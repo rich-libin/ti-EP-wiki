@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Changing_the_DVEVM_memory_map by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:53:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Changing the DVEVM memory map - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Changing_the_DVEVM_memory_map","wgTitle":"Changing the DVEVM memory map","wgCurRevisionId":181137,"wgRevisionId":181137,"wgArticleId":28,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["DaVinci Memorymaps","DVEVM","Codec Engine","Linux","DSPBIOS","Codecs"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Changing_the_DVEVM_memory_map","wgRelevantArticleId":28,"wgRequestId":"3d33f51df2d463211ec32c31","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Changing_the_DVEVM_memory_map rootpage-Changing_the_DVEVM_memory_map skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Changing the DVEVM memory map</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><b>Mastering the Art of Memory Map Configuration for DaVinci-based Systems</b>
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Why_do_Codec_Engine_applications_out_of_the_box_consume_so_much_memory.3F"><span class="tocnumber">1.1</span> <span class="toctext">Why do Codec Engine applications out of the box consume so much memory?</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Physical_sharing_of_DDR2_memory_between_the_ARM_and_the_DSP"><span class="tocnumber">1.2</span> <span class="toctext">Physical sharing of DDR2 memory between the ARM and the DSP</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Linux_partition"><span class="tocnumber">1.3</span> <span class="toctext">Linux partition</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#CMEM:_Contiguous_Memory_Allocator"><span class="tocnumber">1.4</span> <span class="toctext">CMEM: Contiguous Memory Allocator</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#The_DDRALGHEAP_and_DDR_sections"><span class="tocnumber">1.5</span> <span class="toctext">The DDRALGHEAP and DDR sections</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#The_DSPLINKMEM_section"><span class="tocnumber">1.6</span> <span class="toctext">The DSPLINKMEM section</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#The_RESET_VECTOR_segment"><span class="tocnumber">1.7</span> <span class="toctext">The RESET_VECTOR segment</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Designing_the_Memory_Map"><span class="tocnumber">2</span> <span class="toctext">Designing the Memory Map</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#The_procedure"><span class="tocnumber">2.1</span> <span class="toctext">The procedure</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#It_is_.28mostly.29_all_about_video"><span class="tocnumber">2.2</span> <span class="toctext">It is (mostly) all about video</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Determining_the_size_of_.22DDRALGHEAP.22"><span class="tocnumber">2.3</span> <span class="toctext">Determining the size of "DDRALGHEAP"</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Measuring_DDRALGHEAP_size_via_Engine_getUsedMem.28.29_API_.5BAll_CE_versions.5D"><span class="tocnumber">2.4</span> <span class="toctext">Measuring DDRALGHEAP size via Engine_getUsedMem() API [All CE versions]</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Measuring_DDRALGHEAP_size_via_Server_getMemStat.28.29_API_.5BCE_1.20_and_later.5D"><span class="tocnumber">2.5</span> <span class="toctext">Measuring DDRALGHEAP size via Server_getMemStat() API [CE 1.20 and later]</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Measuring_DDRALGHEAP_size"><span class="tocnumber">2.6</span> <span class="toctext">Measuring DDRALGHEAP size</span></a>
+<ul>
+<li class="toclevel-3 tocsection-16"><a href="#Using_the_ALGUTIL_module_.5BAll_CE_versions.5D"><span class="tocnumber">2.6.1</span> <span class="toctext">Using the ALGUTIL module [All CE versions]</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Using_the_DSKT2_trace_.5BCE_2.0_or_above.5D"><span class="tocnumber">2.6.2</span> <span class="toctext">Using the DSKT2 trace [CE 2.0 or above]</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-18"><a href="#Determining_the_size_of_the_.22DDR.22_section"><span class="tocnumber">2.7</span> <span class="toctext">Determining the size of the "DDR" section</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Sizing_and_partitioning_CMEM_memory"><span class="tocnumber">2.8</span> <span class="toctext">Sizing and partitioning CMEM memory</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#Calculating_CMEM_size_and_partitions"><span class="tocnumber">2.8.1</span> <span class="toctext">Calculating CMEM size and partitions</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Measuring_CMEM_size_and_partitions"><span class="tocnumber">2.8.2</span> <span class="toctext">Measuring CMEM size and partitions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-22"><a href="#Optional:_Using_CMEM_to_dynamically_size_DDRALGHEAP"><span class="tocnumber">2.9</span> <span class="toctext">Optional: Using CMEM to dynamically size DDRALGHEAP</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Optional:_reducing_the_DSPLINKMEM_segment_size_from_1MB_to_512KB"><span class="tocnumber">2.10</span> <span class="toctext">Optional: reducing the DSPLINKMEM segment size from 1MB to 512KB</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Arranging_the_segments_in_correct_order_and_alignment"><span class="tocnumber">2.11</span> <span class="toctext">Arranging the segments in correct order and alignment</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#Memory-map_Adaptation_Instructions"><span class="tocnumber">3</span> <span class="toctext">Memory-map Adaptation Instructions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-26"><a href="#Determining_the_version_of_Codec_Engine"><span class="tocnumber">3.1</span> <span class="toctext">Determining the version of Codec Engine</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Rebuilding_DSP_Link_1.30"><span class="tocnumber">3.2</span> <span class="toctext">Rebuilding DSP Link 1.30</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Rebuilding_the_DSP_server"><span class="tocnumber">3.3</span> <span class="toctext">Rebuilding the DSP server</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Optional:_Splitting_the_DDR_section_to_reduce_trampoline_occurrences_by_isolating_code_from_data"><span class="tocnumber">3.4</span> <span class="toctext">Optional: Splitting the DDR section to reduce trampoline occurrences by isolating code from data</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Rebuilding_the_Arm-side_application_-_if_you_use_DSP_Link_1.40_.28or_above.29"><span class="tocnumber">3.5</span> <span class="toctext">Rebuilding the Arm-side application - if you use DSP Link 1.40 (or above)</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Copying_other_necessary_files_to_target_file_system"><span class="tocnumber">3.6</span> <span class="toctext">Copying other necessary files to target file system</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Modifying_the_loadmodules.sh_script"><span class="tocnumber">3.7</span> <span class="toctext">Modifying the loadmodules.sh script</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Changing_the_boot_argument_in_your_Linux_bootloader"><span class="tocnumber">3.8</span> <span class="toctext">Changing the boot argument in your Linux bootloader</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Rebooting_and_running_the_application"><span class="tocnumber">3.9</span> <span class="toctext">Rebooting and running the application</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-35"><a href="#Troubleshooting"><span class="tocnumber">4</span> <span class="toctext">Troubleshooting</span></a>
+<ul>
+<li class="toclevel-2 tocsection-36"><a href="#Checking_how_much_cmem_memory_is_available_or_used"><span class="tocnumber">4.1</span> <span class="toctext">Checking how much cmem memory is available or used</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#Memory_map_mismatch"><span class="tocnumber">4.2</span> <span class="toctext">Memory map mismatch</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#Heap_sizes_too_small"><span class="tocnumber">4.3</span> <span class="toctext">Heap sizes too small</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-39"><a href="#A_Real_World_Example"><span class="tocnumber">5</span> <span class="toctext">A Real World Example</span></a>
+<ul>
+<li class="toclevel-2 tocsection-40"><a href="#Allocating_CMEM_Memory_Space"><span class="tocnumber">5.1</span> <span class="toctext">Allocating CMEM Memory Space</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#Allocating_DDRALGHEAP_Memory_Space"><span class="tocnumber">5.2</span> <span class="toctext">Allocating DDRALGHEAP Memory Space</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#Allocating_DDR_Memory_Space"><span class="tocnumber">5.3</span> <span class="toctext">Allocating DDR Memory Space</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#Allocating_Linux_OS_Memory_space"><span class="tocnumber">5.4</span> <span class="toctext">Allocating Linux OS Memory space</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-44"><a href="#Conclusion"><span class="tocnumber">6</span> <span class="toctext">Conclusion</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This document describes how to configure <a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a> based audio/video applications on DM6446 (DaVinci) for use in a system that has less than 256 MB of DDR2 memory that the evaluation board provides. Specifically, we present the steps for shrinking memory requirements down to 64MB, but the principles apply to any amount of DDR2.
+</p><p>Developers who build audio/video applications on TI's DaVinci platform have a rich software stack available for use with the DVEVM evaluation board. At the core of the DVSDK (Digital Video Software Development Kit), as this stack is called, is Codec Engine (CE), an application programming layer that allows Arm-side applications to execute video and other algorithms on the DSP for faster processing. The DVSDK stack also includes the Montavista Linux OS, Arm-side Codec-Engine-using demo applications that encode and decode video and sound, and DSP-side executables running the actual video encoding and decoding algorithms. While the supplied software gives a strong starting point for creating custom applications, one of the challenges DaVinci developers face is how to adapt all these components to so they fit in a production system.
+</p><p>The DVEVM board is equipped with 256 megabytes of DDR2 memory. The DVSDK software stack is by default configured to use all of that memory: since video algorithms are memory-hungry, this configuration supports most complex video processing scenarios, and does not require the user to deal with the nontrivial issue of changing the memory map. The total DVEVM memory is partitioned by default at 120MB for Linux, 8MB for video and other input/output buffers to be exchanged between the ARM and the DSP, and 128MB for DSP algorithms. Of the latter amount, 6MB is set aside for code and data, and full 122MB for video algorithms intermediate processing buffers organized in a heap. This setting allows for several instances of video, image, and other encoders and decoders for different video formats to be running at the same time.
+</p><p>In the first part of the document, after giving some background on various elements we are working with, we discuss how to determine the minimum memory required and how to partition that memory. The rest consists of hands-on instructions on how to configure and rebuild the various components to fit the chosen memory map. We demonstrate the principles and execute actual steps on the Codec Engine video_copy example, whose sources every DVSDK user can access; at the end we showcase the techniques on the example of a real-world, production system application.
+</p>
+<h3><span id="Why_do_Codec_Engine_applications_out_of_the_box_consume_so_much_memory?"></span><span class="mw-headline" id="Why_do_Codec_Engine_applications_out_of_the_box_consume_so_much_memory.3F">Why do Codec Engine applications out of the box consume so much memory?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=2" title="Edit section: Why do Codec Engine applications out of the box consume so much memory?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The DaVinci EVM board comes with 256MB of external memory installed (the maximum amount currently addressable by the part). All the out-of-the-box software (DSP codecs and ARM-side apps) is spread out over all of that space for developer's comfort. This way you don't have to worry about running out of space when allocating buffers or creating memory-hungry instances of video-processing algorithms.
+</p><p>However, since production platforms based on the DM6446 processor will likely be made with less than 256MB of external memory available, the developer must be able to shrink the memory used by his applications to whatever his target platform provides.
+</p><p>There is a separate article with more details on the <a href="Codec_Engine_Examples_Memory_Map.html" title="Codec Engine Examples Memory Map">memory map employed by the Codec Engine Examples</a>.
+</p>
+<h3><span class="mw-headline" id="Physical_sharing_of_DDR2_memory_between_the_ARM_and_the_DSP">Physical sharing of DDR2 memory between the ARM and the DSP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=3" title="Edit section: Physical sharing of DDR2 memory between the ARM and the DSP">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This 256MB of physical DDR2 memory is shared between the ARM and the DSP, i.e. both processors can access all of the DDR2. The ARM however views this memory as virtual addresses through an MMU (Memory Management Unit) while the DSP uses the physical addresses directly. The virtual addresses is used by Linux to provide memory protection between processes, making sure a process only accesses memory which it has access to. If a Linux user process accesses an address it does not have access to, a segmentation fault (<i>segfault</i>) will occur and the process is killed by the OS.
+</p><p>Since the DSP has no MMU it can not be restricted to certain memory addresses, which means that a 'rogue pointer' in DSP side code can write not just all over the DSP DDR memory but also over the ARM (Linux) side code and data. These issues can be very difficult to find.
+</p><p>The physical memory addresses are the same for the ARM and the DSP on DM6446 and range from 0x80000000 to 0x90000000.
+</p>
+<h3><span class="mw-headline" id="Linux_partition">Linux partition</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=4" title="Edit section: Linux partition">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Linux is different from an RTOS like DSP/BIOS in that it manages all resources in the system for the application. The application requests access to a resource and Linux grants it depending on UNIX permissions and availability. This means that all the memory you give to Linux will be "owned" by Linux and is out of your direct control. The DDR Linux memory partition is segmented in to pages (4KB in size on ARM Linux), and this is the minimal unit of memory you can allocate. What this means is that when you call <code>malloc()</code> to reserve some memory for your application, Linux will give this memory to you as a sequence of 4KB pages. Not only do you not have any control over from where in physical memory this memory is allocated, you don't even know if they are physically contiguous (the MMU makes the memory look virtually contiguous to the process).
+</p><p>This is normally a great feature, but it becomes a problem when you want to share a buffer between the ARM and the DSP. This because the DSP needs <b>physically</b> contiguous memory to work with. This is the reason why the <a href="CMEM_Overview.html" title="CMEM Overview">CMEM</a> kernel module was created, i.e. to provide physically contiguous buffers to be shared between the ARM and the DSP. This is also useful for buffers which are to be accessed using the DMA or the DM6446 H/W resizer.
+</p><p>The Linux partition is also used for various internal I/O buffers and application caching features, so the bigger this partition is, the better.
+</p>
+<h3><span class="mw-headline" id="CMEM:_Contiguous_Memory_Allocator">CMEM: Contiguous Memory Allocator</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=5" title="Edit section: CMEM: Contiguous Memory Allocator">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To be able to share buffers between ARM processes (application control) and the DSP (algorithm acceleration), <a href="CMEM_Overview.html" title="CMEM Overview"> CMEM</a> was created.  It takes a physical memory region you specify at CMEM driver load time and carves it up in to pools of contiguous buffers according to your specifications.  The buffers are typically not <a href="Cache_Management.html" title="Cache Management"> cached</a> on the ARM side (but the Codec Engine handles the DSP side caching of these buffers).
+</p><p>There is an article with a <a href="CMEM_Overview.html" title="CMEM Overview">CMEM Overview</a>, and further details below.  Note that on Linux, once you have inserted the <i>cmemk.ko</i> kernel module you can always execute "<tt>cat /proc/cmem</tt>" to get status on the buffers and pools managed by CMEM.
+</p>
+<h3><span class="mw-headline" id="The_DDRALGHEAP_and_DDR_sections">The DDRALGHEAP and DDR sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=6" title="Edit section: The DDRALGHEAP and DDR sections">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The <a href="DDRALGHEAP.html" title="DDRALGHEAP"><i>DDRALGHEAP</i></a> section contains the heap from which the active codecs allocate all their dynamic memory. This section can be quite large, especially if video codecs are used.
+</p><p>Users of Codec Engine 1.20 and newer can pass in a physically contiguous (e.g. CMEM allocated) memory block to Codec Engine to be used as "DDRALGHEAP". See the <code>Server_redefineHeap()</code> API call. There are also API calls for querying heap usage during run time, see <code>Server_getNumMemSegs()</code> and <code>Server_getMemStat()</code>.
+</p><p>The <i>DDR</i> section contains DSP side code and static data for all the codecs plus the system (i.e. DSP/BIOS and Codec Engine). This section is called "DDR2" for CE 1.20 and later.
+</p>
+<h3><span class="mw-headline" id="The_DSPLINKMEM_section">The DSPLINKMEM section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=7" title="Edit section: The DSPLINKMEM section">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section is used by the <i>DSP Link</i> IPC (Inter Processor Communication) software from TI. Codec Engine uses this software module for communicating between the ARM and the DSP as well as loading the DSP with code and controlling it.
+</p>
+<h3><span class="mw-headline" id="The_RESET_VECTOR_segment">The RESET_VECTOR segment</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=8" title="Edit section: The RESET VECTOR segment">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section contains the DSP reset vector, i.e. the vector table which the DSP side ISTP register is pointing to when the DSP is pulled out of reset by DSP Link. The reset vector code moves the vector table else where by changing the ISTP, but this is where it is located at boot. This section needs to start at an even 1MB and needs to be 128 bytes in size.
+</p>
+<h2><span class="mw-headline" id="Designing_the_Memory_Map">Designing the Memory Map</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=9" title="Edit section: Designing the Memory Map">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section describes how to design your memory map to optimize the memory usage for your system. When this phase is completed we will have a piece of paper that lays out the most compact memory map we can have, with names, origins, and sizes for each segment of the map needed by all the players in the system. That piece of paper we then use as the input for the next phase (described in the next section), where we edit various text files to apply that information into our system's build.
+</p><p>Our motivation here is to make the memory needed by the Codec Engine, and its Arm-side support software like CMEM and DSP Link, be as small as possible. This we want because any portion of the memory set aside for Codec Engine that is not used remains unused forever; whereas any amount of memory given to Linux will always be put to good use. Linux uses all the memory it can get for caching its disk and network data, so increasing the memory for Linux improves the overall performance of the system.
+</p><p>To put it in an equation,
+</p>
+<center><tt>total memory = DSP Server memory + CMEM memory + Linux Memory</tt></center>
+<p>from which follows that
+</p>
+<center><tt>Linux Memory = total memory (e.g. 64MB) - DSP memory - CMEM memory</tt></center>
+<p>Since total memory is fixed and is determined by the hardware design of our board, we strive to give to DSP and CMEM only as much as necessary so that Linux gets as much as possible.
+</p>
+<h3><span class="mw-headline" id="The_procedure">The procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=10" title="Edit section: The procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In essence, the procedure for determining the memory map is this: we make our system work with a luxurious memory map (e.g. the original 256MB), then for each segment we calculate or measure its actual requirements, reduce the segment size, and rerun the application.  Once we have minimized the size of each segment, we compact the map and fit everything into the block of memory we want our final system to have (e.g. 128MB, or 64MB, or 32MB, etc.)
+</p>
+<ol><li>Start with the original 256MB memory map</li>
+<li>Include all the algorithms you need in your DSP server (via the .cfg file), and rebuild the Server</li>
+<li>Determine the size of <i><a href="DDRALGHEAP.html" title="DDRALGHEAP">DDRALGHEAP</a></i>
+<ol><li>calculate, or</li>
+<li>run our ARM-side CE application and measure worst case</li></ol></li>
+<li>Determine the size of the <i>DDR</i> segment</li>
+<li>Determine the size of <i>CMEM</i>
+<ol><li>calculate, or</li>
+<li>run our ARM-side CE application and measure worst case</li></ol></li>
+<li>Move <i>RESET_VECTOR</i> in the same MB as <i>DSPLINKMEM</i> or <i>DDR</i></li>
+<li>Order the segments correctly and place them at proper start addresses</li>
+<li>Compute Linux memory size = our device total memory – <i>DDR</i> – <i>DDRALGHEAP</i> – <i>RESET_VECTOR</i> - <i>DSPLINKMEM</i> - <i>CMEM</i></li></ol>
+<p>Below is an example of a before and after scenario when this procedure is applied:
+</p>
+<center><a href="File_Figure1.html" class="image"><img alt="Figure1.png" src="https://processors.wiki.ti.com/images/f/f4/Figure1.png" width="320" height="285" /></a></center>
+<p>In the "after" picture we have the actual minimum sizes for each segment; knowing that, we can fit everything in a device with less system memory, 128MB in the above example.
+</p><p>We now look at how to calculate or measure these sizes, but first we set some expectations.
+</p>
+<h3><span id="It_is_(mostly)_all_about_video"></span><span class="mw-headline" id="It_is_.28mostly.29_all_about_video">It is (mostly) all about video</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=11" title="Edit section: It is (mostly) all about video">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Recall that the DSP server has four segments:
+</p>
+<ul><li>Two smaller system segments called <i>DSPLINKMEM</i> and <i>RESET_VECTOR</i>, with total size of about 1MB (that can be shrunk to 512KB if really necessary, as we mention in a section below)</li>
+<li>One medium-size segment, <i>DDR</i> (or sometimes called <i>DDR2</i>), sized at typically 1-3MB, that contains the code and static data for all the codecs plus the system</li>
+<li>One large segment called <i>DDRALGHEAP</i>, sized at anywhere from 2MB to 200MB, that holds all the dynamic memory allocated by each active codec instance running on the DSP.</li></ul>
+<p>The sizes of the first two segments are independent of the run-time characteristics of the system.  The size of the <i>DDR</i> segment depends on what codecs we include in the system, and this is fixed given the functionality we wish to support -- we will include only the codecs we need and none of the codecs we don't, which requires a fixed amount of code and static data space. But the size of the <i>DDRALGHEAP</i> segment depends heavily on which instances of those codecs the ARM side creates and when.
+</p><p>When the system is first started, there are no codec instances and the total heap allocated in <i>DDRALGHEAP</i> is 0. When the ARM side creates a DSP codec, for example via <code>VIDENC_create()</code>, this instance allocates dynamic memory according to its spec sheets and the amount of memory usually depends on the codec creation parameters. For video processing in full resolution this may require several MBytes of <i>DDRALGHEAP</i> for a single instance.
+</p><p>When an instance is deleted (e.g. <code>VIDENC_delete()</code>), all of its dynamic memory is reclaimed.
+</p><p>Video codecs (encoders and decoders) by far need the most dynamic memory, often several MBs, followed by imaging codecs, then audio codecs, followed by speech codecs, which typically need very little. Therefore, the way the video codecs are used by the ARM side determines how big the <i>DDRALGHEAP</i> segment must be.
+</p><p>The <i>CMEM</i> segment's size is also very dependent on which codecs run in the system and when. The purpose of the <i>CMEM</i> segment is to exchange input and output codec data between the ARM and the DSP codec instances.  Video buffers allocated via <i>CMEM</i> are much larger than the speech buffers.
+</p><p>The bottom line is that our total required memory depends on how we use the codecs, and if we don't use all available codecs at the same time -- which some classes of applications do and some don't -- the total memory required will be less than the simple sum of the parts.
+</p><p>Here is an example to illustrate this: assume our system is a digital video camera which has a "video record" and a "video play" button.  We could design our system to create, from the ARM side, a video encoder instance and video decoder instance on the DSP, at boot time, and have them run side by side.  Both codec instances hold their dynamic data in <i>DDRALGHEAP</i>. When the user presses the "record" button the ARM side passes the raw images data via <i>CMEM</i> to the video encoder, when the user presses the "playback" button, the ARM side passes the compressed frames and receives uncompressed images.  Our total of combined <i>DDRALGHEAP</i> and <i>CMEM</i> memory required for these two may be, say, 3MB for decoder + 2MB for encoder = 5MB.
+</p><p>But alternatively we can design our system to wait until the user presses the "record" button and then create a video encoder instance on the DSP, and delete the instance when the user presses the stop button. Similarly we create an encoder instance when the user presses the "playback" button, and delete it when he exits the playback mode.
+</p><p>Because we know that the user cannot record and playback at the same time, we know that the encoder instance and the decoder instance cannot exist at the same time. Therefore our total memory needs become MAX(3MB, 2MB) = 3MB instead of 5MB. And since creating a codec instance is a very fast operation, it does not affect our system in terms of speed and power consumption.
+</p>
+<h3><span id="Determining_the_size_of_&quot;DDRALGHEAP&quot;"></span><span class="mw-headline" id="Determining_the_size_of_.22DDRALGHEAP.22">Determining the size of "DDRALGHEAP"</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=12" title="Edit section: Determining the size of &quot;DDRALGHEAP&quot;">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Total "DDRALGHEAP" size depends on which codecs (of which type, from which vendor), how many instances of those codecs exist at the same time, and possibly with which parameters the codecs were created, e.g. D1 vs. CIF max video resolution changes memory requirements.
+</p><p>In theory we can calculate the amount of memory needed by looking at the codec data sheets; those should list how much memory a codec instance requires based on the mode of operation.
+</p><p>In practice, it is better to actually measure the usage at peak time and only look at the specs to confirm that the expected numbers roughly match the measured results. This because the data sheets show the worst case size requirements, and depending on your codec configuration your requirements may or may not be less.
+</p>
+<h3><span id="Measuring_DDRALGHEAP_size_via_Engine_getUsedMem()_API_[All_CE_versions]"></span><span class="mw-headline" id="Measuring_DDRALGHEAP_size_via_Engine_getUsedMem.28.29_API_.5BAll_CE_versions.5D">Measuring DDRALGHEAP size via Engine_getUsedMem() API [All CE versions]</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=13" title="Edit section: Measuring DDRALGHEAP size via Engine getUsedMem() API [All CE versions]">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The simplest way to measure memory usage is this:
+</p>
+<ol><li>In the Arm app, call <code>Engine_getUsedMem()</code> immediately after the first call to <i>Engine_open()</i>.</li>
+<li>Call <code>Engine_getUsedMem(engineHandle)</code> again after creating the codecs with the heaviest memory requirements.</li>
+<li>The delta between the two numbers is roughly the required size of "DDRALGHEAP" (it is in fact slightly larger as it includes the growth of "DDR", but the latter grows only by a few KB per instance; e.g. if the delta is 6.4 MB, the real "DDRALGHEAP" may be 6.395 MB)</li></ol>
+<h3><span id="Measuring_DDRALGHEAP_size_via_Server_getMemStat()_API_[CE_1.20_and_later]"></span><span class="mw-headline" id="Measuring_DDRALGHEAP_size_via_Server_getMemStat.28.29_API_.5BCE_1.20_and_later.5D">Measuring DDRALGHEAP size via Server_getMemStat() API [CE 1.20 and later]</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=14" title="Edit section: Measuring DDRALGHEAP size via Server getMemStat() API [CE 1.20 and later]">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The <code>Server_getMemStat()</code> API in CE 1.20 and later allows us to query each segment specifically, so we can do that for "DDRALGHEAP".
+</p><p>Assuming a CE Engine handle is in <code>hEngine</code>, make a call below at peak load time (worst case codecs created and active) to find out how big "DDRALGHEAP" need be:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+Server_Handle  hServer;
+Int            i;
+Int            numSegs;
+Server_MemStat memStat;
+</p><p>/* hEngine was previously acquired via Engine_open() */
+hServer = Engine_getServer(hEngine);
+</p><p>Server_getNumMemSegs(hServer, &amp;numSegs);
+</p><p>for (i = 0; i &lt; numSegs; i++) {
+</p>
+<pre>   Server_getMemStat(hServer, i, &amp;memStat);
+</pre>
+<pre>   if (strcmp(memStat.name, "DDRALGHEAP") == 0) {
+       printf("DDRALGHEAP usage is&#160;%ld out of&#160;%ld available\n",
+               memStat.used, memStat.size);
+   }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h3><span class="mw-headline" id="Measuring_DDRALGHEAP_size">Measuring DDRALGHEAP size</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=15" title="Edit section: Measuring DDRALGHEAP size">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span id="Using_the_ALGUTIL_module_[All_CE_versions]"></span><span class="mw-headline" id="Using_the_ALGUTIL_module_.5BAll_CE_versions.5D">Using the ALGUTIL module [All CE versions]</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=16" title="Edit section: Using the ALGUTIL module [All CE versions]">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A collection of tools, called 'servertools', at <a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/applications_packages/servertools/index.htm">https://www-a.ti.com/downloads/sds_support/applications_packages/servertools/index.htm</a> contains, among others, a utility to instrument the DSP server and determine the exact breakdown of memory needs by each algorithm for specific types of memory it needs.
+</p>
+<ul><li>Download the tools and locate <i>algUtil</i>, which is a DSP side utility module which prints out the memory allocated for algorithms on the heap as it is instantiated.</li>
+<li>Insert the module into the codec server using <code>xdc.useModule('ti.sdo.apps.algutil.ALGUTIL')</code> in <i>myServer.cfg</i>.</li>
+<li>Call <code>ALGUTIL_init()</code> in the DSP codec server <i>main()</i> function.</li>
+<li>Enable tracing in your CE application and enable algUtil tracing when invoking the application:</li></ul>
+<p><tt>TRACEUTIL_DSP0TRACEMASK="ti.sdo.apps.algutil.ALGUTIL=4"; ./myapp</tt>
+</p>
+<ul><li>For more details on CE trace, see the CE user documentation.</li>
+<li>Invoke the app with one algorithm instance created at a time until data has been collected for all algorithms.</li>
+<li>The output has two lines of special interest, as in the following example:</li></ul>
+<pre>@0x000898fd:[T:0x8fc45144] ti.sdo.apps.algutil.ALGUTIL - EXTERNAL scratch total: best case:(0x0), worst case:(0x0)
+@0x000899a6:[T:0x8fc45144] ti.sdo.apps.algutil.ALGUTIL - External persist total: best case:(0x29d5c), worst case:(0x29d94)
+</pre>
+<ul><li>Both External Scratch and External persistent memory are typically allocated from DDRALGHEAP.</li>
+<li>Add up the heap usage of your "worst case codec combination" to determine your total heap requirement.</li></ul>
+<h4><span id="Using_the_DSKT2_trace_[CE_2.0_or_above]"></span><span class="mw-headline" id="Using_the_DSKT2_trace_.5BCE_2.0_or_above.5D">Using the DSKT2 trace [CE 2.0 or above]</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=17" title="Edit section: Using the DSKT2 trace [CE 2.0 or above]">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The new versions of CE and Framework Components has trace built into the DSKT2 module that will help you in measuring heap space allocation when you run the application. DSKT2 is the module that is responsible for querying the algorithm/codec for its memory requirements and allocating that memory from DDRALGHEAP.
+</p><p>Simply set DSKT2.trace to true in your server's .cfg file and rebuilding the server. Then set the environment variables TRACEUTIL_DSP0TRACEMASK="ti.sdo.fc.dskt2=01234567", TRACEUTIL_DSP0TRACEFILE="" and TRACEUTIL_REFRESHPERIOD=200 prior to running your application and the DSKT2 trace will appear on your stdout (you may also route the output to a file for closer inspection by providing a filename in TRACEUTIL_DSP0TRACEFILE). The resulting trace output contains the similar information as you'd get out of ALGUTIL.
+</p><p>Alternatively, setting CE_DEBUG=2 when running your application would be another convenient way to get the trace on stdout. However, this approach results in a more verbose trace, and you'll need to scan the output to find the DSKT2-related details.
+</p><p>The trace will contain the following information when an algorithm/codec instance is being created:
+</p>
+<pre>@0x000fd446:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Num memory recs requested 9
+@0x000fd483:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[0]: size=0x380, align=0x80, space=IALG_EXTERNAL, attrs=IALG_PERSIST
+@0x000fd4df:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[1]: size=0xfd00, align=0x80, space=IALG_DARAM0, attrs=IALG_SCRATCH
+@0x000fd539:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[2]: size=0x138600, align=0x80, space=IALG_EXTERNAL, attrs=IALG_PERSIST
+@0x000fd595:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[3]: size=0x50000, align=0x80, space=IALG_EXTERNAL, attrs=IALG_SCRATCH
+@0x000fd5f1:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[4]: size=0x7f00, align=0x80, space=IALG_EXTERNAL, attrs=IALG_PERSIST
+@0x000fd64d:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[5]: size=0x1000, align=0x80, space=IALG_EXTERNAL, attrs=IALG_PERSIST
+@0x000fd6a8:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[6]: size=0x5e00, align=0x80, space=IALG_EXTERNAL, attrs=IALG_PERSIST
+@0x000fd703:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[7]: size=0x1580, align=0x80, space=IALG_EXTERNAL, attrs=IALG_PERSIST
+@0x000fd75e:[T:0x88b665f4] ti.sdo.fc.dskt2 - DSKT2_createAlg3&gt; Requested memTab[8]: size=0x580, align=0x80, space=IALG_EXTERNAL, attrs=IALG_PERSIST
+</pre>
+<p>Add up the sizes and alignments of all requests with space=IALG_EXTERNAL (and any space that is mapped to be allocated from DDRALGHEAP. Check the server's .cfg file to see how DSKT2 has been configured.) The total will give you the worst case size requirement on DDRALGHEAP for this algorithm/codec instance.
+</p><p>Invoke your application by creating one codec instance at a time until data has been collected for all algorithms.
+</p><p>Add up the heap usage of your "worst case codec combination" to determine your total heap requirement.
+</p>
+<h3><span id="Determining_the_size_of_the_&quot;DDR&quot;_section"></span><span class="mw-headline" id="Determining_the_size_of_the_.22DDR.22_section">Determining the size of the "DDR" section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=18" title="Edit section: Determining the size of the &quot;DDR&quot; section">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The "DDR" segment holds codec and system code as well as static data. (It is called "DDR2" in CE 1.20 and later but it is the same segment.) We find out its required size simply by looking at the linker map.
+</p><p>The procedure is as follows:
+</p>
+<ul><li>Add all the codecs you intend to use to your DSP server's .cfg file, and no others.</li>
+<li>Build your DSP server.</li>
+<li>Look at the generated .map file for the codec server.</li>
+<li>The <i>.map</i> file is under directory <tt>package/cfg</tt>.</li>
+<li>See how much is used for DDR; in this example, it is 0x90168 bytes:</li></ul>
+<pre>         name            origin    length      used     unused   attr
+----------------------  --------  ---------  --------  --------  ----
+  ARM_RAM               10008000   00004000  00000000  00004000  RWIX
+  CACHE_L2              11800000   00010000  00000000  00010000  RWIX
+  CACHE_L1P             11e08000   00008000  00000000  00008000  RWIX
+  L1DSRAM               11f04000   00010000  00010000  00000000  RWIX
+  CACHE_L1D             11f14000   00004000  00000000  00004000  RWIX
+  DDRALGHEAP            88000000   07a00000  07a00000  00000000  RWIX
+  DDR                   8fa00000   00400000  00090168  0036fe98  RWIX
+  DSPLINKMEM            8fe00000   00100000  00000000  00100000  RWIX
+</pre>
+<ul><li>Add a little to the "used" value to allow your code and data to grow some during development, and that is the minimal DDR size.</li></ul>
+<h3><span class="mw-headline" id="Sizing_and_partitioning_CMEM_memory">Sizing and partitioning CMEM memory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=19" title="Edit section: Sizing and partitioning CMEM memory">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The module we call CMEM, as we have seen, enables us to allocate large chunks of physically contiguous memory from Linux-Arm and place data buffers in them for DSP to process. There are two aspects to configuring CMEM:
+</p>
+<ol><li>Knowing the total amount of memory we need for buffer exchange between Arm and DSP: this is CMEM size</li>
+<li>Knowing the exact size and count of each type of exchange buffers our application needs: this is CMEM partitioning into pools of buffers</li></ol>
+<p>Again, we can calculate or measure required CMEM sizes, and it is always best to do both -- using the calculations to verify the measurements.
+</p>
+<h4><span class="mw-headline" id="Calculating_CMEM_size_and_partitions">Calculating CMEM size and partitions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=20" title="Edit section: Calculating CMEM size and partitions">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>As an example, assume we run one video encoder at D1 resolution and two audio encoders. To exchange buffers with these codecs, we need for the video encoder one input D1 sized buffer for the raw image and one output buffer for the encoded frame; we also need one input buffer for raw audio data and one output buffer for compressed audio for each audio codec.
+</p><p>The size of raw D1 image buffer we calculate knowing the format of the image; let us assume it's 812K. The size of the output video encoder buffer depends on the compression format, but typically it is recommended to be the same as the input buffer, i.e. 812K in our case. As for the audio, assume we similarly use 4K input and 4K output buffer for each codec.
+</p><p>Our total CMEM need is then: <tt>812K x 2   +   4K x 2   +   4K x 2  = 828K</tt>.
+</p><p>Our CMEM pool needs are:      one pool with 2 buffers of 812K, and one pool with 4 buffers of 4K:
+</p><p><tt>[.....812K.....][.....812K.....][4K][4K][4K][4K]</tt>
+</p><p>CMEM pool partitioning is important: if done improperly, it prevents us from getting the buffers we need, even if there is enough total space. (This is the disadvantage of pools; the advantage is that it prevents fragmentation where it could happen, i.e. if the app were allocating and releasing many buffers of different sizes constantly.)
+</p><p>In our example, we have one video encoder and two audio encoder instances, all running at the same time. Let us take a look at how the exchange occurs:
+</p>
+<ul><li>Before application starts, the system integrator loads the CMEM module. Assuming our CMEM area starts at 0x88000000, and is sized as above, the command to load the module is:</li></ul>
+<p><tt>insmod cmemk.ko phys_start=0x88000000 phys_end=0x88200000 pools=2x831488,4x4096</tt>
+</p><p>(we have set aside full 2MB for CMEM, and split it into 2 x 812K and 4 x 4K buffer pools)
+</p>
+<ul><li>Our Arm application allocates its two 812K buffers and four 4K CMEM buffers via <code>Memory_contigAlloc()</code>;</li></ul>
+<ul><li>The Arm application stores raw image block in one 812K buffer and raw audio blocks in two 4K buffers, passes the 812K video buffers in a call to <code>VIDENC_process()</code> and the 4K audio buffers in calls to <code>AUDENC_process()</code>, and reads the compressed video and audio frames from their buffers.</li></ul>
+<ul><li>When the application closes, it frees up all of its CMEM buffers via <code>Memory_contigFree()</code>.</li></ul>
+<p>Imagine now that in addition to all of the above, our application also uses a video decoder, but never at the same time as the video encoder (recall our video camera example that supports record and playback modes but only one at a time). Assuming our video decoder also processes D1 sized images -- getting compressed frames and producing raw images -- we'd need two 812K buffers for the video decoder as well. But since we never have a situation that both the encoder and the decoder process their input data at the same time, we can use the same 812K input and output CMEM buffers. Therefore our total CMEM needs remain the same, and even the partitioning looks the same.
+</p><p>Note that it is not even necessary that the Arm app destroys one video codec on the DSP before it switches to another: the two instances can be active on the DSP at the same time, but if we never call <code>VIDENC_process( input 812K buf, output 812K buf )</code> while we are waiting for <code>VIDDEC_process(input 812K buf, output 812K buf)</code>, we are safe. We create and destroy codec instances on the DSP as needed only in order to save on memory needs on the DSP, for DDRALGHEAP.
+</p><p>Now for a counter example, our application may need both record and playback running at the same time. In that case, our total CMEM needs are 2 x 812K (video encode) + 2 x 812 K (video decode) + 2 x 4K (audio encode) + 2 x 4K (audio decode) which is 3264K. Our command line to load the CMEM module would then be:
+</p><p><tt>insmod cmemk.ko phys_start=0x88000000 phys_end=0x88340000 pools=4x831488,4x4096</tt>
+</p><p>(we set aside 3.25MB, slightly larger than the 3.2MB we need).
+</p>
+<h4><span class="mw-headline" id="Measuring_CMEM_size_and_partitions">Measuring CMEM size and partitions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=21" title="Edit section: Measuring CMEM size and partitions">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In rare cases your application is so complex with its input and output buffers it is easier to measure what your application needs in terms of CMEM memory by running the application itself.
+</p>
+<ul><li>Start with CMEM module loaded and partitioned to allow for plenty of memory and plenty of buffers: one or two really big ones, a few large ones, a number of medium ones, a many small ones. For example:</li></ul>
+<p><tt>insmod cmemk.ko phys_start=0x88000000 phys_end=0x8A000000 pools=2x4100000,10x1100000,50x130000,100x17000</tt>
+</p><p>i.e. two 4MB+ buffers, ten 1MB+ buffers, fifty 128K+ buffers, a hundred 16K+ buffers, for a total of 27MB+, rounded to 32MB.
+</p>
+<ul><li>At your application peak memory usage time, or several times through its life cycle, put the following in your C code:</li></ul>
+<p><tt>system( "/bin/cat /proc/cmem" );</tt>
+</p><p>and record the standard output
+</p><p>Accessing <tt>/proc/cmem</tt> like above will cause CMEM to produce detailed info regarding exactly how many buffers it uses and of what sizes. This will give you the precise statistics for accurate sizing and partitioning.
+</p><p>Of course, it is always good to relax the accurate numbers, whether they are measured or calculated: application code may change and a new or larger buffer may be needed at certain moments, but the "insmod cmemk.ko" line may be neglected to be updated. We use our engineering intuition to decide how much headroom we want to leave in terms of numbers and sizes of the CMEM buffers our application needs.
+</p><p>(It is also worth noting that because alignment and Linux page boundary requirement may require the total area to be larger than the sum of the parts.)
+</p>
+<h3><span class="mw-headline" id="Optional:_Using_CMEM_to_dynamically_size_DDRALGHEAP">Optional: Using CMEM to dynamically size DDRALGHEAP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=22" title="Edit section: Optional: Using CMEM to dynamically size DDRALGHEAP">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In CE 1.20 and above, there are new APIs <code>Server_redefineHeap()</code> and <code>Server_restoreHeap()</code> that let you change the DSP-side heaps at run time:
+</p>
+<ul><li>The memory passed to <code>Server_redefineHeap()</code> needs to be contiguous (CMEM allocated).</li>
+<li>The heap needs to be created in the DSP server’s BIOS configuration file, but can be 0 bytes initially.</li></ul>
+<p>This feature lets the user ‘reuse’ the memory used for "DDRALGHEAP" when the system is doing less stressful DSP tasks, e.g. ARM-side PDF file reading.
+</p><p>To use this feature, you will need to allocate an extra buffer of the size of "DDRALGHEAP" in the CMEM segment, on top of the requirements you have determined from sections 2.4.1 and 2.4.2.
+</p>
+<h3><span class="mw-headline" id="Optional:_reducing_the_DSPLINKMEM_segment_size_from_1MB_to_512KB">Optional: reducing the DSPLINKMEM segment size from 1MB to 512KB</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=23" title="Edit section: Optional: reducing the DSPLINKMEM segment size from 1MB to 512KB">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The "DSPLINKMEM" segment on the DSP is the system segment needed by DSPLink. By default, approximately 512 KB of the 1 MB segment is used for shared buffers and control structures. The defaults in the CE examples are larger to anticipate potential extra memory required by CE in future releases. For simplicity, it is ok to avoid modifying the defaults for DSPLINK system components, but if you need to save an extra 512K you can do so by reducing the size of this segment, without worrying about details of DSPLINK itself.
+</p>
+<h3><span class="mw-headline" id="Arranging_the_segments_in_correct_order_and_alignment">Arranging the segments in correct order and alignment</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=24" title="Edit section: Arranging the segments in correct order and alignment">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If we have followed the outlined procedure, we now have, on paper, the minimal measured and/or calculated size for each segment: CMEM, "DDRALGHEAP", "DDR", and possibly "DSPLINKMEM" if we decided to cut it in half. Segment "RESETCTRL" has a fixed size of 128 bytes.
+</p><p>At this point we now need to decide what the start address of each segment will be.
+</p>
+<ol><li>Know (or decide) how much total system memory we have: 64MB or 128MB etc.</li>
+<li>Place "RESETCTRL" segment at the highest-addressed 1MB in the map – i.e. this segment must be 1 MB aligned and we choose it to be the very last MB in the memory map.</li>
+<li>Place "DSPLINKMEM" segment immediately after "RESETCTRL", so it gets 1MB - 128B (which is still fine). Now the last MB is occupied by "RESETCTRL" + "DSPLINKMEM".</li>
+<li>Place "DDR" before "RESETCTRL". Try to make DDR size at least a multiple of 4KB if you can't make it more even. (I.e. don't use size 2,432,131B for "DDR" size, use 2.5MB, e.g. 0x280000 bytes size, not 0x251C83 bytes size). If possible, leave a larger amount of memory for DDR than required in case you modify the code in the future and result in a code size increase. This will give you the convenience of not having to shift everything in your memory map just to accommodate for small code size changes.</li>
+<li>Place "DDRALGHEAP" before "DDR". Again, use round hex numbers and leave a safety margin if you can.</li>
+<li>Place "CMEM" before "DDRALGHEAP". Same recommendation -- use round hex numbers for origin and size if you can, both to avoid alignment surprises and to make the map easier for humans to understand and maintain.</li>
+<li>Linux gets the rest.</li></ol>
+<p>It is advisable to make "RESETCTRL" + "DSPLINKMEM" occupy the last 1MB of memory, especially if you use DSPLink 1.30. Then you will only have to rebuild DSP Link once (which is a tedious procedure and you don't want to repeat it more than absolutely necessary).
+</p><p>Also, it is convenient to have CMEM and "DDRALGHEAP" adjacent to each other, so you can resize one at the expense of the other without touching other segments. Both CMEM and DDRALGHEAP are normally unused when there are no active codecs, even though the DSP may be up and running and ready to create a codec when instructed.
+</p><p>If you are using the new feature in CE 1.20 and above to dynamically pass a CMEM buffer to the DSP to serve as its "DDRALGHEAP", simply combine "DDRALGHEAP" into the CMEM segment.
+</p><p>As the final result of this phase, your drawing on a piece of paper may look something like this for example:
+</p>
+<center><a href="File_Figure2.html" class="image"><img alt="Figure2.png" src="https://processors.wiki.ti.com/images/b/bc/Figure2.png" width="550" height="598" /></a></center>
+<h2><span class="mw-headline" id="Memory-map_Adaptation_Instructions">Memory-map Adaptation Instructions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=25" title="Edit section: Memory-map Adaptation Instructions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section provides the procedure to follow in order to set up the memory map you have designed. As an example, we have modified the <i>video_copy</i> example in Codec Engine to match the following memory map:
+</p>
+<center><a href="File_Figure3.html" class="image"><img alt="Figure3.png" src="https://processors.wiki.ti.com/images/e/ec/Figure3.png" width="550" height="600" /></a></center>
+<p>For those of you who are familiar with the video_copy example, there is obviously a lot more memory here allocated to each segment than necessary for the application to run. However, the goal of this example is to simply show the files where the changes have been made, so that you can better follow the steps we outline below.
+</p><p>The modified video_copy code example comes in two flavors:
+</p>
+<ul><li>DSPLINK 1.30 and CE 1.02 based</li>
+<li>DSPLINK 1.40 and CE 1.20 based</li></ul>
+<p>See the readme.txt file that accompanies the code for details on the contents.
+</p><p>To unzip/expand the example into a directory of your choice, either use the 'unzip' command in Linux or use WinZip in Windows.
+</p><p>When following this procedure for your own application, simply replace with your own memory map and use the corresponding sizes and base addresses for it.
+</p>
+<h3><span class="mw-headline" id="Determining_the_version_of_Codec_Engine">Determining the version of Codec Engine</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=26" title="Edit section: Determining the version of Codec Engine">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Knowing the version of CE (and DSP Link) is important because it determines the steps to follow. CE 1.20 (or above) uses DSP Link 1.40+, while versions of CE prior to that uses DSPLINK 1.30+. If you do not know which version of CE you are using, you can easily find it out by looking at the name of the CE installation directory. For example, if the directory name is codec_engine_1_20, it means you are using CE 1.20. At the time when this document is written, DVEVM and DVSDK software version 1.20 and prior bundles with versions of CE older than CE 1.20.
+</p>
+<h3><span class="mw-headline" id="Rebuilding_DSP_Link_1.30">Rebuilding DSP Link 1.30</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=27" title="Edit section: Rebuilding DSP Link 1.30">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>DSP Link is a S/W component that enables the ARM and the DSP to communicate. Version 1.30 of DSP Link requires rebuilding of the entire DSP Link when the DSP memory map is changed. DSP Link version 1.40, used by Codec Engine 1.20 and above, is more dynamic and requires no rebuilding.
+</p><p>If your DSP Link version is 1.40 or higher, you can skip to the next section. There is one replacement step you need to do, though much simpler than this one; it will be mentioned later in this procedure.
+Rebuilding DSP Link is the most involved step in the sequence. Its sub-steps are listed here:
+</p>
+<ul><li>cd to <tt>&lt;DVEVM&gt;/dsplink_1_30_*/packages/dsplink</tt> directory. All the paths in the remainder of this section will be given relative to this directory.</li>
+<li>Open the DSP Link configuration file in a text editor: <tt>config/all/CFG_Davinci.TXT</tt>.</li>
+<li>Search for a "RESUMEADDR" text entry. You will see, by default, the value of 0x8FF00020. Change that number to the beginning of our "RESET_VECTOR" segment + 0x20. In our case, it should be 0x83F00020.</li>
+<li>Search for RESETVECTOR entry. Change its value to the beginning our "RESET_VECTOR" segment: 0x83F00000.</li></ul>
+<p><i>Word of caution!</i> commonly large hex numbers with lots of zeroes are mistyped to omit one zero! Make sure the hex number is exactly eight characters wide.
+</p>
+<ul><li>Search for "MEMTABLE0" set of entries. There you will find some entries that resemble our memory map, and some that don't. The ones that you need to look for are "DSPLINKMEM", "RESETCTRL" (same as "RESET_VECTOR") , and DDR. Change their addresses (ADDRDSPVIRTUAL and ADDRPHYSICAL, which are the same) and sizes to match our new memory map; do not worry that "DDRALGHEAP" isn't there -- that's because DSP Link doesn't need to know about it since its content only exists while the DSP runs and is never accessed by the ARM. You will get:</li></ul>
+<pre>[MEMTABLE0]
+
+ [0]
+ ENTRY           | N |   0                  # Entry number
+ ABBR            | S |   DSPLINKMEM         # Abbreviation of the table name
+ ADDRDSPVIRTUAL  | H |   0x83F00080         # DSP virtual address
+ ADDRPHYSICAL    | H |   0x83F00080         # Physical address
+ SIZE            | H |   0xFFF80            # Size of the memory region
+ MAPINGPP        | B |   TRUE               # Map in GPP address space?
+ [/0]
+
+ [1]
+ ENTRY           | N |   1                  # Entry number
+ ABBR            | S |   RESETCTRL          # Abbreviation of the table name
+ ADDRDSPVIRTUAL  | H |   0x83F00000         # DSP virtual address
+ ADDRPHYSICAL    | H |   0x83F00000         # Physical address
+ SIZE            | H |   0x00000080         # Size of the memory region
+ MAPINGPP        | B |   TRUE               # Map in GPP address space?
+ [/1]
+
+ [2]
+ ENTRY           | N |   2                  # Entry number
+ ABBR            | S |   DDR                # Abbreviation of the table name
+ ADDRDSPVIRTUAL  | H |   0x83C00000         # DSP virtual address
+ ADDRPHYSICAL    | H |   0x83C00000         # Physical address
+ SIZE            | H |   0x00300000         # Size of the memory region
+ MAPINGPP        | B |   TRUE               # Map in GPP address space?
+ [/2]
+</pre>
+<p>Do not worry about other segments listed in the file.
+</p>
+<ul><li>Edit file <tt>make/Linux/davinci_mvlpro4.0.mk</tt> that contains DSPLINK build instruction for its ARM binaries, on a Linux host. Edit the following fields to match your DVEVM installation, noting the location of the Linux kernel and the Arm compiler tools:</li></ul>
+<p><tt>BASE_BUILDOS</tt>: location of the Linux kernel; directory usually ends with "/lsp/ti-davinci";
+</p><p><tt>BASE_CGTOOLS</tt>: location of the Arm tools, directory usually ends with " arm/v5t_le/bin"
+</p>
+<ul><li>Edit file <tt>make/DspBios/c64xxp_5.xx_linux.mk</tt> that contains DSPLINK build instructions for its DSP binaries, on a Linux host. Edit the following fields to match your DVEVM and DSP/BIOS installation:</li></ul>
+<p><tt>BASE_SABIOS</tt>: location of your DSPBIOS installation; directory usually ends with "/bios_5_21_01" or some such number
+</p><p><tt>BASE_CGTOOLS</tt>: location of your C64P compiler tools that run on Linux; directory can end in different ways, but it invariably contains subdirectories "bin", "include", and "lib".
+</p>
+<ul><li>Set the environment variable DSPLINK to directory <tt>&lt;DVEVM&gt;/dsplink_1_30_*/packages/dsplink</tt>.</li>
+<li>From the current ($DSPLINK) directory, type:</li></ul>
+<p><tt>gmake -C gpp/src</tt>
+</p><p><tt>gmake -C dsp/src</tt>
+</p>
+<ul><li>Find the newly built DSPLINK kernel module in <tt>gpp/export/BIN/Linux/Davinci/RELEASE/dsplinkk.ko</tt> and copy it to your DVEVM file system.</li></ul>
+<p>This should build a link server configured specifically for the memory layout we need. Keep in mind that if you ever build multiple servers, this build of DSPLINK won't work for them anymore!
+</p><p>If you have more than one server and they have different memory configurations, one approach you may use is to clone the entire top-level DSPLINK directory under a different name, then apply all the steps above in that directory, and you will have a DSPLINK build dedicated entirely to one specific memory map.
+</p><p>If you chose to do so, remember that you must specify which DSPLINK build you are using in the "XDCPATH", that would be the <i>xdcpaths.mak</i> file in Codec Engine examples if you build just Codec Engine examples, and Rules.make file in DVEVM installation directory if you build real DSP servers. The kernel module (<i>dsplinkk.ko</i>) also applies to just one specific memory layout.
+</p><p>It is because of this complexity that DSPLINK 1.40 eliminates all these steps and only uses one <i>dsplinkk.ko</i> kernel driver and one build for any DSP memory layout.
+</p>
+<h3><span class="mw-headline" id="Rebuilding_the_DSP_server">Rebuilding the DSP server</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=28" title="Edit section: Rebuilding the DSP server">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Every DSP server has a BIOS configuration file (<i>.tcf</i> file) that defines the memory layout on the DSP, among other things. It also has a Codec Engine configuration file (<i>.cfg</i> file) which lists which codecs to include in the image.
+</p><p>Our DSP server is found in the Codec Engine <i>examples/servers/video_copy</i> (or <i>examples/ti/sdo/ce/examples/servers/video_copy</i> in more recent versions of CE.  Please adjust the path appropriately for the remainder of this procedure).
+</p><p>The server configuration file (<i>video_copy.cfg</i>) lists what codecs to include. There are only two in the list, and we need both, so we don't change anything in this file.
+</p><p>But if the codecs were real, our first step would be to edit this file and remove all the codecs we don't need. That would reduce the size of the DDR segment and allow us to make it shorter than the default of 4MB.
+The only file we need to edit right now is the <i>video_copy.tcf</i> file. If you open that file in a text viewer, you will see that it imports the contents of another DSP server's .tcf file (all_codecs.tcf) because the contents is the same for both servers. Since we want to modify the video_copy example only, do the following:
+</p>
+<ul><li>cd to the Codec Engine <tt>examples/servers/video_copy</tt> directory.</li>
+<li>From inside the <i>video_copy/</i> directory, copy <i>../all_codecs/all.tcf</i> to <i>video_copy.tcf</i>.</li>
+<li>Edit <i>video_copy.tcf</i> and edit the "mem_ext" array for our newly chosen memory map. That code should look like this:</li></ul>
+<p>&lt;syntaxhighlight lang='javascript'&gt;
+var mem_ext = [
+{
+</p>
+<pre>   comment:    "DDRALGHEAP: off-chip memory for dynamic algmem allocation",
+   name:       "DDRALGHEAP",
+   base:       0x83800000,   // 56 MB
+   len:        0x00400000,   //  4 MB
+   space:      "code/data"
+</pre>
+<p>},
+{
+</p>
+<pre>   comment:    "DDR: off-chip memory for application code and data",
+   name:       "DDR",
+   base:       0x83C00000,   // 60 MB
+   len:        0x00300000,   //  3 MB
+   space:      "code/data"
+</pre>
+<p>},
+{
+</p>
+<pre>   comment:    "RESET_VECTOR: off-chip memory for the reset vector table",
+   name:       "RESET_VECTOR",
+   base:       0x83F00000,   //  63 MB
+   len:        0x00000080,   // 128 B
+   space:      "code/data"
+</pre>
+<p>},
+{
+</p>
+<pre>   comment:    "DSPLINK: off-chip memory reserved for DSPLINK code and data",
+   name:       "DSPLINKMEM",
+   base:       0x83F00080,   // 63 MB + 128 B
+   len:        0x000FFF80,   //  1 MB - 128 B
+   space:      "code/data"
+</pre>
+<p>},
+];
+&lt;/syntaxhighlight&gt;
+</p><p><b>Note!</b> CE 1.20 uses "DDR2" instead of "DDR" in its examples.
+</p><p>Due to the fact we have defined and sized DDRALGHEAP to be a space that is solely used to store algorithm memory requests, you should change all sections, including "BIOSOBJSEG", "MALLOCSEG" and "STACKSEG" to use DDR (if not already done):
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+/* ==========================================================
+</p>
+<pre>*  Set all data sections to use DDR
+*  ==========================================================*/
+</pre>
+<p>bios.setMemDataNoHeapSections (prog, bios.DDR);
+bios.setMemDataHeapSections (prog, bios.DDR);
+</p><p>/*  ==========================================================
+</p>
+<pre>*  MEM&#160;: Global
+*  ==========================================================*/
+</pre>
+<p>//prog.module("MEM").BIOSOBJSEG = bios.DDR;    //comment line out if present
+//prog.module("MEM").MALLOCSEG  = bios.DDR;  //comment line out if present
+</p><p>/*  ==========================================================
+</p>
+<pre>*  TSK&#160;: Global
+*  ==========================================================*/
+</pre>
+<p>//prog.module("TSK").STACKSEG = bios.DDR;        //comment line out if present
+&lt;/syntaxhighlight&gt;
+<br />
+</p>
+<h3><span class="mw-headline" id="Optional:_Splitting_the_DDR_section_to_reduce_trampoline_occurrences_by_isolating_code_from_data">Optional: Splitting the DDR section to reduce trampoline occurrences by isolating code from data</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=29" title="Edit section: Optional: Splitting the DDR section to reduce trampoline occurrences by isolating code from data">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Trampolines are linker-generated function calls that allow code to make jumps to points further than 4MB apart (i.e. far calls). They could occur on DSP servers that are large in terms of code and data size, when points of code that call each other are separated by large chunks of static data and other code. Trampolines may cause some performance loss or other problems; consequently, it is better to tell the linker to place all code apart from all data, to minimize the number of trampolines necessary, given the code would then be more compact. Separating code from data may be beneficial for other reasons as well (e.g. better cache utilization).
+</p><p>To find out how much code vs. data you have, you can use a tool call 'cg_xml' (available at <a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/applications_packages/cg_xml/index.htm">https://www-a.ti.com/downloads/sds_support/applications_packages/cg_xml/index.htm</a>). It is a collection of Perl scripts, which complements the codegen tools, providing more information about compiled binaries.
+</p><p>One of the scripts provided as part of 'cg_xml' is sectti.pl, which lists all output sections in a given compiled binary. If you run this script on your DSP image:
+</p>
+<pre>ofd6x –x myImage.x64P | perl sectti.pl
+</pre>
+<p>the script summarizes your code and data sizes. An example:
+</p>
+<pre>------------------------------------------------------------
+Totals by section type
+------------------------------------------------------------
+  Uninitialized Data&#160;:     961084  0x000EAA3C
+    Initialized Data&#160;:     462114  0x00070D22
+                Code&#160;:    1169504  0x0011D860
+</pre>
+<p>The totals may need to be adjusted to discount sections not placed in DDR. For instance, DSP/BIOS may introduce sections marked as type “N/A” that are neither counted as data or code. If they are placed in the DDR section, they need to be added to the total data memory size.
+</p><p>Coming back to the .tcf file, to separate code from data, split “DDR” segment into two segments: “DDR” that contains data only, and “DDRCODE” that contains code only.
+</p><p>To carve off a portion of DDR for strictly for code placement, change the above DDR declaration in the “mem_ext” array to the following instead:
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+{
+</p>
+<pre>   comment:    "DDR: off-chip memory for data",
+   name:       "DDR",
+   base:       0x83C00000,
+   len:        0x001B0000, // 1.7MB
+   space:      "code/data"
+</pre>
+<p>}, {
+</p>
+<pre>   comment:    "DDRCODE: off-chip mem. for code",
+   name:       "DDRCODE",
+   base:       0x83DB0000,
+   len:        0x00150000, // 1.3MB
+   space:      "code/data"
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Our effective memory map would become:
+</p>
+<center><a href="File_Figure4.html" class="image"><img alt="Figure4.png" src="https://processors.wiki.ti.com/images/2/2a/Figure4.png" width="550" height="600" /></a></center>
+<p>Note that it is not necessary to inform DSP Link of this change, as DDR and DDRCODE are contiguous and can be treated as a monolithic segment of writeable external memory for the DSP Link loader.
+</p><p>After splitting the DDR section, you need to change the following line, which should place most code sections into DDRCODE:
+</p><p><tt>bios.setMemCodeSections (prog, bios.DDRCODE);</tt>
+</p><p>Running <i>sectti.pl</i> from the Code Generation Tools XML Output Utility Scripts on the resulting executable can show all code sections that are not yet placed in DDRCODE. All sections in the video_copy example are already placed using the line above. However, in case your application has some extra non-placed sections (due to the section name missing the prefix ‘.text:’), here’s an example output from sectti.pl for your reference:
+</p>
+<pre>Name       &#160;:  Size (dec)    Size (hex)   Type   Load Addr   Run Addr
+----       &#160;:  ----------    ----------   ----   ----------  ---------
+.randomCode&#160;:  54816         0x0000d620   CODE   0x8fd99740  0x8fd99740
+</pre>
+<p>Assuming you have a section similar to .randomCode which lies outside of DDRCODE, you would need to manually place it in DDRCODE in the server's link.cmd file.
+</p>
+<pre>SECTIONS {
+    .randomCode &gt; DDRCODE
+}
+</pre>
+<p>After you are done with all necessary modifications, save and close the file. Rebuild the server by typing this from the current directory:
+</p>
+<pre>    make clean
+    make
+</pre>
+<p>Then copy the rebuilt server image (video_copy.x64P) to your target file system.
+</p>
+<h3><span id="Rebuilding_the_Arm-side_application_-_if_you_use_DSP_Link_1.40_(or_above)"></span><span class="mw-headline" id="Rebuilding_the_Arm-side_application_-_if_you_use_DSP_Link_1.40_.28or_above.29">Rebuilding the Arm-side application - if you use DSP Link 1.40 (or above)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=30" title="Edit section: Rebuilding the Arm-side application - if you use DSP Link 1.40 (or above)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Users of CE 2.X can use a new feature called Engine.createFromServer to communicate the memory map used by DSP/BIOS to DSP LINK. Please go <a href="Configuring_Codec_Engine_in_Arm_apps_with_createFromServer.html" title="Configuring Codec Engine in Arm apps with createFromServer">here</a> for more details. Using Engine.createFromServer ensures the memory map used by DSP LINK is in sync with DSP/BIOS. The rest of this section does not apply to you.
+</p><p>For users of CE 1.20 and DSP Link 1.40, they do not have to rebuild link, but they have to rebuild their Arm-side application.
+</p><p>Specifically, the change to be made is in examples/apps/video_copy/dualcpu/ceapp.cfg, the application configuration file. It has to have a configuration file setting that specifies what the memory map is.
+</p>
+<ul><li>Open the ceapp.cfg file and add or otherwise make sure the following code exists in the file:</li></ul>
+<p>&lt;syntaxhighlight lang='javascript'&gt;
+osalGlobal.armDspLinkConfig = {
+</p>
+<pre>   memTable: [
+       ["DDRALGHEAP",   {addr: 0x83800000, size: 0x00400000, type: "other"}],
+       ["RESET_VECTOR", {addr: 0x83F00000, size: 0x00000080, type: "reset"}],
+       ["DDR2",         {addr: 0x83C00000, size: 0x00300000, type: "main" }],
+       ["DSPLINKMEM",   {addr: 0x83F00080, size: 0x000FFF80, type: "link" }],
+   ],
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p><p>Then save and close the file.
+</p>
+<ul><li>Rebuild the application by executing make.</li></ul>
+<h3><span class="mw-headline" id="Copying_other_necessary_files_to_target_file_system">Copying other necessary files to target file system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=31" title="Edit section: Copying other necessary files to target file system">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In the final steps, we copy the remaining bits and pieces of the video_copy application to the target file system:
+</p>
+<ol><li>cd to the Codec Engine <tt>examples/apps/video_copy/dualcpu/</tt> directory. This is where the Arm application is.</li>
+<li>Copy the app.out executable to the target file system. Note that you do not have to rebuild it if you have not changed the Linux kernel supplied with the DVEVM/DVSDK software (unless you use DSP Link 1.40).</li>
+<li>Copy in.dat file, a sample input file for the application, from the current directory to the target filesystem.</li>
+<li>Have your <i>cmemk.ko</i> CMEM kernel module available on your target file system. You must have rebuilt it for your Linux kernel in order to run any other Codec Engine application. If you haven't changed your Linux kernel, you can use a copy of cmemk.ko in the Codec Engine examples/apps/system_files/davinci directory.</li>
+<li>If you are using DSPLINK 1.40, copy your dsplinkk.ko kernel module to your target file system. You might have rebuilt it for your Linux kernel in order to run any other Codec Engine application. If you haven't changed your Linux kernel, you can use a copy of dsplinkk.ko in the Codec Engine <tt>examples/apps/system_files/davinci</tt> directory.</li>
+<li>Have your kernel modules loading script (<i>loadmodules.sh</i>) available on your target file system. You can also find a copy of the script in the Codec Engine <tt>examples/apps/system_files/davinci</tt> directory.</li></ol>
+<h3><span class="mw-headline" id="Modifying_the_loadmodules.sh_script">Modifying the loadmodules.sh script</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=32" title="Edit section: Modifying the loadmodules.sh script">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><i>loadmodules.sh</i> loads the kernel module <i>dsplinkk.ko</i> and tells it where to put the DDR segment. That is the only flexibility DSPLINK 1.30 allows. The "DDR" segment can be anywhere and of any length, and can be announced to DSPLINK at the time the kernel module is loaded. Another is that "DDRALGHEAP" can be anywhere and of any length. It is the "DSPLINKMEM" and "RESET_VECTOR" segments that cannot be moved or resized without rebuilding DSPLINK.
+</p><p>Edit the <i>loadmodules.sh</i> script and remove the arguments following insmod dsplinkk.ko text, so the command says:
+</p><p><tt>insmod dsplinkk.ko</tt>
+</p><p>A note about <i>loadmodules.sh</i> and <i>dsplinkk.ko</i> arguments: <i>DSPLINK 1.30</i> supports an optional argument pair ddr_start and ddr_size that allows you to load and run DSP images that have different DDR segment than the default; but it still expects "DSPLINKMEM" and "RESET_VECTOR" segments to match what DSP Link 1.30's configuration file says. This is useful when you want to experiment with increasing your DSP image's size of the DDR segment at the expense of other segments’ sizes (excluding DSPLINKMEM and RESET_VECTOR), or vice versa, without having to go through the process of rebuilding DSP Link 1.30 every time; but it doesn't help if you need to change the limits of the entire memory map. In our case, having changed that text configuration file and rebuilt DSPLINK, the ddr_start and ddr_size arguments are no longer necessary since the DSPLINK 1.30 memory map configuration matches the memory map of the DSP image -- though you can still use them if you subsequently want to experiment with changing the position and size of DDR.
+</p><p>With <i>DSP Link 1.40</i>, which supports dynamic memory map configuration, changing the start address and size of the DDR section is only a matter of modifying the ARM-side application’s .cfg file and rebuilding the application itself. Hence there is no need to specify these parameters in <i>loadmodules.sh</i>.
+</p><p>Next, you have to change the CMEM memory description that follows as the arguments to the <tt>insmod cmemk.ko</tt> command. Specify <i>phys_start</i> and <i>phys_end</i> to match your new CMEM address and size, then specify pools to match the buffer requirement of your application. The pools are configured using an <tt>NxSize</tt> syntax where N is the number of buffers in the pool, and Size is the size of these buffers.
+For the video_copy example, the following configuration would be more than sufficient for CMEM:
+</p><p><tt>insmod cmemk.ko phys_start=0x83400000 phys_end=0x83800000 pools=20x4096,10x131072</tt>
+</p>
+<h3><span class="mw-headline" id="Changing_the_boot_argument_in_your_Linux_bootloader">Changing the boot argument in your Linux bootloader</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=33" title="Edit section: Changing the boot argument in your Linux bootloader">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When the Linux kernel is booted, we limit what the physical memory available to the kernel will be by means of the mem= boot argument. If you use U-Boot, change that portion of the bootargs variable to read <i>mem=52M</i> using the setenv command:
+</p><p><tt>&gt; setenv bootargs ‘console=ttyS0,115200n8 root=/dev/nfs <b>mem=52M</b> nfsroot=192.168.1.101:/opt/montavista/pro/devkit/arm/v5t_le/target,nolock’</tt>
+</p><p><b>Note!</b> This step is critical -- if Linux tries to use memory above 52MB, it will corrupt the CMEM data and the data will corrupt the kernel. That would fortunately likely result in a quick crash.
+</p>
+<h3><span class="mw-headline" id="Rebooting_and_running_the_application">Rebooting and running the application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=34" title="Edit section: Rebooting and running the application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>After the system boots, type:
+</p><p><tt>sh loadmodules.sh</tt>
+</p><p><tt>./app.out</tt>
+</p><p>Look for this line of application output to confirm the procedure worked:
+</p><p><tt>Application finished successfully.</tt>
+</p>
+<h2><span class="mw-headline" id="Troubleshooting">Troubleshooting</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=35" title="Edit section: Troubleshooting">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>At the end of the procedure, if you did everything correctly, the application should run and you can skip this section. Otherwise, this section provides a few troubleshooting tips to find out more about your system with the new memory map.
+</p>
+<h3><span class="mw-headline" id="Checking_how_much_cmem_memory_is_available_or_used">Checking how much cmem memory is available or used</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=36" title="Edit section: Checking how much cmem memory is available or used">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>After running <i>loadmodules.sh</i>, directly entering the command
+</p><p><tt>/bin/cat /proc/cmem</tt>
+</p><p>at the command prompt in Linux can show you whether you have set up CMEM with the correct buffer pools.
+</p><p>If you are interested in verifying the amount of memory allocated from the CMEM pools at any point in time in your application (e.g. when a Memory_contigAlloc call failed), you can add this line:
+</p><p><tt>system( "/bin/cat /proc/cmem" );</tt>
+</p><p>to your ARM-side application’s source code to obtain this information.
+</p>
+<h3><span class="mw-headline" id="Memory_map_mismatch">Memory map mismatch</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=37" title="Edit section: Memory map mismatch">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If there is a mismatch between the memory map used by the DSP/BIOS <i>.tcf</i> file and the DSP Link configuration, often this would result in a failure in the first <code>Engine_open()</code> call, which loads the DSP with the DSP server executable. If this occurs, compare the settings in the mem_ext array in the <i>.tcf</i> file with the ones in the DSP Link configuration (which resides in the <i>CFG_Davinci.txt</i> file in DSP Link 1.30 or in your application’s <i>.cfg</i> file in DSP Link 1.40). It is very possible there is a mismatch between the two.
+</p><p>In fact, it is a good practice to double-check the two configurations after you have gone through all the steps in the procedure of memory map configuration. It can save valuable debugging time down the line.
+</p>
+<h3><span class="mw-headline" id="Heap_sizes_too_small">Heap sizes too small</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=38" title="Edit section: Heap sizes too small">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>One common problem is that estimated heap sizes might be too small. This could happen if the sizes were underestimated or miscalculated, resulting in memory allocation failures on the DSP. Looking at the CE trace files and locating the point of failure should give you some indication of the heap that ran out of space. For example, if the trace shows a failure while creating an algorithm using DSKT2 (part of the <i>Framework Components</i>), this points to a potential lack of space in the "DDRALGHEAP". If the failure occurs while allocating/creating some other object, then it is likely that the DDR heap is too small, etc. You can turn on the highest verbosity level in CE trace by specifying the following command line when running your executable:
+</p><p><tt>CE_TRACE="*=01234567" TRACEUTIL_DSP0TRACEMASK="*=01234567" TRACEUTIL_DSP0TRACEFILE="cedsp0log.txt" CE_TRACEFILEFLAGS="w" CE_TRACEFILE="cearmlog.txt" TRACEUTIL_REFRESHPERIOD=200 ./app.out</tt>
+</p><p>Replace <i>app.out</i> with the name of your application executable. This should produce two log files corresponding to the ARM and the DSP which you can inspect post execution of the application. More details on how to use the CE trace can be found in the Codec Engine Developer’s User Guide.
+</p>
+<h2><span class="mw-headline" id="A_Real_World_Example">A Real World Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=39" title="Edit section: A Real World Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section describes an actual case in which a particular customer tried to resize their memory map.
+</p><p>The application is a four-channel CIF MPEG4 Simple Profile (or H.264 Baseline Profile) Digital Video Recorder (DVR) based on DM6446 with 64MB DDR2. 4 channels of CIF video are encoded and 1 channel of CIF video is decoded. The MPEG4 (or H.264) &amp; Audio encoder &amp; decoder conform to xDM. In this discussion, we will focus on the video codecs. So, 4 CIF encoding instances and 1 CIF decoding instance will be created by calling the VISA API:s. This example is based on Codec Engine 1.02 &amp; DSPLINK 1.30.08.02. Below is the system block diagram:
+</p>
+<center><a href="File_Figure5.html" class="image"><img alt="Figure5.png" src="https://processors.wiki.ti.com/images/b/b0/Figure5.png" width="867" height="525" /></a></center>
+<p>The final 64MB memory map looks like:
+</p>
+<pre>0x80000000 .. 0x83200000-1 (0-50MB; size 50MB): Linux: booted with MEM = 50M
+0x83200000 .. 0x83A00000-1 (50-58MB; size 8MB): CMEM: shared ARM/DSP I/O buffers
+0x83A00000 .. 0x83C00000-1 (58-60MB; size 2MB): DDRALGHEAP: codec dynamic memory
+0x83C00000 .. 0x83E00000-1 (60-62MB; size 2MB): DDR: code, stack, system data
+0x83E00000 .. 0x83F00000-1 (62-63MB; size 1MB): DSPLINKMEM: memory for DSPLINK
+0x83F00000 .. 0x83F00080-1 (63-63MB; size 128B): RESET_VECTOR: reset vectors
+0x83F00080 .. 0x84000000-1 (63-64MB; size 1MB): Unused memory
+</pre>
+<p>How did we arrive at this memory map? First of all, 1MB DSPLINKMEM is the default size of DSPLINK 1.30.08.02. It is important to correctly allocate the right memory size for CMEM, DDRALGHEAP &amp; DDR. Then we will have enough space for DSP S/W &amp; Linux OS.
+</p><p>Below diagram illustrates the system application data flow. VPFE puts the video input data (to be encoded data) in CMEM. The encoder running on DSP outputs the encoded data to CMEM. The encoded data is stored on hard disk finally. As for the decoding data flow, to-be-decoded data is copied from hard disk to CMEM first. Then, the decoder decompresses the data and outputs the result into decoded data buffers. The VPBE output resolution is CIF. Sometimes, we can use the resizer of the VPFE peripheral on DM6446 to get D1 resolution. So we need to allocate a buffer for resizer results in CMEM too.
+</p>
+<center><a href="File_Figure6.html" class="image"><img alt="Figure6.png" src="https://processors.wiki.ti.com/images/c/ca/Figure6.png" width="898" height="400" /></a></center>
+<h3><span class="mw-headline" id="Allocating_CMEM_Memory_Space">Allocating CMEM Memory Space</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=40" title="Edit section: Allocating CMEM Memory Space">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As for to-be-encoded data buffers, the size is <tt>((352 * 288) * 4 * 2B) * 3 = 2433024B</tt>. 352*288 is CIF resolution, 4 means 4 channels, one pixel in YUV4:2:2 needs 2 bytes and three <tt>(352 * 288) * 4 * 2B</tt> buffers are allocated for encoder algorithm. The size of decoded data buffers is same: 2433024B. Because we encode 4 channels CIF, you can calculate the size of encoded data buffers by 50% D1 <tt>((720 * 576 * 3 / 2 ) / 2 = 303.75KB</tt>, YUV4:2:0) or standard MPEG4 compression ratio. Here we allocate 256KB (262144B) for encoded data buffers less than 303.75KB. This is chosen based on experience. So, we configure three 256KB buffers (786432B) for to-be-decoded data buffer accordingly. As for the buffer of resizer result, we need <tt>720 * 576 * 2B = 829440B</tt> in YUV4:2:2. So, the <i>insmod cmemk</i> command looks like:
+</p><p><tt>insmod cmemk.ko phys_start=0x83200000 phys_end=0x83A00000 pools=1x262144, 2x2433024, 1x829440,1x786432</tt>
+</p>
+<h3><span class="mw-headline" id="Allocating_DDRALGHEAP_Memory_Space">Allocating DDRALGHEAP Memory Space</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=41" title="Edit section: Allocating DDRALGHEAP Memory Space">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>DDRALGHEAP is the memory allocated for codec dynamic memory requests. Both encoder and decoder will process and accept data with YUV4:2:0. One channel CIF data in YUV4:2:0 is <tt>352 * 288 * 3 / 2 B</tt> (one pixel with YUV4:2:0 format needs 3/2 byte). Encoder and decoder algorithms need the current frame and previous frame data. To compress or decompress one channel CIF, we need to allocate <tt>352 * 288 * 3 / 2 * 2 B</tt> memory for encoder and decoder respectively. Because 4 channels CIF will be encoded and 1 channel CIF will be decoded. So, the encoder needs <tt>352 * 288 * 3 / 2 * 2 * 4B</tt> (about 1.16MB) of dynamic memory and the decoder needs <tt>352 * 288 * 3 / 2 * 2 * 1B</tt> (about 297KB) of dynamic memory. The total of them is about 1.45MB. 2MB DDRALGHEAP is allocated in this example.
+</p>
+<h3><span class="mw-headline" id="Allocating_DDR_Memory_Space">Allocating DDR Memory Space</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=42" title="Edit section: Allocating DDR Memory Space">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>DDR is the DSP-side segment including all the system code, data, stack, heaps and code and static data for the codecs. The code size for the most complex video codecs is less than several hundred KBs. We can use the script <i>sectti.pl</i> to determine DDR section size:
+</p><p><tt>ofd6x -x codec_server.x64P | perl c:\temp\cg_xml\ofd\sectti.pl &gt; codec_server.x64P.sectti.csv</tt>
+</p><p>The script generated a report file, we can get about 416 KB of the totals of data and code. So 2MB DDR of this application is enough.
+</p>
+<pre>REPORT FOR FILE: codec_server.x64P
+          Name&#160;:         Size (dec) Size (hex)  Type    Load Addr   Run Addr
+          MPEG4ENC&#160;:     23840	    0x00005d20  CODE   	0x83c71000  0x83c71000
+          MPEG4DEC&#160;:     10784      0x00002a20  CODE   	0x83c82000  0x83c82000
+          .bss&#160;:         910        0x0000038e  UDATA   0x83c88000  0x83c88000
+          .hwi_vec&#160;:     512        0x00000200  CODE    0x83c70c00  0x83c70c00
+          .far&#160;:         204920     0x00032078  UDATA   0x83c00000  0x83c00000
+          .bios&#160;:        22912 	    0x00005980  CODE    0x83c76d20  0x83c76d20
+          .text&#160;:        123136     0x0001e100  CODE    0x83c52080  0x83c52080
+          .cinit&#160;:       8196  	    0x00002004  DATA    0x83c84a20  0x83c84a20
+          .sysinit&#160;:     1792  	    0x00000700  CODE    0x83c70180  0x83c70180
+          .const&#160;:       21288 	    0x00005328  DATA    0x83c7c6a0  0x83c7c6a0
+          .stack&#160;:       4096  	    0x00001000  UDATA   0x83c86a28  0x83c86a28
+
+Totals by section type (about 416KB)
+Uninitialized Data: 212958  0x00033fde
+ Initialized Data&#160;: 30080  0x00007580
+             Code&#160;: 182976  0x0002cac0
+</pre>
+<h3><span class="mw-headline" id="Allocating_Linux_OS_Memory_space">Allocating Linux OS Memory space</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=43" title="Edit section: Allocating Linux OS Memory space">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>We computed it by calculating the DSP needs first and subtracting that from the total amount of memory available. We know our production system has only 64MB of memory. Given we need 1MB for "DSPLINKMEM", 2MB for "DDR", 2MB for "DDRALGHEAP", 1MB for "RESET_VECTOR" &amp; unused memory and 8MB for CMEM, that gives a total of 14MB for DSP and shared buffers, leaving 50MB for Linux.
+</p>
+<h2><span class="mw-headline" id="Conclusion">Conclusion</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit&amp;section=44" title="Edit section: Conclusion">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Memory map configuration for Davinci-based system can be systematically performed after the user has designed the memory map to suit the amount of memory available.  In order for the procedure to go smoothly, a reminder is to:
+</p>
+<ol><li>Know your system.  Plan the memory map based on how many and which codec instances will need to be available at the same time in different modes of execution in the application.  Calculate or measure the size for each segment and write down the desired memory map.</li>
+<li>Be thorough. Apply the mechanical steps to adapt the DSP server, ARM application, DSP Link, CMEM and boot loader to match the desired memory map.  Always double-check the changes to ensure all numbers agree with each other.</li></ol>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130123408
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.117 seconds
+Real time usage: 0.122 seconds
+Preprocessor visited node count: 274/1000000
+Preprocessor generated node count: 400/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6078/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:28-0!canonical and timestamp 20201130123408 and revision id 181137
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Changing the DVEVM memory map</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Changing the DVEVM memory map</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Changing the DVEVM memory map</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Changing the DVEVM memory map</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Changing the DVEVM memory map</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Changing the DVEVM memory map</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Changing the DVEVM memory map</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Changing the DVEVM memory map</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Changing the DVEVM memory map</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;oldid=181137">https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;oldid=181137</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_DaVinci_Memorymaps.html" title="Category:DaVinci Memorymaps">DaVinci Memorymaps</a></li><li><a href="Category_DVEVM.html" title="Category:DVEVM">DVEVM</a></li><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_DSPBIOS.html" title="Category:DSPBIOS">DSPBIOS</a></li><li><a href="Category_Codecs.html" title="Category:Codecs">Codecs</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Changing+the+DVEVM+memory+map" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Changing_the_DVEVM_memory_map.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Changing_the_DVEVM_memory_map.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Changing_the_DVEVM_memory_map.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Changing_the_DVEVM_memory_map.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Changing_the_DVEVM_memory_map.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;oldid=181137" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Changing_the_DVEVM_memory_map&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 8 July 2014, at 12:28.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.117","walltime":"0.122","ppvisitednodes":{"value":274,"limit":1000000},"ppgeneratednodes":{"value":400,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":6078,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130123408","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":229});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Changing_the_DVEVM_memory_map by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:53:30 GMT -->
+</html>

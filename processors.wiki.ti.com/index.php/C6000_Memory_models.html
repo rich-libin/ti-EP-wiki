@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_Memory_models by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:28:07 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C6000 Memory models - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C6000_Memory_models","wgTitle":"C6000 Memory models","wgCurRevisionId":181468,"wgRevisionId":181468,"wgArticleId":828,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C6000_Memory_models","wgRelevantArticleId":828,"wgRequestId":"9f5cec2f3d29c21f1e7c5644","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C6000_Memory_models rootpage-C6000_Memory_models skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C6000 Memory models</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Background"><span class="tocnumber">2</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Review_Memory_Models"><span class="tocnumber">3</span> <span class="toctext">Review Memory Models</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Terminology"><span class="tocnumber">3.1</span> <span class="toctext">Terminology</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Definition_.26_Access.2C_Near_.26_Far"><span class="tocnumber">3.2</span> <span class="toctext">Definition &amp; Access, Near &amp; Far</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Tradeoffs"><span class="tocnumber">4</span> <span class="toctext">Tradeoffs</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Drawbacks_of_near"><span class="tocnumber">4.1</span> <span class="toctext">Drawbacks of near</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Costs:_near_vs._far_Accesses"><span class="tocnumber">4.2</span> <span class="toctext">Costs: near vs. far Accesses</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Default:_far_aggregates"><span class="tocnumber">5</span> <span class="toctext">Default: far_aggregates</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Definition_and_Declaration_Must_Agree"><span class="tocnumber">6</span> <span class="toctext">Definition and Declaration Must Agree</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Consistency_of_Builds"><span class="tocnumber">7</span> <span class="toctext">Consistency of Builds</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Rely_on_Compiler_Defaults"><span class="tocnumber">8</span> <span class="toctext">Rely on Compiler Defaults</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Advantages"><span class="tocnumber">8.1</span> <span class="toctext">Advantages</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Disadvantages"><span class="tocnumber">8.2</span> <span class="toctext">Disadvantages</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#How_User_Could_Get_in_Trouble"><span class="tocnumber">8.3</span> <span class="toctext">How User Could Get in Trouble</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Force_Everything_to_far"><span class="tocnumber">9</span> <span class="toctext">Force Everything to far</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#Advantages_2"><span class="tocnumber">9.1</span> <span class="toctext">Advantages</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Disadvantages_2"><span class="tocnumber">9.2</span> <span class="toctext">Disadvantages</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Discussion"><span class="tocnumber">9.3</span> <span class="toctext">Discussion</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-20"><a href="#Note_on_Linker_Diagnostics"><span class="tocnumber">10</span> <span class="toctext">Note on Linker Diagnostics</span></a></li>
+</ul>
+</div>
+
+<hr />
+<p><font size="5"><b>C6000 Memory Models &amp; Vendor Libraries</b></font>
+</p>
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This document discusses usage of the C6000 C compiler memory models from the perspective of an object library vendor.  It assumes you are using the C6000 compiler v5.1.0 or higher.  Note the v5.1.0 compiler comes bundled with Code Composer Studio 3.1.
+</p>
+<h2><span class="mw-headline" id="Background">Background</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=2" title="Edit section: Background">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h2><span class="mw-headline" id="Review_Memory_Models">Review Memory Models</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=3" title="Edit section: Review Memory Models">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Previous versions of the compiler offered memory models for managing both code and data.  The code models were replaced by linker generated trampolines.  The compiler always generates near calls, and lets the linker apply trampolines to calls that do not reach.  Details on trampolines are in this <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/apps/catalog/resources/appnoteabstract.jhtml?abstractName=spraa46">linker application note</a>.
+</p><p>The data memory models remain the same.  But the options for choosing the data memory model, as well as the default, are different from previous releases.
+</p>
+<table border="2" cellspacing="0" cellpadding="4" width="100%">
+<tbody><tr>
+<td><b>Build Option</b>
+</td>
+<td><b>Means</b>
+</td>
+<td><b>Default</b>
+</td></tr>
+<tr>
+<td>
+<p>- -mem_model:data=near
+</p>
+</td>
+<td>All data near
+</td>
+<td>No
+</td></tr>
+<tr>
+<td>
+<p>- -mem_model:data=far_aggregates
+</p>
+</td>
+<td>Aggregate data far; scalar data near
+</td>
+<td>Yes
+</td></tr>
+<tr>
+<td>
+<p>- -mem_model:data=far
+</p>
+</td>
+<td>All data far
+</td>
+<td>No
+</td></tr></tbody></table>
+<p>Older compilers offered the options –ml
+[ 0-3
+] which controlled both code and data models.  Those options are still supported, though deprecated.  Please stop using those options as soon as possible.  Note the options –ml
+[ 1-3
+] indicate use of the far code model, and thus effectively disable trampolines and all their attendant benefits.
+</p><p>The rest of this document only discusses data memory models.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Terminology">Terminology</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=4" title="Edit section: Terminology">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A variable <u>definition</u> tells the compiler everything it needs to know to actually create a given variable …
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+int global_array[100];          // definition
+&lt;/syntaxhighlight&gt;
+</p><p>A variable <u>declaration</u> tells the compiler the type and name of a variable, but typically omits details needed to create it...
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+extern int global_array[];      // declaration
+&lt;/syntaxhighlight&gt;
+</p><p>The keywords <u>near</u> and <u>far</u> can be used on either a variable definition or declaration.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+far extern int global_array[];  // far declaration
+</p><p>near static int i;              // near definition
+&lt;/syntaxhighlight&gt;
+</p><p>Use of near or far overrides any build option.
+</p><p>A variable <u>access</u> is a read or write of the variable …
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+global_array[i] = 0;            // access
+&lt;/syntaxhighlight&gt;
+</p><p>A <u>scalar</u> is a simple variable.
+&lt;syntaxhighlight lang='c'&gt;
+int i;                          // define some
+</p><p>float f;                        // scalars
+</p><p>int *ptr;                       // pointer is scalar
+&lt;/syntaxhighlight&gt;
+</p><p>An <u>aggregate</u> is an array, structure, or union.
+&lt;syntaxhighlight lang='c'&gt;
+int global_array[100];          // define some
+</p><p>struct sss global_struct;       // aggregates
+</p><p>union  uuu global_union;
+&lt;/syntaxhighlight&gt;
+</p>
+<h3><span id="Definition_&amp;_Access,_Near_&amp;_Far"></span><span class="mw-headline" id="Definition_.26_Access.2C_Near_.26_Far">Definition &amp; Access, Near &amp; Far</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=5" title="Edit section: Definition &amp; Access, Near &amp; Far">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This table shows whether a variable with a given definition can be accessed by the given method.
+</p>
+<table border="2" cellspacing="0" cellpadding="4" width="53%" align="center">
+<tbody><tr>
+<td align="center" bgcolor="#C0C0C0">&#160;
+</td>
+<td align="center" bgcolor="#C0C0C0">&#160;
+</td>
+<td align="center" colspan="2">Access
+</td></tr>
+<tr>
+<td align="center" bgcolor="#C0C0C0">&#160;
+</td>
+<td align="center" bgcolor="#C0C0C0">&#160;
+</td>
+<td align="center"><b>Near</b>
+</td>
+<td align="center"><b>Far</b>
+</td></tr>
+<tr>
+<td align="center" rowspan="2">Definition
+</td>
+<td align="center"><b>Near</b>
+</td>
+<td align="center">OK
+</td>
+<td align="center">OK
+</td></tr>
+<tr>
+<td align="center"><b>Far</b>
+</td>
+<td align="center">Fails
+</td>
+<td align="center">OK
+</td></tr></tbody></table><p><br clear="all" />
+</p><p>The key thing to notice is that a far access of a near variable works, while a near access of a far variable does not work.
+</p>
+<h2><span class="mw-headline" id="Tradeoffs">Tradeoffs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=6" title="Edit section: Tradeoffs">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Drawbacks_of_near">Drawbacks of near</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=7" title="Edit section: Drawbacks of near">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If near variables work so well, why not use them all the time?
+</p><p>The total size of all the near variables is limited to 32K bytes.  That is because such variables are accessed at an offset from the register B14, and that offset is limited to 15-bits.
+</p><p>All the near variables, from the libraries and from user code, must be combined together into a single section named .bss and allocated to memory together.  For various system related reasons, that is not always possible.
+</p>
+<h3><span class="mw-headline" id="Costs:_near_vs._far_Accesses">Costs: near vs. far Accesses</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=8" title="Edit section: Costs: near vs. far Accesses">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In contrast to software pipelined loops, performance and code size of variable accesses is directly linked.  As performance improves, so does code size.
+</p><p>Intuition says that near variable access is cheaper than far variable access.  That
+’ s true, but not as often as you might think.
+</p><p>If a variable is accessed indirectly, then the cost is the same.  Indirect access obviously includes any access involving a pointer.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ul><li>ptr_to_int = ...</li></ul>
+<p>ptr_to_struct-&gt;member = ...
+&lt;/syntaxhighlight&gt;
+</p><p>It also includes any other computed memory address.
+&lt;syntaxhighlight lang='c'&gt;
+global_array[i] = ...
+</p><p>local_var = ...
+</p><p>function_argument = ...
+&lt;/syntaxhighlight&gt;
+</p><p>Near access is cheaper only in the case of direct access by name (possibly plus a constant offset).
+&lt;syntaxhighlight lang='c'&gt;
+global_int = ...
+</p><p>global_struct.member = ...
+</p><p>global_array[10] = ...
+&lt;/syntaxhighlight&gt;
+</p><p>Thus, with regard to costs, the importance of the choice of memory model is linked to how often direct accesses occur.  If direct accesses are rare, costs will vary little with the choice of memory model.  If direct memory access is common, then near memory model will tend to be cheaper than far memory model.
+</p>
+<h2><span class="mw-headline" id="Default:_far_aggregates">Default: far_aggregates</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=9" title="Edit section: Default: far aggregates">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The default memory model is far_aggregates because, in most code, direct memory access is common only among scalars.  Aggregates are nearly always accessed indirectly.
+</p><p>Furthermore, placing only scalars in near memory means the 32K size limit will almost never be exceeded.  The largest scalars are 8 bytes big, and it would take 4097 separately named 8-byte scalars to exceed the 32K limit.
+</p><p>Thus, the costs of direct access are minimized while avoiding the 32K size limit of near memory.
+</p>
+<h2><span class="mw-headline" id="Definition_and_Declaration_Must_Agree">Definition and Declaration Must Agree</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=10" title="Edit section: Definition and Declaration Must Agree">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Variable definitions appear in source files, and variable declarations appear in header files.  Declarations influence how accesses are performed.  The near or far property of a given variable as written in the definition and the declaration must agree.  Agreement, as used here, does not mean identical.  It means there will be no error in execution at runtime.  Identical use of near or far is one way to get agreement.  But it is not the only one.  As the table in section 5 indicates, the following would work...
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+/* header file */
+far extern int global_var;   // far declaration
+</p><p>/* library source file */
+near int global_var;         // near definition
+&lt;/syntaxhighlight&gt;
+</p><p>Note the converse is not true.  A near declaration cannot access a far definition.
+</p><p>Explicit use of keywords is not the only way to obtain the results in the above example.  The same thing happens if the library source file is built with the default far_aggregates data memory model, and the user code that includes the header file is built with far data memory model.
+</p>
+<h2><span class="mw-headline" id="Consistency_of_Builds">Consistency of Builds</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=11" title="Edit section: Consistency of Builds">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A library is supplied with at least two components: the object files and the header files.  The object files are built when the library is released. The header files are included in the user
+’ s source and build.  Thus, the header files, and the declarations they contain, are built with the user
+’ s build options.
+</p><p>Some libraries are more sophisticated.  They come with configuration tools that auto-generate additional source files.  These source files can define variables which are accessed in library object code.  The auto-generated source files are built with the user
+’ s build options.
+</p><p>In all these cases, consistency of builds is required so that, as discussed in section 9, the variable definitions and declarations agree.  A library vendor has two choices: document build option requirements, or write the header files and auto-generate source files such that they are independent of the user
+’ s build options.
+</p><p>Documenting which build options should or should not be used is a reasonable choice.  If the user makes an error, the linker will issue a warning or error message.  And correction is straightforward: adopt the build options required by the library.
+</p>
+<h2><span class="mw-headline" id="Rely_on_Compiler_Defaults">Rely on Compiler Defaults</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=12" title="Edit section: Rely on Compiler Defaults">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This is the first of two sections that make specific recommendations.  This section discusses using the compiler default option where scalars are near and aggregates are far.
+</p>
+<h3><span class="mw-headline" id="Advantages">Advantages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=13" title="Edit section: Advantages">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>That's how the user is likely to do it</li>
+<li>Cost savings for scalar access</li>
+<li>No extra costs for most aggregate accesses (which are done indirectly)</li>
+<li>Easy to document</li>
+<li>Easy to justify</li>
+<li>Scenarios where user gets in trouble are fairly exotic</li></ul>
+<h3><span class="mw-headline" id="Disadvantages">Disadvantages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=14" title="Edit section: Disadvantages">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Library scalars are allocated to user's .bss section.  Must determine how much memory this is and document it.</li>
+<li>Some system configurations require that all the library data be allocated separately, i.e. not in .bss, and thus must be far</li></ul>
+<h3><span class="mw-headline" id="How_User_Could_Get_in_Trouble">How User Could Get in Trouble</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=15" title="Edit section: How User Could Get in Trouble">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>User builds with near data memory model and does a direct access to an aggregate defined in the library</li>
+<li>User builds with far data memory model, including an auto-generated file that defines a scalar, and library code performs an access to that scalar</li>
+<li>All of these scenarios result in diagnostic messages from the linker</li></ul>
+<h2><span class="mw-headline" id="Force_Everything_to_far">Force Everything to far</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=16" title="Edit section: Force Everything to far">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section discusses a second recommendation.  Explicitly define and declare every global variable to be far.  Use of the far keyword in this manner overrides any memory model build options chosen by the user.
+</p>
+<h3><span class="mw-headline" id="Advantages_2">Advantages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=17" title="Edit section: Advantages">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>The user cannot get in trouble</li>
+<li>No mixing of library variables with user .bss variables</li>
+<li>Library data can be allocated anywhere in memory</li></ul>
+<h3><span class="mw-headline" id="Disadvantages_2">Disadvantages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=18" title="Edit section: Disadvantages">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Extra costs for every direct scalar access.  This could prove pivotal if it occurs in critical path code.</li></ul>
+<h3><span class="mw-headline" id="Discussion">Discussion</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=19" title="Edit section: Discussion">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The trade-off here is library costs versus ease of support.  It is very easy to support a library where all of the data will always be far.  You only need a bit of documentation to tell the user to expect a .far section.  This .far section can be allocated anywhere from a correctness perspective.  But for that ease of support, you may a price, even a high price, in lost performance and added code size.  The only way to know for sure is to take measurements and see.
+</p><p>The compiler RTS library declares all data as far.  Most of the RTS data is aggregates that are accessed indirectly.  The few scalars that are accessed directly are in seldom used functions.
+</p><p>Note the RTS source actually uses _DATA_ACCESS as the storage class of all variables, and has
+&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>define _DATA_ACCESS far</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+in the header file linkage.h, which is in turn included by all the source files.  Thus, it is easy to change this implementation detail.  Note rebuilding the library is required.  That is pretty straightforward in the case of the RTS library.  It may not be straightforward for other libraries.
+</p>
+<h2><span class="mw-headline" id="Note_on_Linker_Diagnostics">Note on Linker Diagnostics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit&amp;section=20" title="Edit section: Note on Linker Diagnostics">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The linker diagnostic emitted when a data memory model mistake occurs is a warning, not an error.   Here is an example:
+</p>
+<pre>&gt;&gt; warning: Detected a near (.bss section relative) data reference to the symbol
+_global defined in section .far.  The reference occurs in
+file2.obj, section .text, SPC offset 00000008.  Either make the
+symbol near data by placing it in the .bss section, or make the
+references to the symbol far.  For C/C++ code use 'far' or 'near'
+modifiers on the type definition of the symbol or compile with the
+--mem_model:data switch.
+</pre>
+<p>This is a warning because the linker cannot be certain it is an error.  If the linker could somehow be certain that the error occurred in compiler generated code, it would generate an error instead.  It cannot do that.  And it is possible, in assembly language, to employ a custom paging scheme that uses B14 as the base register.  In such a case, the error message is spurious.  Thus, it is categorized as a warning, and not an error.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130083332
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.038 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 192/1000000
+Preprocessor generated node count: 348/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 465/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:828-0!canonical and timestamp 20201130083332 and revision id 181468
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 Memory models</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 Memory models</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C6000 Memory models</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C6000 Memory models</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C6000 Memory models</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 Memory models</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 Memory models</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C6000 Memory models</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C6000 Memory models</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;oldid=181468">https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;oldid=181468</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C6000+Memory+models" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C6000_Memory_models.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:C6000_Memory_models&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C6000_Memory_models.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C6000_Memory_models.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C6000_Memory_models.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;oldid=181468" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C6000_Memory_models&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 July 2014, at 08:51.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.038","walltime":"0.039","ppvisitednodes":{"value":192,"limit":1000000},"ppgeneratednodes":{"value":348,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":465,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130083332","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":222});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_Memory_models by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:28:09 GMT -->
+</html>

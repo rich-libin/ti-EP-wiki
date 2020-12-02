@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Extending_data_structures_in_XDM by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:27:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Extending data structures in XDM - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Extending_data_structures_in_XDM","wgTitle":"Extending data structures in XDM","wgCurRevisionId":181128,"wgRevisionId":181128,"wgArticleId":7,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["XDAIS","Codecs","Codec Engine"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Extending_data_structures_in_XDM","wgRelevantArticleId":7,"wgRequestId":"2f303d9932a8cb0eb2a802ae","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Extending_data_structures_in_XDM rootpage-Extending_data_structures_in_XDM skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Extending data structures in XDM</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Example"><span class="tocnumber">2</span> <span class="toctext">Example</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Constraints"><span class="tocnumber">3</span> <span class="toctext">Constraints</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Naming_Conventions"><span class="tocnumber">4</span> <span class="toctext">Naming Conventions</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Distribution"><span class="tocnumber">5</span> <span class="toctext">Distribution</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Notes"><span class="tocnumber">5.1</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#The_perils_of_extending_inArgs.2C_outArgs"><span class="tocnumber">6</span> <span class="toctext">The perils of extending inArgs, outArgs</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit&amp;section=1" title="Edit section: Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In XDM, structures such as codec creation's <i>*_Params</i>, <code>process()</code>'s <i>*_InArgs</i> and <i>*_OutArgs</i>, and <code>control()</code>'s <i>*_DynamicParams</i> and <i>*_Status</i> are all extensible, meaning users can redefine the structure to include additional fields beyond the base ones. To support this extensibility, XDM structures contain size as its first field. This field is used:
+</p>
+<ul><li>By the framework to determine how big the structure is.</li>
+<li>By the codec to determine how to interpret the fields.</li></ul>
+<p>The advantage of support for extensions is:
+</p>
+<ul><li>Flexibility. This allows users to reuse existing interfaces while augmenting their data structures with extra fields that they need beyond what is initially supported.</li></ul>
+<p>The disadvantages are:
+</p>
+<ul><li>Extra memory needed to support size field.</li>
+<li>An application written to use an algorithm that implements the extended interface/data structures might not necessarily be able to use an algorithm that supports strictly the base interface, i.e. algorithms of the same base class are not necessarily interchangeable without modification of the application code.</li></ul>
+<h2><span class="mw-headline" id="Example">Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit&amp;section=2" title="Edit section: Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Given a base parameter structure:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+typedef struct IVIDDEC_DynamicParams {
+</p>
+<pre>   XDAS_Int32 size;
+   XDAS_Int32 decodeHeader;
+   XDAS_Int32 displayWidth;
+   XDAS_Int32 frameSkipMode;
+</pre>
+<p>} IVIDDEC_DynamicParams;
+&lt;/syntaxhighlight&gt;
+</p><p>We can extend it with new fields as follows:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+typedef struct MYIVIDDEC_DynamicParams {
+</p>
+<pre>   IVIDDEC_DynamicParams base;
+   XDAS_Int32 newField1;
+   XDAS_Int32 newField2;
+</pre>
+<p>} MYIVIDDEC_DynamicParams;
+&lt;/syntaxhighlight&gt;
+</p><p>When using this new structure, we need to ensure that base.size field is set to the size of the extended structure to ensure correct operation in frameworks (e.g. <a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a>):
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<pre>   MYIVIDDEC_DynamicParams dParams;
+</pre>
+<pre>   dParams.base.size = sizeof(MYIVIDDEC_DynamicParams);   // Must be set to size of extended structure
+   dParams.base.displayWidth = 1024;
+   dParams.newField1 = 13;
+   ...
+</pre>
+<pre>   /* If using Codec Engine, API call might look like this.  Note the cast */
+   VIDDEC_control(handle, id, (VIDDEC_DynamicParams *)&amp;dParams, &amp;status);
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Constraints">Constraints</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit&amp;section=3" title="Edit section: Constraints">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>When using the <a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a>, because it's RPC based, you have the following constraints when utilizing remote codecs (when using CE with local codecs, these constraints don't apply):
+<ul><li><i>No pointers in the extended fields</i>. Because of address translation (GPP-side addresses may not match the DSP-side address) and <a href="Cache_Management.html" title="Cache Management"> cache maintenance</a> (DSP is cached, which needs maintained for coherence), pointers to data are non-trivial to manage. The default VISA RPC stubs/skeletons will manage pointers defined in the base class, but it's impossible to know about pointers in proprietary extensions.
+<ul><li>If you must pass pointers across cores, consider using the <code>inBufs</code> and <code>outBufs</code> arguments already present in most of the <code>process()</code> calls, or the <code>*_Status.data</code> field for <code>control()</code> calls.  Note that this technique applies to pointers to data buffers - pointers to functions on different devices are not supported.</li>
+<li>Another alternative if the pointers are to 'small' structs containing scalar fields, you may be able to unroll these scalar elements of the pointed-to-struct into extended scalar fields and avoid the pointer difficulties altogether.</li></ul></li>
+<li><i>Field alignment</i>.  Both the base data structure and the extended structure have to be 32-bit aligned for remote algorithm execution support. If not, extra padding should be added to the structure. E.g.</li></ul></li></ul>
+<p>&lt;syntaxhighlight lang='c'&gt;
+typedef struct MYIVIDDEC_DynamicParams {
+</p>
+<pre>   IVIDDEC_DynamicParams base;
+   XDAS_Int32 newField1;
+   XDAS_Int16 newField2;
+   XDAS_Int16 padding;  // Needed for 32-bit alignment
+</pre>
+<p>} MYIVIDDEC_DynamicParams;
+&lt;/syntaxhighlight&gt;
+</p>
+<ul><li><ul><li><i>Max size</i>.  Fixed size messages are used to marshal arguments for, and unmarshal replies from, remote processors.  These messages contain 1) internal headers (&lt; 128 bytes), input structs (e.g. "InArgs" or "DynamicParams") and output structs (e.g. "OutArgs" or "Status").  The sum of these contents must fit in a message, so the message size imposes a max size constraint on extended args.
+<ul><li>In CE releases before 2.25, there was an artificial limit imposed; regardless of how big the actual message is, no more than 512 bytes were used.</li>
+<li>In current CE releases (2.25 and later), the entire size of the message is available to marshal/unmarshal arguments.  You can configure the size of a message in the app's config script:</li></ul></li></ul></li></ul>
+<p>&lt;syntaxhighlight lang='javascript'&gt;
+/*
+</p>
+<pre>* Increase the size of messages from the default 4kB to 8kB.  To keep the same memory
+* map, we also halve the number of messages from the default 64 to 32.
+*/
+</pre>
+<p>var osalGlobal = xdc.useModule('ti.sdo.ce.osal.Global');
+osalGlobal.armCommMsgSize = 8 * 1024;  // use 8 kB msgs rather than the default 4kB
+osalGlobal.armCommNumMsgs = 32;   // create 32 msgs rather than the default 64
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Naming_Conventions">Naming Conventions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit&amp;section=4" title="Edit section: Naming Conventions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Because anyone can extend these XDM structs, it's important to attempt to define some conventions on the names of the extended fields.  This enables integrators using many different codecs to not have to wonder whether the extended field is <code>.MyField</code> or <code>.myfield</code> or &lt;syntaxhighlight&gt;.MYFIELD&lt;/syntaxhighlight&gt;.  This section describes guidelines for naming extended structs.
+</p>
+<table cellpadding="4" cellspacing="2" border="1">
+<caption><b>Naming Conventions</b>
+</caption>
+<tbody><tr>
+<th align="center"><b>Convention</b>
+</th>
+<th align="center"><b>Examples</b>
+</th></tr>
+<tr>
+<td align="left">Field names begin with a lowercase letter.  Camel case is used where needed to delimit multiword names.
+</td>
+<td align="left"><code>myExtendedField</code>
+</td></tr>
+<tr>
+<td align="left">Fields that indicate boolean flags end with the word "Flag" and are documented to accept <code>XDAS_TRUE</code> or <code>XDAS_FALSE</code>.
+</td>
+<td align="left"><code>enableMyFeatureFlag</code>
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Distribution">Distribution</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit&amp;section=5" title="Edit section: Distribution">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Because these extended structs are codec-specific, they should be provided with the codec, and included in the codec's documentation.  Typically, this involves simply adding a header with these definitions in the codec's package.
+</p>
+<h3><span class="mw-headline" id="Notes">Notes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit&amp;section=6" title="Edit section: Notes">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>These structs are independent of the framework (e.g. Codec Engine), and therefore belong in the base codec release, not in any framework-specific package.</li>
+<li>If extended parameters are used, codecs will try to interpret all of the extended settings.  <b>If you use extended parameters, make sure you initialize all members of the extended parameter structure -- not just the ones you are interested in.</b>  Codec documentation should provide reasonable defaults for all extended parameter settings.</li></ul>
+<h2><span id="The_perils_of_extending_inArgs,_outArgs"></span><span class="mw-headline" id="The_perils_of_extending_inArgs.2C_outArgs">The perils of extending inArgs, outArgs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit&amp;section=7" title="Edit section: The perils of extending inArgs, outArgs">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>As noted above there are (at least) two ways to extend XDM / VISA interfaces. Extending via dynamic params is fine - for example on DM6467 we do the following: -
+(code snippet at time of DM6467 Beta)
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+/* Use extended dynamic parameters to allow tweaking of the QP value */
+</p>
+<pre>   IH264VENC_DynamicParams extDynParams = {
+       Venc1_DynamicParams_DEFAULT,
+       0,    /* ChromaQPOffset */
+       18,   /* QPISlice */
+       20,   /* QPSlice */
+       0,    /* LfDisableIdc */
+       0,    /* LFAlphaC0Offset */
+       0,    /* LFBetaOffset */
+       0,    /* LFParametersFlag */
+       51,   /* RateCtrlQpMax */
+       0,    /* RateCtrlQpMin */
+       0,
+   };
+</pre>
+<p>....
+....
+</p>
+<pre>   extDynParams.videncDynamicParams.size = sizeof(IH264VENC_DynamicParams);
+   extDynParams.videncDynamicParams.targetBitRate = params.maxBitRate;
+   extDynParams.videncDynamicParams.inputWidth = params.maxWidth;
+   extDynParams.videncDynamicParams.inputHeight = params.maxHeight;
+</pre>
+<pre>   /* Create the video encoder */
+   hVe1 = Venc1_create(hEngine, "h264enc", &amp;params,
+                       (VIDENC1_DynamicParams *) &amp;extDynParams);
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>Observe that we're calling a generic API, <code>Venc1_create()</code> - there's nothing specific to H264 encode. The only thing we're doing is extending the data fields, in this case mainly to tweak the Quality Parameters (QPISlice, QPSlice). No <i>logic</i> in the code changes.
+</p><p>Now look at what we have to do (again as of DM6467 Beta) for AAC High End Encode.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+Int Aac_process(Aenc_Handle hAe, Buffer_Handle hInBuf, Buffer_Handle hOutBuf)
+{
+</p>
+<pre>   XDAS_Int32              inBufSizeArray[1];
+   XDAS_Int32              outBufSizeArray[1];
+   XDM_BufDesc             inBufDesc;
+   XDM_BufDesc             outBufDesc;
+   XDAS_Int32              status;
+   IAACENC_InArgs          inArgs;
+   IAACENC_OutArgs         outArgs;
+   XDAS_Int8              *inPtr;
+   XDAS_Int8              *outPtr;
+</pre>
+<pre>   inPtr                   = Buffer_getUserPtr(hInBuf);
+   outPtr                  = Buffer_getUserPtr(hOutBuf);
+</pre>
+<pre>   inBufSizeArray[0]       = Buffer_getNumBytesUsed(hInBuf);
+   outBufSizeArray[0]      = Buffer_getSize(hOutBuf);
+</pre>
+<pre>   inBufDesc.bufSizes      = inBufSizeArray;
+   inBufDesc.bufs          = &amp;inPtr;
+   inBufDesc.numBufs       = 1;
+</pre>
+<pre>   outBufDesc.bufSizes     = outBufSizeArray;
+   outBufDesc.bufs         = &amp;outPtr;
+   outBufDesc.numBufs      = 1;
+</pre>
+<pre>   outArgs.audenc_outArgs.size = sizeof(IAACENC_OutArgs);
+</pre>
+<pre>   /* Special AAC inArgs needed, hence custom Aac_process() required */
+   inArgs.audenc_inArgs.size   = sizeof(IAACENC_InArgs);
+   inArgs.numAncBytes          = 0;
+   inArgs.ancData              = NULL;
+</pre>
+<pre>   /* Stereo 16-bit */
+   inArgs.numInSamples         = Buffer_getNumBytesUsed(hInBuf) / 4;
+</pre>
+<pre>   /* Encode the audio buffer */
+   status = AUDENC_process(Aenc_getVisaHandle(hAe), &amp;inBufDesc, &amp;outBufDesc,
+                           (AUDENC_InArgs *) &amp;inArgs,
+                           (AUDENC_OutArgs *) &amp;outArgs);
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>That's completely different from the extended parameters scenario - we now have <code>Aac_process()</code> instead of just <code>AUDENC_process()</code> (or <code>Aenc_process()</code> to be analogous with naming convention in previous h264 scenario). This is because this particular codec implementation requires <code>inArgs.numInSamples</code> to be buffer size / 4 (the 4 is
+number of channels * number of bytes per sample). That difference is not comprehended in the AUDENC XDM 0.9 interface.
+</p><p>What would happen if we now added another Audio Encoder that customized <code>inArgs</code>/<code>outArgs</code>? We'd inevitably have to load up the code with ugly <code>#ifdef AACENC #else</code> guards. Worse still there's no plug and play - we couldn't swap out one vendor's AACENC for another since the extensions are, by definition, custom.
+</p><p>All applications (not just the DVSDK demos) suffer - TI's Digital Video Test Bench (DVTB) copies all of the header constants and structures from the AAC Encoder (as of DM6467 Beta) into its application file dvevmStAACEnc.h, in order to 'see' the extensions - this results in increased maintenance.
+</p><p>The good news in the above case is that it may be possible in future to use 'normal VISA' because the number of channels is passed in through <code>AUDENC_DynamicParams.numChannels</code>, and the number of bytes per sample can be derived from
+<code>AUDENC_DynamicParams.inputBitsPerSample</code>. This is being considered.
+</p><p>However, the custom code logic above clearly shows that <code>inArgs</code>/<code>outArgs</code> extensions equals custom application code which defeats the original intent of the VISA APIs. You simply cannot write generic application code in such cases.
+</p><p>If you believe you need such extensions we strongly encourage you to look at the newer XDM interfaces - perhaps AUDENC1 or VIDDEC2 solves the problem. This <a href="XDM_FAQ.html" title="XDM FAQ">XDM FAQ article</a> shows some XDM version details.
+</p><p>If after that, you still believe you need to extend <code>inArgs</code>/<code>outArgs</code>, please make sure you supply test cases that <i>clearly exercise all of the extended modes</i> - this is essential because test suites such as the DVTB will not be able to find problems in this area. Make sure such modes also get tested from an Arm-side application on an SoC platform so that any corner cases with cache-management (see above re address translation etc) are caught.
+</p><p>In summary, extending interfaces via DynamicParams is fine, however doing so via <code>inArgs</code>/<code>outArgs</code> requires custom application logic and is strongly discouraged.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201020556
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.031 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 26/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:7-0!canonical and timestamp 20201201020556 and revision id 181128
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Extending data structures in XDM</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Extending data structures in XDM</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Extending data structures in XDM</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Extending data structures in XDM</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Extending data structures in XDM</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Extending data structures in XDM</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Extending data structures in XDM</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Extending data structures in XDM</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Extending data structures in XDM</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;oldid=181128">https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;oldid=181128</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_XDAIS.html" title="Category:XDAIS">XDAIS</a></li><li><a href="Category_Codecs.html" title="Category:Codecs">Codecs</a></li><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Extending+data+structures+in+XDM" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Extending_data_structures_in_XDM.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Extending_data_structures_in_XDM&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Extending_data_structures_in_XDM.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Extending_data_structures_in_XDM.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Extending_data_structures_in_XDM.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;oldid=181128" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Extending_data_structures_in_XDM&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 8 July 2014, at 12:15.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.031","walltime":"0.032","ppvisitednodes":{"value":26,"limit":1000000},"ppgeneratednodes":{"value":32,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201020556","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":223});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Extending_data_structures_in_XDM by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:27:40 GMT -->
+</html>

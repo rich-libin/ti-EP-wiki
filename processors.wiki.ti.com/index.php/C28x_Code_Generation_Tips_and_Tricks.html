@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C28x_Code_Generation_Tips_and_Tricks by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:00:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C28x Code Generation Tips and Tricks - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C28x_Code_Generation_Tips_and_Tricks","wgTitle":"C28x Code Generation Tips and Tricks","wgCurRevisionId":217254,"wgRevisionId":217254,"wgArticleId":4887,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["C2000","Compiler","Development Tools for C2000","FAQ"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C28x_Code_Generation_Tips_and_Tricks","wgRelevantArticleId":4887,"wgRequestId":"308276e8dfcbc5d763b42246","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C28x_Code_Generation_Tips_and_Tricks rootpage-C28x_Code_Generation_Tips_and_Tricks skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C28x Code Generation Tips and Tricks</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Other_Resources"><span class="tocnumber">2</span> <span class="toctext">Other Resources</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Compiler_Support_Options"><span class="tocnumber">3</span> <span class="toctext">Compiler Support Options</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Frequently_Asked_Questions"><span class="tocnumber">4</span> <span class="toctext">Frequently Asked Questions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#A_Minimal_Project"><span class="tocnumber">4.1</span> <span class="toctext">A Minimal Project</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Q:_What_is_the_minimum_that_I_need_in_my_project_to_get_started.3F"><span class="tocnumber">4.1.1</span> <span class="toctext">Q: What is the minimum that I need in my project to get started?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-7"><a href="#Compiler_and_Linker_Options"><span class="tocnumber">4.2</span> <span class="toctext">Compiler and Linker Options</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#Q:_What_are_recommended_compiler_options_for_the_main_CPU.3F"><span class="tocnumber">4.2.1</span> <span class="toctext">Q: What are recommended compiler options for the main CPU?</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Q:_What_are_recommended_compiler_options_for_the_CLA_CPU.3F"><span class="tocnumber">4.2.2</span> <span class="toctext">Q: What are recommended compiler options for the CLA CPU?</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Q:_What_is_the_difference_between_.22Large_memory_model.22_and_.22Small_memory_model.22"><span class="tocnumber">4.2.3</span> <span class="toctext">Q: What is the difference between "Large memory model" and "Small memory model"</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Q:_What_is_.22Unified_Memory_Model.22.3F"><span class="tocnumber">4.2.4</span> <span class="toctext">Q: What is "Unified Memory Model"?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-12"><a href="#Run-Time_Support_Library"><span class="tocnumber">4.3</span> <span class="toctext">Run-Time Support Library</span></a>
+<ul>
+<li class="toclevel-3 tocsection-13"><a href="#Q:_What_is_the_runtime_library_for.3F"><span class="tocnumber">4.3.1</span> <span class="toctext">Q: What is the runtime library for?</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Q:_Where_are_the_RTS_functions_documented.3F"><span class="tocnumber">4.3.2</span> <span class="toctext">Q: Where are the RTS functions documented?</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Q:_Which_runtime_support_library_should_I_use.3F"><span class="tocnumber">4.3.3</span> <span class="toctext">Q: Which runtime support library should I use?</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Q:_Where_is_the_runtime_support_library_located.3F"><span class="tocnumber">4.3.4</span> <span class="toctext">Q: Where is the runtime support library located?</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Q:_How_do_I_add_the_RTS_library_to_my_project.3F"><span class="tocnumber">4.3.5</span> <span class="toctext">Q: How do I add the RTS library to my project?</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Q:_I_want_to_modify_and_rebuild_the_library_or_I_want_to_build_it_with_different_compiler_options._How_can_I_rebuild_it.3F"><span class="tocnumber">4.3.6</span> <span class="toctext">Q: I want to modify and rebuild the library or I want to build it with different compiler options.  How can I rebuild it?</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Q:_I_need_to_be_able_to_build_the_rts_library_for_audit_purposes._How_can_I_do_this.3F"><span class="tocnumber">4.3.7</span> <span class="toctext">Q: I need to be able to build the rts library for audit purposes.  How can I do this?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-20"><a href="#Optimization"><span class="tocnumber">4.4</span> <span class="toctext">Optimization</span></a>
+<ul>
+<li class="toclevel-3 tocsection-21"><a href="#Q:_Can_you_give_me_some_tips_on_using_the_optimizer.3F"><span class="tocnumber">4.4.1</span> <span class="toctext">Q: Can you give me some tips on using the optimizer?</span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#Q:_What_else_can_I_do_to_improve_performance.3F"><span class="tocnumber">4.4.2</span> <span class="toctext">Q: What else can I do to improve performance?</span></a></li>
+<li class="toclevel-3 tocsection-23"><a href="#Q:_My_code_worked_well_until_I_turned_on_optimization._What_could_be_the_issue.3F"><span class="tocnumber">4.4.3</span> <span class="toctext">Q: My code worked well until I turned on optimization. What could be the issue?</span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#Q:_How_can_volatile_help.3F"><span class="tocnumber">4.4.4</span> <span class="toctext">Q: How can volatile help?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-25"><a href="#Variable_Types"><span class="tocnumber">4.5</span> <span class="toctext">Variable Types</span></a>
+<ul>
+<li class="toclevel-3 tocsection-26"><a href="#Q:_I_defined_an_array_of_char.2C_but_each_value_is_taking_up_16_bits.21"><span class="tocnumber">4.5.1</span> <span class="toctext">Q: I defined an array of char, but each value is taking up 16 bits!</span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Q:_Doesn.27t_sizeof.28int.29_.3D.3D_sizeof.28char.29_.3D.3D_1_go_against_the_ANSI_standard.3F"><span class="tocnumber">4.5.2</span> <span class="toctext">Q: Doesn't sizeof(int) == sizeof(char) == 1 go against the ANSI standard?</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Q:_If_char_is_16_bits.2C_how_can_I_access_8-bit_values_efficiently.3F"><span class="tocnumber">4.5.3</span> <span class="toctext">Q: If char is 16 bits, how can I access 8-bit values efficiently?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-29"><a href="#Accessing_Assembly_from_C_Questions"><span class="tocnumber">4.6</span> <span class="toctext">Accessing Assembly from C Questions</span></a>
+<ul>
+<li class="toclevel-3 tocsection-30"><a href="#Q:_Is_there_a_way_to_access_specific_assembly_instructions_from_C_code.3F"><span class="tocnumber">4.6.1</span> <span class="toctext">Q: Is there a way to access specific assembly instructions from C code?</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#Q:_I_have_a_function_in_assembly_and_I_want_to_call_it_from_C_-_How_can_I_access_the_arguments_inside_the_function.3F"><span class="tocnumber">4.6.2</span> <span class="toctext">Q: I have a function in assembly and I want to call it from C - How can I access the arguments inside the function?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-32"><a href="#Undefined_Symbols"><span class="tocnumber">4.7</span> <span class="toctext">Undefined Symbols</span></a>
+<ul>
+<li class="toclevel-3 tocsection-33"><a href="#Q:_When_I_build_I_get_a_bunch_of_undefined_symbols_with_.24_in_them_like_FS.24.24MPY.2C_FS.24.24TOL_-_what_are_these.3F"><span class="tocnumber">4.7.1</span> <span class="toctext">Q: When I build I get a bunch of undefined symbols with $ in them like FS$$MPY, FS$$TOL - what are these?</span></a></li>
+<li class="toclevel-3 tocsection-34"><a href="#Q:_When_I_build_I_get_a_linker_error_that_c_int00_is_not_defined.3F"><span class="tocnumber">4.7.2</span> <span class="toctext">Q: When I build I get a linker error that _c_int00 is not defined?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-35"><a href="#Linker_Questions"><span class="tocnumber">4.8</span> <span class="toctext">Linker Questions</span></a>
+<ul>
+<li class="toclevel-3 tocsection-36"><a href="#Q:_Where_is_the_linker_command_file_format_documented.3F"><span class="tocnumber">4.8.1</span> <span class="toctext">Q: Where is the linker command file format documented?</span></a></li>
+<li class="toclevel-3 tocsection-37"><a href="#Q:_Where_can_I_learn_more_about_linking.3F"><span class="tocnumber">4.8.2</span> <span class="toctext">Q: Where can I learn more about linking?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-38"><a href="#C_I.2FO_.28printf.28.29.2C_sprintf.28.29.2C_puts.28.29.29"><span class="tocnumber">4.9</span> <span class="toctext">C I/O (printf(), sprintf(), puts())</span></a>
+<ul>
+<li class="toclevel-3 tocsection-39"><a href="#Q:_I.27m_trying_to_add_printf.28.29_to_my_project_and_it_doesn.27t_work._Help.21"><span class="tocnumber">4.9.1</span> <span class="toctext">Q: I'm trying to add printf() to my project and it doesn't work.  Help!</span></a></li>
+<li class="toclevel-3 tocsection-40"><a href="#Q:_printf.28.29.2Fsprintf.28.29_in_5.2.x_seems_to_be_using_a_lot_more_stack_than_older_tools.3F"><span class="tocnumber">4.9.2</span> <span class="toctext">Q: printf()/sprintf() in 5.2.x seems to be using a lot more stack than older tools?</span></a></li>
+<li class="toclevel-3 tocsection-41"><a href="#Q:_I_don.27t_need_all_the_features_of_printf.28.29.2Fsprintf.28.29._Can_I_do_something_to_minimize_size.3F"><span class="tocnumber">4.9.3</span> <span class="toctext">Q: I don't need all the features of printf()/sprintf().  Can I do something to minimize size?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-42"><a href="#Industry_Standards"><span class="tocnumber">4.10</span> <span class="toctext">Industry Standards</span></a>
+<ul>
+<li class="toclevel-3 tocsection-43"><a href="#Q:_Does_the_28x_compiler_conform_to_any_industry_standard.3F"><span class="tocnumber">4.10.1</span> <span class="toctext">Q: Does the 28x compiler conform to any industry standard?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-44"><a href="#Extensions"><span class="tocnumber">4.11</span> <span class="toctext">Extensions</span></a>
+<ul>
+<li class="toclevel-3 tocsection-45"><a href="#Q:_Does_the_28x_compiler_support_GCC_extensions.3F"><span class="tocnumber">4.11.1</span> <span class="toctext">Q: Does the 28x compiler support GCC extensions?</span></a></li>
+<li class="toclevel-3 tocsection-46"><a href="#Q:_Does_the_28x_compiler_support_C99_extensions.3F"><span class="tocnumber">4.11.2</span> <span class="toctext">Q: Does the 28x compiler support C99 extensions?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-47"><a href="#Error_Messages"><span class="tocnumber">4.12</span> <span class="toctext">Error Messages</span></a></li>
+<li class="toclevel-2 tocsection-48"><a href="#Updates_and_Issues"><span class="tocnumber">4.13</span> <span class="toctext">Updates and Issues</span></a>
+<ul>
+<li class="toclevel-3 tocsection-49"><a href="#Q:_How_can_I_keep_abreast_of_the_known_issues_with_the_codegen_tools.3F"><span class="tocnumber">4.13.1</span> <span class="toctext">Q: How can I keep abreast of the known issues with the codegen tools?</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A listing of tips and tricks related to the Code Generation Tools for C28x based devices.
+</p>
+<h1><span class="mw-headline" id="Other_Resources">Other Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=2" title="Edit section: Other Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd><ul><li>TMS320C28x Optimizing C/C++ Compiler User's Guide <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">(spru514)</a></li>
+<li>TMS320C28x Assembly Language Tools User's Guide <a href="http://www.ti.com/lit/pdf/spru513" class="extiw" title="tidoc:spru513">(spru513)</a></li></ul></dd></dl>
+<p>The following is great general Code Generation Tools Information. Much of it applies to 28x:
+</p>
+<dl><dd><ul><li><a href="Compiler.html" class="mw-redirect" title="Compiler">Compiler Wiki Area</a></li>
+<li>Code Gen Tools Tips and Tricks for Beginners <a href="https://processors.wiki.ti.com/index.php?title=CGT_Tips_%26_Tricks_for_Beginners&amp;action=edit&amp;redlink=1" class="new" title="CGT Tips &amp; Tricks for Beginners (page does not exist)">Wiki article</a></li>
+<li>Code Generation Tools FAQ  <a href="Code_Generation_Tools_FAQ.html" title="Code Generation Tools FAQ"> Wiki article</a></li></ul></dd></dl>
+<h1><span class="mw-headline" id="Compiler_Support_Options">Compiler Support Options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=3" title="Edit section: Compiler Support Options">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd><ul><li>Please visit the <a href="http://software-dl.ti.com/ccs/esd/documents/sdto_cgt_Compiler-Problems-Checklist.html" title="Before asking for CGT support">Before asking for CGT support</a> Wiki page.  This page also describes how to submit a testcase to TI support.</li>
+<li>Check the <a rel="nofollow" class="external text" href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&amp;service=CQ&amp;schema=SDo-Web&amp;contextid=SDOWP&amp;username=readonly&amp;password=readonly">SDOWP</a> online bug database</li></ul></dd></dl>
+<h1><span class="mw-headline" id="Frequently_Asked_Questions">Frequently Asked Questions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=4" title="Edit section: Frequently Asked Questions">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="A_Minimal_Project">A Minimal Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=5" title="Edit section: A Minimal Project">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_What_is_the_minimum_that_I_need_in_my_project_to_get_started?"></span><span class="mw-headline" id="Q:_What_is_the_minimum_that_I_need_in_my_project_to_get_started.3F">Q: What is the minimum that I need in my project to get started?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=6" title="Edit section: Q: What is the minimum that I need in my project to get started?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The easiest way is to start with a project supplied from TI.  Examples are provided with your kit, or can be downloaded as part of <a rel="nofollow" class="external text" href="http://www.ti.com/controlsuite">ControlSUITE</a>. 
+Some very simple "hello world" type examples are included in the in the <a href="http://www.ti.com/microcontrollers/c2000-real-time-control-mcus/getting-started.html#28x_C.2FC.2B.2B_Header_Files_and_Peripheral_Examples" title="Getting Started with C2000 Links">"C/C++ header files and peripheral example packages"</a>.
+</p><p>The following examples are simplified lists of what these projects include:
+</p>
+<dl><dd><b> Any minimal C based project for a fixed-point 28x will have:</b>
+<ul><li><a href="#Compiler_and_Linker_Options">Compiler options</a>: -v28 -ml -mt -g -pdr -w</li>
+<li>a .c file with main()</li>
+<li><a href="#Run-Time_Support_Library">run-time support library</a> rts2800_ml.lib</li>
+<li>Appropriate <a href="#Linker_Questions">linker command file</a>.  Again the best way is to start with one provided with TI examples mentioned above.</li>
+<li><a href="C28x_Header_Files_and_Peripheral_Examples.html" title="C28x Header Files and Peripheral Examples">Header files</a> to facilitate programming C28x system control and peripherals.</li></ul></dd></dl>
+<dl><dd><b>Any minimal C based project for a 28x with Floating-Point will have:</b>
+<ul><li><a href="#Compiler_and_Linker_Options">Compiler options</a>: -v28 --float_support=fpu32 -ml -mt -g -pdr -w</li>
+<li>a .c file with main()</li>
+<li><a href="#Run-Time_Support_Library">run-time support library</a> rts2800_fpu32.lib</li>
+<li>Appropriate <a href="#Linker_Questions">linker command file</a>.  Again the best way is to start with one provided with TI examples mentioned above.</li>
+<li><a href="C28x_Header_Files_and_Peripheral_Examples.html" title="C28x Header Files and Peripheral Examples">Header files</a> to facilitate programming C28x system control and peripherals.</li></ul></dd></dl>
+<p>If your project also includes CLA code, then you will need to add the switch to enable the support (--cla_support=cla0).  Likewise if your project includes VCU assembly code, then use --vcu_support=vcu0 to enable support.
+</p>
+<h2><span class="mw-headline" id="Compiler_and_Linker_Options">Compiler and Linker Options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=7" title="Edit section: Compiler and Linker Options">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_What_are_recommended_compiler_options_for_the_main_CPU?"></span><span class="mw-headline" id="Q:_What_are_recommended_compiler_options_for_the_main_CPU.3F">Q: What are recommended compiler options for the main CPU?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=8" title="Edit section: Q: What are recommended compiler options for the main CPU?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>These are the basic recommended options to get started.  As you develop your code you may change the optimizer settings (see the optimizer section).
+</p>
+<table cellpadding="3" border="1">
+<caption><b>Commonly Used Compiler Options for the C28x CPU</b>
+</caption>
+<tbody><tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th><b>Options to Specify Processor Type</b>
+</th>
+<th>Option
+</th>
+<th>Alias
+</th>
+<th>Notes
+</th></tr>
+<tr>
+<td>Specify TMS320C28x architecture
+</td>
+<td>--silicon_version=28
+</td>
+<td>-v28
+</td>
+<td><b>Required</b><br />C28x based projects require this option.<br />Failure to use it will generate 27x (legacy) object code.
+</td></tr>
+<tr>
+<td>Specify C28x with Single Precision Floating-Point
+</td>
+<td>--float_support=fpu32
+</td>
+<td><br />
+</td>
+<td><b>This option requires Codegen V5.0.x or later</b><br />Enables generation of single-precision (32-bit) floating-point assembly instructions.<br /> This setting also requires -v28 and assumes large memory model (-ml)
+</td></tr>
+<tr>
+<td>Enable support for the Viterbi, Complex Math and CRC Unit (VCU)<br />
+</td>
+<td>--vcu_support=vcuN<br /> where:
+<ul><li>N = 0 for vcu type 0</li>
+<li>N = 2 for vcu type 2</li></ul>
+</td>
+<td><br />
+</td>
+<td>Enables the assembler to accept VCU assembly instructions<br />
+<ul><li><b>vcu0 requires Codegen V6.0.1 or later</b></li>
+<li><b>vcu2 requires Codegen V6.2.4 or later</b></li></ul>
+</td></tr>
+<tr>
+<td>Accept 24x assembly instructions<br />
+</td>
+<td>--c2xlp_src_compatible
+</td>
+<td>-m20
+</td>
+<td>This option is ONLY used if you are migrating C24x code to the C28x.
+</td></tr>
+<tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th><b>Required Memory Model Options</b>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th></tr>
+<tr>
+<td>Generate large memory model code
+</td>
+<td>--large_memory_model
+</td>
+<td>-ml
+</td>
+<td>This forces the compiler to view the architecture as having a flat 22-bit address space. All pointers are considered to be 22-bit pointers.<br />All TI supplied code uses -ml.<br />Using --float_support assumes large memory model.
+</td></tr>
+<tr>
+<td>Generates code for the unified memory model
+</td>
+<td>--unified_memory
+</td>
+<td>-mt
+</td>
+<td>Indicates memory is available in both program and data space. <br /> This allows the compiler to use instructions such as PREAD/PWRITE and MAC that require unified memory.
+</td></tr>
+<tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th><b>Debug/Optimizer</b>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th></tr>
+<tr>
+<td>Generate symbolic debug information
+</td>
+<td>--symdebug:dwarf
+</td>
+<td>-g
+</td>
+<td>When first writing code turn on full symbolic debug and get the code working. <br />Once code is debugged and stable the user can try --symdebug:skelatal instead.  Doing so can, however, severely limit debug capability so you may only want to apply it to time critical code.
+</td></tr>
+<tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th><b>Highly Recommended for Troubleshooting</b>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th></tr>
+<tr>
+<td>Issues remarks (non-serious warnings)
+</td>
+<td>--issue_remarks
+</td>
+<td>-pdr
+</td>
+<td>These remarks often point out real issues in the code that should be addressed to avoid bugs.<br /><b>TI recommends ALWAYS building with -pdr</b>
+</td></tr>
+<tr>
+<td>Link step: warn sections
+</td>
+<td>--warn_sections
+</td>
+<td>-w
+</td>
+<td>Displays a message when an undefined output section is created.
+</td></tr>
+<tr>
+<td>Issue diagnostics in verbose form
+</td>
+<td>--verbose diagnostics
+</td>
+<td><br />
+</td>
+<td>Provides verbose diagnostics that display the original source with line-wrap and indicate the position of the error in the source line. <br />This can be very useful if an error message is not clear.
+</td></tr></tbody></table>
+<h4><span id="Q:_What_are_recommended_compiler_options_for_the_CLA_CPU?"></span><span class="mw-headline" id="Q:_What_are_recommended_compiler_options_for_the_CLA_CPU.3F">Q: What are recommended compiler options for the CLA CPU?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=9" title="Edit section: Q: What are recommended compiler options for the CLA CPU?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>These are the basic recommended options to get started.
+</p>
+<table cellpadding="3" border="1">
+<caption><b>Commonly Used Compiler Options for the CLA</b>
+</caption>
+<tbody><tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th><b>Options to Specify Processor Type</b>
+</th>
+<th>Option
+</th>
+<th>Alias
+</th>
+<th>Notes
+</th></tr>
+<tr>
+<td>Enable support for the Control Law Accelerator<br />
+</td>
+<td>--cla_support=claN<br /> where:
+<ul><li>N = 0 for cla type 0</li>
+<li>N = 1 for cla type 1</li></ul>
+</td>
+<td><br />
+</td>
+<td>Enables the assembler to accept CLA assembly instructions<br />
+<ul><li><b>cla0: requires Codegen V5.2.x and later (assembly only) or 6.1.0 and later (for C and assembly)</b></li>
+<li><b>cla1: requires Codegen V6.2.4 or later</b></li></ul>
+</td></tr></tbody></table>
+<h4><span id="Q:_What_is_the_difference_between_&quot;Large_memory_model&quot;_and_&quot;Small_memory_model&quot;"></span><span class="mw-headline" id="Q:_What_is_the_difference_between_.22Large_memory_model.22_and_.22Small_memory_model.22">Q: What is the difference between "Large memory model" and "Small memory model"</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=10" title="Edit section: Q: What is the difference between &quot;Large memory model&quot; and &quot;Small memory model&quot;">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd><ul><li>Large memory model assumes data can be anywhere in the memory space.</li>
+<li>Small memory model assumes all data is in the lower 64k of memory unless it is specified as 'far'.</li></ul></dd></dl>
+<dl><dd>For 28x code TI uses large memory model. The small memory model is really there for legacy porting of another core (called the C27x) based code.</dd></dl>
+<h4><span id="Q:_What_is_&quot;Unified_Memory_Model&quot;?"></span><span class="mw-headline" id="Q:_What_is_.22Unified_Memory_Model.22.3F">Q: What is "Unified Memory Model"?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=11" title="Edit section: Q: What is &quot;Unified Memory Model&quot;?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Unified memory model means that any memory block can be used as either program memory or data memory.
+</p><p>All memory blocks including SARAM, flash, ROM, OTP and XINTF memory is unified on the 28x devices. Peripheral registers are typically only mapped to data space.
+</p><p>Specifying unified memory model in the build options is important because it allows the compiler to generate efficient instructions like PREAD/PWRITE/MAC. The compiler will not access anything that is volatile using the program space bus (i.e. peripheral registers).
+</p>
+<h2><span class="mw-headline" id="Run-Time_Support_Library">Run-Time Support Library</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=12" title="Edit section: Run-Time Support Library">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_What_is_the_runtime_library_for?"></span><span class="mw-headline" id="Q:_What_is_the_runtime_library_for.3F">Q: What is the runtime library for?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=13" title="Edit section: Q: What is the runtime library for?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>There is a lot of information on this in the TMS320C28x Optimizing C/C++ Compiler User's Guide <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">(spru514)</a>.  At a high level, the run-time-support library contains the following:
+</p>
+<dl><dd><ul><li>ANSI/ISO C/C++ standard library</li>
+<li>C I/O library</li>
+<li>Low-level support functions that provide I/O to the host operating system</li>
+<li>System startup routine, _c_int00</li></ul></dd></dl>
+<h4><span id="Q:_Where_are_the_RTS_functions_documented?"></span><span class="mw-headline" id="Q:_Where_are_the_RTS_functions_documented.3F">Q: Where are the RTS functions documented?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=14" title="Edit section: Q: Where are the RTS functions documented?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd><ul><li>TI does not provide documentation about the standard C libraries. Several references in the form of internet pages and books have already been published about this subject.</li>
+<li>Similarly, if you are using the C++ STL library and have questions about the API, TI does not provide documentation for that. The file &lt;readme.1st&gt; contains the following references:</li></ul>
+<ol><li>The Standard C++ Library: A Tutorial and Reference, Nicolai M. Josuttis, Addison-Wesley, ISBN 0-201-37926-0</li>
+<li>The C++ Programming Language (Third or Special Editions), Bjarne Stroustrup, Addison-Wesley, ISBN 0-201-88954-4 or 0-201-70073-5.</li>
+<li>Dinkumware's online reference at <a rel="nofollow" class="external free" href="http://dinkumware.com/manuals/">http://dinkumware.com/manuals/</a></li>
+<li>C++ online reference at <a rel="nofollow" class="external free" href="http://www.cplusplus.com/">http://www.cplusplus.com/</a></li></ol></dd></dl>
+<dl><dd><ul><li>A useful utility for checking C syntax and issues is Lint: <a rel="nofollow" class="external free" href="http://www.splint.org/">http://www.splint.org/</a></li></ul></dd></dl>
+<h4><span id="Q:_Which_runtime_support_library_should_I_use?"></span><span class="mw-headline" id="Q:_Which_runtime_support_library_should_I_use.3F">Q: Which runtime support library should I use?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=15" title="Edit section: Q: Which runtime support library should I use?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>In the past, there have been a number of RTS library builds provided by default with the Codgen tools.  To allow for quicker compiler release downloads, current compiler releases pre-build only a small number of very commonly-used libraries. The missing libraries, or libraries with custom build options, can be built by the user as desired.</dd></dl>
+<dl><dd>To learn how to modify and rebuild the library, please refer to the <a href="Mklib.html" title="Mklib">Mklib wiki article</a>.</dd></dl>
+<table cellspacing="2" cellpadding="2" border="1">
+<caption><b>C28x Run-Time Support Libraries</b>
+</caption>
+<tbody><tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th>Most Commonly Used
+</th>
+<th>Description
+</th>
+<th>Option Requirements
+</th></tr>
+<tr>
+<td>rts2800_ml.lib
+</td>
+<td>C/C++ large memory model run-time object library<br />This is the library to use for the fixed-point CPU
+</td>
+<td>-v28 -ml
+</td></tr>
+<tr>
+<td>rts2800_fpu32.lib
+</td>
+<td>C/C++ run-time object library for FPU targets<br />Assumes large memory model<br />Can be combined with the FPU FastRTS library.
+</td>
+<td>-v28 --float_support=fpu32 -ml
+</td></tr>
+<tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th>For C++ Exception Handling
+</th>
+<th>Description
+</th>
+<th>Option Requirements
+</th></tr>
+<tr>
+<td>rts2800_ml_eh.lib
+</td>
+<td>C/C++ large memory model run-time object library with exception handling support<br />Note: exception handling is costly in cycles and size, even if an exception is never thrown<br />Only use this library if you require exception handling
+</td>
+<td>-v28 -ml --exceptions
+</td></tr>
+<tr>
+<td>rts2800_fpu32_eh.lib
+</td>
+<td>C/C++ run-time object library for FPU targets with exception handling support<br />Note: exception handling is costly in cycles and size, even if an exception is never thrown<br />Only use this library if you require exception handling
+</td>
+<td>-v28 --float_support=fpu32 -ml --exceptions
+</td></tr>
+<tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th>Not Recommended<br />(Small Memory Model)
+</th>
+<th>Description
+</th>
+<th>Option Requirements
+</th></tr>
+<tr>
+<td>rts2800.lib
+</td>
+<td>C/C++ small memory model run-time object library<br />It is better to use the large memory model on 28x.<br /> This version of the library is no longer shipped by default with the codegen tools.
+</td>
+<td>-v28
+</td></tr>
+<tr>
+<td>rts2800_eh.lib
+</td>
+<td>C/C++ small memory model run-time object library with exception handling support<br />It is better to use the large memory model on 28x.<br /> This version of the library is no longer shipped by default with the codegen tools.
+</td>
+<td>-v28
+</td></tr></tbody></table>
+<p><br />
+</p>
+<h4><span id="Q:_Where_is_the_runtime_support_library_located?"></span><span class="mw-headline" id="Q:_Where_is_the_runtime_support_library_located.3F">Q: Where is the runtime support library located?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=16" title="Edit section: Q: Where is the runtime support library located?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>It will be in the /lib directory of your codegen install directory.
+<ul><li>For a newer install of Code Composer Studio (CCS), look in the tools directory of your CCS install.  For example: C:\ti\ccsv5\tools\compiler</li>
+<li>Previously compilers were being installed in Program Files.  For example: C:\Program Files\Texas Instruments\C2000 Code Generation Tools 5.2.4</li></ul></dd></dl>
+<h4><span id="Q:_How_do_I_add_the_RTS_library_to_my_project?"></span><span class="mw-headline" id="Q:_How_do_I_add_the_RTS_library_to_my_project.3F">Q: How do I add the RTS library to my project?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=17" title="Edit section: Q: How do I add the RTS library to my project?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><b>Command Line:</b>
+</p>
+<dl><dd>Use the -l &lt;library name&gt; option to include the library.</dd></dl>
+<p><b>In CCS 5:</b>
+</p>
+<dl><dd><ol><li>In Code perspective, right click on the project name and select "properties".</li>
+<li>Expand the C2000 linker -&gt; File search path options.</li>
+<li>Under "Include Library File" specify the RTS library</li>
+<li>The search path should already be specified for the codegen install / lib directory</li></ol></dd></dl>
+<dl><dd><a href="File_Rts_ccs5.html" class="image" title="CCS 5: Adding an RTS Library"><img alt="CCS 5: Adding an RTS Library" src="https://processors.wiki.ti.com/images/4/4a/Rts_ccs5.jpg" width="962" height="605" class="thumbborder" /></a></dd></dl>
+<p><b>In CCS 4:</b>
+</p>
+<dl><dd><ol><li>In Code perspective, right click on the project name and select "properties".</li>
+<li>Under C/C++ Build-&gt;Tool Setting Tab, expand the "C2000 Linker" options.</li>
+<li>Under "File Search Path" specify the RTS library in the Include Library File box</li></ol></dd></dl>
+<dl><dd><a href="File_Rts_ccs4.html" class="image" title="CCS 4: Adding an RTS Library"><img alt="CCS 4: Adding an RTS Library" src="https://processors.wiki.ti.com/images/4/4c/Rts_ccs4.jpg" width="780" height="219" class="thumbborder" /></a></dd></dl>
+<p><b>In CCS 3.3:</b> 
+</p>
+<dl><dd>There are two options:</dd></dl>
+<dl><dd><ul><li>Project-&gt;Add Files To Project, Select obj/lib, Browse to the library and add it</li>
+<li>Project-&gt;Build Options-&gt;Linker-&gt;Libraries and add the RTS library.  This will use the RTS library from the /lib directory of the compiler you are using.</li></ul></dd></dl>
+<dl><dd><a href="File_Rts_CCS3_1.html" class="image" title="CCS 3.3: Adding an RTS Library"><img alt="CCS 3.3: Adding an RTS Library" src="https://processors.wiki.ti.com/images/7/7c/Rts_CCS3_1.jpg" width="431" height="343" class="thumbborder" /></a></dd></dl>
+<p><br />
+</p>
+<h4><span id="Q:_I_want_to_modify_and_rebuild_the_library_or_I_want_to_build_it_with_different_compiler_options._How_can_I_rebuild_it?"></span><span class="mw-headline" id="Q:_I_want_to_modify_and_rebuild_the_library_or_I_want_to_build_it_with_different_compiler_options._How_can_I_rebuild_it.3F">Q: I want to modify and rebuild the library or I want to build it with different compiler options.  How can I rebuild it?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=18" title="Edit section: Q: I want to modify and rebuild the library or I want to build it with different compiler options. How can I rebuild it?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Newer versions of the compiler (6.0.2 and later) provide a utility for rebuilding the RTS library.  Please see the <a href="Mklib.html" title="Mklib">Mklib wiki article</a> for more information.</dd></dl>
+<dl><dd>For older toolsets, in the codegen tools lib directory, unzip the rtssrc.zip file.  There should be a rtssrc_zip_README.txt file that describes the steps to rebuild the libraries.</dd></dl>
+<h4><span id="Q:_I_need_to_be_able_to_build_the_rts_library_for_audit_purposes._How_can_I_do_this?"></span><span class="mw-headline" id="Q:_I_need_to_be_able_to_build_the_rts_library_for_audit_purposes._How_can_I_do_this.3F">Q: I need to be able to build the rts library for audit purposes.  How can I do this?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=19" title="Edit section: Q: I need to be able to build the rts library for audit purposes. How can I do this?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Newer versions of the compiler (6.0.2 and later) provide a utility for rebuilding the RTS library.  Please see the <a href="Mklib.html" title="Mklib">Mklib wiki article</a> for more information.</dd></dl>
+<dl><dd>For older versions of the compiler: in the codegen tools lib directory, unzip the rtssrc.zip file.  There should be a rtssrc_zip_README.txt file that describes the steps to rebuild the libraries.</dd></dl>
+<h2><span class="mw-headline" id="Optimization">Optimization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=20" title="Edit section: Optimization">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_Can_you_give_me_some_tips_on_using_the_optimizer?"></span><span class="mw-headline" id="Q:_Can_you_give_me_some_tips_on_using_the_optimizer.3F">Q: Can you give me some tips on using the optimizer?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=21" title="Edit section: Q: Can you give me some tips on using the optimizer?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>There are a lot of options when it comes to using optimization.  Refer to the TMS320C28x Optimizing C/C++ Compiler User's Guide <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">(spru514)</a> for a detailed explanation.  A simple plan would be:
+</p>
+<dl><dd><ul><li>Partition code into separate files to allow for selective optimization levels.</li></ul></dd></dl>
+<dl><dd><ul><li>Start with Symbolic Debug Enabled</li></ul>
+<dl><dd><ul><li>Write, compile, and debug code without using the optimizer: Get the code functioning!</li>
+<li>Use full symbolic debug (--symdebug:dwarf or -g) at this time to have full symbolic debug.</li></ul></dd></dl></dd></dl>
+<dl><dd><ul><li>Turn on the optimizer and verify code functionality. Debug if necessary.</li></ul></dd></dl>
+<dl><dd><dl><dd><ul><li>The optimizer has different levels (0, 1, 2, and 3), which controls the type and degree of optimization.</li></ul>
+<dl><dd><ul><li>You must specify an optimization level option, otherwise the optimizer is not used.</li>
+<li>Level 0 (--opt_level=0 or -o0) is the lowest level</li>
+<li>Level 3 (--opt_level=3 or -o3) is the highest level</li>
+<li>Start with the lowest level and work your way up.</li></ul></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><ul><li>Level 4:  As of Codegen 6.0.1, a 4th level has been added (--opt_level=4 or -o4).</li></ul>
+<dl><dd><ul><li>This level will perform a post-link optimization of the code.  The downside is it will increase build time but has the potential to improve performance by having a view of the entire application after the link step.</li></ul></dd></dl></dd></dl></dd></dl>
+<dl><dd><ul><li>To debug optimized code, use the --opt_level option in conjunction with symbolic debug (-g)</li></ul>
+<dl><dd><ul><li>This yields the maximum optimization that is still compatible with debug.</li>
+<li>See also <a href="http://software-dl.ti.com/ccs/esd/documents/sdto_cgt_debug_versus_optimization_tradeoff.html" title="Debug versus Optimization Tradeoff">Debug versus Optimization Tradeoff</a></li>
+<li>Optimization Level 2 (-o2) is often a good compromise.</li></ul></dd></dl></dd></dl>
+<dl><dd><ul><li>Use -mn:</li></ul>
+<dl><dd><ul><li>If you want to use symbolic debugging (-g) and enable some optimizations, then use the --optimize_with_debug (-mn) option</li>
+<li>Keep in mind that portions of the debugger's functionality will be unreliable.</li></ul></dd></dl></dd></dl>
+<dl><dd><ul><li>Remove symbolic debug (-g) and use --symdebug:skeletal:</li></ul>
+<dl><dd><ul><li>As a final step, you may wish to compile critical code using --symdebug:skeletal instead of full symbolic debug.  This will allow the scheduler to move instructions that it could not move with symbolic debug enabled.  For example, with the FPU32 instruction set the compiler may be able to make use of more parallel instructions or reduce the number of NOPs in the code.  This "moving around" may change the ability to debug the code, however, so you may want to consider only applying this option to particular files with time critical code.</li></ul></dd></dl></dd></dl>
+<dl><dd><ul><li>Do not use -ss</li></ul>
+<dl><dd><ul><li>Using C source interlisting (-ss) will hinder optimization.  Note: -s does not hinder optimization.</li></ul></dd></dl></dd></dl>
+<h4><span id="Q:_What_else_can_I_do_to_improve_performance?"></span><span class="mw-headline" id="Q:_What_else_can_I_do_to_improve_performance.3F">Q: What else can I do to improve performance?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=22" title="Edit section: Q: What else can I do to improve performance?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd><ul><li>If you are running code from flash, make sure to enable the prefetch buffer and configure the waitstates appropriately.  Examples of how to do this are provided in the <a href="C28x_Header_Files_and_Peripheral_Examples.html" title="C28x Header Files and Peripheral Examples">device support</a> package for each particular device.</li>
+<li>Copy time critical code from its load address in flash to RAM for execution.  This application note explains how: <a href="http://www.ti.com/lit/pdf/spra958" class="extiw" title="tidoc:spra958">Running an Application from Flash (spra958)</a></li>
+<li>Evaluate the partitioning of the code and data and modify the linker file if needed:</li></ul>
+<dl><dd><ul><li>If code accesses data within the same physical memory, then performance will degrade due to resource conflicts. It is better to place code and the data it accesses separate blocks.</li>
+<li>Wait states will degrade performance. Most SARAM is zero-wait on 28x devices. There are some blocks, however, that are not on 2833x devices. Always check the data manual to find the wait states for each physical block and whether it applies to program or data accesses.</li>
+<li>If code makes extensive use of two data buffers, putting each buffer in a different RAM block may improve performance.  The goal is to reduce the pipeline stalls due to write and read occurring in the same cycle to different buffers.</li>
+<li>For Frequently Asked Linker questions - Please see the <a href="C28x_Compiler_-_Understanding_Linking.html" title="C28x Compiler - Understanding Linking">C28x_Compiler - Understanding Linking Wiki Article</a></li></ul></dd></dl>
+<ul><li>Use the --unified_memory compiler switch.  This will allow the compiler to use instructions like MAC and PREAD/PWRITE that require unified memory.</li>
+<li>Constant arrays: If access to a constant array is time critical, then consider copying it from its load address in flash to a RAM address for execution time.  This application note explains how: <a href="http://www.ti.com/lit/pdf/spra958" class="extiw" title="tidoc:spra958">Running an Application from Flash (spra958)</a>.</li>
+<li>For code which will run in flash or external memory, apply the -me compiler option.  This will change "prefetch branch" instructions (SBF/BF) to normal branch instructions (SB/B).  Prefetch branch instructions are efficient from RAM but slower from waitstated memory.  Apply this option to files that contain code that will be run from flash.  (In CCS you can right click on a file to apply a per-file option).</li>
+<li>Avoid some calls and return operations by allowing the compiler to inline some of your functions.</li>
+<li>Other tips can be found here: <a href="C2000_Performance_Tips_and_Tricks.html" title="C2000 Performance Tips and Tricks">C2000 Performance Tips and Tricks</a></li></ul></dd></dl>
+<h4><span id="Q:_My_code_worked_well_until_I_turned_on_optimization._What_could_be_the_issue?"></span><span class="mw-headline" id="Q:_My_code_worked_well_until_I_turned_on_optimization._What_could_be_the_issue.3F">Q: My code worked well until I turned on optimization. What could be the issue?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=23" title="Edit section: Q: My code worked well until I turned on optimization. What could be the issue?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Enabling optimizations may uncover bugs such as:
+</p>
+<dl><dd><ul><li>Uninitialized variables</li>
+<li>Loose adherence to ANSI standard</li>
+<li>Failure to use volatile</li>
+<li>Assembly function not correctly saving/restoring registers</li></ul></dd></dl>
+<h4><span id="Q:_How_can_volatile_help?"></span><span class="mw-headline" id="Q:_How_can_volatile_help.3F">Q: How can volatile help?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=24" title="Edit section: Q: How can volatile help?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Volatile tells the compiler that a variable may change in another context. If it is not used then the compiler will often decide the variable can not change and therefore there is no reason to read it more than once, or even at all. Examples of volatile:
+</p>
+<dl><dd><ul><li>Variables that can change in an interrupt or another task</li>
+<li>Peripheral registers that change via hardware</li>
+<li>Variables that other processors can change.</li></ul></dd></dl>
+<h2><span class="mw-headline" id="Variable_Types">Variable Types</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=25" title="Edit section: Variable Types">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_I_defined_an_array_of_char,_but_each_value_is_taking_up_16_bits!"></span><span class="mw-headline" id="Q:_I_defined_an_array_of_char.2C_but_each_value_is_taking_up_16_bits.21">Q: I defined an array of char, but each value is taking up 16 bits!</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=26" title="Edit section: Q: I defined an array of char, but each value is taking up 16 bits!">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>On 28x bytes and words are equivalent - that is, both int and char are 16-bits.  This yields sizeof(int) == sizeof(char) == 1.
+</p>
+<h4><span id="Q:_Doesn't_sizeof(int)_==_sizeof(char)_==_1_go_against_the_ANSI_standard?"></span><span class="mw-headline" id="Q:_Doesn.27t_sizeof.28int.29_.3D.3D_sizeof.28char.29_.3D.3D_1_go_against_the_ANSI_standard.3F">Q: Doesn't sizeof(int) == sizeof(char) == 1 go against the ANSI standard?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=27" title="Edit section: Q: Doesn&#039;t sizeof(int) == sizeof(char) == 1 go against the ANSI standard?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>By ANSI/ISO C definition, the sizeof operator yields the number of bytes required to store an object. ANSI/ISO further stipulates that when sizeof is applied to char, the result is 1. Since the TMS320C28x char is 16 bits (to make it separately addressable), a byte is also 16 bits.
+</p>
+<h4><span id="Q:_If_char_is_16_bits,_how_can_I_access_8-bit_values_efficiently?"></span><span class="mw-headline" id="Q:_If_char_is_16_bits.2C_how_can_I_access_8-bit_values_efficiently.3F">Q: If char is 16 bits, how can I access 8-bit values efficiently?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=28" title="Edit section: Q: If char is 16 bits, how can I access 8-bit values efficiently?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>To access data in increments of 8 bits, use the __byte() and __mov_byte() intrinsics described in TMS320C28x Optimizing C/C++ Compiler User's Guide <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">(spru514)</a>. Also please refer to this wiki article: <a href="Byte_Accesses_with_the_C28x_CPU.html" title="Byte Accesses with the C28x CPU">Byte Accesses with the C28x_CPU</a>
+</p>
+<h2><span class="mw-headline" id="Accessing_Assembly_from_C_Questions">Accessing Assembly from C Questions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=29" title="Edit section: Accessing Assembly from C Questions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_Is_there_a_way_to_access_specific_assembly_instructions_from_C_code?"></span><span class="mw-headline" id="Q:_Is_there_a_way_to_access_specific_assembly_instructions_from_C_code.3F">Q: Is there a way to access specific assembly instructions from C code?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=30" title="Edit section: Q: Is there a way to access specific assembly instructions from C code?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The C28x compiler includes some intrinsics to do this. They are documented in the <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">compiler reference guide (spru514)</a>. 
+</p>
+<h3><span id="Q:_I_have_a_function_in_assembly_and_I_want_to_call_it_from_C_-_How_can_I_access_the_arguments_inside_the_function?"></span><span class="mw-headline" id="Q:_I_have_a_function_in_assembly_and_I_want_to_call_it_from_C_-_How_can_I_access_the_arguments_inside_the_function.3F">Q: I have a function in assembly and I want to call it from C - How can I access the arguments inside the function?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=31" title="Edit section: Q: I have a function in assembly and I want to call it from C - How can I access the arguments inside the function?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>You are looking for the C calling conventions. These are documented in the <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">compiler reference guide (spru514)</a>. 
+</p><p>The calling conventions describe:
+</p>
+<dl><dd><ul><li>How the C environment passes arguments to a function</li>
+<li>Where the called function should store the return value</li>
+<li>Which registers will be saved and restored by the caller</li>
+<li>Which registers will be saved and restored by the called function</li></ul></dd></dl>
+<p>Also refer to:
+</p>
+<dl><dd><ul><li><a href="Creating_a_C-callable_Assembly_Function_for_the_TMS320C28x_DSP.html" title="Creating a C-callable Assembly Function for the TMS320C28x DSP"> Creating a C-callable Assembly Function for the TMS320C28x</a> Wiki article.</li>
+<li>An Easy Way of Creating a C-callable Assembly Function for the TMS320C28x Application Note <a href="http://www.ti.com/lit/pdf/spra806" class="extiw" title="tidoc:spra806">spra806</a></li></ul></dd></dl>
+<h2><span class="mw-headline" id="Undefined_Symbols">Undefined Symbols</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=32" title="Edit section: Undefined Symbols">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_When_I_build_I_get_a_bunch_of_undefined_symbols_with_$_in_them_like_FS$$MPY,_FS$$TOL_-_what_are_these?"></span><span class="mw-headline" id="Q:_When_I_build_I_get_a_bunch_of_undefined_symbols_with_.24_in_them_like_FS.24.24MPY.2C_FS.24.24TOL_-_what_are_these.3F">Q: When I build I get a bunch of undefined symbols with $ in them like FS$$MPY, FS$$TOL - what are these?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=33" title="Edit section: Q: When I build I get a bunch of undefined symbols with $ in them like FS$$MPY, FS$$TOL - what are these?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>It appears that you need to include the <a href="#Run-Time_Support_Library">Run-Time Support (RTS) Library</a> in your project. The RTS library should be in your code generation tools ./lib directory. 
+</p>
+<h4><span id="Q:_When_I_build_I_get_a_linker_error_that_c_int00_is_not_defined?"></span><span class="mw-headline" id="Q:_When_I_build_I_get_a_linker_error_that_c_int00_is_not_defined.3F">Q: When I build I get a linker error that _c_int00 is not defined?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=34" title="Edit section: Q: When I build I get a linker error that c int00 is not defined?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>_c_int00 is a sample bootstrap routine is provided in the <a href="#Run-Time_Support_Library">Run-Time Support (RTS) Library</a>. The RTS library should be in your code generation tools ./lib directory.
+</p>
+<h2><span class="mw-headline" id="Linker_Questions">Linker Questions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=35" title="Edit section: Linker Questions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_Where_is_the_linker_command_file_format_documented?"></span><span class="mw-headline" id="Q:_Where_is_the_linker_command_file_format_documented.3F">Q: Where is the linker command file format documented?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=36" title="Edit section: Q: Where is the linker command file format documented?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Please refer to TMS320C28x Assembly Language Tools User's Guide <a href="http://www.ti.com/lit/pdf/spru513" class="extiw" title="tidoc:spru513">(spru513)</a>
+</p>
+<h4><span id="Q:_Where_can_I_learn_more_about_linking?"></span><span class="mw-headline" id="Q:_Where_can_I_learn_more_about_linking.3F">Q: Where can I learn more about linking?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=37" title="Edit section: Q: Where can I learn more about linking?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>For Frequently Asked Linker questions - Please see the <a href="C28x_Compiler_-_Understanding_Linking.html" title="C28x Compiler - Understanding Linking">C28x_Compiler - Understanding Linking Wiki Article</a>
+</p>
+<h2><span id="C_I/O_(printf(),_sprintf(),_puts())"></span><span class="mw-headline" id="C_I.2FO_.28printf.28.29.2C_sprintf.28.29.2C_puts.28.29.29">C I/O (printf(), sprintf(), puts())</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=38" title="Edit section: C I/O (printf(), sprintf(), puts())">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_I'm_trying_to_add_printf()_to_my_project_and_it_doesn't_work._Help!"></span><span class="mw-headline" id="Q:_I.27m_trying_to_add_printf.28.29_to_my_project_and_it_doesn.27t_work._Help.21">Q: I'm trying to add printf() to my project and it doesn't work.  Help!</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=39" title="Edit section: Q: I&#039;m trying to add printf() to my project and it doesn&#039;t work. Help!">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Please see <a href="http://software-dl.ti.com/ccs/esd/documents/sdto_cgt_tips_for_using_printf.html" title="Tips for using printf">Tips for using printf Wiki Article</a>.
+</p>
+<h4><span id="Q:_printf()/sprintf()_in_5.2.x_seems_to_be_using_a_lot_more_stack_than_older_tools?"></span><span class="mw-headline" id="Q:_printf.28.29.2Fsprintf.28.29_in_5.2.x_seems_to_be_using_a_lot_more_stack_than_older_tools.3F">Q: printf()/sprintf() in 5.2.x seems to be using a lot more stack than older tools?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=40" title="Edit section: Q: printf()/sprintf() in 5.2.x seems to be using a lot more stack than older tools?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The printf routines were reworked to support multiple levels of support for printf format specifiers and general clean up to reduce code size and overall memory size (including bss). The function _printf (which is indirectly called from sprintf) uses a local array with a size of 400 elements. This has always been there and needs to be that big to be compliant, and we want to avoid using malloc. The difference is that in earlier versions of the tools, this array was previously static and went into bss instead of on the stack. The thinking behind this was that if the user is using C I/O they would probably be using a decent stack size anyway and still want to minimize bss. 
+</p>
+<h4><span id="Q:_I_don't_need_all_the_features_of_printf()/sprintf()._Can_I_do_something_to_minimize_size?"></span><span class="mw-headline" id="Q:_I_don.27t_need_all_the_features_of_printf.28.29.2Fsprintf.28.29._Can_I_do_something_to_minimize_size.3F">Q: I don't need all the features of printf()/sprintf().  Can I do something to minimize size?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=41" title="Edit section: Q: I don&#039;t need all the features of printf()/sprintf(). Can I do something to minimize size?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Knowing that the C I/O support may not suit every user as provided, we support the different levels of format specifier (via the compiler option --printf_support=full, minimal, nofloat) and also provide source so customers can change it to suit their needs. For instance, the source file _printfi.c can be changed to make the array static and _printfi.c can be recompiled. 
+</p>
+<dl><dd><dl><dd>Enable support for smaller, limited versions of the printf and sprintf run-time-support functions:
+<dl><dd><dl><dd>--printf_support={full|nofloat|minimal}</dd></dl></dd></dl></dd></dl></dd></dl>
+<dl><dd>The valid values are:</dd></dl>
+<dl><dd><ul><li>full: Supports all format specifiers. This is the default.</li>
+<li>nofloat: Excludes support for printing floating point values. Supports all format specifiers except&#160;%f,&#160;%g,&#160;%G,&#160;%e, and&#160;%E.</li>
+<li>minimal: Supports the printing of integer, char, or string values without width or precision flags. Specifically, only the&#160;%%,&#160;%d,&#160;%o,&#160;%c,&#160;%s, and&#160;%x format specifiers are supported</li></ul></dd></dl>
+<p>There is no run-time error checking to detect if a format specifier is used for which support is not included. The --printf_support option precedes the --run_linker option, and must be used when performing the final link.
+</p>
+<h2><span class="mw-headline" id="Industry_Standards">Industry Standards</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=42" title="Edit section: Industry Standards">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_Does_the_28x_compiler_conform_to_any_industry_standard?"></span><span class="mw-headline" id="Q:_Does_the_28x_compiler_conform_to_any_industry_standard.3F">Q: Does the 28x compiler conform to any industry standard?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=43" title="Edit section: Q: Does the 28x compiler conform to any industry standard?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Please see <a href="TI_Compilers_and_Industry_Standards.html" title="TI Compilers and Industry Standards">TI_Compilers_and_Industry_Standards Wiki Article</a></dd></dl>
+<h2><span class="mw-headline" id="Extensions">Extensions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=44" title="Edit section: Extensions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_Does_the_28x_compiler_support_GCC_extensions?"></span><span class="mw-headline" id="Q:_Does_the_28x_compiler_support_GCC_extensions.3F">Q: Does the 28x compiler support GCC extensions?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=45" title="Edit section: Q: Does the 28x compiler support GCC extensions?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Please see the <a href="GCC_Extensions_in_TI_Compilers.html" title="GCC Extensions in TI Compilers">GCC Extensions in TI Compilers Wiki Article</a></dd></dl>
+<h4><span id="Q:_Does_the_28x_compiler_support_C99_extensions?"></span><span class="mw-headline" id="Q:_Does_the_28x_compiler_support_C99_extensions.3F">Q: Does the 28x compiler support C99 extensions?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=46" title="Edit section: Q: Does the 28x compiler support C99 extensions?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Please see the <a href="C99_Extensions_Supported_in_C89_Mode_in_TI_Compilers.html" title="C99 Extensions Supported in C89 Mode in TI Compilers">C99 Extensions Supported in C89 Mode in TI Compilers Wiki Article</a></dd></dl>
+<h2><span class="mw-headline" id="Error_Messages">Error Messages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=47" title="Edit section: Error Messages">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<dl><dd>Please refer to the <a href="C28x_Common_Compiler_Errors_and_Warnings.html" class="mw-redirect" title="C28x Common Compiler Errors and Warnings">C28x Common Compiler Errors and Warinings</a> Wiki article.</dd></dl>
+<h2><span class="mw-headline" id="Updates_and_Issues">Updates and Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=48" title="Edit section: Updates and Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Q:_How_can_I_keep_abreast_of_the_known_issues_with_the_codegen_tools?"></span><span class="mw-headline" id="Q:_How_can_I_keep_abreast_of_the_known_issues_with_the_codegen_tools.3F">Q: How can I keep abreast of the known issues with the codegen tools?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit&amp;section=49" title="Edit section: Q: How can I keep abreast of the known issues with the codegen tools?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>The known issues are stored in a <a href="Category_ClearQuest.html" title="Category:ClearQuest">ClearQuest</a> database. There are two ways to access that database:</dd></dl>
+<dl><dd><ol><li>Access incident reports can be achieved via that link: <a rel="nofollow" class="external free" href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&amp;service=CQ&amp;schema=SDo-Web&amp;contextid=SDOWP&amp;username=readonly&amp;password=readonly">https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&amp;service=CQ&amp;schema=SDo-Web&amp;contextid=SDOWP&amp;username=readonly&amp;password=readonly</a>.  Individual incident reports can be accessed (‘SDSCM000XXXXX’) in the ‘Find Record ID’ box.</li>
+<li>Extended account creation and other resources can be performed via that page: <a rel="nofollow" class="external free" href="https://cqweb.ext.ti.com/pages/SDO-Web.html">https://cqweb.ext.ti.com/pages/SDO-Web.html</a></li></ol>
+<dl><dd><ul><li>Customers with special needs (e.g. privacy) can request the creation of personalized ClearQuest accounts at this page: <a rel="nofollow" class="external free" href="https://cqweb.ext.ti.com/cgi-bin/Groups/SDO-Web/AccountRequest.pl">https://cqweb.ext.ti.com/cgi-bin/Groups/SDO-Web/AccountRequest.pl</a> <br />Such an account allows customers to create and store own database queries. As the reasoning for the special need might already by special its rather recommended to ask your FAE about that instead of using that web method. Also the right for creating your own incident reports might be granted only by going via your FAE contact.</li>
+<li>On that page there is also a link to the ClearQuest web based help: <a rel="nofollow" class="external free" href="https://cqweb.ext.ti.com/pages/help/CQWEB-help.htm">https://cqweb.ext.ti.com/pages/help/CQWEB-help.htm</a></li></ul></dd></dl></dd></dl>
+<dl><dd>There are a number of ways a customer can keep up-to-date on C2000 compiler issues through the ClearQuest web interface. There are "Public Query" folders that follow the forum structure.</dd>
+<dd>To access compiler bugs open the "Public Queries" folder, then the "Development Tools" folder, then the "TI C-C++ Compiler" folder.</dd>
+<dd>There are several C28x specific queries available from that point.  For example, there is a "5.1.X Compiler" defect query that will list all issues against 5.1.X releases.</dd></dl>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130124551
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.101 seconds
+Real time usage: 0.105 seconds
+Preprocessor visited node count: 194/1000000
+Preprocessor generated node count: 200/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4887-0!canonical and timestamp 20201130124551 and revision id 217254
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C28x Code Generation Tips and Tricks</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C28x Code Generation Tips and Tricks</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C28x Code Generation Tips and Tricks</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C28x Code Generation Tips and Tricks</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C28x Code Generation Tips and Tricks</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C28x Code Generation Tips and Tricks</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C28x Code Generation Tips and Tricks</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C28x Code Generation Tips and Tricks</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C28x Code Generation Tips and Tricks</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;oldid=217254">https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;oldid=217254</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_C2000.html" title="Category:C2000">C2000</a></li><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li><li><a href="Category_Development_Tools_for_C2000.html" title="Category:Development Tools for C2000">Development Tools for C2000</a></li><li><a href="Category_FAQ.html" title="Category:FAQ">FAQ</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C28x+Code+Generation+Tips+and+Tricks" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C28x_Code_Generation_Tips_and_Tricks.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_C28x_Code_Generation_Tips_and_Tricks.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C28x_Code_Generation_Tips_and_Tricks.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C28x_Code_Generation_Tips_and_Tricks.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C28x_Code_Generation_Tips_and_Tricks.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;oldid=217254" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C28x_Code_Generation_Tips_and_Tricks&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 June 2016, at 07:47.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.101","walltime":"0.105","ppvisitednodes":{"value":194,"limit":1000000},"ppgeneratednodes":{"value":200,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130124551","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C28x_Code_Generation_Tips_and_Tricks by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:00:33 GMT -->
+</html>

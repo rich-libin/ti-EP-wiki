@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Compare_Loop_Performance_Across_C6000_Compilers by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:28:44 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Compare Loop Performance Across C6000 Compilers - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Compare_Loop_Performance_Across_C6000_Compilers","wgTitle":"Compare Loop Performance Across C6000 Compilers","wgCurRevisionId":107013,"wgRevisionId":107013,"wgArticleId":15719,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Compare_Loop_Performance_Across_C6000_Compilers","wgRelevantArticleId":15719,"wgRequestId":"2a49aef21b3283c63df37634","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Compare_Loop_Performance_Across_C6000_Compilers rootpage-Compare_Loop_Performance_Across_C6000_Compilers skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Compare Loop Performance Across C6000 Compilers</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Problem_Statement"><span class="tocnumber">1</span> <span class="toctext">Problem Statement</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Introduction"><span class="tocnumber">2</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Download_and_Install"><span class="tocnumber">3</span> <span class="toctext">Download and Install</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Release_v0.20.00"><span class="tocnumber">3.1</span> <span class="toctext">Release v0.20.00</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Install_Directions"><span class="tocnumber">3.2</span> <span class="toctext">Install Directions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Makefile_Method"><span class="tocnumber">4</span> <span class="toctext">Makefile Method</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Introduction_2"><span class="tocnumber">4.1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Keep_the_Compiler_Generated_Assembly"><span class="tocnumber">4.2</span> <span class="toctext">Keep the Compiler Generated Assembly</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Build_with_Both_Compiler_Versions"><span class="tocnumber">4.3</span> <span class="toctext">Build with Both Compiler Versions</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Compare_Loops"><span class="tocnumber">4.4</span> <span class="toctext">Compare Loops</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#CCSv4_Method"><span class="tocnumber">5</span> <span class="toctext">CCSv4 Method</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Presumptions"><span class="tocnumber">5.1</span> <span class="toctext">Presumptions</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Keep_the_Compiler_Generated_Assembly_2"><span class="tocnumber">5.2</span> <span class="toctext">Keep the Compiler Generated Assembly</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Rename_the_Build_Configuration"><span class="tocnumber">5.3</span> <span class="toctext">Rename the Build Configuration</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Create_New_Build_Configuration_Which_Uses_New_Compiler"><span class="tocnumber">5.4</span> <span class="toctext">Create New Build Configuration Which Uses New Compiler</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#CCSv4_Compare_Loops"><span class="tocnumber">5.5</span> <span class="toctext">CCSv4 Compare Loops</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#CCSv5.1_Method"><span class="tocnumber">6</span> <span class="toctext">CCSv5.1 Method</span></a>
+<ul>
+<li class="toclevel-2 tocsection-18"><a href="#Presumptions_2"><span class="tocnumber">6.1</span> <span class="toctext">Presumptions</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Keep_the_Compiler_Generated_Assembly_3"><span class="tocnumber">6.2</span> <span class="toctext">Keep the Compiler Generated Assembly</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Rename_the_Build_Configuration_2"><span class="tocnumber">6.3</span> <span class="toctext">Rename the Build Configuration</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Create_New_Build_Configuration_Which_Uses_New_Compiler_2"><span class="tocnumber">6.4</span> <span class="toctext">Create New Build Configuration Which Uses New Compiler</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#CCSv5.1_Compare_Loops"><span class="tocnumber">6.5</span> <span class="toctext">CCSv5.1 Compare Loops</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-23"><a href="#Loopdiff_Results_Explained"><span class="tocnumber">7</span> <span class="toctext">Loopdiff Results Explained</span></a>
+<ul>
+<li class="toclevel-2 tocsection-24"><a href="#Table_Column_Headings"><span class="tocnumber">7.1</span> <span class="toctext">Table Column Headings</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#How_the_Tables_are_Sorted"><span class="tocnumber">7.2</span> <span class="toctext">How the Tables are Sorted</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Effective_Initiation_Interval_.28EII.29_Explained"><span class="tocnumber">7.3</span> <span class="toctext">Effective Initiation Interval (EII) Explained</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Multiple_Loop_Implementations_.28Impl.29_Explained"><span class="tocnumber">7.4</span> <span class="toctext">Multiple Loop Implementations (Impl) Explained</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-28"><a href="#Limitations.2C_Caveats.2C_Issues"><span class="tocnumber">8</span> <span class="toctext">Limitations, Caveats, Issues</span></a>
+<ul>
+<li class="toclevel-2 tocsection-29"><a href="#Sometimes_the_Wrong_Loops_Are_Compared"><span class="tocnumber">8.1</span> <span class="toctext">Sometimes the Wrong Loops Are Compared</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Sometimes_the_Wrong_File_Name_is_Used"><span class="tocnumber">8.2</span> <span class="toctext">Sometimes the Wrong File Name is Used</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Runtime_Behavior_Not_Considered"><span class="tocnumber">8.3</span> <span class="toctext">Runtime Behavior Not Considered</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#File_Names_May_Not_Contain_Slashes"><span class="tocnumber">8.4</span> <span class="toctext">File Names May Not Contain Slashes</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#File_Names_Should_be_Unique"><span class="tocnumber">8.5</span> <span class="toctext">File Names Should be Unique</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-34"><a href="#Technical_Details"><span class="tocnumber">9</span> <span class="toctext">Technical Details</span></a>
+<ul>
+<li class="toclevel-2 tocsection-35"><a href="#Invoking_Loopdiff"><span class="tocnumber">9.1</span> <span class="toctext">Invoking Loopdiff</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#Loopdiff_Command_Line"><span class="tocnumber">9.2</span> <span class="toctext">Loopdiff Command Line</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#Dump_Raw_Loop_Information"><span class="tocnumber">9.3</span> <span class="toctext">Dump Raw Loop Information</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#Recognizing_Assembly_Source_Files"><span class="tocnumber">9.4</span> <span class="toctext">Recognizing Assembly Source Files</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#BSD_License"><span class="tocnumber">9.5</span> <span class="toctext">BSD License</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-40"><a href="#How_to_Obtain_Support"><span class="tocnumber">10</span> <span class="toctext">How to Obtain Support</span></a></li>
+<li class="toclevel-1 tocsection-41"><a href="#Compiler_Option_Details"><span class="tocnumber">11</span> <span class="toctext">Compiler Option Details</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Problem_Statement">Problem Statement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=1" title="Edit section: Problem Statement">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Your system is working with an older version of the C6000 compiler, and now you have built it with a newer version of the C6000 compiler.  You want to know if any of the loops run slower or faster, and if so, which ones.
+</p>
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=2" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This page introduces a tool for comparing performance of loops between two different versions of the C6000 compiler.  The tool is named loopdiff.  Loopdiff is a static analysis tool.  Running the code is not required.  The comparison is done by processing the assembly source output of the compiler.
+</p><p>This page walks through three different methods of using the compiler.  One is based on performing the build from the command line with a makefile.  The other two are based on performing the build from within Code Composer Studio versions 4 (CCSv4) or 5.1 (CCSv5.1).  For each method, this page shows how to employ loopdiff to discover the loops which run slower or faster.
+</p>
+<h1><span class="mw-headline" id="Download_and_Install">Download and Install</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=3" title="Edit section: Download and Install">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Release_v0.20.00">Release v0.20.00</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=4" title="Edit section: Release v0.20.00">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_ccstudio/apps/loopdiff/readme.txt">Release Details (.txt)</a></li>
+<li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_ccstudio/apps/loopdiff/loopdiff-v0_20_00-Setup.exe">Windows Install Package</a></li>
+<li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_ccstudio/apps/loopdiff/loopdiff-v0_20_00-Linux-x86-Install">Linux x86 Install Package</a></li></ul>
+<h3><span class="mw-headline" id="Install_Directions">Install Directions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=5" title="Edit section: Install Directions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Download the package for your system, then execute it.  
+</p><p>The Linux package only works when executed from the current directory.  Suppose you download it to /some/local/dir.  You cannot be in another directory and invoke it like this ...
+</p>
+<pre>% /some/local/dir/loopdiff-v0_20_00-Linux-x86-Install
+</pre>
+<p>You have to ...
+</p>
+<pre>% cd /some/local/dir
+% ./loopdiff-v0_20_00-Linux-x86-Install
+</pre>
+<h1><span class="mw-headline" id="Makefile_Method">Makefile Method</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=6" title="Edit section: Makefile Method">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Introduction_2">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=7" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The modifications are made to this simple makefile.
+</p>
+<pre>#-----------------------------------------------------------------------------
+# Name the object files
+#-----------------------------------------------------------------------------
+OBJS&#160;:= icdct.obj isbt.obj iup.obj iwinm.obj mhead.obj towave.obj wavep.obj
+
+#-----------------------------------------------------------------------------
+# Develop C_OPTS: The compiler build options
+#-----------------------------------------------------------------------------
+# Optimization level 2
+C_OPTS&#160;:= $(C_OPTS) -o=2
+# Build for C6400+ processors
+C_OPTS&#160;:= $(C_OPTS) -mv6400+
+
+#-----------------------------------------------------------------------------
+# Link build rule
+#-----------------------------------------------------------------------------
+mp3.out&#160;: $(OBJS)
+	cl6x -z $(OBJS) -o=$@ lnk.cmd
+
+#-----------------------------------------------------------------------------
+# Compile build rule
+#-----------------------------------------------------------------------------
+%.obj&#160;:&#160;%.c
+	cl6x $(C_OPTS) $&lt;
+</pre>
+<p>This section presumes you are comfortable with modifying makefiles, performing builds, and generally working from the command line.  This makefile and the methods described for working with it are admittedly simple.  Such methods probably do not scale to very large builds.  That is not the point here.  The point here is to convey the conceptual changes to your makefile based build, and not the actual details of how your particular makefile must change.
+</p>
+<h3><span class="mw-headline" id="Keep_the_Compiler_Generated_Assembly">Keep the Compiler Generated Assembly</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=8" title="Edit section: Keep the Compiler Generated Assembly">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Add these lines to the C_OPTS section of the makefile ...
+</p>
+<pre># Extra SW pipeline info
+C_OPTS&#160;:= $(C_OPTS) -mw
+</pre>
+<p>By default, the compiler issues a block comment before every software pipelined loop which details properties of that loop.  This option causes the compiler to issue a more verbose form of that comment block.  It also causes the compiler to keep the assembly output file.  As far as loopdiff is concerned, the important part here is that the assembly file is not deleted.  But if you are interested enough in software pipelined loops to read this far, you probably appreciate hearing about -mw.
+</p>
+<h3><span class="mw-headline" id="Build_with_Both_Compiler_Versions">Build with Both Compiler Versions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=9" title="Edit section: Build with Both Compiler Versions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Create a directory named "old_ver".  Then add these lines to the C_OPTS section of the makefile ...
+</p>
+<pre># Put .asm files in this directory
+C_OPTS&#160;:= $(C_OPTS) -fs=old_ver
+</pre>
+<p>The option -fs tells the compiler to place the generated assembly files in the given directory.
+</p><p>Insure the older version of the compiler is in the system path.  Then build.
+</p><p>Next, create a directory named "new_ver".  <b>Change</b> the just added lines to the C_OPTS section to this ...
+</p>
+<pre># Put .asm files in this directory
+C_OPTS&#160;:= $(C_OPTS) -fs=new_ver
+</pre>
+<p>Change the system path to refer to the newer version of the compiler.  Then build.  
+</p><p>At this point, the directory "old_ver" contains compiler generated assembly from the older version of the compiler, and "new_ver" contains compiler generated assembly from the newer version of the compiler.
+</p>
+<h3><span class="mw-headline" id="Compare_Loops">Compare Loops</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=10" title="Edit section: Compare Loops">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>From the directory which contains the sub-directories "old_ver" and "new_ver", issue a command similar to:
+</p>
+<pre>% perl /path/to/loopdiff.pl old_ver new_ver &gt; results.txt
+</pre>
+<p>Or, if you do not have Perl installed and you are on a Windows PC system, you can use the standalone executable
+version:
+</p>
+<pre>% /path/to/loopdiff.exe old_ver new_ver &gt; results.txt
+</pre>
+<p>Loopdiff looks through both directories for assembly files and processes them.  Loops are automatically found and compared.  A report is printed to the standard output stream.  It is captured by this command in the file results.txt.  A description of the results is found <a href="#Loopdiff_Results_Explained"> below</a>.
+</p>
+<h1><span class="mw-headline" id="CCSv4_Method">CCSv4 Method</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=11" title="Edit section: CCSv4 Method">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Presumptions">Presumptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=12" title="Edit section: Presumptions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section presumes you already have a project built and running under CCSv4.  While you may have more than one build configuration for this project, this section presumes the current active configuration is the one used for the final production build.
+</p><p>There are a few different ways to access the interface for changing project build options.  This section presumes you select the name of the project, right-click, and choose <b>Build Properties</b>.  Other methods of accessing it may look a bit different than the screen shots shown here, but they will be similar.
+</p><p>This section also presumes you have installed the two compiler versions of interest, and configured CCS to use them.  If not, the article <a href="https://www.ti.com/tool/TI-CGT" title="Compiler Releases">Compiler Releases</a> discusses how to obtain new compilers, and the article <a href="http://dev.ti.com/tirex/#/Search/compiler%20installation/?link=Development%20Tools%2FIntegrated%20Development%20Environments%2FCode%20Composer%20Studio%2FProjects%20and%20Build%2FDocuments%2FUser's%20Guides%2FCompiler%20Installation%20and%20Selection" title="Compiler Installation and Selection">Compiler Installation and Selection</a> discusses how to configure CCS to use them.
+</p>
+<h3><span class="mw-headline" id="Keep_the_Compiler_Generated_Assembly_2">Keep the Compiler Generated Assembly</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=13" title="Edit section: Keep the Compiler Generated Assembly">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The loopdiff utility processes the compiler generated assembly files.  If your project build settings already keep the compiler generated assembly files, then you can skip this step.  However, default build configurations do not keep these files.  Here is one way to change that.
+</p><p>Bring up the <b>Build Properties</b>.  Make sure the <b>Tool Settings</b> tab is selected.  Highlight <b>Runtime Model Options</b>.  Check the box for <b>Generate verbose software pipelining information (--debug_software_pipeline)</b>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:869px;"><a href="File_Loopdiff_dash_mw.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/0/0b/Loopdiff_dash_mw.JPG" width="867" height="536" class="thumbimage" /></a>  <div class="thumbcaption">Select --debug_software_pipeline</div></div></div></div>
+<p>By default, the compiler issues a block comment before every software pipelined loop which details properties of that loop.  This option causes the compiler to issue a more verbose form of that comment block.  It also causes the compiler to keep the assembly output file.  As far as loopdiff is concerned, the important part here is that the assembly file is not deleted.  But if you are interested enough in software pipelined loops to read this far, you probably appreciate hearing about --debug_software_pipeline.
+</p><p>Rebuild the project.  Now your project build directory contains assembly source files built with the current version of the compiler.
+</p>
+<h3><span class="mw-headline" id="Rename_the_Build_Configuration">Rename the Build Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=14" title="Edit section: Rename the Build Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This step is not strictly necessary.  But things are a bit easier to manage if the compiler version number is part of the build configuration name.
+</p><p>Bring up the <b>Build Properties</b>.  Make sure the <b>Tool Settings</b> tab is selected.  Highlight <b>Tool-chain Settings</b>.  Note the <b>Code Generation tools version</b> shown.  It may be grayed out.  At this point, you don't need to change it.  Just write down that version number.
+</p><p>Next, notice that on the right end of the <b>Configuration</b> drop-down box is another box labeled <b>Manage...</b>.  Click it.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:794px;"><a href="File_Loopdiff_rename_build_configuration.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/d/d1/Loopdiff_rename_build_configuration.JPG" width="792" height="516" class="thumbimage" /></a>  <div class="thumbcaption">Manage Build Configuration</div></div></div></div>
+<p>Highlight the name of the build configuration name to change.  Then click <b>Rename</b>.  Add the compiler version number to the end of the configuration name, similar to <b>Release_v6_0_23</b>.  Click <b>OK</b> until all the dialog boxes are closed.
+</p>
+<h3><span class="mw-headline" id="Create_New_Build_Configuration_Which_Uses_New_Compiler">Create New Build Configuration Which Uses New Compiler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=15" title="Edit section: Create New Build Configuration Which Uses New Compiler">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This step is a bit unusual.  All at one time, you create a new build configuration which is the same as the current one, except it uses the new version of the compiler.  
+</p><p>Bring up the <b>Build Properties</b>.  In the leftmost part of the Window, highlight <b>CCS Build</b>.  Insure the <b>General</b> tab is selected.  In the drop-down box labeled <b>Code Generation tools</b>, choose the new version of the compiler.  Click <b>OK</b>.  
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:748px;"><a href="File_Loopdiff_change_compiler_version.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/f/f2/Loopdiff_change_compiler_version.JPG" width="746" height="641" class="thumbimage" /></a>  <div class="thumbcaption">Change Compiler Version</div></div></div></div>
+<p>Next, a dialog titled <b>Save Build Configuration Settings</b> comes up.  Select the radio button labeled <b>Create a new build configuration initialized with build options from the existing configuration</b>.  Change the <b>New build configuration name</b> so that it includes the version number of the compiler just selected, similar to <b>Release_v7_2_0</b>.  Also check the box labeled <b>Set the new build configuration as the active for the project</b>.  Click <b>OK</b>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:722px;"><a href="File_Loopdiff_save_build_configuration.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/b/be/Loopdiff_save_build_configuration.JPG" width="720" height="448" class="thumbimage" /></a>  <div class="thumbcaption">Create New Configuration</div></div></div></div>
+<p>Build the project.  A new build directory is created, and like the other build configuration, it contains the compiler generated assembly source files.
+</p>
+<h3><span class="mw-headline" id="CCSv4_Compare_Loops">CCSv4 Compare Loops</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=16" title="Edit section: CCSv4 Compare Loops">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>At this point, you have built the project with both configurations, i.e. with both compilers.  Next, the loops are compared with the loopdiff utility.  At this time the loopdiff utility can only be run from the command line.  If it proves to be popular, we may devise a way to invoke it from within CCSv4.
+</p><p>First, determine the directory where the project is based.  Do not bring up the build properties by right clicking the project name.  Instead, choose the menu item <b>Project</b> -&gt; <b>Properties</b>.  In the window on the left, highlight <b>Info</b>.  Note the directory name shown by the label <b>Location</b>.  Let's call this the <i>project directory</i>.  Click <b>OK</b>.
+</p><p>At this point, the difference between methods for CCSv4 and CCSv5.1 is very slight.  So, jump down <a href="#CCSv5.1_Compare_Loops"> below</a> to the CCSv5.1 discussion of how to compare loops.
+</p>
+<h1><span class="mw-headline" id="CCSv5.1_Method">CCSv5.1 Method</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=17" title="Edit section: CCSv5.1 Method">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Much of this section is cut-n-paste from the CCSv4 section.  But there are some substantial differences.  The main difference is in how the new configuration is constructed.  The screen shots are different as well.
+</p>
+<h3><span class="mw-headline" id="Presumptions_2">Presumptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=18" title="Edit section: Presumptions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section presumes you already have a project built and running under CCSv5.1.  While you may have more than one build configuration for this project, this section presumes the current active configuration is the one used for the final production build.
+</p><p>There are a few different ways to access the interface for changing project build options.  This section presumes you select the name of the project, right-click, and choose <b>Build Options...</b>.  Other methods of accessing it may look a bit different than the screen shots shown here, but they will be similar.
+</p><p>This section also presumes you have installed the two compiler versions of interest, and configured CCS to use them.  If not, the article <a href="https://www.ti.com/tool/TI-CGT" title="Compiler Releases">Compiler Releases</a> discusses how to obtain new compilers, and the article <a href="http://dev.ti.com/tirex/#/Search/compiler%20installation/?link=Development%20Tools%2FIntegrated%20Development%20Environments%2FCode%20Composer%20Studio%2FProjects%20and%20Build%2FDocuments%2FUser's%20Guides%2FCompiler%20Installation%20and%20Selection" title="Compiler Installation and Selection">Compiler Installation and Selection</a> discusses how to configure CCS to use them.
+</p>
+<h3><span class="mw-headline" id="Keep_the_Compiler_Generated_Assembly_3">Keep the Compiler Generated Assembly</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=19" title="Edit section: Keep the Compiler Generated Assembly">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The loopdiff utility processes the compiler generated assembly files.  If your project build settings already keep the compiler generated assembly files, then you can skip this step.  However, default build configurations do not keep these files.  Here is one way to change that.
+</p><p>Bring up the <b>Build Options...</b>.  Expand the directory tree like structure on the left to <b>Build/C6000 Compiler</b>.  Highlight <b>Runtime Model Options</b>.  Check the box for <b>Generate verbose software pipelining information (--debug_software_pipeline, -mw)</b>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:853px;"><a href="File_Loopdiff_ccsv5_dash_mw.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/3/3b/Loopdiff_ccsv5_dash_mw.JPG" width="851" height="688" class="thumbimage" /></a>  <div class="thumbcaption">Select --debug_software_pipeline</div></div></div></div>
+<p>By default, the compiler issues a block comment before every software pipelined loop which details properties of that loop.  This option causes the compiler to issue a more verbose form of that comment block.  It also causes the compiler to keep the assembly output file.  As far as loopdiff is concerned, the important part here is that the assembly file is not deleted.  But if you are interested enough in software pipelined loops to read this far, you probably appreciate hearing about --debug_software_pipeline.
+</p><p>Rebuild the project.  Now your project build directory contains assembly source files built with the current version of the compiler.
+</p>
+<h3><span class="mw-headline" id="Rename_the_Build_Configuration_2">Rename the Build Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=20" title="Edit section: Rename the Build Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This step is not strictly necessary.  But things are a bit easier to manage if the compiler version number is part of the build configuration name.
+</p><p>First, record which compiler is currently being used.  Bring up the <b>Build Options...</b>.  In the lower left corner, click on <b>Show advanced settings</b>.  In the left panel, highlight <b>CCS General</b>.  Under <b>Advanced settings</b>, note the current compiler version number.  The compiler version is 6.1.12 in this example.  Click <b>OK</b>.       
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:853px;"><a href="File_Loopdiff_ccsv5_current_config.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/6/69/Loopdiff_ccsv5_current_config.JPG" width="851" height="688" class="thumbimage" /></a>  <div class="thumbcaption">Current Compiler Version Number</div></div></div></div>
+<p>Second, rename the current build configuration.  Right click on the project name and choose <b>Build Configurations</b> -&gt; <b>Manage...</b>.  Make sure the current build configuration is highlighted.  Click <b>Rename...</b>.  Type something like Release_v6_1_12 in the <b>Name</b> box.  Click <b>OK</b> until all dialog boxes are closed.
+</p><p>As of this writing, CCSv5.1 has a bug related to renaming a build configuration.  The steps in this paragraph are a workaround for this bug.  The project view for this project includes a folder with the same name as the configuration.  When the configuration is renamed, the name of this folder should automatically change to match.  But it doesn't.  So, rename this folder manually.  Right click the folder name (not the project name) and choose <b>Rename...</b>.  In the dialog box change the name to match the configuration.  Click <b>OK</b>.
+</p>
+<h3><span class="mw-headline" id="Create_New_Build_Configuration_Which_Uses_New_Compiler_2">Create New Build Configuration Which Uses New Compiler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=21" title="Edit section: Create New Build Configuration Which Uses New Compiler">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>First, create the new build configuration.  Right click on the project name and choose <b>Build Configurations</b> -&gt; <b>Manage...</b>. Click <b>New...</b>.  In the <b>Name</b> box enter something which includes the new compiler version, like Release_v7_3_1.  Under <b>Copy settings from</b> be sure the <b>Existing configuration</b> radio button is selected, and the corresponding drop down box contains the name of the configuration for the other compiler version.  Click <b>OK</b> once.  Next, make the new configuration active.  Highlight the name of the new configuration and click <b>Set Active</b>.  Click <b>OK</b>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:505px;"><a href="File_Loopdiff_ccsv5_new_config.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/2/20/Loopdiff_ccsv5_new_config.JPG" width="503" height="397" class="thumbimage" /></a>  <div class="thumbcaption">Creating New Compiler Configuration</div></div></div></div>
+<p>Second, change the compiler used by the new configuration.  Bring up the <b>Build Options...</b>.  In the lower left corner, click on <b>Show advanced settings</b>.  In the left panel, highlight <b>CCS General</b>.  Under <b>Advanced settings</b>, change the drop-down box for <b>Compiler version</b> to use the new compiler.  Click <b>OK</b>.
+</p><p>Finally, the build the project.  A new build directory is created, and like the other build configuration, it contains the compiler generated assembly source files.
+</p>
+<h3><span class="mw-headline" id="CCSv5.1_Compare_Loops">CCSv5.1 Compare Loops</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=22" title="Edit section: CCSv5.1 Compare Loops">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>At this point, you have built the project with both configurations, i.e. with both compilers.  Next, the loops are compared with the loopdiff utility.  At this time the loopdiff utility can only be run from the command line.  If it proves to be popular, we may devise a way to invoke it from within CCS.  
+</p><p>First, determine the directory where the project is based.  Bring up the <b>Build Options...</b>.  In the lower left corner, click on <b>Show advanced settings</b>.  On the upper left, highlight <b>Resource</b>.  A directory path is shown next to <b>Location:</b>.  Let's call this the <i>project directory</i>.  Click <b>OK</b>.  
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:883px;"><a href="File_Loopdiff_ccsv5_project_location.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/c/cb/Loopdiff_ccsv5_project_location.JPG" width="881" height="556" class="thumbimage" /></a>  <div class="thumbcaption">Determine Project Directory</div></div></div></div>
+<p>Now, bring up your favorite command shell.  If you don't have one, ask a local expert.  On most Windows machines, the menu selection <b>Start</b> -&gt; <b>All Programs</b> -&gt; <b>Accessories</b> -&gt; <b>Command Prompt</b> often works.
+</p><p>Go to the <i>project directory</i> as determined above.  For example:
+</p>
+<pre>C:\&gt;cd "\Documents and Settings\Your Name Here\workspace_v5_1\mp3"
+</pre>
+<p>Examine the directory contents to see the names of the two build configurations created earlier.  For example:
+</p>
+<pre>C:\Documents and Settings\Your Name Here\workspace_v5_1\mp3&gt;dir
+ Volume in drive C has no label.
+ Volume Serial Number is 10F5-1C87
+
+ Directory of C:\Documents and Settings\Your Name Here\workspace_v5_1\mp3
+
+01/20/2012  11:29 AM    &lt;DIR&gt;          .
+01/20/2012  11:29 AM    &lt;DIR&gt;          ..
+01/20/2012  10:03 AM               479 .ccsproject
+01/20/2012  11:28 AM            16,885 .cproject
+01/20/2012  11:28 AM             2,586 .project
+01/20/2012  10:08 AM    &lt;DIR&gt;          .settings
+
+...
+
+01/20/2012  11:11 AM    &lt;DIR&gt;          Release_v6_1_12
+01/20/2012  11:30 AM    &lt;DIR&gt;          Release_v7_3_1
+09/09/2003  10:42 AM             5,043 tableawd.h
+05/20/2011  08:52 AM            12,824 towave.c
+08/17/2007  11:54 AM             2,632 wavep.c
+09/09/2003  10:42 AM             2,647 wcvt.ch
+              21 File(s)        173,524 bytes
+               5 Dir(s)  11,244,933,120 bytes free
+</pre>
+<p>The configurations in this example are named <b>Release_v6_1_12</b> and <b>Release_v7_3_1</b>.  This is the point where it is useful to have the compiler version numbers embedded in the configuration names.  To run the standalone executable version of loopdiff issue a command similar to:
+</p>
+<pre>C:\Documents and Settings\Your Name Here\workspace_v5_1\mp3&gt;\path\to\loopdiff.exe Release_v6_1_12 Release_v7_3_1 &gt; results.txt
+Done!
+</pre>
+<p>Change \path\to to the directory where you have loopdiff installed.  Loopdiff looks through both directories for assembly files and processes them.  Loops are automatically found and compared.  A report is printed to the standard output stream.  It is captured by this command in the file results.txt.  A description of such results is found <a href="#Loopdiff_Results_Explained"> below</a>.
+</p><p>If you have Perl installed, you can use it to invoke the Perl script directly.  For example:
+</p>
+<pre>C:\Documents and Settings\Your Name Here\workspace_v5_1\mp3&gt;perl \path\to\loopdiff.pl Release_v6_1_12 Release_v7_3_1 &gt; results.txt
+Done!
+</pre>
+<h1><span class="mw-headline" id="Loopdiff_Results_Explained">Loopdiff Results Explained</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=23" title="Edit section: Loopdiff Results Explained">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This section describes the default output.  You can also get the output in a <a href="#Dump_Raw_Loop_Information">raw CSV form</a>.    
+</p><p>Typical results look like this ...
+</p>
+<pre>Found 136 loops.
+48, or 35.3%, have the same performance.
+
+
+Loops Which Degraded
+
+6.0.23       7.3.0        Delta  Line  Impl  File
+--------------------------------------------------
+19           21           -2     311   0     iwinQ.ch
+19           21           -2     386   0     iwinQ.ch
+...
+18.50        19           -0.50  50    0     iwinQ.ch
+19.50        20           -0.50  50    0     iwinbQ.ch
+
+
+Loops Which Improved
+
+6.0.23       7.3.0        Delta  Line  Impl  File
+--------------------------------------------------
+21           19           2      82    0     icdct.c
+5            3            2      186   0     icdct.c
+...
+0.50         0.25         0.25   324   0     iupL1.ch
+0.50         0.25         0.25   356   0     iupini.ch
+
+
+Summary of Software Pipelined Loops Unique to Version 6.0.23
+
+EII    Line  Impl  File
+------------------------
+DQ     166   1     isbt.c
+DQ     208   0     iupini.ch
+...
+
+Summary of Software Pipelined Loops Unique to Version 7.3.0
+
+EII    Line  Impl  File
+------------------------
+5      205   0     iupini.ch
+5      215   0     iupini.ch
+...
+
+</pre>
+<p>The first part is a overall summary of how many loops were found, and what percentage of those loops have the same performance.  The next part is a table of data about loops generated by both compilers, and the loop performance degraded; that is, the new compiler generated a slower loop.  The next part is a similar table of data, but for loops which improved.
+This is followed by a table of data about loops generated only by the older compiler version.  Last is that same table of data, but about loops generated only by the new compiler version.
+</p>
+<h3><span class="mw-headline" id="Table_Column_Headings">Table Column Headings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=24" title="Edit section: Table Column Headings">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In all tables, each row represents one loop.  A description of each column follows:
+</p>
+<ul><li>6.0.23 - The version number of the older compiler.  The data is the effective initiation interval (EII) for that loop under that version.  More background on EII is given <a href="#Effective_Initiation_Interval_.28EII.29_Explained">below</a>.  This column heading will vary with the actual version number of the compiler seen.</li>
+<li>7.3.0  - The version number of the new compiler.  The data is the EII for that loop under that version.</li>
+<li>Delta - The difference between the EII values.  Negative numbers indicate a loss in performance.  Conversely, positive numbers indicate a gain in performance.</li>
+<li>Line - The source line number where the loop begins</li>
+<li>Impl - The same source line loop can, in some cases, be implemented multiple times in assembly.  This number distinguishes among such implementations.  More details <a href="#Multiple_Loop_Implementations_.28Impl.29_Explained">below</a>.</li>
+<li>File - The source file which contains the loop</li>
+<li>EII - The Effective Initiation Interval of the loop.  See <a href="#Effective_Initiation_Interval_.28EII.29_Explained">below</a> for more detail.</li></ul>
+<h3><span class="mw-headline" id="How_the_Tables_are_Sorted">How the Tables are Sorted</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=25" title="Edit section: How the Tables are Sorted">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The degraded loops table and the improved loops table are both sorted by the Delta column.  The degraded loops table starts with the loops with the biggest slow down.  Conversely, the improved loops table starts with the loops with the biggest speed up.  Ties are broken by sorting on file name, line number, then implementation number.
+</p><p>The unique loops tables are sorted by file name, line number, then implementation number.
+</p>
+<h3><span id="Effective_Initiation_Interval_(EII)_Explained"></span><span class="mw-headline" id="Effective_Initiation_Interval_.28EII.29_Explained">Effective Initiation Interval (EII) Explained</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=26" title="Edit section: Effective Initiation Interval (EII) Explained">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The EII summarizes, in one number, the performance of a loop.  Smaller numbers are better.
+</p><p>A description of an initiation interval (II) is given <a rel="nofollow" class="external text" href="C6000_Compiler__Tuning_Software_Pipelined_Loops.html#Introduction">here</a>.  The effective II (EII) is the II divided by the unroll factor.  The unroll factor is the number of copies of the loop in the assembly after unrolling.  For a loop that is not unrolled at all, the unroll factor is 1.  Thus, for a loop that is not unrolled, EII equals II.  In the comment block the compiler issues before every loop, the unroll factor is titled the <tt>Loop Unroll Multiple</tt>.
+</p><p>Even though two loops may have different II, due to unrolling, the actual performance may be the same.  For example, suppose the older compiler pipelines a loop with II=2.  Suppose the new compiler pipelines the same loop with II=4, but it unrolls it once (thus divide by 2).  The net performance of these loops is the same, which is reflected in that EII=2 for both loops.  Note an EII can be less than 1.
+</p><p>In some unusual cases, the EII is not a number, but one of the following abbreviations:
+</p>
+<ul><li>DQ - Disqualified.  The loop was disqualfied from software pipelining for some reason.  The most common reason is the loop contains a function call.  Inspect the comment block in the compiler generated assembly for the exact reason for this specific loop.</li>
+<li>FAIL - The compiler attempted to software pipeline the loop, but failed for some reason.  For example, no register allocation could be found.  Again, inspect the comment block in the compiler generated assembly for the exact reason for this specific loop.</li>
+<li>NA - Not applicable.  May only appear in the Delta column.  This shows when a loop pipelines normally under one compiler version, but is DQ or FAIL under the other compiler version.</li></ul>
+<h3><span id="Multiple_Loop_Implementations_(Impl)_Explained"></span><span class="mw-headline" id="Multiple_Loop_Implementations_.28Impl.29_Explained">Multiple Loop Implementations (Impl) Explained</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=27" title="Edit section: Multiple Loop Implementations (Impl) Explained">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In some cases, the compiler generates multiple implementations for the same source loop.  There are two, rather different, ways this can happen.  Despite the difference in how this occurs, it appears similar in the assembly source, and so the handling in loopdiff is the same.  
+</p><p>One way is when the compiler automatically chooses to emit multiple implementations of the loop for performance reasons.
+In such cases, there is a bit of code before the loops which, at runtime, chooses between them.  The criteria for the choice may be the number of loop iterations, whether certain pointers do not alias, etc.
+</p><p>The other way is when the source loop appears in an inline function in a header file, and that function is called from multiple places.
+</p><p>No matter how it occurs, the multiple implementations are assigned a number, starting with 0, in the order of which they appear in the assembly.  There is no guarantee that, for two different versions of the compiler, the same loop will result in the same number of multiple iterations, or, even if the same number of loops is generated, those loops will appear in the same order.  Still, when this occurs, the loops with the same implementation number are compared.  At times, this will result in an invalid comparison.  Given the information presently available in the assembly files, there is nothing more that can be done.
+</p>
+<h1><span id="Limitations,_Caveats,_Issues"></span><span class="mw-headline" id="Limitations.2C_Caveats.2C_Issues">Limitations, Caveats, Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=28" title="Edit section: Limitations, Caveats, Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Sometimes_the_Wrong_Loops_Are_Compared">Sometimes the Wrong Loops Are Compared</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=29" title="Edit section: Sometimes the Wrong Loops Are Compared">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As already discussed <a href="#Multiple_Loop_Implementations_.28Impl.29_Explained"> above</a>, there are cases where one loop in the C source results in multiple implementations of that loop in the assembly.  Loopdiff assigns each of those assembly loops an implementation number, shown as Impl in the output.  Loops with the same Impl are compared.  Sometimes, this comparison is invalid.
+</p>
+<h3><span class="mw-headline" id="Sometimes_the_Wrong_File_Name_is_Used">Sometimes the Wrong File Name is Used</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=30" title="Edit section: Sometimes the Wrong File Name is Used">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The name of the source file which contains the loop is part of how loops are matched up for comparison.  A detailed description of how the file name is determined is beyond the scope of this document.  The way it is usually done, with current versions of the compiler (as of this writing), is by using the file name seen in the most recent .dwpsn directive.  These Dwarf position directives are issued so CCS can determine the C/C++ source code location for one or more assembly instructions.  However, there is a bug where, in some limited cases, the file name in the .dwpsn directive is wrong.  If the source for the loop is in an include file, the file name in the Dwarf position directive may be incorrect.  The details are in the ClearQuest entry SDSCM00042053, which can be looked up <a rel="nofollow" class="external text" href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&amp;service=CQ&amp;schema=SDo-Web&amp;contextid=SDOWP&amp;username=readonly&amp;password=readonly">here</a>.  This bug is fixed as of these compiler versions:
+</p>
+<ul><li>7.3.3</li>
+<li>7.2.8</li>
+<li>7.0.6</li>
+<li>6.1.21</li>
+<li>6.0.30</li></ul>
+<p>As of this writing, only 7.3.3 and 7.2.8 are available.  Not all of these versions are planned for a release.  Some of them, particularly the older ones, may never be released.
+</p><p>Loopdiff is able to transparently handle either current compiler output, or the slight differences in compiler output due to this bug fix.
+</p>
+<h3><span class="mw-headline" id="Runtime_Behavior_Not_Considered">Runtime Behavior Not Considered</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=31" title="Edit section: Runtime Behavior Not Considered">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The total impact any one loop has on overall system performance has several factors.  Loopdiff only considers one: the number of CPU cycles required to execute the loop one time.  Other considerations include:
+</p>
+<ul><li>How many times the loop iterates</li>
+<li>How many times the function containing the loop is called</li>
+<li>Cache effects</li>
+<li>Memory system effects</li></ul>
+<p>Thus, the loop which loopdiff indicates has degraded the most may not, at runtime, cause that much performance loss.  Conversely, a different loop which loopdiff indicates degraded a small amount may, at runtime, cause a great deal of performance loss.  
+</p><p>This is a fundamental limitation of any static performance analysis, such as the one performed by loopdiff.  All of the factors listed above can only be determined by executing the code and conducting a dynamic performance analysis.
+</p>
+<h3><span class="mw-headline" id="File_Names_May_Not_Contain_Slashes">File Names May Not Contain Slashes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=32" title="Edit section: File Names May Not Contain Slashes">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A source file name may not contain either a forward slash (/) or a reverse slash (\). The rules on what characters are allowed in file names is difficult to pin down.  I think forward slash is never allowed anywhere.  And Windows systems do not allow reverse slash.  Unix systems do allow a reverse slash in file names.  Even so, this is exceedingly rare in practice.  So I don't expect this limitation to cause any problems.
+</p><p>Allowing this presumption makes file name parsing much more straightforward.
+</p>
+<h3><span class="mw-headline" id="File_Names_Should_be_Unique">File Names Should be Unique</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=33" title="Edit section: File Names Should be Unique">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As already explained, file names are part of how the loops are paired up for comparison.  The file name considered is only the base name of the file, without any directory path information.  This does not mean it is impossible to have a file of the same name in two different directories.  But it does mean it will be confusing.  All you see in loopdiff output is the name of the file.  You'll have to work out which directory it came from.
+</p>
+<h1><span class="mw-headline" id="Technical_Details">Technical Details</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=34" title="Edit section: Technical Details">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Invoking_Loopdiff">Invoking Loopdiff</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=35" title="Edit section: Invoking Loopdiff">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The tool is implemented as a Perl script named loopdiff.pl.  It is supplied in source form, which can be run the same as any other Perl script.  A standalone executable is also supplied, for use on Windows PC systems which do not have Perl installed.
+</p>
+<h3><span class="mw-headline" id="Loopdiff_Command_Line">Loopdiff Command Line</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=36" title="Edit section: Loopdiff Command Line">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If you have Perl installed, you can always see the latest details on the command line with this command:
+</p>
+<pre>% perldoc loopdiff.pl
+</pre>
+<p>Loopdiff operates upon directories, and not file names.  List out the directories which contain the compiler generated assembly files.  Those directories, and any sub-directories they contain, are searched for assembly source files, in a manner similar to the Unix find command.  If no directories are given, the search begins from the current directory.
+</p><p>As of this writing, these are the options:
+</p>
+<ul><li>--help&#160;: Output usage and quit</li>
+<li>--asm_extension=s&#160;: Extension for assembly files</li>
+<li>-ea=s&#160;: Extension for assembly files</li>
+<li>--verbose&#160;: Print names of files as they are processed</li>
+<li>--csv_dump&#160;: Dump out the raw loop data in CSV format</li></ul>
+<p>Single letter abbreviations also work, e.g. -h for help, -v for verbose.
+</p>
+<h3><span class="mw-headline" id="Dump_Raw_Loop_Information">Dump Raw Loop Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=37" title="Edit section: Dump Raw Loop Information">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Use the option --csv_dump to get the loop performance data in comma separated values (CSV) format.  The data is not processed or analyzed in any way.  CSV data can be trivially loaded into Excel and other programs for custom analysis.  Here is an example
+</p>
+<pre>File Name,Line Number,Impl Number,Version,II,Unroll
+"icdct.c",67,0,6.0.23,19,1
+"icdct.c",67,0,7.3.0,19,1
+"icdct.c",82,0,6.0.23,21,1
+"icdct.c",82,0,7.3.0,19,1
+...
+</pre>
+<p>The first row gives the data column headings.  Each subsequent row is data for one loop.  The column headings are:
+</p>
+<ul><li>File Name - The name of the source file</li>
+<li>Line Number - The line number where the loop starts</li>
+<li>Impl Number - The loop implementation number, described <a href="#Multiple_Loop_Implementations_.28Impl.29_Explained">above</a></li>
+<li>Version - The version of the compiler which produced this loop</li>
+<li>II - The initiation interval</li>
+<li>Unroll - How many times the loop is unrolled</li></ul>
+<h3><span class="mw-headline" id="Recognizing_Assembly_Source_Files">Recognizing Assembly Source Files</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=38" title="Edit section: Recognizing Assembly Source Files">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Assembly source files are identified by the file extension.  By default, if the file extension is <tt>.asm</tt>, or begins with <tt>.s</tt> (e.g. <tt>.s62</tt>, <tt>.s55</tt>, .etc), then it is presumed to be an assembly source file.  You can override the default with the options --asm_extension=<i>s</i> or -ea=<i>s</i>.  Note these same options, with similar usage, are available with the C6000 compiler.  
+</p><p>One difference is the meaning of something like <tt>-ea=s*</tt>.  It is common to think that means s followed by anything.  For Perl regular expressions, that is <b>not</b> what it means.  It means <b>zero</b> or more s characters, and thus will match any file extension, even none at all.  To have that effect, you have to write <tt>-ea=s.*</tt> instead.  Note the addition of the '.' dot.  The script warns you when your -ea choice would match any file extension.
+</p>
+<h3><span class="mw-headline" id="BSD_License">BSD License</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=39" title="Edit section: BSD License">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The loopdiff tool is released under the BSD license.  Details are in the license wording at the end of the Perl source code.
+</p>
+<h1><span class="mw-headline" id="How_to_Obtain_Support">How to Obtain Support</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=40" title="Edit section: How to Obtain Support">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Post your questions and suspected bugs to the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/compiler/f/343.aspx">compiler forum</a> with the tag <tt>loopdiff</tt>.  Please use the tag.  Use of the tag triggers an e-mail to the current support team.  Without the tag, the issue may go unnoticed for some time.
+</p>
+<h1><span class="mw-headline" id="Compiler_Option_Details">Compiler Option Details</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;section=41" title="Edit section: Compiler Option Details">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Compiler options can be expressed in two ways.  All options have a long form that starts with two dashes.  Many options, though not all, also have an equivalent shorter form that begins with one dash.  The makefile portion of this article uses short form options, and the CCS portions use long form options.  Here is a table which shows both forms of the options used in this article.
+</p>
+<table border="2" cellspacing="0" cellpadding="4" width="50%">
+<tbody><tr>
+<td><b>Long Form</b>
+</td>
+<td><b>Short Form</b>
+</td></tr>
+<tr>
+<td>--silicon_version=<i>id</i>
+</td>
+<td>-mv=<i>id</i>
+</td></tr>
+<tr>
+<td>--opt_level=<i>n</i>
+</td>
+<td>-o=<i>n</i>
+</td></tr>
+<tr>
+<td>--debug_software_pipeline
+</td>
+<td>-mw
+</td></tr>
+<tr>
+<td>--asm_directory=<i>dir</i>
+</td>
+<td>-fs=<i>dir</i>
+</td></tr></tbody></table>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201023608
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.129 seconds
+Real time usage: 0.136 seconds
+Preprocessor visited node count: 298/1000000
+Preprocessor generated node count: 468/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4160/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:15719-0!canonical and timestamp 20201201023608 and revision id 107013
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Compare Loop Performance Across C6000 Compilers</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Compare Loop Performance Across C6000 Compilers</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Compare Loop Performance Across C6000 Compilers</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Compare Loop Performance Across C6000 Compilers</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Compare Loop Performance Across C6000 Compilers</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Compare Loop Performance Across C6000 Compilers</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Compare Loop Performance Across C6000 Compilers</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Compare Loop Performance Across C6000 Compilers</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Compare Loop Performance Across C6000 Compilers</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;oldid=107013">https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;oldid=107013</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Compare+Loop+Performance+Across+C6000+Compilers" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Compare_Loop_Performance_Across_C6000_Compilers.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Compare_Loop_Performance_Across_C6000_Compilers.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Compare_Loop_Performance_Across_C6000_Compilers.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Compare_Loop_Performance_Across_C6000_Compilers.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;oldid=107013" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Compare_Loop_Performance_Across_C6000_Compilers&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 18 May 2012, at 07:56.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.129","walltime":"0.136","ppvisitednodes":{"value":298,"limit":1000000},"ppgeneratednodes":{"value":468,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":4160,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201023608","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":358});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Compare_Loop_Performance_Across_C6000_Compilers by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:28:56 GMT -->
+</html>

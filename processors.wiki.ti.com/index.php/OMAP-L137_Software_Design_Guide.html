@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L137_Software_Design_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:25:01 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OMAP-L137 Software Design Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OMAP-L137_Software_Design_Guide","wgTitle":"OMAP-L137 Software Design Guide","wgCurRevisionId":124040,"wgRevisionId":124040,"wgArticleId":11668,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OMAP-L137_Software_Design_Guide","wgRelevantArticleId":11668,"wgRequestId":"3737f6aa5fe8f77175899b37","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OMAP-L137_Software_Design_Guide rootpage-OMAP-L137_Software_Design_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OMAP-L137 Software Design Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Software_Design_Timeline_.E2.86.92"><span class="tocnumber">2</span> <span class="toctext">Software Design Timeline →</span></a></li>
+<li class="toclevel-1"><a href="#Determine_Top_Level_Software_Hierarchy"><span class="tocnumber">3</span> <span class="toctext">Determine Top Level Software Hierarchy</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Real_Time_Operating_System_.28RTOS.29"><span class="tocnumber">3.1</span> <span class="toctext">Real Time Operating System (RTOS)</span></a></li>
+<li class="toclevel-2"><a href="#Generic_Operating_System_.28OS.29"><span class="tocnumber">3.2</span> <span class="toctext">Generic Operating System (OS)</span></a></li>
+<li class="toclevel-2"><a href="#No_Operating_System"><span class="tocnumber">3.3</span> <span class="toctext">No Operating System</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-2"><a href="#Software_offering_for_OMAP-L137.2FC6747"><span class="tocnumber">4</span> <span class="toctext">Software offering for OMAP-L137/C6747</span></a></li>
+<li class="toclevel-1"><a href="#Download.2C_Purchase.2C_or_Install_Appropriate_IDE_.26_Tool_Chain.28s.29"><span class="tocnumber">5</span> <span class="toctext">Download, Purchase, or Install Appropriate IDE &amp; Tool Chain(s)</span></a></li>
+<li class="toclevel-1"><a href="#Download.2C_Purchase.2C_or_Install_Additional_Packages_.2F_Dependencies"><span class="tocnumber">6</span> <span class="toctext">Download, Purchase, or Install Additional Packages / Dependencies</span></a></li>
+<li class="toclevel-1"><a href="#Procure_Hardware_Development_Platforms_.26_Emulation_Tools"><span class="tocnumber">7</span> <span class="toctext">Procure Hardware Development Platforms &amp; Emulation Tools</span></a>
+<ul>
+<li class="toclevel-2"><a href="#TI_XDS_Hardware_Emulators"><span class="tocnumber">7.1</span> <span class="toctext"><b>TI XDS Hardware Emulators</b></span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Software_Development_Platforms_for_OMAP-L137.2FC6747"><span class="tocnumber">7.2</span> <span class="toctext">Software Development Platforms for OMAP-L137/C6747</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Code_Development"><span class="tocnumber">8</span> <span class="toctext">Code Development</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#OMAP-L137.2FC6747_Peripheral_Specific_Code_Development_Guides"><span class="tocnumber">8.1</span> <span class="toctext">OMAP-L137/C6747 Peripheral Specific Code Development Guides</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#EMIFA"><span class="tocnumber">8.1.1</span> <span class="toctext">EMIFA</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Debugging"><span class="tocnumber">9</span> <span class="toctext">Debugging</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Typical_Software_Activity_on_C6-Integra_Devices"><span class="tocnumber">9.1</span> <span class="toctext">Typical Software Activity on C6-Integra Devices</span></a></li>
+<li class="toclevel-2"><a href="#Debug_Approach"><span class="tocnumber">9.2</span> <span class="toctext">Debug Approach</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Check_the_Basics"><span class="tocnumber">9.2.1</span> <span class="toctext">Check the Basics</span></a></li>
+<li class="toclevel-3"><a href="#Narrow_the_Scope_of_the_Problem"><span class="tocnumber">9.2.2</span> <span class="toctext">Narrow the Scope of the Problem</span></a></li>
+<li class="toclevel-3"><a href="#Divide_and_Conquer"><span class="tocnumber">9.2.3</span> <span class="toctext">Divide and Conquer</span></a></li>
+<li class="toclevel-3"><a href="#Obtaining_Additional_Assitance_with_your_Investigation"><span class="tocnumber">9.2.4</span> <span class="toctext">Obtaining Additional Assitance with your Investigation</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Product_Integration"><span class="tocnumber">10</span> <span class="toctext">Product Integration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Understanding_how_the_OMAP-L137.2FC6747_Boot_Sequence_Works"><span class="tocnumber">10.1</span> <span class="toctext">Understanding how the OMAP-L137/C6747 Boot Sequence Works</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Generating_the_Boot_Image"><span class="tocnumber">10.2</span> <span class="toctext">Generating the Boot Image</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Programming_the_Image_into_non-volatile_memory"><span class="tocnumber">10.3</span> <span class="toctext">Programming the Image into non-volatile memory</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Serial_Flashing_Utility"><span class="tocnumber">10.3.1</span> <span class="toctext">Serial Flashing Utility</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Flashing_via_JTAG_using_CCS"><span class="tocnumber">10.3.2</span> <span class="toctext">Flashing via JTAG using CCS</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Serial_Port_Boot_Utility"><span class="tocnumber">10.3.3</span> <span class="toctext">Serial Port Boot Utility</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Software_Performance"><span class="tocnumber">11</span> <span class="toctext">Software Performance</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#C674x_DSP_performance_using_software_library_functions"><span class="tocnumber">11.1</span> <span class="toctext">C674x DSP performance using software library functions</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#BIOS_Drivers:"><span class="tocnumber">11.2</span> <span class="toctext">BIOS Drivers:</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Linux_Drivers:"><span class="tocnumber">11.3</span> <span class="toctext">Linux Drivers:</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Introduction&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The purpose of this software design guide is to walk developers through the various stages of designing software for <a rel="nofollow" class="external text" href="http://www.ti.com/c6-integra">TI's C6-Integra ARM + DSP devices</a> as well as the <a rel="nofollow" class="external text" href="http://focus.ti.com/paramsearch/docs/parametricsearch.tsp?family=dsp&amp;sectionId=2&amp;tabId=2274&amp;familyId=1635&amp;paramCriteria=no">C6748 DSPs</a>. The guide follows the structure shown in the Software Design Timeline below. Each design stage in the Timeline links to a collection of useful documentation, application notes, and design recommendations pertaining to that stage. Using this Guide, software designers can efficiently locate a resource (or collection of resources) they need at each stage in the software development process.<br /><br />
+<b>Note:</b> This guide is not as a replacement for information specified in the data manual nor is it designed as a replacement for information on TI.com, rather is should be used as a companion guide to point to existing information.
+<br /><br />
+</p><p><br />
+</p>
+<h2><span id="Software_Design_Timeline_→"></span><span class="mw-headline" id="Software_Design_Timeline_.E2.86.92">Software Design Timeline →</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=1" title="Edit section: Software Design Timeline →">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="FCK&#95;_ShowTableBorders" cellspacing="0" cellpadding="2" align="center" border="0">
+
+<tbody><tr>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#Determine_Software_Hierarchy"> Determine Software Hierarchy </a>
+</td>
+<td><b>→</b>
+</td>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#Download.2C_Purchase.2C_or_Install_Appropriate_IDE_.26_Tool_Chain.28s.29"> Download, Purchase, or Install Appropriate IDE &amp; Tool Chain(s) </a>
+</td>
+<td>→
+</td>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#Download.2C_Purchase.2C_or_Install_Additional_Packages_.2F_Dependencies">Download, Purchase, or Install Additional Package Dependencies</a>
+</td>
+<td>→
+</td>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#Procure_Hardware_Development_Platforms">Procure Hardware Development Platforms </a>
+</td>
+<td>→
+</td>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#Code_Developement">Code Developement </a>
+</td>
+<td>→
+</td>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#Debugging">Debugging</a>
+</td>
+<td>→
+</td>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#Product_Integration">Product Integration </a>
+</td>
+<td>→
+</td>
+<td valign="middle" align="center" bgcolor="#ffff99"><a href="#System_Level_Testing">System Level Testing  </a>
+</td></tr></tbody></table>
+<p>&#160;
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Determine_Top_Level_Software_Hierarchy">Determine Top Level Software Hierarchy</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:Top_Level_Software_Hierarchy&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span id="Real_Time_Operating_System_(RTOS)"></span><span class="mw-headline" id="Real_Time_Operating_System_.28RTOS.29"><u>Real Time Operating System (RTOS)</u></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:Top_Level_Software_Hierarchy&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Real Time Operating Systems are specifically designed to appropriately schedule signals to be handled with minimal latency at the specific time when the the signal occurs. RTOS such as TI's DSP/BIOS (later renamed SYS/BIOS to reflect multi-core ARM &lt;-&gt; DSP interactions) is one such example of a RTOS that has been specifically designed and successfully used on multiple C6x DSPs for years. The below links will direct you to more information about the DSP/BIOS and SYS/BIOS which are the officially supported RTOSs of TI, and are available free of charge.
+</p><p><b>Note:</b> DSP/BIOS is the precursor to SYS/BIOS, although both are supported. Those who are not as familiar with RTOS will benefit with starting with DSP/BIOS as it has a greater number of drivers for new and legacy devices.
+</p><p><a rel="nofollow" class="external text" href="http://www.ti.com/tool/biossw-c6747">TI DSP/BIOS for C674x DSP</a>
+<br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/tool/sysbios">TI SYS/BIOS for C674x DSP</a>
+<br />
+</p><p>In additional to DSP/BIOS and SYS/BIOS there are additional available RTOSs that can be run on C6-Integra/C674x Devices, each with it own benefits, however it should be noted that these RTOSs are not always free of charge, nor are they directly supported by TI. The following matrix lists additional <a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspfindtoolswbytooltype.tsp?sectionId=3&amp;tabId=2095&amp;toolTypeId=5&amp;familyId=44">Real Time Operating Systems</a> that are available for C6-Integra/C674x devices.
+<br />
+<br />
+</p>
+<h4><span id="Generic_Operating_System_(OS)"></span><span class="mw-headline" id="Generic_Operating_System_.28OS.29"><u>Generic Operating System (OS)</u></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:Top_Level_Software_Hierarchy&amp;action=edit&amp;section=T-3" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Developing on a generic operating system (OS) can jump start your development by providing a predefined code structure (and typically existent peripheral drivers) which allow you to focus directly on your end application development code. While this may sound advantageous, it's important to understand that the benefits that one gains with a traditional operating system can quickly be out shadowed by non-optimized code that can quickly consume a lot of unnecessary processing power and/or available on-chip system memory resulting in a higher overall system cost. 
+</p><p>The following matrix lists <a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspfindtoolswbytooltype.tsp?sectionId=3&amp;tabId=2095&amp;toolTypeId=5&amp;familyId=44">Generic Operating Systems</a> are available for C6-Integra/C6748 Devices
+<br /><br />
+</p>
+<h4><span class="mw-headline" id="No_Operating_System"><u> No Operating System </u></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:Top_Level_Software_Hierarchy&amp;action=edit&amp;section=T-4" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Software development on a device without the use of any operating system is typically done when a very minimal code footprint is needed, or an operating system may add unnecessary complexity that is not needed. 
+Development with no operating systems are typically discouraged because it requires an application to rely solely on interrupts for scheduling. While this approach does work, it quickly becomes a heavy burden on the developer to appropriate structure code to manage all events,  when the code will need to manage for future undefined programs. 
+</p><p>As the application scales to meet additional demands of your customers, additional demands of not using an operating system may sideline you into re-using your your differentiating your products from those your competitors provide.
+<br /><br />
+</p>
+<h2><span id="Software_offering_for_OMAP-L137/C6747"></span><span class="mw-headline" id="Software_offering_for_OMAP-L137.2FC6747">Software offering for OMAP-L137/C6747</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=2" title="Edit section: Software offering for OMAP-L137/C6747">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>TI provides the following software development packages specific to OMAP-L137/C6747:
+</p>
+<ul><li><b>RTOS Support for OMAP-L137/C6747</b>
+<ul><li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_registered_sw/sdo_sb/targetcontent/psp/bios_psp/index.html">DSP/BIOS Platform Support Package for OMAP-L137</a></li></ul></li></ul>
+<ul><li><b>RTOS support for DA830</b>
+<ul><li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_registered_sw/sdo_sb/targetcontent/psp/bios_psp/index.html#DSPBIOS_6.xx-based_Platform_Support">DSP/BIOS Platform Support Package for DA830 (BIOS PSP 2.00.xx)</a></li></ul></li></ul>
+<ul><li><b>OS Support for OMAP-L137</b>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/linuxsdk-omapl137.html">Linux Software Development Kit for OMAP-L137</a></li>
+<li><a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/wincesdk-am1xomapl1x.html">WindowsCE Software Development Kit for OMAP-L137</a><br /></li></ul></li>
+<li><b>Non-OS Examples for OMAP-L137/C6747</b>
+<ul><li><a rel="nofollow" class="external text" href="QuickStartOMAPL1x_rCSL.html">Register Level Chip Support Library (rCSL)Example Package</a></li>
+<li><a rel="nofollow" class="external text" href="http://support.spectrumdigital.com/boards/evmomapl137/revg/">BSL and GEL files for development kits</a></li></ul></li></ul>
+<h2><span id="Download,_Purchase,_or_Install_Appropriate_IDE_&amp;_Tool_Chain(s)"></span><span class="mw-headline" id="Download.2C_Purchase.2C_or_Install_Appropriate_IDE_.26_Tool_Chain.28s.29">Download, Purchase, or Install Appropriate IDE &amp; Tool Chain(s)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_IDE_Toolchain&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Once you have decided on the appropriate software hierarchy that is appropriate for your design, the next step is to pick to tool chain that will quickly assist you in developing your end applications. Integrated Development Environments (IDEs) provide a software developer a base set of software which allows a programmer to get started writing and testing code. IDEs typically include a Text Editor, The software tool chain, and a debugging environment all in a single application that typically runs from a host PC.
+</p><p>A tool chain typically consists of at least one C compiler, an Assembler, and a Linker. The tool chain is CPU architecture dependent, so the right tool chain is dependent on the CPU of choice as well as any additional constraints imposed by the host operating system.
+</p><p>C6x-Integra Devices offer wealth of various tools chains and IDEs due to the integration of both the ARM CPU core and the C674x DSP core, both of which have a different instruction set architecture (ISA)
+</p><p>TI provides both an IDE as well as a tool chain for development on C6x-Integra devices. 
+<br />
+<br />
+<u><b>Integrated Development Environments supported by TI</b></u>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspsupportatn.tsp?familyId=44&amp;sectionId=3&amp;tabId=415&amp;toolTypeId=30">Code Composer Studio (CCS) Integrated Development Environment (IDE)</a>
+<ul><li>Inclusive of TMS320 Optimizing C6000 Optimizing Compiler, C6000 Assembler, &amp; C6000 Linker</li>
+<li>Inclusive of TMS470 Optimizing ARM Optimizing Compiler, ARM Assembler, &amp; ARM Linker</li>
+<li>Inclusive of Cycle Accurate Simulators for both the ARM and C674x DSP Cores</li>
+<li>Integrated support for DSP/BIOS Real Time Operating System</li>
+<li>Integrated support XDS Series Emulators/Debuggers</li></ul></li>
+<li>Additional Introductory Information on the Code Composer can be referenced in the following wiki articles
+<ul><li><a href="Code_Composer_Studio.html" class="mw-redirect" title="Code Composer Studio"> Code Composer Studio Wiki Page</a></li></ul></li></ul>
+<p><br />
+<u><b>Stand Alone Tool Chains supported by TI outside of CCS</b></u>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="https://www-a.ti.com/downloads/sds_support/CodeGenerationTools.htm#C6000">C674x DSP CPU Tool Chain</a>
+<ul><li>TMS320 Optimizing C6000 C/C++ Compiler</li>
+<li>TMS320 Optimizing C6000 Assembler</li>
+<li>TMS320 Optimizing C6000 Linker</li></ul></li>
+<li><a rel="nofollow" class="external text" href="https://www-a.ti.com/downloads/sds_support/CodeGenerationTools.htm#TMS470">ARM9, Cortex-A8 CPU Tool Chain</a>
+<ul><li>TMS470 Optimizing ARM C/C++ Compiler</li>
+<li>TMS470 Optimizing Assembler</li>
+<li>TMS470 Optimizing Linker</li></ul></li>
+<li><a href="Programmable_Realtime_Unit_Software_Development.html" title="Programmable Realtime Unit Software Development"> Programmable Realtime Unit (PRU) Tool Chain</a>
+<ul><li>PRU Assembler</li></ul></li></ul>
+<p><br />
+<u><b>Additional 3rd Party Tool Chains available (not supported by TI)</b></u>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.gnu.org/">GNU ARM Cross Compiler</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.codesourcery.com/">Code Sourcery Lite ARM Cross Compiler</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.keil.com/">Keil ARM Compiler</a></li></ul>
+<h2><span id="Download,_Purchase,_or_Install_Additional_Packages_/_Dependencies"></span><span class="mw-headline" id="Download.2C_Purchase.2C_or_Install_Additional_Packages_.2F_Dependencies">Download, Purchase, or Install Additional Packages / Dependencies</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Add-Ons&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>TI offers wealth of additional Application Programming Interfaces (APIs) for the C6-Integra devices which serve to abstract programming each register at the bit level as well as to provide a well defined method to program the C6-Integra devices. Additionally, there are various software packages available for download which can help you jump start your software development based upon your preferences. 
+</p><p>For a list of all TI Provided API's specific to the OMAP-L137/C6747 please visit the <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/prod/folders/print/omap-l137.html#toolssoftware">OMAP-L137 Project Support Page</a> on TI.com 
+</p>
+<h2><span id="Procure_Hardware_Development_Platforms_&amp;_Emulation_Tools"></span><span class="mw-headline" id="Procure_Hardware_Development_Platforms_.26_Emulation_Tools">Procure Hardware Development Platforms &amp; Emulation Tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Hardware_Development_Platforms&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Hardware Development Platforms are designed, developed, and tested by <a rel="nofollow" class="external text" href="http://focus.ti.com/general/docs/gencontent.tsp?contentId=46045&amp;DCMP=TI_Design_Houses&amp;HQS=Other+OT+designhouses">3rd Party Design Houses</a> in order to provide the software architect team with the ability to develop their code in parallel with the hardware design of the Printed Circuit Board (PCB). Hardware Development platforms are preferable vs simulators because they actually reflect how the device will behave in the end product and take into account system latencies for cache misses and off chip memory accesses. 
+</p><p>Texas Instruments provides a variety of reference designs for JTAG Emulators called the XDS series. These emulators come in various different classes based upon the desired level of support
+</p>
+<h4><span class="mw-headline" id="TI_XDS_Hardware_Emulators"><b><u>TI XDS Hardware Emulators</u></b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:XDS_Emulators&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><b> XDS100 Class Emulators (Version 1, Version 2) </b>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/xds100.html">XDS100 Emulators available from TI</a></li>
+<li><a rel="nofollow" class="external text" href="https://software-dl.ti.com/ccs/esd/documents/xdsdebugprobes/emu_xds100.html#What_is_the_XDS100.3F">Additional XDS100 Wiki Resources</a></li></ul>
+<p><b> XDS510 Class Emulators </b>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/xds510.html">XDS510 Emulators available from TI</a></li>
+<li><a rel="nofollow" class="external text" href="XDS510.html">Additional XDS510 Wiki Resources</a></li></ul>
+<p><b> XDS560 Class Emulators </b>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/xds560.html">XDS560 Emulators available from TI</a></li>
+<li><a rel="nofollow" class="external text" href="https://software-dl.ti.com/ccs/esd/documents/xdsdebugprobes/emu_xds560v2.html">Additional XDS560 Wiki Resources</a></li></ul>
+<p><b> Adaptive Clocking JTAG Emulator Adaptors  </b>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/tmdsadp.html">JTAG Emulator Adaptors </a></li></ul>
+<p><b> 3rd Party Emulator Drivers Updates </b>
+For additional updates and drivers please consult the Official Support Pages from 3rd Party Emulator Providers
+<br />
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.spectrumdigital.com/index_orig.php?cPath=22&amp;osCsid=7978a008720b66afaed03ef106adde8d">Emulator Downloads from Spectrum Digital</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.blackhawk-dsp.com/support/compare.aspx">XDS Emulators from Blackhawk DSP</a></li></ul>
+<p>For additional information on Emulation refer to <a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspfindtoolswbytooltype.tsp?sectionId=3&amp;tabId=2093&amp;toolTypeId=12&amp;familyId=44">Emulators/Analyzers Page on TI.com</a> and additional wiki articles about <a rel="nofollow" class="external text" href="http://dev.ti.com/tirex/#/?link=Development%20Tools%2FDebug%20Probes%2FXDS%2FDocuments%2FXDS%20Target%20Connection%20Guide">TI JTAG Emulators &amp; JTAG Schematics</a> The following hardware development kits are recommended by TI for the OMAP-L137/C6747 <br /> 
+</p>
+<h4><span id="Software_Development_Platforms_for_OMAP-L137/C6747"></span><span class="mw-headline" id="Software_Development_Platforms_for_OMAP-L137.2FC6747"><u>Software Development Platforms for OMAP-L137/C6747</u></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=3" title="Edit section: Software Development Platforms for OMAP-L137/C6747">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><a href="File_Spectrum_OMAPL137_EVM.html" class="image" title="Spectrum OMAPL137 EVM.JPG"><img alt="Spectrum OMAPL137 EVM.JPG" src="https://processors.wiki.ti.com/images/9/9f/Spectrum_OMAPL137_EVM.JPG" width="300" height="216" /></a> <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/tmdsoskl137.html">OMAP-L137 Floating Point Starter Kit</a> from <a rel="nofollow" class="external text" href="http://www.spectrumdigital.com/">Spectrum Digital Inc. </a> <br /><br /><br /><br /> 
+</p>
+<h2><span class="mw-headline" id="Code_Development">Code Development</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Code_Development&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Since Code Development is application specific, and a variety of code development tools can be used to program the OMAP-L138/C6748, this section is specific to highlight code development on the OMAP-L138/C6748 using the Code Composer Studio (CCS) Integrated Development Environment.
+</p>
+<h3><span id="OMAP-L137/C6747_Peripheral_Specific_Code_Development_Guides"></span><span class="mw-headline" id="OMAP-L137.2FC6747_Peripheral_Specific_Code_Development_Guides">OMAP-L137/C6747 Peripheral Specific Code Development Guides</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=4" title="Edit section: OMAP-L137/C6747 Peripheral Specific Code Development Guides">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="EMIFA">EMIFA</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=5" title="Edit section: EMIFA">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li><a rel="nofollow" class="external text" href="Programming_Asynchronous_EMIF_on_OMAP-L13x_/_C674x_/_AM1x.html">Programming Asynchronous EMIF on OMAP-L13x</a>
+<ul><li>This guide provides a spreadsheet for calculating the controller timing values needed to interface with an asynchronous NAND device.</li></ul></li></ul>
+<h2><span class="mw-headline" id="Debugging">Debugging</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Debugging&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Debugging your code is an integral part of code development and a skill that takes time to develop. The goal of this section is not you make you an expert software debugger, but rather to help you understand steps that you can perform on your application code to determine the root cause of your issue. This can be especially helpful if you are using package dependencies (such as drivers) that were not developed by you.
+</p><p>This section is organized as a crash course into a collection of basic philosophies about debugging your applications on the C6-Integra/C6748 devices.
+</p><p>This page is dedicated to helping the software development team find the "root case" of the broken system code and provide explicit and useful feedback for others who can assist you in solving your integration challenges. 
+</p>
+<h3><span class="mw-headline" id="Typical_Software_Activity_on_C6-Integra_Devices">Typical Software Activity on C6-Integra Devices</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Debugging&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In most C6-Integra/C6748 applications, the software development will be split between controlling multiple CPUs, DMAs, and various peripherals. Often, code is developed for each individual portion (CPU Interrupt Service Routines, DMA Transfers, 3rd Party I/O peripheral drivers) by various team members and then collectively integrated into the final application. This is especially true of C6-Integra/C6748 devices running operating systems. 
+</p><p>While splitting code between an development team does have its benefits allowing you to test individual segments of your code, it encourages individuals write code that is beneficial for their particular segment rather than considering the impact on the entire application. As a result, integration of the individual segments often results in a non-working application.
+</p><p><b>Why?</b>
+</p><p>The assumptions that one can make for testing an individual I/O, a DMA Transaction, or a CPU ISR typically do not overlap during system integration. When this occurs, it is not always easy to determine which part is a fault, especially since each developer as independently verified / validated their segment of the code. 
+</p><p><b>So now what....?</b> 
+</p><p>As mentioned above, individuals test their segment of the code assuming they have highest priority and full system bandwidth. However in reality, code integration often introduces system various levels of arbitration (delays) amongst master/slave peripherals using the same bus, as well as possibly additional wait states until CPU bandwidth becomes available (stalls).
+</p>
+<h3><span class="mw-headline" id="Debug_Approach">Debug Approach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Debugging&amp;action=edit&amp;section=T-3" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Debugging code is commonly done by eliminating variables (one at a time if necessary) to assist you in determining where the error occurs. 
+</p><p>As mentioned above, code developed for C6-Integra/C6748 devices often have code operating on various different pieces of hardware (CPUs, DMAs, &amp; I/O peripherals). Each of these individual hardware blocks may be running at different clocking rates and require different frequencies of servicing. These hardware pieces often are interdependent on each other to perform a function (or set of functions) in a well specified time window. When these events do not occur in time, the system will typically break and leave you with little (or no) output on the I/O or an DMA transfer that does not happen. 
+</p>
+<h4><span class="mw-headline" id="Check_the_Basics">Check the Basics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Debugging&amp;action=edit&amp;section=T-4" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>This seems silly, but taking a step back from the specific problem you are facing can be very beneficial. 
+</p><p><b><u>Verify device clocking trees are configured correctly</u></b> C6-Integra/C6748 devices are not just the run-of-the-mill clocking structure of a simplistic 8 bit microcontroller. The hardware domains inside of the C6-Integra/C6748 devices <b><u>do not</u></b> run off a single clocking frequency, but rather a tree of related clocking domains that are derived from a main system clock inputs. Additionally, some peripherals (USB, EMAC, McASP, RTC) often involve being clocked from the main system clock, as well as a second clock source from an external crystal. 
+</p><p>Incorrect configuration of the device clock tree could result in missed servicing of peripherals (even though the peripheral may be configured correctly otherwise). 
+</p><p>For an overview of your device specific clocking structure, refer to your C6-Integra/C6748 Device Specific Technical Reference Manual 
+</p><p><b><u>Verify Power Domains are Active</u></b> C6-Integra Devices consist of multi-core, multi-frequency hardware blocks (CPUs, DMAs, Peripherals), its important to note these blocks can be individually powered down to conserve additional power &amp; reduce heat. The ROM code of C6-Integra/C6748 devices typically enables as few blocks as necessary to boot the device. As a result, it is up to the application developer to power on any additional hardware blocks in order to run their application. 
+</p><p>For an overview of your device specific power structure, refer to your C6-Integra/C6748 device-specific Technical Reference Manual 
+</p><p><b><u>Is this issue always reproducible?</u></b> If the issue is not always reproducible under the same conditions, this typically means it's a timing issue due to asynchronous timing between events. Unfortunately, this also means that the issue is typically harder to debug. 
+</p><p>Testing the same code on a second hardware platform (if available) is also a quick sanity check to make sure your software issue is not board dependent. 
+</p>
+<h4><span class="mw-headline" id="Narrow_the_Scope_of_the_Problem">Narrow the Scope of the Problem</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Debugging&amp;action=edit&amp;section=T-5" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Once you have determined that you device is operating and you have confirmed the basics are covered, the next step is to narrow down to scope of the problem to eliminate as many variables as possible.
+</p><p>Narrowing the scope of the problem is typically done by removing as many variables from your software application while still being able to reproduce the problem.
+</p><p><b>NOTE:</b> Removing code segments is most easily done by using (#ifdef / #endif) around your existing code. The idea behind removing your code is <b>not</b> to make you do more work by rewriting your source code.
+</p><p>Some examples of this would be to occluding various unnecessary I/O operations, bypassing unnecessary DMA transfers, and/or masking off unnecessary interrupt service routines in the CPUs. 
+</p><p>Once the unnecessary operation of software is eliminated, it becomes much easier to see where the problem is occuring. 
+</p>
+<h4><span class="mw-headline" id="Divide_and_Conquer">Divide and Conquer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Debugging&amp;action=edit&amp;section=T-6" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Once the scope of the probem has been narrowed, its important to identify all the various hardware blocks that remain. 
+</p><p>Once you identify the remaining variables in your program, you can systematically disect the operation of each of the hardware blocks to verify correct operation. 
+</p><p><b><u>Example 1:</u></b> <br /> If you have an CPU with multiple interrupts, you can individual mask all by one interrupt at a time to determine if that particular ISR is properly being executed as expected. This process can be repeated through the other remaining interrupt services routines until you find the interrupt service routine that does not perform as expected. 
+</p><p><b><u>Example 2:</u></b> <br /> If you have a DMA that is not making the necessary transfers, you can break the overall transfer down into various sets. 
+</p>
+<ul><li>Step 1: Is event that starts the DMA transfer being reached by the DMA Engine</li>
+<li>Step 2: Is the DMA Transfer source / destination addresses being properly configured</li>
+<li>Step 3: Is the source destination RAM accessible by the DMA controller? Some Memory Mapped Registers are only addressable by certain device masters. It's important to check to make sure that the Memory Mapped Registers you write to are accessible by the DMA controller.</li></ul>
+<p><b><u>Example 3:</u></b> <br /> If you have a I/O Peripheral that is not transmitting/receiving in a consistent manner, there are several steps you can make 
+</p>
+<ul><li>Step 1: Are the clocks to the peripheral correctly set up</li>
+<li>Step 2: Are the buffers properly being serviced in time. Some peripherals (such as McASP) have a limited time window in which you need to service the buffers before a transmit overrun, or underrun condition will cause the state machines to generate an error. You can then use this information to back track and determine why the buffers are not being serviced in time by the CPU or DMAs</li></ul>
+<h4><span class="mw-headline" id="Obtaining_Additional_Assitance_with_your_Investigation">Obtaining Additional Assitance with your Investigation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Debugging&amp;action=edit&amp;section=T-7" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Using the Divide and Conquer approach above you will typically be able to determine what the cause of the errant behavior is provide corrective action within your code, however if you are using a driver or code package that was developed by a 3rd Party, you may need to seek assistance from the developer. <br />
+</p><p>It is important to remember that just because the problem is resolved in your particular software application, it may not be able to be reproduced on a different software and/or hardware application. Because of this, it is very critical for you to provide evidence that you have tracked down the culprit to their specific code before presenting directly pointing the finger.
+</p><p>Sending simple oscilloscope captures is the most useful way to see how your system is specifically behaving is some of the best insight you can produce. Oscilloscope captures can be as simple as triggering on a GPIO toggle when a particular event -or- error occurs. 
+</p><p>Oscilloscope captures allow multiple parties to concurrently debug the problem while:
+</p>
+<ul><li>Guaranteeing inherent orotection of your code (no risk in allowing others to see the source code)</li>
+<li>Showing the specific timing relationship between an event (or sequence of events)</li>
+<li>Showing how specific events are mitigated or exacerbated with code tweaks.</li></ul>
+<p>In addition to sending conclusive evidence, it's also important to remember that the more information you can provide upfront about your specific application, the more likely you will get fast help from the developer.<br />  <b>Remember, someone who has written the code is an expert at the code, and has likely come across (and successfully debugged) many of the issues you are currently seeing. The more information you can provide, them the faster they will be able to provide useful feedback to help you solve your integration challenges.</b><br />When providing evidence of a issue one should provide at the bare minimum the following information:
+</p>
+<ul><li>Hardware Platform
+<ul><li>Silicon Part Number (including Package, Version, &amp; Additional Package Markings)</li>
+<li>Are you working with a C6-Integra Hardware Development Platform -or- is this a custom board?</li></ul></li>
+<li>Software Version
+<ul><li>Full Names &amp; Versions of <b>all </b>software packages that were used to create the software application.</li>
+<li>Full Names of IDEs, Tools Chains, &amp; Debugging Equipment (JTAG Emulators)</li></ul></li>
+<li>Oscilloscope screen captures of the timing before, during, and after the error occurs.</li>
+<li>Additional Observations that may lead to insight into the issue.</li></ul>
+<p><br />
+<b>Debug and Trace capabilities using Code composer Studio</b>
+</p><p><br />
+<b>What is supported:</b>
+</p>
+<ul><li>ARM9 has a 4 KB Enhanced Trace Buffer (ETB) based trace and some AET based debug using Unified Break point Manager (UBM)</li>
+<li>DSP has limited debug capability using UBM</li>
+<li>BIOS Real time Analysis tools (RTA) and RTOS Object View(ROV) tools.</li></ul>
+<p><br />
+<b>What is not supported:</b>
+</p>
+<ul><li>Directing trace data from the C674x DSP to ETB is not supported by this device.</li>
+<li>System trace (software instrumentation)</li>
+<li>System events monitoring</li>
+<li>System throughput/latency analysis</li>
+<li>System bus watch point</li></ul>
+<p><b>Detailed description of debug and trace support in CCS</b> 
+<a rel="nofollow" class="external text" href="Debug_and_Trace_Capabilities_on_OMAPL1X/AM1x/DA8x_devices.html">Debug_and_Trace_Capabilities_on_OMAPL1X/AM1x/DA8x_devices</a> 
+</p><p>Additionally, TI provides a quick utility to collect the status of important register settings via JTAG that can be run from any Code Composer Studio Emulator Tool. <br /> The <a href="http://www.ti.com/lit/SPRACM8" title="OMAP-L1x Debug Gel Files">OMAP-L13x Debug GEL File </a> can be used to help determine the current state of the OMAP-L137/C6747 during the debug phase. <br /><br /> 
+</p>
+<h2><span class="mw-headline" id="Product_Integration">Product Integration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:C6-Integra_Software_Design_Product_Integration&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Once the software is developed and debugged, the final step in the software development process is to take the code you've developed and port it to the actual hardware that will be integrated into your project. 
+<br />
+</p><p><br />
+<b>IMPORTANT:</b>&#160;&#160;&#160;If your software development made use of functions executed by a GEL file, this functionality must be incorporated into the software application itself before you can generated a bootable image. Since GEL files rely on an emulator for execution, this functionality must be replaced by the application code in your end product. 
+</p>
+<h4><span id="Understanding_how_the_OMAP-L137/C6747_Boot_Sequence_Works"></span><span class="mw-headline" id="Understanding_how_the_OMAP-L137.2FC6747_Boot_Sequence_Works">Understanding how the OMAP-L137/C6747 Boot Sequence Works</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=6" title="Edit section: Understanding how the OMAP-L137/C6747 Boot Sequence Works">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>An brief overview of the ROM Boot Loader sequence for the OMAP-L137/C6747 can be found in the following <a href="OMAP-L137_Bootloader.html" title="OMAP-L137 Bootloader">OMAP-L137 Boot Process</a> Wiki Article. 
+</p>
+<h4><span class="mw-headline" id="Generating_the_Boot_Image">Generating the Boot Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=7" title="Edit section: Generating the Boot Image">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The bootable image for the OMAP-L137/C6747 is an Application Image Script (AIS)-format binary converted from a COFF or ELF .out file. For details on generating AIS files and AIS commands, refer to the <a href="http://www.ti.com/lit/pdf/sprab04" class="extiw" title="tidoc:sprab04">OMAP-L137 Bootloader Application Report</a> 
+</p><p>Additionally, TI provides several examples creating a bootable image from your program. There are several LED Blink examples for booting from NAND, NOR, SPI, and UART on the OMAP-L137/C6747 EVM on the following wiki: <a href="Boot_Images_for_OMAP-L137.html" title="Boot Images for OMAP-L137">OMAP-L137 Boot Examples</a> 
+</p>
+<h4><span class="mw-headline" id="Programming_the_Image_into_non-volatile_memory">Programming the Image into non-volatile memory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=8" title="Edit section: Programming the Image into non-volatile memory">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Once a bootable image has been created, there are utilities provided by TI to flash your image into non-volatile memory that run on top of your Host PC.<br /> 
+</p>
+<h5><span class="mw-headline" id="Serial_Flashing_Utility">Serial Flashing Utility</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=9" title="Edit section: Serial Flashing Utility">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>The <a href="Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L137.html" title="Serial Boot and Flash Loading Utility for OMAP-L137">OMAP-L137/C6747 Serial Flashing Utility</a> can be used to flash parallel Flash (NAND or NOR), as well as serial Flash (SPI Flash) using a standard UART serial cable connected to a host PC running Windows or Linux. 
+</p><p>Benefits: 
+</p>
+<ul><li>Fast Flashing Time</li>
+<li>No Connection is required to CCS or to JTAG via an Emulator</li></ul>
+<p>Limitations: 
+</p>
+<ul><li>The Serial Flash Utility only supports flashing EVMs without code modifications for user specific boards.</li>
+<li>The build environment needs to be downloaded to there user PC.</li></ul>
+<h5><span class="mw-headline" id="Flashing_via_JTAG_using_CCS">Flashing via JTAG using CCS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=10" title="Edit section: Flashing via JTAG using CCS">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Various CCS Projects have been developed to flash non-volatile memory via the JTAG connection using Code Composer Studio. These projects can be found in the Software Development Kit for NAND, NOR, or SPI Flash. 
+</p><p>Benefits: 
+</p>
+<ul><li>Source Code is easy to modify</li>
+<li>No additional build environment tools to install</li></ul>
+<p>Drawbacks: 
+</p>
+<ul><li>Slow flashing times</li>
+<li>Requires a JTAG connection</li></ul>
+<h5><span class="mw-headline" id="Serial_Port_Boot_Utility">Serial Port Boot Utility</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=11" title="Edit section: Serial Port Boot Utility">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>When debugging, it is often useful to boot over the serial port rather than reflashing the image each time a modification is made. The UART Boot Host enables this using the following steps: 
+</p>
+<ol><li>Download the tool <a href="http://www.ti.com/lit/pdf/sprab41" class="extiw" title="tidoc:sprab41">In this package </a></li>
+<li>Select the AIS boot image to flash<br /></li>
+<li>Set the board to the appropriate UART boot mode and reset/power cycle</li>
+<li>Push Start</li></ol>
+<p>The existing AIS image will boot unless one of the following is true: 
+</p>
+<ul><li>NOR boot mode is used. In this case, it will be necessary to regenerate it with the AISgen tool and select the appropriate UART boot mode.</li>
+<li>AIS commands are used to modify the pinmux on the UART pins. In this case, the boot will not complete since the UART communication will be lost. Performing the pinmux configuration in the user code rather than AISgen will resolve this issue.</li></ul>
+<h2><span class="mw-headline" id="Software_Performance">Software Performance</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=12" title="Edit section: Software Performance">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h4><span class="mw-headline" id="C674x_DSP_performance_using_software_library_functions">C674x DSP performance using software library functions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=13" title="Edit section: C674x DSP performance using software library functions">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/dsp/docs/dspplatformscontento.tsp?sectionId=2&amp;familyId=1622&amp;tabId=2431">C674x DSP Performance</a>
+</p>
+<h4><span class="mw-headline" id="BIOS_Drivers:">BIOS Drivers:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=14" title="Edit section: BIOS Drivers:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/psp/BIOSPSP/01_30_01/content/OMAPL137_BIOSPSP_Datasheet.pdf">DSP BIOS PSP Driver Datasheet</a></li></ul>
+<h4><span class="mw-headline" id="Linux_Drivers:">Linux Drivers:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit&amp;section=15" title="Edit section: Linux Drivers:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li><a rel="nofollow" class="external text" href="DaVinci_PSP_03.20.00-7.html">PSP Driver Performance and throughput</a></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130194526
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.093 seconds
+Real time usage: 0.099 seconds
+Preprocessor visited node count: 111/1000000
+Preprocessor generated node count: 186/1000000
+Post‐expand include size: 24263/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   14.259      1 -total
+ 20.54%    2.929      1 Template:C6-Integra_Software_Design_Hardware_Development_Platforms
+ 12.67%    1.807      1 Template:C6-Integra_Software_Design_Debugging
+ 10.99%    1.567      1 Template:C6-Integra_Software_Design_IDE_Toolchain
+ 10.97%    1.564      1 Template:C6-Integra_Software_Design_Introduction
+ 10.82%    1.543      1 Template:Top_Level_Software_Hierarchy
+ 10.39%    1.482      1 Template:XDS_Emulators
+  9.24%    1.318      1 Template:C6-Integra_Software_Design_Add-Ons
+  9.10%    1.297      1 Template:C6-Integra_Software_Design_Code_Development
+  8.98%    1.280      1 Template:C6-Integra_Software_Design_Product_Integration
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:11668-0!canonical and timestamp 20201130194526 and revision id 124040
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L137 Software Design Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L137 Software Design Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OMAP-L137 Software Design Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OMAP-L137 Software Design Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OMAP-L137 Software Design Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L137 Software Design Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L137 Software Design Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OMAP-L137 Software Design Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OMAP-L137 Software Design Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;oldid=124040">https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;oldid=124040</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OMAP-L137+Software+Design+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="OMAP-L137_Software_Design_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:OMAP-L137_Software_Design_Guide&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="OMAP-L137_Software_Design_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/OMAP-L137_Software_Design_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/OMAP-L137_Software_Design_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;oldid=124040" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Software_Design_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 18 October 2012, at 09:59.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.093","walltime":"0.099","ppvisitednodes":{"value":111,"limit":1000000},"ppgeneratednodes":{"value":186,"limit":1000000},"postexpandincludesize":{"value":24263,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%   14.259      1 -total"," 20.54%    2.929      1 Template:C6-Integra_Software_Design_Hardware_Development_Platforms"," 12.67%    1.807      1 Template:C6-Integra_Software_Design_Debugging"," 10.99%    1.567      1 Template:C6-Integra_Software_Design_IDE_Toolchain"," 10.97%    1.564      1 Template:C6-Integra_Software_Design_Introduction"," 10.82%    1.543      1 Template:Top_Level_Software_Hierarchy"," 10.39%    1.482      1 Template:XDS_Emulators","  9.24%    1.318      1 Template:C6-Integra_Software_Design_Add-Ons","  9.10%    1.297      1 Template:C6-Integra_Software_Design_Code_Development","  8.98%    1.280      1 Template:C6-Integra_Software_Design_Product_Integration"]},"cachereport":{"timestamp":"20201130194526","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":230});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L137_Software_Design_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:25:07 GMT -->
+</html>

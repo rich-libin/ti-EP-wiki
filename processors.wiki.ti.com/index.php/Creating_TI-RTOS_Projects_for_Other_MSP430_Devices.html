@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Creating_TI-RTOS_Projects_for_Other_MSP430_Devices by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:08:39 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Creating TI-RTOS Projects for Other MSP430 Devices - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Creating_TI-RTOS_Projects_for_Other_MSP430_Devices","wgTitle":"Creating TI-RTOS Projects for Other MSP430 Devices","wgCurRevisionId":211033,"wgRevisionId":211033,"wgArticleId":32438,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Pages with broken file links"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Creating_TI-RTOS_Projects_for_Other_MSP430_Devices","wgRelevantArticleId":32438,"wgRequestId":"cb0882f10a2e76ae0c4dfade","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Creating_TI-RTOS_Projects_for_Other_MSP430_Devices rootpage-Creating_TI-RTOS_Projects_for_Other_MSP430_Devices skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Creating TI-RTOS Projects for Other MSP430 Devices</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This page describes on how to create a MSP430 project for a non-MSP430F5529 device. TI-RTOS 1.20 supports MSP430F5xx and MSP430F6xx families.
+</p><p>For this exercise, a CCS project for a MSP430F5527 will be created. These are the steps to be performed: 
+</p>
+<ol><li><a href="#Build_MSP430Ware_driverlib_and_TI-RTOS_driver_libraries.">Build MSP430Ware driverlib and TI-RTOS driver libraries.</a></li>
+<li><a href="#Create_an_empty_MSP430F5529_TI-RTOS_project_for_CCS.">Create an empty MSP430F5529 TI-RTOS project for CCS.</a></li>
+<li><a href="#Reconfigure_the_project.27s_properties_to_use_the_new_libraries.">Reconfigure the project's properties to use the new libraries.</a></li>
+<li><a href="#Port_over_the_board_files_for_your_new_MSP430_device.">Port over the board files for your new MSP430 device.</a></li></ol>
+<h1><span class="mw-headline" id="Build_MSP430Ware_driverlib_and_TI-RTOS_driver_libraries.">Build MSP430Ware driverlib and TI-RTOS driver libraries.</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=edit&amp;section=1" title="Edit section: Build MSP430Ware driverlib and TI-RTOS driver libraries.">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>Open windows command prompt or linux terminal console and navigate into the TI-RTOS directory.</li></ul>
+<pre>cd c:\TI\tirtos_1_20_00_28
+</pre>
+<ul><li>Edit <i><b>tirtos.mak</b></i> and update <i><b>MSP430DEVLIST</b></i> to include the new MSP430 device</li></ul>
+<pre>#
+# To build TI-RTOS driver libraries for other MSP430 devices; simply append the 
+# device names to MSP430DEVLIST (separated by whitepsaces) 
+#    MSP430DEVLIST := \ 
+#        MSP430F5529 \ 
+#        MSP430F5527 \ 
+#        MSP430F6459 \ 
+#        etc... 
+#
+MSP430DEVLIST := MSP430F5529 \
+                 MSP430F5527
+</pre>
+<ul><li>Build MSP430Ware driverlib and TI-RTOS driver libraries.</li></ul>
+<pre>..\xdctools_3_25_04_88\gmake.exe -f tirtos.mak drivers
+</pre>
+<ul><li><b>(Optional)</b> Verify that the new MSP430 driverlib library was built. In TI-RTOS' products subdirectory, you will find MSP430Ware's <tt>driverlib</tt>. In the driverlib folder you should find a new subdirectory <tt>ccs-MSP430*</tt> that matches your device. Within the subdirectory, look for a <tt>ccs-MSP430*.lib</tt> library. For this example, we'd be expecting to find <tt>.\products\MSP430Ware_1_60_##_###\driverlib\ccs-MSP430F5527\ccs-MSP430F5527.lib</tt>.</li></ul>
+<p><a href="File_CreateMSP430_5527.html" class="image"><img alt="CreateMSP430 5527.png" src="https://processors.wiki.ti.com/images/a/a1/CreateMSP430_5527.png" width="705" height="462" /></a>
+</p>
+<ul><li><b>(Optional)</b> Verify that the new TI-RTOS driver libraries were built. For MSP430, TI-RTOS creates several TI-RTOS driver libraries at a per device basis. Again, we'll make a visual inspection to see that these libraries were created. You will find these libraries in <tt>.\packages\ti\drivers\lib\[non]instrumented\driver_MSP430*.ae430X</tt><br /></li></ul>
+<p><a href="File_CreateMSP430_5527_tirtoslibs.html" class="image"><img alt="CreateMSP430 5527 tirtoslibs.png" src="https://processors.wiki.ti.com/images/c/cd/CreateMSP430_5527_tirtoslibs.png" width="705" height="462" /></a>
+</p>
+<h1><span class="mw-headline" id="Create_an_empty_MSP430F5529_TI-RTOS_project_for_CCS.">Create an empty MSP430F5529 TI-RTOS project for CCS.</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=edit&amp;section=2" title="Edit section: Create an empty MSP430F5529 TI-RTOS project for CCS.">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Create a new MSP430 project for the <i><b>MSP430F5529</b></i> based on the TI-RTOS User Guide instructions.<br />
+<a href="File_CreateMSP430_emptyProject.html" class="image"><img alt="CreateMSP430 emptyProject.png" src="https://processors.wiki.ti.com/images/0/09/CreateMSP430_emptyProject.png" width="417" height="533" /></a>
+</p>
+<h1><span id="Reconfigure_the_project's_properties_to_use_the_new_libraries."></span><span class="mw-headline" id="Reconfigure_the_project.27s_properties_to_use_the_new_libraries.">Reconfigure the project's properties to use the new libraries.</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=edit&amp;section=3" title="Edit section: Reconfigure the project&#039;s properties to use the new libraries.">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>Edit the project properties to use the new MSP430 libraries that were just built. This is simply done by updating the CCS project properties with the new device variant. <i><b>Right-click</b></i> on the project and select <i><b>Properties</b></i>.</li>
+<li>Navigate to <i><b>General</b></i> and update the <i><b>Variant</b></i> field with your device, which in this example would be <i><b>MSP430F5527</b></i>.<br /><a href="File_CreateMSP430_modifiyProject2.html" class="image"><img alt="CreateMSP430 modifiyProject2.png" src="https://processors.wiki.ti.com/images/9/9d/CreateMSP430_modifiyProject2.png" width="995" height="649" /></a></li>
+<li>Click <i><b>OK</b></i> to close the window.</li>
+<li>Build the project to verify that you have no build errors.</li>
+<li><b>(Optional)</b> Since the <i><b>Empty</b></i> example uses the <i><b>GPIO driver</b></i> we can verify that you using the new TI-RTOS GPIO library by looking at what we're linking into our application. The generated RTSC <tt>Debug\configPkg\linker.cmd</tt> file includes a link to <tt>gpio_MSP430F5527.ae430X</tt></li></ul>
+<p><a href="File_CreateMSP430_verifyLibs.html" class="image"><img alt="CreateMSP430 verifyLibs.png" src="https://processors.wiki.ti.com/images/3/31/CreateMSP430_verifyLibs.png" width="899" height="739" /></a>
+</p>
+<h1><span class="mw-headline" id="Port_over_the_board_files_for_your_new_MSP430_device.">Port over the board files for your new MSP430 device.</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=edit&amp;section=4" title="Edit section: Port over the board files for your new MSP430 device.">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The last step is to customize the board files (e.g. MSP_EXP430F5529LP.[ch] and MSP_EXP430F5529LP.cmd) to your own development board. See <a href="Migrating_a_TI-RTOS_project_to_a_custom_development_board.html" title="Migrating a TI-RTOS project to a custom development board">Migrating a TI-RTOS project to a custom development board</a>.
+</p>
+<h1><span class="mw-headline" id="Creating_a_TI-RTOS_Project_for_an_MSP430_Device_with_EUSCI_Drivers">Creating a TI-RTOS Project for an MSP430 Device with EUSCI Drivers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=edit&amp;section=5" title="Edit section: Creating a TI-RTOS Project for an MSP430 Device with EUSCI Drivers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>These steps apply to TI-RTOS 2.15.01 or higher. In this example, we'll use the MSP430F6779 with TI-RTOS 2.15.01.  The steps for building the drivers are identical to the previous example.
+</p>
+<ul><li>Open windows command prompt or linux terminal console and navigate into the TI-RTOS directory.</li></ul>
+<pre>cd c:\TI\tirtos_2_15_01_xx
+</pre>
+<ul><li>Edit <i><b>tirtos.mak</b></i> and update <i><b>MSP430DEVLIST</b></i> to include the new MSP430 device</li></ul>
+<pre>#
+#
+# To build TI-RTOS driver libraries for other MSP430 devices; simply append the
+# device names to MSP430DEVLIST (separated by commas)
+# MSP430DEVLIST := MSP430F5529,MSP430F5527,MSP430F6459,etc...
+#
+MSP430DEVLIST := MSP430F5529,MSP430FR5969,MSP430FR6989,MSP430F6779
+</pre>
+<ul><li>Build MSP430Ware driverlib and TI-RTOS driver libraries.</li></ul>
+<pre>..\xdctools_3_32_00_06_core\gmake.exe -f tirtos.mak drivers
+</pre>
+<p>As in the previous example, verify that the drives were built.
+</p>
+<ul><li>Since the MSP430F6779 is a F5xx_6xx device, create an empty project one of the TI-RTOS supported F5xx_6xx devices.  In this example, we'll create an empty project for the MSP430F5529.</li></ul>
+<p><a href="File_MSP430F5529_Empty.html" class="image"><img alt="MSP430F5529 Empty.PNG" src="https://processors.wiki.ti.com/images/9/9d/MSP430F5529_Empty.PNG" width="798" height="484" /></a>
+</p>
+<ul><li>The MSP4305529 does not have EUSCI, so the board file for our MSP430F6779 project will need modification to replace the USCI configuration with EUSCI configuration.</li></ul>
+<ul><li>Note: We could have started with an empty project for one the TI-RTOS devices that supports EUSCI, however, these are all FR5xx_6xx devices.  You would then need to change the project properties to have the F5xx_6xx driverlib include and library search paths. The MSP430 driverlib for FR5xx_6xx and F5xx_6xx have some incompatible header files (e.g., gpio.h), so compiling the board file for your new project will result in many compilation errors.  It may be useful, though, to import the Empty MSP430FR5969 project so you can compare that board file with the one you will be modifying.</li></ul>
+<ul><li>As in the previous example, edit the project properties to select the new device variant, which in this example would be <i><b>MSP430F6779</b></i>. You may also want to rename your project with a new name that reflects the device variant.  Changing the device variant will bring in a new linker command file into the project (lnk_msp430f6779.cmd for this example), so you need to exclude from the build the MSP_EXP430F5529LP.cmd)</li></ul>
+<p><a href="File_MSP430F6679_Exclude_5529cmd.html" class="image"><img alt="MSP430F6679 Exclude 5529cmd.PNG" src="https://processors.wiki.ti.com/images/9/99/MSP430F6679_Exclude_5529cmd.PNG" width="289" height="272" /></a>
+</p>
+<ul><li>Edit the board.c file for your new project (MSP_EXP430F5929LP.c, if you have not renamed it), and replace all the USCI configuration with EUSCI.  It may be useful to look at the board file for the empty MSP430FR5969 project to see where the changes need to be made.</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201044834
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.058 seconds
+Real time usage: 0.064 seconds
+Preprocessor visited node count: 55/1000000
+Preprocessor generated node count: 144/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 751/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:32438-0!canonical and timestamp 20201201044834 and revision id 211033
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Creating TI-RTOS Projects for Other MSP430 Devices</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;oldid=211033">https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;oldid=211033</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="https://processors.wiki.ti.com/index.php?title=Category:Pages_with_broken_file_links&amp;action=edit&amp;redlink=1" class="new" title="Category:Pages with broken file links (page does not exist)">Pages with broken file links</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Creating+TI-RTOS+Projects+for+Other+MSP430+Devices" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Creating_TI-RTOS_Projects_for_Other_MSP430_Devices.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Creating_TI-RTOS_Projects_for_Other_MSP430_Devices.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Creating_TI-RTOS_Projects_for_Other_MSP430_Devices.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Creating_TI-RTOS_Projects_for_Other_MSP430_Devices.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;oldid=211033" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Creating_TI-RTOS_Projects_for_Other_MSP430_Devices&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 18 December 2015, at 13:33.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.058","walltime":"0.064","ppvisitednodes":{"value":55,"limit":1000000},"ppgeneratednodes":{"value":144,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":751,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201044834","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":320});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Creating_TI-RTOS_Projects_for_Other_MSP430_Devices by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:08:49 GMT -->
+</html>

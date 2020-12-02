@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Profiling_on_C28x_Targets by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:01:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Profiling on C28x Targets - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Profiling_on_C28x_Targets","wgTitle":"Profiling on C28x Targets","wgCurRevisionId":181399,"wgRevisionId":181399,"wgArticleId":12356,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["C2000","Development Tools for C2000","Code Composer Studio v4","Code Composer Studio v5"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Profiling_on_C28x_Targets","wgRelevantArticleId":12356,"wgRequestId":"59a52be904c09a543bebb252","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Profiling_on_C28x_Targets rootpage-Profiling_on_C28x_Targets skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Profiling on C28x Targets</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Profiling_Data_Collection"><span class="tocnumber">2</span> <span class="toctext">Profiling Data Collection</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Profiling_Solutions_for_C28x_Targets"><span class="tocnumber">3</span> <span class="toctext">Profiling Solutions for C28x Targets</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Accessing_the_Profile_Clock_via_Scripting"><span class="tocnumber">4</span> <span class="toctext">Accessing the Profile Clock via Scripting</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Profiling_in_Sys.2FBIOS"><span class="tocnumber">5</span> <span class="toctext">Profiling in Sys/BIOS</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Frequently_Asked_Questions"><span class="tocnumber">6</span> <span class="toctext">Frequently Asked Questions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Q:_Cycle_counts_for_.27step-by-step.27_and_.27run_to_line.27_do_not_match.3F"><span class="tocnumber">6.1</span> <span class="toctext">Q: Cycle counts for 'step-by-step' and 'run to line' do not match?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Enabling_Profile_Data_Collection"><span class="tocnumber">7</span> <span class="toctext">Enabling Profile Data Collection</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Other_Resources"><span class="tocnumber">8</span> <span class="toctext">Other Resources</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd>For a C28x target, <a href="Profiler.html" title="Profiler"> profiling data collection</a> is not enabled in Code Composer Studio by default.</dd></dl>
+<dl><dd>This article describes how to enable profiling data collection if desired, and suggests solutions for profiling without using the Code Composer's data collection.</dd></dl>
+<h1><span class="mw-headline" id="Profiling_Data_Collection">Profiling Data Collection</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=2" title="Edit section: Profiling Data Collection">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd>Code Composer Studio's profiling data collection is described <a href="Profiler.html" title="Profiler"> in this wiki article</a>.   This resource is not enabled for the C28x based MCUs by default.  This is because most profiling activities on C28x devices are for code in flash. The hardware function profiling is breakpoint based, so it is not very useful for code within flash due to limited hardware breakpoint resources.</dd></dl>
+<dl><dd>If code is based in RAM, then the profiling data collection can be enabled and tried (see Enabling Profile Data Collection at the end of this article).  It should be noted that this is not tested on C28x targets and is a use at your own risk feature.</dd></dl>
+<h1><span class="mw-headline" id="Profiling_Solutions_for_C28x_Targets">Profiling Solutions for C28x Targets</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=3" title="Edit section: Profiling Solutions for C28x Targets">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd>Here is a list of other solutions that can be used to profile functions within Code Composer Studio:</dd></dl>
+<dl><dd><dl><dt>Option1 - Profile Clock</dt>
+<dd>The profile clock uses silicon resources to count cycles between two breakpoints.</dd></dl></dd></dl>
+<dl><dd><dl><dd>When using the profile clock in flash, it is important to free-up as many hardware breakpoints as possible.  On c28x you have two analysis resources available at one time. One resource can be used as a hardware breakpoint, watchpoint, or counter. The other one can only be used as a hardware breakpoint or watchpoint. In order to profile, you need to use the analysis counter which uses up one of your resources so now you only can set one hardware breakpoint.  Code Composer Studio will by default set a breakpoint for C I/O (printf etc) and the end of program marker.  When profiling, make sure the following options are unselected so the breakpoints will not be used up by these options:</dd></dl></dd></dl>
+<dl><dd><dl><dd><ol><li>Program load options:
+<ul><li><b>CCS v5</b>: Open tools-&gt;Debugger options -&gt; Program/Memory Load options</li>
+<li><b>CCS v4</b>: Open tools-&gt;Debugger options -&gt; Generic Options<br /><br /><a href="File_Debug_options.html" class="image"><img alt="Debug options.jpg" src="https://processors.wiki.ti.com/images/3/39/Debug_options.jpg" width="382" height="151" /></a><br /><br /></li></ul></li>
+<li>Under Program/Memory Load: Uncheck "Halt at program termination"</li>
+<li>Under Program/Memory Load: Uncheck "Enable C I/O function use" <br /><br /><a href="File_Disable_default_bps.html" class="image"><img alt="Disable default bps.jpg" src="https://processors.wiki.ti.com/images/d/d0/Disable_default_bps.jpg" width="557" height="139" /></a></li>
+<li>Optional: Select "Remember my settings" at the bottom of the configuration screen.</li></ol></dd></dl></dd></dl>
+<p><br />
+</p>
+<dl><dd><dl><dd>To setup the profile clock:</dd></dl></dd></dl>
+<p><br />
+</p>
+<dl><dd><dl><dd><ol><li>In the debug perspective go to
+<ul><li><b>CCS V5</b>: Run -&gt; Clock -&gt; Enable.</li>
+<li><b>CCS V4</b>: Target -&gt; Clock -&gt; Enable. <br /><br /><a href="File_EnableProfileClock.html" class="image"><img alt="EnableProfileClock.jpg" src="https://processors.wiki.ti.com/images/0/03/EnableProfileClock.jpg" width="426" height="655" /></a><br /><br />This will add a clock icon and count to the status bar. <br /><br /><a href="File_Profile_clock.html" class="image"><img alt="Profile clock.jpg" src="https://processors.wiki.ti.com/images/3/35/Profile_clock.jpg" width="448" height="91" /></a><br /><br /></li></ul></li>
+<li>Run to a breakpoint at the start of the function.</li>
+<li>Double click on the clock - this will clear its value.</li>
+<li>Run to a breakpoint at the end of the function</li>
+<li>The clock will display the delta.</li></ol></dd></dl></dd></dl>
+<dl><dd><dl><dt>Option 2 - CPU Timer</dt>
+<dd>Another option customers like to use is to start a CPU timer counting at the SYSCLKOUT frequency.</dd></dl></dd></dl>
+<dl><dd><dl><dd><ol><li>Read the clock before the call</li>
+<li>Read the clock after the call</li>
+<li>Subtract the two to get a delta</li></ol></dd></dl></dd></dl>
+<dl><dd><dl><dt>Option 3 - GPIO Pin</dt>
+<dd>Another option is to use a GPIO pin:</dd></dl></dd></dl>
+<dl><dd><dl><dd><ol><li>Pull the pin low/high before the function</li>
+<li>Pull it high/low after the function</li>
+<li>Read the delta on a scope</li></ol></dd></dl></dd></dl>
+<h1><span class="mw-headline" id="Accessing_the_Profile_Clock_via_Scripting">Accessing the Profile Clock via Scripting</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=4" title="Edit section: Accessing the Profile Clock via Scripting">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd>The following script may aid in accessing the profile clock through scripts in CCS 5.x.</dd></dl>
+<dl><dd><ol><li>Modify the following script for the location of your project and the addresses where breakpoints should be set.</li>
+<li>Load the script through the <a href="http://software-dl.ti.com/ccs/esd/documents/ccs_scripting_console.html" title="Scripting Console"> Scripting Console. (click here to learn more)</a>
+<ul><li><a href="https://processors.wiki.ti.com/images/d/d6/Run_benchmark_test.zip" class="internal" title="Run benchmark test.zip">Media:run_benchmark_test.zip</a></li></ul></li>
+<li>Loading the script will create a new item in the 'Scripts' menu</li></ol></dd></dl>
+<dl><dd>Please see the script comments for a description of what it is doing.  It should be modified for the project specific symbols.</dd></dl>
+<dl><dd>More information on DSS scripting can be found here:
+<ul><li><a href="http://software-dl.ti.com/ccs/esd/documents/users_guide/sdto_dss_handbook.html" title="Debug Server Scripting"> Debug Server Scripting</a></li>
+<li><a href="Java_Scripting_with_DSS.html" title="Java Scripting with DSS"> Java Scripting with DSS</a></li>
+<li><a href="http://software-dl.ti.com/ccs/esd/documents/users_guide/sdto_perl_dss_scripting.html" title="Perl Scripting with DSS"> Perl Scripting with DSS</a></li></ul></dd></dl>
+<h1><span id="Profiling_in_Sys/BIOS"></span><span class="mw-headline" id="Profiling_in_Sys.2FBIOS">Profiling in Sys/BIOS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=5" title="Edit section: Profiling in Sys/BIOS">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd>SYS/BIOS provides a 'Timestamp_get32()' API that can be used to benchmark code.  To use this API, you will need to modify your target code to include these APIs.  This is similar to the CPU timer method mentioned above.</dd></dl>
+<dl><dd>In your app.cfg:</dd></dl>
+<p>&lt;syntaxhighlight lang='c'&gt;
+Timestamp = xdc.useModule('xdc.runtime.Timestamp');
+&lt;/syntaxhighlight&gt;
+</p>
+<dl><dd>In the app.c file:</dd></dl>
+<p>&lt;syntaxhighlight lang ='c'&gt;
+</p>
+<ol><li>include &lt;xdc/runtime/Timestamp.h&gt;</li></ol>
+<p>UInt32 t0, t1;
+</p><p>t0 = Timestamp_get32();
+</p><p>algo();
+</p><p>t1 = Timestamp_get32();
+</p><p>time = t1 - t0;
+&lt;/syntaxhighlight&gt;
+</p>
+<dl><dd>The API function Timestamp_getFreq() can be used to get the frequency of the Timestamp counter.</dd></dl>
+<h1><span class="mw-headline" id="Frequently_Asked_Questions">Frequently Asked Questions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=6" title="Edit section: Frequently Asked Questions">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h4><span id="Q:_Cycle_counts_for_'step-by-step'_and_'run_to_line'_do_not_match?"></span><span class="mw-headline" id="Q:_Cycle_counts_for_.27step-by-step.27_and_.27run_to_line.27_do_not_match.3F">Q: Cycle counts for 'step-by-step' and 'run to line' do not match?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=7" title="Edit section: Q: Cycle counts for &#039;step-by-step&#039; and &#039;run to line&#039; do not match?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>When single stepping, each instruction goes through the whole pipeline.  And then on the next step, the next instruction will go through the whole pipeline, etc.  There is no potential for a resource conflict between two instructions since each instruction goes all the way through the pipeline by itself.</dd></dl>
+<dl><dd>If you run or run to line, however, there is the potential for pipeline stalls.</dd></dl>
+<dl><dd>Consider the case where your code is in the same block as data.  If you try to read data you can not fetch an opcode at the same time and there will be a stall.  Same thing for trying to read and write on the same pipeline cycle.</dd></dl>
+<dl><dd>There are other things that can stall the pipe like CPU register conflicts but these are less obvious to spot.</dd></dl>
+<dl><dd>Refer to this wiki article for more information <a href="C28x_Pipeline_Conflicts.html" title="C28x Pipeline Conflicts"> C28x Pipeline Conflicts</a>.</dd></dl>
+<h1><span class="mw-headline" id="Enabling_Profile_Data_Collection">Enabling Profile Data Collection</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=8" title="Edit section: Enabling Profile Data Collection">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd>As mentioned previously, this functionality is disabled in Code Composer for the C28x by default.  This is because the C28x has limited hardware breakpoints which are required when using this feature in flash.  If you are executing from RAM, you may find it useful.  <b>Note: function profiling for C28x is not officially supported (untested).</b></dd></dl>
+<dl><dd>To enable HW function profiling with CCSv4 for C28x:</dd></dl>
+<dl><dd><ol><li>Browse to &lt;INSTALL DIR&gt;\ccsv4\DebugServer\bin\win32\SerializedProfileActivities</li>
+<li>Open 'ProfileFunctionsHW.prof_ini' in a text editor</li>
+<li>Under the list of ISA, add 'TMS320C28' to the list</li>
+<li>Save file and restart CCSv4</li></ol></dd></dl>
+<dl><dd>The 'ProfileFunctionsHW.prof_ini' should now look something like:</dd></dl>
+<pre>[Name]
+Profile all Functions for CPU Cycles
+
+[Events]
+dataclass.pcdt.events.Cycles
+dataclass.pcdt.events.CPU Cycles
+dataclass.pcdt.events.cycle.Total
+
+[EventClasses]
+pcdt
+
+[ISA]
+TMS320C28
+TMS320C56
+TMS320C55
+TMS320C621x
+TMS320C641x
+TMS320C671x
+TMS470R1
+TMS470R2
+TMS470R3
+TMS470Rd
+TMS470Re
+
+.....
+</pre>
+<h1><span class="mw-headline" id="Other_Resources">Other Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit&amp;section=9" title="Edit section: Other Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>To discuss technical questions, the E2E Community is a great resource. Visit <a rel="nofollow" class="external text" href="http://e2e.ti.com/">e2e.ti.com</a>.
+</p><p><br />
+</p><p><br />
+</p><p>Forums on the E2E site include:
+</p>
+<dl><dd><ul><li><a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/default.aspx">C2000 Forums</a></li>
+<li><a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/default.aspx">Development Tools (CCS, Compiler, DSP/BIOS) Forums</a></li></ul></dd></dl>
+<p>and many more...
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130190224
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.061 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 100/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 308/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.644      1 -total
+ 91.85%    1.510      2 Template:ForumFeed
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:12356-0!canonical and timestamp 20201130190224 and revision id 181399
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Profiling on C28x Targets</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Profiling on C28x Targets</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Profiling on C28x Targets</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Profiling on C28x Targets</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Profiling on C28x Targets</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Profiling on C28x Targets</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Profiling on C28x Targets</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Profiling on C28x Targets</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Profiling on C28x Targets</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;oldid=181399">https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;oldid=181399</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_C2000.html" title="Category:C2000">C2000</a></li><li><a href="Category_Development_Tools_for_C2000.html" title="Category:Development Tools for C2000">Development Tools for C2000</a></li><li><a href="Category_Code_Composer_Studio_v4.html" title="Category:Code Composer Studio v4">Code Composer Studio v4</a></li><li><a href="Category_Code_Composer_Studio_v5.html" title="Category:Code Composer Studio v5">Code Composer Studio v5</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Profiling+on+C28x+Targets" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Profiling_on_C28x_Targets.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Profiling_on_C28x_Targets&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Profiling_on_C28x_Targets.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Profiling_on_C28x_Targets.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Profiling_on_C28x_Targets.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;oldid=181399" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_C28x_Targets&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 11 July 2014, at 10:45.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.061","walltime":"0.066","ppvisitednodes":{"value":47,"limit":1000000},"ppgeneratednodes":{"value":100,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":308,"limit":5000000},"timingprofile":["100.00%    1.644      1 -total"," 91.85%    1.510      2 Template:ForumFeed"]},"cachereport":{"timestamp":"20201130190224","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":226});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Profiling_on_C28x_Targets by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:01:52 GMT -->
+</html>

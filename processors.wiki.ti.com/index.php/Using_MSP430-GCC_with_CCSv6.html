@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_MSP430-GCC_with_CCSv6 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:05:58 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Using MSP430-GCC with CCSv6 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Using_MSP430-GCC_with_CCSv6","wgTitle":"Using MSP430-GCC with CCSv6","wgCurRevisionId":214180,"wgRevisionId":214180,"wgArticleId":33550,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Code Composer Studio v6"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Using_MSP430-GCC_with_CCSv6","wgRelevantArticleId":33550,"wgRequestId":"97761cd53b485858cde922f5","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Using_MSP430-GCC_with_CCSv6 rootpage-Using_MSP430-GCC_with_CCSv6 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Using MSP430-GCC with CCSv6</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Installation"><span class="tocnumber">2</span> <span class="toctext">Installation</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Reference"><span class="tocnumber">3</span> <span class="toctext">Reference</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Creating_a_new_CCS_project_using_MSP430_GCC"><span class="tocnumber">4</span> <span class="toctext">Creating a new CCS project using MSP430 GCC</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Changing_an_existing_CCS_project_created_for_TI_compiler_to_use_MSP430_GCC"><span class="tocnumber">5</span> <span class="toctext">Changing an existing CCS project created for TI compiler to use MSP430 GCC</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Creating_a_new_CDT_project_using_MSP430_GCC"><span class="tocnumber">6</span> <span class="toctext">Creating a new CDT project using MSP430 GCC</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Starting with Code Composer Studio v6 , MSP430 programmers have the option of using GCC Open Source Compiler to build their projects. The GCC compiler has no code size limit, and can be used standalone or with CCSv6.
+</p>
+<h1><span class="mw-headline" id="Installation">Installation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=edit&amp;section=2" title="Edit section: Installation">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The GCC compiler can be installed in one of two ways:
+</p>
+<ol><li>When installing CCSv6, you have the option to select the MSP430 GCC compiler to be installed as an “add-on”. One of the steps during installation is shown in the screenshot below. If you enable MSP430 GCC, it will get installed when you run CCS for the first time. <br /> <a href="File_Installer_main_v6.html" class="image"><img alt="Installer main v6.png" src="https://processors.wiki.ti.com/images/5/54/Installer_main_v6.png" width="500" height="433" /></a><br /> <br /></li>
+<li>Alternately, if you do not select the above option during installation, you can always install it at a later time. Go to menu View-&gt;CCS App Center. Select MSP430 GCC Beta and click the “Install Software” button to start the installation. <br /> <a href="File_Installer_appcenter.html" class="image"><img alt="Installer appcenter.png" src="https://processors.wiki.ti.com/images/f/f5/Installer_appcenter.png" width="500" height="306" /></a><br /> <br /></li></ol>
+<p>Once installed, the GCC compiler tools will be in this directory within the CCS installation: \ccsv6\tools\compiler\gcc_msp430_xxx (where xxx denotes the version number).
+</p>
+<h1><span class="mw-headline" id="Reference">Reference</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=edit&amp;section=3" title="Edit section: Reference">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/tool/msp430-gcc-opensource">http://www.ti.com/tool/msp430-gcc-opensource</a>
+</p>
+<h1><span class="mw-headline" id="Creating_a_new_CCS_project_using_MSP430_GCC">Creating a new CCS project using MSP430 GCC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=edit&amp;section=4" title="Edit section: Creating a new CCS project using MSP430 GCC">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Below are the steps to create a new CCS project that uses MSP430 GCC tools to build the executable.
+</p>
+<ol><li>Start CCSv6 and create a new project by going to menu Project-&gt;New CCS Project…</li>
+<li>Fill in the Target and Project name fields</li>
+<li>For Compiler version, select GNU v4.8.0 (Red hat)</li>
+<li>Under Project templates and examples, select Empty Project or Empty Project (with main.c)</li>
+<li>Click Finish</li></ol>
+<p><br /> <a href="File_New_ccs_proj.html" class="image"><img alt="New ccs proj.png" src="https://processors.wiki.ti.com/images/7/7f/New_ccs_proj.png" width="500" height="597" /></a><br /> <br />
+</p><p>This will create a new project that will be visible in the Project Explorer view. Notice that the project contains a .ld file (appropriate for the target selected). This is the linker script that contains the memory layout and section allocation. This file is the equivalent of the TI linker command file (.cmd). You can now add the necessary source files to the project and build.
+Similar to TI tools, additional compiler and linker options can be set from Project Properties.
+</p>
+<h1><span class="mw-headline" id="Changing_an_existing_CCS_project_created_for_TI_compiler_to_use_MSP430_GCC">Changing an existing CCS project created for TI compiler to use MSP430 GCC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=edit&amp;section=5" title="Edit section: Changing an existing CCS project created for TI compiler to use MSP430 GCC">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Below are the steps to change an existing CCS project that uses TI compiler to one that uses MSP430 GCC. These steps can be applied to a project that was either created from TI Resource Explorer (using one of the device peripheral examples) or one that was created from scratch.
+</p>
+<ol><li>Right-click on the project in Project Explorer view and go to Properties</li>
+<li>Change Compiler version to GNU v4.8.0 (Red Hat) <br /> <a href="File_Change_compiler.html" class="image"><img alt="Change compiler.png" src="https://processors.wiki.ti.com/images/7/7f/Change_compiler.png" width="500" height="435" /></a><br /> <br /></li>
+<li>Click OK</li></ol>
+<p>This will pop up the following dialog. Click OK. <br /> <a href="File_Warning_message.html" class="image"><img alt="Warning message.png" src="https://processors.wiki.ti.com/images/9/9f/Warning_message.png" width="441" height="149" /></a><br /> <br />
+A new build configuration named Debug__GNU will be created. This build configuration will use the appropriate GCC linker script (.ld) instead of the TI linker command file (.cmd). The project will now use the MSP430-GCC compiler for the build.
+</p>
+<h1><span class="mw-headline" id="Creating_a_new_CDT_project_using_MSP430_GCC">Creating a new CDT project using MSP430 GCC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=edit&amp;section=6" title="Edit section: Creating a new CDT project using MSP430 GCC">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>In some cases you may want to create a standard Eclipse C/C++ project (instead of a CCS project) that uses the MSP430 GCC toolchain. This would be necessary if you wanted to debug using GDB instead of the CCS debugger.
+</p><p><b>Note</b> that the steps and screenshots below refer to CCS 6.0.1. Adjust that to match with the specific version of CCSv6 you are working with.
+</p><p>Below are the steps to create a new Eclipse C/C++ project that uses MSP430 GCC tools to build the executable.
+</p>
+<ol><li>Start CCSv6 and create a new project by going to menu <b>File-&gt;New-&gt;Project...</b></li>
+<li>Expand <b>C/C++</b> and select <b>C Project</b> (or C++ Project).  Click Next <br /> <a href="File_New_cdt_proj.html" class="image"><img alt="New cdt proj.png" src="https://processors.wiki.ti.com/images/9/95/New_cdt_proj.png" width="345" height="426" /></a><br /> <br /></li>
+<li>Fill in the <b>Project name</b> field. For Project Type,  choose <b>Empty Project</b> and for Toolchains, select <b>Cross GCC</b>. Click Next <br /> <a href="File_New_cdt_proj1.html" class="image"><img alt="New cdt proj1.png" src="https://processors.wiki.ti.com/images/1/1b/New_cdt_proj1.png" width="472" height="501" /></a><br /> <br /></li>
+<li>Click Next again</li>
+<li>In the <b>Cross compiler prefix</b> field, enter msp430-elf- and in the <b>Cross compiler path</b> field, enter the path to the GCC toolset within CCS. Click Finish <br /> Note: The Problems view may show an error: <b>Progam “gcc” not found in PATH</b>. This can be ignored for now and will disappear when the project is built <br /> <a href="File_New_cdt_proj2.html" class="image"><img alt="New cdt proj2.png" src="https://processors.wiki.ti.com/images/d/de/New_cdt_proj2.png" width="590" height="350" /></a><br /> <br /></li>
+<li>Add source file(s) to project by right-clicking on the project and going to <b>New-&gt;Source file</b>, or by simply copying or linking source file(s) to the project. As an example, the attached code is for blinking an LED on a MSP430F5438A device</li>
+<li>Right-click on the project, go to <b>Properties-&gt;C/C++ Build-&gt;Settings-&gt;Cross GCC Compiler-&gt;Includes</b>. Add the include paths to the \ccs_base\msp430\include_gcc folder and \tools\compiler\gcc_msp430_xxx\msp430-elf\include folder within your CCS installation. The example below shows it for CCS 6.0.1, adjust it for your version of CCS.<br /> <a href="File_Cdt_proj_setting1.html" class="image"><img alt="Cdt proj setting1.png" src="https://processors.wiki.ti.com/images/1/16/Cdt_proj_setting1.png" width="600" height="394" /></a><br /> <br /></li>
+<li>Go to <b>Miscellaneous</b>, and under <b>Other flags</b>, add <b>-mmcu=msp430f5438a</b> or similar, depending on your device<br /> <a href="File_Cdt_proj_setting2.html" class="image"><img alt="Cdt proj setting2.png" src="https://processors.wiki.ti.com/images/9/90/Cdt_proj_setting2.png" width="600" height="361" /></a><br /> <br /></li>
+<li>Add other compiler options as required for the project</li>
+<li>Go to <b>Cross GCC Linker-&gt;Miscellaneous</b>, and under <b>Linker flags</b>, add <b>-T C:\CCStudio_v6.0.1.00039\ccsv6\ccs_base\msp430\include_gcc\msp430f5438a.ld</b>. This is the path to the GCC linker command file specific for the MSP430F5438A. <br /> <a href="File_Cdt_proj_setting3.html" class="image"><img alt="Cdt proj setting3.png" src="https://processors.wiki.ti.com/images/5/55/Cdt_proj_setting3.png" width="600" height="323" /></a><br /> <br /></li>
+<li>Go to <b>Cross GCC Linker-&gt;Libraries</b>, and under <b>Library search path (-L)</b>, add the path to \ccs_base\msp430\include_gcc within your CCS installation. This is required if using MSP430 Emulators package version 6.3.1.8 or later <br /> <a href="File_Cdt_proj_setting4.html" class="image"><img alt="Cdt proj setting4.png" src="https://processors.wiki.ti.com/images/3/3f/Cdt_proj_setting4.png" width="600" height="412" /></a><br /> <br /></li>
+<li>Add other linker options as required by the project</li>
+<li>The C/C++ Builder uses make by default, but there isn't a make executable in the mspgcc toolchain.  Modify the build command to use gmake from CCS instead. <br /> <a href="File_Cdt_proj_builder.html" class="image"><img alt="Cdt proj builder.png" src="https://processors.wiki.ti.com/images/a/a6/Cdt_proj_builder.png" width="600" height="344" /></a><br /> <br /></li>
+<li>Build the project. The build output in the console should look something like this: <br /> <a href="File_Cdt_proj_build1.html" class="image"><img alt="Cdt proj build1.png" src="https://processors.wiki.ti.com/images/e/ed/Cdt_proj_build1.png" width="613" height="353" /></a><br /> <br /></li></ol>
+<p>After the project has been built successfully, it can be debugged using GDB. Please see this wiki article <a href="GDB_with_MSP430_and_CCSv6.html" title="GDB with MSP430 and CCSv6"> GDB with MSP430 and CCSv6</a> for more details on setting up GDB debugging with CCSv6.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130052012
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.065 seconds
+Real time usage: 0.074 seconds
+Preprocessor visited node count: 22/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:33550-0!canonical and timestamp 20201130052012 and revision id 214180
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using MSP430-GCC with CCSv6</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using MSP430-GCC with CCSv6</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Using MSP430-GCC with CCSv6</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Using MSP430-GCC with CCSv6</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Using MSP430-GCC with CCSv6</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using MSP430-GCC with CCSv6</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using MSP430-GCC with CCSv6</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Using MSP430-GCC with CCSv6</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Using MSP430-GCC with CCSv6</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;oldid=214180">https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;oldid=214180</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Code_Composer_Studio_v6.html" title="Category:Code Composer Studio v6">Code Composer Studio v6</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Using+MSP430-GCC+with+CCSv6" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Using_MSP430-GCC_with_CCSv6.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Using_MSP430-GCC_with_CCSv6&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Using_MSP430-GCC_with_CCSv6.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Using_MSP430-GCC_with_CCSv6.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Using_MSP430-GCC_with_CCSv6.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;oldid=214180" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Using_MSP430-GCC_with_CCSv6&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 31 March 2016, at 14:41.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.065","walltime":"0.074","ppvisitednodes":{"value":22,"limit":1000000},"ppgeneratednodes":{"value":28,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130052012","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":235});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_MSP430-GCC_with_CCSv6 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:06:14 GMT -->
+</html>

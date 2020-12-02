@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/HOWTO_Turn_off_DSP_clock_and_Power by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 05:57:39 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>HOWTO Turn off DSP clock and Power - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"HOWTO_Turn_off_DSP_clock_and_Power","wgTitle":"HOWTO Turn off DSP clock and Power","wgCurRevisionId":10414,"wgRevisionId":10414,"wgArticleId":391,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Code Composer Studio v3"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"HOWTO_Turn_off_DSP_clock_and_Power","wgRelevantArticleId":391,"wgRequestId":"0155e6b35b95803b71697e57","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-HOWTO_Turn_off_DSP_clock_and_Power rootpage-HOWTO_Turn_off_DSP_clock_and_Power skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">HOWTO Turn off DSP clock and Power</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Prerequisites"><span class="tocnumber">1</span> <span class="toctext">Prerequisites</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Extracting_the_Sample_Projects"><span class="tocnumber">2</span> <span class="toctext">Extracting the Sample Projects</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Configuring_CCS"><span class="tocnumber">3</span> <span class="toctext">Configuring CCS</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Building_the_ARM_side_Project"><span class="tocnumber">4</span> <span class="toctext">Building the ARM side Project</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Running_the_ARM_side_Project"><span class="tocnumber">5</span> <span class="toctext">Running the ARM side Project</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Turning_the_DSP_Clock_OFF"><span class="tocnumber">5.1</span> <span class="toctext">Turning the DSP Clock OFF</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Turning_the_DSP_Clock_ON"><span class="tocnumber">5.2</span> <span class="toctext">Turning the DSP Clock ON</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Turning_the_DSP_Power_OFF"><span class="tocnumber">5.3</span> <span class="toctext">Turning the DSP Power OFF</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Turning_the_DSP_Power_ON"><span class="tocnumber">5.4</span> <span class="toctext">Turning the DSP Power ON</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Building_the_DSP_side_Project"><span class="tocnumber">6</span> <span class="toctext">Building the DSP side Project</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Important_Code_Sections"><span class="tocnumber">7</span> <span class="toctext">Important Code Sections</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Credits"><span class="tocnumber">8</span> <span class="toctext">Credits</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Prerequisites">Prerequisites</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=1" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>CCS v 3.3</li>
+<li>Latest CCS Driver Release downloaded from <a rel="nofollow" class="external text" href="http://support.spectrumdigital.com/ccs33/">Specturm Digital support site</a> and installed as per the instructions on the Spectrum Digital site.</li>
+<li>DM644x board for testing</li>
+<li>JTAG emulator for loading programs through CCS</li>
+<li>A terminal program and serial connection to the board.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Extracting_the_Sample_Projects">Extracting the Sample Projects</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=2" title="Edit section: Extracting the Sample Projects">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>Download the <a href="https://processors.wiki.ti.com/images/a/a7/DM644x_DSP_Powerdown.zip" class="internal" title="DM644x DSP Powerdown.zip">sample project</a> file and extract it into a working directory.</li>
+<li>Unzip the DM644x_ARM_DSPCLKOFF_01.zip and DM644x_DSP_DSPCLKOFF_01.zip files to the working folder.</li>
+<li>You should now have two new folders, DM644x_ARM_DSPCLKOFF_01 and DM644x_DSP_DSPCLKOFF_01</li></ol>
+<h2><span class="mw-headline" id="Configuring_CCS">Configuring CCS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=3" title="Edit section: Configuring CCS">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section covers setting up CCS and using the correct GEL file. If you already know how to use CCS and load a new GEL file please skip to the next section. 
+</p>
+<ol><li>After installing CCS you should have a desktop icon called <b>Setup CCStudio v3.3</b>. Double click this icon to open the CCS setup utility.</li>
+<li>In the middle window select <b>Factory Boards</b> and select the DM6446 configuration for your emulator. For example, if using the XDS510USB emulator, select the <b>DM6446 XDS510USB EMULATOR</b> configuration.
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_CCS_Setup.html" class="image"><img alt="CCS Setup.JPG" src="https://processors.wiki.ti.com/images/a/a3/CCS_Setup.JPG" width="300" height="225" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_CCS_Setup.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>Click the <b>&lt;&lt; Add</b> button to add this configuration to your CCS setup.</li>
+<li>In the left pane highlight the “ARM9” device on Port16.</li>
+<li>Click the <b>Modify Properties</b> button on the bottom right</li>
+<li>Change the GEL file to the dm644x_arm.gel file located in the DM644x_ARM_DSPCLKOFF_01 directory that you unzipped earlier.</li>
+<li>Click <b>OK</b></li>
+<li>Make sure you have your JTAG emulator connected to your PC.</li>
+<li>Click <b>Save &amp; Quit</b> on the bottom left</li>
+<li>When prompted to <b>Start Code Composer Studio on exit</b> select Yes</li>
+<li>After CCS launches you should be at the <b>CCStudio: Parallel Debug Manager</b> Screen. See below picture
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_CCS_PDM.html" class="image"><img alt="CCS PDM.jpg" src="https://processors.wiki.ti.com/images/2/2d/CCS_PDM.jpg" width="300" height="120" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_CCS_PDM.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>Right click the <b>ARM9</b> port under the <b>DM6446_ICEPICK_XDS510USB</b> configuration and select <b>Open</b></li>
+<li>You have now configured CCS and are ready to begin building the ARM side project.</li></ol>
+<h2><span class="mw-headline" id="Building_the_ARM_side_Project">Building the ARM side Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=4" title="Edit section: Building the ARM side Project">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>In the CCS window select <b>Project -&gt; Open</b> and select the DM644x_ARM_Base.pjt file from the DM644x_ARM_DSPCLKOFF_01 folder you extracted earlier. After opening the project you should see a screen like the following.
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_CCS_ARM_PJT_OPEN.html" class="image"><img alt="CCS ARM PJT OPEN.jpg" src="https://processors.wiki.ti.com/images/6/6a/CCS_ARM_PJT_OPEN.jpg" width="300" height="225" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_CCS_ARM_PJT_OPEN.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>Select <b>Project -&gt; Build</b> to compile the project. You may notice a warning like the following during the build. This can be safely ignored.
+<dl><dd><dl><dd><span style="color: red">[Linking...] "C:\CCStudio_v3.3\tms470\cgtools\bin\cl470" -@"Debug.lkf"</span></dd>
+<dd><span style="color: red">&lt;Linking&gt;</span></dd>
+<dd><span style="color: red">&gt;&gt; warning: load address of uninitialized section .sdrtext ignored</span></dd>
+<dd><span style="color: red">Build Complete,</span></dd>
+<dd><span style="color: red">0 Errors, 1 Warnings, 0 Remarks.</span></dd></dl></dd></dl></li>
+<li>The compiled executable is located in the Debug directory that was created during the build and is called DM644x.out</li>
+<li>You are now ready to run this project. Please proceed to the <a href="#Running_the_ARM_side_Project">Running the ARM side Project</a> section.</li></ol>
+<h2><span class="mw-headline" id="Running_the_ARM_side_Project">Running the ARM side Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=5" title="Edit section: Running the ARM side Project">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section has all the common steps to run the ARM side Project. The subsections contain the steps for using the different functions provided by the sample project. 
+</p>
+<ol><li>Set jumper J4 to SRAM</li>
+<li>Set switch S3[1:10] to 1010111111 when 1 = on and 0 = off</li>
+<li>Power on the DM6446 and in the CCS window press ALT+C to connect to the board.</li>
+<li>In CCS run <b>GEL -&gt; XDS510USB -&gt; for_download</b>. You should see output like the following:
+<dl><dd><dl><dd><span style="color: blue">Setting for download</span></dd>
+<dd><span style="color: blue">Finished setting</span></dd></dl>
+<ol><li>Load the sample program by doing <b>File -&gt; Load Program</b> and select the <b>DM644x.out</b> file in the Debug folder. The Debug folder is located in the DM644x_ARM_DSPCLKOFF_01 folder where the project was extracted.</li></ol></dd></dl></li>
+<li>When the program has loaded you should see a screen similar to the one below:
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_CCS_ARM_PJT_RUN.html" class="image"><img alt="CCS ARM PJT RUN.jpg" src="https://processors.wiki.ti.com/images/9/9d/CCS_ARM_PJT_RUN.jpg" width="300" height="226" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_CCS_ARM_PJT_RUN.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>Open a terminal program to connect to the board. The terminal settings should be:
+<dl><dd><dl><dd><dl><dd>Bits per Second: 115200</dd>
+<dd>Data Bits: 8</dd>
+<dd>Parity: None</dd>
+<dd>Stop Bits: 1</dd>
+<dd>Flow Control: None</dd></dl></dd></dl>
+<ol><li>In the CCS Window press F5 to run the program. You should see output like the following appear in the terminal window.</li></ol></dd>
+<dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_ARM_PJT_TERM_OUTPUT.html" class="image"><img alt="ARM PJT TERM OUTPUT.jpg" src="https://processors.wiki.ti.com/images/d/d5/ARM_PJT_TERM_OUTPUT.jpg" width="300" height="152" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_ARM_PJT_TERM_OUTPUT.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>In the terminal window press <b>0</b> to turn on the DSP and load the DSP side program. The DSP side program comes from the dspprog.h file in the Include directory and was derived from the DSP example application.</li>
+<li>Open the <b>View Memory</b> Window in CCS by doing <b>View -&gt; Memory</b>. Type <b>0x01c4189c</b> into the address field. This allows you to view the <b>MDSTAT39</b> value. Bits 0-5 of this value indicate the power state of the DSP. For information on what these value mean please see the ARM subsystem user’s guide (SPRUE14a) section 7.7.15. For this example the values we will see are <b>0x00001F03 (DSP on)</b> and <b>0x00000F02 (DSP off)</b>. The current value should be <b>0x00001F03</b> since the DSP was turned on when you pressed 0 in the terminal window.</li></ol>
+<h3><span class="mw-headline" id="Turning_the_DSP_Clock_OFF">Turning the DSP Clock OFF</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=6" title="Edit section: Turning the DSP Clock OFF">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>To turn the DSP clock off press <b>1</b> in the terminal window. In the CCS memory window right click and select <b>Refresh Window</b>. You should now see the value has changed to <b>0x00000F02</b>.</li></ul>
+<h3><span class="mw-headline" id="Turning_the_DSP_Clock_ON">Turning the DSP Clock ON</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=7" title="Edit section: Turning the DSP Clock ON">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>To turn the DSP on press <b>2</b> in the terminal window. In the CCS memory window rigth click and select <b>Refresh Window</b>. You should see the value has changed to <b>0x00001F03</b>.</li></ul>
+<h3><span class="mw-headline" id="Turning_the_DSP_Power_OFF">Turning the DSP Power OFF</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=8" title="Edit section: Turning the DSP Power OFF">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>To turn off power to the DSP press <b>6</b>. In the CCS memory window rigth click and select <b>Refresh Window</b>. You should see the value has changed to <b>0x00000A00</b>.</li></ul>
+<h3><span class="mw-headline" id="Turning_the_DSP_Power_ON">Turning the DSP Power ON</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=9" title="Edit section: Turning the DSP Power ON">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>To turn on power to the DSP press <b>0</b>. In the CCS memory window rigth click and select <b>Refresh Window</b>. You should see the value has changed to <b>0x00001F03</b></li></ul>
+<h2><span class="mw-headline" id="Building_the_DSP_side_Project">Building the DSP side Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=10" title="Edit section: Building the DSP side Project">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The DSP side project is provided mainly as source code for the DSP program used in this example. The ARM project already has a build version of this code included in the <b>Include</b> directory of the arm project in the <b>dspprog.h</b> file. However, if you do need or want to rebuild the DSP side project the following steps will walk you through the process. 
+</p>
+<ol><li>From the <b>CCStudio: Parallel Debug Manager</b> windows right click on the <b>C64PLUS</b> port on the <b>DM6446_ICEPICK_XDS510USB</b> configuration and select <b>Open</b>.</li>
+<li>Open the DSP side project that was extracted earlier by doing <b>Project -&gt; Open</b> and selecting the <b>DM644x_DSP_Base.pjt</b> file from the DM644x_DSP_DSPCLKOFF_01 folder. NOTE: you may get a message saying <i>Cannot find file C:\CCStudio_v3.2\C6000\cgtools\lib\rts64plus.lib</i>. If that occurs click <b>Browse</b> and select the <b>rts64plus.lib</b> file in the <i>C:\CCStudio_v3.3\ C6000\cgtools\lib</i> folder (This assumes you installed CCS in the default location of C:\CCStudio_v3.3, if not then adjust this path accordingly).</li>
+<li>Select <b>Project -&gt; Build Clean</b> and select <b>Yes</b> when prompted.</li>
+<li>Select <b>Project -&gt; Build</b> to rebuild the DSP project.</li></ol>
+<h2><span class="mw-headline" id="Important_Code_Sections">Important Code Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=11" title="Edit section: Important Code Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The important code section in the ARM example project is located in the <b>Sources\dm644x_main.c</b> file and is the switch statement in the <b>main()</b> function. 
+</p>
+<ul><li>Case 1 - shows how the DSP clock is turned <b>off</b></li>
+<li>Case 2 - shows how the DSP clock is turned <b>on</b></li>
+<li>Case 6 - shows how the DSP power is turned <b>off</b>. There is a section in case 6 that indicated where to place a call to an external power controller if you have one.</li>
+<li>Case 0 - shows how the DSP power is turned <b>on</b> and the DSP program is loaded.</li></ul>
+<h2><span class="mw-headline" id="Credits">Credits</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit&amp;section=12" title="Edit section: Credits">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Kohtaro Hashimota: provided sample code used in this project for DSP clock and power control.</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130220008
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.055 seconds
+Real time usage: 0.059 seconds
+Preprocessor visited node count: 54/1000000
+Preprocessor generated node count: 66/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:391-0!canonical and timestamp 20201130220008 and revision id 10414
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>HOWTO Turn off DSP clock and Power</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>HOWTO Turn off DSP clock and Power</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>HOWTO Turn off DSP clock and Power</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>HOWTO Turn off DSP clock and Power</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>HOWTO Turn off DSP clock and Power</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>HOWTO Turn off DSP clock and Power</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>HOWTO Turn off DSP clock and Power</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>HOWTO Turn off DSP clock and Power</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>HOWTO Turn off DSP clock and Power</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;oldid=10414">https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;oldid=10414</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Code_Composer_Studio_v3.html" title="Category:Code Composer Studio v3">Code Composer Studio v3</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=HOWTO+Turn+off+DSP+clock+and+Power" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="HOWTO_Turn_off_DSP_clock_and_Power.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_HOWTO_Turn_off_DSP_clock_and_Power.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="HOWTO_Turn_off_DSP_clock_and_Power.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/HOWTO_Turn_off_DSP_clock_and_Power.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/HOWTO_Turn_off_DSP_clock_and_Power.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;oldid=10414" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Turn_off_DSP_clock_and_Power&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 21 April 2009, at 10:06.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.055","walltime":"0.059","ppvisitednodes":{"value":54,"limit":1000000},"ppgeneratednodes":{"value":66,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130220008","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":224});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/HOWTO_Turn_off_DSP_clock_and_Power by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 05:57:46 GMT -->
+</html>

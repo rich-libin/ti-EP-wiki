@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Reentrant by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Reentrant - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Reentrant","wgTitle":"Reentrant","wgCurRevisionId":200325,"wgRevisionId":200325,"wgArticleId":4979,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Reentrant","wgRelevantArticleId":4979,"wgRequestId":"ad6c01762846e60d715219d0","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Reentrant rootpage-Reentrant skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Reentrant</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>A function is <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Reentrant_(subroutine)">reentrant</a> if it can safely be invoked again while another instance of the function is active.
+</p><p>Generally, a function is reentrant if it doesn't access the program state.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Terminology"><span class="tocnumber">1</span> <span class="toctext">Terminology</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Entering_a_function"><span class="tocnumber">1.1</span> <span class="toctext">Entering a function</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Reentering_a_function"><span class="tocnumber">1.2</span> <span class="toctext">Reentering a function</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Non-reentrant_functions_in_the_RTS_.28run-time_support_library.29"><span class="tocnumber">2</span> <span class="toctext">Non-reentrant functions in the RTS (run-time support library)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Unsafe_examples"><span class="tocnumber">3</span> <span class="toctext">Unsafe examples</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Non-reentrant.2C_but_potentially_safe_examples"><span class="tocnumber">4</span> <span class="toctext">Non-reentrant, but potentially safe examples</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#How_do_I_avoid_a_problem.3F"><span class="tocnumber">5</span> <span class="toctext">How do I avoid a problem?</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#other"><span class="tocnumber">6</span> <span class="toctext">other</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Terminology">Terminology</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=1" title="Edit section: Terminology">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/State_(computer_science)">program state</a> is the value of all of memory, especially global variables.  The program state also includes the function call stack, as well as the dynamic memory pool.
+</p><p>A <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Thread_(computer_science)">thread</a> is a single flow of control through a program.  It has its own stack.  In a single-threaded environment, there is only one thread and one stack.  The C standard assumes a single-threaded environment.  A multi-threaded environment has several threads, each with its own stack.  See <a href="Thread-safe.html" title="Thread-safe">thread-safe</a> for a discussion of what it means to have multiple threads.
+</p><p>A function is <b>reentrant</b> if it can safely be invoked again while another instance of the function is active.  This is usually due to a recursive function, but could be due to an interrupt or signal.  A reentrant function is not necessarily thread-safe, interrupt-safe, or signal-safe, or vice versa.
+</p>
+<h2><span class="mw-headline" id="Entering_a_function">Entering a function</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=2" title="Edit section: Entering a function">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>When a function is called (entered), a <b>stack frame</b> (activation record) is pushed onto the <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Call_stack">function call stack</a>.  The frame on top of the stack represents the state of the currently executing function.  The other frames on the stack represent the state of functions that have been entered but have not finished; they were suspended by a function call, interrupt, or something similar.  Each frame represents an instance of a function that has been called but has not yet returned.
+</p>
+<h2><span class="mw-headline" id="Reentering_a_function">Reentering a function</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=3" title="Edit section: Reentering a function">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If there are two frames for one function on the stack, that function has been reentered.  This means that somehow during execution of that function, or one of the functions it calls, something called the function again.  This is typically due to recursion, but can happen during an interrupt or context switch.
+</p><p>If the function is not re-entrant, your data could get corrupted.  It may not be obvious that a function has been reentered; the reentrant call could be several call layers deep or in an interrupt function.
+</p><p>In a single-threaded environment, a function could be re-entered in several ways:
+</p>
+<ul><li>a recursive function call</li>
+<li>an interrupt or trap handler</li>
+<li>a signal handler</li>
+<li>a C++ exception</li></ul>
+<p>These cases are all conceptually just like a function call.  A new frame is pushed onto the stack for the called function, interrupt handler, signal handler, or exception handler.
+</p>
+<h1><span id="Non-reentrant_functions_in_the_RTS_(run-time_support_library)"></span><span class="mw-headline" id="Non-reentrant_functions_in_the_RTS_.28run-time_support_library.29">Non-reentrant functions in the RTS (run-time support library)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=4" title="Edit section: Non-reentrant functions in the RTS (run-time support library)">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Any function which accesses non-const program state is not reentrant.  Program state is static or global data, such as <tt>errno</tt>, the C I/O buffer, the stack, the dynamic memory pool, and external objects such as files.  Additionally, functions which call non-reentrant functions are non-reentrant.
+</p><p>The compiler run-time support library has static and global data.  
+Here is a non-exhaustive list of this data:
+</p>
+<ul><li>errno</li>
+<li>the C I/O buffer</li>
+<li>the dynamic allocation heap</li>
+<li>the function call stack</li>
+<li>the atexit registered function list</li>
+<li>the temporary file name list</li>
+<li>the asctime return value buffer</li>
+<li>the asctime/strftime format buffer</li>
+<li>the random number generator seed</li>
+<li>the currently-registered C++ new handler</li></ul>
+<p>Here are some examples of functions which access errno:
+</p>
+<ul><li>perror, strerror</li>
+<li>asin, acos, log, sqrt, etc</li>
+<li>fgetpos, ftell</li>
+<li>strtod, strtol</li></ul>
+<p>Here are some examples of functions which access the C I/O buffer, or access other global state in the C I/O subsystem:
+</p>
+<ul><li>the entire printf family except sprintf</li>
+<li>the entire scanf family except sscanf</li>
+<li>the entire puts family</li>
+<li>the entire putc family</li>
+<li>fopen, freopen, fclose, tmpfile</li>
+<li>fgetpos, fsetpos, ftell, feof, rewind</li>
+<li>clearerr, ferror, perror</li>
+<li>fopen, fread, fwrite, fseek, fclose</li>
+<li>open, read, write, lseek, close, unlink, rename</li>
+<li>HOSTopen, HOSTclose, HOSTread, HOSTwrite, HOSTlseek, HOSTunlink, HOSTrename, HOSTtime, HOSTclock</li>
+<li>tabinit, add_device, remove_device</li>
+<li>clock, time, getenv</li>
+<li>setbuf, setvbuf</li>
+<li>assert</li></ul>
+<p>Here are some examples of functions that access the dynamic allocation heap:
+</p>
+<ul><li>the entire *alloc family including free</li>
+<li>operators new and delete</li>
+<li>setbuf, setvbuf</li>
+<li>minit, memalign, memmap (on targets which have them)</li></ul>
+<h1><span class="mw-headline" id="Unsafe_examples">Unsafe examples</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=5" title="Edit section: Unsafe examples">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The printf family of functions is not reentrant because these functions modify the I/O buffer, which is global state.  It is not safe to call printf from within a function which could be called during the execution of printf or any of its descendants.  An interrupt could occur at any time, including during execution of printf, so it is not safe to call printf from within an interrupt handler:
+&lt;syntaxhighlight code='c'&gt;
+interrupt void handler(void)
+{
+</p>
+<pre>   printf("in handler\n"); /* unsafe */
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>The strtok function is non-reentrant because proper use of it relies on global state maintained from call to call.  It is not safe to nest calls to strtok.
+&lt;syntaxhighlight code='c'&gt;
+</p>
+<ol><li>include &lt;stdio.h&gt;</li>
+<li>include &lt;string.h&gt;</li></ol>
+<p>int main()
+{
+</p>
+<pre>   char input[] = "a=b:c=d";
+</pre>
+<pre>   char *colon, *equal;
+   
+   for (colon = strtok(input, ":"); 
+        colon = strtok(NULL,  ":"); )
+   {
+       printf("[%s]\n", colon);
+</pre>
+<pre>       for (equal = strtok(colon, "="); 
+            equal = strtok(NULL,  "="); )
+           printf("[%s]\n", equal);
+   }
+</pre>
+<pre>   return 0;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>You should not create any C++ class objects in an interrupt function, because they typically require dynamic allocation, and the interrupt may have occurred during some dynamic memory allocation function:
+</p><p>&lt;syntaxhighlight code='c'&gt;
+interrupt void handler(void)
+{
+</p>
+<pre>   class thing; /* this may require dynamic allocation! */
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>If you use C++ exceptions, do not throw an exception out of a destructor.  If you throw from a destructor while an exception is being handled, the program will abort; C++ destructors are not reentrant.
+</p>
+<h1><span id="Non-reentrant,_but_potentially_safe_examples"></span><span class="mw-headline" id="Non-reentrant.2C_but_potentially_safe_examples">Non-reentrant, but potentially safe examples</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=6" title="Edit section: Non-reentrant, but potentially safe examples">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A function which is technically non-reentrant might still be safe to call if your program doesn't care about the side effects.
+</p><p>For example, any function which could set <tt>errno</tt> is non-reentrant, but if the program always ignores <tt>errno</tt>, it doesn't matter.
+</p><p>Code which uses dynamic memory allocation is not strictly reentrant, but if the following conditions are true, we don't care that it's technically non-reentrant:
+</p>
+<ul><li>the program cannot reenter any dynamic memory allocation function, because
+<ul><li>the program is a single-threaded environment</li>
+<li>the program's interrupt functions never call any dynamic memory allocation function (checked recursively)</li></ul></li>
+<li>there is enough memory to satisfy all allocations</li>
+<li>the program doesn't care about exactly what the heap looks like (no pointer comparisons between alloc'd objects)</li></ul>
+<p>&lt;syntaxhighlight code='c'&gt;
+void allocate_and_work(void)
+{
+</p>
+<pre>   char * mem = malloc(4);
+   if (mem) { work(); free(mem); }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h1><span id="How_do_I_avoid_a_problem?"></span><span class="mw-headline" id="How_do_I_avoid_a_problem.3F">How do I avoid a problem?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=7" title="Edit section: How do I avoid a problem?">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>In a single-threaded environment, the following simple tips will avoid most problems:
+</p>
+<ul><li>Don't call any functions from an interrupt handler function unless you know that the function is reentrant.</li>
+<li>If you use C++ exceptions, don't call any functions from a C++ destructor unless you know that the function is reentrant.</li>
+<li>If you don't know whether a function is reentrant, assume that it is non-reentrant.</li>
+<li>Don't overlap calls to strtok.</li></ul>
+<p>Note that the C++ destructors sometimes de-allocate memory, which is OK, because the destructor will not generally be invoked during execution of a C dynamic memory allocation function.
+</p>
+<h1><span class="mw-headline" id="other">other</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit&amp;section=8" title="Edit section: other">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Things to consider:
+</p>
+<ul><li>C++ exception handling</li>
+<li><a href="Volatile.html" title="Volatile">volatile</a></li>
+<li>setjmp/longjmp</li>
+<li>heap</li>
+<li>thread-local storage</li>
+<li>multiple cores</li>
+<li>shared memory</li>
+<li>dynamic linking</li>
+<li>critical sections (lock, mutex)</li>
+<li>atomic accesses</li></ul>
+<p>From the page <a href="Before_asking_for_DSP/BIOS_support.html" title="Before asking for DSP/BIOS support">Before asking for DSP/BIOS support</a>:
+</p>
+<dl><dd>Despite being written in C, DSP/BIOS can interface with C++ - check out the bigtime example. However avoid using the C++ STL exception handling (try/throw/catch calls) -- they are not <a href="Thread-safe.html" title="Thread-safe">thread-safe</a>. Check the last topic of <a href="C%2b%2b_Support_in_TI_Compilers.html" class="mw-redirect" title="Overview of C++ Support in TI Compilers">this page</a>.</dd></dl>
+<p><a href="Special_WhatLinksHere/Reentrant.html" title="Special:WhatLinksHere/Reentrant">Special:WhatLinksHere/Reentrant</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130083141
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.028 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4979-0!canonical and timestamp 20201130083141 and revision id 200325
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Reentrant</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Reentrant</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Reentrant</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Reentrant</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Reentrant</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Reentrant</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Reentrant</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Reentrant</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Reentrant</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;oldid=200325">https://processors.wiki.ti.com/index.php?title=Reentrant&amp;oldid=200325</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Reentrant" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Reentrant.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Reentrant&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Reentrant.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Reentrant.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Reentrant.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;oldid=200325" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Reentrant&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 May 2015, at 12:14.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.028","walltime":"0.031","ppvisitednodes":{"value":31,"limit":1000000},"ppgeneratednodes":{"value":36,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130083141","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":232});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Reentrant by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:41 GMT -->
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:46:06 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Multithreaded Debugging Made Easier by Forcing Core Dumps - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps","wgTitle":"Multithreaded Debugging Made Easier by Forcing Core Dumps","wgCurRevisionId":181233,"wgRevisionId":181233,"wgArticleId":408,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","Debug","DaVinci Debugging"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps","wgRelevantArticleId":408,"wgRequestId":"b644796c1dde231d843c3a3b","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps rootpage-Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Multithreaded Debugging Made Easier by Forcing Core Dumps</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Example_Debugging_Session"><span class="tocnumber">2</span> <span class="toctext">Example Debugging Session</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Step_1:_Make_sure_your_system_will_generate_core_files"><span class="tocnumber">2.1</span> <span class="toctext">Step 1:  Make sure your system will generate core files</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Step_2:_Forcing_your_program_to_core_dump"><span class="tocnumber">2.2</span> <span class="toctext">Step 2:  Forcing your program to core dump</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Step_3:_Using_your_core_file_in_gdb"><span class="tocnumber">2.3</span> <span class="toctext">Step 3: Using your core file in gdb</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Core_Dumping_on_Ctrl-C"><span class="tocnumber">3</span> <span class="toctext">Core Dumping on Ctrl-C</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Many applications on DaVinci are multithreaded in nature to ensure that all system resources are used to their full potential.  Unfortunately, traditional debugging methods for multithreaded programs are rarely successful.  In fact, many of us who are savvy with gdb command-line debugging have been forced back into the caveman days of instrumenting our code with <code>printf()</code> statements due to poor support for multithreaded applications in our debugger of choice.
+</p><p>If you've ever been frustrated while trying to list the running threads in gdb or have been unable to successfully display a stack trace for any of them, you'll be happy to hear about my recent discovery:  <b>gdb's support for debugging multithreaded programs is much more reliable when you are debugging a core file</b>.
+</p>
+<h2><span class="mw-headline" id="Example_Debugging_Session">Example Debugging Session</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit&amp;section=2" title="Edit section: Example Debugging Session">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If your DaVinci platform has enough memory to run gdb, I wouldn't bother messing with gdbserver -- it is much easier to bring up gdb on the running target system.  This is especially true if gdb needs to load symbols from a bunch of shared objects, or if you are debugging a shared object.  In this example, I'll be running gdb directly on the target, but if you need to use gdbserver I would look <a href="Debugging_remotely_on_DaVinci_using_gdb.html" title="Debugging remotely on DaVinci using gdb">at this page</a> for more information.
+</p>
+<h3><span class="mw-headline" id="Step_1:_Make_sure_your_system_will_generate_core_files">Step 1:  Make sure your system will generate core files</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit&amp;section=3" title="Edit section: Step 1: Make sure your system will generate core files">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As core files can be <b>huge</b>, may systems disable the generation of core files by default and you may need to turn them on.  First take a look at your current settings:
+</p>
+<pre>% ulimit -a
+
+core file size        (blocks, -c) 0
+data seg size         (kbytes, -d) unlimited
+file size             (blocks, -f) unlimited
+max locked memory     (kbytes, -l) 32
+max memory size       (kbytes, -m) unlimited
+open files                    (-n) 1024
+pipe size          (512 bytes, -p) 8
+stack size            (kbytes, -s) 8192
+cpu time             (seconds, -t) unlimited
+max user processes            (-u) 960
+virtual memory        (kbytes, -v) unlimited
+</pre>
+<p>The above report shows that the core file size is set to 0, which means that core files will not be generated.  You need to change this setting to "unlimited" as follows:
+</p>
+<pre>% ulimit -c unlimited
+</pre>
+<p>You show now see "ulimited" for the core file size if you run <tt>ulimit -a</tt> again.
+</p><p>Even if <tt>ulimit -a</tt> reports "unlimited" for core file size when your system first boots, I would probably go ahead and set it again anyway.  I seem to remember once seeing a system that reported "unlimited" at boot time, but didn't generate a core file.  When I set it again, it started getting the core files.
+</p>
+<h3><span class="mw-headline" id="Step_2:_Forcing_your_program_to_core_dump">Step 2:  Forcing your program to core dump</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit&amp;section=4" title="Edit section: Step 2: Forcing your program to core dump">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>You may be thinking "How do I get a program to core dump at a particular point in time?".  The first thing that may come to your mind is to create a NULL pointer and dereference it, but I prefer to be a little more precise.
+</p><p>First, you need to make sure your program includes these header files:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>include &lt;sys/types.h&gt;</li>
+<li>include &lt;signal.h&gt;</li>
+<li>include &lt;unistd.h&gt;</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>Then, at the point where you want to core dump, you send your program the "SIGSEGV" (segmentation fault) signal:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+kill(getpid(), SIGSEGV);
+&lt;/syntaxhighlight&gt;
+</p><p>You could also get fancy and only core dump when certain conditions are met:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+ret = VIDDEC_process((VIDDEC_Handle) gdecoder-&gt;decoder, &amp;(gdecoder-&gt;inBufDesc),
+</p>
+<pre>         &amp;(gdecoder-&gt;outBufDesc), &amp;vidDecInArgs, &amp;vidDecOutArgs);
+</pre>
+<p>if (ret &lt; 0) kill(getpid(), SIGSEGV);
+&lt;/syntaxhighlight&gt;
+</p><p>Once you've sabotaged your program in the right place, build it and and run it and let the segmentation fault happen:
+</p>
+<pre>Segmentation fault      (core dumped) gst-launch-0.10 filesrc location=$1&#160;!
+    tidemux_avi name=t&#160;! queue max-size-buffers=60&#160;! gdecoder Codec=2&#160;!
+    fbvideosink device=/dev/fb/3 t.&#160;! queue max-size-buffers=180&#160;! adecoder Engine=1&#160;!
+    osssink
+</pre>
+<p>Note that the segmentation fault reported "(core dumped)" because we had core files enabled.
+</p>
+<h3><span class="mw-headline" id="Step_3:_Using_your_core_file_in_gdb">Step 3: Using your core file in gdb</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit&amp;section=5" title="Edit section: Step 3: Using your core file in gdb">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When your program core dumped, it created a file named "core.<i>n</i>", where <i>n</i> is a number indicating the process ID of your program when it was running.  Next we will bring up gdb with this core file by specifying it on the command line after the program:
+</p>
+<pre>% gdb ./gst-launch-0.10 ./core.1831
+</pre>
+<p>Once gdb comes up, you can inspect your program at the point when the core dump occurred.  Note that you cannot resume your program or use the "next" or "step" commands, because your program is no longer running.
+</p><p>If you now try to use gdb's commands for debugging threads, you'll be pleasantly surprised to see that they now seem to work as expected.  First, let's list all the threads that were running when the program was terminated:
+</p>
+<pre>(gdb) info threads
+  9 process 1833  0x401fc8ec in&#160;?? () from /lib/tls/libpthread.so.0
+  8 process 1834  0x402b7294 in ioctl () from /lib/tls/libc.so.6
+  7 process 1835  0x40235ac4 in kill () from /lib/tls/libc.so.6
+  6 process 1836  0x401fc8ec in&#160;?? () from /lib/tls/libpthread.so.0
+  5 process 1837  0x401fc8ec in&#160;?? () from /lib/tls/libpthread.so.0
+  4 process 1838  0x402004a4 in&#160;?? () from /lib/tls/libpthread.so.0
+  3 process 1839  0x401fcc18 in&#160;?? () from /lib/tls/libpthread.so.0
+  2 process 1840  0x401ff830 in&#160;?? () from /lib/tls/libpthread.so.0
+* 1 process 1831  0x402b5548 in poll () from /lib/tls/libc.so.6
+</pre>
+<p>Note that thread 7 is the thread that called "kill".  We need to use the "thread" command to switch to that thread:
+</p>
+<pre>(gdb) thread 7
+[Switching to thread 7 (process 1835)]#0  0x40235ac4 in kill ()
+   from /lib/tls/libc.so.6
+</pre>
+<p>We are now inside the "kill" function.  We need to use the "up" command to go back to the function that called "kill" so we can examine the variables in that function:
+</p>
+<pre>(gdb) up
+
+#1  0x407a83e8 in gst_gdecoder_decode (gdecoder=0x79000, outbuf=0x423431d4)
+    at gstgdecoder.c:634
+if (ret &lt; 0) kill(getpid(), SIGSEGV);
+</pre>
+<p>We can now dump variables in this function:
+</p>
+<pre>(gdb) set print pretty
+(gdb) print vidDecOutArgs
+$5 = {
+  size = 156,
+  extendedError = 1032,
+  bytesConsumed = 544,
+  decodedFrameType = 1,
+  outputID = 646152,
+  displayBufs = {
+    numBufs = 1,
+    width = 720,
+...
+</pre>
+<p>As shown above, we are able to see the values of all the members of a large structure <b>without coding up a million printfs!</b>
+</p>
+<h2><span class="mw-headline" id="Core_Dumping_on_Ctrl-C">Core Dumping on Ctrl-C</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit&amp;section=6" title="Edit section: Core Dumping on Ctrl-C">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>You may also have a situation where your program seems to hang and you want to inspect it while it's hanging.  No problem -- just make your program core dump when you hit Ctrl-C.
+</p><p>First, write a function that will cause a core dump:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>include &lt;sys/types.h&gt;</li>
+<li>include &lt;signal.h&gt;</li>
+<li>include &lt;unistd.h&gt;</li></ol>
+<p>static void core_dump(int sigid)
+{
+</p>
+<pre>   kill(getpid(), SIGSEGV);
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Next, override the SIGINT signal to call this function (SIGINT is the signal that gets sent when you hit Ctrl-C):
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+int main()
+{
+</p>
+<pre>   signal(SIGINT, core_dump);
+   ...
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Now hit Ctrl-C when your program is running and get an instant core dump!
+</p><p>Note that the man page for the signal function states "Use of this function is unspecified in a multi-threaded process".  However, it has worked for me so far -- as least for this purpose.  If it works, great!  We're just using this for debugging anyway.
+</p><p><a href="https://processors.wiki.ti.com/index.php?title=User:Don_Darling&amp;action=edit&amp;redlink=1" class="new" title="User:Don Darling (page does not exist)">Don Darling</a> 18:04, 31 July 2008 (CDT)
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130183654
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.025 seconds
+Real time usage: 0.027 seconds
+Preprocessor visited node count: 94/1000000
+Preprocessor generated node count: 188/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1966/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:408-0!canonical and timestamp 20201130183654 and revision id 181233
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Multithreaded Debugging Made Easier by Forcing Core Dumps</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;oldid=181233">https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;oldid=181233</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_Debug.html" title="Category:Debug">Debug</a></li><li><a href="Category_DaVinci_Debugging.html" title="Category:DaVinci Debugging">DaVinci Debugging</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Multithreaded+Debugging+Made+Easier+by+Forcing+Core+Dumps" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;oldid=181233" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 July 2014, at 13:28.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.025","walltime":"0.027","ppvisitednodes":{"value":94,"limit":1000000},"ppgeneratednodes":{"value":188,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1966,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130183654","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":226});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Multithreaded_Debugging_Made_Easier_by_Forcing_Core_Dumps by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:46:08 GMT -->
+</html>

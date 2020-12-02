@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DM6467_PCI_Host_Interrupts by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:05:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>PCI Interrupt Handling on DM6467/DM6467T PCI Host - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host","wgTitle":"PCI Interrupt Handling on DM6467/DM6467T PCI Host","wgCurRevisionId":72362,"wgRevisionId":72362,"wgArticleId":9071,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["WikiNote"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host","wgRelevantArticleId":9071,"wgRequestId":"a3cde97cb061673496294fe5","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgRedirectedFrom":"DM6467_PCI_Host_Interrupts","wgInternalRedirectTargetUrl":"/index.php/PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host"});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["mediawiki.action.view.redirect","site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<link rel="canonical" href="PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host.html"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-PCI_Interrupt_Handling_on_DM6467_DM6467T_PCI_Host rootpage-PCI_Interrupt_Handling_on_DM6467 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">PCI Interrupt Handling on DM6467/DM6467T PCI Host</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"><span class="mw-redirectedfrom">(Redirected from <a href="https://processors.wiki.ti.com/index.php?title=DM6467_PCI_Host_Interrupts&amp;redirect=no" class="mw-redirect" title="DM6467 PCI Host Interrupts">DM6467 PCI Host Interrupts</a>)</span></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><table border="1">
+
+<tbody><tr>
+<td><a href="File_Construction_Icon_small.html" class="image"><img alt="Construction Icon small.png" src="https://processors.wiki.ti.com/images/8/89/Construction_Icon_small.png" width="50" height="44" /></a></td>
+<td><b>This page is currently under construction.  The content of this page is due to change quite frequently and thus the quality and accuracy are not guaranteed until this message has been removed.  Please feel free to contribute to this page while construction is in progress.</b>
+</td></tr>
+
+</tbody></table>
+<table style="width:100%; border:0; cellpadding:0; cellspacing:0;">
+
+<tbody><tr>
+<td><a href="File_TexasInstrumentsLogo.html" class="image"><img alt="TexasInstrumentsLogo.png" src="https://processors.wiki.ti.com/images/e/e5/TexasInstrumentsLogo.png" width="200" height="47" /></a></td>
+<td></td>
+<td style="text-align:right; font-style:italic; font-weight:bold; font-size:200%;">Wiki Note
+</td></tr>
+<tr>
+<td colspan="3" style="background:rgb(255,255,255); color:rgb(144,0,0); font-size:200%; text-align:center;">PCI Interrupt Handling on DM6467/DM6467T PCI Host
+</td></tr>
+<tr>
+<td style="text-align:left; font-weight:bold; font-size:125%;">Author(s):Hemant Pedanekar</td>
+<td></td>
+<td style="font-size: 125%; font-style:italic; text-align:right;">Texas Instruments
+</td></tr>
+<tr style="background: white; color: black">
+<td style="text-align:left;">SPRWIKI9071</td>
+<td></td>
+<td style="text-align:right; font-style:italic; font-size:125%;">July 2011
+</td></tr>
+<tr>
+<td>
+</td></tr>
+<tr>
+<td colspan="3" align="center">
+</td></tr>
+<tr>
+<td colspan="3" style="font-size:150%; text-align:center;"><b>Abstract</b>
+</td></tr>
+<tr>
+<td colspan="3" align="left" style="font-style:italic">This application note describes the hardware and software modifications required to support PCI interrupts on DM6467 (and DM6467T) Evaluation Module (EVM) set up as PCI Host.
+</td></tr>
+<tr>
+<td colspan="3"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#OVERVIEW"><span class="tocnumber">1</span> <span class="toctext">OVERVIEW</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#SETUP"><span class="tocnumber">2</span> <span class="toctext">SETUP</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Considerations"><span class="tocnumber">3</span> <span class="toctext">Considerations</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Hardware_Modifications"><span class="tocnumber">4</span> <span class="toctext">Hardware Modifications</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Software_Modifications"><span class="tocnumber">5</span> <span class="toctext">Software Modifications</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Taking_Care_of_Pin_Multiplexing"><span class="tocnumber">5.1</span> <span class="toctext">Taking Care of Pin Multiplexing</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Setting_up_GPIO_Interrupts"><span class="tocnumber">5.2</span> <span class="toctext">Setting up GPIO Interrupts</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Adding_Interrupt_Allocation_Support_in_PCI_Host_Driver"><span class="tocnumber">5.3</span> <span class="toctext">Adding Interrupt Allocation Support in PCI Host Driver</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="OVERVIEW">OVERVIEW</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=1" title="Edit section: OVERVIEW">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>DM6467/DM6467T devices do not have PCI interrupts input lines (INTA, INTB, INTC, INTD). Thus the default EVMs cannot receive PCI interrupts from targets connected over the bus and in turn, cannot interrupt DM6467 ARM on the same.
+</p><p>This can be worked around by using GPIO lines to receive PCI interrupts from the PCI slot to which DM6467 PCI Host EVM is connected. This requires using wires to get the INTA...D lines from the slot and connect them to DM6467 GPIO lines and modify the Host Controller driver accordingly.
+</p>
+<div style="padding: 5px; background: none repeat scroll 0% 0% rgb(238, 238, 238); color: rgb(21, 27, 84);">
+<p><b>Note1:</b> Though this document refers EVM for example, most of the details covered will also be applicable for making custom board using DM6467/T as PCI Host. For example, using a custom board having on board PCI slot(s) with PCI bus arbiter.
+</p><p><b>Note2:</b> Both DM6467 and DM6467T devices are referred hereafter simply as DM6467.
+</p>
+</div>
+<h3><span class="mw-headline" id="SETUP">SETUP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=2" title="Edit section: SETUP">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The hardware setup involves following:
+</p>
+<ol><li>DM6467 EVM</li>
+<li>PCI back-plane with at least 2 PCI slots</li></ol>
+<dl><dd><dl><dd><ul><li>Put DM6467 EVM in one slot</li>
+<li>Connect at least one PCI card (e.g., an Ethernet NIC) in the other slot to be used as PCI target device</li></ul></dd></dl></dd></dl>
+<h3><span class="mw-headline" id="Considerations">Considerations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=3" title="Edit section: Considerations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To enable DM6467 to receive PC interrupts, we will designate GPIO pins. As per PCI specification, upto 4 interrupts can be wired to receive interrupts from PCI target devices. Thus we will need to use 4 GPIO pins which would generate interrupts to DM6467 ARM.
+</p><p>Note following points regarding the GPIO:
+</p>
+<ul><li>GPIO0-7 (Bank 0) can be set up as individual interrupt sources</li>
+<li>GPIO2 and GPIO3 are muxed with audio clock 1 and 0 respectively so we need to set up pinmux configuration for GPIO function on this pins and disable AUDCLK0 and AUDCLK1.</li>
+<li>GPIO interrupts should be set up for rising edge</li></ul>
+<h3><span class="mw-headline" id="Hardware_Modifications">Hardware Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=4" title="Edit section: Hardware Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Use wires to connect PCI interrupt lines from target device(s) from respective slots to DM6467 PCI Host's GPIO pins.
+</p><p>Following figures show 2 of the possible arrangements when using 4 target devices:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:758px;"><a href="File_PCI_DM6467_Interrupts_1.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/f/fe/PCI_DM6467_Interrupts_1.png" width="756" height="378" class="thumbimage" /></a>  <div class="thumbcaption">Fig 1</div></div></div>
+<p><br style="clear: both" /> 
+</p><p>The approach shown in Fig 1 is useful when the PCI targets used support more than one interrupt.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:758px;"><a href="File_PCI_DM6467_Interrupts_2.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/2/27/PCI_DM6467_Interrupts_2.png" width="756" height="378" class="thumbimage" /></a>  <div class="thumbcaption">Fig 2</div></div></div>
+<p><br style="clear: both" /> 
+</p><p><b>Note:</b> The arrangement in Fig 2 assumes that all the PCI target devices used use single interrupt (INTA).
+</p>
+<h3><span class="mw-headline" id="Software_Modifications">Software Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=5" title="Edit section: Software Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section describes the modifications required in DM6467 PCI Host Controller driver and DM6467 EVM specific file to incorporate the interrupt handling support for PCI Host.
+</p><p>Please note following points regarding the software modifications discussed in later subsections:
+</p>
+<ol><li>The source code referred here is based on kernel from arago git repository available <a rel="nofollow" class="external text" href="http://arago-project.org/git/projects/linux-davinci.git?p=projects/linux-davinci.git;a=summary">here</a></li>
+<li>For software support, we consider the approach shown in Fig 1 in earlier section</li></ol>
+<h4><span class="mw-headline" id="Taking_Care_of_Pin_Multiplexing">Taking Care of Pin Multiplexing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=6" title="Edit section: Taking Care of Pin Multiplexing">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>File: arch/arm/mach-davinci/board-dm646x-evm.c
+Function: dm646xevm_pci_setup
+</p><p>Add following line to disable AUDCLK0 to be able to use GPIO3 just before the <tt>if</tt> block.
+</p>
+<pre> davinci_cfg_reg(DM646X_AUDCK0);
+</pre>
+<p>Note that a similar configuration of AUDCLK1 (for GPIO0) already exists inside the <tt>if</tt> block. In case the <tt>if</tt> block is not being executed in your case, following line also needs to be added:
+</p>
+<pre> davinci_cfg_reg(DM646X_AUDCK1);
+</pre> 
+<h4><span class="mw-headline" id="Setting_up_GPIO_Interrupts">Setting up GPIO Interrupts</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=7" title="Edit section: Setting up GPIO Interrupts">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Now we need to set up GPIO bank 0 interrupt, pin direction (input) and trigger (rising edge). For this, add following code after the <tt>if...else</tt> block in dm646xevm_pci_setup():
+</p>
+<pre> set_irq_type(gpio_to_irq(0), IRQ_TYPE_EDGE_RISING);
+ set_irq_type(gpio_to_irq(1), IRQ_TYPE_EDGE_RISING);
+ set_irq_type(gpio_to_irq(2), IRQ_TYPE_EDGE_RISING);
+ set_irq_type(gpio_to_irq(3), IRQ_TYPE_EDGE_RISING);
+</pre>
+<p>Note that rest of the things for setting up GPIO IRQs will be taken care by GPIO IRQ layer in kernel.
+</p>
+<h4><span class="mw-headline" id="Adding_Interrupt_Allocation_Support_in_PCI_Host_Driver">Adding Interrupt Allocation Support in PCI Host Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;section=8" title="Edit section: Adding Interrupt Allocation Support in PCI Host Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The interrupt allocation is directly related to how the interrupt routing is done from target devices to DM6467 host. We consider the setup shown in Fig 1.
+</p><p>Also, the numbers populated for irqs in the table should be same as the output of gpio_to_irq() call for respective GPIOs.
+</p><p>File: arch/arm/mach-davinci/pci-dm646x.c
+Function: dm646x_pci_map_irq
+</p><p>Add following code after <b>removing</b> <tt>return -1</tt> statement:
+</p>
+<pre>	int irq = -1;
+
+	static int dm6467_pci_irq_tbl[4] = {
+		48,
+		49,
+		50,
+		51
+	};
+
+	irq = dm6467_pci_irq_tbl[(pin - 1) &amp; 3];
+
+	return irq;
+</pre>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201001832
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.053 seconds
+Real time usage: 0.058 seconds
+Preprocessor visited node count: 153/1000000
+Preprocessor generated node count: 585/1000000
+Post‐expand include size: 1747/2097152 bytes
+Template argument size: 231/2097152 bytes
+Highest expansion depth: 6/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 464/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    8.335      1 -total
+ 82.97%    6.916      1 Template:AppNote
+ 25.52%    2.127      1 Template:Month
+ 15.73%    1.311      1 Template:Under_Construction
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:9071-0!canonical and timestamp 20201201001832 and revision id 72362
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DM6467 PCI Host Interrupts</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DM6467 PCI Host Interrupts</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>DM6467 PCI Host Interrupts</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>DM6467 PCI Host Interrupts</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>DM6467 PCI Host Interrupts</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DM6467 PCI Host Interrupts</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DM6467 PCI Host Interrupts</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>DM6467 PCI Host Interrupts</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>DM6467 PCI Host Interrupts</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;oldid=72362">https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;oldid=72362</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="https://processors.wiki.ti.com/index.php?title=Category:WikiNote&amp;action=edit&amp;redlink=1" class="new" title="Category:WikiNote (page does not exist)">WikiNote</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=PCI+Interrupt+Handling+on+DM6467%2FDM6467T+PCI+Host" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;oldid=72362" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=PCI_Interrupt_Handling_on_DM6467/DM6467T_PCI_Host&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 27 July 2011, at 21:30.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.053","walltime":"0.058","ppvisitednodes":{"value":153,"limit":1000000},"ppgeneratednodes":{"value":585,"limit":1000000},"postexpandincludesize":{"value":1747,"limit":2097152},"templateargumentsize":{"value":231,"limit":2097152},"expansiondepth":{"value":6,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":464,"limit":5000000},"timingprofile":["100.00%    8.335      1 -total"," 82.97%    6.916      1 Template:AppNote"," 25.52%    2.127      1 Template:Month"," 15.73%    1.311      1 Template:Under_Construction"]},"cachereport":{"timestamp":"20201201001832","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DM6467_PCI_Host_Interrupts by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:05:26 GMT -->
+</html>

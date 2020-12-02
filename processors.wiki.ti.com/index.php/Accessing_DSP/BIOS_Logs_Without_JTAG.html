@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Accessing_DSP/BIOS_Logs_Without_JTAG by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:09:19 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Accessing DSP/BIOS Logs Without JTAG - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Accessing_DSP/BIOS_Logs_Without_JTAG","wgTitle":"Accessing DSP/BIOS Logs Without JTAG","wgCurRevisionId":181460,"wgRevisionId":181460,"wgArticleId":818,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["DSPBIOS"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Accessing_DSP/BIOS_Logs_Without_JTAG","wgRelevantArticleId":818,"wgRequestId":"9d94b8909968b2863947679c","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Accessing_DSP_BIOS_Logs_Without_JTAG rootpage-Accessing_DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Accessing DSP/BIOS Logs Without JTAG</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>Many developers use the DSP/BIOS LOG_printf() or LOG_event() functions to instrument their applications with debug information. In many cases, especially for telecom or video infrastructure applications, developers may wish to leave the instrumentation in the production code base to enable easier isolation of errors that occur in testing laboratory or field trial situation. One challenge is such situations is that access to DSP/BIOS logs generally requires an emulator to be connected to the malfunctioning DSP. This may be physically impossible in densely-packed board racks or practically impossible if the equipment is at a remote customer site.
+</p><p>Although some recent DSP devices (e.g., DM6437 and DM648) enable DSP/BIOS logs to be retrieved over TCP/IP for viewing in the <a href="../SoC_Analyzer.html" title="SoC Analyzer">SoC Analyzer</a>, this capability is not yet available on many devices. An alternative approach for developers is to write some code that retrieves the logs remotely via whatever communication mechanisms are available to the DSP (often via an host microcontroller) and then display the log contents either on the developer's desktop or on a debug console attached to the equipment. To achieve this, it is necessary to understand how to access the log buffers and the format of the log records. This information is summarized below.
+</p><p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Contents_of_memory_address_.7Blog_name.7D.24buf"><span class="tocnumber">2</span> <span class="toctext">Contents of memory address {log name}$buf</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Record_format_on_28x_and_55x"><span class="tocnumber">3</span> <span class="toctext">Record format on 28x and 55x</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Decoding_example_for_C6x"><span class="tocnumber">4</span> <span class="toctext">Decoding example for C6x</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Decoding_BIOS_events"><span class="tocnumber">5</span> <span class="toctext">Decoding BIOS events</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When a LOG_printf() is executed from your target program, it is written into memory in such a way that the host can grab the entries and output them on the PC. The way the LOG_printf() information is stored is using LOG_Event's in a particular location in memory associated with the log that you’re printing to. This location can be found by taking your log name and concatenating a "$buf" to the end of it. For the trace log you would look for the location in memory associated with the following symbol: "trace$buf". One thing to note when looking at this information directly in memory is that it will be cleared by the RTA plug-in when it is read at run time as well as when it is read via stop mode (i.e., at a breakpoint). The memory location is then filled with 0xFFFF to signify that there is no relevant LOG_printf()&gt; data in memory at that location.
+</p>
+<h3><span id="Contents_of_memory_address_{log_name}$buf"></span><span class="mw-headline" id="Contents_of_memory_address_.7Blog_name.7D.24buf">Contents of memory address {log name}$buf</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=edit&amp;section=2" title="Edit section: Contents of memory address {log name}$buf">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Each four word LOG_Event has the following elements in each log buffer entry:
+</p>
+<ul><li><b>ADDR (first word):</b> SEQNUM – sequence number of the particular LOG_printf statement. This number starts at 2 and counts upwards by two (and this should be divided by two for sequential numbers).</li>
+<li><b>ADDR+1 (second word):</b> Arg0 – argument passed to LOG_printf to be used in conjunction with the format string</li>
+<li><b>ADDR+2 (third word):</b> Arg1 – argument passed to LOG_printf to be used in conjunction with the format string</li>
+<li><b>ADDR+3 (fourth word):</b> STRING – this is the format string address passed to LOG_printf. This string is stored in the .const/.printf sections of the COFF file. To read the string, take the address from the fourth word of the appropriate LOG_Event and read the string at that location in the COFF file up until the NULL character.</li></ul>
+<p>The number of LOG_Event entries in the {log name}$buf depends upon the configured size of that particular log buffer. If you wish to look this up, you can either reference your .tcf file (which you can also do using the GConf tool) or grep the COFF file symbol table for the {log name}$size symbol and check its value (for DSP/BIOS v5.10 or later). If you are using DSP/BIOS 4.90 or earlier you will need to look directly at the configuration with the GConf tool under the list of logs and reference the properties for the size field of the log in question.There are some exceptions to the above format. The 28x and 55x are slightly more complicated in terms of interpreting the LOG_Events. They generally stick to the above format but have minor variations based upon the addressing size and where the &lt;source lang="c"&gt;LOG_printf()&lt;/source&gt; came from (assembly or C).
+</p>
+<h3><span class="mw-headline" id="Record_format_on_28x_and_55x">Record format on 28x and 55x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=edit&amp;section=3" title="Edit section: Record format on 28x and 55x">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There are two main differences in the format of the records on 28x and 55x targets.
+</p><p>1. The records are still 16 bytes each, but the sequence number is only 16-bits instead of 32-bits. The format of a LOG_printf record on the 28x and 55x is as follows:
+</p>
+<dl><dd><ul><li>16-bit pad</li>
+<li>16-bit sequence number</li>
+<li>32-bit arg0</li>
+<li>32-bit arg1</li>
+<li>32-bit format address</li></ul></dd></dl>
+<p>2. The arguments may be "packed" into the space of arg0 and arg1. When the log record is written, the arguments are copied directly from the stack to the record. For example, if a Log_printf had two arguments, an integer (16-bits) and a pointer (32-bits), the record would have the following format:
+</p>
+<dl><dd><ul><li>16-bit pad</li>
+<li>16-bit sequence number</li>
+<li>16-bit arg0</li>
+<li>32-bit arg1</li>
+<li>16-bit empty</li>
+<li>32-bit format address</li></ul></dd></dl>
+<p>In order to decode the record correctly, you need to know the size of the arguments. This can be done generically by parsing the format string to determine the argument types.
+</p>
+<h3><span class="mw-headline" id="Decoding_example_for_C6x">Decoding example for C6x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=edit&amp;section=4" title="Edit section: Decoding example for C6x">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For illustration purposes we can show how a pseudo-C program on the host could decode a LOG record obtained from a C6000 DSP:
+&lt;syntaxhighlight lang='c'&gt;
+struct LOG_event {
+</p>
+<pre>   UInt32 seq;
+   UInt32 arg0;
+   UInt32 arg1;
+   UInt32 formatPtr;
+</pre>
+<p>};
+</p><p>struct LOG_event log;
+char chr;
+char format[];
+int i = 0;
+</p><p>/* ... copy current LOG entry into log ... */
+</p><p>do {
+</p>
+<pre>   chr = /* ... read a byte from address (log.formatPtr+i) in COFF file ... */;
+   format[i] = chr;
+   i++;
+</pre>
+<p>} while (chr&#160;!= '\0');
+</p><p>printf(format, log.arg0, log.arg1);
+&lt;/syntaxhighligh&gt;
+</p><p>The statements in `backticks` above are loosely specified because there are varied methods with which to accomplish those actions. For example, there are utilities (libraries) available with which to read COFF files.
+</p>
+<h3><span class="mw-headline" id="Decoding_BIOS_events">Decoding BIOS events</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=edit&amp;section=5" title="Edit section: Decoding BIOS events">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The BIOS events ("SWI: post", "TSK: ready", etc.) found in LOG_system$buf are decoded differently from the LOG_printf ones. The third argument is interpreted as an "event id" instead of the address of a string. There are 16 different event ids, that each have a hardcoded meaning.
+</p><p>Unfortunately, there is no tool available for decoding these events outside of CCS. The following excerpt of JavaScript code, however, may be useful as a reference in attempting to decode a BIOS event. Based on the event id, it constructs the formatted message using the other arguments.
+</p><p>Note: In this code, calls to "getNickName" APIs are used to try and retrieve a label for the object at the specified 'addr'. Be sure to add the DSP/BIOS repository to your package path so the "xdc.useModule()"
+functions will find the respective modules. Example: export XDCPATH=c:/ti/bios_5_41_10_06/packages
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+</p>
+<pre>   var TSK = xdc.useModule('ti.bios.rov.TSK');
+   var KNL = xdc.useModule('ti.bios.rov.KNL');
+   var LOG = xdc.useModule('ti.bios.rov.LOG');
+   var MBX = xdc.useModule('ti.bios.rov.MBX');
+   var MEM = xdc.useModule('ti.bios.rov.MEM');
+   var QUE = xdc.useModule('ti.bios.rov.QUE');
+   var ROV = xdc.useModule('ti.bios.rov.ROV');
+   var SEM = xdc.useModule('ti.bios.rov.SEM');
+   var SWI = xdc.useModule('ti.bios.rov.SWI');
+   var TSK = xdc.useModule('ti.bios.rov.TSK');
+</pre>
+<pre>   /* Decode the event based on rec.val3 */
+   switch (Number(rec.val3)) {
+</pre>
+<pre>       case 0:
+           /*
+            * _log.h: #define _LOG_PRDBEGIN    0   // handle = prd, arg0 = 0
+            * _VSM_systemFormats[_LOG_PRDBEGIN] = "PRD: begin&#160;%s (0x%04x)%s";
+            * example: "PRD: begin prdClock0 (0x13de8)"
+            *
+            * PRD doesn't have dynamic name.
+            */
+           var addr = Number(rec.val2);
+           var nickName = ROV.getNickName(ROV.getStaticName(addr), addr);
+           return("PRD: begin " + nickName);
+</pre>
+<pre>       case 1:
+           /*
+            * _log.h: #define _LOG_PRDEND    1   // handle = 0, arg0 = 0
+            * _VSM_systemFormats[_LOG_PRDEND]   = "PRD: end";
+            * example: "PRD: end"
+            */
+           return("PRD: end");
+</pre>
+<pre>       case 2:
+           /*
+            * _log.h: #define _LOG_SWIPOST    2   // handle = swi, arg0 = 0
+            * _VSM_systemFormats[_LOG_SWIPOST]  = "SWI: post &#160;%s (0x%04x)%s";
+            * example: "SWI: post PRD_swi (0x13a4c)"
+            */
+            var addr = Number(rec.val2);
+            return("SWI: post " + SWI.getNickName(addr));
+</pre>
+<pre>       case 3:
+           /*
+            * _log.h: #define _LOG_SWIBEGIN   3   // handle = swi, arg0 = 0
+            * _VSM_systemFormats[_LOG_SWIBEGIN] = "SWI: begin&#160;%s (0x%04x)%s";
+            * example:  SWI: begin KNL_swi (TSK scheduler) (0x13a20)
+            */
+           var handle = SWI.fxnToHandle(Number(rec.val2));
+           return("SWI: begin " + SWI.getNickName(handle));
+</pre>
+<pre>       case 4:
+           /*
+            * _log.h: #define _LOG_SWIEND   4   // handle = swi, arg0 = swi-&gt;lock
+            * _VSM_systemFormats[_LOG_SWIEND]   = "SWI: end  &#160;%s (0x%04x) state =&#160;%s";
+            * example: SWI: end   PRD_swi (0x13a4c) state = done
+            *
+            * From vsm.c:
+            *   elem-&gt;arg2 = (Arg)(event-&gt;asa.system.asa.thread.arg0 == 0&#160;? "still ready"&#160;: "done");
+            */
+           var handle = SWI.fxnToHandle(Number(rec.val2));
+           var state = (rec.val1 == 0)&#160;? "still ready"&#160;: "done";
+           return("SWI: end " + SWI.getNickName(handle) + " state = " + state);
+</pre>
+<pre>       case 5:
+           /*
+            * _log.h: #define _LOG_PRDTICK    5   // tick.high = PRD_D_timh, tick.low = PRD_D_timl
+            * _VSM_systemFormats[_LOG_PRDTICK]  = "PRD: tick count =&#160;%d (0x%08x)%s";
+            * example: PRD: tick count = 5 (0x00000005)
+            */
+           var tickCount;
+           /* 28x and 55x are 16-bit value in rec.val2 */
+           if ((ROV.getISA() == '55') || (ROV.getISA() == '28')) {
+               tickCount = Number(rec.val2);
+           }
+           /* 6x is 32-bit value in rec.val1 */
+           else {
+               tickCount = Number(rec.val1);
+           }
+           return("PRD: tick count = " + tickCount + " (" + countToHex(tickCount) + ")");
+</pre>
+<pre>       case 6:
+           /*
+            * _log.h: #define _LOG_CLKINT    6   // tick.high = CLK_R_timh, tick.low = CLK_R_timl
+            * _VSM_systemFormats[_LOG_CLKINT]   = "CLK: current time =&#160;%d (0x%08x)%s";
+            * example: CLK: current time = 6 (0x00000006)
+            */
+           var tickCount;
+           /* 28x and 55x are 16-bit value in rec.val2 */
+           if ((ROV.getISA() == '55') || (ROV.getISA() == '28')) {
+               tickCount = Number(rec.val2);
+           }
+           /* 6x is 32-bit value in rec.val1 */
+           else {
+               tickCount = Number(rec.val1);
+           }
+           return("CLK: current time = " + tickCount + " (" + countToHex(tickCount) + ")");
+</pre>
+<pre>       case 7:
+           /*
+            * This event does not appear to be implemented in BIOS 5.
+            * _log.h: #define _LOG_HWIBEGIN  7   // handle = hwi id, arg0 = 0
+            * _VSM_systemFormats[_LOG_HWIBEGIN] = "HWI: begin";
+            */
+           return("HWI: begin");
+</pre>
+<pre>       case 8:
+           /*
+            * _log.h: #define _LOG_USRMSG  8   // user message (format arg0)
+            * exmple:
+            */
+           var args = [Number(rec.val1)];
+           var msg = getMessage(rec.val2, args);
+           return(msg);
+</pre>
+<pre>       case 9:
+           /*
+            * _log.h: #define _LOG_USRERR  9   // user error (format arg0)
+            * example: SYS_error called: error id = 0x1
+            */
+           var args = [Number(rec.val1)];
+           var msg = getMessage(rec.val2, args);
+           return(msg);
+</pre>
+<pre>       case 10:
+           /*
+            * _log.h: #define _LOG_TSKBLOCKED  10  // handle = tsk, arg0 = 0
+            * _VSM_systemFormats[_LOG_TSKBLOCKED] = "TSK: blocked&#160;%s (0x%08x) on&#160;%s";
+            * example: TSK: blocked task1 (0x000137b0) on &lt;unknown handle&gt; SEM
+            */
+           var addr = Number(rec.val2)
+           return("TSK: blocked " + TSK.getNickName(addr));
+</pre>
+<pre>       case 11:
+           /*
+            * _log.h: #define _LOG_TSKDONE  11  // handle = tsk, arg0 = 0
+            * _VSM_systemFormats[_LOG_TSKDONE] = "TSK: terminated&#160;%s (0x%08x)%s";
+            * example: TSK: terminated task0 (0x0001170c)
+            */
+           var addr = Number(rec.val2);
+           return ("TSK: terminated " + TSK.getNickName(addr));
+</pre>
+<pre>       case 12:
+           /*
+            * _log.h: #define _LOG_TSKRUNNING  12  // handle = tsk, arg0 = 0
+            * _VSM_systemFormats[_LOG_TSKRUNNING] = "TSK: running&#160;%s (0x%08x)%s";
+            * example: TSK: running task1 (0x000137b0)
+            */
+           return("TSK: running " + TSK.getNickName(Number(rec.val2)));
+</pre>
+<pre>       case 13:
+           /*
+            * _log.h: #define _LOG_TSKREADY  13  // handle = tsk, arg0 = 0
+            * _VSM_systemFormats[_LOG_TSKREADY] = "TSK: ready&#160;%s (0x%08x)%s";
+            * example: TSK: ready task1 (0x000137b0)
+            */
+           return ("TSK: ready " + TSK.getNickName(Number(rec.val2)));
+</pre>
+<pre>       case 14:
+           /*
+            * _log.h: #define _LOG_SEMPOST  14  // handle = sem, arg0 = sem count
+            * _VSM_systemFormats[_LOG_SEMPOST] = "SEM: post&#160;%s (0x%04x) count =&#160;%d";
+            * example: SEM: post &lt;unknown handle&gt; (0x13dc8) count = 0
+            */
+           var addr = Number(rec.val2);
+           return ("SEM: post " + SEM.getNickName(addr));
+</pre>
+<pre>       case 15:
+           /*
+            * _log.h: #define _LOG_TSKYIELD  15  // handle = tsk, arg0 = 0
+            * _VSM_systemFormats[_LOG_TSKYIELD] = "TSK: yield&#160;%s (0x%08x)%s";
+            * example: TSK: yield task0 (0x0001170c)
+            */
+           var addr = Number(rec.val2);
+           return ("TSK: yield " + TSK.getNickName(addr));
+</pre>
+<pre>       case 16:
+           /*
+            * This event does not appear to be handled by VBD.
+            * _log.h: #define _LOG_PWRMRSRCCHNG  16  // arg0 = id, arg1 = 0(off) or 1(on)
+            * example:
+            */
+           var off = (rec.val2 == 0)&#160;? "off"&#160;: "on";
+           return ("PWRM: Source Change id: " + rec.val1 + " " + off);
+</pre>
+<pre>       default:
+           return ("Unknown event id " + rec.val3);
+   }
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130202313
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.028 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 19/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:818-0!canonical and timestamp 20201130202313 and revision id 181460
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Accessing DSP/BIOS Logs Without JTAG</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;oldid=181460">https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;oldid=181460</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="../Category_DSPBIOS.html" title="Category:DSPBIOS">DSPBIOS</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Accessing+DSP%2FBIOS+Logs+Without+JTAG" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="BIOS_Logs_Without_JTAG.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="../Talk_Accessing_DSP/BIOS_Logs_Without_JTAG.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="BIOS_Logs_Without_JTAG.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/Accessing_DSP/BIOS_Logs_Without_JTAG.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/Accessing_DSP/BIOS_Logs_Without_JTAG.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;oldid=181460" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Accessing_DSP/BIOS_Logs_Without_JTAG&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 July 2014, at 08:43.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.028","walltime":"0.029","ppvisitednodes":{"value":19,"limit":1000000},"ppgeneratednodes":{"value":24,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130202313","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":224});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Accessing_DSP/BIOS_Logs_Without_JTAG by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:09:22 GMT -->
+</html>

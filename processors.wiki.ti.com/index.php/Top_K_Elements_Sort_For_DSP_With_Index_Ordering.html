@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Top_K_Elements_Sort_For_DSP_With_Index_Ordering by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:32:19 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Top K Elements Sort For DSP With Index Ordering - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Top_K_Elements_Sort_For_DSP_With_Index_Ordering","wgTitle":"Top K Elements Sort For DSP With Index Ordering","wgCurRevisionId":182035,"wgRevisionId":182035,"wgArticleId":6796,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Top_K_Elements_Sort_For_DSP_With_Index_Ordering","wgRelevantArticleId":6796,"wgRequestId":"a452e0a47ffacc09e284da27","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Top_K_Elements_Sort_For_DSP_With_Index_Ordering rootpage-Top_K_Elements_Sort_For_DSP_With_Index_Ordering skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Top K Elements Sort For DSP With Index Ordering</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This implementation of the Quickselect with Index Ordering algorithm has been created as part of a short study on the optimization of sorting algorithms for Texas Instruments DSPs. If you have any suggestions for further optimizations please do not hesitate to give us feedback.
+</p><p>Refer to our study about <a href="Optimized_Sort_Algorithms_For_DSP.html" title="Optimized Sort Algorithms For DSP">Optimized Sort Algorithms For DSP</a> for some benchmark results and comparison with other sort algorithms.
+</p>
+<h1><span class="mw-headline" id="Top_K_Elements_Sort_with_Index_Ordering">Top K Elements Sort with Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;action=edit&amp;section=1" title="Edit section: Top K Elements Sort with Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The entry point for this code is the function:
+<code>void fast_top_k(SORT_KEY_TYPE * restrict keys, SORT_INDEX_TYPE * restrict indexes, int size, int k);</code>.
+</p><p>The top <code>k</code> elements of both <code>keys</code> and <code>indexes</code> arrays are sorted by decreasing values of the <code>keys</code> array. The remaining elements in both arrays are moved, and their order is most likely altered by the procedure.
+</p><p>This function can be used as a sort function when <code>k = size</code>.
+</p><p>This implementation supports the following features/optimizations compared to a basic Quicksort/Quickselect:
+</p>
+<ul><li>It supports "index ordering".</li>
+<li>It does implement a mechanism to improve performance in case a bad pivot selection is detected (using median of median approach as described on <a rel="nofollow" class="external free" href="http://en.wikipedia.org/wiki/Selection_algorithm#Linear_general_selection_algorithm_-_Median_of_Medians_algorithm">http://en.wikipedia.org/wiki/Selection_algorithm#Linear_general_selection_algorithm_-_Median_of_Medians_algorithm</a>). This prevents the algorithm from going into O(N^2) worst-case performance.</li>
+<li>When doing recursive calls, if the size of the sub-array to be sorted is &lt;= 4, then a simple inline sort function is used rather than further recursive calls. This change alone is responsible for significant improvements in performance vs simple quicksort implementation.</li>
+<li>It does implement an optimization that take advantage of the fact several of the items being sorted could have the same value. This will dramatically reduce the performance if a large number of elements in the array to be sorted have the same value, and it will have no negative performance impacts in other cases.</li>
+<li>It is faster on a DSP than a simple implementation of Quicksort because by using some scratch memory we are able to software pipepline efficiently the "partition" phase of the algorithm.</li></ul>
+<h2><span class="mw-headline" id="Source_Code">Source Code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;action=edit&amp;section=2" title="Edit section: Source Code">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>define SORT_INDEX_TYPE uint32_t</li>
+<li>define SORT_KEY_TYPE   int32_t</li>
+<li>define SORT_KEY_MIN INT32_MIN</li></ol>
+<p>inline int median_of_twenty_five(SORT_KEY_TYPE * restrict array, int left) {
+	int i, j = left;
+	SORT_KEY_TYPE i1, i2, i3, i4, i5;
+	int idx1, idx2, idx3, idx4, idx5;
+	int idx1_tmp, idx4_tmp, idx3_tmp;
+	SORT_KEY_TYPE i1_tmp, i3_tmp, i4_tmp;
+	SORT_KEY_TYPE medians[5];
+	int medians_idx[5];
+</p>
+<pre>   /* This function is used to find in an array of 25 elements an element that is fair
+      approximation of the median value of the array.  This algorithm guarantees that the
+      median returned has at least 30% of the elements smaller and at least 30% higher.
+      That is except of course when there are too many items with the same value in
+      the array, in which case this algorithm loses its "efficiency".  */
+</pre>
+<p>	for (i = 0; i&lt;5;i++) {
+		i1 = array[j]; idx1 = j++;
+		i2 = array[j]; idx2 = j++;
+		i3 = array[j]; idx3 = j++;
+		i4 = array[j]; idx4 = j++;
+		i5 = array[j]; idx5 = j++;
+		if (i1 &gt; i2) { i1_tmp = i1; i1 = i2; i2 = i1_tmp; idx1_tmp = idx1; idx1 = idx2; idx2 = idx1_tmp; }
+		if (i4 &gt; i5) { i4_tmp = i4; i4 = i5; i5 = i4_tmp; idx4_tmp = idx4; idx4 = idx5; idx5 = idx4_tmp; }
+		if (i2 &gt; i3) { i3_tmp = i3; i3 = i2; i2 = i3_tmp; idx3_tmp = idx3; idx3 = idx2; idx2 = idx3_tmp; }
+		if (i3 &gt; i4) { i3_tmp = i3; i3 = i4; i4 = i3_tmp; idx3_tmp = idx3; idx3 = idx4; idx4 = idx3_tmp; }
+		if (i2 &gt; i3) { i3_tmp = i3; i3 = i2; i2 = i3_tmp; idx3_tmp = idx3; idx3 = idx2; idx2 = idx3_tmp; }
+		medians[i] = i3;
+		medians_idx[i] = idx3;
+	}
+	j = 0;
+	i1 = medians[j]; idx1 = medians_idx[j++];
+	i2 = medians[j]; idx2 = medians_idx[j++];
+	i3 = medians[j]; idx3 = medians_idx[j++];
+	i4 = medians[j]; idx4 = medians_idx[j++];
+	i5 = medians[j]; idx5 = medians_idx[j++];
+	if (i1 &gt; i2) { i1_tmp = i1; i1 = i2; i2 = i1_tmp; idx1_tmp = idx1; idx1 = idx2; idx2 = idx1_tmp; }
+	if (i4 &gt; i5) { i4_tmp = i4; i4 = i5; i5 = i4_tmp; idx4_tmp = idx4; idx4 = idx5; idx5 = idx4_tmp; }
+	if (i2 &gt; i3) { i3_tmp = i3; i3 = i2; i2 = i3_tmp; idx3_tmp = idx3; idx3 = idx2; idx2 = idx3_tmp; }
+	if (i3 &gt; i4) { i3_tmp = i3; i3 = i4; i4 = i3_tmp; idx3_tmp = idx3; idx3 = idx4; idx4 = idx3_tmp; }
+	if (i2 &gt; i3) { i3_tmp = i3; i3 = i2; i2 = i3_tmp; idx3_tmp = idx3; idx3 = idx2; idx2 = idx3_tmp; }
+	return idx3;
+}
+</p><p><br />
+static uint32_t fast_partition(SORT_KEY_TYPE * restrict ping, SORT_KEY_TYPE * restrict pong, SORT_INDEX_TYPE * restrict iping, SORT_INDEX_TYPE * restrict ipong, int left, int right, int pivotIndex) {
+	 SORT_KEY_TYPE pivotValue = ping[pivotIndex];
+	 uint16_t storeIndex, i, rightIndex;
+	 uint16_t equalCount = 0;
+	 SORT_KEY_TYPE temp;
+	 SORT_INDEX_TYPE itemp;
+</p><p>	 /* This function is the heart of the quicksort algorithm, as it performs the partitioning of
+	    the array elements using the pivot it has been given.  */
+</p>
+<pre>    temp = ping[pivotIndex]; itemp = iping[pivotIndex];
+    ping[pivotIndex] = ping[right]; // Move pivot to end
+    iping[pivotIndex] = iping[right]; // Move pivot to end
+    ping[right] = temp; iping[right] = itemp;
+    storeIndex = left;
+    rightIndex = right;
+    #pragma MUST_ITERATE(1)
+    for(i=left;i&lt;right;i++) {
+    	if (ping[i] &gt; pivotValue) {
+    		pong[storeIndex] = ping[i];
+    		ipong[storeIndex++] = iping[i];
+    	} else {
+    		pong[rightIndex] = ping[i];
+    		ipong[rightIndex--] = iping[i];
+    	}
+    	/* Here we keep track of how many items of value equal to the pivot
+    	   are part of the data being partitioned.  Keeping track of this
+    	   "equalCount" allows us to implement an optimization for the case
+    	   several items have the same value.  */
+    	if (ping[i] == pivotValue) equalCount++;
+    }
+    pong[storeIndex] = ping[right];
+    ipong[storeIndex] = iping[right];
+    /* Copy pivotValue back into the ping buffer.  */
+    ping[storeIndex] = pong[storeIndex];
+    iping[storeIndex] = ipong[storeIndex];
+    /* The "equalCount" is packed in the return value along with the new pivotIndex.  */
+    return ((uint32_t)storeIndex | (uint32_t)equalCount &lt;&lt; 16);
+</pre>
+<p>}
+</p><p>inline void fast_small_sort(SORT_KEY_TYPE * restrict ping, SORT_KEY_TYPE * restrict pong, SORT_INDEX_TYPE * restrict iping, SORT_INDEX_TYPE * restrict ipong, int left, int right, int k, int depth) {
+	SORT_KEY_TYPE * restrict target;
+	SORT_INDEX_TYPE * restrict itarget;
+	SORT_KEY_TYPE i1, i2, i3, i4, i_temp;
+	SORT_INDEX_TYPE idx1, idx2, idx3, idx4, idx_temp;
+</p><p>	/* This function is called to sort small arrays of 4 or less elements.
+	   Using this function rather than letting the quicksort code recurse
+	   on arrays of size 4, 3 and 2 is leading to some noticeable
+	   performance gains.  */
+	if ((right == left) &amp;&amp; (depth &amp; 1)) {
+		pong[right] = ping[right];
+		ipong[right] = iping[right];
+		return;
+	}
+	if (depth &amp; 1) {
+		target = pong; itarget = ipong;
+	} else {
+		target = ping; itarget = iping;
+	}
+	switch(right - left + 1) {
+	case 2:
+		i1 = ping[left]; i2 = ping[right];
+		idx1 = iping[left]; idx2 = iping[right];
+		if (i1 &lt; i2) {
+			i_temp = i1; idx_temp = idx1;
+			i1 = i2; idx1 = idx2;
+			i2 = i_temp; idx2 = idx_temp;
+		}
+		target[left] = i1; target[right] = i2;
+		itarget[left] = idx1; itarget[right] = idx2;
+		break;
+	case 3:
+		i1 = ping[left]; i2 = ping[left+1]; i3 = ping[right];
+		idx1 = iping[left]; idx2 = iping[left+1]; idx3 = iping[right];
+		/* Sort the three entries.  */
+		if (i2 &gt; i1) {
+			i_temp = i1; idx_temp = idx1;
+			i1 = i2; idx1 = idx2;
+			i2 = i_temp; idx2 = idx_temp;
+		}
+		if (i3 &gt; i2) {
+			i_temp = i2; idx_temp = idx2;
+			i2 = i3; idx2 = idx3;
+			i3 = i_temp; idx3 = idx_temp;
+		}
+		if (i2 &gt; i1) {
+			i_temp = i1; idx_temp = idx1;
+			i1 = i2; idx1 = idx2;
+			i2 = i_temp; idx2 = idx_temp;
+		}
+		/* Write the output.  */
+		target[left] = i1; target[left+1] = i2; target[right] = i3;
+		itarget[left] = idx1; itarget[left+1] = idx2; itarget[right] = idx3;
+		break;
+	case 4:
+		i1 = ping[left]; i2 = ping[left+1]; i3 = ping[left+2]; i4 = ping[right];
+		idx1 = iping[left]; idx2 = iping[left+1]; idx3 = iping[left+2]; idx4 = iping[right];
+		/* Sort the four entries.  */
+		if (i2 &gt; i1) {
+			i_temp = i1; idx_temp = idx1;
+			i1 = i2; idx1 = idx2;
+			i2 = i_temp; idx2 = idx_temp;
+		}
+		if (i4 &gt; i3) {
+			i_temp = i4; idx_temp = idx4;
+			i4 = i3; idx4 = idx3;
+			i3 = i_temp; idx3 = idx_temp;
+		}
+		if (i3 &gt; i2) {
+			i_temp = i2; idx_temp = idx2;
+			i2 = i3; idx2 = idx3;
+			i3 = i_temp; idx3 = idx_temp;
+		}
+		if (i2 &gt; i1) {
+			i_temp = i1; idx_temp = idx1;
+			i1 = i2; idx1 = idx2;
+			i2 = i_temp; idx2 = idx_temp;
+		}
+		if (i4 &gt; i3) {
+			i_temp = i4; idx_temp = idx4;
+			i4 = i3; idx4 = idx3;
+			i3 = i_temp; idx3 = idx_temp;
+		}
+		if (i3 &gt; i2) {
+			i_temp = i2; idx_temp = idx2;
+			i2 = i3; idx2 = idx3;
+			i3 = i_temp; idx3 = idx_temp;
+		}
+		/* Write the output.  */
+		target[left] = i1; target[left+1] = i2; target[left+2] = i3;  target[right] = i4;
+		itarget[left] = idx1; itarget[left+1] = idx2; itarget[left+2] = idx3;  itarget[right] = idx4;
+		break;
+	}
+}
+</p><p>static uint32_t partition_same_values(SORT_KEY_TYPE * restrict keys, SORT_INDEX_TYPE * restrict values, SORT_KEY_TYPE * restrict orig_keys, SORT_INDEX_TYPE * restrict orig_values, SORT_KEY_TYPE pivotValue, int size) {
+	uint32_t storeIndex = 0, position;
+	SORT_KEY_TYPE * restrict l_keys = keys;
+	SORT_INDEX_TYPE * restrict l_values = values;
+</p><p>	/* This function is used whenever it has been detected that several items
+	   have the same value.  */
+	for(position = 0; position &lt; size; position++) {
+		if (keys[position] == pivotValue) {
+			SORT_KEY_TYPE key_tmp = l_keys[storeIndex];
+			SORT_INDEX_TYPE val_tmp = l_values[storeIndex];
+			orig_keys[storeIndex] = keys[position];
+			orig_values[storeIndex++] = values[position];
+			keys[position] = key_tmp;
+			values[position] = val_tmp;
+		}
+	}
+	return storeIndex;
+}
+</p><p>static void fast_top_k_aux(SORT_KEY_TYPE * restrict ping, SORT_KEY_TYPE * restrict pong, SORT_INDEX_TYPE * restrict iping, SORT_INDEX_TYPE * restrict ipong, int left, int right, int k, int depth, int alert) {
+	uint32_t pivotIndex, pivotNewIndex;
+	uint32_t equalCount;
+	int i, new_alert = alert;
+	SORT_KEY_TYPE pivotValue;
+</p><p>	/* Select a pivot index. */
+	if ((right - left) &gt; 25 &amp;&amp; alert) {
+		/* In case an alert has been previously raised we use a median-based
+		   pivot selection algorithm rather than just take the middle point.
+		   This is to avoid worst-case scenarios where bad pivots are selected
+		   one after the other.	 */
+		pivotIndex = median_of_twenty_five(ping, left);
+	} else {
+		/* If no alert has been raised, or if the number of items is now too small
+		   we just pick the middle of the array as the pivot.  */
+		pivotIndex = (left+right)/2;
+	}
+	pivotValue = ping[pivotIndex];
+	pivotNewIndex = fast_partition(ping, pong, iping, ipong, left, right, pivotIndex);
+	equalCount = (pivotNewIndex &amp; 0xffff0000) &gt;&gt; 16;
+	pivotNewIndex = (pivotNewIndex &amp; 0x0000ffff);
+	/* equalCount is the number of items that had the same value as the pivot during
+	   the partitioning.  */
+	if (equalCount &gt; 1) {
+		/* Take care of all the items that have the same value as the  pivot.  */
+	 	if (depth &amp; 1) {
+			partition_same_values(pong+pivotNewIndex+1, ipong+pivotNewIndex+1,
+										  pong+pivotNewIndex+1, ipong+pivotNewIndex+1,
+										  pivotValue, right - pivotNewIndex);
+	 	} else {
+			partition_same_values(pong+pivotNewIndex+1, ipong+pivotNewIndex+1,
+										  ping+pivotNewIndex+1, iping+pivotNewIndex+1,
+										  pivotValue, right - pivotNewIndex);
+	 	}
+	} else if ((right - left&gt;31)
+		&amp;&amp; ((6 * (pivotNewIndex - left)) &lt; (right - left)
+		|| (6 * (right - pivotNewIndex)) &lt; (right - left)) ) {
+		new_alert = 1;
+	}
+	/* Do a real quicksort on the first k entries.  */
+	if ((pivotNewIndex - left) &lt;= 4) {
+	    /* If there are 4 items or less to be sorted on the left of the new pivot then
+	       use an optimized small sort function.  */
+	 	fast_small_sort(pong, ping, ipong, iping, left, pivotNewIndex - 1, k, depth+1);
+	} else {
+	 	/* If there are more than 4 items to be sorted on the left of the new pivot then
+	 	   we recurse.  */
+	 	fast_top_k_aux(pong, ping, ipong, iping, left, pivotNewIndex - 1, k, depth+1, new_alert);
+	}
+	if (pivotNewIndex + equalCount &gt; k) {
+	 	/* Do nothing with the right-hand side if the new pivot is beyond the first k items.  */
+	 	if (depth &amp; 1) {
+	     	for (i=pivotNewIndex+equalCount+1;i&lt;=right;i++) {
+	     		/* If needed we copy the sorted values from the scratch memory to the original memory.  */
+				pong[i] = ping[i];
+				ipong[i] = iping[i];
+	     	}
+	 	}
+	} else {
+	 	/* Only keep recursing on the right-hand side if the pivot is on the left of the k-th items.  */
+	 	if ((right - pivotNewIndex - equalCount) &lt;= 4) {
+	        /* If there are 4 items or less to be sorted on the right of the new pivot then
+	           use an optimized small sort function.  */
+			fast_small_sort(pong, ping, ipong, iping, pivotNewIndex + equalCount + 1, right, k, depth+1);
+	 	} else {
+	  	 	/* If there are more than 4 items to be sorted on the right of the new pivot then
+	  	 	   we recurse.  */
+			fast_top_k_aux(pong, ping, ipong, iping, pivotNewIndex + equalCount + 1, right, k, depth+1, new_alert);
+	 	}
+	}
+}
+</p><p><br />
+</p>
+<ol><li>pragma DATA_ALIGN(scratch,64);</li></ol>
+<p>static SORT_KEY_TYPE scratch[2048]; /* Scratch memory used by the algorithm, this is NOT re-entrant. */
+void fast_top_k(SORT_KEY_TYPE * restrict keys, SORT_INDEX_TYPE * restrict indexes, int size, int k) {
+</p><p>	if (size &gt; 4) {
+		fast_top_k_aux(keys, scratch, indexes, (SORT_INDEX_TYPE *)(scratch+size), 0, size - 1, k, 0, 0 /* No alert for now.  */);
+	} else {
+		/* Use a simple fast sort algorithm for small arrays (size &lt;= 4).  */
+		fast_small_sort(keys, scratch, indexes, (SORT_INDEX_TYPE *)(scratch+size), 0, size - 1, k, 0);
+	}
+}
+&lt;/syntaxhighlight&gt;
+</p>
+<h1><span class="mw-headline" id="Optimized_Maximum_Search_function">Optimized Maximum Search function</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;action=edit&amp;section=3" title="Edit section: Optimized Maximum Search function">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The function
+<code>int find_max_position(SORT_KEY_TYPE * restrict array, int size);</code> return the index of the maximum value in an array <code>array</code> of size <code>size</code>.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+int find_max_position(SORT_KEY_TYPE * restrict array, int size) {
+	int i;
+	SORT_KEY_TYPE * restrict array1 = array;
+	SORT_KEY_TYPE * restrict array2 = array + size/4;
+	SORT_KEY_TYPE * restrict array3 = array + 2*(size/4);
+	SORT_KEY_TYPE * restrict array4 = array + 3*(size/4);
+	SORT_KEY_TYPE max1 = SORT_KEY_MIN, max2 = SORT_KEY_MIN, max3 = SORT_KEY_MIN, max4 = SORT_KEY_MIN;
+	int max_idx = 0, max1_idx = 0, max2_idx = 0, max3_idx = 0, max4_idx = 0;
+	/* Do 4 max searches in parallel.  */
+	for(i=0;i&lt;size/4;i++) {
+		if (array1[i] &gt; max1) {max1 = array1[i]; max1_idx = i;}
+		if (array2[i] &gt; max2) {max2 = array2[i]; max2_idx = i;}
+		if (array3[i] &gt; max3) {max3 = array3[i]; max3_idx = i;}
+		if (array4[i] &gt; max4) {max4 = array4[i]; max4_idx = i;}
+	}
+	/* These index calculations are moved out of the loop to keep the kernel small. */
+	max2_idx += size/4;
+	max3_idx += 2*(size/4);
+	max4_idx += 3*(size/4);
+	/* Find the max of the last 3-2-1 elements in the array.  */
+	switch (size &amp; 0x3) {
+	case 3:
+		if (array[size-3] &gt; max3) {max3 = array[size-3]; max3_idx = size-3;}
+	case 2:
+		if (array[size-2] &gt; max2) {max2 = array[size-2]; max2_idx = size-2;}
+	case 1:
+		if (array[size-1] &gt; max1) {max1 = array[size-1]; max1_idx = size-1;}
+	}
+	if (max1 &gt; max2) {max2 = max1; max2_idx = max1_idx;}
+	if (max3 &gt; max4) {max4 = max3; max4_idx = max3_idx;}
+	if (max2 &gt; max4) {
+		max_idx = max2_idx;
+	} else {
+		max_idx = max4_idx;
+	}
+	return max_idx;
+}
+</p><p>&lt;/syntaxhighlight&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130083136
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.028 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 16/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:6796-0!canonical and timestamp 20201130083136 and revision id 182035
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Top K Elements Sort For DSP With Index Ordering</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;oldid=182035">https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;oldid=182035</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Top+K+Elements+Sort+For+DSP+With+Index+Ordering" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Top_K_Elements_Sort_For_DSP_With_Index_Ordering.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Top_K_Elements_Sort_For_DSP_With_Index_Ordering.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Top_K_Elements_Sort_For_DSP_With_Index_Ordering.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Top_K_Elements_Sort_For_DSP_With_Index_Ordering.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;oldid=182035" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Top_K_Elements_Sort_For_DSP_With_Index_Ordering&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 21 July 2014, at 07:55.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.028","walltime":"0.029","ppvisitednodes":{"value":11,"limit":1000000},"ppgeneratednodes":{"value":16,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130083136","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":227});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Top_K_Elements_Sort_For_DSP_With_Index_Ordering by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:32:21 GMT -->
+</html>

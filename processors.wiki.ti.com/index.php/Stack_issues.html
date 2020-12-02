@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Stack_issues by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:33:18 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Stack issues - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Stack_issues","wgTitle":"Stack issues","wgCurRevisionId":181204,"wgRevisionId":181204,"wgArticleId":159,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["DVEVM","Codec Engine","DaVinci Debugging"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Stack_issues","wgRelevantArticleId":159,"wgRequestId":"efa908eb8df43fd43ebcbb6f","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Stack_issues rootpage-Stack_issues skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Stack issues</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This page is about problems and crashes that occur due to insufficient stack space in DSP server threads, and how to find them.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#One_solution"><span class="tocnumber">2</span> <span class="toctext">One solution</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Finding_out_dynamic_stack_usage"><span class="tocnumber">3</span> <span class="toctext">Finding out dynamic stack usage</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Changing_dynamic_stack_allocation"><span class="tocnumber">4</span> <span class="toctext">Changing dynamic stack allocation</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Finding_out_static_stack_usage"><span class="tocnumber">5</span> <span class="toctext">Finding out static stack usage</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Caveats_of_static_stack_usage"><span class="tocnumber">5.1</span> <span class="toctext">Caveats of static stack usage</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Indirect_calls"><span class="tocnumber">5.1.1</span> <span class="toctext">Indirect calls</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Far_calls"><span class="tocnumber">5.1.2</span> <span class="toctext">Far calls</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Libraries_built_with_-g"><span class="tocnumber">5.1.3</span> <span class="toctext">Libraries built with -g</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Stack_analysis_conclusions"><span class="tocnumber">6</span> <span class="toctext">Stack analysis conclusions</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#See_Also"><span class="tocnumber">7</span> <span class="toctext">See Also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A large portion of mysterious crashes occur due to stack overflows of codec threads running on the DSP. How do you know if your DSP threads have too little stack space?
+</p><p>Why is this important?  The value used in the <code>getStackSize()</code> Codec Engine method for a given codec is plugged into dynamic creation of a DSP/BIOS task (in SoC scenario) hence you'd better ensure its enough for the context of Codec Engine + algorithm processing method, else you'll get a nasty crash!
+</p>
+<h2><span class="mw-headline" id="One_solution">One solution</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=2" title="Edit section: One solution">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The easiest way to deal with stack space issues is: <b>Allocate plenty of stack space! Allocate way more than absolutely necessary -- perhaps 32K or more per thread, especially video and imaging.</b> All the stack memory is external, and only what is used is cached, so the only penalty for unnecessarily large stack sizes is wasting a few dozen K per codec instance (and those are few) of cheap external memory, for codecs that eat megabytes to process their data. The potential benefit is preventing a crash a few years down the road because an unusual input caused the codec to overflow.
+</p><p>You can often see 8K or 16K stack allocations, in order to save additional 32 or so K, for codecs that require 8MB of data for intermediate buffers.
+</p>
+<h2><span class="mw-headline" id="Finding_out_dynamic_stack_usage">Finding out dynamic stack usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=3" title="Edit section: Finding out dynamic stack usage">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Unless your application crashed (e.g. because they threads over-ran their stack!), CE's tracing facilities can display stack usage per remote alg thread, when the remote alg is deleted.
+</p><p><b>Note:</b>  The stack usage display only applies to remote algorithms.  Local algorithms use the stack of the calling thread, so applications will have to use OS primitives for their given OS (e.g. <code>TSK_stat()</code> on BIOS).
+</p><p>If using CE 2.00 or later, you can use the <a href="CE_DEBUG.html" title="CE DEBUG">CE_DEBUG</a> feature to enable all trace, then search the output for the string <b>stack</b>.
+</p><p>Here's an example session for CE 2.x:
+</p>
+<pre>root@146.252.161.13:~/r/ce-h18x# CE_DEBUG=2 ./app.out  | grep stack
+[DSP] @0,051,117tk: [+4 T:0x8fa463cc] OT - Thread_create &gt; name: "videnc_copy#0", pri:  -1, stack size:  1024, stack seg: 0
+[DSP] @0,065,397tk: [+4 T:0x8fa463cc] OT - Thread_create &gt; name: "viddec_copy#1", pri:  -1, stack size:  1024, stack seg: 0
+@0,641,660us: [+5 T:0x4003a6d8] CE - Engine_deleteNode(0x3f998): algName = videnc_copy, algHandle = 0x8fa47398, stack size = 1024, stack used = 731(72%)
+@0,644,959us: [+5 T:0x4003a6d8] CE - Engine_deleteNode(0x3fae0): algName = viddec_copy, algHandle = 0x8fa47ce0, stack size = 1024, stack used = 739(73%)
+</pre>
+<p>And here's similar output for CE 3.x (note the trace formatting is slightly different, but the information is the same):
+</p>
+<pre>root@arago:/tmp# CE_DEBUG=2 ./app_remote.xv5T -m omap3530_memmap.txt  | grep stack
+[t=0x000be6fd] [tid=0x4001e9a0] ti.sdo.ce.Engine: Engine_deleteNode(0xd5d58): algName = universal_copy, algHandle = 0x8788f598, stack size = 4096, stack used = 2028(50%)
+</pre>
+<h2><span class="mw-headline" id="Changing_dynamic_stack_allocation">Changing dynamic stack allocation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=4" title="Edit section: Changing dynamic stack allocation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Set the <code>.stackSize</code> field to the desired value of each algorithm thread listed, as well as for the system thread, that calls, in its own context, each algorithm's <code>create()</code> function. Example:
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+Server.algs = [
+</p>
+<pre>   {
+       name: "h264enc",
+       mod: H264ENC,
+       groupId: 0,
+       threadAttrs: {
+           stackSize:  65536,  // stack size for each instance of this codec
+           stackMemId: 0,
+           priority: Server.MINPRI + 1
+       }
+   },
+   {
+       name: "h264dec",
+       mod: H264DEC,
+       groupId: 1,
+       threadAttrs: {
+           stackSize:  65536,  // stack size for each instance of this codec
+           stackMemId: 0,
+           priority: Server.MINPRI + 1
+       }
+   },
+</pre>
+<p>];
+</p><p>// stack size for the system thread, used to create/delete codecs, as well as
+// handle general Server API requests like 'getCpuLoad()'
+Server.threadAttrs.stackSize = 65536;
+&lt;/syntaxhighlight&gt;
+</p><p>This setting will override the default that the algorithm suggests (via the <code>getStackSize()</code> fxn in its codec package), so make sure you're allocating more than the algorithm thinks it needs, not less.
+</p><p>One way to find out what the default allocations are is to look at the generated <a href="Configuring_Codec_Engine_in_Arm_apps_with_createFromServer.html#Finding_out_what.27s_in_the_DSP_server_combo" title="Configuring Codec Engine in Arm apps with createFromServer">Server Data Sheet</a> HTML file located in the Server's <b>package/info</b> directory.
+</p>
+<h2><span class="mw-headline" id="Finding_out_static_stack_usage">Finding out static stack usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=5" title="Edit section: Finding out static stack usage">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>What's the problem with just using dynamic stack usage? It comes down to the call graph. A static call graph is constructed via some static analysis of the code.  In particular, the code is not executed.  A static call graph shows all the possible calls that could occur.  A dynamic call graph is constructed via information gathered when the code executes.  A dynamic call graph shows which calls actually do occur.
+</p><p>Dynamic call graphs are very accurate, but only for the code which actually executes.  There is no guarantee that, even with worst case input, the functions that use the most stack get called.
+</p><p>Generally speaking, a static call graph shows all the possible calls, and thus is a better choice for exploring system limits than a dynamic call graph.  Always understand the accuracy constraints of the static call graph tool you are using, and the impact those constraints have on measurement of system limits.  This topic demonstrates also outlines such limitations.
+</p><p>The TI supplied <a rel="nofollow" class="external text" href="https://www-a.ti.com/downloads/sds_support/applications_packages/cg_xml/index.htm">cg_xml</a> utility package performs processing of XML files that can be generated by TI Codegen tools.  Several tools are in the package.  The executable call_graph builds a static call graph.
+</p>
+<pre>C:\dir&gt;ofd6x -x -g ex.out | call_graph
+Reading from stdin ...
+Call Graph for ex.out
+****************************************************
+_c_int00&#160;: wcs = 1240
+|  __args_main&#160;: wcs = 1240
+|  |  _main&#160;: wcs = 1232
+|  |  |  _cond_is_false&#160;: wcs = 1216
+|  |  |  |  _output&#160;: wcs = 1208
+|  |  |  |  |  _printf&#160;: wcs = 1176
+|  |  |  |  |  |  __printfi&#160;: wcs = 1160
+|  |  |  |  |  |  |  __pproc_fflags&#160;: wcs = 0
+|  |  |  |  |  |  |  __pproc_fwp&#160;: wcs = 40
+|  |  |  |  |  |  |  |  _atoi&#160;: wcs = 0
+. . .
+</pre>
+<p>Note wcs stands for worst case stack, the total amount of stack needed at that point in the call graph.
+</p><p>The cg_xml package is available for Windows and Linux x86 systems.  It comes wrapped in a GUI installer, and requires clicking a license agreement.
+</p><p>The executable call_graph is implemented in Perl, and full source code is located in the directory install_root/ofd, where install_root is the location where cg_xml is installed.  The binary executables are located in install_root/bin.  Executing call_graph does not require the system to have Perl installed.  Note that running call_graph does add some files to the system temporary directory.
+</p><p>The input for call_graph is an XML file representation of the system executable.  Create that XML file with the Object File Display (OFD) utility.  OFD is a component of the TI Code Generation Tools.  Examples include ofd6x from the C6000 toolset, and ofd470 from the ARM toolset.
+</p><p>In some cases the XML file size can be very large, 200 MB or more, which causes call_graph to run very slowly.  The solution is to use OFD options which reduce the XML size.    The documentation for call_graph has all the details.  For the example above, the best options to use are:
+</p>
+<pre>-xg --xml_indent=0 --obj_display=none,header,optheader,symbols --dwarf_display=none,dinfo
+</pre>
+<p>How does call_graph work?  It processes the debug information. The same debug information created by the compiler, and used by the debugger when you set breakpoints, look at variables, etc.  The debug information is in <a rel="nofollow" class="external text" href="http://dwarfstd.org/">Dwarf</a> format.
+</p><p>call_graph can analyze a library and show the maximum amount of stack it may use.
+</p>
+<pre>C:\dir&gt;call_graph --stack_max rts6400.xml
+_strftime&#160;: wcs = 1248
+</pre>
+<p>Hence codec producers can use the --stack_max option to determine what to plug into the CE-required <code>getStackSize()</code> method (set in the codec package's &lt;MODULE&gt;.xs file).  Note that this the what the <a href="RTSC_Codec_And_Server_Package_Wizards.html" title="RTSC Codec And Server Package Wizards"> RTSC Codec Packaging Wizard</a> does behind the scenes.
+</p><p>Note that the <a href="QualiTI_XDAIS_Compliance_Tool.html" class="mw-redirect" title="QualiTI XDAIS Compliance Tool">QualiTI XDAIS Compliance Tool</a> runs this exact sequence to report the stack size.
+</p>
+<h3><span class="mw-headline" id="Caveats_of_static_stack_usage">Caveats of static stack usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=6" title="Edit section: Caveats of static stack usage">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Indirect_calls">Indirect calls</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=7" title="Edit section: Indirect calls">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Most functions calls are direct calls to a function with a specific name.  Sometimes, the address of the function being called is passed in as a parameter, or looked up in a table.  Such calls are termed indirect calls.
+</p><p>Indirect calls are difficult to handle when generating a static call graph.  In practice, any given indirect call actually calls only a small number of functions.  However, static analysis generally cannot find those functions.
+</p><p>When call_graph finds a function that makes an indirect call, it notes that fact in the output.  You can supply configuration files which list out, for that parent function which makes the indirect call, all the child functions it possibly calls.
+</p><p>For example, the compiler runtime support library code makes indirect function calls. The configuration files ti_rts_indirect.txt, c60_rts_indirect.txt, arm_rts_indirect.txt, and c55_rts_indirect.txt supply information for these indirect function calls. The file ti_rts_indirect.txt supplies information that is common across those different RTS libs. For full correctness, it must be used in combination with a target specific file. For example ...
+</p>
+<pre>   call_graph -i=ti_rts_indirect.txt -i=c60_rts_indirect.txt c60_app.xml
+</pre>
+<p>These files also serve as examples of how you can write your own such configuration files.
+</p><p>Note dynamic call graphs do not have this problem.  Because dynamic call graphs get their information based on actual execution, it is trivial to follow an indirect call to the function actually called.
+</p>
+<h4><span class="mw-headline" id="Far_calls">Far calls</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=8" title="Edit section: Far calls">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Unfortunately code built with CGT 6.0.x does not distinguish between near .v. far .v. indirect calls in the generated Dwarf information. Hence if you build your library with <tt>-ml3</tt> then call_graph will treat is as an indirect call. The end stack size may then be too small because we dont see the true call tree. call_graph attempts to detect if the stack size is too small and emits a warning: -
+</p>
+<pre>The function which uses the most stack also makes no direct function calls.
+  The max stack size is almost certainly too low.  Please view the online
+  documentation with the command 'perldoc call_graph.pl' for possible
+  explanations.
+  _DMJPGE_dspRun&#160;: wcs = 272
+</pre>
+<p><b>The best solution to this problem is to not use -ml3 or far calls in your c6x library</b>. -ml3 has been deprecated since 2005. Instead rely on linker trampolines to patch up the reach between functions that are further away than the 21 bit near addressing mode. 99 times out of 100 this should yield better performance than making everything far because there are typically relatively few trampolines in comparison to total function calls in large algorithms.
+</p><p>FYI this issue is fixed in CGT 6.1.x. The script will automatically do the right thing - you wont need an updated script.
+</p>
+<h4><span class="mw-headline" id="Libraries_built_with_-g">Libraries built with -g</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=9" title="Edit section: Libraries built with -g">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The script determines the amount of stack used by one function from the Dwarf attribute DW_AT_frame_base. This attribute is output by the compiler in default builds, but not when building for debug with -g. The call graph will be accurate but not the stack usage.
+</p><p>Most codec vendors release production libraries without -g since it drastically inhibits optimization - so typically this limitation is not a problem.
+</p>
+<h2><span class="mw-headline" id="Stack_analysis_conclusions">Stack analysis conclusions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=10" title="Edit section: Stack analysis conclusions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>As indicated initially be generous with stack size. We've never seen an algorithm use &gt; 32K so this may be a reasonable cap.</li>
+<li>At the same time, one downside of <i>too</i> large a stack maybe inflexibility in DSP-only systems e.g. the same codec package is often reused for DM6446, DM648, DM6437 - in the latter 2 cases you may want a smaller stack size so it can be placed in internal memory.</li>
+<li>Employ both dynamic &amp; static stack analysis. Be aware of the caveats in each method.</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit&amp;section=11" title="Edit section: See Also">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>The <a href="DSP_BIOS_FAQ.html#Q:_Useful_Tips_on_Stack_Overflow" title="DSP BIOS FAQ">BIOS FAQ</a> has additional stack debugging details</li>
+<li>The <a href="DSP_BIOS_Debugging_Tips.html#Cause:_Stack_overflow" title="DSP BIOS Debugging Tips">BIOS Debugging Tips</a> article describes techniques for identifying stack overflows</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201020752
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.030 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 106/1000000
+Preprocessor generated node count: 188/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1959/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:159-0!canonical and timestamp 20201201020752 and revision id 181204
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Stack issues</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Stack issues</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Stack issues</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Stack issues</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Stack issues</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Stack issues</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Stack issues</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Stack issues</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Stack issues</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;oldid=181204">https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;oldid=181204</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_DVEVM.html" title="Category:DVEVM">DVEVM</a></li><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li><li><a href="Category_DaVinci_Debugging.html" title="Category:DaVinci Debugging">DaVinci Debugging</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Stack+issues" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Stack_issues.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Stack_issues&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Stack_issues.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Stack_issues.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Stack_issues.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;oldid=181204" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Stack_issues&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 July 2014, at 13:09.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.030","walltime":"0.031","ppvisitednodes":{"value":106,"limit":1000000},"ppgeneratednodes":{"value":188,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1959,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201020752","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":226});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Stack_issues by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:33:20 GMT -->
+</html>

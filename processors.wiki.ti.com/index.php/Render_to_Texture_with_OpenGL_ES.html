@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Render_to_Texture_with_OpenGL_ES by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:51:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Render to Texture with OpenGL ES - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Render_to_Texture_with_OpenGL_ES","wgTitle":"Render to Texture with OpenGL ES","wgCurRevisionId":164639,"wgRevisionId":164639,"wgArticleId":3595,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["OMAP35x","OpenGL ES"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Render_to_Texture_with_OpenGL_ES","wgRelevantArticleId":3595,"wgRequestId":"e162e6a955248c233bc157b8","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Render_to_Texture_with_OpenGL_ES rootpage-Render_to_Texture_with_OpenGL_ES skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Render to Texture with OpenGL ES</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#First.2C_Some_Terms"><span class="tocnumber">2</span> <span class="toctext">First, Some Terms</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Dimensions"><span class="tocnumber">2.1</span> <span class="toctext">Dimensions</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Color_Depth"><span class="tocnumber">2.2</span> <span class="toctext">Color Depth</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Color_Format"><span class="tocnumber">2.3</span> <span class="toctext">Color Format</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Color_Space"><span class="tocnumber">2.4</span> <span class="toctext">Color Space</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Stride"><span class="tocnumber">2.5</span> <span class="toctext">Stride</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Contiguous"><span class="tocnumber">2.6</span> <span class="toctext">Contiguous</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Cached"><span class="tocnumber">2.7</span> <span class="toctext">Cached</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Twiddling"><span class="tocnumber">2.8</span> <span class="toctext">Twiddling</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Compression"><span class="tocnumber">2.9</span> <span class="toctext">Compression</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#MipMaps"><span class="tocnumber">2.10</span> <span class="toctext">MipMaps</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Allocator"><span class="tocnumber">2.11</span> <span class="toctext">Allocator</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#The_Framebuffer"><span class="tocnumber">3</span> <span class="toctext">The Framebuffer</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Three_framebuffer_configurations_supported_under_Linux_for_the_Null_window_system"><span class="tocnumber">3.1</span> <span class="toctext">Three framebuffer configurations supported under Linux for the Null window system</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Texture_Mapping"><span class="tocnumber">4</span> <span class="toctext">Texture Mapping</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#Texture_Map_formats_defined_by_the_OpenGL_ES_standards"><span class="tocnumber">4.1</span> <span class="toctext">Texture Map formats defined by the OpenGL ES standards</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Additional_Texture_Map_formats_defined_by_extensions"><span class="tocnumber">4.2</span> <span class="toctext">Additional Texture Map formats defined by extensions</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Compressed_Texture_Map_formats_defined_by_extensions_.28for_static_textures.29"><span class="tocnumber">4.3</span> <span class="toctext">Compressed Texture Map formats defined by extensions (for static textures)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Essential_functions_in_OpenGL_ES_1.1_and_2.0_to_create_and_configure_texture_maps"><span class="tocnumber">4.4</span> <span class="toctext">Essential functions in OpenGL ES 1.1 and 2.0 to create and configure texture maps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Render_To_Texture"><span class="tocnumber">5</span> <span class="toctext">Render To Texture</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#The_most_common_applications_for_Rendering_to_a_Texture"><span class="tocnumber">5.1</span> <span class="toctext">The most common applications for Rendering to a Texture</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Supplied_versions_of_the_Render_to_Texture_demonstration_program"><span class="tocnumber">5.2</span> <span class="toctext">Supplied versions of the Render to Texture demonstration program</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Render_to_Texture_Demonstration_Program_Screen_Capture"><span class="tocnumber">5.3</span> <span class="toctext">Render to Texture Demonstration Program Screen Capture</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#PixelBuffers"><span class="tocnumber">6</span> <span class="toctext">PixelBuffers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-26"><a href="#Essential_EGL_functions_to_create_and_use_a_pixelbuffer"><span class="tocnumber">6.1</span> <span class="toctext">Essential EGL functions to create and use a pixelbuffer</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-27"><a href="#Pixelbuffer_Demonstration_Program"><span class="tocnumber">7</span> <span class="toctext">Pixelbuffer Demonstration Program</span></a></li>
+<li class="toclevel-1 tocsection-28"><a href="#Frame_Buffer_Objects"><span class="tocnumber">8</span> <span class="toctext">Frame Buffer Objects</span></a>
+<ul>
+<li class="toclevel-2 tocsection-29"><a href="#Essential_OpenGL_ES_functions_to_create_and_use_FBOs_and_RBOs"><span class="tocnumber">8.1</span> <span class="toctext">Essential OpenGL ES functions to create and use FBOs and RBOs</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-30"><a href="#FBO_Demonstration_Program"><span class="tocnumber">9</span> <span class="toctext">FBO Demonstration Program</span></a>
+<ul>
+<li class="toclevel-2 tocsection-31"><a href="#Parameters_to_glFramebufferTexture2D.28.29"><span class="tocnumber">9.1</span> <span class="toctext">Parameters to glFramebufferTexture2D()</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-32"><a href="#Pixmaps"><span class="tocnumber">10</span> <span class="toctext">Pixmaps</span></a></li>
+<li class="toclevel-1 tocsection-33"><a href="#References"><span class="tocnumber">11</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Graphics SDK (with the associated drivers) for the PowerVR SGX graphics core on OMAP35x supports several methods for sharing 2D images between OpenGL ES 1.1, 2.0, OpenVG and native OS windowing systems.  The terminology and use of these various approaches for the SGX is difficult to discern from the standard documents that define them because industry standard API's are quite complicated and there are many factors in their application that can affect performance.
+</p><p>Those that are new to OpenGL ES might think that PixelBuffers, Texture Maps, Pixmaps and/or Frame Buffer Objects are interchangeable or compatible, but that is generally not true.  These constructs have been defined over time as OpenGL has evolved and their intended uses and level of support on the SGX differ significantly. It is highly recommended to read through the various specifications at <a rel="nofollow" class="external autonumber" href="http://www.khronos.org/">[1]</a>
+</p><p>Implementations of OpenGL for desktop systems are typically more forgiving about how applications are implemented, but in the embedded world it is especially important to choose the right constructs for the intended application due to the limits inherit in any embedded system.  In particular, the need to convert an image stored in one format to another by copying its contents should be avoided because that can place an unnecessary burden on the limited bandwidth of the memory interface and the host processor.
+</p><p>This paper attempts to introduce applications developers using OMAP35x to the various methods of sharing rendered images with OpenGL ES so that the best approach can be chosen for any given application.  This paper is only an introduction and is not intended to be comprehensive.  Particular focus is given to the methods of accomplishing Rendering to a Texture and Texture Streaming applications on the OMAP35x platform.  Some familiarity with OpenGL ES is assumed and the appropriate Khronos standard documents should be used as the definitive references.
+</p>
+<h2><span id="First,_Some_Terms"></span><span class="mw-headline" id="First.2C_Some_Terms">First, Some Terms</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=2" title="Edit section: First, Some Terms">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>What makes a buffer a buffer?  In the world of OpenGL ES, a lot more information is needed than just the address and size of a buffer.  Here is a summary of other important attributes for buffers used to store images:
+</p>
+<h3><span class="mw-headline" id="Dimensions">Dimensions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=3" title="Edit section: Dimensions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The size of the image in pixels in the horizontal and vertical directions.  Images are always stored in rectangular shapes, so every horizontal line of pixels in a given image will have the same length.  If an image will be used for texture mapping, it is best for its horizontal and vertical sizes to be powers of two.  OpenGL ES 1.1 requires this, but OpenGL ES 2.0 does not.  Even though 2.0 allows non-power of two sizes (often referred to as NPOT), in certain situations, SGX may perform better with textures that do have power of two dimensions and this is related to how the texture is stored and accessed (see the section on Twiddling below).  Therefore, most applications round up texture sizes to the closest power of two and either stretch the image or allow the extra pixels to remain a background or border color.  Note that it’s fine for the horizontal and vertical dimensions to be different powers of two (non-square), but then the texture may be rendered with better quality in the direction of the larger dimension.  The maximum dimensions for any texture on the SGX on OMAP3 is 2048 x 2048 (this changes on certain OMAP4 models and beyond).
+</p>
+<h3><span class="mw-headline" id="Color_Depth">Color Depth</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=4" title="Edit section: Color Depth">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The number of bits used to encode each pixel of the image.  For OpenGL ES, this is usually 16, 24 or 32.
+</p>
+<h3><span class="mw-headline" id="Color_Format">Color Format</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=5" title="Edit section: Color Format">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The ordering and precisions of the Red, Green, Blue and Alpha components of the pixels of the image.  On the PowerVR architecture, this is usually, RGB565 (16 bits), RGB888 (24 bits) or ARGB8888 (32 bits).
+</p>
+<h3><span class="mw-headline" id="Color_Space">Color Space</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=6" title="Edit section: Color Space">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>OpenGL ES and OpenVG only directly support the RGB (Red, Green, Blue) color space.  However, video/camera systems typically produce images in the YCrCb color space, so sharing images between those systems and OpenGL ES requires converting the color space of every pixel in the image.  This is an expensive operation, but there are extensions to OpenGL ES to allow color space conversion (YCrCb to RGB) to be performed on the SGX.  The OMAP35x Display Subsystem also has dedicated logic for doing color space conversions.
+</p>
+<h3><span class="mw-headline" id="Stride">Stride</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=7" title="Edit section: Stride">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Images are often stored in buffers that were originally allocated to hold larger images.  Therefore the lines of the current image may not be continuous such that each line immediately succeeds its predecessor.  In other words, there may be unused words of memory at the end of each line which must be skipped when copying the image.  The stride is defined as the count of bytes that must be added to the address of the start of a line to address the start of the next line in the same image.  Sometimes strides are expressed in pixels instead of bytes, in which case the color depth of the image must be taken into account.
+</p><p>Display and rendering hardware often impose strict requirements on the stride of image buffers. 
+For example, the SGX 1.0.3 core in OMAP35x ES2.x devices requires a minimum stride of 32 pixels and the stride must also be a multiple of 32 pixels.  However, the newer SGX 1.2.1 core in the ES3.x devices only requires that the stride be a multiple of 8 pixels and have a minimum of 8 pixels.
+</p><p>Another example of a required stride is with the OMAP35x Display Subsystem.  It has the ability to display images rotated on 90 degree increments, but only if the displayed image buffer has a stride of 2048 pixels.
+</p>
+<h3><span class="mw-headline" id="Contiguous">Contiguous</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=8" title="Edit section: Contiguous">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>An image which is stored continuously in physical memory, without gaps.  The SGX can only render into a contiguous image buffer and the OMAP35x display subsystem can only display images from  contiguous buffers, however, they do handle strided images provided the strides are in the required ranges.
+</p>
+<h3><span class="mw-headline" id="Cached">Cached</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=9" title="Edit section: Cached">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>An image which is stored in a region in DDR memory which is being cached by the ARM processor’s data cache.   This is determined by the configuration of the ARM’s  MMU which is controlled by the OS that allocated the buffer in question.
+</p><p>Buffers which will be shared between the ARM and the SGX are usually not cached.  In some situations it may be possible to increase performance by using a cached buffer instead, but this requires the application to clean and invalidate the proper cache lines at very specific times that may be difficult to determine.
+</p>
+<h3><span class="mw-headline" id="Twiddling">Twiddling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=10" title="Edit section: Twiddling">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Accessing DDR memory sequentially is faster than accessing it randomly and reading a stored image in a horizontal direction usually corresponds to sequential access, but reading the same image vertically usually requires random access (or large steps in the address).  This would make the time required to read an image from DDR for texture mapping dependent upon the orientation of the viewport from the geometry.  Therefore, the OpenGL ES drivers for the SGX typically prepare images that will be used for texture mapping by rearranging their contents so that horizontal and vertical accesses will have more consistent and deterministic performance.  This process is called Twiddling and it is applied by default to all OpenGL ES texture maps for the SGX.  However, since the SGX has a deferred rendering architecture, twiddling is typically deferred until textures are actually used.  Beginning with the 1.3 DDK, twiddling is now performed by the SGX using its transfer queue, rather than by the ARM.  This is a performance enhancement that can be disabled by placing the string “DisableHWTextureUpload=1” in the powervr.ini file, which can be useful for debugging.
+</p>
+<h3><span class="mw-headline" id="Compression">Compression</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=11" title="Edit section: Compression">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Images that will be used for texture mapping in OpenGL ES are usually compressed with an algorithm that is proprietary to the PowerVR architecture named PVRTC.  This is an asymmetrical compression algorithm meaning that it is much more compute intensive to compress an image than to decompress the same image.  In fact, since the SGX has dedicated logic to decompress the PVRTC format, it is effectively free and should always be used for static images because it reduces the burden on the OMAP35x DDR memory system. Utilities are provided in the Graphics SDK to do the PVRTC compression for static images, on a workstation, when an application is compiled.
+</p><p>However, if the image for a texture map is to be dynamically updated for every frame, compression can not be used because the cost of doing it on the target OMAP35x device would be too great.
+</p>
+<h3><span class="mw-headline" id="MipMaps">MipMaps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=12" title="Edit section: MipMaps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When an image will be used for texture mapping, it is recommended that MipMaps be supplied also.  MipMaps are copies of the texture image which have been scaled down and filtered in advance.  OpenGL ES will automatically select the best MipMap from this set of images for the target geometry whenever the texture map is applied.   MipMaps enable OpenGL ES to maintain higher quality rendering results when the textures will be viewed across a wide range of down-scaled factors.  MipMaps can be generated at compile time or run time, but they are intended for static images.
+</p><p>If the image for a texture map is to be dynamically updated for every frame, the cost of regenerating the MipMaps for every frame is probably too great and may have no value anyway if the texture image is not down-scaled across a range of factors.  That is controlled by how the application animates the motion of the model and/or the viewport in 3D space.
+</p>
+<h3><span class="mw-headline" id="Allocator">Allocator</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=13" title="Edit section: Allocator">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>OpenGL ES and OpenVG rely upon the EGL driver to supply the framebuffer, pixelbuffers and pixmaps.  Since any EGL driver is implemented for a specific OS, it depends upon that underlying OS to provide these allocations.  Knowing the allocator of a buffer can help determine the other attributes of the buffer and ultimately its compatibility for a particular application.
+</p>
+<h2><span class="mw-headline" id="The_Framebuffer">The Framebuffer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=14" title="Edit section: The Framebuffer">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The most familiar buffer is what the SGX renders into by default, for display, but it’s known by several names and it’s usually not a single buffer.  Books on OpenGL call this the Color Buffer.  The EGL document calls it an on-screen rendering surface.  A more precise name is the window system provided framebuffer.  This ambiguity in nomenclature comes from the fact that OpenGL was designed to be OS and platform independent, but displaying a graphics buffer is always a very OS and platform dependent activity.
+</p><p>On the OMAP35x platform, the framebuffer is always allocated by an EGL driver, either under Windows or Linux, and the EGL driver can be configured to use a single framebuffer or 2 or 3 (or more) framebuffers.  Using 2 or more buffers improves the quality of the displayed graphics because one buffer can be written by the SGX while another buffer is being read by the DSS for display.  The buffer that is currently being read by the DSS is called the Front Buffer.  If a second buffer has been allocated, it is called a Back Buffer and the SGX will render to it, instead of the front buffer.  Typically, the front and back buffer assignments are swapped at the completion of each frame to prevent the need to copy buffer contents and/or maintain synchronization with the DSS video system.
+</p><p>If the application chooses to swap the front and back buffers synchronously at the display frame rate (usually 60 Hz) and the application can always complete the rendering of each frame within that available time, then 2 buffers are sufficient.  However, in most applications, the time to render frames varies greatly depending upon the complexity of the current scene and this can make it impossible to guarantee that rendering is completed for every frame in the available time.  In this case, it is useful to allocate additional back buffers to allow the rendering to run asynchronous to the display.  This is called a flip chain of back buffers.
+</p>
+<h4><span class="mw-headline" id="Three_framebuffer_configurations_supported_under_Linux_for_the_Null_window_system">Three framebuffer configurations supported under Linux for the Null window system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=15" title="Edit section: Three framebuffer configurations supported under Linux for the Null window system">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>pvr2d front - The SGX renders directly to a single buffer which is always displayed.</li>
+<li>pvr2d blit - The SGX renders to a back buffer and copies each frame to a displayed buffer.</li>
+<li>pvr2d flip - Multiple render buffers are used and each is displayed successively.</li></ul>
+<p>Obviously, the term “framebuffer” is a vague misnomer, but it serves as a useful name for whatever set of buffers the SGX is using for the default rendering target in the current system configuration.  It is important to understand that all of these buffers are for the express purpose of displaying images on a display by the OMAP35x Display Subsystem.  If high performance is desired, these buffers should not be read by the host processor either directly or with OpenGL ES functions such as glReadPixels(), glCopyTexImage2D() or glCopyTexSubImage2D().  These functions are useful for testing and debugging purposes, but they are performance killers.  This is because OpenGL ES has a long rendering pipeline design and any operation that requires reading from the final result (a framebuffer) stalls the entire pipeline whenever a read back is performed.
+</p><p>There are many applications that require rendering an intermediate image that will not be displayed directly, but read back and used for further rendering.  This can be done without stalling the pipeline by rendering to either a pbuffer or Frame Buffer Object, instead of using the framebuffer.  The pbuffer or FBO can then be used as a texture map for further rendering by OpenGL ES.  This is called Render to Texture or RTT.  It has many applications and is discussed in detail in the following sections.
+</p>
+<h2><span class="mw-headline" id="Texture_Mapping">Texture Mapping</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=16" title="Edit section: Texture Mapping">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This is the primary mechanism in OpenGL for using 2D images by mapping them onto 3D geometry.  It is usually the most performance critical aspect of using OpenGL ES on OMAP35x because texture data is often large and must be stored in the DDR memory.  PVRTC compression is typically used to increase the performance of texture mapping and MipMaps are used to improve the quality of the resultant image.
+</p><p>The image data for a texture map can originate from a number of possible sources.  For static images, it is best to use the PVRTexTool utility provided in the Graphics SDK to compress and MipMap the images into the PVRTC format at compile time.  Performing the compression at run-time is not supported.  There are two levels of quality in PVRTC compression; 2 or 4 bits per pixel, and a choice of alpha or no alpha support.  The texture image must be supplied in one of these supported formats:
+</p>
+<h4><span class="mw-headline" id="Texture_Map_formats_defined_by_the_OpenGL_ES_standards">Texture Map formats defined by the OpenGL ES standards</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=17" title="Edit section: Texture Map formats defined by the OpenGL ES standards">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>GL_RGBA				(RGBA 8888)
+GL_RGB				(RGB 888)
+GL_LUMINANCE			(I 8)
+GL_ALPHA				(A 8)
+GL_LUMINANCE_ALPHA		(AI 88)
+</p>
+<h4><span class="mw-headline" id="Additional_Texture_Map_formats_defined_by_extensions">Additional Texture Map formats defined by extensions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=18" title="Edit section: Additional Texture Map formats defined by extensions">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>GL_RGB565_OES			(RGB 565)
+GL_RGBA4_OES			(RGBA 4444)
+GL_RGB5_A1_OES		(RGBA 1555)
+GL_BGRA				(BGRA 8888)
+</p>
+<h4><span id="Compressed_Texture_Map_formats_defined_by_extensions_(for_static_textures)"></span><span class="mw-headline" id="Compressed_Texture_Map_formats_defined_by_extensions_.28for_static_textures.29">Compressed Texture Map formats defined by extensions (for static textures)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=19" title="Edit section: Compressed Texture Map formats defined by extensions (for static textures)">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>GL_ETC1_RGB8_OES
+GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG
+GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG
+GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG
+GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG
+</p><p>The OpenGL ES standards only specify texture formats in the RGB color space, but there are some extensions which are supported on the SGX for supplying textures in the YCrCb color space.  In this case, the SGX can perform color space conversion to an RGB format.
+</p><p>The pixel dimensions of a texture affect the performance of using the texture.  In particular,
+the horizontal and vertical dimensions should be powers of two.  OpenGL ES 1.1 requires this, but OpenGL ES 2.0 does not.  Even though 2.0 allows non-power of two sizes (NPOT), the SGX still performs much better (10 to 20 times faster) with textures that do have power of two dimensions.  Therefore, most applications round up texture sizes to the closest power of two and either stretch the image or allow the extra pixels to remain a background/border color.
+</p><p>When dynamic images are used for texture mapping, they can be supplied from either a pbuffer, FBO or a buffer allocated by the application.  In texture streaming and render to texture applications, the texture image is typically updated for every frame.  In these cases,  PVRTC compression can not be used because it is not supported at run-time and there is probably not enough time to do the compression and maintain video frame rates anyway.
+</p><p>Mipmapping is also optional, but it can improve the quality of the resultant image in applications where the texture mapped geometry will be viewed across a range of decreasing sizes.  OpenGL ES 1.1 has the ability to automatically generate mipmaps whenever a texture map is updated.  This is enabled with glTexParameterf(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE).  Automatic mipmap generation has been replaced in OpenGL ES 2.0 with the new function glGenerateMipmap(TEXTURE 2D), which only generates the mipmap levels once per call.  The performance of mipmap generation has been improved significantly beginning with the 1.4 DDK.
+</p>
+<h4><span class="mw-headline" id="Essential_functions_in_OpenGL_ES_1.1_and_2.0_to_create_and_configure_texture_maps">Essential functions in OpenGL ES 1.1 and 2.0 to create and configure texture maps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=20" title="Edit section: Essential functions in OpenGL ES 1.1 and 2.0 to create and configure texture maps">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>glGenTextures	 - Generates handles for texture maps</li>
+<li>glBindTexture	- Binds a texture map for use</li>
+<li>glTexImage2D - Loads the texture map image data</li>
+<li>glTexParameterf - Configures texture map filtering parameters</li></ul>
+<p>The OpenGL ES drivers normally perform twiddling on all textures before they are used.  This is done to improve the performance of using the textures when they are applied to the geometry.  However, the twiddling is not done immediately when a texture is created.  The SGX architecture defers all rendering, including the twiddling of textures, until they are actually required.  This can lead to some unexpected results when attempting to benchmark the performance of rendering textured geometry.
+</p>
+<h2><span class="mw-headline" id="Render_To_Texture">Render To Texture</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=21" title="Edit section: Render To Texture">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There are many applications that require rendering an intermediate image that will not be displayed directly, but read back and used for further rendering.  This can be done without stalling the OpenGL ES pipeline by rendering to either a pbuffer or Frame Buffer Object, instead of using the framebuffer.  The pbuffer or FBO can then be used as a texture map for further rendering by OpenGL ES.
+</p>
+<h4><span class="mw-headline" id="The_most_common_applications_for_Rendering_to_a_Texture">The most common applications for Rendering to a Texture</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=22" title="Edit section: The most common applications for Rendering to a Texture">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Repeating a rendered image multiple times in a scene</li>
+<li>Simulating reflection effects, like a mirror or lake in a scene</li>
+<li>Simulating shadow effects in a scene</li>
+<li>Post-processing effects, such as motion blur or antialiasing</li>
+<li>Compositing a rendered image into a 3D GUI</li></ul>
+<p>A sample application named RenderToTexture is provided here in source code form that demonstrates how to implement rendering to a texture on the OMAP35x platform using either pbuffers or FBOs.
+</p>
+<pre> <a href="File_RenderToTextureExamples.html" title="File:RenderToTextureExamples.zip">File:RenderToTextureExamples.zip</a>
+</pre>
+<h4><span class="mw-headline" id="Supplied_versions_of_the_Render_to_Texture_demonstration_program">Supplied versions of the Render to Texture demonstration program</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=23" title="Edit section: Supplied versions of the Render to Texture demonstration program">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>RenderToTexture_pBuffer\OGLES\RenderToTexture.cpp - Uses PBuffers for OpenGL ES 1.1</li>
+<li>RenderToTexture\OGLES\RenderToTexture.cpp - Uses FBO-OES extension for OpenGL ES 1.1</li>
+<li>RenderToTexture2\OGLES2\RenderToTexture2.cpp - Uses FBOs for OpenGL ES 2.0</li></ul>
+<p>The use of Frame Buffer Objects is recommended over pbuffers for rendering to textures, because FBOs are more flexible and offer some performance advantages.  Nevertheless, the pbuffer version of the demonstration program is also provided for comparison and legacy.
+</p><p>These programs use the PVRShell and PVRTools environment so they can be directly compiled and run under either embedded Linux, WindowsCE 6.0 or VFrame, without modification.  These programs can also be used for benchmarking to compare the actual performance when run on the OMAP35x EVM, since they all display real-time performance measurements in frames per second (FPS).  Use the up/down arrow keys to increase/decrease the size of the cube.
+</p><p>Note that to run the FBO-OES version under VFrame requires the PowerVR PC Emulation SDK version 2.4 or later and the pcviewer_es1.cfg file properly configured for the SGX530 core in OMAP35x. 
+</p><p>The design and coding of these programs is described in more detail in the following sections on PixelBuffers and Frame Buffer Objects.  See figure 1.
+</p>
+<h4><span class="mw-headline" id="Render_to_Texture_Demonstration_Program_Screen_Capture">Render to Texture Demonstration Program Screen Capture</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=24" title="Edit section: Render to Texture Demonstration Program Screen Capture">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><a href="File_RTT_Cube.html" class="image"><img alt="RTT Cube.jpg" src="https://processors.wiki.ti.com/images/f/f0/RTT_Cube.jpg" width="643" height="515" /></a>
+</p><p>Figure 1
+</p>
+<h2><span class="mw-headline" id="PixelBuffers">PixelBuffers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=25" title="Edit section: PixelBuffers">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>PixelBuffers (or pbuffers) are the original solution for how to render to an off-screen buffer with OpenGL ES or OpenVG.  This approach continues to be supported on OMAP35x for rendering with OpenGL ES 1.1 and OpenVG, but it has been superseded by the newer Frame Buffer Objects approach in OpenGL ES 2.0.  Since there is now an extension to OpenGL ES 1.1 to also support FBOs, and they provide better performance and flexibility, the only reasons to use pbuffers today are for backwards compatibility or for OpenVG.  Pbuffers are still the best way to share images between OpenGL ES 1.1 and OpenVG.
+</p><p>The major difference between pbuffers and FBOs is that pbuffers are allocated by the EGL driver whereas FBOs are controlled entirely through OpenGL ES and are therefore integrated with it better.  Pbuffers require a separate rendering context from the framebuffer.  This leads to some performance problems when rendering to a texture because switching OpenGL ES to render to a pbuffer requires handling changes in the rendering context and this cost is incurred every time the rendering target is changed.  Also, when a pbuffer is used as a texture, it is not stored in a twiddled format which reduces the performance when the texture is used.
+</p>
+<h4><span class="mw-headline" id="Essential_EGL_functions_to_create_and_use_a_pixelbuffer">Essential EGL functions to create and use a pixelbuffer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=26" title="Edit section: Essential EGL functions to create and use a pixelbuffer">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>eglGetCurrentDisplay -	Get a handle to the framebuffer</li>
+<li>eglGetCurrentContext -	Get a handle to the rendering context of the framebuffer</li>
+<li>eglQueryContext - Get the rendering context of the framebuffer</li>
+<li>eglGetConfigAttrib - Get the configuration of the rendering context</li>
+<li>eglChooseConfig - Find the closest matching rendering context available</li>
+<li>eglCreatePbufferSurface - Create a pixelbuffer</li>
+<li>eglMakeCurrent	- Switch the rendering target to the pixelbuffer</li>
+<li>eglBindTexImage - Bind a pixelbuffer to use it as a texture map</li>
+<li>eglDestroySurface - Delete a pixelbuffer</li></ul>
+<p>PixelBuffers are for rendering with the accelerated OpenGL ES 1.1 or OpenVG drivers only.  They are not intended to be accessed directly by the application or any other software which may be running on the ARM.  If such access is needed, either Pixmaps or FBOs should be used instead.
+</p><p>Note that support for pixelbuffers has recently been added to the OpenGL ES 2.0 driver for OMAP35x beginning with the 1.4 DDK, but its use is not recommended because this contradicts the Khronos standard for 2.0 and is probably not portable.
+</p>
+<h2><span class="mw-headline" id="Pixelbuffer_Demonstration_Program">Pixelbuffer Demonstration Program</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=27" title="Edit section: Pixelbuffer Demonstration Program">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The pbuffer version of the RenderToTexture demonstration program creates and uses a single pbuffer which is bound and used as both a texture map applied to a geometric model of a rotating cube and for the target of the rendering.  This forms a circular rendering loop where the image of a rotating cube is rendered to the pbuffer and then used as a texture map on the same cube for the next frame.  See figures 1 and 2.
+</p><p><a href="File_RTT_Figure2.html" class="image"><img alt="RTT Figure2.jpg" src="https://processors.wiki.ti.com/images/9/99/RTT_Figure2.jpg" width="563" height="505" /></a>
+</p><p>Figure 2
+</p><p><br />
+The design and coding of this program is now described in detail with an emphasis on the OpenGL ES calls involved with controlling the pbuffer and texture map.  Please refer to the program source code (RenderToTexture.cpp, in the older versions of the SDK) to follow this description.
+</p><p>In InitView(), a call to SelectEGLConfig() queries the EGL driver to get the rendering context of the framebuffer so that eglCreatePbufferSurface() can create a pbuffer which matches that context as closely as possible.  A handle is also created for a texture with glGenTextures() and it is bound with glBindTexture() so that it can be configured with glTexImage2D() and glTexParameterf().  The important parameters for the texture are its dimensions (gTextureSize) and the color format (GL_RGB).  
+</p><p>Next, the texture is bound to the pbuffer by eglBindTexImage() so that the pbuffer can be used for texturing.  This requires switching the rendering target from the framebuffer to the pbuffer (m_PBufferSurface) by calling eglMakeCurrent(), and then after the bind operation, eglMakeCurrent() is called again to switch the rendering target back to the framebuffer (m_CurrentSurface).  This completes the initialization of the program.
+</p><p>RenderScene() constitutes the main loop of this program.  It is called repeatedly by the PVRShell to render each frame of the 3D scene.  With each call, RenderScene() calls RenderTexture() to render an updated texture map, then the next frame of the cube model is rendered with the updated texture applied.  
+</p><p>RenderTexture() is the function that actually renders the cube image into a texture map.  This function  begins and ends with calls to eglMakeCurrent().  This first call switches the target of OpenGL ES rendering from the framebuffer to the pbuffer to be used for texturing (m_PBufferSurface).
+</p><p>Since texture maps usually have different dimensions than the framebuffer, glViewport() is called to configure OpenGL ES for the dimensions of the target texture and to erase it with glClear() in preparation for rendering a new image of the cube.  A different model-view projection matrix is also required, so that is loaded as well.   eglReleaseTexImage() and eglBindTexImage() are called to release the previously used pbuffer and bind the new one for texturing.  In this case, these are really the same pbuffer (m_PBufferSurface), but the EGL driver still requires these calls; possibly to signal that the rendering of the previous texture is complete.  The call to DrawCubeSmooth() actually renders the cube model into the pbuffer with the updated rotation angle.
+</p><p>Finally, the last call to eglMakeCurrent(), switches the rendering target from the pbuffer back to the framebuffer (m_CurrentSurface).
+</p><p>Note that this program does not ever generate mipmaps for either of the textures, nor does it compress them.  This is because the textures are updated so frequently that generating mipmaps or converting them to the PVRTC format would take too much time.  Therefore, only the first mipmap level (0) of the textures is rendered and used in the uncompressed GL_RGB format.
+</p>
+<h2><span class="mw-headline" id="Frame_Buffer_Objects">Frame Buffer Objects</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=28" title="Edit section: Frame Buffer Objects">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>An FBO is an off-screen rendering target.  It is an alternative to the framebuffer or pbuffer that would otherwise serve as the target buffer for rendering from OpenGL ES.  FBOs were introduced with OpenGL ES 2.0 to provide greater flexibility and performance for applications like rendering to a texture map and now OpenGL ES 1.1 also supports FBOs through extensions to that standard.  Older applications which were developed before 2.0, typically use pbuffers for off-screen rendering, but that approach has been superseded by FBOs.
+</p><p>The major difference between pbuffers and FBOs is that pbuffers are allocated by the EGL driver and require disparate rendering contexts whereas FBOs can share the same context as the framebuffer so there is less overhead associated with switching the target of the rendering between the two.  Since FBOs are controlled entirely through OpenGL ES, they are also more tightly integrated and flexible.  For example, not only can the rendered color image be captured and used as a texture map, but the depth and stencil images can be captured and used too.
+</p><p>An FBO is essentially a data structure maintained by the OpenGL ES driver.  FBOs do not store image data directly, but store handles to renderbuffers or to textures which have been attached to the FBOs to capture the rendered images.  There are 3 defined attachment points for the color, depth and stencil images that OpenGL ES produces.  The rendered color image is most often used and can either be captured directly into an attached texture or into a renderbuffer for the application to read.  The depth image (Z buffer) data is sometimes used for advanced rendering techniques and can be captured into either a texture or renderbuffer as well.  Finally, the stencil image can only be captured into a renderbuffer.  Note that capturing the depth image into a texture requires the OES_depth_texture extension which is only available beginning with the 1.4 DDK.
+</p><p>Renderbuffers are defined by data structures called Render Buffer Objects.  For an application to read the color, depth and/or stencil images, it must create corresponding renderbuffers for each, configure and attach them to the current FBO with glFramebufferRenderbuffer().  Renderbuffers are empty when they are created by glGenRenderbuffers(), so their dimensions and formats must be configured using glRenderbufferStorage().  Applications can query the maximum dimensions that are supported by calling glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE), but for the SGX it is the same as the maximum texture size (2048 x 2048).  Up to 3 renderbuffers can be attached to an FBO  at the same time.
+</p><p>Alternatively, to capture a color image directly into a texture map (rendering to a texture), use glFramebufferTexture2D() to attach the texture, instead of renderbuffers.  This has the advantage that the texture can then be used immediately for texturing, without copying or conversion.
+</p><p>When an FBO is bound as the current rendering target, the functions glCopyTexImage2D() and glCopyTexSubImage2D() will copy from the color buffer renderbuffer or texture currently attached to the currently bound FBO, rather than from the framebuffer.  This can be used to copy portions of an attached renderbuffer or texture to another texture.  Also, the function glReadPixels() can be used to copy renderbuffers or textures currently attached to the currently bound FBO to a buffer supplied by the application.  Note however, that these features are only operational beginning with the 1.5 DDK.
+</p><p>Figure 3 shows the relationship between the framebuffer, FBOs, RBOs, textures and how they can be connected to capture rendered images.
+</p><p><a href="File_RTT_Figure3.html" class="image"><img alt="RTT Figure3.jpg" src="https://processors.wiki.ti.com/images/9/9f/RTT_Figure3.jpg" width="762" height="718" /></a>
+</p><p>Figure 3
+</p><p>So there are two ways to capture rendered color images with FBOs; with an attached RBO, or directly into a texture map.  This distinction is made because the OpenGL ES driver needs to know in advance if the image will be used for texturing.  If so, the image will be twiddled as it is stored to provide better performance when the texture is used.  The application also has the choice to store the image into any mipmap level of the texture and to generate the remaining levels, if needed.  If the rendered color image will not be used for texture mapping, then the image should be captured into an RBO to avoid the overhead of the twiddling.  
+</p>
+<h4><span class="mw-headline" id="Essential_OpenGL_ES_functions_to_create_and_use_FBOs_and_RBOs">Essential OpenGL ES functions to create and use FBOs and RBOs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=29" title="Edit section: Essential OpenGL ES functions to create and use FBOs and RBOs">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>glGenFramebuffers - Generates FBO handles</li>
+<li>glBindFramebuffer - Bind or unbind an FBO for use</li>
+<li>glFramebufferTexture2D - Attach a texture map to capture rendered color image</li>
+<li>glDeleteFramebuffers - Deletes FBO handles</li>
+<li>glCheckFramebufferStatus - Check that FBO attachments are complete</li></ul>
+<ul><li>glGenRenderbuffers - Generates RBO handles</li>
+<li>glBindRenderbuffer - Bind an RBO for use</li>
+<li>glRenderbufferStorage - Define pixel color format and dimensions for RBO storage</li>
+<li>glFramebufferRenderbuffer - Attach RBOs to capture rendered color, depth or stencil data</li>
+<li>glDeleteRenderbuffers - Deletes RBO handles</li></ul>
+<p>Note that since FBOs are not dependent on any underlying windowing system or EGL support, they are always available on the OMAP35x platform under Linux and Windows.  The Qt environment supports render to texture applications via FBOs for its rendering of widgets.
+</p>
+<h2><span class="mw-headline" id="FBO_Demonstration_Program">FBO Demonstration Program</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=30" title="Edit section: FBO Demonstration Program">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The FBO and FBO-OES versions of the RenderToTexture demonstration program create and use two FBOs which each have corresponding texture map attachments.  The texture from the first FBO is applied to a geometric model of a rotating cube as the second FBO is used as the target of the rendering.  After each frame is rendered, the use of these two FBOs are swapped, so that the next frame will be rendered with a texture image of the previous cube.  This circular rendering algorithm produces a rotating cube which is texture mapped with an image of itself, which is also rotating.  See figures 1 and 4.
+</p><p><a href="File_RTT_Figure4.html" class="image"><img alt="RTT Figure4.jpg" src="https://processors.wiki.ti.com/images/b/b4/RTT_Figure4.jpg" width="621" height="507" /></a>
+</p><p>Figure 4
+</p><p>The design and coding of this program is now described in detail with an emphasis on the OpenGL ES calls involved with controlling the FBOs and texture maps.  Please refer to the program source code (RenderToTexture.cpp) to follow this description.
+</p><p>In InitView(), handles are created for 2 textures and 2 FBOs, with glGenTextures() and glGenFramebuffers(), respectively.  Both textures are bound with glBindTexture() so that they can be configured with glTexImage2D() and glTexParameterf().  The important parameters for the textures are their  dimensions (gTextureSize) and their color format (GL_RGB).  Each FBO is then bound with glBindFramebuffer() so that their corresponding textures can then be attached by glFramebufferTexture2D(), which also configures how these attachments will be used.  
+</p>
+<h4><span id="Parameters_to_glFramebufferTexture2D()"></span><span class="mw-headline" id="Parameters_to_glFramebufferTexture2D.28.29">Parameters to glFramebufferTexture2D()</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=31" title="Edit section: Parameters to glFramebufferTexture2D()">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>GL_FRAMEBUFFER - These FBOs share the same rendering context as the framebuffer.</li>
+<li>GL_COLOR_ATTACHMENT0 - The color buffer image will be captured, not the depth buffer.</li>
+<li>GL_TEXTURE_2D - These are 2D textures, not 1D or 3D.</li>
+<li>m_hTexture[Index] - The handles of the textures to attach to these FBOs.</li>
+<li>0 - The color buffer will be rendered into MipMap level 0 (the first one).</li></ul>
+<p>Since this program only uses FBOs for the purpose of rendering to textures, no Render Buffer Objects are needed.  This completes the initialization of the program.
+</p><p>RenderScene() constitutes the main loop of this program.  It is called repeatedly by the PVRShell to render each frame of the 3D scene.  With each call, RenderScene() calls RenderTexture() to render an updated texture map, then the next frame of the cube model is rendered with the updated texture applied.  Finally, the FBO index (m_CurrentFBO) is toggled so that the FBOs are swapped in preparation for the next call to RenderScene().
+</p><p>RenderTexture() is the function that actually renders the cube image into a texture map.  This function  begins and ends with calls to glBindFramebuffer().  The first call switches the rendering target from the framebuffer to the texture attached to the FBO (m_hFBO), which is indexed by (m_CurrentFBO).  This simply toggles between 0 and 1 to effect the swapping of the two textures each time RenderTexture() is called.
+</p><p>Next, the call to glCheckFramebufferStatus() is recommended to confirm that the FBO is ready for use.  If an error is returned, it indicates that the FBO is not ready to be used for rendering, but that should never occur.
+</p><p>Since the texture maps usually have different dimensions than the framebuffer, glViewport() is called to configure OpenGL ES for the dimensions of the target texture and to erase it with glClear() in preparation for rendering a new image of the cube.  A different model-view projection matrix is also required, so that is loaded as well.  The call to DrawCubeSmooth() actually renders the cube model into the texture attached to the FBO indexed by (m_CurrentFBO) with the updated rotation angle.  Note that glBindTexture() binds the opposite texture map to use for texturing this cube (m_hTexture[m_CurrentFBO ^ 1]).
+</p><p>Finally, the last call to glBindFramebuffer(), switches the rendering target from the FBO back to the framebuffer.  The 0 parameter for the FBO handle selects the framebuffer, rather than an FBO.
+</p><p>Note that this program does not ever generate mipmaps for either of the textures nor does it compress them.  This is because the textures are updated so frequently that generating mipmaps or converting them to the PVRTC format would take too much time.  Therefore, only the first mipmap level (0) of the textures is rendered and used in the uncompressed GL_RGB format.
+</p><p>The FBO-OES version of the RenderToTexture demonstration program is identical to the FBO version in how they create and use textures and FBOs, except that the FBO-OES version uses extensions to access the FBO functions since they are not directly supported by the OpenGL ES 1.1 standard.  To use extensions supported through the PVRTools class CPVRTglesExt, InitView() calls CPVRTglesExt&#160;::LoadExtensions() to initialize the pointer (m_Extensions).  This pointer is then used to call all extension functions for FBOs.  To obtain a string which lists the names of all extension functions supported by the OpenGL ES driver, use glGetString(GL_EXTENSIONS).  It is a good practice for applications that require extensions to do this inquiry to confirm that the required extensions are available.
+</p>
+<h2><span class="mw-headline" id="Pixmaps">Pixmaps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=32" title="Edit section: Pixmaps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Pixmaps are another type of off-screen rendering surface that can be allocated by the EGL driver.  The EGL specification (Khronos Native Platform Graphics Interface) defines two types of off-screen rendering surfaces; pixelbuffers and pixmaps (as well as the framebuffer used for the on-screen native platform windowing system).  The difference between pixelbuffers and pixmaps is in the format and stride of the image data they store.  PixelBuffers are created with a format and stride that the SGX can render into efficiently, but is not necessarily compatible with any other graphics interface beyond OpenGL ES 1.1 and OpenVG.  Pixmaps, however are specifically defined to be compatible with the native windowing and/or graphics system for the OS platform that the EGL driver is implemented for.  Also, since pixelbuffers are required by the EGL specification, their support is guaranteed on whatever OS platform the EGL driver is provided for.  However, support for pixmaps is optional and should not be assumed because a different implementation is required for each windowing system.
+</p><p>Windows has only a single windowing system to support and an updated WSEGL and display driver could allow pixmap images from OpenGL ES and OpenVG to be shared by Windows as DirectDraw surfaces which can be accessed by Windows native graphics interface (GDI).  A major obstacle in this development would be the fact that Windows uses two types of image buffers; Device Independent Bitmaps (DIBs) and Device Dependent Bitmaps (DDBs) and to allow the SGX to access DDBs via pixmaps requires customizations to the Windows display driver in addition to the EGL driver.
+</p><p>Support for pixmaps for OMAP35x under Linux is in development.  There are several popular windowing systems in use today with embedded Linux and each of these will require enhancements to their EGL driver implementations to support pixmaps.  Potentially, the pixel format and stride requirements of each windowing system could be different.  Today, pixmaps are only supported for the Null windowing system beginning with release 3.00.00.10 of the Linux Graphics SDK.  This support is defined by the following LinuxNullPixmap structure.  It allows the use of CMEM to allocate buffers for pixmaps which are physically contiguous, for example.  The source code for this implementation of the EGL driver can be used as a guide for implementing pixmap support for other windowing systems.
+</p>
+<pre>  typedef struct  {
+   long ePixelFormat;
+   long eRotation;
+   long lWidth;
+   long lHeight;
+   long lStride;
+   long lSizeInBytes;
+   long pvAddress;
+   long lAddress;
+  } LinuxNullPixmap&#160;;
+</pre>
+<h2><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;section=33" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>www.montgomery1.com/opengl - Montgomery One - Practical Solutions from the Visual Computing Frontier</li>
+<li>www.khronos.org/opengles - The official standard documents for OpenGL ES 1.1 and 2.0</li>
+<li>www.khronos.org/egl - The official standard document for the EGL</li>
+<li>OpenGL ES 2.0 Programming Guide - By Aaftab Munshi, Dan Ginsburg and Dave Shreiner</li>
+<li>www.imgtec.com/PowerVR/insider - Download the “PC Emulation” PowerVR SDKs for OpenGL ES</li>
+<li>www.opengl.org/wiki/Main_Page - Wiki that covers desktop versions of OpenGL</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130085354
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.079 seconds
+Real time usage: 0.083 seconds
+Preprocessor visited node count: 130/1000000
+Preprocessor generated node count: 136/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:3595-0!canonical and timestamp 20201130085354 and revision id 164639
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Render to Texture with OpenGL ES</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Render to Texture with OpenGL ES</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Render to Texture with OpenGL ES</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Render to Texture with OpenGL ES</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Render to Texture with OpenGL ES</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Render to Texture with OpenGL ES</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Render to Texture with OpenGL ES</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Render to Texture with OpenGL ES</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Render to Texture with OpenGL ES</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;oldid=164639">https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;oldid=164639</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li><li><a href="Category_OpenGL_ES.html" title="Category:OpenGL ES">OpenGL ES</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Render+to+Texture+with+OpenGL+ES" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Render_to_Texture_with_OpenGL_ES.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Render_to_Texture_with_OpenGL_ES&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Render_to_Texture_with_OpenGL_ES.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Render_to_Texture_with_OpenGL_ES.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Render_to_Texture_with_OpenGL_ES.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;oldid=164639" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Render_to_Texture_with_OpenGL_ES&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 November 2013, at 10:37.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.079","walltime":"0.083","ppvisitednodes":{"value":130,"limit":1000000},"ppgeneratednodes":{"value":136,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130085354","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":235});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Render_to_Texture_with_OpenGL_ES by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:51:36 GMT -->
+</html>

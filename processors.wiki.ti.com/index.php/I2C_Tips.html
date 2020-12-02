@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/I2C_Tips by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:54:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>I2C Tips - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"I2C_Tips","wgTitle":"I2C Tips","wgCurRevisionId":236816,"wgRevisionId":236816,"wgArticleId":541,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["I2C"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"I2C_Tips","wgRelevantArticleId":541,"wgRequestId":"5190c8dc8c1679ba3ed3fec7","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-I2C_Tips rootpage-I2C_Tips skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">I2C Tips</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Clock_Problems"><span class="tocnumber">2</span> <span class="toctext">Clock Problems</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Detecting_and_handling_NACK"><span class="tocnumber">3</span> <span class="toctext">Detecting and handling NACK</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Hardware_Response_to_a_NACK"><span class="tocnumber">3.1</span> <span class="toctext">Hardware Response to a NACK</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#User_Response_to_a_NACK"><span class="tocnumber">3.2</span> <span class="toctext">User Response to a NACK</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Repeated_Start"><span class="tocnumber">4</span> <span class="toctext">Repeated Start</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Zero_Length_Transfer"><span class="tocnumber">5</span> <span class="toctext">Zero Length Transfer</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Back-to-Back_Transfers"><span class="tocnumber">6</span> <span class="toctext">Back-to-Back Transfers</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Subtleties_of_the_Master_Receiver_Mode"><span class="tocnumber">7</span> <span class="toctext">Subtleties of the Master Receiver Mode</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#External_Slave_Device_Hanging_the_Bus_by_Holding_SDA_Low"><span class="tocnumber">8</span> <span class="toctext">External Slave Device Hanging the Bus by Holding SDA Low</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Common_Mistake_Clearing_Interrupts"><span class="tocnumber">9</span> <span class="toctext">Common Mistake Clearing Interrupts</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Using_I2C_in_a_Multi-Threaded_Context"><span class="tocnumber">10</span> <span class="toctext">Using I2C in a Multi-Threaded Context</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Related_articles"><span class="tocnumber">11</span> <span class="toctext">Related articles</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Overview">Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=1" title="Edit section: Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This article is applicable to most TI processors (DSP, OMAP, Davinci, Sitara).  Some sections may be applicable only to certain devices in which case it will be noted.  The reader is encouraged to use data manuals and user guides as the primary source of information.  This article is intended to supplement.  The silicon errata for a specific device is also a good place to look for device-specific issues.  For example, the repeated start feature is broken on TMS320VC5507 DSP's.
+</p>
+<h1><span class="mw-headline" id="Clock_Problems">Clock Problems</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=2" title="Edit section: Clock Problems">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A very common mistake made by users of the I2C module is to incorrectly configure the clocks.  The following diagram is an excerpt from page 14 of spru175d <a rel="nofollow" class="external text" href="http://www.ti.com/lit/spru175">(c6000 I2C Reference Guide)</a>:
+</p><p><a href="File_I2cTips_screenshot1.html" class="image"><img alt="I2cTips screenshot1.JPG" src="https://processors.wiki.ti.com/images/e/e1/I2cTips_screenshot1.JPG" width="656" height="697" /></a>
+</p><p>Pay close attention to the pieces circled in red.  The input clock to the I2C must be between 6.7 and 13.3 MHz for the case of the c6000 device family.  This number could potentially change by device or process node, so please check the user guide for your specific device.  For example, the 6424 specifies a range of 7-12 MHz.  In general though, failure to properly configure the prescaler can result in "flaky" behavior from the I2C module.
+</p><p>Also notice how the frequency is calculated.  Notice the value 'd' inside the calculation and make sure you correlate that value with the table below.  Furthermore note that due to the nature of I2C and the requirement to observe (potential) clock stretching, the observed frequency will actually be a little slower since the I2C peripheral needs to for the clock to rise in case the slave wants to hold it low.  So the slower the rise time the more deviation you'll see from this calculated frequency.
+</p><p>So in programming these clock frequencies, here are the steps you should take:
+</p>
+<ol><li><b>Figure out the speed of the input clock to the I2C module.</b>  Let's take a 600 MHz DM642 for example.  The datasheet shows the I2C module being clocked at CPU/4 (150 MHz in this case).  For a 6424 the PLL diagram in the datasheet shows the I2C to be directly fed with the AUXCLK which is equivalent to CLKIN/1.  So for example, the 6424 DSK uses a 27 MHz input clock and so that would directly feed the I2C periphal.</li>
+<li><b>Calculate the prescaler value.</b>  For the DM642 with the 150 MHz clock feeding the I2C we could choose I2CPSC=14 (/15) such that the I2C module receives a 10 MHz pre-scaled clock.  For our 6424 example we should set I2CPSC=2 (/3) to get a 9 MHz pre-scaled clock.</li>
+<li><b>Calculate ICCL/ICCH.</b>  Normally one would want the SCL pin to operate at a specific frequency, generally 100 kHz or 400 kHz.  Let's assume we want 50% duty cycle (e.g. ICCL=ICCH).  Now let's plug that info into the formula shown in the figure above to calculate the ICCL/ICCH values.  For both our DM642 example and our 6424 example we would use d=5 since our prescaler was greater than or equal to 2 for both of them.  For the DM642 example this comes to ICCL=ICCH=45.  For the 6424 this gives an answer of ICCL=ICCH=40.</li>
+<li><b>Program the values <i>while the I2C is in reset</i>.</b>  There are multiple mentions of this fact in the documentation, but it is easy to forget about.  When programming the prescaler and the ISCL/ISCH registers you need to make sure the I2C module is being held in reset.</li>
+<li><b>Double-check yourself.</b>  You've done all the math.  You've programmed all the registers.  Now do yourself a favor and measure the resulting SCL frequency with an oscilloscope.  If it does not match exactly what you programmed it to be then you have made a mistake in one of these steps.  Be sure that everything works the way you intended it to work.  If the frequency comes out to something different then you may have the I2C prescaler out of spec which could result in failures either at different temperatures or on different devices.</li></ol>
+<h1><span class="mw-headline" id="Detecting_and_handling_NACK">Detecting and handling NACK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=3" title="Edit section: Detecting and handling NACK">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A common mistake is to neglect checking for a NACK.  When everything is working properly there is no problem.  However, checking for a NACK and handling it can save you lots of time.  For example, if you have a board with a hardware problem then the NACK detection can quickly help you identify those issues.
+</p><p>If you are operating the I2C through polling, you simply need to change your polling such that you poll XRDY/RRDY <i>as well as</i> <b>ARDY</b>.
+</p><p>Here's an example using a c6424 DSP:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+// BAD CODE!!! Would hang in case we get NACKed!
+// Wait for "XRDY" flag to transmit data
+while (&#160;!(*I2C_STR &amp; ICSTR_ICXRDY) );
+&lt;/syntaxhighlight&gt;
+</p><p>However, you should change it to look like this:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+// Wait for "XRDY" flag to transmit data or "ARDY" if we get NACKed
+while (&#160;!(*I2C_STR &amp; (ICSTR_ICXRDY|ICSTR_ARDY)) );
+</p><p>// If a NACK occurred, SCL is held low and STP bit cleared
+if ( *I2C_STR &amp; ICSTR_NACK )
+{
+	*I2C_MDR |= ICMDR_STP;	// send STP to end transfer
+	*I2C_STR = ICSTR_NACK;	// clear NACK bit
+	return I2C_FAIL;
+}
+&lt;/syntaxhighlight&gt;
+</p><p>If you are using interrupts then you should be sure to enable the NACK interrupt and to check for it in the I2C ISR.
+</p>
+<h4><span class="mw-headline" id="Hardware_Response_to_a_NACK">Hardware Response to a NACK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=4" title="Edit section: Hardware Response to a NACK">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Clears the I2CMDR.STP</li>
+<li>Holds SCL low</li>
+<li>Sets I2CSTR.NACK</li></ul>
+<h4><span class="mw-headline" id="User_Response_to_a_NACK">User Response to a NACK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=5" title="Edit section: User Response to a NACK">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Set I2CMDR.STP which will send a "stop" bit and release SCL.</li>
+<li>Write I2CSTR.NACK=1 to clear the flag (it's a write-1-to-clear bit)</li>
+<li>Wait for I2CMDR.MST to self-clear before initiating any further I2C transactions.  When MST clears the controller has finished sending the stop bit.  This can be done most efficiently by checking for I2CMDR.MST==0 at the start of the function. That will allow the processor to do other stuff during that period and still prevents new transactions before it has completed.</li></ul>
+<h1><span class="mw-headline" id="Repeated_Start">Repeated Start</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=6" title="Edit section: Repeated Start">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A typical use case for a repeated start is doing a read from an EEPROM.  In order to do so you would normally first do a write of the address from which you want to read, followed by a repeated start and then a read of that address.  A repeated start can be accomplished by writing to the start bit (STT).  The only "trick" is to set the bit at the correct time.  The bit of interest in this case is the ARDY bit.  You can either poll for this bit or get an interrupt.  In either case, you should wait for ARDY before you re-program any of the I2C registers (e.g. switch from write to read and do the repeated start).
+</p><p>Here's an example that was written on DM355 (note this was not using Linux).  It was to read a register from an AIC3204 data converter, so it is very similar to reading from an EEPROM.  That is, first you write the address of the register and then perform a repeated start and then perform the read operation:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<pre> /* Check for Bus Busy */
+ while ((*I2C_ICSTR &amp; ICSTR_BB));
+</pre>
+<pre> /* Disable I2C during configuration */
+ *I2C_ICMDR = 0;
+</pre>
+<pre> /* Set the I2C controller to write len bytes */
+ *I2C_ICCNT = write_len;
+ *I2C_ICSAR = slaveaddr;
+ *I2C_ICMDR = ICMDR_IRS | ICMDR_STT | ICMDR_TRX | ICMDR_MST | ICMDR_FREE;
+</pre>
+<pre> /* Transmit data */
+ for (i = 0; i &lt; write_len; i++)
+ {
+</pre>
+<p>	// Wait for "XRDY" flag to transmit data or "ARDY" if we get NACKed
+	while (&#160;!(*I2C_ICSTR &amp; (ICSTR_ICXRDY|ICSTR_ARDY)) );
+</p><p>	// If a NACK occurred then SCL is held low and STP bit cleared
+	if ( *I2C_ICSTR &amp; ICSTR_NACK )
+	{
+			*I2C_ICMDR = 0;		// reset I2C so SCL isn't held low
+			return RRET__FAIL;
+	}
+</p>
+<pre>   *I2C_ICDXR = write_data[i];
+ }
+</pre>
+<pre> // wait for ARDY before beginning the read phase of the transaction
+ while (&#160;!(*I2C_ICSTR &amp; ICSTR_ARDY) );
+</pre>
+<pre> /* Set the I2C controller to read len bytes */
+ *I2C_ICCNT = read_len;
+ *I2C_ICMDR = ICMDR_IRS | ICMDR_STT | ICMDR_STP | ICMDR_MST | ICMDR_FREE;
+</pre>
+<pre> /* Receive data */
+ for (i = 0; i &lt; read_len; i++)
+ {
+</pre>
+<p>	// Wait for I2C to read data or or "ARDY" if we get NACKed
+</p>
+<pre>   while(&#160;!(*I2C_ICSTR &amp; (ICSTR_ICRRDY|ICSTR_ARDY)) ) {};
+</pre>
+<p>	// If a NACK occurred then SCL is held low and STP bit cleared
+	if ( *I2C_ICSTR &amp; ICSTR_NACK )
+	{
+			*I2C_ICMDR = 0;		// reset I2C so SCL isn't held low
+			return RRET__FAIL;
+	}
+</p>
+<pre>   // Make sure that you got the RRDY signal
+   while(&#160;!(*I2C_ICSTR &amp; ICSTR_ICRRDY) ) {};
+</pre>
+<p>	read_data[i] = *I2C_ICDRR;
+</p>
+<pre> }
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h1><span class="mw-headline" id="Zero_Length_Transfer">Zero Length Transfer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=7" title="Edit section: Zero Length Transfer">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A zero length transfer is useful for doing "bus probing".  That is, you can check to see if a slave of a given address is on the bus without actually doing any transfers to/from that slave.
+</p><p>When using the I2C peripheral in the non repeat mode (i.e. RM=0) there is a hardware counter for keeping track of the number of elements being transferred.  In this mode you must specify a value for the count register that is greater than 0 in order for the transfer to take place.  Therefore, a zero-length transfer is not possible with RM=0.
+</p><p>If using the repeat mode (RM=1) then you can do as many transfers as you want, including none at all!  In the case of RM=1, as soon as you set the start bit (STT) then the hardware will respond by outputting a start bit, the slave address, R/W, and then will look for an ACK.  Once those bits have gone out on the bus you can immediately end the transaction by sending a stop bit (STP).  Just make sure you don't set STT and STP simultaneously.  You need to set STT, wait for the corresponding bus activity (i.e. wait for ARDY), and then set STP.
+</p><p><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> The RM bit does not exist in the I2C controller used in OMAP and Sitara devices, so unfortunately this is not applicable to those devices.
+</p>
+<h1><span class="mw-headline" id="Back-to-Back_Transfers">Back-to-Back Transfers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=8" title="Edit section: Back-to-Back Transfers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>If you do multiple transfers in a row you may notice that you need some amount of delay between the transfers.  That is, once the stop bit has been sent for one transfer you need to wait a specific amount of time before starting the next transfer.  This is similar to the NACK handling where you issue a STOP condition and then retry.  In both of these scenarios you need to poll for I2CMDR.MST==0 before you attempt to initiate the next START condition.
+</p>
+<h1><span class="mw-headline" id="Subtleties_of_the_Master_Receiver_Mode">Subtleties of the Master Receiver Mode</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=9" title="Edit section: Subtleties of the Master Receiver Mode">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>When acting as a master receiver, the I2C spec requires that a NACK be sent by the master upon receipt of the last byte of data from the slave transmitter.  This is in order to tell the slave transmitter not to try and send any more data.  Otherwise, if the slave tried transmitting more data and the first bit happened to be a 0 you would lock up the bus because the slave would be holding SDA low which would prevent the master from sending the STOP bit!
+</p><p>So how does this special condition get handled by the I2C peripheral?  There are a couple ways to deal with it:
+</p>
+<ol><li>The simple scenario is when using RM=0 since there is a hardware counter of how much data you are receiving.  In this scenario the peripheral knows when you want to receive the last byte of data and so it automatically NACKs the slave on that transaction (assuming that STT and STP were both set at the beginning of the transaction).</li>
+<li>A more complicated scenario exists where you are trying to use RM=1, i.e. in the case where the amount of data you receive is dependent upon the data you are receiving (variable length transfer).  In this scneario you should set the I2CMDR.STP bit <b>before</b> reading your last data byte from I2CDRR.  Additionally you need to done one extra "dummy read" to get the stop bit generated.</li></ol>
+<h1><span class="mw-headline" id="External_Slave_Device_Hanging_the_Bus_by_Holding_SDA_Low">External Slave Device Hanging the Bus by Holding SDA Low</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=10" title="Edit section: External Slave Device Hanging the Bus by Holding SDA Low">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A problematic scenario can arise if the processor/I2C module gets reset while it is in the middle of mastering a transfer.  In this scenario the external slave might be holding SDA low to transmit a 0 (or ACK).  The end result is that the bus will hang.  If the I2C tries to initiate a new transfer it will hit a "bus busy" error on some devices or "arbitration lost" on others.  In this case it will not release SDA until it gets one or more falling edges on SCL.
+</p><p>There are a couple ways to recover from this scenario.
+</p>
+<ol><li>For master devices that mux the SCL/SDA pins with GPIO, the easiest thing is to configure the pins for GPIO operation and toggle SCL until the slave releases SDA.  At this point you should be able to resume normal operation.</li>
+<li>Many master devices don't mux SCL/SDA with GPIO since the I2C I/O cells are often special open drain cells.  A workaround has been reported to work even on these devices.  By configuring the I2C for "free data format" and then reading a byte the I2C will immediately start sending clocks to input data (rather than trying to send an address).  This can be used to free up the bus.</li>
+<li>Some slave devices can reset their I2C interface when the bus is hanging (e.g. the LTC4151, after 33 ms). Switch it on if that is not the default behaviour.</li></ol>
+<p>For devices that actually boot from I2C you need to be careful about this scenario.  Since the above workarounds rely on software they will not be possible if the device cannot boot!  For this case you need to do something different.  For example, if you can control the timing of the reset you could make sure you only reset the device when no I2C transaction is in progress.  A different option would be to build your board such that the processor reset power cycles the I2C EEPROM/flash (or simply resets it, but most EEPROMs/flashes don't have a reset pin).
+</p>
+<h1><span class="mw-headline" id="Common_Mistake_Clearing_Interrupts">Common Mistake Clearing Interrupts</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=11" title="Edit section: Common Mistake Clearing Interrupts">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The interrupts get logged into a special kind of register.  It's special in that the interrupt bits are "write-1-to-clear".  For these bits, writing a zero does nothing and writing a 1 to a bit that is already set will clear that bit.
+</p><p>When trying to modify a specific bit, programmers often use a read-modify-write construct.  For example:
+</p>
+<pre>// typical example of clearing bit 4
+// read-modify-write
+// Don't do this for write-1-to-clear registers!
+my_register &amp;= ~(1&lt;&lt;4);
+</pre>
+<p>If you do something like the above for a write-1-to-clear register you will <b>clear all bits except the one you're trying to clear</b>!  Here's another mistake sometimes observed with these registers:
+</p>
+<pre>// Another improper way of trying to clear a bit in a write-1-to-clear register
+// read-modify-write
+// Don't do this for write-1-to-clear registers!
+my_register |= (1&lt;&lt;4);
+</pre>
+<p>The above example would end up clearing <b>all</b> bits that are set in the register.
+</p><p>Here's how it <b>should</b> look:
+</p>
+<pre>// Correct method of clearing bit 4 in a write-1-to-clear register
+// do a straight write to the register
+my_register = (1&lt;&lt;4);
+</pre>
+<h1><span class="mw-headline" id="Using_I2C_in_a_Multi-Threaded_Context">Using I2C in a Multi-Threaded Context</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=12" title="Edit section: Using I2C in a Multi-Threaded Context">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>In a multi-threaded applicaton (e.g. using an RTOS where multiple threads might attempt to perform an I2C transaction) it is critical that your driver be <b>thread safe</b>.  Some people incorrectly think that checking for Bus Busy is sufficient for this condition, but it is not.  Here's a scenario that can occur:
+</p>
+<ul><li>Thread 1 starts an I2C transaction.  We program slave address, number of bytes, &lt;interrupt&gt;</li>
+<li>Thread 2 now starts an I2C transaction.  Because Thread 1 never hit the “STT” bit, the bus is not busy.  Thread 2 programs slave address, number of bytes, starts transaction, sends data.</li>
+<li>Thread 2 has completed its transfer correctly.</li>
+<li>Eventually we have a context switch back to Thread 1.  The slave address and number of bytes are now left in the state as specified by Thread 2, but that’s unknown to Thread 1.  It moves forward with setting the STT bit and performing its transfer.  Only now it is to the wrong address and potentially for the wrong number of bytes!</li></ul>
+<p>The solution to this issue is to use a mutex (e.g. GateMutex from TI-RTOS).  Each instance of the I2C driver (i.e. corresponding to the physical controllers in a device) should have its own mutex. Upon starting a transaction a thread locks the mutex, and upon completing the transaction it unlocks the mutex. It may not be a good idea to block a thread just because and as long as I2C is busy. In that case, a thread dedicated to I2C operation could swiftly accept orders for transmission.
+</p>
+<h1><span class="mw-headline" id="Related_articles">Related articles</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit&amp;section=13" title="Edit section: Related articles">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>For an example of programming the I2C peripheral using the CSL 2.x functional layer you should read <a href="Using_Functional_CSL_with_DM642.html" title="Using Functional CSL with DM642">this article</a>.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130212322
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.058 seconds
+Real time usage: 0.060 seconds
+Preprocessor visited node count: 59/1000000
+Preprocessor generated node count: 114/1000000
+Post‐expand include size: 56/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.589      1 Template:Note
+100.00%    1.589      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:541-0!canonical and timestamp 20201130212322 and revision id 236816
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>I2C Tips</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>I2C Tips</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>I2C Tips</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>I2C Tips</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>I2C Tips</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>I2C Tips</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>I2C Tips</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>I2C Tips</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>I2C Tips</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;oldid=236816">https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;oldid=236816</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_I2C.html" title="Category:I2C">I2C</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=I2C+Tips" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="I2C_Tips.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_I2C_Tips.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="I2C_Tips.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/I2C_Tips.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/I2C_Tips.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;oldid=236816" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=I2C_Tips&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 30 August 2019, at 14:37.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.058","walltime":"0.060","ppvisitednodes":{"value":59,"limit":1000000},"ppgeneratednodes":{"value":114,"limit":1000000},"postexpandincludesize":{"value":56,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.589      1 Template:Note","100.00%    1.589      1 -total"]},"cachereport":{"timestamp":"20201130212322","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":240});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/I2C_Tips by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:54:53 GMT -->
+</html>

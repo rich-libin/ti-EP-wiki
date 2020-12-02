@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:15:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques","wgTitle":"OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques","wgCurRevisionId":25445,"wgRevisionId":25445,"wgArticleId":4486,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["OMAPL1","C674x","AM1x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques","wgRelevantArticleId":4486,"wgRequestId":"7dc16e58742b2b5ddf1856b0","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OMAP-L1x_C674x_AM1x_Multichannel_Audio_Serial_Port_McASP_Throughput_and_Optimization_Techniques rootpage-OMAP-L1x skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><a href="AM1x_SOC_Architecture_and_Throughput_Overview.html" title="OMAP-L1x/C674x/AM1x SOC Architecture and Throughput Overview"><b><big><big>^</big></big></b> Up to main <b>OMAP-L1x/C674x/AM1x SOC Architecture and Throughput Overview</b> Table of Contents</a> 
+</p><p>This article was created to present throughput measurements and optimization techniques for the the Multichannel Audio Serial Port (McASP) of OMAP-L1x/C674x/AM1xx devices. Different variables were explored to assess their impact on McASP performance. Finally, the maximum throughput that can be achieved by the McASP are also presented.&#160; 
+</p><p>The information in this article deals mainly with OMAP-L1x8/C674m/AM18xx devices (where m is an even number). However the data can also be extended to OMAP-L1x7/C674n/AM17xx devices (where n is an odd number) given that both sets of devices share a similar SOC architecture. 
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#McASP_Basics"><span class="tocnumber">1</span> <span class="toctext">McASP Basics</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Features"><span class="tocnumber">1.1</span> <span class="toctext">Features</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Data_Flow"><span class="tocnumber">1.2</span> <span class="toctext">Data Flow</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#FIFO_Configuration"><span class="tocnumber">1.3</span> <span class="toctext">FIFO Configuration</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Clocking"><span class="tocnumber">1.4</span> <span class="toctext">Clocking</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#McASP_Throughput_Characterization"><span class="tocnumber">2</span> <span class="toctext">McASP Throughput Characterization</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Test_Environment"><span class="tocnumber">3</span> <span class="toctext">Test Environment</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Summary_of_McASP_Throughput_Data"><span class="tocnumber">4</span> <span class="toctext">Summary of McASP Throughput Data</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Standalone_Transfers.2C_No_EDMA_Background_Activity"><span class="tocnumber">4.1</span> <span class="toctext">Standalone Transfers, No EDMA Background Activity</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Competing_Traffic.2C_EDMA_Background_Activity_Using_Different_TC"><span class="tocnumber">4.2</span> <span class="toctext">Competing Traffic, EDMA Background Activity Using Different TC</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Competing_Traffic.2C_EDMA_Background_Activity_Using_Same_TC"><span class="tocnumber">4.3</span> <span class="toctext">Competing Traffic, EDMA Background Activity Using Same TC</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Factors_Affecting_McASP_Throughput"><span class="tocnumber">5</span> <span class="toctext">Factors Affecting McASP Throughput</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#McASP_Throughput_Presentation"><span class="tocnumber">6</span> <span class="toctext">McASP Throughput Presentation</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="McASP_Basics">McASP Basics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=1" title="Edit section: McASP Basics">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following sections provide a high-level overview of the McASP. Detailed information on the McASP can be obtained from the <i>TMS320C674x/OMAP-L1x Multichannel Audio Serial Port (McASP) User's Guide</i> (SPRUFM1).<br /> 
+</p><p><br /> 
+</p>
+<h3><span class="mw-headline" id="Features">Features<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=2" title="Edit section: Features">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The McASP&#160;is a general-purpose serial port optimized for multichannel audio applications. It supports time-division multiplexed (TDM) stream, Inter-IC Sound (I2S) protocols, direct connection to analog to digital converters (ADC) and digital to analog converters (DAC). The McASP includes independent transmit and receive sections with separate master clocks, bit clocks, and frame syncs.&#160; Up to 16 serializers that can be individually enabled for either transmit or receive operation; the number of serializers supported on each McASP&#160;varies for device to device (see your device data sheet).&#160; Each McASP also includes a 256-byte Read FIFO and Write FIFO.<br /><br /> 
+</p><p><b>McASP Block Diagram</b><br /> 
+</p><p><a href="../../File_McaspBlockDiagram.html" class="image" title="McASP Block Diagram"><img alt="McASP Block Diagram" src="https://processors.wiki.ti.com/images/4/4d/McaspBlockDiagram.png" width="635" height="512" /></a> 
+</p>
+<h3><span class="mw-headline" id="Data_Flow">Data Flow</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=3" title="Edit section: Data Flow">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The McASP generates transmit/receive DMA event (AXEVT/AREVT) requests when it needs data to be tranferred to/from its serializer registers. The Read and Write FIFOs directly service these data transfer requests.&#160; When a specific amount of data is available or needed in the FIFOs, the FIFOs generate a transmit/receive DMA event (AXEVT/AREVT).&#160; The EDMA must service McASP FIFOs when AXEVT/AREVT are generated.&#160; The amount of data requested by the FIFOs depends on number of serializers being used and FIFO configuration (see below).<br /><br /> 
+</p>
+<h3><span class="mw-headline" id="FIFO_Configuration">FIFO Configuration<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=4" title="Edit section: FIFO Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The McASP Write and Read FIFOs temporarily hold serializer data.<br /> 
+</p>
+<ul><li>256 bytes = up to four 32-bit words per serializer in the case of 16 active serializers</li>
+<li>256 bytes = up to 64 32-bit words in the case of one active serializer</li></ul>
+<p>The WNUMDMA and WNUMEVT parameters are used to configure the Write FIFO.&#160; Similarly RNUMDMA and RNUMEVT configure the Read FIFO. 
+</p><p>WNUMDMA specifies the write word count per McASP transfer. This value must equal the number of McASP serializers used as transmitters. Upon a transmit DMA event from the McASP, WNUMDMA words are transferred from the Write FIFO to the McASP. WNUMEVT specifies the write word count per DMA event. This value is a non-zero integer multiple of the number of serializers enabled as transmitters. When the Write FIFO has space for at least WNUMEVT words of data, then an AXEVT (transmit DMA event) is generated by FIFO to the host/DMA controller. RNUMEVT and RNUMDMA are receive/read versions of the two parameters just described. 
+</p><p><b>McASP FIFO Use</b> 
+</p><p><a href="../../File_McaspFifoUse.html" class="image" title="McASP FIFO Use"><img alt="McASP FIFO Use" src="https://processors.wiki.ti.com/images/c/c3/McaspFifoUse.png" width="379" height="433" /></a> 
+</p><p>When FIFO is disabled, EDMA writes data directly to serializers; WNUMDMA, WNUMEVT, RNUMDMA, and RNUMEVT are ignored.<br /> 
+</p><p>The “TX/RX EVT DMA RATIO ” is the multiplication factor between W/RNUMEVT and W/RNUMDMA.<br /> 
+</p>
+<ul><li><i>WNUMEVT = TX EVT DMA RATIO * WNUMDMA</i></li>
+<li><i>RNUMEVT = RX EVT DMA RATIO * RNUMDMA</i></li></ul>
+<p>TX/RX EVT DMA RATIO affects how often DMA requests are generated by the McASP. If TX EVT DMA RATIO = 1, then FIFO will trigger an DMA request on every transmit event.<br />However, if TX EVT DMA RATIO = 4, then FIFO will trigger an DMA request after four transmit events. Reducing number of DMA requests makes it easier to meet real-time deadlines.<br /><br /> 
+</p>
+<h3><span class="mw-headline" id="Clocking">Clocking<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=5" title="Edit section: Clocking">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>McASP serial clock (ACLKR &amp; ACLKX) can be generated internally or externally. In the case of internal clock, ACLKR &amp; ACLKX are generated from high-frequency clock (AHCLKX and AHCLKR) and clock dividers (CLKXDIV and CLKRDIV). The high-frequency clock generated externally on AHCLKX and AHCLKR pins or internally from AUXCLK and clock dividers (HCLKXDIV and HCLKRDIV). In the case of external clock, ACLKR &amp; ACLKX are sourced directly on McASP pins. 
+</p><p><b>McASP Transmit Clock Generator Block Diagram</b> 
+</p><p><a href="../../File_McaspTransmitClockDiagram.html" class="image" title="McASP Transmit Clock Generator Block Diagram"><img alt="McASP Transmit Clock Generator Block Diagram" src="https://processors.wiki.ti.com/images/c/c7/McaspTransmitClockDiagram.png" width="457" height="408" /></a><br /> 
+</p><p><br /> 
+</p><p><b>McASP Receive Clock Generator Block Diagram</b><br /> 
+</p><p><a href="../../File_McaspReceiveClockDiagram.html" class="image" title="McASP Receive Clock Generator Block Diagram"><img alt="McASP Receive Clock Generator Block Diagram" src="https://processors.wiki.ti.com/images/1/1a/McaspReceiveClockDiagram.png" width="459" height="351" /></a> 
+</p><p><br /> 
+</p><p>McASP supports independent transmit and receive clock zones. &#160;However, McASP receiver can also be configured to operate synchronously to the transmitter clock and frame signals (ACLKX and AFSX).<br /> 
+</p>
+<h2><span class="mw-headline" id="McASP_Throughput_Characterization">McASP Throughput Characterization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=6" title="Edit section: McASP Throughput Characterization">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A vast amount of throughput data was collected on the McASP. Several knobs (or variables) were turned to get a full understanding of the McASP throughput performance under different scenarios.<br /> 
+</p><p>One imporant variable that was considered during these throughput measurements was the impact of other master activity on the McASP throughput performance. To simulate activity generated by another master(s), a dummy EDMA continuous transfer was setup to compete for access to external memory. Several aspects of this backgound activity were also tweaked. 
+</p>
+<table width="80%" cellspacing="1" cellpadding="1" border="1" summary="Summary of test variables explored during LCDC throughput data collection.">
+<caption><b>Throughput Data Test Variables</b>
+</caption>
+<tbody><tr>
+<th scope="col">Test Variable<br />
+</th>
+<th scope="col">Options<br />
+</th></tr>
+<tr>
+<td>DSP/ARM Frequency<br />
+</td>
+<td>300, 200, and 100 MHz<br />
+</td></tr>
+<tr>
+<td>Pass/Fail Criteria<br />
+</td>
+<td>EDMA is not able to complete the transfer of data from McASP or FIFO to the destination buffers <br />
+</td></tr>
+<tr>
+<td>McASP Data Location<br />
+</td>
+<td>L2, Shared RAM, DDR2 (132 MHz)<br />
+</td></tr>
+<tr>
+<td>Test Parameters<br />
+</td>
+<td>
+<ul><li>Serial clock frequency and word size (8, 16, and 32)</li>
+<li>Number of serializers (4 TX/RX, 8 TX/RX)</li>
+<li>Write/Read FIFO enabled/disabled</li>
+<li>TX/RX EVT DMA RATIO</li>
+<li>EDMA default burst size</li>
+<li>Background EDMA activity w/ different read rate levels &amp; priority</li>
+<li>DDR2 memory controller peripheral bus burst priority register (PBBPR) setting</li></ul>
+</td></tr></tbody></table>
+<p><b>Notes: </b><br /> 
+</p>
+<ul><li>The TX/RX EVT DMA RATIO value shown in data slides is the minimum value for which the test always passes for a given set of test parameters. A lower threshold value will cause the test to fail.<br /></li>
+<li>All data collected using low-level software; BIOS and Linux were not used.<br /></li></ul>
+<p><br /> 
+</p>
+<h2><span class="mw-headline" id="Test_Environment">Test Environment<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=7" title="Edit section: Test Environment">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following list describes the test environment under which the McASP throughput data was collected: 
+</p>
+<ul><li>All data was collected with the DSP &amp; ARM running at three different frequencies: 300, 200, and 100MHz.</li>
+<li>L2, Shared RAM, and DDR2 memory were used to hold the source (SRC) and destination (DST) data buffers.<br /></li>
+<li>No drivers or high-level operating systems (BIOS, Linux, etc.) were used for this testing.&#160; All data was collected using low-level software.<br /></li></ul>
+<p><br /> 
+</p>
+<h2><span class="mw-headline" id="Summary_of_McASP_Throughput_Data">Summary of McASP Throughput Data</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=8" title="Edit section: Summary of McASP Throughput Data">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The subsections given below present a summary of a large amount of data collected by varying the parameters listed in the&#160;<i>Throughput Data Test Variables</i> table . To see the specific impact of these test parameters on McASP performance, refer to the back up slides given in the presentations at the end of this wiki article.<br /> 
+</p><p><b>NOTE: "Max throughput" is on a per serializer basis.</b>
+</p>
+<h3><span id="Standalone_Transfers,_No_EDMA_Background_Activity"></span><span class="mw-headline" id="Standalone_Transfers.2C_No_EDMA_Background_Activity">Standalone Transfers, No EDMA Background Activity</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=9" title="Edit section: Standalone Transfers, No EDMA Background Activity">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<table cellspacing="0" cellpadding="4" border="1" style="width: 620px; height: 179px;">
+<caption><b>Summary of McASP Standalone Data, 4 TX/RX Serializers</b>
+</caption>
+<tbody><tr>
+<td align="center"><b>Test Scenario</b>
+</td>
+<td align="center"><b>Max Throughput (Mbps)</b>
+</td>
+<td align="center"><b>SRC and DST Buffers</b>
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=32 bits<br />FIFO enabled
+</td>
+<td align="center">49<br />49<br />49
+</td>
+<td>L2 with TX/RX EVT DMA ratio = 1<br />L3 with TX/RX EVT DMA ratio = 1<br />DDR2 with TX/RX EVT DMA ratio = 1
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=16 bits<br />FIFO enabled
+</td>
+<td align="center">32<br />32<br />32
+</td>
+<td>L2 with TX/RX EVT DMA ratio = 2<br />L3 with TX/RX EVT DMA ratio = 2<br />DDR2 with TX/RX EVT DMA ratio = 3
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=8 bits<br />FIFO enabled
+</td>
+<td align="center">16<br />16<br />16
+</td>
+<td>L2 with TX/RX EVT DMA ratio = 2<br />L3 with TX/RX EVT DMA ratio = 2<br />DDR2 with TX/RX EVT DMA ratio = 2
+</td></tr></tbody></table>
+<p><br /> 
+</p>
+<table cellspacing="0" cellpadding="4" border="1" style="width: 623px; height: 381px;">
+<caption><b>Summary of McASP Standalone Data, 8 TX/RX Serializers</b>
+</caption>
+<tbody><tr>
+<td align="center"><b>Test Scenario</b>
+</td>
+<td align="center"><b>Max Throughput (Mbps)</b>
+</td>
+<td align="center"><b>SRC and DST Buffers</b>
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=32 bits<br />FIFO disabled
+</td>
+<td align="center">21.5<br />21.5<br />21.5
+</td>
+<td>L2<br />L3<br />DDR2
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=32 bits<br />FIFO enabled
+</td>
+<td align="center">32<br />32<br />32
+</td>
+<td>L2 with TX/RX EVT DMA ratio = 2<br />L3 with TX/RX EVT DMA ratio = 2<br />DDR2 with TX/RX EVT DMA ratio = 2
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=16 bits<br />FIFO disabled
+</td>
+<td align="center">10.66<br />10.66<br />10.66
+</td>
+<td>L2<br />L3<br />DDR2
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=16 bits<br />FIFO enabled
+</td>
+<td align="center">16<br />16<br />16
+</td>
+<td>L2 with TX/RX EVT DMA ratio = 2<br />L3 with TX/RX EVT DMA ratio = 2<br />DDR2 with TX/RX EVT DMA ratio = 2
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=8 bits<br />FIFO disabled
+</td>
+<td align="center">4.8<br />4.8<br />4.8
+</td>
+<td>L2<br />L3<br />DDR2
+</td></tr>
+<tr>
+<td>Standalone Test<br />Element size=8 bits<br />FIFO enabled
+</td>
+<td align="center">8<br />8<br />8
+</td>
+<td>L2 with TX/RX EVT DMA ratio = 2<br />L3 with TX/RX EVT DMA ratio = 2<br />DDR2 with TX/RX EVT DMA ratio = 2
+</td></tr></tbody></table>
+<p><br /> 
+</p>
+<h3><span id="Competing_Traffic,_EDMA_Background_Activity_Using_Different_TC"></span><span class="mw-headline" id="Competing_Traffic.2C_EDMA_Background_Activity_Using_Different_TC">Competing Traffic, EDMA Background Activity Using Different TC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=10" title="Edit section: Competing Traffic, EDMA Background Activity Using Different TC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Summary of McASP Concurrent Data, 4 TX/RX Serializers, Different TC Used for Background Activity</b><br /> 
+</p><p><a href="../../File_McaspConcurrent4txrxDifferentTC.html" class="image" title="Summary of McASP Concurrent Data, 4 TX/RX Serializers, Different TC Used for Background Activity"><img alt="Summary of McASP Concurrent Data, 4 TX/RX Serializers, Different TC Used for Background Activity" src="https://processors.wiki.ti.com/images/9/9d/McaspConcurrent4txrxDifferentTC.png" width="635" height="518" /></a> 
+</p><p>NOTE: The above all test scenarios are with the background activity with continues data transfer of 4K bytes.<br /> 
+</p><p><br /> 
+</p><p><b>Summary of McASP Concurrent Data, 8 TX/RX Serializers, Different TC Used for Background Activity</b><br /> 
+</p><p><a href="../../File_McaspConcurrent8txrxDifferentTC.html" class="image" title="Summary of McASP Concurrent Data, 8 TX/RX Serializers, Different TC Used for Background Activity"><img alt="Summary of McASP Concurrent Data, 8 TX/RX Serializers, Different TC Used for Background Activity" src="https://processors.wiki.ti.com/images/e/e5/McaspConcurrent8txrxDifferentTC.png" width="636" height="516" /></a> 
+</p><p>NOTE: The above all test scenarios are with the background activity with continues data transfer of 4K bytes.<br /> 
+</p>
+<h3><span id="Competing_Traffic,_EDMA_Background_Activity_Using_Same_TC"></span><span class="mw-headline" id="Competing_Traffic.2C_EDMA_Background_Activity_Using_Same_TC">Competing Traffic, EDMA Background Activity Using Same TC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=11" title="Edit section: Competing Traffic, EDMA Background Activity Using Same TC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Summary of McASP Concurrent Data, 4 TX/RX Serializers, Same TC Used for Background Activity</b><br /> 
+</p><p><a href="../../File_McaspConcurrent4txrxSameTC.html" class="image" title="Summary of McASP Concurrent Data, 4 TX/RX Serializers, Same TC Used for Background Activity"><img alt="Summary of McASP Concurrent Data, 4 TX/RX Serializers, Same TC Used for Background Activity" src="https://processors.wiki.ti.com/images/4/46/McaspConcurrent4txrxSameTC.png" width="635" height="517" /></a> 
+</p><p>NOTE: The above all test scenarios are with the background activity with continues data transfer of 4K bytes.<br /> 
+</p><p><br /> 
+</p><p><b>Summary of McASP Concurrent Data, 8 TX/RX Serializers, Same TC Used for Background Activity</b><br /> 
+</p><p><a href="../../File_McaspConcurrent8txrxSameTC.html" class="image" title="Summary of McASP Concurrent Data, 8 TX/RX Serializers, Same TC Used for Background Activity"><img alt="Summary of McASP Concurrent Data, 8 TX/RX Serializers, Same TC Used for Background Activity" src="https://processors.wiki.ti.com/images/2/2f/McaspConcurrent8txrxSameTC.png" width="634" height="517" /></a> 
+</p><p>NOTE: The above all test scenarios are with the background activity with continues data transfer of 4K bytes.
+</p>
+<h2><span class="mw-headline" id="Factors_Affecting_McASP_Throughput">Factors Affecting McASP Throughput<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=12" title="Edit section: Factors Affecting McASP Throughput">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following table describes the main factors affecting McASP&#160;throughput and general recommendations for handling those factors. 
+</p><p><br /> 
+</p>
+<table width="89%" cellspacing="0" cellpadding="4" border="1">
+<caption><b>Factors Affecting McASP Throughput</b>
+</caption>
+<tbody><tr>
+<td><b>Factor</b>
+</td>
+<td><b>Impact</b>
+</td>
+<td><b>General Recommendation</b>
+</td></tr>
+<tr>
+<td>SRC/DST Buffer Location
+</td>
+<td>Different memories have different access latencies. The longer the access latency, the lower the sustainable McASP throughput.
+</td>
+<td>Internal memory (L2 and Shared RAM) has lower access latencies than external memory (DDR). In general, try to keep McASP SRC/DST buffers in internal memory to meet McASP real-time requirements.
+</td></tr>
+<tr>
+<td>EDMA Queue/TC assignment for McASP
+</td>
+<td>Assigning McASP transmit and receive events to the same Queue/TC might add delay in servicing individual events.
+</td>
+<td>Assign McASP transmit and receive EDMA events to the same queue/TC during general usage to save EDMA queue/TC resources as the performance impact is not significant.
+</td></tr>
+<tr>
+<td>McASP FIFO Use
+</td>
+<td>Using FIFO increases McASP data rate and decreases real-time burden on EDMA.
+</td>
+<td>Use McASP FIFO whenever possible.The ratio between W/RNUMEVT and W/RNUMDA should be increased as much as possible to take full advantage of the FIFOs and in turn increase the performance of the McASP.<br />
+</td></tr>
+<tr>
+<td>Large, parallel data transfer on same EDMA Queue/TC
+</td>
+<td>Assigning large paging transfers on same EDMA Queue/TC as McASP transfers impacts McASP performance.
+</td>
+<td>Move large paging transfers with non real-time requirements to different queue/TC and reduce the priority of that TC relative to the TC used for McASP transfers.
+</td></tr></tbody></table>
+<p><br /> 
+</p>
+<h2><span class="mw-headline" id="McASP_Throughput_Presentation">McASP Throughput Presentation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=13" title="Edit section: McASP Throughput Presentation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following presentation summarizes the results of all throughput measurements conducted on OMAP-L1x8/C674x/AM18xx class of devices. 
+</p><p><a href="https://processors.wiki.ti.com/images/e/e1/Omapl1x8_c674x_am18xx_mcaspThroughput.zip" class="internal" title="Omapl1x8 c674x am18xx mcaspThroughput.zip">Omapl1x8_c674x_am18xx_mcaspThroughput.zip</a><br /> 
+</p><p><a href="https://processors.wiki.ti.com/images/8/85/Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part1.zip" class="internal" title="Omapl1x8 c674x am18xx mcaspThroughput backupSlides Part1.zip">Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part1.zip</a><br /> 
+</p><p><a href="https://processors.wiki.ti.com/images/7/7e/Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part2a.zip" class="internal" title="Omapl1x8 c674x am18xx mcaspThroughput backupSlides Part2a.zip">Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part2a.zip</a><br /> 
+</p><p><a href="https://processors.wiki.ti.com/images/8/89/Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part2b.zip" class="internal" title="Omapl1x8 c674x am18xx mcaspThroughput backupSlides Part2b.zip">Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part2b.zip</a><br /> 
+</p><p><a href="https://processors.wiki.ti.com/images/c/cf/Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part3.zip" class="internal" title="Omapl1x8 c674x am18xx mcaspThroughput backupSlides Part3.zip">Omapl1x8_c674x_am18xx_mcaspThroughput_backupSlides_Part3.zip</a><br /> 
+</p><p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130125623
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.075 seconds
+Real time usage: 0.085 seconds
+Preprocessor visited node count: 51/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4486-0!canonical and timestamp 20201130125623 and revision id 25445
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x Multichannel Audio Serial Port (McASP) Throughput and Optimization Techniques</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;oldid=25445">https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;oldid=25445</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../../Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="../../Category_C674x.html" title="Category:C674x">C674x</a></li><li><a href="../../Category_AM1x.html" title="Category:AM1x">AM1x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OMAP-L1x%2FC674x%2FAM1x+Multichannel+Audio+Serial+Port+%28McASP%29+Throughput+and+Optimization+Techniques" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="../../Talk_OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../../Special_WhatLinksHere/OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../../Special_RecentChangesLinked/OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;oldid=25445" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 March 2010, at 10:13.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.075","walltime":"0.085","ppvisitednodes":{"value":51,"limit":1000000},"ppgeneratednodes":{"value":56,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130125623","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":230});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L1x/C674x/AM1x_Multichannel_Audio_Serial_Port_(McASP)_Throughput_and_Optimization_Techniques by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:15:22 GMT -->
+</html>

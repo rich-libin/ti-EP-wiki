@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Build_OpenSSL_for_Sitara by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:23:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Build OpenSSL for Sitara - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Build_OpenSSL_for_Sitara","wgTitle":"Build OpenSSL for Sitara","wgCurRevisionId":114473,"wgRevisionId":114473,"wgArticleId":8641,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM437x","AM335x","AM35x","AM37x","AM1x","AM18x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Build_OpenSSL_for_Sitara","wgRelevantArticleId":8641,"wgRequestId":"c9888e7f4fae0ca5c5212a26","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Build_OpenSSL_for_Sitara rootpage-Build_OpenSSL_for_Sitara skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Build OpenSSL for Sitara</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Assumptions"><span class="tocnumber">2</span> <span class="toctext">Assumptions</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Procedure_to_Build.2FTest_OpenSSL"><span class="tocnumber">3</span> <span class="toctext">Procedure to Build/Test OpenSSL</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Install_OpenSSL_1.0.0d_in_the_Host_Development_System"><span class="tocnumber">3.1</span> <span class="toctext">Install OpenSSL 1.0.0d in the Host Development System</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Configure_OpenSSL"><span class="tocnumber">3.2</span> <span class="toctext">Configure OpenSSL</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Patch_OpenSSL"><span class="tocnumber">3.3</span> <span class="toctext">Patch OpenSSL</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Compile_and_Install_into_target"><span class="tocnumber">3.4</span> <span class="toctext">Compile and Install into target</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Modify_path_to_OpenSSL"><span class="tocnumber">3.5</span> <span class="toctext">Modify path to OpenSSL</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Testing"><span class="tocnumber">4</span> <span class="toctext">Testing</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Speed_Tests"><span class="tocnumber">4.1</span> <span class="toctext">Speed Tests</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Encryt.2FDecryt_Tests"><span class="tocnumber">4.2</span> <span class="toctext">Encryt/Decryt Tests</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This is the third of three articles written as a how-to guide for enabling hardware accelerated cryptographic functions for OpenSSL version 1.0.0d. 
+</p><p>The first and second articles describe how to patch the Linux kernel with Open Crypto Framework (OCF-Linux) and how to build and use the crypto module which accesses the hardware accelerators. 
+</p><p>This article describes how to build and run OpenSSL version 1.0.0d with support for the hardware accelerated cryptographic functions available on the 37xx and 35xx general purpose (GP) device family. 
+</p>
+<h2><span class="mw-headline" id="Assumptions">Assumptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=2" title="Edit section: Assumptions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Linux host development system.&#160;&#160;Ubuntu 10.04 running in a VMWare machine is used in the examples here</li>
+<li>Sitara SDK for the AM37xx or AM35xx (this includes the kernel source code, root file system and the cross-compiler tools)</li></ul>
+<ul><li>Shiva EVM (AM3517) or OMAP3 Rev G EVM (AM37x).&#160; For examples here the board uses the AM3703 processor module</li>
+<li>Source tarball from openssl.org (openssl-1.0.0d.tar.gz)</li></ul>
+<p><br />
+</p><p>For the rest of this article it is assumed that the Sitara SDK&#160;has been installed on the Linux host development system.&#160; The root file system for the EVM lies in a sub-directory of the SDK called targetNFS and the board performs a NFS&#160;mount of this directory.&#160; 
+</p><p><br />
+</p><p><br />
+</p>
+<h2><span id="Procedure_to_Build/Test_OpenSSL"></span><span class="mw-headline" id="Procedure_to_Build.2FTest_OpenSSL">Procedure to Build/Test OpenSSL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=3" title="Edit section: Procedure to Build/Test OpenSSL">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Install_OpenSSL_1.0.0d_in_the_Host_Development_System">Install OpenSSL 1.0.0d in the Host Development System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=4" title="Edit section: Install OpenSSL 1.0.0d in the Host Development System">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Place the OpenSSL tarball&#160;a convenient directory on the Linux host and extract it in place.&#160; 
+</p>
+<h3><span class="mw-headline" id="Configure_OpenSSL">Configure OpenSSL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=5" title="Edit section: Configure OpenSSL">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There is a README file and INSTALL&#160;file under the openssl-1.0.0d directory.&#160; The instructions under the INSTALL&#160;file do <b>NOT </b>apply to the situation for cross-compiling with an ARM target.&#160; Do <b>NOT </b>run the ./configure or ./Configure scripts.&#160; Skip the instructions in the INSTALL file and just do the following: 
+</p><p>Edit the Makefile and make the following changes: 
+</p>
+<pre>INSTALL_PREFIX=[path to NFS]
+
+CFLAG= -O -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+CC= arm-arago-linux-gnueabi-gcc
+AR= arm-arago-linux-gnueabi-ar $(ARFLAGS) r
+RANLIB= arm-arago-linux-gnueabi-ranlib
+NM= arm-arago-linux-gnueabi-nm
+
+</pre>
+<p>The path in the INSTALL_PREFIX parameter should match the path in the host dev system for the root of the NFS&#160;mount to be used by the EVM target. 
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Patch_OpenSSL">Patch OpenSSL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=6" title="Edit section: Patch OpenSSL">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>OpenSSL needs a small modification to make SHA&#160;and MD5 operations work with large files when using the AM3x HW accelerators. 
+</p><p><a href="File_0002-Modify-eng_cryptodev.c-to-make-SHA1-and-MD5-work-wit.html" title="File:0002-Modify-eng cryptodev.c-to-make-SHA1-and-MD5-work-wit.patch">File:0002-Modify-eng cryptodev.c-to-make-SHA1-and-MD5-work-wit.patch</a>
+</p>
+<h3><span class="mw-headline" id="Compile_and_Install_into_target">Compile and Install into target</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=7" title="Edit section: Compile and Install into target">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To ensure that the OpenSSL Makefile will find the cross-compile tools from the SDK, source the environment setup script from the SDK.&#160; The prompt will change to indicate that the tools are now in the current path. 
+</p>
+<pre>user@usergt-laptop:~/OpenSSL/openssl-1.0.0d$
+user@usergt-laptop:~/OpenSSL/openssl-1.0.0d$ source ~/ti-sdk-am37x-evm-05.04.00.00/linux-devkit/environment-setup
+[linux-devkit]:~/OpenSSL/openssl-1.0.0d&gt;</pre>
+<p>Now just run <b>make </b>and then <b>make install</b>.&#160; The make install command will place OpenSSL in the usr/local/ssl sub-directory of the NFS mount.&#160; This will then be the /usr/local/ssl sub-directory of the target system after the target boots up. 
+</p><p>When the target boots and mounts this NFS, the openssl app and collateral will be under /usr/local/ssl.&#160; From the target perspective this will look like the following: 
+</p><p><br />
+</p>
+<pre>root@arago:/usr/local/ssl# ls -l
+drwxr-xr-x 2 1000 1000 4096 Jun 23 2010 bin
+drwxr-xr-x 2 1000 1000 4096 Jun 23 2010 certs
+drwxr-xr-x 3 1000 1000 4096 Jun 23 2010 include
+drwxr-xr-x 4 1000 1000 4096 Jun 23 2010 lib
+drwxr-xr-x 6 1000 1000 4096 Jun 23 2010 man
+drwxr-xr-x 2 1000 1000 4096 Jun 23 2010 misc
+-rw-r--r-- 1 1000 1000 10819 Jun 23 2010 openssl.cnf
+drwxr-xr-x 2 1000 1000 4096 Jun 23 2010 private
+root@arago:/usr/local/ssl#</pre>
+<p><br />And the openssl app will be in the bin sub-directory: 
+</p>
+<pre>root@arago:/usr/local/ssl# cd bin/
+root@arago:/usr/local/ssl/bin# ls -l
+-rwxr-xr-x 1 1000 1000 4261 Jun 23 2010 c_rehash
+-rwxr-xr-x 1 1000 1000 2142934 Jun 23 2010 openssl
+root@arago:/usr/local/ssl/bin#</pre>
+<h3><span class="mw-headline" id="Modify_path_to_OpenSSL">Modify path to OpenSSL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=8" title="Edit section: Modify path to OpenSSL">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The Sitara SDK contains an OpenSSL executable at the location /usr/bin/openssl in the root filesystem.&#160; So in the Linux host this is at /home/[user]/ti-[SDK]/targetNFS/usr/bin/openssl.&#160; This needs to be changed so that calls to OpenSSL&#160;go to the new executable in /usr/local/bin/openssl.
+</p><p>First save the existing openssl executable.&#160; Then make a soft link to the new new version.
+</p>
+<pre>[linux-devkit]:~/ti-sdk-am37x-evm-05.04.00.00/targetNFS/usr/bin&gt; mv openssl openssl.old
+[linux-devkit]:~/ti-sdk-am37x-evm-05.04.00.00/targetNFS/usr/bin&gt; ln -s /usr/local/ssl/bin/openssl openssl
+[linux-devkit]:~/ti-sdk-am37x-evm-05.04.00.00/targetNFS/usr/bin&gt;
+[linux-devkit]:~/ti-sdk-am37x-evm-05.04.00.00/targetNFS/usr/bin&gt; ls -l openssl
+lrwxrwxrwx 1 root root 26 2012-03-07 15:34 openssl -&gt; /usr/local/ssl/bin/openssl
+[linux-devkit]:~/ti-sdk-am37x-evm-05.04.00.00/targetNFS/usr/bin&gt;</pre>
+<p>Now when the board boots up any calls to the executable openssl will go to the newly compiled version instead of the one included in the SDK.
+</p>
+<h2><span class="mw-headline" id="Testing">Testing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=9" title="Edit section: Testing">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Speed_Tests">Speed Tests</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=10" title="Edit section: Speed Tests">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Now&#160;it is possible to run speed tests on the target EVM.&#160; The log below shows the speed test executed without the ocf driver loaded and then again after installing the module.&#160; So the first speed test below shows the performance without the hardware acceleration.&#160; The command is the same because OpenSSL simply reverts to a pure SW implementation if the hardware accelerators are not available.&#160; The time function is used to wrap the openssl application and measure time and bandwidth for the application 
+</p><p><br />
+</p>
+<pre>root@arago:/usr/local/ssl/bin# time -v openssl speed -evp aes-128-cbc -engine cryptodev
+engine "cryptodev" set.
+Doing aes-128-cbc for 3s on 16 size blocks: 111841 aes-128-cbc's in 2.60s
+Doing aes-128-cbc for 3s on 64 size blocks: 107004 aes-128-cbc's in 2.56s
+Doing aes-128-cbc for 3s on 256 size blocks: 15170 aes-128-cbc's in 0.46s
+Doing aes-128-cbc for 3s on 1024 size blocks: 14993 aes-128-cbc's in 0.45s
+Doing aes-128-cbc for 3s on 8192 size blocks: 4706 aes-128-cbc's in 0.28s
+OpenSSL 1.0.0a 1 Jun 2010
+built on: Tue Sep 14 14:22:46 CDT 2010
+options:bn(32,32) rc4(ptr,int) des(idx,cisc,2,long) aes(partial) idea(int) blowfish(idx)
+compiler: arm-none-linux-gnueabi-gcc -O -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+The 'numbers' are in 1000s of bytes per second processed.
+type 16 bytes 64 bytes 256 bytes 1024 bytes 8192 bytes
+aes-128-cbc 596.49k 2282.75k 1294.51k 5117.61k 12850.52k
+Command being timed: "openssl speed -evp aes-128-cbc -engine cryptodev"
+User time (seconds): 0.28
+System time (seconds): 6.15
+Percent of CPU this job got: 41%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 15.44s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 5440
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 30
+Minor (reclaiming a frame) page faults: 326
+Voluntary context switches: 34919
+Involuntary context switches: 219132
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:/usr/local/ssl/bin#
+
+root@arago:/usr/local/ssl/bin# time -v openssl speed -evp aes-192-cbc -engine cryptodev
+engine "cryptodev" set.
+Doing aes-192-cbc for 3s on 16 size blocks: 111771 aes-192-cbc's in 2.60s
+Doing aes-192-cbc for 3s on 64 size blocks: 102088 aes-192-cbc's in 2.55s
+Doing aes-192-cbc for 3s on 256 size blocks: 14859 aes-192-cbc's in 0.45s
+Doing aes-192-cbc for 3s on 1024 size blocks: 15148 aes-192-cbc's in 0.45s
+Doing aes-192-cbc for 3s on 8192 size blocks: 4511 aes-192-cbc's in 0.27s
+OpenSSL 1.0.0a 1 Jun 2010
+built on: Tue Sep 14 14:22:46 CDT 2010
+options:bn(32,32) rc4(ptr,int) des(idx,cisc,2,long) aes(partial) idea(int) blowfish(idx)
+compiler: arm-none-linux-gnueabi-gcc -O -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+The 'numbers' are in 1000s of bytes per second processed.
+type 16 bytes 64 bytes 256 bytes 1024 bytes 8192 bytes
+aes-192-cbc 596.11k 2177.88k 1267.97k 5170.52k 12318.04k
+Command being timed: "openssl speed -evp aes-192-cbc -engine cryptodev"
+User time (seconds): 0.24
+System time (seconds): 6.10
+Percent of CPU this job got: 42%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 15.04s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 5440
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 356
+Voluntary context switches: 34528
+Involuntary context switches: 214123
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:/usr/local/ssl/bin#
+
+root@arago:/usr/local/ssl/bin# time -v openssl speed -evp aes-256-cbc -engine cryptodev
+engine "cryptodev" set.
+Doing aes-256-cbc for 3s on 16 size blocks: 112338 aes-256-cbc's in 2.60s
+Doing aes-256-cbc for 3s on 64 size blocks: 100421 aes-256-cbc's in 2.39s
+Doing aes-256-cbc for 3s on 256 size blocks: 14423 aes-256-cbc's in 0.42s
+Doing aes-256-cbc for 3s on 1024 size blocks: 16441 aes-256-cbc's in 0.50s
+Doing aes-256-cbc for 3s on 8192 size blocks: 3982 aes-256-cbc's in 0.23s
+OpenSSL 1.0.0a 1 Jun 2010
+built on: Tue Sep 14 14:22:46 CDT 2010
+options:bn(32,32) rc4(ptr,int) des(idx,cisc,2,long) aes(partial) idea(int) blowfish(idx)
+compiler: arm-none-linux-gnueabi-gcc -O -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+The 'numbers' are in 1000s of bytes per second processed.
+type 16 bytes 64 bytes 256 bytes 1024 bytes 8192 bytes
+aes-256-cbc 599.14k 2142.31k 1230.76k 5611.86k 10873.51k
+Command being timed: "openssl speed -evp aes-256-cbc -engine cryptodev"
+User time (seconds): 0.32
+System time (seconds): 5.85
+Percent of CPU this job got: 41%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 15.05s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 5440
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 356
+Voluntary context switches: 46666
+Involuntary context switches: 201214
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:/usr/local/ssl/bin#
+
+root@arago:/usr/local/ssl/bin# time -v openssl speed -evp des-cbc -engine cryptodev
+engine "cryptodev" set.
+Doing des-cbc for 3s on 16 size blocks: 111207 des-cbc's in 2.59s
+Doing des-cbc for 3s on 64 size blocks: 106106 des-cbc's in 2.52s
+Doing des-cbc for 3s on 256 size blocks: 15585 des-cbc's in 0.46s
+Doing des-cbc for 3s on 1024 size blocks: 15965 des-cbc's in 0.48s
+Doing des-cbc for 3s on 8192 size blocks: 4809 des-cbc's in 0.29s
+OpenSSL 1.0.0a 1 Jun 2010
+built on: Tue Sep 14 14:22:46 CDT 2010
+options:bn(32,32) rc4(ptr,int) des(idx,cisc,2,long) aes(partial) idea(int) blowfish(idx)
+compiler: arm-none-linux-gnueabi-gcc -O -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+The 'numbers' are in 1000s of bytes per second processed.
+type 16 bytes 64 bytes 256 bytes 1024 bytes 8192 bytes
+des-cbc 593.10k 2263.59k 1329.92k 5449.39k 13131.78k
+Command being timed: "openssl speed -evp des-cbc -engine cryptodev"
+User time (seconds): 0.25
+System time (seconds): 6.10
+Percent of CPU this job got: 42%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 15.04s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 5440
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 356
+Voluntary context switches: 40137
+Involuntary context switches: 213806
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:/usr/local/ssl/bin#
+
+root@arago:/usr/local/ssl/bin# time -v openssl speed -evp des3 -engine cryptodev
+engine "cryptodev" set.
+Doing des-ede3-cbc for 3s on 16 size blocks: 112762 des-ede3-cbc's in 2.62s
+Doing des-ede3-cbc for 3s on 64 size blocks: 101369 des-ede3-cbc's in 1.69s
+Doing des-ede3-cbc for 3s on 256 size blocks: 14209 des-ede3-cbc's in 0.42s
+Doing des-ede3-cbc for 3s on 1024 size blocks: 15949 des-ede3-cbc's in 0.48s
+Doing des-ede3-cbc for 3s on 8192 size blocks: 3973 des-ede3-cbc's in 0.24s
+OpenSSL 1.0.0a 1 Jun 2010
+built on: Tue Sep 14 14:22:46 CDT 2010
+options:bn(32,32) rc4(ptr,int) des(idx,cisc,2,long) aes(partial) idea(int) blowfish(idx)
+compiler: arm-none-linux-gnueabi-gcc -O -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+The 'numbers' are in 1000s of bytes per second processed.
+type 16 bytes 64 bytes 256 bytes 1024 bytes 8192 bytes
+des-ede3-cbc 601.40k 2162.54k 1212.50k 5443.93k 10848.94k
+Command being timed: "openssl speed -evp des3 -engine cryptodev"
+User time (seconds): 0.29
+System time (seconds): 5.17
+Percent of CPU this job got: 36%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 15.05s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 5440
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 356
+Voluntary context switches: 135308
+Involuntary context switches: 113232
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:/usr/local/ssl/bin#</pre>
+<h3><span id="Encryt/Decryt_Tests"></span><span class="mw-headline" id="Encryt.2FDecryt_Tests">Encryt/Decryt Tests</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit&amp;section=11" title="Edit section: Encryt/Decryt Tests">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To test encryption/decryption some data files must be created.&#160; In the following example four random files are created with the dd command.&#160; The sizes of these files are 1k, 10k, 1M, and 100M.&#160; The performance of crypto varies greatly with file size. 
+</p><p><br />
+</p>
+<pre>root@arago:~# dd if=/dev/urandom of=smallrnddata bs=1024 count=1
+root@arago:~# dd if=/dev/urandom of=medrnddata bs=1024 count=10
+root@arago:~# dd if=/dev/urandom of=bigrnddata bs=1024 count=1024
+root@arago:~# dd if=/dev/urandom of=hugernddata bs=1048576 count=100</pre>
+<p><br />Now each file is encrypted and then decrypted and compared to the original file.&#160; The encrypted file ends in .enc.&#160; The decrypted files end in dec. 
+</p><p><br />
+</p>
+<pre>root@arago:~# time -v openssl enc -aes-128-cbc -engine cryptodev -in smallrnddata -out smallrnddata.enc -pass pass:password
+engine "cryptodev" set.
+Command being timed: "openssl enc -aes-128-cbc -engine cryptodev -in smallrnddata -out smallrnddata.enc -pass pass:password"
+User time (seconds): 0.03
+System time (seconds): 0.00
+Percent of CPU this job got: 44%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 0.07s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4480
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 2
+Minor (reclaiming a frame) page faults: 294
+Voluntary context switches: 24
+Involuntary context switches: 3
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~# time -v openssl enc -aes-128-cbc -engine cryptodev -in medrnddata -out medrnddata.enc -pass pass:password
+engine "cryptodev" set.
+Command being timed: "openssl enc -aes-128-cbc -engine cryptodev -in medrnddata -out medrnddata.enc -pass pass:password"
+User time (seconds): 0.03
+System time (seconds): 0.00
+Percent of CPU this job got: 59%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 0.05s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4496
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 297
+Voluntary context switches: 15
+Involuntary context switches: 2
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~# time -v openssl enc -aes-128-cbc -engine cryptodev -in bigrnddata -out bigrnddata.enc -pass pass:password
+engine "cryptodev" set.
+Command being timed: "openssl enc -aes-128-cbc -engine cryptodev -in bigrnddata -out bigrnddata.enc -pass pass:password"
+User time (seconds): 0.02
+System time (seconds): 0.13
+Percent of CPU this job got: 26%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 0.59s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4496
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 297
+Voluntary context switches: 274
+Involuntary context switches: 260
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~# time -v openssl enc -aes-128-cbc -engine cryptodev -in hugernddata -out hugernddata.enc -pass pass:password
+engine "cryptodev" set.
+Command being timed: "openssl enc -aes-128-cbc -engine cryptodev -in hugernddata -out hugernddata.enc -pass pass:password"
+User time (seconds): 0.39
+System time (seconds): 6.65
+Percent of CPU this job got: 12%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 57.01s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4496
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 297
+Voluntary context switches: 26416
+Involuntary context switches: 291
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~#
+root@arago:~# time -v openssl enc -d -aes-128-cbc -engine cryptodev -in smallrnddata.enc -pass pass:password &gt; smallrnddatadec
+engine "cryptodev" set.
+Command being timed: "openssl enc -d -aes-128-cbc -engine cryptodev -in smallrnddata.enc -pass pass:password"
+User time (seconds): 0.03
+System time (seconds): 0.00
+Percent of CPU this job got: 43%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 0.07s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4400
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 2
+Minor (reclaiming a frame) page faults: 289
+Voluntary context switches: 18
+Involuntary context switches: 1
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~# time -v openssl enc -d -aes-128-cbc -engine cryptodev -in medrnddata.enc -pass pass:password &gt; medrnddatadec
+engine "cryptodev" set.
+Command being timed: "openssl enc -d -aes-128-cbc -engine cryptodev -in medrnddata.enc -pass pass:password"
+User time (seconds): 0.01
+System time (seconds): 0.01
+Percent of CPU this job got: 60%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 0.05s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4432
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 293
+Voluntary context switches: 15
+Involuntary context switches: 4
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~# time -v openssl enc -d -aes-128-cbc -engine cryptodev -in bigrnddata.enc -pass pass:password &gt; bigrnddatadec
+engine "cryptodev" set.
+Command being timed: "openssl enc -d -aes-128-cbc -engine cryptodev -in bigrnddata.enc -pass pass:password"
+User time (seconds): 0.03
+System time (seconds): 0.03
+Percent of CPU this job got: 16%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 0.41s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4432
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 293
+Voluntary context switches: 389
+Involuntary context switches: 8
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~# time -v openssl enc -d -aes-128-cbc -engine cryptodev -in hugernddata.enc -pass pass:password &gt; hugernddatadec
+engine "cryptodev" set.
+Command being timed: "openssl enc -d -aes-128-cbc -engine cryptodev -in hugernddata.enc -pass pass:password"
+User time (seconds): 0.45
+System time (seconds): 6.67
+Percent of CPU this job got: 12%
+Elapsed (wall clock) time (h:mm:ss or m:ss): 0m 55.18s
+Average shared text size (kbytes): 0
+Average unshared data size (kbytes): 0
+Average stack size (kbytes): 0
+Average total size (kbytes): 0
+Maximum resident set size (kbytes): 4432
+Average resident set size (kbytes): 0
+Major (requiring I/O) page faults: 0
+Minor (reclaiming a frame) page faults: 293
+Voluntary context switches: 26514
+Involuntary context switches: 233
+Swaps: 0
+File system inputs: 0
+File system outputs: 0
+Socket messages sent: 0
+Socket messages received: 0
+Signals delivered: 0
+Page size (bytes): 4096
+Exit status: 0
+root@arago:~#
+root@arago:~# time diff smallrnddata smallrnddatadec
+real 0m 0.01s
+user 0m 0.00s
+sys 0m 0.00s
+root@arago:~# time diff medrnddata medrnddatadec
+real 0m 0.02s
+user 0m 0.00s
+sys 0m 0.00s
+root@arago:~# time diff bigrnddata bigrnddatadec
+real 0m 0.50s
+user 0m 0.00s
+sys 0m 0.02s
+root@arago:~# time diff hugernddata hugernddatadec
+real 0m 48.92s
+user 0m 0.39s
+sys 0m 2.30s
+root@arago:~# ls -l
+drwxrwxrwx 8 1000 1000 4096 Jul 20 2010 Apps
+-rw-r--r-- 1 root root 1048576 Aug 13 2010 bigrnddata
+-rw-r--r-- 1 root root 1048608 Aug 13 2010 bigrnddata.enc
+-rw-r--r-- 1 root root 1048576 Aug 13 2010 bigrnddatadec
+drwxr-xr-x 2 1000 1000 4096 Jul 23 2010 crypto-tools
+-rw-r--r-- 1 1000 1000 15805 Jun 29 2010 crypto-tools-20100325.tar.gz
+-rw-r--r-- 1 root root 104857600 Aug 13 2010 hugernddata
+-rw-r--r-- 1 root root 104857632 Aug 13 2010 hugernddata.enc
+-rw-r--r-- 1 root root 104857600 Aug 13 2010 hugernddatadec
+-rwxrwxrwx 1 1000 1000 611 Aug 3 2010 loop.sh
+-rw-r--r-- 1 root root 10240 Aug 13 2010 medrnddata
+-rw-r--r-- 1 root root 10272 Aug 13 2010 medrnddata.enc
+-rw-r--r-- 1 root root 10240 Aug 13 2010 medrnddatadec
+drwxr-xr-x 3 1000 1000 4096 Aug 3 2010 omap3_crypto
+-rwxrwxrwx 1 1000 1000 9024 Aug 3 2010 omap3_crypto.tar.gz
+drwxrwxr-x 3 1000 1000 4096 Jul 23 2010 omap3_crypto_old
+drwxr-xr-x 23 1000 1000 4096 Jul 16 2010 openssl-0.9.8n
+drwxr-xr-x 22 1000 1000 4096 Jul 19 2010 openssl-1.0.0a
+-rw-r--r-- 1 1000 1000 4015794 Jun 11 2010 openssl-1.0.0a.tar.gz
+-rw-r--r-- 1 root root 1024 Aug 13 2010 smallrnddata
+-rw-r--r-- 1 root root 1056 Aug 13 2010 smallrnddata.enc
+-rw-r--r-- 1 root root 1024 Aug 13 2010 smallrnddatadec
+root@arago:~#</pre>
+<p><br />The diff function shows that the decrypted file is identical to the original file. 
+</p><p><br />
+</p><p><br />
+</p><p><br />
+</p><p><br />
+</p><p><br />
+</p><p>&#160; 
+</p><p>&#160;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201000540
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.042 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 106/1000000
+Preprocessor generated node count: 218/1000000
+Post‐expand include size: 116/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 19341/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.524      1 Template:Sitara_Devices
+100.00%    1.524      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:8641-0!canonical and timestamp 20201201000540 and revision id 114473
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Build OpenSSL for Sitara</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Build OpenSSL for Sitara</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Build OpenSSL for Sitara</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Build OpenSSL for Sitara</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Build OpenSSL for Sitara</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Build OpenSSL for Sitara</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Build OpenSSL for Sitara</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Build OpenSSL for Sitara</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Build OpenSSL for Sitara</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;oldid=114473">https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;oldid=114473</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM437x.html" title="Category:AM437x">AM437x</a></li><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li><li><a href="Category_AM35x.html" title="Category:AM35x">AM35x</a></li><li><a href="Category_AM37x.html" title="Category:AM37x">AM37x</a></li><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_AM18x.html" title="Category:AM18x">AM18x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Build+OpenSSL+for+Sitara" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Build_OpenSSL_for_Sitara.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Build_OpenSSL_for_Sitara&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Build_OpenSSL_for_Sitara.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Build_OpenSSL_for_Sitara.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Build_OpenSSL_for_Sitara.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;oldid=114473" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Build_OpenSSL_for_Sitara&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 24 July 2012, at 21:07.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.042","walltime":"0.043","ppvisitednodes":{"value":106,"limit":1000000},"ppgeneratednodes":{"value":218,"limit":1000000},"postexpandincludesize":{"value":116,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":19341,"limit":5000000},"timingprofile":["100.00%    1.524      1 Template:Sitara_Devices","100.00%    1.524      1 -total"]},"cachereport":{"timestamp":"20201201000540","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":225});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Build_OpenSSL_for_Sitara by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:23:44 GMT -->
+</html>

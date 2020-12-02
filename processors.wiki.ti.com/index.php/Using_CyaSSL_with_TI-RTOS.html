@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_CyaSSL_with_TI-RTOS by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:08:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Using CyaSSL with TI-RTOS - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Using_CyaSSL_with_TI-RTOS","wgTitle":"Using CyaSSL with TI-RTOS","wgCurRevisionId":195826,"wgRevisionId":195826,"wgArticleId":36099,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Under Construction"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Using_CyaSSL_with_TI-RTOS","wgRelevantArticleId":36099,"wgRequestId":"8290ea6c89189ace718e354a","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Using_CyaSSL_with_TI-RTOS rootpage-Using_CyaSSL_with_TI-RTOS skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Using CyaSSL with TI-RTOS</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><table border="1">
+
+<tbody><tr>
+<td><a href="File_Construction_Icon_small.html" class="image"><img alt="Construction Icon small.png" src="https://processors.wiki.ti.com/images/8/89/Construction_Icon_small.png" width="50" height="44" /></a></td>
+<td><b>This page is currently under construction.  The content of this page is due to change quite frequently and thus the quality and accuracy are not guaranteed until this message has been removed.  Please feel free to contribute to this page while construction is in progress.</b>
+</td></tr>
+
+</tbody></table>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Supported_targets_and_products"><span class="tocnumber">1</span> <span class="toctext">Supported targets and products</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Download"><span class="tocnumber">2</span> <span class="toctext">Download</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Installation"><span class="tocnumber">3</span> <span class="toctext">Installation</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Setup"><span class="tocnumber">4</span> <span class="toctext">Setup</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Building_CyaSSL_libraries"><span class="tocnumber">5</span> <span class="toctext">Building CyaSSL libraries</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Building_TI-RTOS_CyaSSL_example_applications"><span class="tocnumber">6</span> <span class="toctext">Building TI-RTOS CyaSSL example applications</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#On_the_command_line_using_makefiles:"><span class="tocnumber">6.1</span> <span class="toctext">On the command line using makefiles:</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#In_Code_Composer_Studio_.28CCS.29:"><span class="tocnumber">6.2</span> <span class="toctext">In Code Composer Studio (CCS):</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#In_IAR_Embedded_Workbench:"><span class="tocnumber">6.3</span> <span class="toctext">In IAR Embedded Workbench:</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Benchmarks_and_CyaSSL_API_tests"><span class="tocnumber">7</span> <span class="toctext">Benchmarks and CyaSSL API tests</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#WolfSSL.27s_TI-RTOS_CyaSSL_examples"><span class="tocnumber">8</span> <span class="toctext">WolfSSL's TI-RTOS CyaSSL examples</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Useful_references:"><span class="tocnumber">9</span> <span class="toctext">Useful references:</span></a></li>
+</ul>
+</div>
+
+<p><br />The <a rel="nofollow" class="external text" href="http://www.yassl.com/yaSSL/Products-cyassl.html">CyaSSL embedded SSL library</a> is a lightweight Secure Sockets Layer (SSL)/Transport Layer Security (TLS) library written in ANSI C and targeted for embedded, RTOS, and resource-constrained environments--primarily because of its small size, speed, and feature set.
+</p><p>TI-RTOS for TivaC provides an example called "tcpEchoTLS" that shows how a TI-RTOS application can use the CyaSSL stack.
+</p>
+<h1><span class="mw-headline" id="Supported_targets_and_products">Supported targets and products</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=1" title="Edit section: Supported targets and products">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>Targets: ARM Cortex-M4F on the TM4C1294XL Launchpad</li>
+<li>Products:
+<ul><li>TI-RTOS v2.10.01.38 or later</li>
+<li>CyaSSL v3.2.0 - v3.3.0</li>
+<li>(Optional) Socat v1.7.2.1 or later. (Open source tool for testing the tcpEchoTLS example.)</li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Download">Download</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=2" title="Edit section: Download">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Download TI-RTOS and CyaSSL as follows:
+</p><p><b>TI-RTOS:</b> Download the <a rel="nofollow" class="external text" href="http://www.ti.com/tool/ti-rtos">TI-RTOS for TivaC</a> product from either of these locations: 
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/tirtos/index.html">TI-RTOS webpage</a></li>
+<li>The App Center in Code Composer Studio</li></ul>
+<p><b>CyaSSL:</b> Download the <a rel="nofollow" class="external text" href="http://www.yassl.com/yaSSL/Products-cyassl.html">CyaSSL</a> product from one of these locations:
+</p>
+<ul><li><a rel="nofollow" class="external text" href="https://estore.ti.com/">TI eStore</a> -- a TI licensed product</li>
+<li><a rel="nofollow" class="external text" href="http://www.wolfssl.com/cyassl-3.3.0.zip">WolfSSL download page</a> -- a GPL licensed product</li>
+<li>Clone it from WolfSSL’s <a rel="nofollow" class="external text" href="https://github.com/cyassl/cyassl">CyaSSL GitHub repository</a> -- a GPL licensed product</li></ul>
+<p><b>(Optional) Socat:</b> 
+</p>
+<ul><li>For Linux, the tool is generally part of standard Linux distribution (like Ubuntu, SuSE).</li>
+<li>For Windows, download it from the <a rel="nofollow" class="external text" href="http://www.dest-unreach.org/socat/">Socat website</a>.</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Installation">Installation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=3" title="Edit section: Installation">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Install TI-RTOS and CyaSSL as follows:
+</p><p><b>TI-RTOS:</b> 
+</p>
+<ul><li>Run the installer and follow the instructions.</li></ul>
+<p><b>CyaSSL:</b> 
+</p>
+<ul><li>If you downloaded an installer, run the installer and follow the instructions.</li>
+<li>If you downloaded a *.zip file, extract the contents to your disk (for example, in C:/cyassl).</li>
+<li>If you are cloning it from WolfSSL’s CyaSSL GitHub repository, store it on your disk (for example, in C:/cyassl).</li></ul>
+<p><b>(Optional) Socat:</b> 
+</p>
+<ul><li>On Linux, it is pre-installed.</li>
+<li>On Windows, extract the contents of the zip file to your disk (for example, to C:/SOCAT).</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Setup">Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=4" title="Edit section: Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>In order to build CyaSSL, you first need to update the CyaSSL installation directory path in TI-RTOS. Follow these steps:
+</p>
+<ol><li>Open the <code>tirtos.mak</code> file in the TI-RTOS installation directory.</li>
+<li>In tirtos.mak, update the definition of CYASSL_INSTALLATION_DIR to point to the installed CyaSSL product path.</li>
+<li>(Optional) Update other build options, such as the code generation tools path and build targets. Information about these options can be found in the <i>TI-RTOS User's Guide</i> (<a href="http://www.ti.com/lit/pdf/spruhd4" class="extiw" title="tidoc:spruhd4">SPRUHD4</a>).</li></ol>
+<p>NOTE: For GNU, before building CyaSSL libraries add <code>"-D_POSIX_SOURCE"</code> to <code>cyasslPathInclude</code> variable in '&lt;CyaSSL root directory&gt;/tirtos/cyassl.bld'.
+</p>
+<h1><span class="mw-headline" id="Building_CyaSSL_libraries">Building CyaSSL libraries</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=5" title="Edit section: Building CyaSSL libraries">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>After performing the set up steps, build the CyaSSL libraries as follows: 
+</p>
+<ol><li>Open your choice of terminal or command prompt.</li>
+<li>Type the following command: <br /><code>cd <i>tirtos_install_dir</i></code><br /></li>
+<li>To build: <br /><code>make -f tirtos.mak cyassl</code><br /></li>
+<li>To clean: <br /><code>make -f tirtos.mak clean-cyassl</code><br /></li></ol>
+<p>If the "make" tool is not installed on your machine, you can use the "gmake" tool available in XDCtools which is installed along with TI-RTOS.
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Building_TI-RTOS_CyaSSL_example_applications">Building TI-RTOS CyaSSL example applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=6" title="Edit section: Building TI-RTOS CyaSSL example applications">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>TI-RTOS provides an application called "tcpEchoTLS" that uses the CyaSSL stack. The source for this example and a readme file with further information is provided in <code><i>tirtos_install_dir</i>\packages\examples\source\tcpEchoTLS</code>.
+</p><p>There are three ways to build this TI-RTOS CyaSSL example application. All these options are discussed in detail in the <i>TI-RTOS for TivaC Getting Started Guide</i> (<a href="http://www.ti.com/lit/pdf/spruhu5" class="extiw" title="tidoc:spruhu5">SPRUHU5</a>). 
+</p>
+<h2><span class="mw-headline" id="On_the_command_line_using_makefiles:">On the command line using makefiles:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=7" title="Edit section: On the command line using makefiles:">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you want to build the example from the command line, you will need to generate the example first and then build it. 
+</p>
+<ol><li>To generate the example, open your choice of terminal or command prompt, and type the following commands, where the <i>destination_path_for_examples</i> is the location where you want the example tree to be generated:<br /><code>cd <i>tirtos_install_dir</i><br />make -f tirtos.mak examplesgen DEST="<i>destination_path_for_examples</i>"</code></li>
+<li>To build the tcpEchoTLS example:<br /><code>cd <i>destination_path_for_examples</i>/tirtos_&lt;<i>version</i>&gt;_examples/TI/EK_TM4C1294XL/tcpEchoTLS</code></li>
+<li>Read the "Build Details" section of the <code>tcpEchoTLS_readme.txt</code> file for example build steps.</li>
+<li>Run the following command to build the example.<br /><code>make</code></li>
+<li>Load and run the example on the target. The IP address of the application should be printed to the console attached.</li>
+<li>Read the "Example Usage" section of the <code>tcpEchoTLS_readme.txt</code> file for steps to test the application, including how to connect to a client tool (either Socat or the CyaSSL echoclient).</li></ol>
+<h2><span id="In_Code_Composer_Studio_(CCS):"></span><span class="mw-headline" id="In_Code_Composer_Studio_.28CCS.29:">In Code Composer Studio (CCS):</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=8" title="Edit section: In Code Composer Studio (CCS):">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>In CCS, choose <b>View &gt; Resource Explorer (Examples)</b> from the menus.</li>
+<li>Type "TCP Echo with TLS" in the "enter search keyword" field.</li>
+<li>Select the <b>TCP Echo with TLS</b> example from the TI Target Examples. The full path to this example is TI-RTOS for TivaC &gt; Tiva C Series &gt; Tiva TM4C1294NCPDT &gt; Driver Examples &gt; EK-TM4C1294 &gt; TI Target Examples &gt; Ethernet Examples &gt; TCP Echo with TLS.</li>
+<li>In the right panel, click the <b>Import the example project into CCS</b> link.</li>
+<li>Before building the example, read the "Build Details" section of the <code>tcpEchoTLS_readme.txt</code> file for example build steps.</li>
+<li>In the TI Resource Explorer panel, click the <b>Build the imported project</b>, <b>Debugger Configuration</b>, and <b>Debug the imported project</b> links to build and debug the application.</li>
+<li>In the CCS Debug perspective, run the application. The IP address of the application should be printed to the console.</li>
+<li>Read the "Example Usage" section of the <code>tcpEchoTLS_readme.txt</code> file for steps to test the application, including how to connect to a client tool (either Socat or the CyaSSL echoclient).</li></ol>
+<h2><span class="mw-headline" id="In_IAR_Embedded_Workbench:">In IAR Embedded Workbench:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=9" title="Edit section: In IAR Embedded Workbench:">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>In IAR, choose <b>Project &gt; Create New Project</b> from the menus.</li>
+<li>Select the Tool chain, and select the "Empty project" template. Click <b>OK</b>.</li>
+<li>Browse to the location where you want to save this project, and type a file name for the project file (*.ewp). Click <b>Save</b>.</li>
+<li>Choose <b>Help &gt; Information Center</b> and click the <b>Integrated Solutions</b> icon.</li>
+<li>Scroll down and click the icon for Texas Instruments example projects.</li>
+<li>Click the link to the <b>example applications</b>.</li>
+<li>Expand the example tree and select the <b>EK-TM4C1294XL &gt; Ethernet Examples &gt; TCP Echo with TLS</b> example.</li>
+<li>Choose <b>File &gt; Save Workspace</b>. Browse to the location where you want to save this workspace, and type a file name for the workspace file (*.eww). Click <b>Save</b>.</li>
+<li>Before building the example, read the "Build Details" section of the <code>tcpEchoTLS_readme.txt</code> file for example build steps.</li>
+<li>Build the project by choosing <b>Project &gt; Make</b>.</li>
+<li>Download and run the application. The IP address of the application should be printed to the Terminal I/O.</li>
+<li>Read the "Example Usage" section of the <code>tcpEchoTLS_readme.txt</code> file for steps to test the application, including how to connect to a client tool (either Socat or the CyaSSL echoclient).</li></ol>
+<p><br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Benchmarks_and_CyaSSL_API_tests">Benchmarks and CyaSSL API tests</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=10" title="Edit section: Benchmarks and CyaSSL API tests">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Applications have been provided to benchmark the CyaSSL cryptography algorithms or test the CyaSSL APIs. These applications will be built along with the CyaSSL libraries. They can be found in <code><i>cyassl_install_dir</i>/tirtos/packages/ti/net/cyassl/tests/ctaocrypt</code>. 
+</p><p>Load and run the built executable on the target. The results are printed out on the console. 
+</p><p>For more CyaSSL benchmark information, see <a rel="nofollow" class="external text" href="http://www.yassl.com/yaSSL/benchmarks-cyassl.html">WolfSSL's benchmarks</a>.
+</p><p><br />
+</p>
+<h1><span id="WolfSSL's_TI-RTOS_CyaSSL_examples"></span><span class="mw-headline" id="WolfSSL.27s_TI-RTOS_CyaSSL_examples">WolfSSL's TI-RTOS CyaSSL examples</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=11" title="Edit section: WolfSSL&#039;s TI-RTOS CyaSSL examples">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Examples from the WolfSSL team can be downloaded from <a rel="nofollow" class="external text" href="https://github.com/wolfSSL/wolfssl-examples/tree/master/tirtos_ccs_examples">WolfSSL's examples GitHub</a>.
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Useful_references:">Useful references:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;section=12" title="Edit section: Useful references:">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><b>User guides and manuals:</b> 
+</p>
+<ul><li><i>TI-RTOS for TivaC Getting Started Guide</i> (<a href="http://www.ti.com/lit/pdf/spruhu5" class="extiw" title="tidoc:spruhu5">SPRUHU5</a>)</li>
+<li><i>TI-RTOS User's Guide</i> (<a href="http://www.ti.com/lit/pdf/spruhd4" class="extiw" title="tidoc:spruhd4">SPRUHD4</a>)</li>
+<li><a rel="nofollow" class="external text" href="http://www.yassl.com/documentation/CyaSSL-Manual.pdf">CyaSSL Manual</a></li></ul>
+<p><b>Support:</b> 
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/tirtos/default.aspx">TI-RTOS support forum</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.yassl.com/forums/">CyaSSL support forum</a></li></ul>
+<p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130224942
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.055 seconds
+Real time usage: 0.057 seconds
+Preprocessor visited node count: 50/1000000
+Preprocessor generated node count: 64/1000000
+Post‐expand include size: 348/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.458      1 Template:Under_Construction
+100.00%    1.458      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:36099-0!canonical and timestamp 20201130224942 and revision id 195826
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using CyaSSL with TI-RTOS</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using CyaSSL with TI-RTOS</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Using CyaSSL with TI-RTOS</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Using CyaSSL with TI-RTOS</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Using CyaSSL with TI-RTOS</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using CyaSSL with TI-RTOS</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using CyaSSL with TI-RTOS</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Using CyaSSL with TI-RTOS</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Using CyaSSL with TI-RTOS</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;oldid=195826">https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;oldid=195826</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Under_Construction.html" title="Category:Under Construction">Under Construction</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Using+CyaSSL+with+TI-RTOS" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Using_CyaSSL_with_TI-RTOS.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Using_CyaSSL_with_TI-RTOS&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Using_CyaSSL_with_TI-RTOS.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Using_CyaSSL_with_TI-RTOS.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Using_CyaSSL_with_TI-RTOS.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;oldid=195826" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Using_CyaSSL_with_TI-RTOS&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 19 March 2015, at 19:06.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.055","walltime":"0.057","ppvisitednodes":{"value":50,"limit":1000000},"ppgeneratednodes":{"value":64,"limit":1000000},"postexpandincludesize":{"value":348,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.458      1 Template:Under_Construction","100.00%    1.458      1 -total"]},"cachereport":{"timestamp":"20201130224942","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":222});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_CyaSSL_with_TI-RTOS by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:08:13 GMT -->
+</html>

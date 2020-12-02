@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Profiling_on_the_C6000_using_Function_Hooks by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 13:51:43 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Profiling on the C6000 using Function Hooks - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Profiling_on_the_C6000_using_Function_Hooks","wgTitle":"Profiling on the C6000 using Function Hooks","wgCurRevisionId":182474,"wgRevisionId":182474,"wgArticleId":16340,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["WikiNote"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Profiling_on_the_C6000_using_Function_Hooks","wgRelevantArticleId":16340,"wgRequestId":"2e6a8f9e861976bce1d1c6fd","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Profiling_on_the_C6000_using_Function_Hooks rootpage-Profiling_on_the_C6000_using_Function_Hooks skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Profiling on the C6000 using Function Hooks</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><table style="width:100%; border:0; cellpadding:0; cellspacing:0;">
+
+<tbody><tr>
+<td><a href="File_TexasInstrumentsLogo.html" class="image"><img alt="TexasInstrumentsLogo.png" src="https://processors.wiki.ti.com/images/e/e5/TexasInstrumentsLogo.png" width="200" height="47" /></a></td>
+<td></td>
+<td style="text-align:right; font-style:italic; font-weight:bold; font-size:200%;">Wiki Note
+</td></tr>
+<tr>
+<td colspan="3" style="background:rgb(255,255,255); color:rgb(144,0,0); font-size:200%; text-align:center;">Profiling on the C6000 using Function Hooks
+</td></tr>
+<tr>
+<td style="text-align:left; font-weight:bold; font-size:125%;">Author(s):Brighton Feng</td>
+<td></td>
+<td style="font-size: 125%; font-style:italic; text-align:right;">China Field Applications Team
+</td></tr>
+<tr style="background: white; color: black">
+<td style="text-align:left;">&lt;wikinotenumber/&gt;</td>
+<td></td>
+<td style="text-align:right; font-style:italic; font-size:125%;">July 2014
+</td></tr>
+<tr>
+<td>
+</td></tr>
+<tr>
+<td colspan="3" align="center">
+</td></tr>
+<tr>
+<td colspan="3" style="font-size:150%; text-align:center;"><b>Abstract</b>
+</td></tr>
+<tr>
+<td colspan="3" align="left" style="font-style:italic">DSP program Profiling is the base of DSP optimization. The profiling feature of CCS (Code Composer Studio) is good for many projects, but there are many complicated projects that are hard to be run with CCS. For this kind of complicated projects, the function hook feature of cgtools (Code Generation Tools) and the task switch hook of Operating System can be used to collect profiling data. This application note introduces Profiling with Hooks, <a href="https://processors.wiki.ti.com/images/5/5f/DSPProfilingwithHook.zip" class="internal" title="DSPProfilingwithHook.zip">Example code and tool</a> are provided with this Wiki note.
+</td></tr>
+<tr>
+<td colspan="3"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Compiler_Options_for_Function_Hooks"><span class="tocnumber">2</span> <span class="toctext">Compiler Options for Function Hooks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Task_switch_hook"><span class="tocnumber">3</span> <span class="toctext">Task switch hook</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Implementing_Hook_Functions"><span class="tocnumber">4</span> <span class="toctext">Implementing Hook Functions</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Run_program_and_dump_the_raw_data"><span class="tocnumber">5</span> <span class="toctext">Run program and dump the raw data</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Process_raw_entry.2Fexit_records_with_a_tool"><span class="tocnumber">6</span> <span class="toctext">Process raw entry/exit records with a tool</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Example"><span class="tocnumber">7</span> <span class="toctext">Example</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#References"><span class="tocnumber">8</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Associated_example_code_and_tool_for_this_application_note"><span class="tocnumber">9</span> <span class="toctext">Associated example code and tool for this application note</span></a></li>
+</ul>
+</div>
+
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The profiling feature of CCS (Code Composer Studio) is good for many projects, but there are limitations for it:
+</p>
+<ol><li>Many complicated projects in customers’ real system are hard to be run with CCS.</li>
+<li>Profiling of CCS requires debug information kept with the program, that is, it can not work with release version of a program.</li>
+<li>From CCS4, profiling feature of CCS can only work with simulator and does not support emulator.</li></ol>
+<p>For these cases, the function hook feature of cgtools (Code Generation Tools) and the task switch hook of Operating System can be used to collect profiling data.
+<br style="clear: both" />
+From C6000 cgtools version 6.1, function hook feature are supported by the C compiler (<font color="red">this feature does not support functions in assembly code</font>). The compiler can automatically generate code to call user defined functions at the beginning and end of a function. An entry hook is a routine that is called upon entry to each function in the program. An exit hook is a routine that is called upon exit of each function. Applications for hooks include debugging, trace, profiling, and stack overflow checking…
+<br style="clear: both" />
+The basic flow of Profiling with Hooks is shown in following figure.
+</p>
+<table border="1" align="center">
+
+<tbody><tr>
+<td align="center"><a href="File_FunctionHookProfilingFlow.html" class="image"><img alt="FunctionHookProfilingFlow.png" src="https://processors.wiki.ti.com/images/0/0a/FunctionHookProfilingFlow.png" width="730" height="426" /></a>
+</td></tr>
+<tr>
+<td align="center">Figure 1 - basic flow of Profiling with Hooks
+</td></tr></tbody></table>
+<p><br />
+This application note introduces the implementation of above flow step by step,  <a href="https://processors.wiki.ti.com/index.php?title=Special:Upload&amp;wpDestFile=DSPProfilingwithHook.7z" class="new" title="DSPProfilingwithHook.7z">Example code and tool</a> are provided with this application note.
+</p>
+<h2><span class="mw-headline" id="Compiler_Options_for_Function_Hooks">Compiler Options for Function Hooks</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=2" title="Edit section: Compiler Options for Function Hooks">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The compiler options for function hook in CCS5 with cgtools 7.3 looks like below figure.
+</p>
+<table border="1" align="left">
+
+<tbody><tr>
+<td align="center"><a href="File_Compiler_options_for_function_hook_in_CCS5.html" class="image"><img alt="Compiler options for function hook in CCS5.PNG" src="https://processors.wiki.ti.com/images/f/f7/Compiler_options_for_function_hook_in_CCS5.PNG" width="749" height="519" /></a>
+</td></tr>
+<tr>
+<td align="center">Figure 2 - Compiler options for function hook in CCS5
+</td></tr></tbody></table>
+<p><br />
+<br style="clear: both" />
+The compiler options dialog in different CCS version may looks a little bit different from above figure. The command line options are same. Following table describes the command line options.
+</p>
+<table style="border-collapse:collapse; border:1px solid black;">
+<caption><b>Table 1 - Compiler Options for Function Hooks</b>
+</caption>
+<tbody><tr>
+<th><b>Options</b>
+</th>
+<th><b>Description</b>
+</th></tr>
+<tr>
+<td style="border-collapse:collapse; border:1px solid black;"><b></b>
+<p>--entry_hook <b>[=name]</b>
+</p>
+</td>
+<td style="border-collapse:collapse; border:1px solid black;">Enables entry hooks. The hook function is called name.
+</td></tr>
+<tr>
+<td style="border-collapse:collapse; border:1px solid black;"><b></b>
+<p>--entry_parm <b></b>
+{=name|address|none} |style="border-collapse:collapse; border:1px solid black;"|Specify the parameters to the hook function. The name parameter specifies that the name of the calling function is passed to the hook function as an argument. In this case the signature for the hook function is: void hook(const char *name);<br /><br />The address parameter specifies that the address of the calling function is passed to the hook function. In this case the signature for the hook function is: void hook(void (*addr)()); <br /><br />The none parameter specifies that the hook is called with no parameters. This is the default. In this case the signature for the hook function is: void hook(void);
+</p>
+</td></tr>
+<tr>
+<td style="border-collapse:collapse; border:1px solid black;"><b></b>
+<p>--exit_hook <b>[=name]</b>
+</p>
+</td>
+<td style="border-collapse:collapse; border:1px solid black;">Enables exit hooks. The hook function is called name.
+</td></tr>
+<tr>
+<td style="border-collapse:collapse; border:1px solid black;"><b></b>
+<p>--exit_parm <b></b>
+{=name|address|none} |style="border-collapse:collapse; border:1px solid black;"|Specify the parameters to the hook function. The name parameter specifies that the name of the calling function is passed to the hook function as an argument. In this case the signature for the hook function is: void hook(const char *name);<br /><br />The address parameter specifies that the address of the calling function is passed to the hook function. In this case the signature for the hook function is: void hook(void (*addr)());<br /><br />The none parameter specifies that the hook is called with no parameters. This is the default. In this case the signature for the hook function is: void hook(void);
+</p>
+</td></tr></tbody></table>
+<p>The presence of the hook options creates an implicit declaration of the hook function with the given signature. If a declaration or definition of the hook function appears in the compilation unit compiled with the options, it must agree with the signatures listed above.
+<br style="clear: both" />
+In C++, the hooks are declared extern "C". Thus you can define them in C (or assembly) without being concerned with name mangling.
+<br style="clear: both" />
+Entry hooks and exit hooks are independent. You can enable one but not the other, or both. The same function can be used as both the entry and exit hook.
+<br style="clear: both" />
+<font color="green">The compiler options for function hook are independent of other compiler options; you can use highest optimization level without any debug information for your program under test.</font>
+<br style="clear: both" />
+You must take care to avoid recursive calls to hook functions. The hook function should not call any function which itself has hook calls inserted. To help prevent this, hooks are not generated for inline functions, or for the hook functions themselves.
+<br style="clear: both" />
+You can use the --remove_hooks_when_inlining option to remove entry/exit hooks for functions that are auto-inlined by the optimizer.
+<br style="clear: both" />
+The NO_HOOKS pragma prevents entry and exit hook calls from being generated for a function.
+The syntax of the pragma in C is:
+&lt;syntaxhighlight lang="c"&gt;
+</p>
+<ol><li>pragma NO_HOOKS ( func );</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+Additionally, <font color="red">all library calls will have their cycles included by the calling function</font>. Since the library functions are pre-compiled, there is no option for a hook to be added to indicate an entry or exit. This is typically no a big deal, since a user can’t do anything to optimize the library functions anyway, but they should just be aware that this occurs.
+</p>
+<h2><span class="mw-headline" id="Task_switch_hook">Task switch hook</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=3" title="Edit section: Task switch hook">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If multiple tasks are used, task switch should be recorded with task switch hook feature of OS (Operating System). Without task switch record, the function executing when task switch happens can not be counted correctly.
+<br style="clear: both" />
+Below is example configuration script for BIOS in CCS5.
+&lt;syntaxhighlight lang="c"&gt;
+/* Define and add one Task Hook Set */
+Task.addHookSet({
+	registerFxn: null,
+	createFxn: null,
+	readyFxn: null,
+	switchFxn: '&amp;task_switch_hook',
+	exitFxn: null,
+	deleteFxn: null,
+});
+&lt;/syntaxhighlight&gt;
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Implementing_Hook_Functions">Implementing Hook Functions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=4" title="Edit section: Implementing Hook Functions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Hook functions can be implemented for various purposes, such as, debugging, trace, and stack overflow checking. In this application note, we use it for Profiling.
+<br style="clear: both" />
+Below are the example hook functions code for Profiling.
+&lt;syntaxhighlight lang="c"&gt;
+/*if record buffer is used as circular buffer,
+MAX record number must be power of 2 for easy wrap*/
+</p>
+<ol><li>define MAX_PROFILE_RECORD_NUM   (1*1024*1024)</li></ol>
+<p>typedef enum
+{
+</p>
+<pre> HOOK_TYPE_FUNC_ENTRY = 0,   /*function entry hook*/
+ HOOK_TYPE_FUNC_EXIT,   /*function exit hook*/
+ HOOK_TYPE_TASK_ENTRY,   /*task entry hook*/
+ HOOK_TYPE_TASK_EXIT     /*task exit hook*/
+</pre>
+<p>}Hook_Record_Type;
+</p><p>typedef  struct{
+</p>
+<pre> /*Address always has last 2 bits == 0.
+ lower two bits are used as record type*/
+ unsigned int address_type;
+ unsigned int TSCL;   /*Lower 32 bits of Time Stamp Counter*/
+ unsigned int TSCH;   /*Higher 32 bits of Time Stamp Counter*/
+</pre>
+<p>} Hook_Record;
+</p><p><br />
+/*since the profile data buffer is huge, normally it is allocated in
+big external memory. If it is in external memory,
+do NOT make this buffer cacheable because this is write only buffer,
+cache is not helpful, and it will cause cache conflict if it is cacheable*/
+</p>
+<ol><li>pragma DATA_SECTION (ProfileData, ".far:External_NonCache_Data")</li></ol>
+<p>Hook_Record ProfileData[MAX_PROFILE_RECORD_NUM];
+</p><p>/*this variable should be located in internal memory for performance.
+Initializing it to be 0xFFFFFFFF actually disable hook recording*/
+unsigned int uiProfileDataCnt= 0xFFFFFFFF;   //counter of records
+</p><p>/*call this function where you want to begin record,
+recalling this function actually restarts the record.
+If profile data buffer is in DDR, this function can only
+be called after DDR initialization*/
+</p>
+<ol><li>pragma NO_HOOKS(hook_init);</li></ol>
+<p>void hook_init()
+{
+</p>
+<pre> TSCL= 0;   //enable TSC
+</pre>
+<pre> uiProfileDataCnt= 0;
+</pre>
+<pre> /*0xFFFFFFFF represents a invalid record*/
+ memset(ProfileData, 0xFFFFFFFF, sizeof(ProfileData));
+</pre>
+<p>}
+</p><p>/*--------------------------------------------------------------
+Following hook functions stop recording when record buffer full,
+thus save the records from the beginning of the program
+</p>
+<hr /><p>*/
+</p><ol><li>pragma CODE_SECTION (entry_hook, ".text:hook_funcs")</li></ol>
+<p>void entry_hook(void (* func_addr)())
+{
+</p>
+<pre> unsigned int uiOldGIE;
+</pre>
+<pre> //disable interrupt to make sure every record is atomic
+ uiOldGIE= _disable_interrupts();
+</pre>
+<pre> if(uiProfileDataCnt&lt;MAX_PROFILE_RECORD_NUM)
+ {
+   ProfileData[uiProfileDataCnt].address_type=
+     (unsigned int)func_addr;
+   ProfileData[uiProfileDataCnt].TSCL= TSCL;
+   ProfileData[uiProfileDataCnt].TSCH= TSCH;
+</pre>
+<pre>   uiProfileDataCnt++;
+ }
+</pre>
+<pre> _restore_interrupts(uiOldGIE);   //restore interrupt
+</pre>
+<p>}
+</p>
+<ol><li>pragma CODE_SECTION (exit_hook, ".text:hook_funcs")</li></ol>
+<p>void exit_hook(void (* func_addr)())
+{
+</p>
+<pre> unsigned int uiOldGIE;
+</pre>
+<pre> //disable interrupt to make sure every record is atomic
+ uiOldGIE= _disable_interrupts();
+</pre>
+<pre> if(uiProfileDataCnt&lt;MAX_PROFILE_RECORD_NUM)
+ {
+   /*function Address always has last 2 bits == 0.
+   "|HOOK_TYPE_FUNC_EXIT" to signal this is a function exit record
+   in the record buffer, make it possible to distinguish record
+   type in the post processing tool*/
+   ProfileData[uiProfileDataCnt].address_type=
+     ((unsigned int)func_addr)|HOOK_TYPE_FUNC_EXIT;
+   ProfileData[uiProfileDataCnt].TSCL= TSCL;
+   ProfileData[uiProfileDataCnt].TSCH= TSCH;
+</pre>
+<pre>   uiProfileDataCnt++;
+ }
+</pre>
+<pre> _restore_interrupts(uiOldGIE);   //restore interrupt
+</pre>
+<p>}
+</p><p>/*if multiple tasks are used, task switch must be recorded with
+task switch hook feature of OS. Without task switch record,
+the function executing when task switch happens can not be
+recognized correctly by post processing tool.
+function hook should NOT be generated for this function*/
+</p>
+<ol><li>pragma CODE_SECTION (task_switch_hook, ".text:hook_funcs")</li>
+<li>pragma NO_HOOKS(task_switch_hook);</li></ol>
+<p>void task_switch_hook(unsigned int prevTask,
+</p>
+<pre> unsigned int nextTask)
+</pre>
+<p>{
+</p>
+<pre> unsigned int uiOldGIE;
+ unsigned int uiTSCL, uiTSCH;
+</pre>
+<pre> //disable interrupt to make sure every record is atomic
+ uiOldGIE= _disable_interrupts();
+</pre>
+<pre> uiTSCL= TSCL;
+ uiTSCH= TSCH;
+</pre>
+<pre> if(uiProfileDataCnt&lt;MAX_PROFILE_RECORD_NUM)
+ {
+   /*task handle Address always has last 2 bits == 0.
+   "|HOOK_TYPE_TASK_EXIT" to signal this is a task exit record
+   in the record buffer, make it possible to distinguish record
+   type in the post processing tool*/
+   ProfileData[uiProfileDataCnt].address_type=
+     prevTask|HOOK_TYPE_TASK_EXIT;
+   ProfileData[uiProfileDataCnt].TSCL= uiTSCL;
+   ProfileData[uiProfileDataCnt].TSCH= uiTSCH;
+</pre>
+<pre>   uiProfileDataCnt++;
+ }
+</pre>
+<pre> if(uiProfileDataCnt&lt;MAX_PROFILE_RECORD_NUM)
+ {
+   /*task handle Address always has last 2 bits == 0.
+   "|HOOK_TYPE_TASK_ENTRY" to signal this is an task entry record
+   in the record buffer, make it possible to distinguish record
+   type in the post processing tool*/
+   ProfileData[uiProfileDataCnt].address_type=
+     nextTask|HOOK_TYPE_TASK_ENTRY;
+   ProfileData[uiProfileDataCnt].TSCL= uiTSCL;
+   ProfileData[uiProfileDataCnt].TSCH= uiTSCH;
+</pre>
+<pre>   uiProfileDataCnt++;
+ }
+</pre>
+<pre> _restore_interrupts(uiOldGIE);   //restore interrupt
+</pre>
+<p>}
+</p><p>/*--------------------------------------------------------------
+Following hook functions use record buffer as a circular buffer,
+thus save the last records when program stops
+</p>
+<hr /><p>*/
+</p><ol><li>pragma CODE_SECTION (entry_hook_circular, ".text:hook_funcs_circular")</li></ol>
+<p>void entry_hook_circular(void (* func_addr)())
+{
+</p>
+<pre> unsigned int uiOldGIE;
+ unsigned int uiProfileDataIndex; //index in the circular buffer
+</pre>
+<pre> //return before hook is initialized
+ if(0xFFFFFFFF==uiProfileDataCnt)
+   return;
+</pre>
+<pre> //disable interrupt to make sure every record is atomic
+ uiOldGIE= _disable_interrupts();
+</pre>
+<pre> /*make data pointer circular*/
+ uiProfileDataIndex= uiProfileDataCnt &amp; (MAX_PROFILE_RECORD_NUM-1);
+</pre>
+<pre> ProfileData[uiProfileDataIndex].address_type=
+   (unsigned int)func_addr;
+ ProfileData[uiProfileDataIndex].TSCL= TSCL;
+ ProfileData[uiProfileDataIndex].TSCH= TSCH;
+</pre>
+<pre> uiProfileDataCnt++;
+</pre>
+<pre> _restore_interrupts(uiOldGIE);   //restore interrupt
+</pre>
+<p>}
+</p>
+<ol><li>pragma CODE_SECTION (exit_hook_circular, ".text:hook_funcs_circular")</li></ol>
+<p>void exit_hook_circular(void (* func_addr)())
+{
+</p>
+<pre> unsigned int uiOldGIE;
+ unsigned int uiProfileDataIndex; //index in the circular buffer
+</pre>
+<pre> //return before hook is initialized
+ if(0xFFFFFFFF==uiProfileDataCnt)
+   return;
+</pre>
+<pre> //disable interrupt to make sure every record is atomic
+ uiOldGIE= _disable_interrupts();
+</pre>
+<pre> /*make data pointer circular*/
+ uiProfileDataIndex= uiProfileDataCnt &amp; (MAX_PROFILE_RECORD_NUM-1);
+</pre>
+<pre> /*Address always has last 2 bits == 0.
+ So, "| 1" to signal this is an exit record in the buffer.
+ makes it possible to distinguish enter against exit
+ in the post processing tool*/
+ ProfileData[uiProfileDataIndex].address_type=
+   ((unsigned int)func_addr)|HOOK_TYPE_FUNC_EXIT;
+ ProfileData[uiProfileDataIndex].TSCL= TSCL;
+ ProfileData[uiProfileDataIndex].TSCH= TSCH;
+</pre>
+<pre> uiProfileDataCnt++;
+</pre>
+<pre> _restore_interrupts(uiOldGIE);   //restore interrupt
+</pre>
+<p>}
+</p><p>/*if multiple tasks are used, task switch must be recorded with
+task switch hook feature of OS. Without task switch record,
+the function executing when task switch happens can not be
+recognized correctly by post processing tool.
+function hook should NOT be generated for this function*/
+</p>
+<ol><li>pragma CODE_SECTION (task_switch_hook_circular, ".text:hook_funcs_circular")</li>
+<li>pragma NO_HOOKS(task_switch_hook_circular);</li></ol>
+<p>void task_switch_hook_circular(unsigned int prevTask,
+</p>
+<pre> unsigned int nextTask)
+</pre>
+<p>{
+</p>
+<pre> unsigned int uiOldGIE;
+ unsigned int uiProfileDataIndex; //index in the circular buffer
+ unsigned int uiTSCL, uiTSCH;
+</pre>
+<pre> //return before hook is initialized
+ if(0xFFFFFFFF==uiProfileDataCnt)
+   return;
+</pre>
+<pre> //disable interrupt to make sure every record is atomic
+ uiOldGIE= _disable_interrupts();
+</pre>
+<pre> uiTSCL= TSCL;
+ uiTSCH= TSCH;
+</pre>
+<pre> /*make data pointer circular*/
+ uiProfileDataIndex= uiProfileDataCnt &amp; (MAX_PROFILE_RECORD_NUM-1);
+</pre>
+<pre> /*task handle Address always has last 2 bits == 0.
+ "|HOOK_TYPE_TASK_EXIT" to signal this is an task exit record
+ in the record buffer, make it possible to distinguish record
+ type in the post processing tool*/
+ ProfileData[uiProfileDataIndex].address_type=
+   prevTask|HOOK_TYPE_TASK_EXIT;
+ ProfileData[uiProfileDataIndex].TSCL= uiTSCL;
+ ProfileData[uiProfileDataIndex].TSCH= uiTSCH;
+</pre>
+<pre> uiProfileDataCnt++;
+</pre>
+<pre> /*make data pointer circular*/
+ uiProfileDataIndex= uiProfileDataCnt &amp; (MAX_PROFILE_RECORD_NUM-1);
+</pre>
+<pre> /*task handle Address always has last 2 bits == 0.
+ "|HOOK_TYPE_TASK_ENTRY" to signal this is an task entry record
+ in the record buffer, make it possible to distinguish record
+ type in the post processing tool*/
+ ProfileData[uiProfileDataIndex].address_type=
+   nextTask|HOOK_TYPE_TASK_ENTRY;
+ ProfileData[uiProfileDataIndex].TSCL= uiTSCL;
+ ProfileData[uiProfileDataIndex].TSCH= uiTSCH;
+</pre>
+<pre> uiProfileDataCnt++;
+</pre>
+<pre> _restore_interrupts(uiOldGIE);   //restore interrupt
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>The buffer for enter/exit records should be big enough to cover all functions and tasks interested. For periodical processing system, the buffer should be big enough to record all function calls in a processing period.
+<br style="clear: both" />
+Two sets of hook functions are implemented in above code. One set stops recording when the record buffer full, thus saves the records from the beginning of the program; the other set uses record buffer as a circular buffer, thus saves the last records when program stops. User can choose one of them according to his application.
+<br style="clear: both" />
+Since Hook is an intrusive method, it affects the performance of original program. Hook functions are called most frequently, so they should be put into internal memory to alleviate the impact.
+<br style="clear: both" />
+The code size of each function may increase about 64 to 128 bytes. The code size of the entry/exit hook function is about 80 bytes. If entry/exit hook functions are inlined, each function size additionally increases about 160 bytes. As a result of code size increasing, you may need to change you memory allocation to move something in internal memory to external memory.
+<br style="clear: both" />
+The cycles for each function call may increase about 40 to 80 cycles, which may reduce the processing capability or channel density of original system.
+<br style="clear: both" />
+To alleviate the impact, we can use Hooks only for functions we are interested in. You may use file specific options to add function hooks for functions in a specific source code file. You may use NO_HOOKS pragma to disable hooks for specific function.
+<br style="clear: both" />
+Though the overall performance of original program is affected, it does not change the relative relationship between functions, while this is the key information we need dig out with this tool for most cases. For example, we can use this tool to find the top 10 functions which consume most of DSP cycles.
+</p>
+<h2><span class="mw-headline" id="Run_program_and_dump_the_raw_data">Run program and dump the raw data</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=5" title="Edit section: Run program and dump the raw data">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Hook feature is independent of CCS or emulator, the program with Hook feature can be run with or without CCS/emulator.
+<br style="clear: both" />
+After running the program, the function and task entry/exit records with time stamp are saved in the raw profile data buffer. You can use any convenient method to dump this buffer and save the contents to a file. These methods may include:
+</p>
+<ol><li>Load the DSP through emulator/CCS, run the DSP, and then dump the buffer through CCS.</li>
+<li>Load the DSP through system host, run the DSP, and then dump the buffer through host interface.</li>
+<li>Connect emulator to your DSP board before power up, but boot load the DSP through your system host as a normal standalone system without emulator, run the DSP, and then connect the CCS to the DSP, and dump the buffer through CCS.</li></ol>
+<p>With the hook functions introduced in previous section, the raw profile data buffer is
+&lt;syntaxhighlight lang="c"&gt;
+Hook_Record ProfileData[MAX_PROFILE_RECORD_NUM];
+&lt;/syntaxhighlight&gt;
+Number of records are stored in:
+&lt;syntaxhighlight lang="c"&gt;
+unsigned int uiProfileDataCnt;
+&lt;/syntaxhighlight&gt;
+If uiProfileDataCnt is less than the buffer size, only number of uiProfileDataCnt records (uiProfileDataCnt*3 words) should be dumped; if uiProfileDataCnt is equal or larger than buffer size (circular buffer), the full buffer should be dumped.
+<br style="clear: both" />
+The raw data may be saved in a text file or binary file. The text format should comply with file generated by memory dump feature of CCS like below (32-bit Hex – <font color="red">C Style</font>):
+&lt;syntaxhighlight lang="c"&gt;
+1651 1 90000000 0 60000
+0x0C000E8C
+0x0064AAA8
+0x00000000
+0x0C000E24
+0x0064AB16
+0x00000000
+0x0C000E25
+0x0064ABEA
+0x00000000
+0x0C000E8D
+0x0064AD93
+0x00000000
+0x0C00C644
+0x0064FBA3
+0x00000000
+0x0C00C645
+0x0064FC8D
+0x00000000
+0x00000003
+0x006500D6
+0x00000000
+0x00804C12
+0x006500D6
+0x00000000
+0x0C00C608
+0x00650298
+0x00000000
+0x00804C13
+0x00650438
+0x00000000
+0x008043BA
+0x00650438
+0x00000000
+0x0C00C598
+0x006505F6
+0x00000000
+……
+&lt;/syntaxhighlight&gt;
+The first line is a file header generated by CCS, which is not really needed by profiling. The real data begins from the second line, which is generated with the hook functions introduced in above section, they are: address, TSCL, TSCH; address, TSCL, TSCH…
+<br style="clear: both" />
+If the data is saved into a binary file, it is just exactly same as the content in the DSP memory buffer (no file header like the text file generated by CCS memory dumping). If you save data to binary file through CCS, 32-bit data type size should be selected.
+</p>
+<h2><span id="Process_raw_entry/exit_records_with_a_tool"></span><span class="mw-headline" id="Process_raw_entry.2Fexit_records_with_a_tool">Process raw entry/exit records with a tool</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=6" title="Edit section: Process raw entry/exit records with a tool">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Huge raw data dumped from DSP buffer need be processed with a tool to generate profile.
+<br style="clear: both" />
+An example tool is provided with this application note. Following figure shows the tool.
+</p>
+<table border="1" align="left">
+
+<tbody><tr>
+<td align="center"><a href="File_A_tool_for_function_profile_post_processing.html" class="image"><img alt="A tool for function profile post processing.PNG" src="https://processors.wiki.ti.com/images/2/26/A_tool_for_function_profile_post_processing.PNG" width="783" height="608" /></a>
+</td></tr>
+<tr>
+<td align="center">Figure 3 - A tool for profile post processing
+</td></tr></tbody></table>
+<p><br />
+<br style="clear: both" />
+The raw data only record the address of function or task, while function or task name is not recorded for memory saving. According to the address of the function, the function name can be found in DSP .out file or .map file generated by cgtools. This tool uses .out file as input to resolve function names.
+<br style="clear: both" />
+Please note, some tasks may not have a corresponding symbol in the .out file because they are created at run time. For this kind of task or function can not find name from the .out file, they are given name in the format like “?task #1”.
+<br style="clear: both" />
+If there is static function in the program, to get the name of static function, you need uncheck the “Parse global symbol only” checkbox in the tool. However, when all symbols are parsed, we may get multiple symbols with same address, for this case, those symbols’ names are concatenated with “ - ” as the name of the address. For example, if both symbol “SL2MemoryBufInit” and “.text” has same value of “0x0c0137e0”, then in the output file, you will see the function name for “0x0c0137e0” is “.text - SL2MemoryBufInit”.
+<br style="clear: both" />
+The tool generates two output files, one is call list file, it is actually a list of function/task call history, this may be useful for software debug; and the other output file is final profile result. The file format is CSV (Comma Separated Values), it is actually a text format, but can be opened with Microsoft Excel like below.
+</p>
+<table border="1" align="left">
+
+<tbody><tr>
+<td align="center"><a href="File_Example_of_function_call_list_file.html" class="image"><img alt="Example of function call list file.PNG" src="https://processors.wiki.ti.com/images/7/7e/Example_of_function_call_list_file.PNG" width="618" height="462" /></a>
+</td></tr>
+<tr>
+<td align="center">Figure 4 - Example of call list file
+</td></tr></tbody></table>
+<p><br />
+<br style="clear: both" />
+Please note, the function call history is listed in the order of competition time (exit TSC) of a function. You can re-sort the data by enter time (enter TSC) in the Excel.
+<br style="clear: both" />
+The inclusive cycles in above table is the cycles for a function including all sub-functions, the exclusive cycles in above table is the cycles for a function excluding its sub-functions.
+</p>
+<table border="1" align="left">
+
+<tbody><tr>
+<td align="center"><a href="File_Example_of_profile_output_file.html" class="image"><img alt="Example of profile output file.PNG" src="https://processors.wiki.ti.com/images/b/b2/Example_of_profile_output_file.PNG" width="911" height="363" /></a>
+</td></tr>
+<tr>
+<td align="center">Figure 5 - Example of profile output file
+</td></tr></tbody></table>
+<p><br />
+<br style="clear: both" />
+In above table, the first line of the table records the TSC (Time Stamp Counter) of first record and last record,  the total cycles = (LastTSC - FirstTSC).
+<br style="clear: both" />
+The valid cycles of all functions be recorded should be less than the total cycles, because <font color="red">some functions in libraries or in assembly code can not be recorded by hook feature provided by C compiler</font>. The percentage of valid cycles over total cycles is shown in row 2 column F.
+<br style="clear: both" />
+In above table, the “Inclu” is abbreviation of “Inclusive”; the “Exclu” is abbreviation of “Exclusive”. For example, “MaxExcluCycle” means the maximum cycles of a function exclude the cycles of its sub-functions.
+<br style="clear: both" />
+Since exclusive cycle is more valuable for most applications, so the profile output is sorted by descending order of total exclusive cycle of each function (ExecuteTimes*AverageExcluCycle). Percentage value in the table is the percentage of a function’s exclusive cycles in the total valid cycles of all functions, that is, Percentage= (ExecuteTimes*AverageExcluCycle)/(Functions ValidCycles).
+<br style="clear: both" />
+The second part in the profile output file is for tasks. Task cycles are collected by task switch hook, it is supported by Operation System such as BIOS, which can record almost all cycles, so, “Valid/Total” can be close to 100%. Inclusive cycle is less meaningful for task, so the cycles collected for tasks by this tool is something like the Exclusive cycles, it excludes the cycles of other tasks, but the cycles may include the cycles of hardware or software interrupt happens during a task execution.
+<br style="clear: both" />
+The tool was developed with Borland Turbo C++ Explorer, the code are also provided along with this application note. The main mechanism behind this implementation is function call stack. Following figure shows the basic flow diagram.
+</p><p><br />
+</p>
+<table border="1" align="left">
+
+<tbody><tr>
+<td align="center"><a href="File_Flow_diagram_of_function_profile_post_processing.html" class="image"><img alt="Flow diagram of function profile post processing.PNG" src="https://processors.wiki.ti.com/images/d/d7/Flow_diagram_of_function_profile_post_processing.PNG" width="733" height="596" /></a>
+</td></tr>
+<tr>
+<td align="center">Figure 6 - Flow diagram of function profile post processing
+</td></tr></tbody></table>
+<p><br />
+<br style="clear: both" />
+The tool reports some status information in the status window during processing. The number of functions and number of tasks founded in the raw data file are reported.
+<br style="clear: both" />
+Since the data record may begin or end during some functions executing, there may be several enter records without corresponding exit record, or there may be several exit records without corresponding enter record. The tool reports the number of this kind of records.
+<br style="clear: both" />
+The task stack data structure are allocated according to call stack size configured in the tool’s GUI (Graphical User Interface). The default values should be enough for most application.
+<br style="clear: both" />
+The maximum call stack depth is also reported in the status window, it actually represents maximum function calls pushed into the call stack. The stack size configuration in the GUI must be larger than actual call stack depth.
+</p>
+<h2><span class="mw-headline" id="Example">Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=7" title="Edit section: Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>An example project is provided along with this application note to demonstrate how to use the tool. Following figure shows the project in CCS5.3.
+</p>
+<table border="1" align="left">
+
+<tbody><tr>
+<td align="center"><a href="File_ExampleProject.html" class="image"><img alt="ExampleProject.PNG" src="https://processors.wiki.ti.com/images/4/45/ExampleProject.PNG" width="912" height="530" /></a>
+</td></tr>
+<tr>
+<td align="center">Figure 7 - Example project
+</td></tr></tbody></table>
+<p><br />
+<br style="clear: both" />
+It is a test created based on the “mutex” example of SYS/BIOS. A timer is setup to switch three tasks circularly. Each task just runs a delay function to consume some cycles.
+<br style="clear: both" />
+This project can be run on C6670 EVM, C6678 EVM or TCI6614 EVM. If you want to run this project on other C66x DSP board, you need change configuration for main PLL and DDR3 accordingly.
+<br style="clear: both" />
+The steps to profile the program are:
+</p>
+<ol><li>Add “hook.c” and “hook.h” to the original project.</li>
+<li>Modify the macro “MAX_PROFILE_RECORD_NUM” defined in the “hook.h” to determine how many profiling records to save, that is, the size of the buffer for profiling records.</li>
+<li>Add code to call “hook_init” function in the main function. Please note, we recommend to store the raw profiling data in DDR, so please call “hook_init” function after the DDR initialization.</li>
+<li>Allocate the ".far:External_NonCache_Data" section defined for the profiling data buffer to Non-cacheable DDR through additional link command file “KeyStone_BIOS.cmd”.</li>
+<li>In the compiler options of the project, setup entry hook and exit hook to be the hook functions implemented in the “hook.c”. If relative smaller buffer is used and you are more interested in the last part of records, the “xxxx_hook_circular” functions should be used.</li>
+<li>In the SYS/BIOS configuration script, setup the task switch hook to be the hook function implemented in the “hook.c”. If relative smaller buffer is used and you are more interested in the last part of records, the “task_switch_hook_circular” function should be used.</li>
+<li>Compile the program and run it on core 0 of a C66x DSP.</li>
+<li>Wait for several seconds and then stop the program.</li>
+<li>Check the variable “uiProfileDataCnt” in the expression window to see how many profiling records we got.</li>
+<li>In the memory window, save the buffer “ProfileData” to a data file in “32-bit Hex – <font color="red">C</font> Style” (not <font color="red">TI</font> Style) format. If the uiProfileDataCnt&lt;MAX_PROFILE_RECORD_NUM, only save uiProfileDataCnt*3 words (each record occupies 3 words); otherwise, the buffer was wrapped around, then we should save the full buffer, that is, number of words to be saved should be MAX_PROFILE_RECORD_NUM*3.</li>
+<li>Run the post processing tool. Select the data file and corresponding .out file, and then click the “Process” button (Figure 3).</li>
+<li>Check the information in the output window. When it shows “Profile data processing complete.”, you should get the output in files xxx_profile.csv (Figure 5) and xxx_call_list.csv (Figure 4).</li></ol>
+<h2><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=8" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/spru187">TMS320C6000 Optimizing Compiler User's Guide (spru187)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/spru423">TMS320 DSP/BIOS User Guide (spru423)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/SPRAAO8">Common Object File Format (SPRAAO8)</a></li>
+<li>Tool Interface Standard (TIS) Executable and Linking Format (ELF) Specification</li></ol>
+<h2><span class="mw-headline" id="Associated_example_code_and_tool_for_this_application_note"><a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/images/5/5f/DSPProfilingwithHook.zip">Associated example code and tool for this application note</a></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit&amp;section=9" title="Edit section: Associated example code and tool for this application note">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130161817
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.099 seconds
+Real time usage: 0.107 seconds
+Preprocessor visited node count: 432/1000000
+Preprocessor generated node count: 1355/1000000
+Post‐expand include size: 4006/2097152 bytes
+Template argument size: 1180/2097152 bytes
+Highest expansion depth: 6/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 86/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   14.063      1 -total
+ 41.60%    5.851      1 Template:WikiNote
+ 16.30%    2.293      7 Template:Imgfrm
+ 15.83%    2.227      1 Template:Month
+ 12.17%    1.711     40 Template:Section_Break
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:16340-0!canonical and timestamp 20201130161817 and revision id 182474
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Profiling on the C6000 using Function Hooks</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Profiling on the C6000 using Function Hooks</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Profiling on the C6000 using Function Hooks</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Profiling on the C6000 using Function Hooks</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Profiling on the C6000 using Function Hooks</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Profiling on the C6000 using Function Hooks</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Profiling on the C6000 using Function Hooks</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Profiling on the C6000 using Function Hooks</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Profiling on the C6000 using Function Hooks</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;oldid=182474">https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;oldid=182474</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="https://processors.wiki.ti.com/index.php?title=Category:WikiNote&amp;action=edit&amp;redlink=1" class="new" title="Category:WikiNote (page does not exist)">WikiNote</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Profiling+on+the+C6000+using+Function+Hooks" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Profiling_on_the_C6000_using_Function_Hooks.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Profiling_on_the_C6000_using_Function_Hooks.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Profiling_on_the_C6000_using_Function_Hooks.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Profiling_on_the_C6000_using_Function_Hooks.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Profiling_on_the_C6000_using_Function_Hooks.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;oldid=182474" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Profiling_on_the_C6000_using_Function_Hooks&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 28 July 2014, at 04:41.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.099","walltime":"0.107","ppvisitednodes":{"value":432,"limit":1000000},"ppgeneratednodes":{"value":1355,"limit":1000000},"postexpandincludesize":{"value":4006,"limit":2097152},"templateargumentsize":{"value":1180,"limit":2097152},"expansiondepth":{"value":6,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":86,"limit":5000000},"timingprofile":["100.00%   14.063      1 -total"," 41.60%    5.851      1 Template:WikiNote"," 16.30%    2.293      7 Template:Imgfrm"," 15.83%    2.227      1 Template:Month"," 12.17%    1.711     40 Template:Section_Break"]},"cachereport":{"timestamp":"20201130161817","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":222});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Profiling_on_the_C6000_using_Function_Hooks by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 13:51:53 GMT -->
+</html>

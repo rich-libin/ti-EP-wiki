@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:15:22 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OMAP-L1x/C674x/AM1x SoC Architectural Overview - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview","wgTitle":"OMAP-L1x/C674x/AM1x SoC Architectural Overview","wgCurRevisionId":127771,"wgRevisionId":127771,"wgArticleId":4224,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["OMAPL1","C674x","AM1x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview","wgRelevantArticleId":4224,"wgRequestId":"38d34224ca7443ea3420e427","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OMAP-L1x_C674x_AM1x_SoC_Architectural_Overview rootpage-OMAP-L1x skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OMAP-L1x/C674x/AM1x SoC Architectural Overview</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#System_Interconnect_Overview"><span class="tocnumber">1</span> <span class="toctext">System Interconnect Overview</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Master.28s.29"><span class="tocnumber">1.1</span> <span class="toctext">Master(s)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Slaves"><span class="tocnumber">1.2</span> <span class="toctext">Slaves</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Switched_Central_Resource_.28SCR.29"><span class="tocnumber">1.3</span> <span class="toctext">Switched Central Resource (SCR)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Arbitration"><span class="tocnumber">1.3.1</span> <span class="toctext">Arbitration</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Default_Burst_Size"><span class="tocnumber">1.3.2</span> <span class="toctext">Default Burst Size</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-7"><a href="#Bridges"><span class="tocnumber">1.4</span> <span class="toctext">Bridges</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Master_Slave_Connectivity"><span class="tocnumber">1.5</span> <span class="toctext">Master Slave Connectivity</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="System_Interconnect_Overview">System Interconnect Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=1" title="Edit section: System Interconnect Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<hr />
+<p>The C674x DSP, ARM9 CPU Cores, System DMA, and device specific peripherals are interconnected within the OMAP-L1x devices by a low latency switch fabric. This switch fabric is described in detail in the subsequent articles. <br />
+</p><p>The major components in the OMAP-L1x devices are: 
+</p>
+<ul><li><b>Masters</b> (C674x DSP Megamodule, ARM9 CPU Core, EDMA3, select peripherals)</li>
+<li><b>Slaves</b> (most peripherals, various memory controllers)</li>
+<li><b>Switched Central Resources</b> (SCRs)</li>
+<li><b>Bridges and Buses</b></li></ul>
+<p><br />In each of the below diagrams the Masters (Transaction Initiators) are shown on the left hand side of the diagram, and the Slaves (Transaction Responders) are shown on the right hand side of the diagram. The switch fabric is shown in between the Masters and the Slaves as Switch Central Resources (SCRs) and Bridges (BRs).<br />
+</p><p>The arrows indicate the master/slave relationship. Each arrow originates at a master and terminates at a slave (or group of slaves). The direction of the arrow does not indicate the direction of data flow. Data flow is typically bi-directional for each of the documented bus paths but there are minor exceptions. One example of an exception are the read/write ports of the EDMA3 Transfer Controller. The read port reads data from source memory/peripherals, and the write port writes data to destination memory/peripheral.<br />
+</p><p>Some modules are shown on both sides of SCRs or have multiple instances in the block diagram. This is because select peripherals have both a Master DMA Port as well as one or more slave port(s). This dual port functtonality allows the peripheral to act as both a Master and and Slave. Examples include HPI, USB0, USB1, etc. <br />
+</p><p>On chip/Off chip memory controllers are considered slave end points (targets) and are always shown on the right side of main SCRs. The memory controllers can be classified as one of the following 
+</p>
+<ul><li>stand alone memory controllers (such as Shared RAM or EMIF controllers)</li>
+<li>part of a module/peripheral (for example, system masters can access the C674x DSP Megamodule L1/L2 memory via the C784x DSP Megamodule Slave DMA Port (SDMA), and the EMAC CPPI RAM is accessible via the EMAC port shown on the right side of SCR1/SCR2.)<br /></li></ul>
+<p><br /><b>OMAP-L137 System Interconnect Diagram</b> 
+</p>
+<dl><dd><dl><dd><dl><dd><div class="center"><div class="floatnone"><a href="../../File_OMAPL137_SysInterconnect.html" class="image" title="OMAP-L137 System Interconnect Diagram"><img alt="OMAP-L137 System Interconnect Diagram" src="https://processors.wiki.ti.com/images/4/4f/OMAPL137_SysInterconnect.PNG" width="700" height="693" class="thumbborder" /></a></div></div></dd></dl></dd></dl></dd></dl>
+<p><br /><b>OMAP-L138 System Interconnect Diagram</b> 
+</p>
+<dl><dd><dl><dd><dl><dd><div class="center"><div class="floatnone"><a href="../../File_OMAPL138_SysInterconnect.html" class="image" title="OMAP-L138 System Interconnect Diagram"><img alt="OMAP-L138 System Interconnect Diagram" src="https://processors.wiki.ti.com/images/8/84/OMAPL138_SysInterconnect.PNG" width="700" height="679" class="thumbborder" /></a></div></div><br /></dd></dl></dd></dl></dd></dl>
+<p><br />
+</p>
+<h2><span id="Master(s)"></span><span class="mw-headline" id="Master.28s.29">Master(s)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=2" title="Edit section: Master(s)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Masters (Transaction Initiators) in the OMAP-L1x device are IP modules which are capable of initiating their own read/write transfer requests. This includes both CPUs (ARM9 / C674x DSP Megamodule), System DMAs (EDMA3), and select peripherals that utilize their own Master DMA Ports to initiate their own read/write transfers. <br />
+</p><p><br />The following Table lists the Masters for the respective OMAP-L1x devices 
+</p>
+<table cellspacing="1" cellpadding="1" width="971" align="center" border="1">
+<caption><b>List of Masters on OMAPL1x/C674x/AM1x</b>
+</caption>
+<tbody><tr>
+<td><b>Masters</b>
+</td>
+<td><b>Description</b>
+</td>
+<td><b>OMAP-L137</b>
+</td>
+<td><b>OMAP-L138</b><br />
+</td>
+<td valign="middle" align="center"><b>Default Master Priority<sup>*</sup></b>
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">ARM9-I </span> <br />
+</p>
+</td>
+<td valign="top" align="left">ARM9 Instruction:Instruction/Program accesses. I-Cache accesses
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center"><b>2<br /></b>
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">ARM9-D</span> <br />
+</p>
+</td>
+<td valign="top" align="left">ARM9 Data Port: Load/Store instructions, D-cache and peripheral register accessess
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">C674x DSP Megamodule Master DMA Port (MDMA)
+<p class="mw-empty-elt">
+</p>
+</span></td>
+<td valign="top" align="left">
+<p>C674x long distances memory access port (i.e. load/stores to external memory and shared RAM outside the DSP Mega Module Memory) and cache controller accesses to external memory and shared RAM. <br /><br /><b>Note:</b>MDMA is a "port" name, has no relation to EDMA3 or the DSP Megamodule IDMA.
+</p>
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">C674x DSP Megamodule Configuration Port (CFG) </span>
+</td>
+<td valign="top" align="left">Provides access to the peripheral configuration bus. (i.e. accesses to McASP, PLLC, other Memory Mapped Peripherals)
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Ethernet Media Access Controller (EMAC) </span>
+</td>
+<td valign="top" align="left">EMAC Master Port RX/TX DMA engine accesses to internal/external device memory
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Universal Serial Bus Controller (USB2.0) (VBUS) </span>
+</td>
+<td valign="top" align="left">USB0 Queue Manager access to internal/external device memory<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Universal Serial Bus Controller (USB2.0) (CDMA) </span>
+</td>
+<td valign="top" align="left">USB0 internal DMA Master Port: accesses to/from internal/external device memory<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Universal Serial Bus Controller (USB1.0) </span>
+</td>
+<td valign="top" align="left">USB1 internal DMA Master Port: Accesses to/from internal/external device memory
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Host Port Interface (HPI) </span>
+</td>
+<td valign="top" align="left">HPI Internal DMA Master Port: Accesses to/from device internal memory, external memory, and peripheral registers.
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">EDMA3_0_TC0 (RD)</span>**
+</td>
+<td valign="top" align="left">EDMA3_0 Transfer Controller 0 read accesses fromSRCperipheral/memory. EDMA3_0_CC0 Q0 submissions<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">EDMA3_0 Transfer Controller 0 (write)** </span>
+</td>
+<td valign="top" align="left">EDMA3_0 Transfer Controller 0 write accesses to DSP/peripheral/memory. EDMA3_0_CC0&#160;Q1 submissions
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">EDMA3_0 Transfer Controller 1 (read)*</span>*
+</td>
+<td valign="top" align="left">EDMA3_0 Transfer Controller 1 read accesses from SRC peripheral/memory. EDMA3_1_CC0 Q0 submissions<br /><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">EDMA3_0 Transfer Controller 1(write)** </span>
+</td>
+<td valign="top" align="left">EDMA3_0 Transfer Controller 1 write accesses to DSP/peripheral/memory <br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">EDMA3_0 Transfer Controller 0 (read)</span>**<br />
+</td>
+<td valign="top" align="left">
+<p>EDMA3_1 Tranfer Controller 0 read accesses from SRC peripheral/memory<br />
+</p>
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">EDMA3_1 Transfer Controller 1(write)</span>**<br />
+</td>
+<td valign="top" align="left">EDMA3_1 Transfer Controller 0 write accesses to DST peripheral/memory <br />
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Liquid Crystal Display Controller (LCDC) </span>
+</td>
+<td valign="top" align="left">
+<p>LCD DMA Port to read image data from external memory
+</p><p>&#160;OMAPL137/AM17xx/C6747:&#160;EMIFB&#160;SDRAM, OMAPL138/AM18xx/C6748:&#160;mDDR/DDR2<br />
+</p>
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Programmable Realtime Unit 0 (PRU0) </span>
+</td>
+<td valign="top" align="left">PRU0 accesses to/from internal/external device memory and peripheral memory mapped registers (e.g McASP etc) <br />
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Programmable Realtime Unit 1 (PRU1) </span>
+</td>
+<td valign="top" align="left">PRU1 accesses to/from internal/external device memory and peripheral memory mapped registers (e.g McASP etc)
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Seral ATA Controller (SATA) </span>
+</td>
+<td valign="top" align="left">SATA Tx/Rx FIFO Internal DMA port for accessing internal/external device memory<br />
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Video Port Interface (DMA 0) </span>
+</td>
+<td valign="top" align="left">VPIF01 Port to write to memory video data that is input from an external component
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Video Port Interface (VPIF)(DMA 1)</span>)
+</td>
+<td valign="top" align="left">VPIF02 Port to read from memory video data that will be output to an external component
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">2<br />
+</td></tr>
+<tr>
+<td valign="top" align="left"><span style="color: rgb(0,0,255)">Universal Parallel Port Controller (uPP) </span>
+</td>
+<td valign="top" align="left">uPP internal DMA Master Port: (DMA Channel I/Q)accesses to/from internal memory/external device memory to recieve/send data on uPPI/O bus<br />
+</td>
+<td valign="top" align="center"><br />
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">0<br />
+</td></tr></tbody></table>
+<p><br /><sup><b>**</b></sup>TCRD/WR priority cannot be programmed individually. Single priority value controls both TC rd/wr port priority. 
+</p><p><sup><br /></sup>
+</p>
+<h2><span class="mw-headline" id="Slaves">Slaves</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=3" title="Edit section: Slaves">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Slaves (Transaction Request Recipients) in the device are IP modules that accept / service the transfer requests from the masters. Modules that fall under this category are peripherals (such as SPI, McASP, McBSP, UART, I2C, etc) that rely on CPU or EDMA3 to initiate transactions on their behalf. On-chip memory (DSP L1/L2, ARM RAM, Shared RAM) and off-chip memory (SDRAM, DDR2/mDDR, NOR/NAND flash, etc) are also considered to be slave modules. 
+</p><p><br />
+</p>
+<table cellspacing="1" cellpadding="1" width="971" align="center" border="1">
+<caption><b>List of Slaves in OMAPL1x/C674x/AM1x Devices</b>
+</caption>
+<tbody><tr>
+<td><b>Masters</b>
+</td>
+<td><b>Description</b>
+</td>
+<td><b>OMAP-L137</b>
+</td>
+<td><b>OMAP-L138</b><br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">C674x DSP Megamodule Slave DMA Port (SDMA) </span>&lt;span style="color: rgb(0,0,255)" /&gt;<br />
+</p>
+</td>
+<td valign="top" align="left">DSP SDMA port allows accessing only the DSP memories. DSPSS registers (e.g. program counter, IDMA, Cache controller, DSP Interrupt Controller, etc) are only accessible by DSP (other masters like ARM and HPI cannot access these registers)
+</td>
+<td valign="top" align="center">X<br />
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">ARM RAM </span><br />
+</p>
+</td>
+<td valign="top" align="left">ARM RAM memory. On-chip/Internal memory
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">ARM ROM / ARM Interrupt Controller </span><br />
+</p>
+</td>
+<td valign="top" align="left">ARM ROM and ARM interrupt controller (Only accessible by ARM)
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">Shared RAM </span><br />
+</p>
+</td>
+<td valign="top" align="left">Accessible by ARM/DSP and all other masters (except LCDC)
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">EMIFA </span><br />
+</p>
+</td>
+<td valign="top" align="left">SDRAM, NOR, NAND flash. Off-chip/External memory
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">EMIFB(SDRAM) </span><br />
+</p>
+</td>
+<td valign="top" align="left">SDRAM. Off-chip/external memory
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">EMIFB(SDRAM) </span><br />
+</p>
+</td>
+<td valign="top" align="left">SDRAM. Off-chip/external memory
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">mDDR/DDR2 </span><br />
+</p>
+</td>
+<td valign="top" align="left">mDDR/DDR2. Off-chip/external memory
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr>
+<tr>
+<td valign="top" align="left">
+<p><span style="color: rgb(0,0,255)">Peripherals </span><br />
+</p>
+</td>
+<td valign="top" align="left">Accesses to all peripheral memory mapped registers, including transmit/recieve registers for serial ports, DMA ports/FIFOs for peripherals like McASP/McBSP, PLL , PSC, master peripheral (EDMA, USB, SATA) configuration registers, etc. <br />
+</td>
+<td valign="top" align="center">X
+</td>
+<td valign="top" align="center">X<br />
+</td></tr></tbody></table>
+<p><br />
+</p><p><b>NOTE:</b> Not all masters can access all slaves. For additional details on restrictions, if any, on a particular master's accessibility to a given slave memory/peripheral on the device, please refer to the section on Master/Slave Connectivity.<br /><br />
+</p><p><br />
+</p>
+<h2><span id="Switched_Central_Resource_(SCR)"></span><span class="mw-headline" id="Switched_Central_Resource_.28SCR.29">Switched Central Resource (SCR) <br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=4" title="Edit section: Switched Central Resource (SCR)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Switch Central Resources provides low-latency interconnectivity between the masters and slaves. SCRs (also called Switch Fabric or crossbars) direct the access requests by providing address decoding, arbitration, and routing of the requests to the various slaves.<br />
+</p><p><br />For uniquely exclusive master/slave pairs, concurrent transactions can be sent in parallel through and SCR. For example, if a request from the C674x Megamodule to configure the McASP and another request from the ARM to configure the UART arrive at a particular SCR concurrently, both of the requests will pass through the SCR at the same time. 
+</p><p>The interconnect of a device typically consists of one or two main SCRs and a number of smaller, satellite SCRs. The main SCR's handle the majority of the traffic and are typically clocked at a higher frequency than the satellite SCRs. 
+</p><p>The figure below illustrates one such data flow example, where the highlighted paths are completely independent of each other and will allow true concurrency and parallelism. 
+</p><p><br />
+</p>
+<pre><b>SCRconcurrent data movement </b>
+ 
+</pre>
+<dl><dd><dl><dd><dl><dd><a href="../../File_SCRConcurrency.html" class="image"><img alt="SCRConcurrency.png" src="https://processors.wiki.ti.com/images/2/29/SCRConcurrency.png" width="960" height="720" /></a></dd>
+<dd><div class="center"><div class="floatnone"><a href="../../File_SCRConcurrencyFootnote.html" class="image" title="SCRConcurrencyFootnote.png"><img alt="SCRConcurrencyFootnote.png" src="https://processors.wiki.ti.com/images/0/09/SCRConcurrencyFootnote.png" width="741" height="249" /></a></div></div></dd></dl></dd></dl></dd></dl>
+<p><br /><br />
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Arbitration">Arbitration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=5" title="Edit section: Arbitration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Arbitration for the Switch Central Resources is a two layer arbitration scheme which occurs on the burst size boundary. Arbitration occurs when two competing resources attempt concurrent access to the same slave. <br />
+</p><p><br /><b>Layer 1: Master Priority Level Arbitration</b> Each master in a device is assigned to a system priority level. Following a Power On Reset (POR), each masters priority level is reset to the its default as specified in the System Configuration (SYSCFG) Section of the device System Reference Guide. 
+</p><p>All SCRs on the device perform arbitration based on the priority level of the master that sends the read/write access request. System programmers are expected to modify the default priority values in order to fine tune the system for their application requirements. 
+</p><p><b>Level 0:</b> Highest Priority Level <br /><b>Level 1:</b> 2nd Highest Priority Level <br /><b>Level 2:</b> 3rd Highest Priority Level <br /><b>Level 3:</b> 4th Highest Priority Level <br /><b>Level 4:</b> 5th Highest Priority Level <br /><b>Level 5:</b> 6th Highest Priority Level <br /><b>Level 6:</b> 7th Highest Priority Level <br /><b>Level 7:</b> Lowest Priority Level <br />
+</p><p>If two concurrent requests to the same slave concurrently arrive from masters with <u>different</u> priority levels, the master with the highest priority level wins the arbitration. <br />
+</p><p><br />
+</p><p><b>Layer 2: Inter-Priority Level Aribitration</b> 
+</p><p>Inter-Priority Level Arbitration is implemented as round robin style arbitration. If two concurrent requests to the same slave arrive from masters with the <u>same</u> priority level, round robin arbitration decides which master is allowed to continue with the request, and which master must wait until the SCR is free before continuing with the request. 
+</p><p><br /><b>NOTE:</b>Arbitration/Re-Arbitration occurs at burst size boundaries (or lower if a burst request is not used) 
+</p><p><br />
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Default_Burst_Size">Default Burst Size</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=6" title="Edit section: Default Burst Size">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A transaction from a master is typically broken down into smaller bursts at the system interconnect level. This is done to increase the collective efficiency of transfers through the interconnect. 
+</p><p>Since large burst sizes of higher priority threads will always win arbitration and subsequently block other low priority transactions until they are finished, It is assumed that the system programmer will fine tune the burst size of all the masters in the system. This allows the lower priority requests a chance to win arbitration between contiguous bursts of higher priority requests. 
+</p><p>The default burst size for a master is shown in the table below. 
+</p>
+<table cellspacing="1" cellpadding="1" border="1">
+<caption><b>Default Burst Size for Master Peripherals on OMAPL1x/c674x/AM1x</b>
+</caption>
+<tbody><tr>
+<td><b>Master <br /></b>
+</td>
+<td><b>Default Burst Size </b><br />
+</td>
+<td><b>Fixed/Configurable</b><br />
+</td></tr>
+<tr>
+<td>DSP MDMA<br />
+</td>
+<td>Load/Store word/double word: 4 / 8 bytes <br />
+<p>Cache Victims (MDMA writes): 16 bytes 
+</p><p>Cache Misses (MDMA reads): 32 -128 bytes <br />
+</p>
+</td>
+<td>Case Dependent<br />
+<p><br />
+</p>
+</td></tr>
+<tr>
+<td>DSP CFG<br />
+</td>
+<td>
+<p>Load/Store word/double word: 4/8 bytes<br />
+</p>
+</td>
+<td>Case dependent<br />
+</td></tr>
+<tr>
+<td>EDMA3_x_TCx<br />
+</td>
+<td>16/32/64 bytes<br />
+</td>
+<td>Configurable via CFGCHIPx register in the SYSCFG module<br />
+</td></tr>
+<tr>
+<td>USB2.0<br />
+</td>
+<td>64 bytes<br />
+</td>
+<td>Fixed<br />
+</td></tr>
+<tr>
+<td>HPI<br />
+</td>
+<td>
+<p>4 words (16 bytes) 
+</p><p>for HPID accesses<br />
+</p>
+</td>
+<td>Multiplexed mode w/ auto-increment reads/writes produce 4 word reads/writes.
+<p>Multiplexed mode w/ non auto-increment reads/writes produce 1 word reads/writes. 
+</p><p><br />
+</p>
+</td></tr>
+<tr>
+<td>EMAC<br />
+</td>
+<td>64 bytes<br />
+</td>
+<td>Fixed <br />
+</td></tr>
+<tr>
+<td>VPIF<br />
+</td>
+<td>32/64/128/256 bytes<br />
+</td>
+<td>Configurable<br />
+</td></tr>
+<tr>
+<td>SATA<br />
+</td>
+<td>32 bytes<br />
+</td>
+<td>Configurable (in words) 1/2/4/8 words<br />
+</td></tr></tbody></table>
+<p><br />
+</p><p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Bridges">Bridges</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=7" title="Edit section: Bridges">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Within the SoC/DSP, individual modules/peripherals/memories (or group of peripherals) may run at different clock rates and may have different bus width interfaces (typically 64 bit and 32 bit buses). Logic is needed to synchronize communication between two modules that operate at different clock rates and/or bus widths. Bridges provide the means of resolving these differences by performing bus-width conversion as well as bus operating clock frequency conversion. 
+</p><p>Bridges are also responsible for buffering read and write commands and data. Buffering is implemented with First In First Out (FIFO) style buffering. One implication of this is that any high priority request that is passed into a bridge must wait until the bridge FIFO finishes its previous transactions before it is allowed to continue. 
+</p>
+<dl><dd><dl><dd><dl><dd><a href="../../File_Bridge.html" class="image"><img alt="Bridge.PNG" src="https://processors.wiki.ti.com/images/c/cf/Bridge.PNG" width="559" height="197" /></a></dd></dl></dd></dl></dd></dl>
+<p>There are two types of Bridges: 
+</p>
+<ul><li>Synchronous Bridge: A bridge for which clock rates X and Y are either equal to, or are an integer multiple (i.e. "synchronous") of one another.</li>
+<li>Asynchronous Bridge: A bridge for which clock rates X and Y are asynchronous to each other. These bridges are typically used when a peripheral or group of peripherals have module clocks that are not an integer multiple of the primary (typically CPU) clocks (ex: 133MHz for EMIFA), or when modules are not constrained to a "fixed" ratio with respect to (w.r.t) the primary clocks (ex: The Async3 group of peripherals on OMAP-L138).</li></ul>
+<p><br />
+</p><p><br />
+</p><p>There are two main types of buses on the OMAP-L1x/c674x devices:<br />
+</p>
+<ul><li>A 64-bit bus with separate read and write interfaces, allowing multiple read and write transactions to occur simultaneously. This bus is best suited for high-speed/high-bandwidth exchanges, especially data transfers between on-chip and off-chip memories. On the OMAP-L1x/c674x family of devices, SCR1 interfaces with several modules using this 64-bit bus. Most of the high bandwidth master peripherals (ex: EDMA3 transfer controllers) and slave memories (ex: C64x+ system direct memory access (SDMA) port for L1/L2 memory access, mDDR/DDR2 controller, etc.) are directly connected to the main SCR through this 64-bit bus. Peripherals that do not support the 64-bit bus interface are connected to the main SCR via bridges (responsible for protocol conversion from a 64-bit to 32-bit bus interface).<br /></li></ul>
+<p><b>NOTE:</b> An exception to the above description of buses is the 32-bit bus connecting the EMIFB (SDRAM) controller to the main SCR on the OMAPL137/c6747 family of devices. Even though it is a 32-bit bus, it behaves like the 64-bit bus allowing multiple read and write transactions to occur simultaneously. 
+</p>
+<ul><li>A 32-bit bus with a single interface for both reads and writes. The read and write transactions are serviced strictly in order. This bus is best suited for communicating with the memory-mapped registers of all on-chip peripherals. On the OMAP-L1x/c674x family of devices, SCR2 interfaces with several modules using this 32-bit bus. Accesses to memory-mapped registers can be for configuration purposes (ex: accesses to configure a peripheral) or for data accesses (ex: read/writes from/to McASP receive/transmit buffer registers, and reads from the UART receiver buffer registers).</li></ul>
+<p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Master_Slave_Connectivity">Master Slave Connectivity</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;section=8" title="Edit section: Master Slave Connectivity">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Not all masters can access all slaves in the device. For a detailed description of which masters can access which slaves, refer to the System Interconnect chapter of the device specific System Reference Guide.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201041755
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.081 seconds
+Real time usage: 0.084 seconds
+Preprocessor visited node count: 61/1000000
+Preprocessor generated node count: 98/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4224-0!canonical and timestamp 20201201041755 and revision id 127771
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x SoC Architectural Overview</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;oldid=127771">https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;oldid=127771</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../../Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="../../Category_C674x.html" title="Category:C674x">C674x</a></li><li><a href="../../Category_AM1x.html" title="Category:AM1x">AM1x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OMAP-L1x%2FC674x%2FAM1x+SoC+Architectural+Overview" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="AM1x_SoC_Architectural_Overview.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="AM1x_SoC_Architectural_Overview.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../../Special_WhatLinksHere/OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../../Special_RecentChangesLinked/OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;oldid=127771" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 29 November 2012, at 11:39.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.081","walltime":"0.084","ppvisitednodes":{"value":61,"limit":1000000},"ppgeneratednodes":{"value":98,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201041755","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":308});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L1x/C674x/AM1x_SoC_Architectural_Overview by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:15:29 GMT -->
+</html>

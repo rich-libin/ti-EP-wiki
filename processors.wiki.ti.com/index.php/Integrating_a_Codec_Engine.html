@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Integrating_a_Codec_Engine by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:30:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Integrating a Codec Engine - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Integrating_a_Codec_Engine","wgTitle":"Integrating a Codec Engine","wgCurRevisionId":181300,"wgRevisionId":181300,"wgArticleId":692,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Codec Engine","MFP"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Integrating_a_Codec_Engine","wgRelevantArticleId":692,"wgRequestId":"0e24a1b2ea3c92001239e561","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Integrating_a_Codec_Engine rootpage-Integrating_a_Codec_Engine skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Integrating a Codec Engine</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This section describes how the Engine Integrator should configure an Engine for use by the application developer.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#A_Reusable_Example"><span class="tocnumber">2</span> <span class="toctext">A Reusable Example</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Advanced_Engine_Creation"><span class="tocnumber">2.1</span> <span class="toctext">Advanced Engine Creation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Understanding_Engine_Configuration_Syntax"><span class="tocnumber">3</span> <span class="toctext">Understanding Engine Configuration Syntax</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Framework_Components_Configuration"><span class="tocnumber">3.1</span> <span class="toctext">Framework Components Configuration</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Additional_Documents_and_Resources"><span class="tocnumber">4</span> <span class="toctext">Additional Documents and Resources</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Overview">Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=edit&amp;section=1" title="Edit section: Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The Application Author gets an Engine configuration from the <a href="#Engine_Integrator">Engine Integrator</a>. In practice, these roles may be shared by one person.
+</p><p>An Engine configuration is stored in an XDC *.cfg file and processed by the makefile using package.xdc to generate a *.c file and a linker command file (*.xdl) from the *.cfg file. For build instructions, see CE_INSTALL_DIR/examples/build_instructions.html.
+</p><p>The Codec Engine example applications typically support GPP+DSP, GPP-only, and DSP-only usage. For GPP+DSP usage, the Engine configuration is often defined in a file named remote.cfg, designating codecs run remotely on a DSP server. For GPP-only or DSP-only usage the configuration often resides in a file named "local.cfg", designating that the codecs run locally, on the same CPU as the main application.
+</p><p>An Engine configuration can include the names of the Engines, as well as the codecs and their names within each Engine, whether each codec is local or remote relative to the application, which groups each codec should be integrated into (for environments that support resource sharing), the name of the Server image if a particular Engine contains remote codecs, and more.
+</p><p>In its simplest form, however, the Engine configuration script can simply name the DSP server package and the corresponding server executable, and automatically import all the server's codec definitions. This makes the codecs available for use from the application as remote codecs.
+</p><p>For the latter form of configuration to work, it is important that you receive your DSP server in a package—which is the default server delivery method as of CE 2.00—instead of getting just one DSP server binary executable.
+</p>
+<h1><span class="mw-headline" id="A_Reusable_Example">A Reusable Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=edit&amp;section=2" title="Edit section: A Reusable Example">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The video_copy example uses the following ceapp.cfg configuration file:
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+</p>
+<pre>/* ======== ceapp.cfg ======== */
+/* use the tracing utility module */
+var TraceUtil = xdc.useModule('ti.sdo.ce.utils.trace.TraceUtil');
+//TraceUtil.attrs = TraceUtil.SOCRATES_TRACING;
+</pre>
+<pre>/* set up OSAL */
+var osalGlobal = xdc.useModule('ti.sdo.ce.osal.Global');
+osalGlobal.runtimeEnv = osalGlobal.DSPLINK_LINUX;
+</pre>
+<pre>/* ======== Engine Configuration ======== */
+var Engine = xdc.useModule('ti.sdo.ce.Engine');
+var myEngine = Engine.createFromServer(
+      "video_copy",     // Engine name (as referred to in the C app)
+      "./video_copy.x64P", // path to server exe, relative to its package dir
+      "ti.sdo.ce.examples.servers.video_copy.evmDM6446" // server package
+);
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>Most of this configuration file can be used as is. For your applications, you should modify the portions shown in bold: the name of your engine (your choice), the name of the server executable, and the name of the server executable's package.
+</p><p>The codecs included in the server will be available to the application under their original names, which for convenience are shown during the application's build—as shown in this excerpt:
+</p>
+<pre>configuring ceapp.x470MV from package/cfg/ceapp_x470MV.cfg ...
+Info: Configuring engine named '<b>video_copy'</b> from the info file for DSP server
+'<b>./video_copy.x64P'</b>, located in package
+'<b>ti.sdo.ce.examples.servers.video_copy.evmDM6467'</b>:
+   Target app will look for the DSP server image 'video_copy.x64P' in its current directory.
+Adding codec '<b>viddec_copy'</b>
+(ti.sdo.ce.examples.codecs.viddec_copy.VIDDEC_COPY), scratch groupId=0
+Adding codec '<b>videnc_copy'</b>
+(ti.sdo.ce.examples.codecs.videnc_copy.VIDENC_COPY), scratch groupId=0
+</pre>
+<pre>Info: Reading DSP memory map from the info file for DSP server './video_copy.x64P',
+located in package 'ti.sdo.ce.examples.servers.video_copy.evmDM6467': ...
+</pre>
+<p>It is good practice to verify that the information in this build log (server executable/package name, codec names, scratch groups) matches what you expect.
+</p><p>Even though the engine is configured from the information stored in the server package, you still must have all the codecs included in the server in your package path. If you do not have a required codec package, the build will fail. If you have a codec package of a different version than the one used to build the server, you will get a warning.
+</p>
+<h2><span class="mw-headline" id="Advanced_Engine_Creation">Advanced Engine Creation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=edit&amp;section=3" title="Edit section: Advanced Engine Creation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The <code>Engine.createFromServer()</code> method in the previous configuration example is available as of Codec Engine 2.00, and is <i>strongly</i> recommended when configuring an Engine with a remote Server.  <a href="Configuring_Codec_Engine_in_Arm_apps_with_createFromServer.html" title="Configuring Codec Engine in Arm apps with createFromServer">See this article for more details</a>.  It replaces the lower-level <code>Engine.create()</code> method for most common use cases, and helps avoid the complexity of matching the DSP-side codec/algorithm lists and system memory maps.
+</p><p>The lower-level <code>Engine.create()</code> method is still available.  Although you typically do not need to use it, its usage is documented here for users of Codec Engine 1.x:
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+/* get various codec modules; i.e., implementation of codecs */
+var VIDDEC_COPY = xdc.useModule('ti.sdo.ce.examples.codecs.viddec_copy.VIDDEC_COPY');
+var VIDENC_COPY = xdc.useModule('ti.sdo.ce.examples.codecs.videnc_copy.VIDENC_COPY');
+</p><p>/* ======== Engine Configuration ========  */
+var Engine = xdc.useModule('ti.sdo.ce.Engine');
+var myEngine = Engine.create("video_copy", [
+</p>
+<pre>   {name: "videnc_copy", mod: VIDENC_COPY, local: false},
+   {name: "viddec_copy", mod: VIDDEC_COPY, local: false}
+</pre>
+<p>]);
+myEngine.server = "./video_copy.x64P";
+</p><p>/* ======== Server memory map (DSPLINK) configuration ========
+</p>
+<pre>* This table must match exactly the addresses and sizes of segments in the Server’s
+* BIOS configuration (.tcf) script. There is exactly one "main", one "link", and
+* one "reset" segment type, and zero or more of "other" types.
+</pre>
+<ul><li>/</li></ul>
+<p>myEngine.armDspLinkConfig = {
+</p>
+<pre>   memTable: [
+       ["DDRALGHEAP", {addr: 0x88000000, size: 0x07A00000, type: "other"}],
+       ["DDR2",       {addr: 0x8FA00000, size: 0x00400000, type: "main" }],
+       ["DSPLINKMEM", {addr: 0x8FE00000, size: 0x00100000, type: "link" }],
+       ["RESETCTRL",  {addr: 0x8FF00000, size: 0x00000080, type: "reset"}],
+   ],
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p>
+<h1><span class="mw-headline" id="Understanding_Engine_Configuration_Syntax">Understanding Engine Configuration Syntax</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=edit&amp;section=4" title="Edit section: Understanding Engine Configuration Syntax">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The syntax used in Engine configurations is based on JavaScript, which is also used for the Tconf language used to statically configure DSP/BIOS. (See <a href="http://www.ti.com/lit/pdf/spru007" class="extiw" title="tidoc:spru007">DSP/BIOS 5.30 Textual Configuration (Tconf) User’s Guide (SPRU007)</a> for details.)
+</p><p>Unlike the JavaScript used in web pages, an object model is provided to meet the needs of Engine configuration. This object model is documented in the Configuration Reference, which is available at CE_INSTALL_DIR/xdoc/index.html.
+</p><p>For example, the following statements cause the Global module in the ti.sdo.ce.osal package to be made available to the configuration script. It then sets the runtimeEnv attribute of the Global module to DSPLINK_LINUX. This indicates that an application that uses this Engine can use the DSP/BIOS Link and Linux operating environments.
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+var osalGlobal = xdc.useModule('ti.sdo.ce.osal.Global');
+osalGlobal.runtimeEnv = osalGlobal.DSPLINK_LINUX;
+&lt;/syntaxhighlight&gt;
+</p><p>To see the other options for the runtimeEnv attribute, follow these steps:
+</p>
+<ol><li>Open CE_INSTALL_DIR/xdoc/index.html to see the Configuration Reference. Depending on your browser, you may need to enable active content to view the list of nodes on the left.</li>
+<li>Click the link to the ti.sdo.ce.osal package.</li>
+<li>Click the link to the Global module.</li>
+<li>You see the valid settings for runtimeEnv and other documentation for the Global module.</li>
+<li>Click "Back" in the upper-right corner of the window. Note that the usual Back button in your browser does not function as expected in this online help system.</li></ol>
+<p>After setting the runtime environment, the example ceapp.cfg configuration file gets access to the codec modules it will need.
+</p><p>For example:
+&lt;syntaxhighlight lang='javascript'&gt;
+var VIDDEC_COPY =  xdc.useModule('ti.sdo.ce.examples.codecs.viddec_copy.VIDDEC_COPY');
+&lt;/syntaxhighlight&gt;
+</p><p>This statement "uses" the VIDDEC_COPY module in the "ti.sdo.ce.examples.codecs.viddec_copy" package, and stores the handle to it in a variable named VIDDEC_COPY. A similar statement gets the corresponding video encoder. You can modify these statements to reference any of the codecs provided with Codec Engine.
+</p><p>The ti.sdo.ce.examples.codecs.viddec_copy package corresponds to CE_INSTALL_DIR/examples/ti/sdo/ce/examples/codecs/viddec_copy and VIDDEC_COPY matches the VIDDEC_COPY.xdc filename in that directory.
+</p><p>The next group of statements declare the contents of an Engine.
+&lt;syntaxhighlight lang='javascript'&gt;
+var Engine = xdc.useModule('ti.sdo.ce.Engine');
+var vcr = Engine.create("video_copy", [
+</p>
+<pre>   {name: "videnc_copy", mod: VIDENC_COPY, local: false},
+   {name: "viddec_copy", mod: VIDDEC_COPY, local: false}
+   ]
+</pre>
+<p>);
+&lt;/syntaxhighlight&gt;
+First, they make the Engine module in the ti.sdo.ce package available to the script. Then they use the create() method of the Engine module to create an Engine. As with the Global module in the ti.sdo.ce.osal package, you can use the Configuration Reference online help to get details about the Engine module in the ti.sdo.ce package.
+</p><p>Each Engine has a name that will be used by the Application Author in the <code>Engine_open()</code> API they call. In this case, the Engine name is "video_copy".
+</p><p>The create method then expects an array of algorithm descriptions. Each algorithm description contains the following fields:
+</p>
+<ul><li>name. This string specifies the "local" name to be used by the Application Author to identify an algorithm to instantiate in the VIDENC_create and VIDDEC_create VISA APIs.</li>
+<li>mod. This field is a reference that identifies the actual module implementing the algorithm to instantiate. This is the same as the name declared as a variable in the previous statement that called xdc.useModule to get the ti.sdo.ce.examples.codecs.viddec_copy.VIDDEC_COPY module.</li>
+<li>local. If true, the algorithm is instantiated on the "local" CPU. Otherwise, the Codec Server creates a remote instance of the algorithm identified by mod.</li></ul>
+<h2><span class="mw-headline" id="Framework_Components_Configuration">Framework Components Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=edit&amp;section=5" title="Edit section: Framework Components Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The example configuration files—remote.cfg (for GPP+DSP) and local.cfg (for GPP-only and DSP-only)—often configure the ti.sdo.fc.dskt2.DSKT2 and ti.sdo.fc.dman3.DMAN3 modules, which are part of Framework Components. DSKT2 is the xDAIS algorithm memory allocation manager, and DMAN3 is the DMA manager. For details on configuring these modules, see the Framework Components documentation in CE_INSTALL_DIR/xdoc/index.html.
+</p>
+<h1><span class="mw-headline" id="Additional_Documents_and_Resources">Additional Documents and Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=edit&amp;section=6" title="Edit section: Additional Documents and Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li><i>Codec Engine Server Integrator User's Guide</i> (<a href="http://www.ti.com/lit/pdf/SPRUED5" class="extiw" title="tidoc:SPRUED5">SPRUED5</a>)</li>
+<li><i>Codec Engine Algorithm Creator User's Guide</i> (<a href="http://www.ti.com/lit/pdf/SPRUED6" class="extiw" title="tidoc:SPRUED6">SPRUED6</a>)</li>
+<li><i>Codec Engine Application (API) Reference Guide</i> CE_INSTALL_DIR/docs/html/index.html</li>
+<li><i>Configuration Reference Guide.</i> CE_INSTALL_DIR/xdoc/index.html</li>
+<li><i>Example Build and Run Instructions.</i> CE_INSTALL_DIR/examples/build_instructions.html</li>
+<li><i>xDM API Reference.</i> XDAIS_INSTALL_DIR/docs/html/index.html</li>
+<li><i>xDAIS-DM (Digital Media) User Guide</i> (<a href="http://www.ti.com/lit/pdf/SPRUEC8" class="extiw" title="tidoc:SPRUEC8">SPRUEC8</a>)</li>
+<li><i>TMS320 DSP Algorithm Standard Rules and Guidelines</i> (<a href="http://www.ti.com/lit/pdf/SPRU352" class="extiw" title="tidoc:SPRU352">SPRU352</a>)</li>
+<li><i>TMS320 DSP Algorithm Standard API Reference</i> (<a href="http://www.ti.com/lit/pdf/SPRU360" class="extiw" title="tidoc:SPRU360">SPRU360</a>)</li>
+<li><i>TMS320 DSP Algorithm Standard Developer’s Guide</i> (<a href="http://www.ti.com/lit/pdf/SPRU424" class="extiw" title="tidoc:SPRU424">SPRU424</a>)</li>
+<li><i>TMS320 DSP Algorithm Standard Demonstration Application</i> (<a href="http://www.ti.com/lit/pdf/SPRU361" class="extiw" title="tidoc:SPRU361">SPRU361</a>)</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201020652
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.030 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:692-0!canonical and timestamp 20201201020652 and revision id 181300
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Integrating a Codec Engine</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Integrating a Codec Engine</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Integrating a Codec Engine</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Integrating a Codec Engine</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Integrating a Codec Engine</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Integrating a Codec Engine</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Integrating a Codec Engine</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Integrating a Codec Engine</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Integrating a Codec Engine</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;oldid=181300">https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;oldid=181300</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li><li><a href="Category_MFP.html" title="Category:MFP">MFP</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Integrating+a+Codec+Engine" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Integrating_a_Codec_Engine.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Integrating_a_Codec_Engine&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Integrating_a_Codec_Engine.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Integrating_a_Codec_Engine.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Integrating_a_Codec_Engine.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;oldid=181300" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Integrating_a_Codec_Engine&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 July 2014, at 19:21.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.030","walltime":"0.031","ppvisitednodes":{"value":23,"limit":1000000},"ppgeneratednodes":{"value":28,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201020652","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":270});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Integrating_a_Codec_Engine by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:30:30 GMT -->
+</html>

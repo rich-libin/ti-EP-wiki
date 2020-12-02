@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Early_Boot_and_Late_Attach by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:04 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Early Boot and Late Attach - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Early_Boot_and_Late_Attach","wgTitle":"Early Boot and Late Attach","wgCurRevisionId":230823,"wgRevisionId":230823,"wgArticleId":33457,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["IPC"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Early_Boot_and_Late_Attach","wgRelevantArticleId":33457,"wgRequestId":"701a1916e1aaf3e62b36e2fc","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Early_Boot_and_Late_Attach rootpage-Early_Boot_and_Late_Attach skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Early Boot and Late Attach</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>{{#invoke:Message box|ombox}}
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Boot_Sequence"><span class="tocnumber">2</span> <span class="toctext">Boot Sequence</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Enabling_Early_Boot"><span class="tocnumber">3</span> <span class="toctext">Enabling Early Boot</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#u-boot"><span class="tocnumber">3.1</span> <span class="toctext">u-boot</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Enabling_Late_Attach"><span class="tocnumber">4</span> <span class="toctext">Enabling Late Attach</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Linux_kernel"><span class="tocnumber">4.1</span> <span class="toctext">Linux kernel</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Enabling_Late_attach_on_Android_.286AJ1.3.29"><span class="tocnumber">5</span> <span class="toctext">Enabling Late attach on Android (6AJ1.3)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Tools"><span class="tocnumber">5.1</span> <span class="toctext">Tools</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#SysBios"><span class="tocnumber">5.2</span> <span class="toctext">SysBios</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Building_kernel"><span class="tocnumber">5.3</span> <span class="toctext">Building kernel</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Building_u-boot"><span class="tocnumber">5.4</span> <span class="toctext">Building u-boot</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Building_IPU1_binary"><span class="tocnumber">5.5</span> <span class="toctext">Building IPU1 binary</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Building_Android_userspace_binary"><span class="tocnumber">5.6</span> <span class="toctext">Building Android userspace binary</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Binaries_to_be_flashed_into_the_eMMC"><span class="tocnumber">5.7</span> <span class="toctext">Binaries to be flashed into the eMMC</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Binaries_to_be_pushed_to_file_system"><span class="tocnumber">5.8</span> <span class="toctext">Binaries to be pushed to file system</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Validation"><span class="tocnumber">5.9</span> <span class="toctext">Validation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Enabling_Early_Boot_and_Late_attach_on_Android_.286AL.1.1.29"><span class="tocnumber">6</span> <span class="toctext">Enabling Early Boot and Late attach on Android (6AL.1.1)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-18"><a href="#Sources"><span class="tocnumber">6.1</span> <span class="toctext">Sources</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#SysBios_Tools_Versions"><span class="tocnumber">6.2</span> <span class="toctext">SysBios Tools Versions</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Building_kernel_DTB_file"><span class="tocnumber">6.3</span> <span class="toctext">Building kernel DTB file</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Building_u-boot_2"><span class="tocnumber">6.4</span> <span class="toctext">Building u-boot</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Building_IPU1_binary_2"><span class="tocnumber">6.5</span> <span class="toctext">Building IPU1 binary</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Building_Android_userspace_binary_2"><span class="tocnumber">6.6</span> <span class="toctext">Building Android userspace binary</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Binaries_to_be_flashed_into_the_eMMC_2"><span class="tocnumber">6.7</span> <span class="toctext">Binaries to be flashed into the eMMC</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Binaries_to_be_pushed_to_file_system_2"><span class="tocnumber">6.8</span> <span class="toctext">Binaries to be pushed to file system</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Validation_2"><span class="tocnumber">6.9</span> <span class="toctext">Validation</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Error_Recovery"><span class="tocnumber">6.10</span> <span class="toctext">Error Recovery</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#IPU1_Race_Condition"><span class="tocnumber">6.11</span> <span class="toctext">IPU1 Race Condition</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-29"><a href="#Enabling_Early_Boot_and_Late_attach_on_Android_.28starting_in_6AM.1.2.29"><span class="tocnumber">7</span> <span class="toctext">Enabling Early Boot and Late attach on Android (starting in 6AM.1.2)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-30"><a href="#Sources_2"><span class="tocnumber">7.1</span> <span class="toctext">Sources</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#SysBios_Tools_Versions_2"><span class="tocnumber">7.2</span> <span class="toctext">SysBios Tools Versions</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Building_kernel_DTB_file_2"><span class="tocnumber">7.3</span> <span class="toctext">Building kernel DTB file</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Building_u-boot_3"><span class="tocnumber">7.4</span> <span class="toctext">Building u-boot</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Building_IPU1_binary_3"><span class="tocnumber">7.5</span> <span class="toctext">Building IPU1 binary</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Building_Android_userspace_binary_3"><span class="tocnumber">7.6</span> <span class="toctext">Building Android userspace binary</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#Binaries_to_be_flashed_into_the_eMMC_3"><span class="tocnumber">7.7</span> <span class="toctext">Binaries to be flashed into the eMMC</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#Binaries_to_be_pushed_to_file_system_3"><span class="tocnumber">7.8</span> <span class="toctext">Binaries to be pushed to file system</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#Validation_3"><span class="tocnumber">7.9</span> <span class="toctext">Validation</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#Using_DMA_Pool_instead_of_CMA_Pool"><span class="tocnumber">7.10</span> <span class="toctext">Using DMA Pool instead of CMA Pool</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-40"><a href="#Potential_Issues"><span class="tocnumber">8</span> <span class="toctext">Potential Issues</span></a>
+<ul>
+<li class="toclevel-2 tocsection-41"><a href="#Debugging_Crashes"><span class="tocnumber">8.1</span> <span class="toctext">Debugging Crashes</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#My_Tasks_on_the_slave_core_do_not_get_to_run_until_the_host_has_setup_rpmsg"><span class="tocnumber">8.2</span> <span class="toctext">My Tasks on the slave core do not get to run until the host has setup rpmsg</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Heterogeneous multicore devices, like DRA7XX, often configure their individual cores into <b>master/slave</b> relationships.  The <b>master</b> (e.g. DRA7XX's A15) often runs an HLOS like Linux, which manages <b>slaves</b> (e.g. DRA7XX's DSPs and IPUs) that run an RTOS like SYS/BIOS.  The bootloader (e.g. u-boot) for the typical master/slave system loads/boots the HLOS, and once the HLOS has enabled enough infrastructure (e.g. file systems, device driver backplanes, etc), the HLOS loads/boots the slave devices.
+</p><p>In some use cases, however, it's important that features enabled by the [traditionally] slave devices become available ASAP, without waiting for the HLOS to boot.  In this case, the system integrator might prefer to instead configure the cores into a <b>peer-to-peer</b> relationship, rather than the traditional <b>master/slave</b>.  In this peer-to-peer configuration, the bootloader instead loads the RTOS-enabled cores <b>and then</b> the HLOS.  This way, both cores independently boot, and the RTOS-running cores can enable functionality very early.  This configuration is often called "Early Boot".
+</p><p>In this peer-to-peer configuration, once both HLOS and RTOS cores have independently booted and are ready to communicate with each other, they can establish a communication path.  This post-boot handshaking is often called "Late Attach".
+</p><p>This feature has been enabled for DRA7XX, running Linux on the A15 and BIOS on the IPUs.  This article describes the boot sequence with Early Boot, details to enable it, and potential issues you may encounter.
+</p>
+<h2><span class="mw-headline" id="Boot_Sequence">Boot Sequence</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=2" title="Edit section: Boot Sequence">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Early Boot starts with the bootloader, in this case, u-boot.  It has been extended to support parsing a resource table, allocating the necessary memory and configuring the mmus, loading the IPUs code/data, and booting the IPUs (running BIOS) before it loads and boots the Linux kernel.
+</p><p>In order to obtain memory for loading the IPUs, u-boot leveraged the same page order allocation scheme as used by the CMA allocator from the Linux kernel.  This has two benefits:
+</p>
+<ol><li>Reduced modification to the Linux kernel.  The Linux rproc drivers process the firmware images and "allocate" memory like they traditionally have - the higher layers don't know any difference.  Note that the allocator did require a modification to not <b>zero</b> the memory during allocation (since that would erase the code u-boot loaded and the IPUs are actively executing!).</li>
+<li>Code reuse.  Better to leverage the well-tested page order allocation policy (as used by the CMA allocator) than create something from scratch.  The GPL license helped facilitate this code reuse.</li></ol>
+<p>A potential maintenance issue with this approach is that u-boot must stay in sync with the allocation policy of the Linux CMA allocator.  As changes are made in CMA, those must be integrated back into u-boot.
+</p>
+<h2><span class="mw-headline" id="Enabling_Early_Boot">Enabling Early Boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=3" title="Edit section: Enabling Early Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="u-boot">u-boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=4" title="Edit section: u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default, the configuration in the config file "include/configs/dra7xx_evm.h" is done for IPU2. You could enable the corresponding flags (both at kernel and u-boot) to use the functionality for IPU2.
+</p><p>To enable the feature for IPU1, kindly replace the config "CONFIG_LATE_ATTACH_BOOTIPU2" --&gt; "CONFIG_LATE_ATTACH_BOOTIPU1" in the file and change the undef to define for the late attach config.
+</p><p>Also, make sure the name of the IPU binary that you want to load is also changed to the correct name. For the name of the IPU binary, change the config CONFIG_SPL_FAT_LOAD_IPU_PAYLOAD_NAME. Ideally for IPU1, this name should be dra7-ipu1-fw.xem4.
+</p><p>Build the u-boot with the configuration dra7xx_evm:
+</p>
+<pre>       &lt;host&gt; make dra7xx_evm (from the u-boot folder)
+</pre>
+<p>After building with these changes, copy the MLO and u-boot.img in the boot partition of the SD card.
+</p>
+<h2><span class="mw-headline" id="Enabling_Late_Attach">Enabling Late Attach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=5" title="Edit section: Enabling Late Attach">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Linux_kernel">Linux kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=6" title="Edit section: Linux kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Run the following commands on the linux directory to enable late attach to IPU2.
+</p>
+<pre>   &lt;host&gt; export ARCH=arm
+   &lt;host&gt; export CROSS_COMPILE=arm-linux-gnueabihf-
+   &lt;host&gt; make omap2plus_defconfig
+   &lt;host&gt; make menuconfig
+</pre>
+<p>In the menuconfig GUI, enable the following config
+</p>
+<pre>   Device Drivers  ---&gt;
+     Remoteproc Drivers  ---&gt;
+       &lt;M&gt; OMAP remoteproc support
+       [*]   OMAP remoteproc support for IPU
+       [*]     Attach to already-running IPU2 (no reset/load/start)
+       [*]   OMAP remoteproc support for DSP
+       [*]   OMAP remoteproc support for IPU1 (DRA7xx only)
+       [ ]     Attach to already-running IPU1 (no reset/load/start)
+       [*]   OMAP remoteproc support for DSP2 (DRA7xx only)
+</pre>
+<p>Note that "IPU" with no appended digit refers to IPU2.
+</p><p><br />
+</p>
+<h2><span id="Enabling_Late_attach_on_Android_(6AJ1.3)"></span><span class="mw-headline" id="Enabling_Late_attach_on_Android_.286AJ1.3.29">Enabling Late attach on Android (6AJ1.3)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=7" title="Edit section: Enabling Late attach on Android (6AJ1.3)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><span style="color:red"><b>IMPORTANT NOTE:</b></span>      <b> This feature works only with single stage boot loader configuration!!!</b>
+</p><p>Enabling this feature involves building 4 different components:
+</p>
+<ul><li>u-boot</li></ul>
+<ul><li>Android Kernel</li></ul>
+<ul><li>Sysbios IPU1 binary</li></ul>
+<ul><li>Android userspace binary to test the feature</li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Tools">Tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=8" title="Edit section: Tools">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Kernel/u-boot
+	Same as mentioned in the Android release notes.
+</p>
+<h3><span class="mw-headline" id="SysBios">SysBios</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=9" title="Edit section: SysBios">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>BIOS		: bios_6_35_03_47
+</p><p>XDC 		: xdctools_3_25_04_88
+</p><p>CG Tools	: TICGTARM_5.0.1
+</p><p>IPC            &#160;: 3.21.00.07
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Building_kernel">Building kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=10" title="Edit section: Building kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Choose the following 2 configs for IPU1 under
+</p>
+<pre>Drivers--&gt;Remoteproc drivers--&gt;
+	[*] OMAP remoteproc support for IPU1 (DRA7xx only) - (CONFIG_OMAP_REMOTEPROC_IPU1)
+	[*] Attach to already-running IPU1 (DRA7xx only) - (CONFIG_OMAP_REMOTEPROC_LATE_ATTACH_IPU1)
+</pre>
+<p>Save the kernel config and build the kernel as mentioned in the release notes.
+This generates the  zImage and dtb to be flashed.
+</p>
+<h3><span class="mw-headline" id="Building_u-boot">Building u-boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=11" title="Edit section: Building u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Cherry-pick the following patch and applying it on top of the Release Notes.
+</p><p>	<a rel="nofollow" class="external free" href="http://review.omapzoom.org/34844">http://review.omapzoom.org/34844</a>
+</p>
+<pre>    git fetch <a rel="nofollow" class="external free" href="http://review.omapzoom.org/repo/u-boot">http://review.omapzoom.org/repo/u-boot</a> refs/changes/44/34844/1 &amp;&amp; git cherry-pick FETCH_HEAD
+</pre>
+<p><br />
+Build the u-boot as mentioned in the Release Notes.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Building_IPU1_binary">Building IPU1 binary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=12" title="Edit section: Building IPU1 binary">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To build the sample MessageQ_single.xem4
+</p><p>cd to &lt;mydroid&gt;/hardware/ti/ipc.
+</p><p>Make sure that the ipc version supports late attache (e.g. <b>3.21.00.07</b>)
+</p><p><b>Fixup product.mak</b>
+</p><p>Following variables need to be set before building the ipu1 binary.
+</p><p>&lt;syntaxhighlight lang='make'&gt;
+</p>
+<ol><li>DEPOT is often a directory in your SDK containing your TI tools eg: XDC,BIOS. folder</li></ol>
+<p>DEPOT = _your_depot_folder_
+PLATFORM = DRA7XX
+TOOLCHAIN_INSTALL_DIR = $(DEPOT)/_your_arm_code_gen_install_
+XDC_INSTALL_DIR = $(DEPOT)/_your_xdctools_install_
+BIOS_INSTALL_DIR = $(DEPOT)/_your_BIOStools_install_
+ti.targets.arm.elf.M4 = $(DEPOT)/&lt;folder name of TI ARM CGT Tools&gt;
+&lt;/syntaxhighlight&gt;
+</p><p>Run the following build command
+</p>
+<pre>make -f ipc-bios.mak all
+</pre>
+<p><br />
+A binary would be generated here:
+</p>
+<pre>&lt;mydroid&gt;/hardware/ti/ipc/packages/ti/ipc/tests/bin/ti_platforms_evmDRA7XX_ipu1/messageq_single.xem4
+</pre>
+<p>Since the size of the binary is quiet large ( ~5M) we need to strip the symbols on the xem4. To do this, execute:
+</p>
+<pre>&lt;CGT ARM tools folder&gt;/armstrip -p &lt;mydroid&gt;/hardware/ti/ipc/packages/ti/ipc/tests/bin/ti_platforms_evmDRA7XX_ipu1/messageq_single.xem4 -o &lt;patch of destination folder&gt;/dra7-ipu1-fw.xem4.
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Building_Android_userspace_binary">Building Android userspace binary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=13" title="Edit section: Building Android userspace binary">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Builing remoteproc (IPU1) userspace sample to test late attach:
+Setup your android build (cd to your "mydroid" folder) and issue the following commands:
+</p>
+<pre>  lunch full_jacinto6evm-userdebug &lt;-- If not already done as per release notes
+</pre>
+<pre>  make messageQApp messageQBench messageQMulti nameServerApp ping_rpmsg lad_dra7xx libmmrpc
+</pre>
+<pre>  Note:: libmmrpc and lad_dra7xx might be already built since they are used for multimedia and radio use cases.
+</pre>
+<p>This should generate the sample binaries under the &lt;mydroid&gt;/out/target/product/jacinto6evm/system/bin and &lt;mydroid&gt;/out/target/product/jacinto6evm/system/lib
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Binaries_to_be_flashed_into_the_eMMC">Binaries to be flashed into the eMMC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=14" title="Edit section: Binaries to be flashed into the eMMC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Flash the u-boot and SPL into the QSPI and reboot.
+</p>
+<pre>sudo ./fastboot oem spi
+sudo ./fastboot flash xloader &lt;path to built MLO&gt;
+sudo ./fastboot flash bootloader &lt;path to built u-boot.img&gt;
+sudo ./fastboot reboot
+</pre>
+<p>Enter fastboot on the device and flash IPU1 binary, zImage and dtb into eMMC and reboot.
+</p>
+<pre>sudo ./fastboot flash ipu &lt;mydroid&gt;/hardware/ti/ipc/dra7-ipu1-fw.xem4
+sudo ./fastboot flash environment &lt;path to built dra7-evm.dtb&gt;
+sudo ./fastboot flash zImage &lt;path to built zImage&gt;
+sudo ./fastboot reboot
+</pre>
+<h3><span class="mw-headline" id="Binaries_to_be_pushed_to_file_system">Binaries to be pushed to file system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=15" title="Edit section: Binaries to be pushed to file system">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>adb push &lt;mydroid&gt;/out/target/product/jacinto6evm/system/bin/messageQApp /system/bin
+adb push &lt;patch of ipu1 binary&gt;/dra7-ipu1-fw.xem4 /system/vendor/firmware
+</pre>
+<p><br /> 
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In case lad_dra7xx and libmmrpc are needed, also push those to the relevant folders.</div>
+<p>Once this is done. Change the switch setting to QSPI production as mentioned <a rel="nofollow" class="external text" href="http://omappedia.org/wiki/6AJ.1.2_Application_Notes#Single_stage_bootloader">here</a>.
+</p><p>Reboot to device. You should be able to see the single stage directly load the kernel.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Validation">Validation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=16" title="Edit section: Validation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Once in the android command prompt, launch lad_dra7xx if it is not already launched.
+</p><p>To execute the rest sample, execute:
+</p>
+<pre>/system/bin/messageQApp 10 2
+</pre>
+<p>This should do 10 iterations of the messageQApp (10) with IPU1 (2).
+</p><p><br />
+</p>
+<h2><span id="Enabling_Early_Boot_and_Late_attach_on_Android_(6AL.1.1)"></span><span class="mw-headline" id="Enabling_Early_Boot_and_Late_attach_on_Android_.286AL.1.1.29">Enabling Early Boot and Late attach on Android (6AL.1.1)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=17" title="Edit section: Enabling Early Boot and Late attach on Android (6AL.1.1)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><span style="color:red"><b>IMPORTANT NOTE:</b></span>      <b> 6AL.1.1 kernel needs some post-release fixes to enable kernel loading of IPU1 - See "IPU1 Race Condition" below </b>
+</p><p>Enabling this feature involves building 4 different components:
+</p>
+<ul><li>u-boot</li>
+<li>Android Kernel DTB file</li>
+<li>Sysbios IPU1 binary to test the feature</li>
+<li>Android userspace binary to test the feature</li></ul>
+<h3><span class="mw-headline" id="Sources">Sources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=18" title="Edit section: Sources">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Kernel/u-boot
+</p>
+<ul><li>Same as mentioned in the Android release notes.</li></ul>
+<h3><span class="mw-headline" id="SysBios_Tools_Versions">SysBios Tools Versions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=19" title="Edit section: SysBios Tools Versions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following versions were used for validation:
+</p>
+<ul><li>IPC <b>3.36.01.11</b></li>
+<li>SYS/BIOS <b>6.41.03.51</b></li>
+<li>XDCtools <b>3.30.06.67.core</b></li>
+<li>CG Tools <b>TICGTARM_5.1.5</b></li></ul>
+<h3><span class="mw-headline" id="Building_kernel_DTB_file">Building kernel DTB file</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=20" title="Edit section: Building kernel DTB file">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Cherry-pick the following patch and apply it on top of the commit from the Release Notes. This patch adds a new dts file that enables late attach for IPU1 for dra7xx boards with a 10" lcd.
+</p><p>	<a rel="nofollow" class="external free" href="http://review.omapzoom.org/#/c/36616/">http://review.omapzoom.org/#/c/36616/</a>
+</p>
+<pre>    git fetch <a rel="nofollow" class="external free" href="http://review.omapzoom.org/kernel/omap">http://review.omapzoom.org/kernel/omap</a> refs/changes/16/36616/1 &amp;&amp; git cherry-pick FETCH_HEAD
+</pre>
+<p>Build the dtbs as mentioned in the release notes.
+This generates the dra7-evm-lcd10-late-attach-ipu1.dtb to be flashed.
+</p>
+<h3><span class="mw-headline" id="Building_u-boot_2">Building u-boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=21" title="Edit section: Building u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Enable late attach in the dra7xx_evm_android.h config file by defining the CONFIG_LATE_ATTACH flag:
+</p>
+<pre>diff --git a/include/configs/dra7xx_evm_android.h b/include/configs/dra7xx_evm_android.h
+index 3749671..b2c43e9 100644
+--- a/include/configs/dra7xx_evm_android.h
++++ b/include/configs/dra7xx_evm_android.h
+@@ -318,7 +318,7 @@
+ /* JAMR3 board pin mux */
+ #define CONFIG_DRA7XX_JAMR3
+ 
+-#undef CONFIG_LATE_ATTACH
++#define CONFIG_LATE_ATTACH
+ 
+ /* Enable this flag if you want to boot IPU2
+  * from SPL */
+</pre>
+<p>Build the u-boot as mentioned in the Release Notes.
+</p>
+<h3><span class="mw-headline" id="Building_IPU1_binary_2">Building IPU1 binary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=22" title="Edit section: Building IPU1 binary">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To build the sample messageq_single.xem4:
+</p>
+<pre>cd &lt;mydroid&gt;/hardware/ti/ipc
+</pre>
+<p>Make sure that the ipc version supports late attach (e.g. <b>3.36.01.11</b>)
+</p><p><b>Fixup product.mak</b>
+</p><p>Following variables need to be set before building the ipu1 binary.
+</p><p>&lt;syntaxhighlight lang='make'&gt;
+</p>
+<ol><li>DEPOT is often a directory in your SDK containing your TI tools eg: XDC,BIOS</li></ol>
+<p>DEPOT = _your_depot_folder_
+PLATFORM = DRA7XX
+TOOLCHAIN_INSTALL_DIR = $(DEPOT)/_your_arm_code_gen_install_
+XDC_INSTALL_DIR = $(DEPOT)/_your_xdctools_install_
+BIOS_INSTALL_DIR = $(DEPOT)/_your_BIOStools_install_
+ti.targets.arm.elf.M4 = $(DEPOT)/&lt;folder name of TI ARM CGT Tools&gt;
+&lt;/syntaxhighlight&gt;
+</p><p>Run the following build command
+</p>
+<pre>make -f ipc-bios.mak all
+</pre>
+<p>A binary will be generated here:
+</p>
+<pre>&lt;mydroid&gt;/hardware/ti/ipc/packages/ti/ipc/tests/bin/ti_platforms_evmDRA7XX_ipu1/messageq_single.xem4
+</pre>
+<p>Since the size of the binary is quite large ( ~5M) we need to strip the symbols on the xem4. To do this, execute:
+</p>
+<pre>&lt;CGT ARM tools folder&gt;/bin/armstrip -p &lt;mydroid&gt;/hardware/ti/ipc/packages/ti/ipc/tests/bin/ti_platforms_evmDRA7XX_ipu1/messageq_single.xem4 -o &lt;path of destination folder&gt;/dra7-ipu1-fw.xem4
+</pre>
+<h3><span class="mw-headline" id="Building_Android_userspace_binary_2">Building Android userspace binary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=23" title="Edit section: Building Android userspace binary">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To build the userspace sample to test late attach:
+</p><p>Setup your android build (cd to your "mydroid" folder) and issue the following commands:
+</p>
+<pre>  lunch full_jacinto6evm-userdebug &lt;-- If not already done as per release notes
+</pre>
+<pre>  make libtiipc libtiipcutils libtiipcutils_lad libtitransportrpmsg lad_dra7xx messageQApp
+</pre>
+<pre>  Note:: lad_dra7xx and the libraries might already be built since they are used for other use cases.
+</pre>
+<p>This should generate the sample binaries under the &lt;mydroid&gt;/out/target/product/jacinto6evm/system/bin and &lt;mydroid&gt;/out/target/product/jacinto6evm/system/lib
+</p>
+<h3><span class="mw-headline" id="Binaries_to_be_flashed_into_the_eMMC_2">Binaries to be flashed into the eMMC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=24" title="Edit section: Binaries to be flashed into the eMMC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Flash the u-boot and MLO into the QSPI and reboot.
+</p>
+<pre>sudo ./fastboot oem spi
+sudo ./fastboot flash xloader &lt;path to built MLO&gt;
+sudo ./fastboot flash bootloader &lt;path to built u-boot.img&gt;
+sudo ./fastboot reboot
+</pre>
+<p>Enter fastboot on the device and flash IPU1 binary and dtb into eMMC and reboot.
+</p>
+<pre>sudo ./fastboot flash ipu1 &lt;mydroid&gt;/hardware/ti/ipc/dra7-ipu1-fw.xem4
+sudo ./fastboot flash environment &lt;path to built dra7-evm-lcd10-late-attach-ipu1.dtb&gt;
+sudo ./fastboot reboot
+</pre>
+<h3><span class="mw-headline" id="Binaries_to_be_pushed_to_file_system_2">Binaries to be pushed to file system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=25" title="Edit section: Binaries to be pushed to file system">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>adb push &lt;mydroid&gt;/out/target/product/jacinto6evm/system/bin/messageQApp /system/bin
+adb push &lt;patch of ipu1 binary&gt;/dra7-ipu1-fw.xem4 /system/vendor/firmware
+</pre>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In case lad_dra7xx and other libraries are needed, also push those to the relevant folders.</div>
+<p>Once this is done, you can change the switch setting to QSPI production as mentioned <a rel="nofollow" class="external text" href="http://omappedia.org/wiki/6AJ.1.2_Application_Notes#Single_stage_bootloader">here</a> or stay in dual stage boot mode.
+</p><p>Reboot the device. You should be able to see the single stage directly load the kernel if in single stage mode.
+</p>
+<h3><span class="mw-headline" id="Validation_2">Validation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=26" title="Edit section: Validation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Once in the android command prompt, launch lad_dra7xx if it is not already launched.
+</p><p>To execute the test sample, execute:
+</p>
+<pre>/system/bin/messageQApp 10 2
+</pre>
+<p>This should do 10 iterations of the messageQApp (10) with IPU1 (2).
+</p>
+<h3><span class="mw-headline" id="Error_Recovery">Error Recovery</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=27" title="Edit section: Error Recovery">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The 6AL.1.1 release supports error recovery with late attach. You can read more about error recovery <a rel="nofollow" class="external text" href="IPC_Slave_Error_Recovery.html">here</a>.
+</p>
+<h3><span class="mw-headline" id="IPU1_Race_Condition">IPU1 Race Condition</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=28" title="Edit section: IPU1 Race Condition">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The kernel version that is part of the 6AL.1.1 release has a race condition that may result in IPU1 failing to load when loaded by the kernel. If you face this issue, please use the post-release fixes from the Application Notes for 6AL.1.1 for "IPU1 Loading fails some time":
+</p>
+<pre>   <a rel="nofollow" class="external free" href="http://omapedia.org/wiki/6AL.1.1_Application_Notes#Post_release_fixes">http://omapedia.org/wiki/6AL.1.1_Application_Notes#Post_release_fixes</a>
+</pre>
+<p>Then build the kernel as mentioned in the release notes and flash the upated zImage to the target.
+</p>
+<pre>sudo ./fastboot flash zImage &lt;path to built zImage&gt;
+</pre>
+<p>Reboot the device.
+</p>
+<h2><span id="Enabling_Early_Boot_and_Late_attach_on_Android_(starting_in_6AM.1.2)"></span><span class="mw-headline" id="Enabling_Early_Boot_and_Late_attach_on_Android_.28starting_in_6AM.1.2.29">Enabling Early Boot and Late attach on Android (starting in 6AM.1.2)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=29" title="Edit section: Enabling Early Boot and Late attach on Android (starting in 6AM.1.2)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Enabling this feature involves building 4 different components:
+</p>
+<ul><li>u-boot</li>
+<li>Android Kernel DTB file</li>
+<li>Sysbios IPU1 binary to test the feature</li>
+<li>Android userspace binary to test the feature</li></ul>
+<h3><span class="mw-headline" id="Sources_2">Sources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=30" title="Edit section: Sources">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Kernel/u-boot
+</p>
+<ul><li>Same as mentioned in the Android release notes.</li></ul>
+<h3><span class="mw-headline" id="SysBios_Tools_Versions_2">SysBios Tools Versions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=31" title="Edit section: SysBios Tools Versions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following versions were used for validation but any compatible ones may be used:
+</p>
+<ul><li>IPC <b>3.43.03.05</b></li>
+<li>SYS/BIOS <b>6.45.01.29</b></li>
+<li>XDCtools <b>3.32.00.06.core</b></li>
+<li>CG Tools <b>TICGTARM_5.2.7</b></li></ul>
+<h3><span class="mw-headline" id="Building_kernel_DTB_file_2">Building kernel DTB file</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=32" title="Edit section: Building kernel DTB file">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The kernel dtb file dra7-evm-lcd-lg-late-attach.dts enables late attach for IPU2 and also has commented sections for enabling late attach for the other cores. Modify this file to enable late attach for the desired core(s) or use it as an example for modifying your dts file.
+</p><p>We'll use IPU1 as an example for now. Modify the file to comment out the IPU2 section and enable IPU1 late attach:
+</p>
+<pre>--- a/arch/arm/boot/dts/dra7-evm-lcd-lg-late-attach.dts
++++ b/arch/arm/boot/dts/dra7-evm-lcd-lg-late-attach.dts
+@@ -8,6 +8,7 @@
+
+ #include "dra7-evm-lcd-lg.dts"
+
++/*
+ &amp;ipu2 {
+        ti,late-attach;
+        ti,no-idle-on-init;
+@@ -37,10 +38,9 @@
+        ti,no-idle-on-init;
+        ti,no-reset-on-init;
+ };
+-
++*/
+ /* Uncomment below block to enable late attach for IPU1 */
+
+-/*
+ &amp;ipu1 {
+        ti,late-attach;
+        ti,no-idle-on-init;
+@@ -70,7 +70,6 @@
+        ti,no-idle-on-init;
+        ti,no-reset-on-init;
+ };
+-*/
+</pre>
+<p>Build the dtbs as mentioned in the release notes. This generates the dra7-evm-lcd-lg-late-attach.dtb to be flashed.
+</p>
+<h3><span class="mw-headline" id="Building_u-boot_3">Building u-boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=33" title="Edit section: Building u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Enable late attach in u-boot for Android eMMC loading by setting the following configs:
+</p>
+<pre>CONFIG_LATE_ATTACH=y
+CONFIG_LATE_ATTACH_GPT_PART=y
+</pre>
+<p>Or from menuconfig:
+</p>
+<pre>ARM architecture ---&gt;
+    Early Boot/Late Attach ---&gt;
+        [*] Enable late attach
+        [*]    Enable loading remotecore binaries from GPT partitions
+</pre>
+<p>Build the u-boot as mentioned in the Release Notes.
+</p>
+<h3><span class="mw-headline" id="Building_IPU1_binary_3">Building IPU1 binary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=34" title="Edit section: Building IPU1 binary">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Build the IPU binary the same as described in the "Building IPU1 binary" section for 6AL.1.1 <a href="#Building_IPU1_binary_2">here</a>.
+</p><p>A binary will be generated here:
+</p>
+<pre>&lt;mydroid&gt;/hardware/ti/ipc/packages/ti/ipc/tests/bin/ti_platforms_evmDRA7XX_ipu1/messageq_single.xem4
+</pre>
+<p>Since the size of the binary is quite large ( ~5M) we need to strip the symbols on the xem4. To do this, execute:
+</p>
+<pre>&lt;CGT ARM tools folder&gt;/bin/armstrip -p 
+</pre>
+<p>&lt;mydroid&gt;/hardware/ti/ipc/packages/ti/ipc/tests/bin/ti_platforms_evmDRA7XX_ipu1/messageq_single.xem4 -o &lt;path of destination folder&gt;/dra7-ipu1-fw.xem4
+</p>
+<h3><span class="mw-headline" id="Building_Android_userspace_binary_3">Building Android userspace binary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=35" title="Edit section: Building Android userspace binary">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Build the Android userspace sample the same as described in the "Building Android userspace binary" section for 6AL.1.1 <a href="#Building_Android_userspace_binary_2">here</a>
+</p><p>This should generate the sample binaries under the <b>&lt;mydroid&gt;/out/target/product/jacinto6evm/system/bin</b> and <b>&lt;mydroid&gt;/out/target/product/jacinto6evm/system/lib</b> (for 6AM SDKs)
+</p><p><i>or</i> <b>&lt;mydroid&gt;/out/target/product/jacinto6evm/vendor/bin</b> and <b>&lt;mydroid&gt;/out/target/product/jacinto6evm/vendor/lib</b> (starting with Android O)
+</p>
+<h3><span class="mw-headline" id="Binaries_to_be_flashed_into_the_eMMC_3">Binaries to be flashed into the eMMC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=36" title="Edit section: Binaries to be flashed into the eMMC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Flash the u-boot and MLO into the QSPI and reboot.
+</p>
+<pre>sudo ./fastboot oem spi
+sudo ./fastboot flash xloader &lt;path to built MLO&gt;
+sudo ./fastboot flash bootloader &lt;path to built u-boot.img&gt;
+sudo ./fastboot reboot
+</pre>
+<p>Enter fastboot on the device and flash IPU1 binary and dtb into eMMC and reboot.
+</p>
+<pre>sudo ./fastboot flash ipu1 &lt;mydroid&gt;/hardware/ti/ipc/dra7-ipu1-fw.xem4
+sudo ./fastboot flash environment &lt;path to built dra7-evm-lcd-lg-late-attach.dtb&gt;
+sudo ./fastboot reboot
+</pre>
+<h3><span class="mw-headline" id="Binaries_to_be_pushed_to_file_system_3">Binaries to be pushed to file system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=37" title="Edit section: Binaries to be pushed to file system">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For 6AM:
+</p>
+<pre>adb push &lt;mydroid&gt;/out/target/product/jacinto6evm/system/bin/messageQApp /system/bin
+adb push &lt;path of ipu1 binary&gt;/dra7-ipu1-fw.xem4 /system/vendor/firmware
+</pre>
+<p>Starting in Android O:
+</p>
+<pre>adb push &lt;mydroid&gt;/out/target/product/jacinto6evm/vendor/bin/messageQApp /vendor/bin
+adb push &lt;path of ipu1 binary&gt;/dra7-ipu1-fw.xem4 /vendor/firmware
+</pre>
+<p><br />
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In case lad_dra7xx and other libraries are needed, also push those to the relevant folders.</div>
+<p>Once this is done, you can change the switch setting to QSPI production as mentioned <a rel="nofollow" class="external text" href="http://omappedia.org/wiki/6AJ.1.2_Application_Notes#Single_stage_bootloader">here</a> or stay in dual stage boot mode.
+</p><p>Reboot the device. You should be able to see the single stage directly load the kernel if in single stage mode.
+</p>
+<h3><span class="mw-headline" id="Validation_3">Validation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=38" title="Edit section: Validation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Once in the android command prompt, launch lad_dra7xx if it is not already launched.
+</p><p>To execute the test sample, execute:
+</p>
+<pre>/system/bin/messageQApp 10 2
+</pre>
+<p>This should do 10 iterations of the messageQApp (10) with IPU1 (2).
+</p>
+<h3><span class="mw-headline" id="Using_DMA_Pool_instead_of_CMA_Pool">Using DMA Pool instead of CMA Pool</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=39" title="Edit section: Using DMA Pool instead of CMA Pool">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The 6AM.1.2 release introduces changes that allow selecting a DMA Pool to be used for the remote core instead of a CMA pool. This creates a carveout that can not be touched by the kernel even when it is not in use by remoteproc. This may be desirable in late-attach scenarios where there is a small window between early loading by u-boot and remoteproc allocating the CMA memory.
+</p><p>Enabling DMA Pool:
+</p>
+<ul><li>In u-boot, in addition to the CONFIG_LATE_ATTACH and CONFIG_LATE_ATTACH_GPT_PART flags, enable the following flag:</li></ul>
+<pre>CONFIG_LATE_ATTACH_DMA_POOL=y
+</pre>
+<p>Or from menuconfig:
+</p>
+<pre>ARM architecture ---&gt;
+    Early Boot/Late Attach ---&gt;
+        [*] Enable late attach
+        [*]    Enable loading remotecore binaries from GPT partitions
+        <b>[*]   Enable using a DMA pool instead of a CMA pool</b>
+</pre>
+<p>Rebuild the u-boot as mentioned in the release notes.
+</p>
+<ul><li>In the kernel, use the dts file dra7-evm-lcd-lg-late-attach-no-map.dtb, or follow the example to make the changes for the desired configuration. The differences when compared to doing late attach are to add these additional lines:</li></ul>
+<pre>+&amp;ipu1_cma_pool {
++       /delete-property/ reusable;
++       no-map;
++};
+</pre>
+<pre> &amp;mmu_ipu1{
+        ti,late-attach;
++       ti,late-attach-dma-pool;
+        ti,no-idle-on-init;
+        ti,no-reset-on-init;
+ };
+</pre>
+<p>This removes the "reusable" property from the IPU1 reserved-mem definition, creating a DMA pool instead of a CMA pool. Additionally, it adds a "late-attach-dma-pool" flag to the MMU entry for IPU1, which is needed for the IOMMU to take special action when using a DMA pool.
+</p><p>To run the IPU1 example from the previous section, modify the dts file to comment the IPU2 section and enable the IPU1 section:
+</p>
+<pre>--- a/arch/arm/boot/dts/dra7-evm-lcd-lg-late-attach-no-map.dts
++++ b/arch/arm/boot/dts/dra7-evm-lcd-lg-late-attach-no-map.dts
+@@ -8,7 +8,7 @@
+ 
+ #include "dra7-evm-lcd-lg.dts"
+ 
+-
++/*
+ &amp;ipu2_cma_pool {
+        /delete-property/ reusable;
+        no-map;
+@@ -44,10 +44,11 @@
+        ti,no-idle-on-init;
+        ti,no-reset-on-init;
+ };
++*/
+ 
+ /* Uncomment below block to enable late attach for IPU1 */
+ 
+-/*
++
+ &amp;ipu1_cma_pool {
+        /delete-property/ reusable;
+        no-map;
+@@ -83,7 +84,7 @@
+        ti,no-idle-on-init;
+        ti,no-reset-on-init;
+ };
+-*/
++
+
+</pre>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />
+<ul><li>The allocation scheme for a DMA Pool is different from a CMA Pool. Depending on your image's memory requirements, you might find that the size of the existing pool is no longer sufficient for the allocation and alignment requirements of a DMA pool. If this happens, then either the pool size should be increased or the memory sections in the remote core image should be reassessed to adjust the sizes and/or order of the allocations to fit in the existing pool.</li>
+<li>The DMA Pool method requires vmalloc space whereas the CMA Pool method does not. This is because the CMA pool has a default mapping in the kernel but DMA pool does not. If you face vmalloc errors, the size of the vmalloc space may need to be increased.</li></ul></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Potential_Issues">Potential Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=40" title="Edit section: Potential Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Debugging_Crashes">Debugging Crashes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=41" title="Edit section: Debugging Crashes">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Visibility into the slave execution can be extremely valuable when debugging.  This can help detect system aborts, resource allocation failures, timer misconfigurations, blown stacks, and many other issues.
+</p><p>The best way to debug these scenarios is to attach to the crashed slave with CCS, load symbols, and inspect the state of the processor.  Interesting things to look at include the program counter, trace logs, memory windows, ROV, etc.
+</p><p>If you can't attach CCS, inspecting logged statements in the trace buffer can still be helpful.  The typically configured logger used to fill the trace buffer is a "SysMin" type, which means human-readable strings are rendered directly into the trace buffer (as opposed to a logger like LoggerBuf which is very fast and deterministic, but encodes the logs, which must then be decoded using a tool like CCS).  The symbol of the trace buffer can vary based on your device, since different devices use different loggers:
+</p>
+<ul><li>OMAP5, DRA7XX - <b>ti_trace_SysMin_Module_State_0_outbuf__A</b></li>
+<li>All others - <b>xdc_runtime_SysMin_Module_State_0_outbuf__A</b></li></ul>
+<p>You can look for this symbol in your slave's memory map, and inspect the memory to see any trace statements emitted during the slave's execution.
+</p><p>A slave's trace buffer can also be displayed from the Linux command line, by way of remoteproc's debugfs filesystem support.  A debugfs directory is created for each remoteproc instance.  Each remoteproc instance directory contains the following files:
+</p>
+<pre>      &#160;% ls /debug/remoteproc/remoteproc0
+       name   recovery  state    trace0    version
+</pre>
+<p>The 'trace0' file contains the contents of the slave's SYS/BIOS trace buffer, and can be displayed with:
+</p>
+<pre>      &#160;% cat /debug/remoteproc/remoteproc0/trace0
+</pre>
+<p>.
+</p><p>The trace buffer contents are displayed starting from the base address of the trace buffer, which means that if trace buffer wraparound has occured then the debugfs file will begin with 'later' trace statements, i.e., the very first trace output will have been overwritten with later trace output.  Since trace statements are typically prefixed with a timestamp, the earliest trace statements can be identified by finding the lowest timestamp prefix (and in the case of wraparound, this 'earliest' trace statement will be preceeded by the trace buffers's last or 'latest' trace statement).
+</p><p>Note: in order to have access to the above remoteproc instance debugfs files, you must mount the debugfs filesystem, e.g.,
+</p>
+<pre>      &#160;% mount -t debugfs none /debug
+</pre>
+<p>will mount the debugfs filesystem on the directory '/debug'.
+</p>
+<h3><span class="mw-headline" id="My_Tasks_on_the_slave_core_do_not_get_to_run_until_the_host_has_setup_rpmsg">My Tasks on the slave core do not get to run until the host has setup rpmsg</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit&amp;section=42" title="Edit section: My Tasks on the slave core do not get to run until the host has setup rpmsg">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In most IPC examples, there is a line in the SYSBIOS configuration script (.cfg) file that adds <code>IpcMgr_ipcStartup()</code> as a startup function, which gets invoked during <code>BIOS_start()</code>, which is called in <code>main()</code>:
+</p><p>&lt;syntaxhighlight code='c'&gt;
+/*
+</p>
+<pre>* Remove this line to _not_ sync with the host processor during startup.
+* Remember to manually call IpcMgr_ipcStartup() when ready to "late attach" with the host.
+*/
+</pre>
+<p>BIOS.addUserStartupFunction('&amp;IpcMgr_ipcStartup');
+&lt;/syntaxhighlight&gt;
+</p><p>This function spin-waits for the host to setup rpmsg, and needs to be commented out if you want Tasking to be enabled on the slave so that it can do some 'work' before waiting for communication to be established with the host. The application would then call <code>IpcMgr_ipcStartup()</code> in their application whenever they are ready to establish communication with the host. Normally this is best done in a low-priority Task, so that higher-priority Tasks can run while this Task is spin-waiting for the host to setup rpmsg. Only after this function returns can the application use MessageQ to talk to the host.
+</p><p><br />
+Another approach is for the application to directly call the <code>Resource_getVdevStatus</code> function from the IPC Resource module to check the communication status, and only after that returns successfully, call <code>IpcMgr_ipcStartup()</code>. In between checks, the task can sleep or yield to prevent blocking other tasks from running. This could be accomplished in a manner like the below:
+</p><p>&lt;syntaxhighlight code='c'&gt;
+Void wait_for_a15()
+{
+</p>
+<pre>   Char hostStatus = 0;
+</pre>
+<pre>   do {
+       hostStatus = Resource_getVdevStatus(VIRTIO_ID_RPMSG);
+       if (hostStatus == 0) {
+           Task_sleep(200);
+       }
+   } while (hostStatus == 0);
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130082605
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.069 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 202/1000000
+Preprocessor generated node count: 295/1000000
+Post‐expand include size: 1526/2097152 bytes
+Template argument size: 985/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    5.063      1 -total
+ 52.28%    2.647      1 Template:Ombox
+ 31.11%    1.575      4 Template:SpNote
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:33457-0!canonical and timestamp 20201130082605 and revision id 230823
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Early Boot and Late Attach</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Early Boot and Late Attach</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Early Boot and Late Attach</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;oldid=230823">https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;oldid=230823</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_IPC.html" title="Category:IPC">IPC</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Early+Boot+and+Late+Attach" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Early_Boot_and_Late_Attach.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Early_Boot_and_Late_Attach&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Early_Boot_and_Late_Attach.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Early_Boot_and_Late_Attach.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Early_Boot_and_Late_Attach.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;oldid=230823" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 28 September 2017, at 10:40.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.069","walltime":"0.071","ppvisitednodes":{"value":202,"limit":1000000},"ppgeneratednodes":{"value":295,"limit":1000000},"postexpandincludesize":{"value":1526,"limit":2097152},"templateargumentsize":{"value":985,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    5.063      1 -total"," 52.28%    2.647      1 Template:Ombox"," 31.11%    1.575      4 Template:SpNote"]},"cachereport":{"timestamp":"20201130082605","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":219});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Early_Boot_and_Late_Attach by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:06 GMT -->
+</html>

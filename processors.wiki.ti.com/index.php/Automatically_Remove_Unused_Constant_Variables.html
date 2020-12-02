@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Automatically_Remove_Unused_Constant_Variables by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:26:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Automatically Remove Unused Constant Variables - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Automatically_Remove_Unused_Constant_Variables","wgTitle":"Automatically Remove Unused Constant Variables","wgCurRevisionId":181614,"wgRevisionId":181614,"wgArticleId":1973,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Automatically_Remove_Unused_Constant_Variables","wgRelevantArticleId":1973,"wgRequestId":"fcd3f6a0483683dbf8023ba7","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Automatically_Remove_Unused_Constant_Variables rootpage-Automatically_Remove_Unused_Constant_Variables skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Automatically Remove Unused Constant Variables</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_Macro"><span class="tocnumber">2</span> <span class="toctext">The Macro</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Limitations_and_Caveats"><span class="tocnumber">3</span> <span class="toctext">Limitations and Caveats</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#How_Does_It_Do_That.3F"><span class="tocnumber">4</span> <span class="toctext">How Does It Do That?</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Overview"><span class="tocnumber">4.1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Multiple_Line_Macros"><span class="tocnumber">4.2</span> <span class="toctext">Multiple Line Macros</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#The_Pragma_Part"><span class="tocnumber">4.3</span> <span class="toctext">The Pragma Part</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#Subsections"><span class="tocnumber">4.3.1</span> <span class="toctext">Subsections</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Form_the_Section_Name_with_Smooshing"><span class="tocnumber">4.3.2</span> <span class="toctext">Form the Section Name with Smooshing</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#The_asm.28.29_Part"><span class="tocnumber">4.4</span> <span class="toctext">The asm() Part</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#Form_the_First_asm.28.29_Line"><span class="tocnumber">4.4.1</span> <span class="toctext">Form the First asm() Line</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Form_the_Second_asm.28.29_Line"><span class="tocnumber">4.4.2</span> <span class="toctext">Form the Second asm() Line</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This article describes a C macro which automatically removes the constant variables that are not used.  If that is not interesting enough, consider that this macro makes use of several unusual techniques you might find useful elsewhere, including:
+</p>
+<ul><li>how to stringify macro arguments</li>
+<li>relying on the compiler to concatenate (<i>smoosh together</i>) adjacent quoted strings</li>
+<li>multiple line macros</li>
+<li>multiple line asm() statements</li>
+<li>subsections</li>
+<li>conditional linking</li>
+<li>pragmas, and how to generate them from macros</li></ul>
+<h2><span class="mw-headline" id="The_Macro">The Macro</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=2" title="Edit section: The Macro">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Here is a helper macro, followed by the main macro ...
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<ol><li>define PRAGMA(x) _Pragma(#x)</li></ol>
+<ol><li>define REMOVE_UNUSED_CONSTANT(var)             \</li></ol>
+<pre>  PRAGMA(DATA_SECTION(var, ".const:" #var))    \
+  asm(" .sect \".const:" #var "\"\n"           \
+      " .clink")
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>Here is how to use it ...
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+const int one_const = 1;
+const int two_const = 2;
+</p><p>REMOVE_UNUSED_CONSTANT(one_const);   // removed if not used
+REMOVE_UNUSED_CONSTANT(two_const);   // removed if not used
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Limitations_and_Caveats">Limitations and Caveats</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=3" title="Edit section: Limitations and Caveats">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Does not work for C++.  Such a macro can probably be written, though it would not be quite as simple.</li>
+<li>Invoke the macro only at the end of the source file.  While it is likely to be OK when invoked elsewhere, this avoids possible problems described below in <a href="#The_asm.28.29_Part">#The asm() Part</a>.</li></ul>
+<h2><span id="How_Does_It_Do_That?"></span><span class="mw-headline" id="How_Does_It_Do_That.3F">How Does It Do That?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=4" title="Edit section: How Does It Do That?">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Overview">Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=5" title="Edit section: Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The pragma part of the macro places the constant variable in a section named ".const:<i>variable name</i>".  The asm() part of the macro marks that section with the directive ".clink".  That stands for conditional linking.  Sections so marked are removed by the linker if it finds that the section is never used, i.e. there are no references to that variable.
+</p>
+<h3><span class="mw-headline" id="Multiple_Line_Macros">Multiple Line Macros</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=6" title="Edit section: Multiple Line Macros">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Note how all the lines in the macro end with "\", save the last one.  It is an old rule of C that #define macros must all be on one source line.  The "\" syntax tells the compiler to pretend the next line was written on the current line.  As you can see, you can do this repeatedly, which allows you to format a complex macro for readability.
+</p>
+<h3><span class="mw-headline" id="The_Pragma_Part">The Pragma Part</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=7" title="Edit section: The Pragma Part">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The pragma syntax is mostly explained in <a href="https://software-dl.ti.com/ccs/esd/documents/sdto_cgt_pragmas_you_can_understand.html" title="Pragmas You Can Understand">Pragmas You Can Understand</a>, particularly the VAR_IN_SECTION macro.  There are two additional twists here: subsections and concatenation of string constants.
+</p>
+<h4><span class="mw-headline" id="Subsections">Subsections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=8" title="Edit section: Subsections">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>First, subsections.  The variable is placed in a section all by itself.  The subsection ".const:<i>variable name</i>" does this.  By being a subsection of .const, one of the usual sections generated by the compiler, it will be combined into the rest of .const should the linker not remove it.  Even so, marking this subsection with .clink means the linker can remove it without affecting any other part of .const.
+</p>
+<h4><span class="mw-headline" id="Form_the_Section_Name_with_Smooshing">Form the Section Name with Smooshing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=9" title="Edit section: Form the Section Name with Smooshing">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>What does the syntax ".const:" #var do?  Note there is nothing but space between the " and #.  Well, from <a href="https://software-dl.ti.com/ccs/esd/documents/sdto_cgt_pragmas_you_can_understand.html" title="Pragmas You Can Understand">Pragmas You Can Understand</a>, you already know that #var means that macro argument will be replaced and converted to a quoted string, also known as stringifying the macro argument.  So, that means the second argument to the DATA_SECTION pragma will be ".const:" "variable" .  When the C compiler sees two constant strings like that, with nothing but space between them, it concatenates them.  That is, it <i>smooshes</i> them together as if you had written ".const:variable".  And, of course, that is exactly the name of the section needed.
+</p>
+<h3><span id="The_asm()_Part"></span><span class="mw-headline" id="The_asm.28.29_Part">The asm() Part</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=10" title="Edit section: The asm() Part">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>An asm() statement is a way to inject a bit of assembly code into C compiler output.  Using asm() statements is largely frowned upon, and rightly so.  There are many ways to get into trouble.  That said, there is little to worry about here.  An asm() statement, used at file scope, which only emits assembler directives, is fairly safe.  One <b>warning</b>: To be absolutely sure no problems arise, use REMOVE_UNUSED_CONSTANT only at the end of a source file.  That insures the .sect directive (which changes the current section name) will not interfere with any section name emitted by the compiler.
+</p><p>An asm() statements accepts one argument: a quoted string.
+</p><p>This particular asm() statement results in two lines of assembly:
+</p>
+<pre> .sect ".const:variable"
+ .clink
+</pre>
+<p>The space at the beginning of each line is important.  Otherwise, the assembler interprets them as labels.
+</p>
+<h4><span id="Form_the_First_asm()_Line"></span><span class="mw-headline" id="Form_the_First_asm.28.29_Line">Form the First asm() Line</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=11" title="Edit section: Form the First asm() Line">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Here is the first half of the asm part of the macro again, followed by an explanation that moves from left to right.
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>  asm(" .sect \".const:" #var "\"\n"           \
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>The beginning is pretty obvious.  The \" means actually put a quote inside the string, and do not end the argument to asm().  The&#160;:" ends the .const part of the subsection name, followed by the variable part of the subsection name.  Those are smooshed together just as in the pragma.  The "\"\n" says to smoosh on two more characters: a " and a newline.
+</p>
+<h4><span id="Form_the_Second_asm()_Line"></span><span class="mw-headline" id="Form_the_Second_asm.28.29_Line">Form the Second asm() Line</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;section=12" title="Edit section: Form the Second asm() Line">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Here is the second half of the asm part of the macro, followed by more explanation.
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   " .clink")
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>Finally, something normal!  It is just another quoted string, the .clink directive explained earlier.  Due to the line continuation "\" on the previous line, the compiler acts as if this line were written on the previous line, which means this string is smooshed on to the end of the previous one.  Remember the previous string ends with a newline.  So, in the compiler output, this forms two lines.  As promised, a multiple line asm() statement!  Note there is no concluding semi-colon.  The user of the macro supplies that semi-colon.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130083355
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.027 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 56/1000000
+Preprocessor generated node count: 72/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 45/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:1973-0!canonical and timestamp 20201130083355 and revision id 181614
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Automatically Remove Unused Constant Variables</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Automatically Remove Unused Constant Variables</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Automatically Remove Unused Constant Variables</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Automatically Remove Unused Constant Variables</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Automatically Remove Unused Constant Variables</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Automatically Remove Unused Constant Variables</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Automatically Remove Unused Constant Variables</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Automatically Remove Unused Constant Variables</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Automatically Remove Unused Constant Variables</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;oldid=181614">https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;oldid=181614</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Automatically+Remove+Unused+Constant+Variables" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Automatically_Remove_Unused_Constant_Variables.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Automatically_Remove_Unused_Constant_Variables&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Automatically_Remove_Unused_Constant_Variables.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Automatically_Remove_Unused_Constant_Variables.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Automatically_Remove_Unused_Constant_Variables.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;oldid=181614" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Automatically_Remove_Unused_Constant_Variables&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 14:31.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.027","walltime":"0.028","ppvisitednodes":{"value":56,"limit":1000000},"ppgeneratednodes":{"value":72,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":45,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130083355","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":231});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Automatically_Remove_Unused_Constant_Variables by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:26:58 GMT -->
+</html>

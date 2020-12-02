@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSP/BIOS_on_Multi-Core_sharedimage by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:05:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>DSP/BIOS on Multi-Core sharedimage - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"DSP/BIOS_on_Multi-Core_sharedimage","wgTitle":"DSP/BIOS on Multi-Core sharedimage","wgCurRevisionId":78043,"wgRevisionId":78043,"wgArticleId":6880,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"DSP/BIOS_on_Multi-Core_sharedimage","wgRelevantArticleId":6880,"wgRequestId":"94c74f216e4c20f6274d791d","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-DSP_BIOS_on_Multi-Core_sharedimage rootpage-DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">DSP/BIOS on Multi-Core sharedimage</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Multiple_Applications_Sharing_a_Partial_DSP.2FBIOS_Image"><span class="tocnumber">1</span> <span class="toctext">Multiple Applications Sharing a Partial DSP/BIOS Image</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Absolute_Linking_vs._Relocatable_Linking"><span class="tocnumber">1.1</span> <span class="toctext">Absolute Linking vs. Relocatable Linking</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Absolute_Linking"><span class="tocnumber">1.1.1</span> <span class="toctext">Absolute Linking</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Relocatable_Linking"><span class="tocnumber">1.1.2</span> <span class="toctext">Relocatable Linking</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-5"><a href="#Creating_a_Partial_Linked_Image"><span class="tocnumber">1.2</span> <span class="toctext">Creating a Partial Linked Image</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Relocatable_Linking_Restrictions"><span class="tocnumber">1.2.1</span> <span class="toctext">Relocatable Linking Restrictions</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Memory_Location_Requirements"><span class="tocnumber">1.2.2</span> <span class="toctext">Memory Location Requirements</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Linker_Commands_for_Creating_a_Partial_Image"><span class="tocnumber">1.2.3</span> <span class="toctext">Linker Commands for Creating a Partial Image</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Relocatable_Output_Sections"><span class="tocnumber">1.2.4</span> <span class="toctext">Relocatable Output Sections</span></a>
+<ul>
+<li class="toclevel-4 tocsection-10"><a href="#.sharedL2_Section"><span class="tocnumber">1.2.4.1</span> <span class="toctext">.sharedL2 Section</span></a></li>
+<li class="toclevel-4 tocsection-11"><a href="#.localL2_Section"><span class="tocnumber">1.2.4.2</span> <span class="toctext">.localL2 Section</span></a></li>
+<li class="toclevel-4 tocsection-12"><a href="#.bss_Section"><span class="tocnumber">1.2.4.3</span> <span class="toctext">.bss Section</span></a></li>
+<li class="toclevel-4 tocsection-13"><a href="#.cinit_Section"><span class="tocnumber">1.2.4.4</span> <span class="toctext">.cinit Section</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-14"><a href="#Choosing_Code_for_the_Partial_Image"><span class="tocnumber">1.2.5</span> <span class="toctext">Choosing Code for the Partial Image</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Validating_the_Selected_DSP.2FBIOS_Symbols"><span class="tocnumber">1.2.6</span> <span class="toctext">Validating the Selected DSP/BIOS Symbols</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-16"><a href="#Linking_the_Partial_Image_into_an_Application"><span class="tocnumber">1.3</span> <span class="toctext">Linking the Partial Image into an Application</span></a>
+<ul>
+<li class="toclevel-3 tocsection-17"><a href="#Prevent_DSP.2FBIOS_from_Generating_Linker_Commands_for_Compiler_Sections"><span class="tocnumber">1.3.1</span> <span class="toctext">Prevent DSP/BIOS from Generating Linker Commands for Compiler Sections</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Include_a_User_Command_File"><span class="tocnumber">1.3.2</span> <span class="toctext">Include a User Command File</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Linker_Commands_in_the_User_Command_File"><span class="tocnumber">1.3.3</span> <span class="toctext">Linker Commands in the User Command File</span></a>
+<ul>
+<li class="toclevel-4 tocsection-20"><a href="#Specify_Path_to_the_Partial_Image"><span class="tocnumber">1.3.3.1</span> <span class="toctext">Specify Path to the Partial Image</span></a></li>
+<li class="toclevel-4 tocsection-21"><a href="#Compiler_Sections"><span class="tocnumber">1.3.3.2</span> <span class="toctext">Compiler Sections</span></a></li>
+<li class="toclevel-4 tocsection-22"><a href="#Hard-coded_Addresses_for_.sharedL2_and_.localL2"><span class="tocnumber">1.3.3.3</span> <span class="toctext">Hard-coded Addresses for .sharedL2 and .localL2</span></a></li>
+<li class="toclevel-4 tocsection-23"><a href="#Linking_the_.bss_Section"><span class="tocnumber">1.3.3.4</span> <span class="toctext">Linking the .bss Section</span></a></li>
+<li class="toclevel-4 tocsection-24"><a href="#NOLOAD_Directive"><span class="tocnumber">1.3.3.5</span> <span class="toctext">NOLOAD Directive</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-25"><a href="#Multiple_Applications_Using_a_Shared_Image_Example_Application"><span class="tocnumber">1.4</span> <span class="toctext">Multiple Applications Using a Shared Image Example Application</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Shared_Memory_Partitioning"><span class="tocnumber">1.5</span> <span class="toctext">Shared Memory Partitioning</span></a>
+<ul>
+<li class="toclevel-3 tocsection-27"><a href="#SL2RAM_Partitions"><span class="tocnumber">1.5.1</span> <span class="toctext">SL2RAM Partitions</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#DDR2_Partitions"><span class="tocnumber">1.5.2</span> <span class="toctext">DDR2 Partitions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-29"><a href="#Code_and_Data_Placement"><span class="tocnumber">1.6</span> <span class="toctext">Code and Data Placement</span></a>
+<ul>
+<li class="toclevel-3 tocsection-30"><a href="#Code_Placement"><span class="tocnumber">1.6.1</span> <span class="toctext">Code Placement</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#Data_Placement"><span class="tocnumber">1.6.2</span> <span class="toctext">Data Placement</span></a></li>
+<li class="toclevel-3 tocsection-32"><a href="#Configuration_File_Updates_for_Code_and_Data_Placement"><span class="tocnumber">1.6.3</span> <span class="toctext">Configuration File Updates for Code and Data Placement</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-33"><a href="#Installing_the_Applications"><span class="tocnumber">1.7</span> <span class="toctext">Installing the Applications</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Building_the_Applications"><span class="tocnumber">1.8</span> <span class="toctext">Building the Applications</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Loading_and_Running_the_Application"><span class="tocnumber">1.9</span> <span class="toctext">Loading and Running the Application</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span id="Multiple_Applications_Sharing_a_Partial_DSP/BIOS_Image"></span><span class="mw-headline" id="Multiple_Applications_Sharing_a_Partial_DSP.2FBIOS_Image">Multiple Applications Sharing a Partial DSP/BIOS Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=1" title="Edit section: Multiple Applications Sharing a Partial DSP/BIOS Image">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The sharedimage example shows how to create a partial DSP/BIOS image that can be shared by different applications running on different cores. Sharing common code between multiple applications reduces the overall memory requirement. The intention is to how to create and use a partial linked object file after building on the memory partitions from the <a href="BIOS_on_Multi-Core_multipleimage.html" title="DSP/BIOS on Multi-Core multipleimage">multipleimage</a> example.
+</p><p><a href="../File_Randyp_BIOS_Multicore_sh_memory.html" class="image" title="Figure 1. Multiple Applications Sharing a Partial DSP/BIOS Image"><img alt="Figure 1. Multiple Applications Sharing a Partial DSP/BIOS Image" src="https://processors.wiki.ti.com/images/a/a1/Randyp_BIOS_Multicore_sh_memory.png" width="900" height="679" class="thumbborder" /></a> <br /><b>Figure 1.</b> Multiple Applications Sharing a Partial DSP/BIOS Image 
+</p>
+<h2><span class="mw-headline" id="Absolute_Linking_vs._Relocatable_Linking">Absolute Linking vs. Relocatable Linking</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=2" title="Edit section: Absolute Linking vs. Relocatable Linking">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A CCS project builds an executable .out image file by combining all of the components of the project and then resolving all symbol references. For these examples, all of the executable .out files are fully resolved and "absolute" linked .out image files. It is also possible to create a relocatable object file, which will be used for the parial DSP/BIOS image that will be shared by the applications in this example.
+</p>
+<h3><span class="mw-headline" id="Absolute_Linking">Absolute Linking</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=3" title="Edit section: Absolute Linking">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Most projects or applications only use absolute linking. The process of building the project is simple. First, all of the source files of the project are compiled into .obj files, with references to external functions or variables marked as being unresolved. Then, the linker reads in all of those .obj files, other .obj files (in some cases), and .lib library archive files. The linker parses the .obj files and places them at an absolute location in memory. When the linker reaches an external symbol referenced in the .obj file that has not been found, it searches the listed libraries to find that symbol and then include the object module from the library that contains that symbol.
+</p><p>As an example, the sharedimage_app0 project has the sh_app0.c source file. First, sh_app0.c is compiled to create sh_app0.obj in the Debug folder. Several functions are called in sh_app0.c but some of those functions are not defined in sh_app0.c, for example CLK_gethtime and LOG_printf. Then, the linker parses sh_app0.obj and reaches these symbols which have not been found, yet. The linker reads the DSP/BIOS libraries until it finds each of these. The linker will then take the clk object module and the log_printf object module from the DSP/BIOS library file, adding those object modules to the output linked image and resolving the values for the CLK_gethtime and LOG_printf symbols in sh_app0.obj with the new absolute values.
+</p><p>When the linker combines all of the objects into the output image, it places the various sections as indicated in the linker command file. The linker has rules for determining the order of the various objects within a memory section. If any objects change from one build to the next, the order of all objects in the final output may change. But functions within a single .obj object file or module will be placed in the same order as they appear in the .obj file. That order could change from one compile to the next, depending on compiler settings, but whatever order is used in the compiler's output that same order within a section will be used in the final linked output image.
+</p>
+<h3><span class="mw-headline" id="Relocatable_Linking">Relocatable Linking</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=4" title="Edit section: Relocatable Linking">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When sh_app0.c is compiled to create sh_app0.obj, the sh_app0.obj object file is a relocatable object file. It contains address for code and data, but these addresses are saved as relocatable values that can be set to an absolute value in the final linking process. The compiler includes all code and data from the sh_app0.c file in the sh_app0.obj object file. When the linker reads in sh_app0.obj, it will include all of the functions and will keep them in the same order as they were in the sh_app0.obj file.
+</p><p>Relocatable linking is the process in which .obj object files and portions of .lib archive files can be built together into a single object file without having to fully resolve all external references, similar to the sh_app0.obj file created by the compiler. Once this relocatable-linked object file is created, the order of functions and data in that object file will be set and that order will not change when the object file is used again.
+</p><p>In this example, we will create a single relocatable object file that contains all of the common portions of the DSP/BIOS library files, such as CLK_gethtime and LOG_printf. Since these common portions will be placed together in a single relocatable object file, their locations will be fixed relative to the beginning of the relocatable section. For example, if CLK_gethtime is placed first and LOG_printf is placed second in the BIOS_partial.obj file, CLK_gethtime will be first and LOG_printf will be second in the final absolute linked output file.
+</p><p>Relocatable linking into a single object file allows the modules in that file to be used as a group. When that group is placed at the same fixed location for every project, all references into that group will be resolved to the same absolute address so that every application can share the exact same code and initialized data.
+</p>
+<h2><span class="mw-headline" id="Creating_a_Partial_Linked_Image">Creating a Partial Linked Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=5" title="Edit section: Creating a Partial Linked Image">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>An object file generated as a partially linked, relocatable image can be linked again with additional modules to form an application, just as you would do with .lib archive files and separately compiled .obj object files. Partial linking allows you to partition large applications, link each part separately, and then link the parts together to create the final executable. The TI Code Generation Tools' linker provides an option, -r or --relocatable, to create a partial image. Use of the -r option allows the partial image to be written in a form that will allow it to be linked again with the final application. 
+</p>
+<h3><span class="mw-headline" id="Relocatable_Linking_Restrictions">Relocatable Linking Restrictions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=6" title="Edit section: Relocatable Linking Restrictions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There are a few restrictions when using the -r linker option to create a partial image: 
+</p>
+<ul><li>Conditional linking is disabled. This means any code modules you pull into the partial image will be included in the final output even if they are not used, so memory requirements may increase. You can control this manually by leaving out certain modules.</li>
+<li>Trampolines are disabled. All code needs to be within a +/- 4MB range so branch displacements can be loaded in a 21-bit opcode field.</li>
+<li>.cinit and .pinit can not be placed in the partial image. These must be combined with other .cinit/.pinit code to build a complete initialization table.</li></ul>
+<h3><span class="mw-headline" id="Memory_Location_Requirements">Memory Location Requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=7" title="Edit section: Memory Location Requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>You must place the partial image into shared memory (internal or external) so that all the cores can access it. The partial image may contain most of the DSP/BIOS code (.bios) but not .hwi_vec. It may also contain the constant data (.sysinit and .const) needed by the DSP/BIOS code, and all of this code and constant data must be placed into internal or external shared memory so that all the cores can access it. To do this, the image is placed in the same fixed location when linked into each core's application code. Only one application needs to physically include the partial image, and that application must always be loaded first before the others are loaded, or else the other applications may run into errors. 
+</p><p>Because the DSP/BIOS code contains data references (.far and .bss sections), these sections need to be placed in the same memory location in non-shared memory by the different applications that will link with this partial image. To allow this to work correctly, each core must have a non-shared memory section at the same address location. For C6472, these sections must be placed in local L2 memory for each core. These sections must use the Local L2 memory address 0x00800000 so the same address on each core will access a pysically different memory. Using Shared L2 memory at 0x00200000 would result in the same address accessing the same physical memory, so each core would overwrite the data from the other cores. Using a Global L2 address at 0x10800000 / 0x11800000 or using separate partitions would result in different addresses so the common code could not be linked successfully with a single address.
+</p><p>The restrictions on .bss and .far may be impossible to meet for some applications. If there is not enough L2 memory space available for these sections, then the shared partial linking may not be feasible for that application. An example would be an application in which all of local L2 memory is used as cache. Another example would be that special data buffers must be located in L2 memory for speed, and there is no space available for all of .bss and the portion of .far from the partial object file.
+</p>
+<h3><span class="mw-headline" id="Linker_Commands_for_Creating_a_Partial_Image">Linker Commands for Creating a Partial Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=8" title="Edit section: Linker Commands for Creating a Partial Image">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The -x option tells the linker to search all of the input object and library files for the unresolved symbols.
+</p><p>The -r option causes the linker to make the output file relocatable. All resolved address symbols will be set relative to the start of its memory section. The final link will change these relative addresses to absolute addresses.
+</p><p>The -o option sets the name of the relocatable partial link output file.
+</p><p>The -u option introduces an unresolved symbol into the linker's symbol table. This has the same effect as when an object file references an external symbol. The linker includes the input object file or library module that defines that symbol and uses that to build the output file. The BIOS_partial.cmd linker command file used in this sharedimage project has a list of all of the public API calls to DSP/BIOS 5.41. 
+</p><p>The -l option specifies a library file from which symbols will be resolved and from which code and data will be copied to build the output file.
+</p>
+<h3><span class="mw-headline" id="Relocatable_Output_Sections">Relocatable Output Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=9" title="Edit section: Relocatable Output Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In order to place the partial linked file's sections at the same location for each core to use, the applications' linker command files must be programmed to force these partial linked sections to be linked to fixed addresses. The linker can accept a hard-coded hex address that can be used to place any section to start at that fixed address, so this method will be used to force three generated sections from the partial linked file to be linked to fixed addresses. These sections are named .sharedL2, .localL2, and the pre-defined .bss section. These sections are implemented as 
+</p>
+<ul><li>.sharedL2 - contains .bios code, .sysinit initialized data and .const initialized data</li>
+<li>.localL2 - contains .far and .trcdata uninitialized data</li>
+<li>.bss - contains DP-relative uninitialized data space</li>
+<li>.cinit - contains initialized data space that will be combined with other .cinit sections</li></ul>
+<h4><span class="mw-headline" id=".sharedL2_Section">.sharedL2 Section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=10" title="Edit section: .sharedL2 Section">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The bulk of the partial image is placed into the named section, .sharedL2. The .sharedL2 section will be built in the relocatable link process. It will contain the .bios code section, the .sysinit initialized data section and the .const initialized data section. All of the addresses and symbols and data locations in these sections will be resolved to the same address in the final link step that builds the absolute executable .out output file.
+</p><p>The following is placed in the SECTIONS section of BIOS_partial.cmd:
+</p>
+<pre>    .sharedL2: {        /* contains code &amp; read-only data which */
+        *(.bios)        /*   are placed into shared L2 memory.  */
+        *(.sysinit)
+/*        *(.text)      /* no .text in this example, so comment out to avoid warning */
+        *(.const)
+    }
+</pre>
+<h4><span class="mw-headline" id=".localL2_Section">.localL2 Section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=11" title="Edit section: .localL2 Section">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>DSP/BIOS allocates some uninitialized data into the .far and .trcdata memory sections. Since these variables will be accessed by the code in the shared partial image, only one address can be used for these variables. This means that these data sections must be placed at the same address for each core. 
+</p><p>The .localL2 section will contain all of the .far and .trcdata from the partial image. In the final link process, the full content of .localL2 will be placed at a fixed address in the local L2 address range. This allows the same address to be used for non-shared memory. If the section were placed in a shared memory area, each core would overwrite the data values written by the other cores; if the section were placed in a unique partition in Shared L2 or External memory, different addresses would be required and the partial image could not access the different addresses.
+</p><p>Any additional data memory allocated to .far or .trcdata by the rest of the application will be placed in a different location in the final link step. The .far and .trcdata from the partial image must be placed in the Local L2 to take advantage of the common addressing of different memories. But if the rest of any core's application puts data into .far and .trcdata, those memory areas may be placed in any memory area or partition that is unique to that core.
+</p><p>The following is placed in the SECTIONS section of BIOS_partial.cmd:
+</p>
+<pre>    .localL2: {         /* contains data which should be placed */
+        *(.far)         /*   in local L2 memory                 */
+        *(.trcdata)
+    }
+</pre>
+<h4><span class="mw-headline" id=".bss_Section">.bss Section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=12" title="Edit section: .bss Section">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>On C6000 devices, the .bss section must be one contiguous section because its content is accessed by using an offset from the Data Page pointer (DP, which is register B14). Because the applications will also allocate data memory locations to the .bss section, the .bss section contributed by the DSP/BIOS partial image must be placed at the same memory location for all the cores that use the shared partial image. 
+</p><p>The .bss section cannot be split up and it must be placed at the same location for each core/application. Specific linker commands and capabilities will be used to ensure that the .bss section is placed at the fixed location, and that each application can still contribute to this section. 
+</p><p>The following is placed in the SECTIONS section of BIOS_partial.cmd:
+</p>
+<pre>    .bss: {}            /* contains bss from partial image */
+</pre>
+<h4><span class="mw-headline" id=".cinit_Section">.cinit Section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=13" title="Edit section: .cinit Section">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The .cinit section contains data initialization values to be copied to data space at run time. In the final link, this section will be combined with other .cinit sections from other object files and other library modules to form the final .cinit section. The .cinit section will be placed in unique memory for each core in the final link process, but does not require any other special handling in the partial linked image.
+</p><p>The following is placed in the SECTIONS section of BIOS_partial.cmd:
+</p>
+<pre>    .cinit: {}          /* contains initialization values from partial image */
+</pre>
+<h3><span class="mw-headline" id="Choosing_Code_for_the_Partial_Image">Choosing Code for the Partial Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=14" title="Edit section: Choosing Code for the Partial Image">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The linker command file provided in the partial example contains a list of all user level DSP/BIOS functions (API function names). Most of the function names are commented out. The uncommented lines are functions that are needed or called by the application examples to create the partial image. Based on application configuration options, other DSP/BIOS APIs may be needed by the application because they are called internally. 
+</p><p>See Section 5 to determine how to make these additional functions part of the partial image. 
+</p><p>Also, there is a list of additional symbols that can be included, such as _HWI_F_dispatch.
+</p><p>The BIOS_partial.cmd linker command file also includes a list of DSP/BIOS libraries needed to build the partial image and to resolve unresolved symbols introduced by the –u option. This list is specific to the platform for which the partial image will be used. To determine the list of DSP/BIOS libraries (*.a##) needed for your platform’s applications, look at the DSP/BIOS generated linker command file (*.cfg.cmd) for your application. This file contains a library reference (using the –l linker option) for all the DSP/BIOS libraries needed by your platform’s application. Use these referenced libraries to generate the partial image by copying the -l lines to your partial linker command file, with the exception of the RTDX, RTDX Link, and real-time system (RTS) libraries (for example, rtdx64xplus.lib, lnkrtdx.a64, and rts64plus.lib). 
+</p><p>You can modify the list of functions and libraries included to adjust the partial image. Once the image is created, its memory size is fixed. Therefore, to minimize memory requirement for the partial image, the list should be modified based on the following needs: 
+</p>
+<ul><li>APIs used by two or more applications</li>
+<li>Common configuration options</li></ul>
+<p>If a function is called by only one of the applications using the partial image, there are no sizing gains for including the function in the shared partial image instead of in the application itself. Of course, there is no sizing loss by placing as much as possible in the shared partial image, as long as the functions will definitely be called at least once.
+</p><p>Uncomment any DSP/BIOS symbols that meet the above criteria, and that are not stated in the BIOS_partial.cmd file as "cannot be included". Some functions are known to have references to addresses that will not be resolved within the partial linked file.
+</p>
+<h3><span id="Validating_the_Selected_DSP/BIOS_Symbols"></span><span class="mw-headline" id="Validating_the_Selected_DSP.2FBIOS_Symbols">Validating the Selected DSP/BIOS Symbols</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=15" title="Edit section: Validating the Selected DSP/BIOS Symbols">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To ensure that all necessary functions are resolved and the correct libraries are included in the linker command file, you can use the –a linker option for a test of the linker command file. The -a option forces the linker to build an absolute, executable output module. This means it will attempt to resolve all references and will issue linker errors and/or warnings for any references outside the partial image. A partial image should not contain any unresolved references outside the image itself unless the symbols are in a data section and are C-initialized by the application. 
+</p><p>Run a test build of the BIOS_partial project using the linker's -a option. The linker issues various warnings for unresolved references. In the example provided for this app note, all of the unresolved symbol references are referenced in the data section (.localL2 section) of the DSP/BIOS partial image and all are C-initialized by the application. These are acceptable for the real build, without the -a option.
+</p><p>If there are any other unresolved symbol references, some of the -u options will have to be removed or commented out.
+</p><p>After validating the linker command file, remove the -a option and build the BIOS_partial project to create the BIOS_partial.obj file.
+</p>
+<h2><span class="mw-headline" id="Linking_the_Partial_Image_into_an_Application">Linking the Partial Image into an Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=16" title="Edit section: Linking the Partial Image into an Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Each application is created by linking the object files generated by the compiler and libraries supplied by TI or TI Third Party Partner. For the sharedimage applications, the BIOS_partial.obj partial linked image will be added to the list of files included in the link process and special linker directives and flags will be used to put the BIOS_partial components in the location required. Most of the partial image will be linked to fixed locations so each core will be able to share the partial image. The steps in this section apply to each core's project.
+</p>
+<h3><span id="Prevent_DSP/BIOS_from_Generating_Linker_Commands_for_Compiler_Sections"></span><span class="mw-headline" id="Prevent_DSP.2FBIOS_from_Generating_Linker_Commands_for_Compiler_Sections">Prevent DSP/BIOS from Generating Linker Commands for Compiler Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=17" title="Edit section: Prevent DSP/BIOS from Generating Linker Commands for Compiler Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The DSP/BIOS configuration tool generates a linker command file based on the selections made in the Configuration Tool's GUI or based on commands added to the .tcf file directly. Special handling is needed for the case of linking with a partial image, so some of the linker directives that would normally be included in the DSP/BIOS *cfg.cmd file must be removed and a second linker command file must be used to complete the link operation. Since the DSP/BIOS tools will regenerate the *cfg.cmd file, a DSP/BIOS command must be added to the .tcf file to prevent these directives from being included.
+</p><p>If you are using the DSP/BIOS Configuration Tool instead of editing .tcf files directly, enable (checkmark) the “User .cmd File For Compiler Sections” option in the Compiler Sections tab of the MEM Module Properties dialog in each application’s configuration (see figure below). 
+</p><p><a href="../File_Randyp_BIOS_Multicore_sh_usercmd.html" class="image"><img alt="Randyp BIOS Multicore sh usercmd.jpg" src="https://processors.wiki.ti.com/images/9/9d/Randyp_BIOS_Multicore_sh_usercmd.jpg" width="450" height="474" /></a>
+</p><p>Another way to do this is to add the following line to the .tcf file in each core's project, which is what the GUI commands will do:
+</p><p><code>bios.MEM.USERCOMMANDFILE = 1;</code> 
+</p>
+<h3><span class="mw-headline" id="Include_a_User_Command_File">Include a User Command File</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=18" title="Edit section: Include a User Command File">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A second linker command file may now be created and placed in the project folder. In previous versions of the Code Generation Tools, the Link Order was important and the User Command file needed to be linked before the DSP/BIOS *cfg.cmd file. With CGT 6.1.17 and later, this does not appear to be an issue.
+</p><p>If you want to control the link order of files, right-click on the Project name and select Build Properties. Select CCS Build, then select the Link Order tab, Add the files whose order needs to be controlled, and move the files Up or Down to set their link order. The top file in the list will be linked first among the list of files.
+</p><p>For these applications, the User Command file is named appN.cmd [N=0..5].
+</p>
+<h3><span class="mw-headline" id="Linker_Commands_in_the_User_Command_File">Linker Commands in the User Command File</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=19" title="Edit section: Linker Commands in the User Command File">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The USERCOMMANDFILE = 1 command mentioned above causes DSP/BIOS to exclude the TI Compiler-generated sections from being included in the *cfg.cmd file. Instead, all of these sections must be included in the User Command file. Other commands and directives and special syntax are used in the appN.cmd files to properly link in the BIOS_partial.obj components so that each project's application will be able to share this part of the DSP/BIOS library.
+</p><p>The following sections described the various methods used to make this link operation successful.
+</p>
+<h4><span class="mw-headline" id="Specify_Path_to_the_Partial_Image">Specify Path to the Partial Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=20" title="Edit section: Specify Path to the Partial Image">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The parital image created in the BIOS_partial project is included in the link by specifying it in the user command file.
+</p><p><code>"../../BIOS_partial/Debug/BIOS_partial.obj"	/* pull in the partial image file */</code>
+</p>
+<h4><span class="mw-headline" id="Compiler_Sections">Compiler Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=21" title="Edit section: Compiler Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>All of the compiler sections are usually configured in the *.tcf file and specified in the DSP/BIOS *cfg.cmd file. In this case, these must be listed in the User Command file, appN.cmd. And each section must be assigned to the memory region as chosen for that application. 
+</p><p>In app0.cmd for the sharedimage_app0 project, all of the compiler sections are assigned to its Local L2, LL2RAM:
+</p>
+<pre>	/* initialized sections: program code and initialized data */
+	.text:   {} &gt;&gt; LL2RAM
+	.switch: {} &gt;&gt; LL2RAM
+	.cinit:  {} &gt;  LL2RAM
+	.pinit:  {} &gt;  LL2RAM
+	.const:  {} &gt;&gt; LL2RAM
+	.printf: {} &gt;&gt; LL2RAM
+	.data:   {} &gt;&gt; LL2RAM
+
+	/* uninitialized sections: variable data space */
+	.vers:   {} &gt;&gt; LL2RAM
+	.far:    {} &gt;&gt; LL2RAM
+
+</pre>
+<p>In app1.cmd for the sharedimage_app1 project, all of the compiler sections are assigned to its Shared L2 partition, SL2RAM:
+</p>
+<pre>	/* initialized sections: program code and initialized data */
+	.text:   {} &gt;&gt; SL2RAM
+	.switch: {} &gt;&gt; SL2RAM
+	.cinit:  {} &gt;  SL2RAM
+	.pinit:  {} &gt;  SL2RAM
+	.const:  {} &gt;&gt; SL2RAM
+	.printf: {} &gt;&gt; SL2RAM
+	.data:   {} &gt;&gt; SL2RAM
+
+	/* uninitialized sections: variable data space */
+	.vers:   {} &gt;&gt; SL2RAM
+	.far:    {} &gt;&gt; SL2RAM
+
+</pre>
+<p>These compiler sections have no direct relationship to the partial link file, BIOS_partial.obj. These sections contain the compiler code generated in the associated project.
+</p><p>The &gt;&gt; operator indicates to the linker that the output section can be split, if needed, to achieve an efficient allocation. Because of the hard-coded addresses below, the linker might not be able to allocate whole sections between the .localL2 and .bss sections in the LL2RAM memory range. The &gt;&gt; operator allows the linker to split sections. In the sharedimage_appN projects, combinations of .far and .text and .const have been observed to be split for efficiency in filling holes between sections. Note that .cinit, .pinit, and .bss must not be split, so the &gt;&gt; operator must not be used for these sections; the &gt; operator may be used instead, which does not allow the linker to split the section.
+</p>
+<h4><span class="mw-headline" id="Hard-coded_Addresses_for_.sharedL2_and_.localL2">Hard-coded Addresses for .sharedL2 and .localL2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=22" title="Edit section: Hard-coded Addresses for .sharedL2 and .localL2">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In the process of building the partial link file, two sections were created that must be placed at the exact same locations for each application. This is how the applications will share a common copy of the partial link file. 
+</p><p>The .sharedL2 section must be placed at the beginning of the physical Shared L2 memory region using a hard-coded address. This method, using the syntax below, forces this section to be linked before other sections into this memory region so it is guaranteed to be placed at this address. Since the same .sharedL2 section is linked to the same address for each application, they can all use the exact same code and initialized data from that common shared memory area.
+</p><p>Since the .sharedL2 section is identical for all of the cores, it only needs to load from one of the applications. In this example, sharedimage_app0 is the only project that will physically include the .sharedL2 section. app0.cmd includes the following lines to link the .sharedL2 section and to place that code into its load image:
+</p>
+<pre>	.sharedL2: /* type = NOLOAD    Place at beginning of shared L2 memory. */
+	    {} &gt; 0x00200000         /* Only loaded by app0 */
+</pre>
+<p>To avoid every application image containing a duplicate copy of the .sharedL2 section, this section is labeled with "type = NOLOAD". A NOLOAD section will be linked and its symbols will be resolved for the rest of the application during the link process, but the NOLOAD section's contents will not be placed in the output image file. appN.cmd [N=1..5] include the following lines to link the .sharedL2 section and to not place that code into the associated load image:
+</p>
+<pre>	.sharedL2: type = NOLOAD    /* Place at beginning of shared L2 memory. */
+	    {} &gt; 0x00200000         /* Only loaded by app0 */
+</pre>
+<p>The .localL2 section must be placed at the beginning of the physical Local L2 memory region using a hard-coded address. This method, using the syntax below, forces this section to be linked before other sections into the Local L2 memory region so it is guaranteed to be placed at this address. Since the same .localL2 section is linked to the same address for each application, these .far and .trcdata uninitialized data sections will be linked to the same address in as every application. The references from the .sharedL2 section into these sections will be coherent, allowing the shared partial link image to work. appN.cmd [N=0..5] includes the following lines to link the .localL2:
+</p>
+<pre>	.localL2: {} &gt; 0x00800000   /* Place at beginning of local L2 memory. */
+</pre>
+<p>It is required that the Local L2 address range starting at 0x0080000 is used, as discussed in [[#Memory Location Requirements|Memory Location Requirements], above.
+</p>
+<h4><span class="mw-headline" id="Linking_the_.bss_Section">Linking the .bss Section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=23" title="Edit section: Linking the .bss Section">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The .bss section has some special considerations that must be met:
+</p>
+<ul><li>.bss must be placed at the same fixed address for each application.</li>
+<li>The portion of .bss from BIOS_partial must be placed first so it is the same for each application.</li>
+<li>All of the other object modules will have .bss allocations, too.</li>
+<li>For each application, all of the .bss allocations from all sources must be placed in a single contiguous output .bss section.</li>
+<li>.bss may only occupy a total of 32K bytes of memory, including the portion from BIOS_partial.obj.</li></ul>
+<p>The following lines are included in appN.cmd [N=0..5] to handle .bss properly:
+</p>
+<pre>	.bss: {	
+	    BIOS_partial.obj(.bss)  /* The .bss section from partial */
+	    *(.bss)                 /* image must be specified first */
+	} &gt; 0x00801000
+</pre>
+<h4><span class="mw-headline" id="NOLOAD_Directive">NOLOAD Directive</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=24" title="Edit section: NOLOAD Directive">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A section marked with the NOLOAD flag is not included in the final output file. Nothing in this section is loaded onto the target system. In the NOLOAD case, space is allocated in memory by the linker and therefore allocation errors are caught by the linker, but the contents of the section are not placed in the output file. Errors that are caught include allocating too much code to a memory range and allocating multiple sections to the same memory range.  
+</p>
+<h2><span class="mw-headline" id="Multiple_Applications_Using_a_Shared_Image_Example_Application">Multiple Applications Using a Shared Image Example Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=25" title="Edit section: Multiple Applications Using a Shared Image Example Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The examples for this scenario can be found in the several sharedimage_appN [N=0..5] project folders plus the BIOS_partial project folder. In the BIOS_partial project folder, a DSP/BIOS partial image will be built. In the sharedimage_appN [N=0..5] project folders, the applications will link the BIOS_partial image with the application code to build unique applications to run on coreN [N=0..5]. 
+</p><p>The same basic application code from the singleimage project is used for this example, with the exception that the number of writer tasks is equal to N+1 for CoreN and sharedimage_appN. Like singleimage, this example uses a QUE (DSP/BIOS queue) to send messages and a SEM (DSP/BIOS semaphore) to synchronize between one or more writer() tasks to a single reader() task. The reader task, the writer task(s), and the semaphore DSP/BIOS objects are statically created in the DSP/BIOS configuration file in each project folder. The memory location for the code and data are also set in the DSP/BIOS configuration file in each project folder to implement the arrangement shown in Figure 1.
+</p><p>Each of the identical writer tasks will load and send a message through the DSP/BIOS QUE mechanism, then will post a SEM to tell the reader task that a message is ready. The reader task will respond to the SEM by pulling a message off the QUE object and reporting the results using a LOG_printf message.<br /> 
+</p><p>You will be able to observe the results of the execution by each core by using the RTA-&gt;Printf Logs window.<br /> 
+</p><p>The application should be built using DSP/BIOS 5.41.07 or greater and CCSv4.2.0.09 or greater. Earlier releases will not support the Printf Logs as well or at all. With DSP/BIOS 5.41.07 or greater and CCSv4.2.0.09 or greater, you will be able to observe the results of the execution by each core by using the RTA-&gt;Printf Logs window. With earlier releases of DSP/BIOS and CCSv4, you would have to use the ROV tool and click down into the log buffers to observe the results.
+</p><p>Each project folder has a slightly different C source file and a slightly different DSP/BIOS Configuration .tcf file. The sh_appN.c [N=0..5] files differ only by the number of messages allocated, 3 for each of the writer tasks that are defined in the tcf file.<br /> 
+</p><p>The sharedimage_appN.tcf DSP/BIOS Configuration files define N+1 writer tasks for CoreN, define separate partitions in both SL2RAM and DDR2, define a DDR2_COMMON memory partition that is identical for all cores. The configuration files also place different parts of the application in different memory partitions. This partitioning is what allows the cores to use a physical shared memory resource (Shared L2 and DDR2) at the same time without interfering with each other. 
+</p><p>The only difference between the sharedimage_appN projects and the multipleimage_appN projects is the use of the SL2_COMMON memory partition to hold portions of DSP/BIOS that can be shared by all the applications. 
+</p>
+<h2><span class="mw-headline" id="Shared_Memory_Partitioning">Shared Memory Partitioning</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=26" title="Edit section: Shared Memory Partitioning">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Figure 1 shows how Shared L2 (SL2RAM) and DDR2 memory are divided into multiple partitions. Any partition that is allocated to CoreX will not be available to CoreY, as far as the linker is concerned. 
+</p>
+<h3><span class="mw-headline" id="SL2RAM_Partitions">SL2RAM Partitions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=27" title="Edit section: SL2RAM Partitions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The C6472 SL2RAM is 768KB in size. For this sharedimage scenario, we require a common partition in which the shared partial DSP/BIOS image will be placed. Creating this SL2_COMMON partition to start at 0x00200000 with size 0x00030000 leaves a remaining space of 0x000C0000. This remaining space divides evenly into 6 equal partitions of 96KB each. Some applications may find it useful to have an uneven set of partitions, but for this example and for many applications the even division of partitions will work well. SL2RAM starts at address 0x00200000, so each partition starts at 0x00230000+(0x00018000*N) for CoreN, N=0..5.
+</p><p>The following lines were added to each sharedimage_appN.tcf [N=0..5] to implement the SL2_COMMON partition. These changes were done once through the DSP/BIOS Configuration Tool then copied to the other 5 tcf files.
+</p><p>
+bios.MEM.create("SL2_COMMON");
+bios.MEM.instance("SL2_COMMON").base = 0x00200000;
+bios.MEM.instance("SL2_COMMON").len = 0x00030000;
+bios.MEM.instance("SL2_COMMON").createHeap = 0;
+bios.MEM.instance("SL2_COMMON").space = "code/data";
+bios.MEM.instance("SL2_COMMON").comment = "192KB common SL2 for all cores";
+</p><p>The following lines were added to multipleimage_app1.tcf to implement the SL2RAM partition for Core1. These changes could also be done through the DSP/BIOS Configuration Tool, but it was easier for the author to do that once and then copy the lines to the other 5 tcf files and manually edit the addresses.
+</p><p>
+bios.MEM.instance("SL2RAM").comment = "96KB partition of 768K Shared L2 RAM";
+bios.MEM.instance("SL2RAM").base = 0x00248000;
+bios.MEM.instance("SL2RAM").len = 0x00018000;
+bios.MEM.instance("SL2RAM").createHeap = 1;
+bios.MEM.instance("SL2RAM").heapSize = 0x00000800;
+</p>
+<h3><span class="mw-headline" id="DDR2_Partitions">DDR2 Partitions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=28" title="Edit section: DDR2 Partitions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For this implementation, the DDR2 memory is 256MB in size. This is divided into 6 equal partitions of 32MB, plus 1 64MB common partition. Some applications may find it useful to have a different sizing for the partitions, but for this example this configuration will work well. DDR2 starts at address 0xE0000000, so each partition starts at 0xE0000000+(0x02000000*N) for CoreN, [N=0..5].
+</p><p>As an example, the following lines were added to multipleimage_app1.tcf to implement the unique 32MB DDR2 partition for Core1. 
+</p><p>
+bios.MEM.instance("DDR2").comment = "Core1's 32MBytes of DDR2";
+bios.MEM.instance("DDR2").base = 0xe2000000;
+bios.MEM.instance("DDR2").len  = 0x02000000;
+bios.MEM.instance("DDR2").createHeap = 1;
+bios.MEM.instance("DDR2").heapSize = 0x00000800;
+
+</p><p>The following lines were added to multipleimage_appN.tcf to implement the shared 64MB DDR2 common partition for CoreN, [N=0..5]. This logically shared region, DDR2_COMMON, is defined exactly the same for all of the cores so they may all use this common space. DDR2_COMMON is not used in this application note.
+</p><p>
+bios.MEM.create("DDR2_COMMON");
+bios.MEM.instance("DDR2_COMMON").base = 0xec000000;
+bios.MEM.instance("DDR2_COMMON").len = 0x04000000;
+bios.MEM.instance("DDR2_COMMON").createHeap = 0;
+bios.MEM.instance("DDR2_COMMON").space = "code/data";
+bios.MEM.instance("DDR2_COMMON").comment = "64MBytes common DDR2 for all cores";
+
+</p>
+<h2><span class="mw-headline" id="Code_and_Data_Placement">Code and Data Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=29" title="Edit section: Code and Data Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>One way to build and run multiple independent applications would be to place all code and data in local L2 (LL2RAM) so that each core is completely isolated from the other cores. That method would work, but it ignores the additional memory space available in the Shared L2 (SL2RAM) on-chip memory and the DDR2 off-chip memory. Larger applications that do not fit into LL2RAM would have to use a different method to fit the application into available memory other than LL2RAM.<br /> 
+</p><p>Instead, the sharedimage applications use the memory partitions described above. Each of the sharedimage_appN [N=0..5] uses different locations for their program and data. This is not a common way to use the partitions, but it provides an example of the possibilities and flexibility of the CCSv4 tools. The sharedimage applications keep most of their code and data separated from the other cores, but the partial link BIOS_partial portion of DSP/BIOS will be physically shared by all of the cores. See Figure 1 for details. 
+</p><p>The default DSP/BIOS configuration platform file for the C6472 is setup with all the initialized sections (program code and constant data) in the Shared L2 space and all of the uninitialized and unique (data and interrupt vectors) sections in the Local L2 space. The sharedimage_appN.tcf [N=0..5] configuration files must be modified to change from these defaults to the program code and data placement that has been defined in Figure 1.
+</p><p>As you see in Figure 1, the code and data placement plan is systematic. For all cores, .bss and some BIOS data are placed in Local L2, and the BIOS_partial sections are placed in SL2_COMMON. For Core0, Core1, and Core2, all program, all other BIOS code/data, and all data are placed in Local L2 (private physical memory), Shared L2 (private partition), and DDR2 (private partition), respectively. For Core3, Core4, and Core5, all non-BIOS code is placed in Shared L2 (private partition) and all non-BIOS data is placed in Local L2 (private physical memory), then all other BIOS sections are placed in Local L2, Shared L2, and DDR2, respectively.
+</p>
+<h3><span class="mw-headline" id="Code_Placement">Code Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=30" title="Edit section: Code Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In a DSP/BIOS-based application, the .text and .bios sections contain almost all the code needed for the application. For the sharedimage applications, there is no reason to choose to place code in LL2RAM or SL2RAM or DDR2. Any of those could be chosen for performance or space availability reasons. Each of the sharedimage applications uses a different choice of where to locate the program and initialized data. This will allow a simple benchmarking or comparison of performance when the code is placed in one memory or another.
+</p><p>The following memory sections comprise the initialized code and data sections. These are defined in the tcf file to be placed as specified in Figure 1.<br /> 
+</p>
+<ul><li>BIOS&#160;Data:&#160;.gblinit<br /></li>
+<li>BIOS&#160;Code:&#160;.bios, .sysinit, .hwi, .rtdx_text<br /></li>
+<li>Compiler Sections:&#160;.text, .switch, .cinit, .pinit, .const/.printf, .data<br /></li></ul>
+<h3><span class="mw-headline" id="Data_Placement">Data Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=31" title="Edit section: Data Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There is no reason for the sharedimage applications to choose to place uninitialized data in LL2RAM or SL2RAM or DDR2. Any of those could be chosen for performance or space availability reasons. Each of the sharedimage applications uses a different choice of where to locate the uninitialized data. This will allow a simple benchmarking or comparison of performance when the code is placed in one memory or another. 
+</p><p>The following memory sections comprise the uninitialized data sections (and .hwi_vec). These are defined in the tcf file to be placed as specified in Figure 1.<br /> 
+</p>
+<ul><li>Segment For DSP/BIOS&#160;Objects</li>
+<li>Segment For malloc() / free()</li>
+<li>BIOS&#160;Data:&#160;.args, .stack, .trcdata, .sysdata, DSP/BIOS&#160;Conf Sections<br /></li>
+<li>BIOS&#160;Code:&#160;.hwi_vec<br /></li>
+<li>Compiler Sections:&#160;.bss, .far, .cio<br /></li></ul>
+<h3><span class="mw-headline" id="Configuration_File_Updates_for_Code_and_Data_Placement">Configuration File Updates for Code and Data Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=32" title="Edit section: Configuration File Updates for Code and Data Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following lines were added at the end of the sharedimage_app5.tcf file to place all of the non-shared BIOS code and some data into DDR2 and some of the uninitialized data sections (plus .hwi_vec) into LL2RAM. The first part allocates the memory segments and the second part puts all of the BIOS Objects into DDR2 instead of the default LL2RAM. 
+</p>
+<pre>/* allocate memory segments */
+bios.MEM.BIOSOBJSEG  = prog.get("DDR2");
+bios.MEM.MALLOCSEG   = prog.get("LL2RAM");
+bios.MEM.ARGSSEG     = prog.get("DDR2");    /* BIOS Uninit .args          def: LL2 */
+bios.MEM.STACKSEG    = prog.get("LL2RAM");  /* BIOS Uninit .stack         def: LL2 */
+bios.MEM.TRCDATASEG  = prog.get("DDR2");    /* BIOS Uninit .trcdata       def: LL2 */
+bios.MEM.SYSDATASEG  = prog.get("DDR2");    /* BIOS Uninit .sysdata       def: LL2 */
+bios.MEM.OBJSEG      = prog.get("DDR2");    /* BIOS Uninit .*obj?         def: LL2 */
+bios.MEM.HWIVECSEG   = prog.get("LL2RAM");  /* BIOS Init'd .hwi_vec       def: LL2 */
+bios.MEM.GBLINITSEG  = prog.get("DDR2");    /* BIOS Init'd .gblinit       def: SL2 */
+bios.MEM.BIOSSEG     = prog.get("DDR2");    /* BIOS Init'd .bios          def: SL2 */
+bios.MEM.SYSINITSEG  = prog.get("DDR2");    /* BIOS Init'd .sysinit       def: SL2 */
+bios.MEM.HWISEG      = prog.get("DDR2");    /* BIOS Init'd .hwi           def: SL2 */
+bios.MEM.RTDXTEXTSEG = prog.get("DDR2");    /* BIOS Init'd .rtdx_text     def: SL2 */
+
+/* select memory segments for all the objects, def: LL2 */
+bios.BUF.OBJMEMSEG = prog.get("DDR2");
+bios.SYS.TRACESEG = prog.get("DDR2");
+bios.LOG.OBJMEMSEG = prog.get("DDR2");
+bios.LOG.instance("LOG_system").bufSeg = prog.get("DDR2");
+bios.STS.OBJMEMSEG = prog.get("DDR2");
+bios.CLK.OBJMEMSEG = prog.get("DDR2");
+bios.PRD.OBJMEMSEG = prog.get("DDR2");
+bios.SWI.OBJMEMSEG = prog.get("DDR2");
+bios.TSK.OBJMEMSEG = prog.get("DDR2");
+bios.TSK.instance("reader0").stackMemSeg = prog.get("DDR2");
+bios.TSK.instance("TSK_idle").stackMemSeg = prog.get("DDR2");
+bios.TSK.instance("writer0").stackMemSeg = prog.get("DDR2");
+bios.TSK.instance("writer1").stackMemSeg = prog.get("DDR2");
+bios.TSK.instance("writer2").stackMemSeg = prog.get("DDR2");
+bios.TSK.instance("writer3").stackMemSeg = prog.get("DDR2");
+bios.TSK.instance("writer4").stackMemSeg = prog.get("DDR2");
+bios.TSK.instance("writer5").stackMemSeg = prog.get("DDR2");
+bios.IDL.OBJMEMSEG = prog.get("DDR2");
+bios.SEM.OBJMEMSEG = prog.get("DDR2");
+bios.MBX.OBJMEMSEG = prog.get("DDR2");
+bios.QUE.OBJMEMSEG = prog.get("DDR2");
+bios.LCK.OBJMEMSEG = prog.get("DDR2");
+bios.DIO.OBJMEMSEG = prog.get("DDR2");
+bios.DHL.OBJMEMSEG = prog.get("DDR2");
+bios.RTDX.RTDXDATASEG = prog.get("DDR2");
+bios.HST.OBJMEMSEG = prog.get("DDR2");
+bios.HST.instance("RTA_fromHost").bufSeg = prog.get("DDR2");
+bios.HST.instance("RTA_toHost").bufSeg = prog.get("DDR2");
+bios.PIP.OBJMEMSEG = prog.get("DDR2");
+bios.SIO.OBJMEMSEG = prog.get("DDR2");
+</pre>
+<h2><span class="mw-headline" id="Installing_the_Applications">Installing the Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=33" title="Edit section: Installing the Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Download the Randyp_sharedimage.zip file from <a href="../Using_DSP/BIOS_on_Multi-Core_DSP_Devices.html#Example_files_referenced_in_this_Wiki_topic" title="Using DSP/BIOS on Multi-Core DSP Devices">here</a> to a temporary location on your computer. Use the CCSv4 File-&gt;Import command to import the BIOS_partial and sharedimage_appN projects into your workspace using these steps: 
+</p>
+<ol><li>From the CCSv4 main menu, select the File-&gt;Import command</li>
+<li>Select as source type CCS:Existing CCS/CCE Eclipse Projects</li>
+<li>Select an archive file</li>
+<li>Browse to the Randyp_sharedimage.zip file or enter the path to it</li>
+<li>Select the BIOS_partial and sharedimage_appN projects</li>
+<li>Click Finish</li></ol>
+<p>Since the examples were built and archived from a workspace using CCSv4.2.4.00033, DSP/BIOS 5.41.10.36, Code Generation Tools 7.0.5, and the on-board XDS100USB emulator, there may be some "housekeeping" needed to make your build and debug experience run smoothly. Please follow these steps for each project to make sure the right tools are selected: 
+</p>
+<ol><li>In the C/C++ Projects window, right-click on the project folder name and select Build Properties..., select CCS Build in the left pane then the General tab Build</li>
+<li>Click the drop-down arrow for Code Generation tools and select the latest version of CGT 7.0.x that you have. Earlier versions like 6.0.x may work but have not been tested (please comment here if you test them). If your latest version is not yet in the list, click More then Select tool from file-system and browse to the folder, such as C:\Program Files\Texas Instruments\C6000 Code Generation Tools 6.1.17, then click OK and OK.</li>
+<li>Click the drop-down arrow for DSP/BIOS version and select the latest version of BIOS 5.xx that you have. Earlier versions like 5.33 may work but have not been tested, and they will not display the RTA Printf Logs correctly. BIOS 6.x will not be compatible without some time to do the migration. If your latest version is not in the list, click More then Select tool from file-system and browse to the folder, such as C:\Program Files\Texas Instruments\bios_5_41_10_36, then click OK and OK.</li>
+<li>Click OK to save these changes and select Apply changes to existing build configuration in the Save Build Configuration Settings window if it comes up.</li>
+<li>Repeat the steps above for each of the sharedimage_appN projects.</li>
+<li>For the BIOS_partial project only, in the C/C++ Projects window, right-click on the BIOS_partial project folder name, Build Properties, C/C++ build category, Tool Settings tab, under C6000 linker select the File Search Path settings group and if libc.a is listed under Include library file, select it and click the Delete icon immediately above it. This will avoid a warning message. Select the Linker Output settings and make sure <b>Produce a relocatable output module</b> is checked and that <b>Produce absolute executable object file</b> is not checked. Select the Runtime Environment settings and use the Initialization model drop-down box to select the blank line. Click OK.</li>
+<li>Repeat the steps above for the Release configuration when you want to build your final application with optimization. Use the Debug configuration for evaluation and functional debug.</li></ol>
+<p><b>NOTE:</b> libc.a is used as a flag to the linker to include the right Run-Time Support library for the version of Code Generation Tools and DSP/BIOS that you are using. We do not want any RTS functions to be included in the BIOS_partial project Build configuration.
+</p>
+<h2><span class="mw-headline" id="Building_the_Applications">Building the Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=34" title="Edit section: Building the Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Project dependencies are set so that all of the projects will be kept up-to-date whenever the BIOS_partial project is rebuilt. To make this work, follow the steps below to get a successful build of the projects. 
+</p>
+<ol><li>Select the sharedimage_app0 project, right-click and Set as Active Project.</li>
+<li>On each of the sharedimage_appN projects, right-click and Build Properties..., select CCS Build in the left pane then the Dependencies tab. Make sure the only dependency is BIOS_partial, remove any others that may be there and add BIOS_partial if it is not, then click OK.</li>
+<li>On the main icon row click the Build Active Project icon (see the picture below). You may have a warning about $bss being redefined, which is unavoidable and does not cause a problem.</li>
+<li>After a successful build of the sharedimage_app0 project, only on the sharedimage_app0 project right-click and Build Properties..., select CCS Build in the left pane then the Dependencies tab. Now add all of the other sharedimage_appN projects, as shown in the picture below, then click OK.<br /></li>
+<li>Now and anytime for this set of projects, simply click the Build Active Project icon, and all of the projects will be built, successfully. You should have no errors or warnings. If you change a line in sh_app3.c, click Build Active Project and you will have sharedimage_app3 compile &amp; link, plus sharedimage_app0 will re-link. The $bss redefinition warnings can be ignored.</li></ol>
+<p><a href="../File_Randyp_BIOS_Multicore_sh_build.html" class="image"><img alt="Randyp BIOS Multicore sh build.png" src="https://processors.wiki.ti.com/images/a/a1/Randyp_BIOS_Multicore_sh_build.png" width="674" height="645" /></a> 
+</p><p><b>Another option:</b>&#160;Instead of setting sharedimage_app0 to have all the other sharedimage_appN projects as Dependencies, select the other projects and build multiple projects. After a successful build of the sharedimage_app0 project, click Collapse All in the C/C++ Projects window and select all of the other sharedimage_appN projects together using shift and left-click. Then right-click and select Build Project. All of the selected projects will be built, if needed.
+</p><p><b>Remember:</b>&#160;The sharedimage_app0.out file must be loaded before any of the others. It is the only one that contains the actual contents of the BIOS_partial section, but each app will try to run from this code area. Also, if you make any changes to the BIOS_partial contents or linking methods, you must reload sharedimage_app0.out before any of the other projects. <b>This means do it manually, with Synchronous Mode Disabled, to make sure sharedimage_app0 is loaded first.</b> This is why the author prefers the non-Dependency method of building and loading each application.
+</p>
+<h2><span class="mw-headline" id="Loading_and_Running_the_Application">Loading and Running the Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;section=35" title="Edit section: Loading and Running the Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Since each core runs a different application, each application must be individually loaded using CCSv4. The partial image gets linked with each core, but since it would be loaded into the exact same location in shared memory for every application there is no reason for it to be re-loaded for every core. For this example, the partial image is only loaded as a part of sharedimage_app0.out and is not included in the other .out files. This requires that sharedimage_app0.out must be loaded first so the partial image is available to the other applications when they get loaded. Once loaded, you can take advantage of the CCStudio debugger by running all cores in parallel or you can run each core individually. 
+</p><p><a href="../File_Randyp_BIOS_Multicore_mi_Debug.html" class="image"><img alt="Randyp BIOS Multicore mi Debug.png" src="https://processors.wiki.ti.com/images/2/23/Randyp_BIOS_Multicore_mi_Debug.png" width="685" height="351" /></a> 
+</p>
+<ol><li>Launch TI Debugger to load the Target Configuration</li>
+<li>On the Debug window icon row, click Enable Synchronous Mode<br /></li>
+<li>On the main icon row, click Connect Target to connect to all the cores, making sure that all the cores successfully connect and now show (Suspended)<br /></li>
+<li>On the Debug window icon row, click Disable Synchronous Mode<br /></li>
+<li>On the Debug icon row click Collapse All (for ease).</li>
+<li>Highlight Core0 and on the main icon row, click Load Program then Browse Project and select the sharedimage_app0.out. Click OK and OK to load it to Core0, which MUST be loaded first to include the BIOS_partial section in SL2_COMMON. Repeat for all of the cores and their associated sharedimage_appN.out files. You can double-click on a .out file rather than selecting and clicking OK in the Browse Project window. It may be easier to load the remaining appN [N=1-5] in reverse order because of the hierarchy expansion that occurs.</li>
+<li>On the CCS menu bar, go to Tools-&gt;RTA-&gt;Printf Logs</li>
+<li>(This step may not be required with all releases) On the Debug icon row click Collapse All (for ease), then select each core one-at-a-time and make sure in the Printf Logs window that the "Stream RTA data" icon is selected and highlighted.</li>
+<li>Click Enable Synchronous Mode</li>
+<li>Click Run, wait 5 seconds, then click Halt.</li>
+<li>Observe the Printf Logs window for each of the cores. Use Collapse All if it makes it easier to go through the list of cores. When Core0 is selected in the Debug window, the display will be as shown here. Note the Core N number on some lines. In each Printf Log window, click the Auto Fit Columns button to show all of the text.</li></ol>
+<p><a href="../File_Randyp_BIOS_Multicore_sh_printf.html" class="image" title="Printf Logs for Core0"><img alt="Printf Logs for Core0" src="https://processors.wiki.ti.com/images/c/c8/Randyp_BIOS_Multicore_sh_printf.png" width="526" height="431" /></a>
+</p><p>Some points to know:
+</p>
+<ul><li>It is very rare that you would want to set a software breakpoint in DSP/BIOS space. But with the shared portion in BIOS_partial, you must not do this. A software breakpoint is created by swapping the target instruction with a breakpoint instruction. In a shared area, this would cause the breakpoint to also be seen by other cores that execute that same line, but CCS would not be prepared to handle it except with the core for which the breakpoint was set. Do not use software breakpoints in physically shared code. This is also discussed on the <a href="BIOS_on_Multi-Core_singleimage.html#Breakpoint_corruption_between_the_cores" title="DSP/BIOS on Multi-Core singleimage">singleimage</a> page.</li>
+<li>Once you have loaded all the cores, when you later make changes and do a Rebuild, CCSv4 will let you select the option to Reload the program automatically when it detects that a loaded .out file has changed. Checking Remember my decision will save having to answer this every time.</li>
+<li>After the load or reload, the processor will automatically run to main() and halt. If it is stuck running, click Halt and then Restart (or Reload Program, or CPU&#160;Reset and then Reload Program).</li>
+<li>You can associate a project's .out file with a single CPU core, if you want to. I have not used this method, but it could prove helpful in some cases. In the C/C++ Projects window, right-click on the project folder name (except BIOS_partial) and select Debug Properties... and make sure you are on the Debugger tab. For all of the *_appN projects, click on Connect to exact CPU and use the drop-down box to select the matching CoreN.</li></ul>
+<p>Return to <a href="../Using_DSP/BIOS_on_Multi-Core_DSP_Devices.html" title="Using DSP/BIOS on Multi-Core DSP Devices">Using DSP/BIOS on Multi-Core DSP Devices</a>.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130041628
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.090 seconds
+Real time usage: 0.094 seconds
+Preprocessor visited node count: 273/1000000
+Preprocessor generated node count: 444/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5484/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:6880-0!canonical and timestamp 20201130041628 and revision id 78043
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core sharedimage</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;oldid=78043">https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;oldid=78043</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=DSP%2FBIOS+on+Multi-Core+sharedimage" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="BIOS_on_Multi-Core_sharedimage.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="BIOS_on_Multi-Core_sharedimage.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/DSP/BIOS_on_Multi-Core_sharedimage.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/DSP/BIOS_on_Multi-Core_sharedimage.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;oldid=78043" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_sharedimage&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 17 September 2011, at 11:09.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.090","walltime":"0.094","ppvisitednodes":{"value":273,"limit":1000000},"ppgeneratednodes":{"value":444,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":5484,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130041628","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSP/BIOS_on_Multi-Core_sharedimage by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:05:30 GMT -->
+</html>

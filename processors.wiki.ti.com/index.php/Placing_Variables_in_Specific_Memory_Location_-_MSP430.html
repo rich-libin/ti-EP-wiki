@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Placing_Variables_in_Specific_Memory_Location_-_MSP430 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:08 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Placing Variables in Specific Memory Location - MSP430 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Placing_Variables_in_Specific_Memory_Location_-_MSP430","wgTitle":"Placing Variables in Specific Memory Location - MSP430","wgCurRevisionId":210854,"wgRevisionId":210854,"wgArticleId":18952,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["MSP430","Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Placing_Variables_in_Specific_Memory_Location_-_MSP430","wgRelevantArticleId":18952,"wgRequestId":"7a6ba0b325d775934324c997","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Placing_Variables_in_Specific_Memory_Location_-_MSP430 rootpage-Placing_Variables_in_Specific_Memory_Location_-_MSP430 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Placing Variables in Specific Memory Location - MSP430</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#General_Example"><span class="tocnumber">2</span> <span class="toctext">General Example</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#IAR_EWB"><span class="tocnumber">2.1</span> <span class="toctext">IAR EWB</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#Using_location_PRAGMA_Or_The_At_Sign"><span class="tocnumber">2.1.1</span> <span class="toctext">Using location PRAGMA Or The At Sign</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Using_constseg_PRAGMA_With_Defined_Section_From_The_Linker_Configuration_File"><span class="tocnumber">2.1.2</span> <span class="toctext">Using <b>constseg</b> PRAGMA With Defined Section From The Linker Configuration File</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="#CCS_.28Code_Composer_Studio.29"><span class="tocnumber">2.2</span> <span class="toctext">CCS (Code Composer Studio)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Using_location_PRAGMA"><span class="tocnumber">2.2.1</span> <span class="toctext">Using <b>location</b> PRAGMA</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Using_DATA_SECTION_PRAGMA_With_Defined_Memory_Section_in_Linker_Command_File"><span class="tocnumber">2.2.2</span> <span class="toctext">Using <b>DATA_SECTION</b> PRAGMA With Defined Memory Section in Linker Command File</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Modifying_The_Linker_Configuration_File"><span class="tocnumber">2.2.3</span> <span class="toctext">Modifying The Linker Configuration File</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Generating_JTAG_Lock"><span class="tocnumber">3</span> <span class="toctext">Generating JTAG Lock</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Background">Background</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=1" title="Edit section: Background">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In many application, it is sometime necessary to place a variable in a specific memory location. This wiki shows a small guide to implement the specific variable placement for C programming language using most common compilers/IDEs for MSP430.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="General_Example">General Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=2" title="Edit section: General Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>For the general example, the goal is to place a variable in InfoD segment of MSP430F5438A as follows:
+</p>
+<div class="center"><div class="floatnone"><a href="File_Msp430_placing_variable_f54xxa_mem_map.html" class="image"><img alt="Msp430 placing variable f54xxa mem map.PNG" src="https://processors.wiki.ti.com/images/1/15/Msp430_placing_variable_f54xxa_mem_map.PNG" width="600" height="567" /></a></div></div>
+<p>As can be seen above, the InfoD segment of the MSP430F5438A is located at address 0x1800 - 0x187F. The information memory is often used to store calibrated application parameters which can be updated without affecting the code stored in the main flash memory. For evaluating the code, the IDE shall generate a TI-TXT binary file which shows that the variable is really stored at the desired location.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="IAR_EWB">IAR EWB</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=3" title="Edit section: IAR EWB">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Using_location_PRAGMA_Or_The_At_Sign">Using location PRAGMA Or The At Sign</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=4" title="Edit section: Using location PRAGMA Or The At Sign">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The IAR MSP430 EWB offers since a long time a very convenient and easy way to place a certain by using the <b>location</b> pragma or the at sign (<b>@</b>), which enables the specific placement of a variable by giving only the specified address as parameter.
+</p>
+<ul><li>Using the <b>location</b> pragma:</li></ul>
+<table style="border-collapse: separate; border-spacing: 0; border-width: 1px; border-style: solid; border-color: #000; padding: 0">
+
+<tbody><tr>
+<th style="border-style: solid; border-width: 0 1px 1px 0">Code
+</th>
+<th style="border-style: solid; border-width: 0 0 1px 0">Generated TI-TXT file
+</th></tr>
+<tr>
+<td style="border-style: solid; border-width: 0 1px 0 0">
+<p>&lt;syntaxhighlight lang ='c'&gt;
+</p>
+<ol><li>include &lt;msp430.h&gt;</li></ol>
+<ol><li>pragma location=0x1800</li></ol>
+<p>const unsigned char port_bit = BIT0;
+</p><p>void main(void)
+{
+</p>
+<pre> WDTCTL = WDTPW + WDTHOLD;  // disable watchdog
+ P1DIR = port_bit;          // set P1.x as output
+</pre>
+<pre> while(1)
+ {
+   P1OUT ^= port_bit;         // toggle P1.0
+</pre>
+<p>	  __delay_cycles(100000);
+</p>
+<pre> }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+</td>
+<td style="border-style: solid; border-width: 0">
+<pre>@1800
+01
+@5C00
+31 40 00 5C B0 13 0C 5C B0 13 48 5C B2 40 80 5A
+5C 01 D2 42 00 18 04 02 D2 E2 00 18 02 02 00 3C
+3F 40 33 82 3F 53 FE 2F F7 3F 03 43 0A 12 21 83
+0A 4C 81 4A 00 00 0D 41 0D 53 5C 43 B0 13 4C 5C
+F8 3F 03 43 80 00 2C 5C 80 00 44 5C 10 01
+@FFFE
+00 5C
+q
+</pre>
+</td></tr></tbody></table>
+<p><br />
+</p>
+<ul><li>Using the at sign (<b>@</b>):</li></ul>
+<table style="border-collapse: separate; border-spacing: 0; border-width: 1px; border-style: solid; border-color: #000; padding: 0">
+
+<tbody><tr>
+<th style="border-style: solid; border-width: 0 1px 1px 0">Code
+</th>
+<th style="border-style: solid; border-width: 0 0 1px 0">Generated TI-TXT file
+</th></tr>
+<tr>
+<td style="border-style: solid; border-width: 0 1px 0 0">
+<p>&lt;syntaxhighlight lang ='c'&gt;
+</p>
+<ol><li>include &lt;msp430.h&gt;</li></ol>
+<p>const unsigned char port_bit @ 0x1800 = BIT0;
+</p><p>void main(void)
+{
+</p>
+<pre> WDTCTL = WDTPW + WDTHOLD;  // disable watchdog
+ P1DIR = port_bit;          // set P1.x as output
+</pre>
+<pre> while(1)
+ {
+   P1OUT ^= port_bit;         // toggle P1.0
+</pre>
+<p>	  __delay_cycles(100000);
+</p>
+<pre> }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+</td>
+<td style="border-style: solid; border-width: 0">
+<pre>@1800
+01
+@5C00
+31 40 00 5C B0 13 0C 5C B0 13 48 5C B2 40 80 5A
+5C 01 D2 42 00 18 04 02 D2 E2 00 18 02 02 00 3C
+3F 40 33 82 3F 53 FE 2F F7 3F 03 43 0A 12 21 83
+0A 4C 81 4A 00 00 0D 41 0D 53 5C 43 B0 13 4C 5C
+F8 3F 03 43 80 00 2C 5C 80 00 44 5C 10 01
+@FFFE
+00 5C
+q
+</pre>
+</td></tr></tbody></table>
+<p><br />
+</p>
+<h4><span class="mw-headline" id="Using_constseg_PRAGMA_With_Defined_Section_From_The_Linker_Configuration_File">Using <b>constseg</b> PRAGMA With Defined Section From The Linker Configuration File</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=5" title="Edit section: Using constseg PRAGMA With Defined Section From The Linker Configuration File">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>It is also possible to use a section name which is already defined in the linker configuration file. For the example above, the default linker configuration file of MSP430F5438A which is called lnk430F5438A.xcl contains the definition of INFOD segment:
+</p>
+<pre>// -----------------------------------------------
+// Read-only memory
+//
+
+// -------------------------------------
+// Information memory
+//
+
+-Z(CONST)INFO=1800-19FF
+-Z(CONST)INFOA=1980-19FF
+-Z(CONST)INFOB=1900-197F
+-Z(CONST)INFOC=1880-18FF
+-Z(CONST)INFOD=1800-187F
+</pre>
+<p>This section can be used together with the <b>constseg</b> pragma as follows:
+</p>
+<table style="border-collapse: separate; border-spacing: 0; border-width: 1px; border-style: solid; border-color: #000; padding: 0">
+
+<tbody><tr>
+<th style="border-style: solid; border-width: 0 1px 1px 0">Code
+</th>
+<th style="border-style: solid; border-width: 0 0 1px 0">Generated TI-TXT file
+</th></tr>
+<tr>
+<td style="border-style: solid; border-width: 0 1px 0 0">
+<p>&lt;syntaxhighlight lang ='c'&gt;
+</p>
+<ol><li>include &lt;msp430.h&gt;</li></ol>
+<ol><li>pragma constseg=INFOD</li></ol>
+<p>const unsigned char port_bit = BIT0;
+</p>
+<ol><li>pragma constseg=default</li></ol>
+<p>void main(void)
+{
+</p>
+<pre> WDTCTL = WDTPW + WDTHOLD;  // disable watchdog
+ P1DIR = port_bit;          // set P1.x as output
+</pre>
+<pre> while(1)
+ {
+   P1OUT ^= port_bit;         // toggle P1.0
+</pre>
+<p>	  __delay_cycles(100000);
+</p>
+<pre> }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+</td>
+<td style="border-style: solid; border-width: 0">
+<pre>@1800
+01
+@5C00
+31 40 00 5C B0 13 0C 5C B0 13 48 5C B2 40 80 5A
+5C 01 D2 42 00 18 04 02 D2 E2 00 18 02 02 00 3C
+3F 40 33 82 3F 53 FE 2F F7 3F 03 43 0A 12 21 83
+0A 4C 81 4A 00 00 0D 41 0D 53 5C 43 B0 13 4C 5C
+F8 3F 03 43 80 00 2C 5C 80 00 44 5C 10 01
+@FFFE
+00 5C
+q
+</pre>
+</td></tr></tbody></table>
+<p><br />
+<br />
+</p><p><br />
+</p>
+<h3><span id="CCS_(Code_Composer_Studio)"></span><span class="mw-headline" id="CCS_.28Code_Composer_Studio.29">CCS (Code Composer Studio)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=6" title="Edit section: CCS (Code Composer Studio)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Using_location_PRAGMA">Using <b>location</b> PRAGMA</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=7" title="Edit section: Using location PRAGMA">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The CCS v5.x comes with the Code Generation Tools (CGT) version v4.x which also supports the <b>location</b> pragma such the one in IAR EWB. The CGT v4.x however does not support the at sign (<b>@</b>) usage for placing the data in specified address.
+</p><p>The supported syntaxs of <b>location</b> pragma supported by the CGT v4.x are follows:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>pragma LOCATION( x , address );</li></ol>
+<p>int x;
+&lt;/syntaxhighlight&gt;
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>pragma location=address</li></ol>
+<p>int x;
+&lt;/syntaxhighlight&gt;
+</p><p><br />
+</p>
+<h4><span class="mw-headline" id="Using_DATA_SECTION_PRAGMA_With_Defined_Memory_Section_in_Linker_Command_File">Using <b>DATA_SECTION</b> PRAGMA With Defined Memory Section in Linker Command File</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=8" title="Edit section: Using DATA SECTION PRAGMA With Defined Memory Section in Linker Command File">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Older CCS v4.x version of CCS comes with older CGT version v3.x which does not support the <b>location</b> pragma, and instead for this purpose the <b>DATA_SECTION</b> pragma can be used. The DATA_SECTION pragma of older CGT v3.x version works the almost the same as <b>constseg</b> pragma in IAR EWB.
+</p><p>For the example above, the default linker command file lnk_msp430f5438a.cmd contains the following definition of INFOD segment:
+</p>
+<pre>MEMORY
+{
+    ........
+
+    INFOA                  &#160;: origin = 0x1980, length = 0x0080
+    INFOB                  &#160;: origin = 0x1900, length = 0x0080
+    INFOC                  &#160;: origin = 0x1880, length = 0x0080
+    INFOD                  &#160;: origin = 0x1800, length = 0x0080
+
+    ........
+}
+
+SECTIONS
+{
+    ........
+
+    .infoA    &#160;: {} &gt; INFOA              /* MSP430 INFO FLASH MEMORY SEGMENTS */
+    .infoB    &#160;: {} &gt; INFOB
+    .infoC    &#160;: {} &gt; INFOC
+    .infoD    &#160;: {} &gt; INFOD
+
+    ........
+}
+</pre>
+<p>The memory section can be used in the code with <b>DATA_SECTION</b> pragma as follows:
+</p>
+<table style="border-collapse: separate; border-spacing: 0; border-width: 1px; border-style: solid; border-color: #000; padding: 0">
+
+<tbody><tr>
+<th style="border-style: solid; border-width: 0 1px 1px 0">Code
+</th>
+<th style="border-style: solid; border-width: 0 0 1px 0">Generated TI-TXT file
+</th></tr>
+<tr>
+<td style="border-style: solid; border-width: 0 1px 0 0">
+<p>&lt;syntaxhighlight lang ='c'&gt;
+</p>
+<ol><li>include &lt;msp430.h&gt;</li></ol>
+<ol><li>pragma DATA_SECTION(port_bit, ".infoD")</li></ol>
+<p>const unsigned char port_bit = BIT0;
+</p><p>void main(void)
+{
+</p>
+<pre> WDTCTL = WDTPW + WDTHOLD;  // disable watchdog
+ P1DIR = port_bit;          // set P1.x as output
+</pre>
+<pre> while(1)
+ {
+   P1OUT ^= port_bit;         // toggle P1.0
+</pre>
+<p>	  __delay_cycles(100000);
+</p>
+<pre> }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+</td>
+<td style="border-style: solid; border-width: 0">
+<pre>@1800
+01
+@5c00
+31 40 00 5C B0 13 AA 5C 0C 93 02 24 B0 13 1A 5C
+0C 43 B0 13 88 5C B0 13 AE 5C 1A 14 3F 40 00 00
+3F 90 01 00 22 28 3F 40 00 00 3F 90 01 00 1D 28
+3A 40 00 00 3A 80 00 00 3A 50 07 00 5A 09 39 40
+00 00 3C 49 3D 49 CF 0D 0F 18 4F 5F 00 18 4F DC
+6F 4F 4F 4F 5F 06 00 18 5B 4F 00 00 1C 53 0D 63
+3E 49 3F 49 4B 13 1A 83 EC 23 3F 40 00 00 3F 90
+00 00 08 24 3A 40 00 00 02 3C 6A 13 2A 52 3A 90
+00 00 FB 23 19 16 10 01 B2 40 80 5A 5C 01 D2 42
+00 18 04 02 D2 E2 00 18 02 02 0D 14 3D 40 32 82
+1D 83 FE 23 0D 16 F6 3F 03 43 1C 43 10 01 03 43
+FF 3F
+@fffe
+00 5C
+q
+</pre>
+</td></tr></tbody></table>
+<p><br />
+</p>
+<h4><span class="mw-headline" id="Modifying_The_Linker_Configuration_File">Modifying The Linker Configuration File</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=9" title="Edit section: Modifying The Linker Configuration File">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>As shown above, the defined memory segments of IAR's linker configuration file and memory section of CCS's linker command file can be used with <b>constseg</b> pragma and <b>DATA_SECTION</b> pragma respectively to put a variable inside a specific memory location. Therefore it is possible to modify the linker configuration/command file to define a new memory segment/section and put the necessary variable inside the defined memory segment/location.
+</p><p>For more information regarding modifying the linker configuration/command file, please refer to the CCS and IAR documentation.
+</p><p><br />
+<br />
+</p>
+<h2><span class="mw-headline" id="Generating_JTAG_Lock">Generating JTAG Lock</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;section=10" title="Edit section: Generating JTAG Lock">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>One most common example for placing variable inside specific memory location is defining the electronic JTAG fuse of MSP430x5xx/6xx devices (or even MSP430FR57xx) inside the program as variable, so that once the program is downloaded into the device the JTAG access will be disabled after the next power cycle.
+</p><p>On the MSP430x5xx/6xx devices, the electronic JTAG fuse is defined as the content of memory location 0x17FC-0x17FF. Any value besides 0x00s or 0xFFs will disable the JTAG access. The following example shows how to define the JTAG fuse as variable to be not removed by the linker since it is mostly considered as dead variable when not accessed by any part of the program:
+</p>
+<ul><li>IAR: using the <b>required</b> pragma</li></ul>
+<table style="border-collapse: separate; border-spacing: 0; border-width: 1px; border-style: solid; border-color: #000; padding: 0">
+
+<tbody><tr>
+<th style="border-style: solid; border-width: 0 1px 1px 0">Code
+</th>
+<th style="border-style: solid; border-width: 0 0 1px 0">Generated TI-TXT file
+</th></tr>
+<tr>
+<td style="border-style: solid; border-width: 0 1px 0 0">
+<p>&lt;syntaxhighlight lang ='c'&gt;
+</p>
+<ol><li>include &lt;msp430.h&gt;</li></ol>
+<p>const unsigned long int jtag_lock @ 0x17FC = 0xAAAAAAAA;
+</p>
+<ol><li>pragma required=jtag_lock</li></ol>
+<p>void main(void)
+{
+</p>
+<pre> WDTCTL = WDTPW + WDTHOLD;  // disable watchdog
+ P1DIR = BIT0;              // set P1.0 as output
+</pre>
+<pre> while(1)
+ {
+   P1OUT ^= BIT0 &#160;;         // toggle P1.0
+</pre>
+<p>	  __delay_cycles(100000);
+</p>
+<pre> }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+</td>
+<td style="border-style: solid; border-width: 0">
+<pre>@17FC
+AA AA AA AA
+@5C00
+31 40 00 5C B0 13 0C 5C B0 13 44 5C B2 40 80 5A
+5C 01 D2 43 04 02 D2 E3 02 02 00 3C 3F 40 33 82
+3F 53 FE 2F F8 3F 03 43 0A 12 21 83 0A 4C 81 4A
+00 00 0D 41 0D 53 5C 43 B0 13 48 5C F8 3F 03 43
+80 00 28 5C 80 00 40 5C 10 01
+@FFFE
+00 5C
+q
+</pre>
+</td></tr></tbody></table>
+<p><br />
+</p>
+<ul><li>CCS: using the <b>RETAIN</b> pragma</li></ul>
+<table style="border-collapse: separate; border-spacing: 0; border-width: 1px; border-style: solid; border-color: #000; padding: 0">
+
+<tbody><tr>
+<th style="border-style: solid; border-width: 0 1px 1px 0">Code
+</th>
+<th style="border-style: solid; border-width: 0 0 1px 0">Generated TI-TXT file
+</th></tr>
+<tr>
+<td style="border-style: solid; border-width: 0 1px 0 0">
+<p>&lt;syntaxhighlight lang ='c'&gt;
+</p>
+<ol><li>include &lt;msp430.h&gt;</li></ol>
+<ol><li>pragma RETAIN(jtag_lock)</li>
+<li>pragma location=0x17FC</li></ol>
+<p>const unsigned long int jtag_lock = 0xAAAAAAAA;
+</p><p>void main(void)
+{
+</p>
+<pre> WDTCTL = WDTPW + WDTHOLD;  // disable watchdog
+ P1DIR = BIT0;              // set P1.0 as output
+</pre>
+<pre> while(1)
+ {
+   P1OUT ^= BIT0 &#160;;         // toggle P1.0
+</pre>
+<p>	  __delay_cycles(100000);
+</p>
+<pre> }
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+</td>
+<td style="border-style: solid; border-width: 0">
+<pre>@17fc
+AA AA AA AA
+@5c00
+31 40 00 5C B0 13 A6 5C 0C 93 02 24 B0 13 1A 5C
+0C 43 B0 13 88 5C B0 13 AA 5C 1A 14 3F 40 00 00
+3F 90 01 00 22 28 3F 40 00 00 3F 90 01 00 1D 28
+3A 40 00 00 3A 80 00 00 3A 50 07 00 5A 09 39 40
+00 00 3C 49 3D 49 CF 0D 0F 18 4F 5F 00 18 4F DC
+6F 4F 4F 4F 5F 06 00 18 5B 4F 00 00 1C 53 0D 63
+3E 49 3F 49 4B 13 1A 83 EC 23 3F 40 00 00 3F 90
+00 00 08 24 3A 40 00 00 02 3C 6A 13 2A 52 3A 90
+00 00 FB 23 19 16 10 01 B2 40 80 5A 5C 01 D2 43
+04 02 D2 E3 02 02 0D 14 3D 40 32 82 1D 83 FE 23
+0D 16 F7 3F 03 43 1C 43 10 01 03 43 FF 3F
+@fffe
+00 5C
+q
+</pre>
+</td></tr></tbody></table>
+<p>When trying to program the code into the device, don't forget to enable the access to the BSL memory since it is per default disabled. Please refer to the following wiki page for getting information on how to enable the BSL memory access in various software programmers/debuggers: <a href="MSP430_FAQ.html#How_to_enable_the_access_to_BSL_Flash_memory_in_MSP430F5xx.2F6xx_devices_.3F" title="MSP430 FAQ">MSP430_FAQ#How_to_enable_the_access_to_BSL_Flash_memory_in_MSP430F5xx.2F6xx_devices_.3F</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130093418
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.057 seconds
+Real time usage: 0.059 seconds
+Preprocessor visited node count: 99/1000000
+Preprocessor generated node count: 204/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3044/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:18952-0!canonical and timestamp 20201130093418 and revision id 210854
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Placing Variables in Specific Memory Location - MSP430</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;oldid=210854">https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;oldid=210854</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_MSP430.html" title="Category:MSP430">MSP430</a></li><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Placing+Variables+in+Specific+Memory+Location+-+MSP430" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Placing_Variables_in_Specific_Memory_Location_-_MSP430.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Placing_Variables_in_Specific_Memory_Location_-_MSP430.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Placing_Variables_in_Specific_Memory_Location_-_MSP430.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Placing_Variables_in_Specific_Memory_Location_-_MSP430.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;oldid=210854" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Placing_Variables_in_Specific_Memory_Location_-_MSP430&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 17 December 2015, at 09:48.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.057","walltime":"0.059","ppvisitednodes":{"value":99,"limit":1000000},"ppgeneratednodes":{"value":204,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3044,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130093418","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":243});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Placing_Variables_in_Specific_Memory_Location_-_MSP430 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:14 GMT -->
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Serial_Boot_and_Flash_Loading_Utility by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:26:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Serial Boot and Flash Loading Utility - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Serial_Boot_and_Flash_Loading_Utility","wgTitle":"Serial Boot and Flash Loading Utility","wgCurRevisionId":66510,"wgRevisionId":66510,"wgArticleId":269,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","Boot","Flash","UART","DM6467","DM644x","DM355","DaVinci Linux"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Serial_Boot_and_Flash_Loading_Utility","wgRelevantArticleId":269,"wgRequestId":"e2d96cb6af3305004ce14c5a","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Serial_Boot_and_Flash_Loading_Utility rootpage-Serial_Boot_and_Flash_Loading_Utility skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Serial Boot and Flash Loading Utility</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#TI_Flash_and_Boot_Utilities"><span class="tocnumber">1</span> <span class="toctext">TI Flash and Boot Utilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Other_related_software"><span class="tocnumber">1.1</span> <span class="toctext">Other related software</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Versions_for_Other_Devices"><span class="tocnumber">1.2</span> <span class="toctext">Versions for Other Devices</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Running"><span class="tocnumber">2</span> <span class="toctext">Running</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Compiling"><span class="tocnumber">3</span> <span class="toctext">Compiling</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Usage_for_1.x_Versions"><span class="tocnumber">4</span> <span class="toctext">Usage for 1.x Versions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Serial_Loader_Usage"><span class="tocnumber">4.1</span> <span class="toctext">Serial Loader Usage</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Serial_Flasher_Usage"><span class="tocnumber">4.2</span> <span class="toctext">Serial Flasher Usage</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Other_Options_for_Both_Utilities"><span class="tocnumber">4.3</span> <span class="toctext">Other Options for Both Utilities</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Usage_for_2.x_Versions"><span class="tocnumber">5</span> <span class="toctext">Usage for 2.x Versions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#Serial_Loader_Usage_2"><span class="tocnumber">5.1</span> <span class="toctext">Serial Loader Usage</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Serial_Flasher_Usage_2"><span class="tocnumber">5.2</span> <span class="toctext">Serial Flasher Usage</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Other_Options_for_Both_Utilities_2"><span class="tocnumber">5.3</span> <span class="toctext">Other Options for Both Utilities</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Obtaining_the_software"><span class="tocnumber">6</span> <span class="toctext">Obtaining the software</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Test_Environment"><span class="tocnumber">7</span> <span class="toctext">Test Environment</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Known_Problems"><span class="tocnumber">8</span> <span class="toctext">Known Problems</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#License"><span class="tocnumber">9</span> <span class="toctext">License</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="TI_Flash_and_Boot_Utilities">TI Flash and Boot Utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=1" title="Edit section: TI Flash and Boot Utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These packages (currently available for the DM35x, DM644x, and DM646x) contain a
+set of utilities, some for running under CCS on Windows, and others for running from
+the command-line on both Windows and Linux.  In these second set of utilities are applications 
+for flashing the NOR, NAND, and SPI Flash (and in the future SD/MMC cards, I2C EEPROM) of 
+the EVMs via the serial port.  All source is included for users who wish to adapt the applications 
+to their own custom platform.  The entire project is released under a BSD-style license.
+</p><p>The Serial Flashing Host Utility (which offers the same functionality as a previous program called DVFlasher)
+executable is called sfh_&lt;DEVICENAME&gt;.exe, where device name is DM35x, DM644x, or DM646x.
+</p><p>The Serial Loading Host Utility (which offers the same functionality as a previous program called DVLoader)
+executable is called slh_&lt;DEVICENAME&gt;.exe, where device name is DM35x, DM644x, or DM646x.
+</p><p>These programs each encapsulate a distinct binary UBL which is transferred via the UART.  This implies that the chip must be
+operating in the UART boot mode, showing the BOOTME prompt.  
+</p><p>NOTE: The assumption is made that the UART of the device 
+operates at 115200, 8N1.  If the oscillator used with the device does not match the one used on the EVM (e.g. on a custom 
+platform), the baud rate assumption may be incorrect.
+</p><p>The binary UBL in the case of the Serial Flasher program is known as the Serial Flasher Target, or sft. The binary UBL in the case
+of the Serial Loader program is the Serial Loader Target, or slt.  The build scripts for these are present in the directories of the same name.  
+</p><p>The majority of the code for the target and host components is found in the top-level common directory.  This code is shared across many devices (hence the name common).  When a build for an individual device is done, the common directory is included.  The &lt;DEVICENAME&gt; path contains code needed to differentiate each device.  Most of this code is found under &lt;DEVICENAME&gt;/common as it is likewise shared between the GNU and CCS components in the package.
+</p>
+<h3><span class="mw-headline" id="Other_related_software">Other related software</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=2" title="Edit section: Other related software">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Other alternatives for <a href="RBL_UBL_and_host_program.html" title="RBL UBL and host program">RBL UBL and host programs</a> are also available.
+</p>
+<h3><span class="mw-headline" id="Versions_for_Other_Devices">Versions for Other Devices</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=3" title="Edit section: Versions for Other Devices">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A version of these tools for the OMAP-L138 device can be found at this <a href="Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138.html" title="Serial Boot and Flash Loading Utility for OMAP-L138"> page</a>.
+</p><p>A version of these tools for the OMAP-L137 device can be found at this <a href="Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L137.html" title="Serial Boot and Flash Loading Utility for OMAP-L137"> page</a>.
+</p><p>A version of these tools for the DM365 device can be found at this <a href="UG__DaVinci_PSP_Installation_on_DM365_EVM.html#Flashing_DM365_EVM_.28PG_1.2_Silicon_or_newer.29_using_Serial_flash_utilities" class="mw-redirect" title="UG: DaVinci PSP Installation on DM365 EVM"> page </a>.
+</p>
+<h2><span class="mw-headline" id="Running">Running</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=4" title="Edit section: Running">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>- Under Windows - 
+This utilities can be run from the command line under Windows with 
+the .Net Framework 2.0 or later installed.  
+</p>
+<pre> sfh_&lt;DEVICENAME&gt;.exe [options]
+ slh_&lt;DEVICENAME&gt;.exe [options]
+</pre>
+<p>- Under Linux -
+They can also be run on a Linux machine with the latest open-source Mono
+Framework installed.
+</p>
+<pre> mono sfh_&lt;DEVICENAME&gt;.exe [options]
+ mono slh_&lt;DEVICENAME&gt;.exe [options]
+</pre>
+<h2><span class="mw-headline" id="Compiling">Compiling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=5" title="Edit section: Compiling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A makefile is included for compiling the host and target parts of each utility.
+The target portions are built first since they are embedded into the the host
+executables.  These target portions are loaded to the DM35x device via the UART
+boot mode.
+</p><p><br />
+<i><b>Under Windows</b></i>
+</p><p>The currently supported method is to use the Cygwin environment (such as
+the one provided with the Montavista Linux tools for Windows) and put the 
+C sharp compiler's (the csc.exe executable) install location in the user's
+path.  This compiler comes with the .NET Framework installation and can
+usually be found in C:\WINDOWS\Microsoft.NET\Framework\&lt;version number&gt;.
+Then go to the top level directory of the package and run:
+</p>
+<pre>    make
+</pre>
+<p><i><b>Under Linux</b></i>
+</p><p>The Mono Framework must be installed and in the path.  RPMs may be available at <a rel="nofollow" class="external autonumber" href="http://www.mono-project.com/Downloads">[1]</a>.  Then go to the &lt;DEVICE_NAME&gt;/GNU path of the package and run:
+</p>
+<pre>    make
+ 
+</pre>
+<p>The above instructions assume the that GNU ARM cross-compiler tools (arm-none-linux-gnueabi-gcc, 
+etc.) are in the current PATH.  The CCS portion of the package cannot be built under Linux.
+</p>
+<h2><span class="mw-headline" id="Usage_for_1.x_Versions">Usage for 1.x Versions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=6" title="Edit section: Usage for 1.x Versions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Serial_Loader_Usage">Serial Loader Usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=7" title="Edit section: Serial Loader Usage">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>More info can be found by running the utility with the '-h' option.
+</p>
+<pre>  slh_&lt;DEVICENAME&gt;.exe -h
+</pre>
+<p>1) Load a UBL or small UBL-like application to the DM35x IRAM
+</p>
+<pre>  slh_&lt;DEVICENAME&gt;.exe -load2IRAM &lt;UBL binary file&gt;
+</pre>
+<p>2) Load a larger image compiled to run at start of DDR space 
+</p>
+<pre>  slh_&lt;DEVICENAME&gt;.exe -load2DDR &lt;binary application file&gt;
+</pre>
+<p>For the load to IRAM option, the file size is limited to 14KB, and the 
+application assumes an entry point address of 0x0100 (the smallest 
+allowed).  The entry point address canbe modified by using the -startAddr
+command line option, with the address specified in hex.
+</p><p>For the load to DDR option, the file size is limited to 32MB, and the 
+application assumes a load address and entry point address of 0x80000000.
+The entry point address can be altered by using the -startAddr command line option, 
+as with the -load2IRAM case.  The load address can be altered from the default by 
+using the -loadAddr command line option
+</p>
+<h3><span class="mw-headline" id="Serial_Flasher_Usage">Serial Flasher Usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=8" title="Edit section: Serial Flasher Usage">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>More info can be found by running the utility with the '-h' option.
+</p>
+<pre>  sfh_&lt;DEVICENAME&gt;.exe -h
+</pre>
+<p>1) Erase the NAND flash
+</p>
+<pre>  sfh_&lt;DEVICENAME&gt;.exe -nanderase
+</pre>
+<p>2) Flash the NAND with a UBL and u-boot image
+</p>
+<pre>   sfh_&lt;DEVICENAME&gt;.exe -nandflash  &lt;UBL binary file&gt; &lt;binary application file&gt;
+</pre>
+<p>The entry point of the UBL is assumed to be 0x0100, but this can be changed by using 
+the -UBLStartAddr option.  The entry point and load address of the application default
+to 0x81080000 (u-boot defaults).  To change these values, use the -APPStartAddr and 
+-APPLoadAddr option.
+</p>
+<pre>   sfh_&lt;DEVICENAME&gt;.exe -nandflash  -UBLStartAddr &lt;address&gt;  -APPLoadAddr &lt;address&gt; &lt;UBL binary file&gt; &lt;binary application file&gt;
+</pre>
+<p>3) Erase the NOR flash
+</p>
+<pre>  sfh_&lt;DEVICENAME&gt;.exe -norerase
+</pre>
+<p>4) Flash the NOR with a UBL and u-boot image
+</p>
+<pre>   sfh_&lt;DEVICENAME&gt;.exe -norflash  &lt;UBL binary file&gt; &lt;binary application file&gt;
+</pre>
+<p>The entry point of the UBL is assumed to be 0x0100, but this can be changed by using 
+the -UBLStartAddr option.  The entry point and load address of the application default
+to 0x81080000 (u-boot defaults).  To change these values, use the -APPStartAddr and 
+-APPLoadAddr option.
+</p>
+<pre>   sfh_&lt;DEVICENAME&gt;.exe -norflash  -UBLStartAddr &lt;address&gt;  -APPLoadAddr &lt;address&gt; &lt;UBL binary file&gt; &lt;binary application file&gt;
+</pre>
+<p>5) Flash the NOR with a single u-boot image (old u-boot builds)
+</p>
+<pre>   sfh_&lt;DEVICENAME&gt;.exe -norflash_noubl  &lt;binary application file&gt;
+</pre>
+<p><br />
+</p>
+<pre>  NOTE: Currently, YOU MUST USE THE UBL BINARY CREATED BY THE UBL PROJECT IN THIS PACKAGE.  
+        If you use any other UBL binary, the boot procedure will most likely fail.
+</pre>
+<h3><span class="mw-headline" id="Other_Options_for_Both_Utilities">Other Options for Both Utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=9" title="Edit section: Other Options for Both Utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>  -p &lt;COM PORT NAME&gt; &#160;: Allows specifying com port other than default 'COM1' or '/dev/ttyS0'.
+  -h                 &#160;: Show help text.
+  -v                 &#160;: See verbose output from the DM35x.
+</pre>
+<h2><span class="mw-headline" id="Usage_for_2.x_Versions">Usage for 2.x Versions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=10" title="Edit section: Usage for 2.x Versions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The 2.x versions of the tools introduced the ability to target specific devices of a device family within the flashing and loading tools.  Individual UBL versions are built for each device type.  To see what device types and flash types are supported in the package, you should examine the device.mak file.  Alternatively, you can run either the 'slh' or 'sfh' programs with the '-h' option to view the help screen.  The supported device and flash types (along with the defaults) are listed under the '-targetType' and '-flashType' options.
+</p>
+<h3><span class="mw-headline" id="Serial_Loader_Usage_2">Serial Loader Usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=11" title="Edit section: Serial Loader Usage">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>More info can be found by running the utility with the '-h' option.
+</p>
+<pre>  slh_&lt;DEVICENAME&gt;.exe -h
+</pre>
+<p>1) Load a UBL or small UBL-like application to the DM35x IRAM
+</p>
+<pre>  slh_&lt;DEVICENAME&gt;.exe -targetType &lt;TargetTypeName&gt; -load2IRAM &lt;UBL binary file&gt;
+</pre>
+<p>2) Load a larger image compiled to run at start of DDR space 
+</p>
+<pre>  slh_&lt;DEVICENAME&gt;.exe -targetType &lt;TargetTypeName&gt; -load2DDR &lt;binary application file&gt;
+</pre>
+<p>For the load to IRAM option, the file size is limited to the maximum UBL size (14KB for DM644x, 30KB for others), and the application assumes an entry point address of 0x0100 (the smallest allowed).  The entry point address can be modified by using the -startAddr
+command line option, with the address specified in hex.
+</p><p>For the load to DDR option, the file size is limited to 32MB, and the application assumes a load address and entry point address of 0x80000000. The entry point address can be altered by using the -startAddr command line option, as with the -load2IRAM case.  The load address can be altered from the default by using the -loadAddr command line option
+</p>
+<h3><span class="mw-headline" id="Serial_Flasher_Usage_2">Serial Flasher Usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=12" title="Edit section: Serial Flasher Usage">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>More info can be found by running the utility with the '-h' option.
+</p>
+<pre>  sfh_&lt;DEVICENAME&gt;.exe -h
+</pre>
+<p>Examples:
+</p>
+<ol><li>Erase the NAND flash attached to a DM6446<pre>   sfh_DM644x.exe -erase -flashType NAND -targetType DM6446</pre></li>
+<li>Flash the NAND attached to DM6446 with a UBL and u-boot image<pre>   sfh_DM644x.exe -flash -flashType NAND -targetType DM6446 &lt;UBL binary file&gt; &lt;u-boot binary file&gt;</pre></li>
+<li>Erase a NOR flash attached to a DM6441<pre>   sfh_DM644x.exe -erase -flashType NOR -targetType DM6441</pre></li>
+<li>Flash a NOR flash attached to a DM6441 with a UBL and u-boot image<pre>   sfh_DM644x.exe -flash -flashType NOR -targetType DM6441 &lt;UBL binary file&gt; &lt;binary application file&gt;</pre></li>
+<li>Flash the NOR with a single u-boot image (old u-boot builds)<pre>   sfh_DM644x.exe -flash_noubl -flashType NOR &lt;binary application file&gt;</pre></li></ol>
+<p>NOTE: YOU SHOULD USE THE UBL BINARY CREATED BY THE UBL PROJECT IN THIS PACKAGE.  Using any other UBL image is not guaranteed to work.
+</p>
+<h3><span class="mw-headline" id="Other_Options_for_Both_Utilities_2">Other Options for Both Utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=13" title="Edit section: Other Options for Both Utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>  -baud              &#160;: Allows specifying the baud rate (if hardware setup supports this)
+  -p &lt;COM PORT NAME&gt; &#160;: Allows specifying com port other than default 'COM1' or '/dev/ttyS0'.
+  -h                 &#160;: Show help text.
+  -v                 &#160;: See verbose output from the DM35x.
+</pre>
+<h2><span class="mw-headline" id="Obtaining_the_software">Obtaining the software</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=14" title="Edit section: Obtaining the software">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The latest software can be download from SourceForge by visiting the download page <a rel="nofollow" class="external text" href="http://sourceforge.net/projects/dvflashutils/files/">here</a>.
+</p>
+<h2><span class="mw-headline" id="Test_Environment">Test Environment</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=15" title="Edit section: Test Environment">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The binaries included in the package were generated under Windows XP SP2 using the .NET Framework v2.0 C# compiler (csc.exe, v8.00.50727.42) and the CodeSourcery arm-none-linux-gnueabi cross compiler (gcc v4.2.3, Sourcery G++ Lite 2008q1-126).  The slh and sfh binaries were tested under Windows XP using the .Net framework v2.0 and the Mono Framework for Windows v1.9.1, with a native serial port.  Previous versions have been tested under Fedora 7 Linux, using a USB-&gt;serial adapter (Prolific PL2303 chipset), running both the Mono 1.2.3 and Mono 1.9.1 Frameworks.
+</p><p>Recent builds (&gt;=2.0) have been tested under Windows XP SP2 using the .NET Framework v3.5 C# compiler (version 3.5.30729.1).  The sfh tool was tested under Fedora 11 Linux with Mono version 2.4.2.3, on a system with a native serial port.
+</p>
+<h2><span class="mw-headline" id="Known_Problems">Known Problems</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=16" title="Edit section: Known Problems">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>We have had reports of problems when using this utility with a USB to Serial adapter on Ubuntu or Kubuntu 8.04.  The data transfer hangs while the CRC is being transmitted to the EVM from the host.
+</p><p>The Mono serial port code for Linux platforms has a major bug that affects Mono 1.2.6 and 1.9.1. This has been fixed in newer versions of Mono (ie 2.0: for OpenSuSE 11.1 Mono 2.0.1 its still broken but its seemingly fixed in <a rel="nofollow" class="external text" href="http://download.opensuse.org//repositories/Mono/openSUSE_11.1">OpenSuSE 11.1 Mono 2.6.3</a>). Some distributions may have backported the fix to older versions of Mono. If not you can fix the Mono write_serial() function in support/serial.c yourself.
+</p>
+<ul><li>Patch file: <a href="File_Mono-fix-linux-serial.patch.html" title="File:Mono-fix-linux-serial.patch.gz">File:Mono-fix-linux-serial.patch.gz</a></li>
+<li><a rel="nofollow" class="external text" href="https://bugzilla.novell.com/show_bug.cgi?id=375580">Mono bug report</a></li></ul>
+<p>To fix Mono under Ubuntu 8.04:
+</p>
+<pre> sudo -i
+ mkdir mono
+ cd mono
+ apt-get build-dep mono-2.0-devel
+ apt-get source mono-2.0-devel
+ wget <a href="https://processors.wiki.ti.com/images/9/93/Mono-fix-linux-serial.patch.gz" class="internal" title="Mono-fix-linux-serial.patch.gz">http://processors.wiki.ti.com/images/9/93/Mono-fix-linux-serial.patch.gz</a>
+ cd mono-1.2.6+dfsg
+ zcat Mono-fix-linux-serial.patch.gz | patch -p 1
+ dpkg-buildpackage -b
+ dpkg -i ../libmono0_1.2.6+dfsg-6ubuntu3_i386.deb
+</pre>
+<p>This has been tested and works on Ubuntu 8.04 using standard serial ports and USB serial port adapters.
+</p><p>To fix Mono under Ubuntu 9.04:
+</p><p>You can do the above steps, or you can use an <a rel="nofollow" class="external text" href="http://mono-project.com/DistroPackages/Ubuntu">unofficial Mono 2.4.2.3 package for Ubuntu 9.04</a>.
+</p>
+<h2><span class="mw-headline" id="License">License</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;section=17" title="Edit section: License">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These tools are provided as freeware, with no guarantee.  Issues can be reported to the <a rel="nofollow" class="external text" href="http://linux.davincidsp.com/mailman/listinfo/davinci-linux-open-source">DaVinci Linux Open Source mailing list</a>.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201003057
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.048 seconds
+Real time usage: 0.051 seconds
+Preprocessor visited node count: 111/1000000
+Preprocessor generated node count: 172/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 473/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:269-0!canonical and timestamp 20201201003057 and revision id 66510
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Serial Boot and Flash Loading Utility</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Serial Boot and Flash Loading Utility</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;oldid=66510">https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;oldid=66510</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_Boot.html" title="Category:Boot">Boot</a></li><li><a href="Category_Flash.html" title="Category:Flash">Flash</a></li><li><a href="Category_UART.html" title="Category:UART">UART</a></li><li><a href="Category_DM6467.html" title="Category:DM6467">DM6467</a></li><li><a href="Category_DM644x.html" title="Category:DM644x">DM644x</a></li><li><a href="Category_DM355.html" title="Category:DM355">DM355</a></li><li><a href="Category_DaVinci_Linux.html" title="Category:DaVinci Linux">DaVinci Linux</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Serial+Boot+and+Flash+Loading+Utility" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Serial_Boot_and_Flash_Loading_Utility.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Serial_Boot_and_Flash_Loading_Utility&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Serial_Boot_and_Flash_Loading_Utility.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Serial_Boot_and_Flash_Loading_Utility.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Serial_Boot_and_Flash_Loading_Utility.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;oldid=66510" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 28 June 2011, at 02:23.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.048","walltime":"0.051","ppvisitednodes":{"value":111,"limit":1000000},"ppgeneratednodes":{"value":172,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":473,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201003057","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Serial_Boot_and_Flash_Loading_Utility by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:26:54 GMT -->
+</html>

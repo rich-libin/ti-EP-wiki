@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:03:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>HALCoGen Ethernet Driver and lwIP Integration Demonstration - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration","wgTitle":"HALCoGen Ethernet Driver and lwIP Integration Demonstration","wgCurRevisionId":210772,"wgRevisionId":210772,"wgArticleId":16636,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["HALCoGen","Hercules","Pages with broken file links","RM4","TMS570"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration","wgRelevantArticleId":16636,"wgRequestId":"e280591e270db7c870337e13","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration rootpage-HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">HALCoGen Ethernet Driver and lwIP Integration Demonstration</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Supported_Features"><span class="tocnumber">2</span> <span class="toctext">Supported Features</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Configuring_EMAC_and_MDIO_using_HALCoGen_GUI"><span class="tocnumber">3</span> <span class="toctext">Configuring EMAC and MDIO using HALCoGen GUI</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Programming_Sequence_using_HALCoGen_generated_drivers"><span class="tocnumber">4</span> <span class="toctext">Programming Sequence using HALCoGen generated drivers</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Design_of_LwIP_Integration"><span class="tocnumber">5</span> <span class="toctext">Design of LwIP Integration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Hardware_Abstraction_Layer"><span class="tocnumber">5.1</span> <span class="toctext">Hardware Abstraction Layer</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#lwIP_Interface_Layer"><span class="tocnumber">5.2</span> <span class="toctext">lwIP Interface Layer</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Hercules_Development_Network_Interface_Layer"><span class="tocnumber">5.3</span> <span class="toctext">Hercules Development &#160;Network Interface Layer</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Network_device_initialization"><span class="tocnumber">5.3.1</span> <span class="toctext">Network device initialization</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Packet_data_transmission"><span class="tocnumber">5.3.2</span> <span class="toctext">Packet data transmission</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Packet_data_reception"><span class="tocnumber">5.3.3</span> <span class="toctext">Packet data reception</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-12"><a href="#lwIP_Application_Layer"><span class="tocnumber">5.4</span> <span class="toctext">lwIP Application Layer</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#System_Application_Layer"><span class="tocnumber">5.5</span> <span class="toctext">System Application Layer</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Release_Folder_Structure"><span class="tocnumber">6</span> <span class="toctext">Release Folder Structure</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Hardware_Setup"><span class="tocnumber">7</span> <span class="toctext"><i>Hardware Setup</i></span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Building_.26_Executing"><span class="tocnumber">8</span> <span class="toctext">Building &amp; Executing</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Download"><span class="tocnumber">9</span> <span class="toctext">Download</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Known_Issues"><span class="tocnumber">10</span> <span class="toctext">Known Issues</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The Ethernet Media Access Controller (EMAC) and Management Data Input/Output (MDIO) peripherals on the Hercules line of devices provide a full-featured Ethernet interface. The EMAC peripheral conforms to the IEEE 802.3 standard, describing the Carrier Sense Multiple Access with Collision Detection (CSMA/CD) Access Method and Physical Layer specifications. The EMAC module provides an efficient interface between the processor and a local network. The EMAC supports 10Base-T (10 Mbps) and 100BaseTX (100 Mbps), in half-duplex and full-duplex modes. The EMAC control module provides an interface from the CPU to the EMAC and MDIO modules. The EMAC control module controls device interrupts and incorporates an 8k-byte internal RAM to hold EMAC buffer descriptors (also known as CPPI RAM). The MDIO module implements the 802.3 serial management interface to interrogate and control up to 32 Ethernet PHYs connected to the device by using a shared two-wire bus. Applications can use the MDIO module to configure the auto negotiation parameters of each PHY attached to the EMAC, retrieve the negotiation results, and configure required parameters in the EMAC module for correct operation. <br />
+</p><p>The driver code is part of the HALCoGen release and APIs for EMAC and MDIO are listed in <i>include/emac.h</i> and <i>include/mdio.h</i>, respectively.
+</p>
+<h1><span class="mw-headline" id="Supported_Features">Supported Features</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=2" title="Edit section: Supported Features">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>Integration of CPDMA based EMAC driver for RM48xx/RM46xx/TMS570xxx/RM57xx/TMS570LCxx</li>
+<li>lwIP 1.4.1 TCP/IP stack ported for the above devices' EMAC driver</li>
+<li>By default the DHCP support is enabled. However the integration supports both DHCP &amp; Static IP addressing.</li>
+<li>Integration with HALCoGen v4.00.00 release</li>
+<li>By default the software is configured for executing from flash.</li>
+<li>The integrated application demonstrates a webserver application on TMS570xx/TMS570LCxx/RM48xx/RM57xx device.</li>
+<li>Diagnostic &amp; Debug messages are printed on JTAG SCI Port. Following are the settings for the console:</li></ul>
+<p>&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Baud Rate: 9600
+</p><p>&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Data: 8 bit
+</p><p>&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Parity: None
+</p><p>&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Stop bit: 2
+</p><p>&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;Flow Control: None
+</p><p><u><b>Note:</b></u> Since the MAC Address is part of the binary image, all devices programmed with these binaries &amp; connected to same DHCP server will be assigned same IP address. The default MAC address is 00:08:EE:03:A6:6C
+</p>
+<h1><span class="mw-headline" id="Configuring_EMAC_and_MDIO_using_HALCoGen_GUI">Configuring EMAC and MDIO using HALCoGen GUI<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=3" title="Edit section: Configuring EMAC and MDIO using HALCoGen GUI">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The following sequence is to be followed to get working driver code for EMAC and MDIO modules using HALCoGen. A working implementation of this with lwIP is available at the end of this page.
+</p>
+<ol><li>Under the ‘Driver Enable’ tab, enable EMAC Driver and SCI2 Driver.</li>
+<li>Under ‘VIM RAM’ add the names of the ISRs for EMAC Transmit and Receive Interrupts (Channels 77 and 79 respectively).</li>
+<li>Enable these interrupts under the ‘VIM Channel 64-95’ tab.</li>
+<li>Under the ‘PLL’ tab, change the multiplier for both PLLs to a value of 120, such that the output frequency in both cases is 160.00 MHz.</li>
+<li>Under the ‘GCM’ tab, change the value of the VCLKA4 Divider to 2, such that the output of VCLKA4( or VCLKA4_DIVR_EMAC in case of RM46x/TMS570LS12x Devices) is 40.00 MHz.</li>
+<li>Under the ‘PINMUX’ tab, enable RMII or MII(depending on the board that you are using - Most HDKs support MII by default, while controlCARDs are designed for RMII), MDIO(G3) &amp; MDCLK(V5).</li>
+<li>Under the ‘EMAC’ tab, change the EMAC address to 00:08:EE:03:A6:6C, which is the default MAC Address. Change the physical address to 1.</li>
+<li>Generate the system initialization and HAL Code.<br /></li></ol>
+<p><b>For TMS570LC43x and RM57x devices:</b> 
+</p>
+<ol><li>Under the ‘Driver Enable’ tab, enable EMAC Driver and SCI1 Driver.</li>
+<li>Under ‘VIM RAM’ add the names of the ISRs for EMAC Transmit and Receive Interrupts (Channels 77 and 79 respectively).</li>
+<li>Enable these interrupts under the ‘VIM Channel 64-95’ tab.</li>
+<li>Under the ‘PLL’ tab, change the multiplier for both PLLs to a value of 150, such that the output frequency in both cases is 300.00 MHz.</li>
+<li>Under the ‘GCM’ tab, change the value of the VCLK1, VCLK2 and VCLK3 Dividers to 1 and VCLKA4 Divider to 2, such that the output of VCLKA4_DIV is 37.50 MHz.</li>
+<li>Under the ‘PINMUX’ tab, enable RMII/MII, under Pin Muxing. Under Input Muxing, enable MDIO(G3), MII_COL(F3), MII_CRS(B4), MII_RX_DV(B11), MII_RX_ER(N19), MII_RXCLK(K19), MII_RXD[0], MII_RXD[1], MII_RXD[2], MII_RXD[3], MII_TX_CLK.</li>
+<li>Under the ‘EMAC’ tab, change the EMAC address to the correct address (the default one in the example is mentioned above). The physical address is 1 by default.</li>
+<li>Generate the system initialization and HAL Code.</li></ol>
+<p><br />
+</p><p><br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Programming_Sequence_using_HALCoGen_generated_drivers">Programming Sequence using HALCoGen generated drivers<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=4" title="Edit section: Programming Sequence using HALCoGen generated drivers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Usng the HALCoGen generated driver code (through the procedure above), the following sequence can be used to configure and operate the EMAC and MDIO modules.<br />
+</p>
+<ol><li>Initialize the EMAC module by calling <i><b>EMACInit()</b></i>. This API resets the EMAC and EMAC Control Module Registers.</li>
+<li>Initialize the MDIO Module using <i><b>MDIOInit()</b></i>. Insert a short delay after this function returns to ensure that MDIO module initialization completes successfully before using other MDIO APIs.</li>
+<li>Auto negotiate with the PHY device connected to MDIO. PHY Auto negotiation APIs are provided as reference and must be adapted to the external PHY present on the hardware.</li>
+<li>After completing auto negotiation, get the auto negotiation result using the respective PHY’s link partner ability API and set the duplex mode of operation in the EMAC using <i><b>EMACDuplexSet()</b></i>.</li>
+<li>Set the MAC Address in the EMAC hardware using <i><b>EMACMACAddrSet()</b></i></li>
+<li>Enable unicast for a specific channel using the <i><b>EMACRxUnicastSet()</b></i> API (optional).</li>
+<li>Initialize the TX and RX buffer descriptors in the CPPI RAM, which is local to the EMAC.</li>
+<li>Enable the TX operation in EMAC using <i><b>EMACTxEnable()</b></i>. This enables the EMAC hardware transmit operation. However, transmission will not start until a valid descriptor pointer is written using EMACTxHdrDescPtrWrite().</li>
+<li>Enable the RX operation in EMAC using <i><b>EMACRXEnable()</b></i>.</li>
+<li>Write the RX Header Descriptor Pointer using <i><b>EMACRxHdrDescPtrWrite()</b></i>. The EMAC hardware will start receiving data at this point. The data will be stored to the buffer pointer in this buffer descriptor. After the buffer corresponding to this descriptor is filled, the next descriptor is used by the EMAC hardware according to the buffer descriptor settings.</li>
+<li>Enable MII using <i><b>EMACMIIEnable()</b></i>.</li>
+<li>Enable the Transmit and Receive Pulse interrupts using <i><b>EMACTxIntPulseEnable()</b></i> and <i><b>EMACRxIntPulseEnable()</b></i>. The interrupts will be routed through the EMAC Control Core to the CPU interrupt controller. This enables the EMAC TX and RX pulse interrupts at EMAC peripheral level only. The core interrupts must be enabled separately in the VIM.<br /></li></ol>
+<p>The following guidelines should be observed when writing an EMAC interrupt service routine (ISR):
+</p>
+<ul><li>In an EMAC Transmit ISR, the interrupt must be acknowledged to the EMAC hardware using <i><b>EMACCoreIntAck()</b></i>. However, the interrupt will be cleared only if the completion pointer is written using the EMACTxCPWrite() API with the last processed TX buffer descriptor.</li>
+<li>In an EMAC Receive ISR, the interrupt must be acknowledged to the EMAC hardware using <i><b>EMACCoreIntAck()</b></i>. Again, the interrupt will be cleared only if the completion pointer is written using the EMACRxCPWrite() API with the last processed RX buffer descriptor.</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Design_of_LwIP_Integration">Design of LwIP Integration<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=5" title="Edit section: Design of LwIP Integration">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<div class="center"><div class="floatnone"><a href="File_Design_of_LwIP_Integration.html" class="image" title="Desigm of lwIP Integration"><img alt="Desigm of lwIP Integration" src="https://processors.wiki.ti.com/images/a/a1/Design_of_LwIP_Integration.png" width="1275" height="775" /></a></div></div>
+<p><br />
+</p><p>The integrated software deliverable consists of four main layers:
+</p>
+<ol><li>Hardware Abstraction Layer (HAL): EMAC &amp; MDIO HALs are part of the HALCoGen release and the PHY HAL is part of the application.</li>
+<li>lwIP Network Interface Layer – Hercules NetIF port for LwIP</li>
+<li>lWIP Application Layer – An IP stack application based on LwIP. Examples are provided for HTTP server, UDP based client and echo server. The packets start and end at this layer.</li>
+<li>System Application Layer – This includes the system initialization and is generated based on the HALCoGen GUI. This layer configures the PLLs &amp; PINMUX.</li></ol>
+<h2><span class="mw-headline" id="Hardware_Abstraction_Layer">Hardware Abstraction Layer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=6" title="Edit section: Hardware Abstraction Layer">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This layer implements the lowers level hardware abstraction APIs that can be used for control and configuration of the EMAC device. <br />
+</p>
+<ul><li><i><b>emac.c</b></i> – Ethernet MAC and Control module. This file is generated using HALCoGen. In this release the file is located at <i>&lt;Device&gt;\HALCoGen-xx\source\emac.c</i>, where xx is the device variant.</li>
+<li><i><b>mdio.c</b></i> – MDIO interface between the PHY and MAC. This file is generated using HALCoGen. In this release the file is located at <i>&lt;Device&gt;\HALCoGen-xx\source\emac.c</i></li>
+<li><i><b>phy_dp83640.c</b></i> – Example PHY Device HAL for DP83640 PHY on HDK. This file should be written for the external Ethernet PHY on the hardware.</li></ul>
+<h2><span class="mw-headline" id="lwIP_Interface_Layer">lwIP Interface Layer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=7" title="Edit section: lwIP Interface Layer">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To interface with the rest of the network, the device abstraction layer needs to be glued with a network stack that can form and interpret network packets. The device abstraction hooks into the interface layer of lwIP. This is also referred to as the device-specific "port" or the hdk-interface for lwIP. It defines standard interface entry points and state variables. A network device is represented by struct netif, generically referred to as netif. The netif contains all the information about the interface, including the IP/MAC address(s), TCP/IP options, protocol handlers, link information, and (most importantly) the network device driver entry point callbacks. Every network interface must implement the linkoutput and init callbacks, and all state information is maintained in this structure. The interface layer also implements the core interrupt handling and DMA handling. All the required function calls for initializing the lwIP stack and registering the network interface are performed in <i>lwip-1.3.2\ports\hdk\lwiplib.c\lwiplib.c</i>. Refer to the lwIP documentation for more information about the lwIP stack implementation.<br />
+</p>
+<h2><span class="mw-headline" id="Hercules_Development_Network_Interface_Layer">Hercules Development &#160;Network Interface Layer<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=8" title="Edit section: Hercules Development  Network Interface Layer">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The main tasks of the HDK network interface layer are:
+</p>
+<h3><span class="mw-headline" id="Network_device_initialization">Network device initialization<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=9" title="Edit section: Network device initialization">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The first step towards bringing up the interface is done as part of the <i><b>hdkif_init()</b></i>. This function is called when the network device is registered with the lwIP stack using netif_add. As part of the initialization, the netif output callbacks are registered and hardware initialization, including PHY and DMA initialization, is performed. DMA buffer descriptor (BD) pools are maintained in the CPPI RAM for both TX and RX channels. The descriptor chains are maintained by the "free_head", which points to the next unused/free descriptor in the BD pool, and "active_tail", which points to the last BD in the active queue that has been en-queued to the hardware. The packet buffers (pbuf) are pre-allocated for maximum length and queued in the receive buffer descriptors before the reception begins. Please refer to the lwIP documentation for details on pbuf handling by lwIP.<br />
+</p>
+<h3><span class="mw-headline" id="Packet_data_transmission">Packet data transmission<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=10" title="Edit section: Packet data transmission">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Packet data transmission takes place inside the linkoutput callback registered with the lwIP stack. This callback is invoked whenever the lwIP stack receives a packet for transmission from the application layer. The pbuf can contain a chain of packet buffers and hence the DMA descriptors are properly updated (chained if necessary), with SOP, EOP and length fields. The first DMA descriptor is marked with the EOP and OWNER flags, while only the last is set with the EOP flag. After filling the BD's with the pbuf information, the BD, which corresponds to the SOP is written to the HEAD descriptor pointer register to start the transmission. Once a packet is transmitted, the EMAC Control Core generates a transmit interrupt. This interrupt is cleared only if the completion pointer is written with the last BD processed. In the interrupt handler, the next BD to process is taken and traversed to reach the BD that corresponds to the end of the packet. This BD, which corresponds to the end of the packet, is written to the completion pointer. After this, the pbuf that corresponds to this packet is freed. Thus it is made sure that the freeing of pbuf is done only after the packet transmission is complete.<br />
+</p>
+<h3><span class="mw-headline" id="Packet_data_reception">Packet data reception<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=11" title="Edit section: Packet data reception">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Packet reception takes place in the context of the interrupt handler for receive. As described earlier, the receive buffer descriptors are en-queued to the DMA before the reception can actually begin. The pbuf allocated for maximum length, may actually contain a chain of packet buffers. The descriptors are updated for OWNER flag only. The EOP, SOP and EOQ are updated by the DMA upon completion of the reception. One important point to note is that, the actual data received may be less/more than the max length allocated. Hence the pbuf chain needs to be adjusted as detailed here. First, the active_head (which is the first BD en-queued), is checked for OWNER bit having been cleared by the DMA. Then the BD list is traversed, starting at the active_head, to find the EOP BD, which is the last BD of the current packet. While doing so if the EOP is not found on the current BD, then the pbuf of the current BD is chained to the pbuf of the next BD, since the current packet has spilled over to the next BD. Once, the EOP is found the last pbuf is updated as the terminator (pbuf-&gt;next = NULL). Thus, the entire packet is collected and passed to the upper layer for processing. Since, the current BD has been done with, it is put back at the free_head, by allocating a new pbuf.<br />
+</p>
+<h2><span class="mw-headline" id="lwIP_Application_Layer">lwIP Application Layer<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=12" title="Edit section: lwIP Application Layer">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This layer contains the Ethernet application (HTTP server, echo server, etc.). This is located at lwip-1.4,1/apps/&lt;application&gt;. This is the layer at which all the imcoming packets terminate and all outgoing packets originate. This release contains a <i>httpserver_raw</i> application that runs a sample webserver on the device.<br />
+</p>
+<h2><span class="mw-headline" id="System_Application_Layer">System Application Layer<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=13" title="Edit section: System Application Layer">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This layer implements system level initialization and provides options for lwIP stack. This layer can contain any other algorithms, decoding, etc. The main IP stack based application is part of the lwip directory as mentioned above.<br />
+</p>
+<h1><span class="mw-headline" id="Release_Folder_Structure">Release Folder Structure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=14" title="Edit section: Release Folder Structure">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>There are 6 different variants supported. The folder for each variant contains the following: 
+</p>
+<ol><li>Build Folder: This contains the Code Composer Studio project which can be imported into your workspace and built.</li>
+<li>HALCoGen Folder: This folder contains the source and include folders generated using the latest version on HALCoGen.</li>
+<li>Demo Executable: This folder contains a .out file which can be executed on the device HDK that is being used for development.</li></ol>
+<p>&lt;Install Directory&gt;<br /><a href="File_Folder_Structure.html" class="image" title="Folder Structure for the Release"><img alt="Folder Structure for the Release" src="https://processors.wiki.ti.com/images/c/c9/Folder_Structure.png" width="678" height="447" /></a><br />
+</p><p>Note:
+</p>
+<ul><li>The '<b>Build-xx'</b> folder contains the CCSv5 project for the device.</li>
+<li>The '<b>HALCoGen-xx'</b> folder contains the HALCoGen generated driver files for the device.</li>
+<li>The '<b>Demo Executable'</b> Folder contains the .out file for the sample project for the device, which can be loaded and executed.</li>
+<li>The '<b>example'</b> folder contains a HDK port of the lwIP example.</li>
+<li>'<b>lwip-1.4.1'</b> contains all the lwIP library files.<br /></li></ul>
+<h1><span class="mw-headline" id="Hardware_Setup"><i>Hardware Setup</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=15" title="Edit section: Hardware Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>Connect ethernet port on HDK to network with DHCP Server</li>
+<li>Enable the Ethernet on EVM by setting switch S2 bit4 to On</li>
+<li>Connect the JTAG USB port to PC (used for console output also)</li></ul>
+<p><br />
+</p>
+<h1><span id="Building_&amp;_Executing"></span><span class="mw-headline" id="Building_.26_Executing">Building &amp; Executing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=16" title="Edit section: Building &amp; Executing">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>Release folders contains CCS Projects for RM48xx &#160;and RM46xx(Little Endian) &amp; TMS570xx Devices (Big Endian).</li>
+<li>Based on the device import the project into CCS from <i>&lt;install_folder&gt;\&lt;device line&gt;</i></li>
+<li>Build the project</li>
+<li>Target configuration, is supplied with this software. Set the correct target configuration as the Default &amp; Active configuration<div class="center"><div class="floatnone"><a href="File_CCS_screenshot.html" class="image"><img alt="CCS screenshot.png" src="https://processors.wiki.ti.com/images/7/70/CCS_screenshot.png" width="269" height="308" /></a></div></div></li>
+<li>Download and execute the binary (Disconnect the device from debugger and reset). Below is an screen capture of console output:<div class="center"><div class="floatnone"><a href="File_CCS_Output_Screenshot.html" class="image"><img alt="CCS Output Screenshot.png" src="https://processors.wiki.ti.com/images/e/ed/CCS_Output_Screenshot.png" width="457" height="324" /></a></div></div></li>
+<li>The webserver is accessible at the IP address displayed in the console.<br /></li></ul>
+<p><br />
+<b>Note:</b>
+</p>
+<ul><li>The RM46xx project enables RMII by default, which works for the RM46 controlCARDs. If you're using an RM46 HDK, however, you will need to change this setting to MII(in the PINMUX tab), and then rebuild the project.</li></ul>
+<p><br />
+</p><p><br />
+</p><p><br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Download">Download</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=17" title="Edit section: Download">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><b>Version 00.02.00 of Demo:</b>
+</p><p><a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/images/4/44/HALCoGen_EMAC_Driver_with_lwIP_Demonstration.zip">lwIP_Demo_v02</a><br />
+</p><p><b>Version 00.03.00 (supports TMS570LC43xx and RM57x devices):</b>
+</p><p><a rel="nofollow" class="external text" href="http://software-dl.ti.com/hercules/hercules_public_sw/HALCoGen_EMAC_LWIP-00.03.00-installer.exe">lwIP_Demo_v03</a>
+</p>
+<h1><span class="mw-headline" id="Known_Issues">Known Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit&amp;section=18" title="Edit section: Known Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>For version 0.0.3, problems have been reported when using RMII mode (especially on the CNCD boards). 
+The issue is that the RMIISPEED bit of the MACCONTROL register is left at the default 10MBPs while most
+times the phy will autonegotiate to 100MBPs.  When the phy and mac mismatch, it appears the the MAC is 
+transmitting (but not receiving) however no packets will be observed coming from the phy. 
+</p><p>Patch here: 
+<a href="File_Lwip_0_0_3_patch_rm46.html" title="File:Lwip 0 0 3 patch rm46.zip">File:Lwip 0 0 3 patch rm46.zip</a>
+</p><p>To use the patch, you need GNU 'patch' - <a rel="nofollow" class="external free" href="http://sourceforge.net/projects/mingw/files/Installer/">http://sourceforge.net/projects/mingw/files/Installer/</a> was used to install MSYS diff/patch.
+To actually apply the patch:
+</p>
+<ol><li>Open an MSYS shell</li>
+<li>Change directories to /C/TI/Hercules (default install) or where ever the parent folder of "HALCoGen EMAC Driver with lwIP Demonstration/v00.03.00/" is on your machine.</li>
+<li>patch -p3 -i &lt;pathtopatchfile&gt;/lwip_0_0_3_patch_rm46.patch</li></ol>
+<p>You should see: 
+patching file 'HALCoGen EMAC Driver with lwIP Demonstration/v00.03.00/RM46x/HALCoGen-RM46/include/phy_dp83640.h'
+patching file 'HALCoGen EMAC Driver with lwIP Demonstration/v00.03.00/RM46x/HALCoGen-RM46/source/phy_dp83640.c'
+patching file 'HALCoGen EMAC Driver with lwIP Demonstration/v00.03.00/lwip-1.4.1/ports/hdk/netif/hdkif.c'
+</p><p>if not try again.. 
+</p><p>The same patches to phy_dp83640.h and phy_83640.c need to be applied to other subdirectores (e.x. RM48x) when RMII is needed. 
+But all projects use the common 'hdkif.c' file in the lwip-1.4.1/ports/ folder so this file only needs to be patched a single time.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130030403
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.061 seconds
+Real time usage: 0.065 seconds
+Preprocessor visited node count: 70/1000000
+Preprocessor generated node count: 76/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:16636-0!canonical and timestamp 20201130030402 and revision id 210772
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>HALCoGen Ethernet Driver and lwIP Integration Demonstration</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;oldid=210772">https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;oldid=210772</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_HALCoGen.html" title="Category:HALCoGen">HALCoGen</a></li><li><a href="Category_Hercules.html" title="Category:Hercules">Hercules</a></li><li><a href="https://processors.wiki.ti.com/index.php?title=Category:Pages_with_broken_file_links&amp;action=edit&amp;redlink=1" class="new" title="Category:Pages with broken file links (page does not exist)">Pages with broken file links</a></li><li><a href="Category_RM4.html" title="Category:RM4">RM4</a></li><li><a href="Category_TMS570.html" title="Category:TMS570">TMS570</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=HALCoGen+Ethernet+Driver+and+lwIP+Integration+Demonstration" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;oldid=210772" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 December 2015, at 15:03.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.061","walltime":"0.065","ppvisitednodes":{"value":70,"limit":1000000},"ppgeneratednodes":{"value":76,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130030403","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":229});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/HALCoGen_Ethernet_Driver_and_lwIP_Integration_Demonstration by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:03:46 GMT -->
+</html>

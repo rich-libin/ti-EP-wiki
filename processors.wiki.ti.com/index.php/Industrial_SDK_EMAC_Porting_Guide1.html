@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Industrial_SDK_EMAC_Porting_Guide1 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 11:53:05 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Industrial SDK EMAC Porting Guide1 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Industrial_SDK_EMAC_Porting_Guide1","wgTitle":"Industrial SDK EMAC Porting Guide1","wgCurRevisionId":229736,"wgRevisionId":229736,"wgArticleId":45311,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Industrial_SDK_EMAC_Porting_Guide1","wgRelevantArticleId":45311,"wgRequestId":"334d27582365294935a5cd79","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Industrial_SDK_EMAC_Porting_Guide1 rootpage-Industrial_SDK_EMAC_Porting_Guide1 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Industrial SDK EMAC Porting Guide1</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Migrating_a_TI_SYSBIOS_Industrial_SDK_project_to_a_custom_development_board"><span class="tocnumber">1</span> <span class="toctext">Migrating a TI SYSBIOS Industrial SDK project to a custom development board</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Modifying_Board_and_device_files_for_custom_platform_development"><span class="tocnumber">2</span> <span class="toctext">Modifying Board and device files for custom platform development</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Adding_a_new_device_to_the_board_data"><span class="tocnumber">2.1</span> <span class="toctext">Adding a new device to the board data</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#GEL.2C_Boot_and_Application_based_configuration_settings"><span class="tocnumber">3</span> <span class="toctext">GEL, Boot and Application based configuration settings</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#GEL"><span class="tocnumber">3.1</span> <span class="toctext">GEL</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Boot"><span class="tocnumber">3.2</span> <span class="toctext">Boot</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Application"><span class="tocnumber">3.3</span> <span class="toctext">Application</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#PinMux"><span class="tocnumber">4</span> <span class="toctext">PinMux</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#How_to_configure_PinMux_for_Industrial_Ethernet"><span class="tocnumber">4.1</span> <span class="toctext">How to configure PinMux for Industrial Ethernet</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Clock_and_Timer"><span class="tocnumber">5</span> <span class="toctext">Clock and Timer</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Memory"><span class="tocnumber">6</span> <span class="toctext">Memory</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#DDR_configuration_.E2.80.93_DDR_configuration_tools"><span class="tocnumber">6.1</span> <span class="toctext">DDR configuration – DDR configuration tools</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#MMU_Configuration"><span class="tocnumber">6.2</span> <span class="toctext">MMU Configuration</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Other_Memory_Parameter_settings"><span class="tocnumber">6.3</span> <span class="toctext">Other Memory Parameter settings</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Interrupt"><span class="tocnumber">7</span> <span class="toctext">Interrupt</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#How_to_add_support_for_other_PHYs"><span class="tocnumber">8</span> <span class="toctext">How to add support for other PHYs</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Adding_a_different_TCP.2FIP_Stack"><span class="tocnumber">9</span> <span class="toctext">Adding a different TCP/IP Stack</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Adding_a_separate_Protocol_specific_stack"><span class="tocnumber">10</span> <span class="toctext">Adding a separate Protocol specific stack</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#Debugging"><span class="tocnumber">11</span> <span class="toctext">Debugging</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Migrating_a_TI_SYSBIOS_Industrial_SDK_project_to_a_custom_development_board">Migrating a TI SYSBIOS Industrial SDK project to a custom development board</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=1" title="Edit section: Migrating a TI SYSBIOS Industrial SDK project to a custom development board">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This migration  guides describes the steps involved to port an existing TI SYSBIOS Industrial SDK project (such as an example project) to a custom development/production board.  The custom board that may have a number of component substitutions from the TI board.  The guide will touch upon the changes required for the inclusion of additional components to the board.
+The primary items which change in moving from one platform to another are the  
+</p>
+<ul><li>PinMux settings</li>
+<li>Clock and timer configuration changes.</li>
+<li>Memory configuration</li>
+<li>Interrupt changes</li>
+<li>IO changes (MII, MDIO,GPIO,UART)</li>
+<li>Board component substitutions</li>
+<li>Board Initialization (drawing from all of the above)</li></ul>
+<p>This discussion draws upon the information and links that are contained in:
+</p>
+<dl><dd><a rel="nofollow" class="external text" href="http://www.ti.com/tool/PRU-ICSS-INDUSTRIAL-SW">PRU-ICSS Industrial Software for Sitara(TM) Processors</a></dd>
+<dd><a rel="nofollow" class="external text" href="Sitara_Indust_SDK_Training.html">Sitara ISDK2.1 Industrial SDK Training for AM335x and AM437x</a></dd>
+<dd><a rel="nofollow" class="external text" href="http://www.ti.com/tool/tmdsice3359">AM3359 Industrial Communications Engine</a></dd>
+<dd><a rel="nofollow" class="external text" href="http://www.ti.com/tool/TMDXIDK437X">AM437x Industrial Development Kit (IDK)</a></dd></dl>
+<p>Please refer to these documents for additional detail and explanations
+</p><p>Figure 1 shows the Industrial SDK architecture. 
+When migrating an existing design to a custom board – many of the changes will be covered by SDK Board specific sections. The Board specific information is contained in both the Starterware board level APIs and in the SYSBIOS Board level APIs.
+</p><p>The Starterware board level APIs, shown in the lower right of Figure 1, provide a high level abstraction for the PinMux, Clock tree, configuration, Board devices, Memory Map, Board level mux controls, board power, and IO expanders. The Starterware board APIs perform auto-detection of board type and definition and then develop the abstraction based upon the board configuration and the on board device descriptions.  The board module draws device descriptions of the onboard devices from the Device module. 
+</p><p>The SYSBIOS board level APIs, shown in the center of Figure 1, provide driver APIs for accessing device peripheral modules from an application. This has implementations for Digital Inputs, Digital Outputs, Flash memory (QSPI and SPI), Rotary Switch, TLK100 Ethernet Phy, integrated matrix monochrome display. 
+</p><p>There are different build configurations present for AM3x and AM4x.  A number of these are based upon the Starterware Board APIs.
+</p><p><a href="File_SDK_Arch.html" class="image"><img alt="SDK Arch.png" src="https://processors.wiki.ti.com/images/8/8d/SDK_Arch.png" width="607" height="600" /></a>
+</p><p>The industrial SDK is built on top of SYSBIOS. SYS/BIOS is an advanced real-time operating system from Texas Instruments for supporting in a wide range of DSPs, ARMs, and microcontrollers. It is designed for use in embedded applications that need real-time scheduling, synchronization, and instrumentation. SYS/BIOS provide a wide range of system services.
+</p><p>SYSBIOS contains the XGCONFIG graphical configuration tool which is used within CCS helps to create the static configuration used by SYS/BIOS at build time. Using this tool - one can choose which software modules to include, change default values of parameters to tune performance for each application, and create RTOS objects such as threads and semaphores.
+</p><p><a href="File_BIOS.html" class="image" title="405×361px"><img alt="405×361px" src="https://processors.wiki.ti.com/images/f/fe/BIOS.png" width="405" height="361" /></a>
+</p><p>For more information on SYSBIOS please go to <br />
+</p>
+<dl><dd><a rel="nofollow" class="external free" href="https://e2e.ti.com/support/processors/f/791/t/840835">http://processors.wiki.ti.com/index.php/SYS/BIOS_Training:_Introduction_to_SYS/BIOS</a></dd></dl>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Modifying_Board_and_device_files_for_custom_platform_development">Modifying Board and device files for custom platform development</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=2" title="Edit section: Modifying Board and device files for custom platform development">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Each TI SYSBIOS Industrial SDK project has a set of Starterware and SYSBIOS board files that configure and initialize board configuration information. These drivers are named (by convention) after the development board. 
+By configuring a few specific files, the porting process from one development board to another is relatively straight forward.  The files that need to be modified to create a custom board are shown below. The files are separated into four groups. The Starterware and SYSBIOS board files are the files that are used to define and configure a device that on the board. If the custom platform has the same type and number of devices as a TI board but with some configuration differences, these files are used to configure the board.   When additional devices or number of devices are added to the custom board, then the definition and operation of these components must be defined. The component definition and operation is defined in the SYSBIOS and Starterware Device files.   
+</p><p>Starterware Board files
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk\starterware\include\Board.h</dd>
+<dd>{IA_SDK_HOME}\sdk\starterware\board\&lt;device name&gt;\&lt;dev board name&gt;.h</dd>
+<dd>{IA_SDK_HOME}\sdk\starterware\board\&lt;device name&gt;\&lt;dev board name&gt;.c</dd></dl>
+<p>Starterware Device files
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk\starterware\board\board.c</dd>
+<dd>{IA_SDK_HOME}\starterware\device\&lt; DeviceName&gt;.h</dd>
+<dd>{IA_SDK_HOME}\starterware\device\&lt; DeviceName&gt;.c</dd></dl>
+<p>SYSBIOS Board files
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk\board\include\ board_&lt;DeviceName&gt;.h</dd>
+<dd>{IA_SDK_HOME}\sdk\board\include\&lt;dev board name&gt;\board_&lt;DeviceName&gt;.h</dd>
+<dd>{IA_SDK_HOME}\sdk\board\source\board_support.c</dd></dl>
+<p>SYSBIOS device files
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk\board\source\drivers\board_&lt;DeviceName&gt;.c</dd>
+<dd>{IA_SDK_HOME}\sdk\board\source\\&lt;dev board name&gt;\board_&lt;DeviceName&gt;.c</dd></dl>
+<p>Where device name is = am335xx or am437xx <br />
+Where dev board name is = icev2AM335x or idkAM437x <br />
+Where DeviceName is = phy, led, lcd, mux, support, rotaryswitch, spiflash, board_qspi, … <br />
+</p><p>In developing a new board it is often useful to create new files for those files with the &lt;dev board name&gt; file names with the name chosen for Project. For example when developing a custom board named “Project” from the AM437x IDK one could copy the idkAM437x directories and files into new “Project” directories and files. During the process of copying the board files it will necessary to update a number of board definitions and function names plus the  #include and #define directives and function names as necessary.
+</p>
+<h4><span class="mw-headline" id="Adding_a_new_device_to_the_board_data">Adding a new device to the board data</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=3" title="Edit section: Adding a new device to the board data">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>To add a new device to the board data
+</p>
+<ul><li>Add an identifier in {IA_SDK_HOME}\starterware\include\device.h</li></ul>
+<p>This file contains the device module interface. It contains the identifiers for devices on the boards.  It also contains the prototypes for functions for probing devices over the I2C bus, for those devices which are connected to I2C.
+</p>
+<pre>For example:
+DEVICE_ID_LED  = 0x4U,
+/**&lt; LED device ID. */
+</pre>
+<ul><li>Add the device information in IA_SDK_HOME}\starterware\board\SOCNAME\SOCNAME_BOARDNAME.c</li></ul>
+<p>This file contains the implementation of board information for SOCNAME based boardname. For example this could be in the case of an AM43xx based IDKEVM board.<br />
+</p><p><br />
+</p>
+<pre>const boardDeviceData_t gBoardAm43xxIdkevmDevData[] =
+{ 					/* TRICOLOR LED */
+       DEVICE_ID_LED,                  /* devId */
+       0U,                             /* devInstNum the Instance number 0,1,2,… */
+       CHIPDB_MOD_ID_GPIO,             /* ctrlModId  What is the controlling module */
+       2U,                             /* ctrlModInstNum  Which GPIO instance is used */
+       24, 				/* ctrlInfo   GPIO Pin Number 24 controls LED */
+       CHIPDB_MOD_ID_INVALID,          /* dataModId */
+       INVALID_INST_NUM,               /* dataModInstNum */
+       NULL,                           /* pFnSelectDev */
+       NULL,                           /* pFnResetDev */
+       NULL                            /* pFnPowerOnDev */
+ },
+</pre>
+<ul><li>The API’s declarations for accessing the board data are contained in  {IA_SDK_HOME}\starterware\include\board.h</li></ul>
+<pre>For example:
+chipdbModuleID_t BOARDGetDeviceCtrlModId(uint32_t devId, uint32_t devInstNum);
+Where 
+   devId = DEVICE_ID_LED
+   devInstNum = 0U
+   will return CHIPDB_MOD_ID_GPIO which is the control module for LED.
+</pre>
+<p>The board components reference the Chip DB details. The ChipDB is used to abstract the SoC details across all the platforms through APIs and Headers. A description of the ChipDB details is contained in the “StarterWare 02. 01. 01. XX Board and ChipDB Details Update Guide” in 
+</p>
+<dl><dd>{IA_SDK_HOME}\Starterware\src\starterware\docs in the section ChipDB details.</dd></dl>
+<p><br />
+</p>
+<h3><span id="GEL,_Boot_and_Application_based_configuration_settings"></span><span class="mw-headline" id="GEL.2C_Boot_and_Application_based_configuration_settings">GEL, Boot and Application based configuration settings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=4" title="Edit section: GEL, Boot and Application based configuration settings">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="GEL">GEL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=5" title="Edit section: GEL">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>To operate the new board under CCS, it is often necessary to update the General Extension Language (GEL) file.  The GEL configures the Code Composer Studio development environment and initializes the target CPU. The GEL file contains configuration settings for Clocks, Power, DDR, and Boot. The determination of the settings to be used for each of these are covered in subsequent sections.
+</p><p>Additional information on creating GEL files are available at: <br />
+</p>
+<dl><dd><a rel="nofollow" class="external free" href="https://software-dl.ti.com/ccs/esd/documents/users_guide/index.html">http://processors.wiki.ti.com/index.php/GEL</a><br /></dd>
+<dd><a rel="nofollow" class="external free" href="CCStudio_FAQ.html#GEL">http://processors.wiki.ti.com/index.php/CCStudio_FAQ#GEL</a></dd></dl>
+<p><br />
+</p>
+<h4><span class="mw-headline" id="Boot">Boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=6" title="Edit section: Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>When operating the new board with standalone media booting, the RBL [Read Only Memory BootLoader], residing in the ROM of the SoC copies the boot loader from the respective flash device to onchip RAM and gives control to it.  The boot loader initializes the PLLs and enables peripheral clocks and then it initializes the DDR. Once all the initialization is done, the boot loader copies the application from flash to the DDR and transfers control to the application. The application then starts execution from DDR.  The boot loader is built to support each SOC, Flash media, and board. The bootloader project is found at 
+{IA_SDK_HOME}\starterware\bootloader. This project will draw upon the Starterware board, dal, soc, utils, ff9b_lib and mmscd definitions.  Please see the Building Bootloader section in 
+{IA_SDK_HOME}\sdk\docs\SYSBIOS Industrial SDK 02.01.01 User Guide.pdf for additional detail.
+</p>
+<pre>Note –The MII and boot pins are shared. When bringing up the board the first step is to configure SYSBOOT pins to boot the device. Then later once the boot is 
+complete, then the  MII pins are configured for the Ethernet phys.
+
+If the Ethernet phys have a conflicting boot/sw strap configuration, then a special Ethernet phy reset may be required (as is done on the ICEv2)
+</pre>
+<h4><span class="mw-headline" id="Application">Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=7" title="Edit section: Application">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Each application contains an initialization section. In the initialization section the application will  
+Identify the board type
+Enable the pin mux configuration
+Initialize and configure the SOC components 
+Initialize and configure board components
+</p><p>Examples of this initialization is contained in the main sections of the examples 
+</p>
+<pre>Note -  SYS/BIOS does not provide any APIs for configuring the AM3359 clock. 
+</pre>
+<p>To configure the AM3359 clock, a startup sequence that performs the clock initialization in inserted prior to main() execution. There are three possible initializations that can be performed using any of the following three options in the .cfg file:
+</p>
+<pre>.var Startup = xdc.useModule('xdc.runtime.Startup');
+Startup.resetFxn = '&amp;myClockSetup'; 	/* called before variables are initialized*/
+       or:
+Startup.firstFxns.$add('&amp;myClockSetup'); 	/* called before BIOS modules are initialized */
+      or:
+Startup.lastFxns.$add('&amp;myClockSetup'); 	* called after BIOS modules are initialized */
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="PinMux">PinMux</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=8" title="Edit section: PinMux">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The PinMux tool provides an intelligent automated solution to the complex problem of pin selection. The pin mux tool and supporting literature is available at: <a rel="nofollow" class="external free" href="https://software-dl.ti.com/ccs/esd/pinmux/pinmux_release_archive.html">http://processors.wiki.ti.com/index.php/TI_PinMux_Tool</a>. The Pin MUX Utility is a software tool which provides a Graphical User Interface for configuring pin multiplexing settings, resolving conflicts and specifying I/O cell characteristics for TI MPUs. The resulting configuration settings are output as C header/code files that can be imported the software development kit (SDK). The TI PinMux tool automatically determines the Sitara mux configuration for a specified set of external peripheral signals.  The determination of which pins to use is performed without requiring manual evaluation of the possible pin configuration options.  The PinMux tool generates the configuration code that is used by the board module APIs to configure the device at runtime.   
+</p><p>The pin mux tool output is contained in a file that is saved in     /Starterware/board/SOCNAME/SOCNAME_BOARDNAME_pinmuxdata.c 
+</p><p>The pinmux output specifies the settings by subsystem group such as UART, USB, PWMSS, PRU_ICSS, CPSW, GPMC, MMCSD, QSPI, VPFE, MCSPI, GPIO, ADC, etc. The subsystem group pinmux data IDs are defined in    {IA_SDK_HOME}/Starterware/include/SOCNAME/chipdb_defs.h
+</p><p>During the initialization section, the application selects the defined pin mux settings to enable by defining a pin mux configuration and then calling Board_pinMuxConfig(PINMUX_config  “NAME”);
+</p>
+<pre>For example:
+
+PINMUX_config  iceV2Mux[] =
+{
+   {CHIPDB_MOD_ID_GPIO, 0, 0}, 
+   {CHIPDB_MOD_ID_GPIO, 1, 0},
+   {CHIPDB_MOD_ID_GPIO, 2, 0},
+   {CHIPDB_MOD_ID_GPIO, 3, 0},
+   {CHIPDB_MOD_ID_I2C, 0, 0},
+   {CHIPDB_MOD_ID_MCSPI, 0, 0},
+   {CHIPDB_MOD_ID_MCSPI, 1, 0},
+   {CHIPDB_MOD_ID_PRU_ICSS, 1, 0},
+   {0xFFFFFFFF, 0, 0}
+};
+</pre>
+<p>The configuration is then enabled by using the Board_pinMuxConfig(PINMUX_config  “NAME”);
+</p>
+<pre>For example:
+
+Board_pinMuxConfig(iceV2Mux);
+</pre>
+<p>Additional information on updating the pin mux data manually is available in the “StarterWare 02. 01. 01. XX Board and ChipDB Details Update Guide” in {IA_SDK_HOME}\Starterware\src\starterware\docs in the section Updating Pin Mux Data.
+</p><p>When changes are made to the pinmux file, it is necessary to  rebuild the board project so that the changes are available to the ISDK examples and customer developed applications.
+The Pinmux for each pin is controlled by the mux value set for that particular pin in the pad control register. The Pad Control register description is contained in the Control Module of the device TRM.  Although this register has a number of control settings, two settings are important to signal and direction selection of a pin.
+The receive active (bit 18) and the mux mode setting (bit 3-0) enable the input buffer and select the signal for the pin.   
+The control module base address for the AM335x and AM437x is 0x44E10000. This is described in the memory map section of the TRM.  
+</p><p>The signal configurations that can be selected for each pad are listed in the device data sheet in the Terminal Configuration section.  The Starterware pinmux API's set the configuration of the control register. Before the Starterware pin configuration API is called the pad configuration register will have the default value as described in the pin attributes table of the data sheet.  
+</p><p>The PRU-ICSS supports an internal pinmux selection option that expands the device-level pinmuxing for a number of GIO inputs and GPO outputs. The internal pinmuxing is programmable through the PIN_MX register of the PRU-ICSS CFG register space as described in the TRM section PRU-ICSS Internal Pinmux.
+</p>
+<h4><span class="mw-headline" id="How_to_configure_PinMux_for_Industrial_Ethernet">How to configure PinMux for Industrial Ethernet</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=9" title="Edit section: How to configure PinMux for Industrial Ethernet">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The industrial Ethernets are implemented using the PRU-ICSS to meet the real time protocol requirements. The PRU-ICSS supports only the MII interface.
+</p><p>A description of the pins that are used for AM335 and AM437 EtherCAT operation are described in <a rel="nofollow" class="external text" href="PRU_ICSS_EtherCAT_firmware_API_guide.html#AM335x.2FAM437x_SOC_pins_used_for_EtherCAT_functionality">AM335x &amp; AM437x SOC pins used for EtherCAT functionality</a> which is part of the <a rel="nofollow" class="external text" href="PRU_ICSS_EtherCAT_firmware_API_guide.html#AM335x_EtherCAT_Register_List">PRU ICSS EtherCAT firmware API guide</a>. 
+The configuration shown in the link above will support EtherCAT, Profinet, Sercos III, and EthernetIP. EthernetIP may also require Half-Duplex support depending on the use case.  When there is a Half-Duplex requirement, it will be necessary to also connect the PR1_MIIn_COL/CRS pins from the PHY. 
+</p><p>Each of the Industrial ethernet protocols has specific LED requirements.  In the Sitara AM437x IDK and AM335x ICEV2 EVMs, the support for these multiple requirements are met generally using tri color LEDs.   However these are not intended as a complete example solution for a product since there is specific labelling and positioning requirements in each standard’s specification. 
+</p><p>One of the key things to consider is that the MII and boot pins are shared.  During device initialization the  SYSBOOT signals are configured support the device boot.  Then later once the boot is complete, the MII signals are pins are configured connect to the Ethernet phys. If the Ethernet PHYs have a conflicting boot software strap configuration, then an Ethernet PHY reset may be required to correctly configure the PHY.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Clock_and_Timer">Clock and Timer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=10" title="Edit section: Clock and Timer">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To simplify the complex task of clock configuration, Texas instruments has developed a clock tree tool. The Sitara clock tree tool is visual interactive configuration tool that provides information about the clocks and modules in Sitara devices. Using this tool a developer can see and interact with both the visual clock tree elements and with the PRCM registers.  This interactive visual tool enables the developer to have a global view of the device clock tree architecture and to easily determine the correct register settings for a specific configuration.
+</p><p><a href="File_Clock_tool.html" class="image"><img alt="Clock tool.png" src="https://processors.wiki.ti.com/images/a/af/Clock_tool.png" width="600" height="326" /></a>
+</p><p>The clock tree tool is available at <a rel="nofollow" class="external text" href="http://www.ti.com/tool/clocktreetool#2">Sitara Clock Tree Tool</a>.  The AM335x clock tree tool description is available at <a rel="nofollow" class="external text" href="AM335x_Clock_Tree_Tool.html">AM335x Clock Tree Tool</a>.  The AM437x AM335x clock tree tool description is available at <br />
+</p>
+<dl><dd><a rel="nofollow" class="external text" href="http://www.ti.com/lit/spruib7">AM437x Clock Tree Tool</a>. <br /></dd></dl>
+<p>The clock values are used in the bootloader, GEL, SOC and (in some cases) the application.   <br />
+</p><p>The boot loader initializes the PLLs, enables the peripheral clocks, initializes the DDR, sets the operating frequencies, loads the application from the respective media to DDR, and hands over control to DDR.
+The boot loader configuration files are in <br />
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk\starterware\bootloader\src\am43xx <br /></dd>
+<dd>{IA_SDK_HOME}\starterware\bootloader\src\am335xx</dd></dl>
+<p>The GEL files are located in<br />
+</p>
+<dl><dd>{IA_SDK_HOME}\ tools\gel.</dd></dl>
+<p>The Starterware clock register data values are stored in include file configuration settings in<br />
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk\starterware\include\am437x\am437x <br /></dd>
+<dd>{IA_SDK_HOME}\starterware\include\am335x.</dd></dl>
+<pre>Note:  The DMtimer operation can be affected by the changes in the clock 
+frequencies based upon the clock input that is selected for timer input 
+TIMERx_GCLK (where x is the DMTimer number) in the PRCM.
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Memory">Memory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=11" title="Edit section: Memory">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span id="DDR_configuration_–_DDR_configuration_tools"></span><span class="mw-headline" id="DDR_configuration_.E2.80.93_DDR_configuration_tools">DDR configuration – DDR configuration tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=12" title="Edit section: DDR configuration – DDR configuration tools">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>DDR configuration is performed in the boot loader and the GEL files. The Sitara DDR configuration tools describe how to set the EMIF registers depending on the DDR memory type.   There are separate DDR configuration guides for the AM437x and AM335x devices. <br />
+The AM437x DDR Configuration and Programming Guide are available at: <br />
+</p>
+<dl><dd><a rel="nofollow" class="external text" href="AM437x_DDR_Configuration_and_Programming_Guide.html">AM437x DDR Configuration &amp; Programming Guide</a>.   The AM335x EMIF Configuration tips are provided at: <br /></dd>
+<dd><a rel="nofollow" class="external text" href="AM335x_EMIF_Configuration_tips.html">AM335x EMIF Configuration tips</a>.</dd></dl>
+<p>Additionally there is additional information available on line to assist in resolving Common DDR Issues that is available at:<br />
+</p>
+<dl><dd><a rel="nofollow" class="external free" href="Common_DDR_Issues.html">http://processors.wiki.ti.com/index.php/Common_DDR_Issues</a>.</dd></dl>
+<p><br />
+</p>
+<h4><span class="mw-headline" id="MMU_Configuration">MMU Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=13" title="Edit section: MMU Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Device memory is configured in the “application”, the SYSBIOS configuration file, GEL, and the boot loader. 
+The application initialization contains the MMU configuration for the SOC and application specific configurations.  When memory and peripheral changes can impose changes to the memory configuration in the application, the MMU configuration can be changed in the application with
+SYS_MMU_ENTRY mmuEntries[] <br />
+This is defined in:<br />
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk_osdrivers\include\osdrv_mmu.h. <br /></dd></dl>
+<p>The mmu table is then set at the start of the application by calling SDKMMUInit(SYS_MMU_ENTRY mmuEntries[]) <br />
+SDKMMUInit is defined in:<br />
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk_osdrivers\source\osdrv_mmu.c.<br /></dd></dl>
+<p>Examples of MMU configurations are available in:<br />
+</p>
+<dl><dd>C:\ti\sysbios_ind_sdk_2.1.1.2\sdk\examples\ethernetip_adapter\appl_cnfg.h<br /></dd></dl>
+<pre>In addition - Memory section configurations can be further specified 
+using &lt;application&gt;xdt files and in the application directory. 
+Examples of these configurations can be found in:
+   C:\ti\sysbios_ind_sdk_2.1.1.2\sdk\examples\ethernetip_adapter\ethernetip.xdt 
+   C:\ti\sysbios_ind_sdk_2.1.1.2\sdk\examples\ethercat_slave\ethercat.xdt
+</pre>
+<p><br />
+</p>
+<h4><span class="mw-headline" id="Other_Memory_Parameter_settings">Other Memory Parameter settings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=14" title="Edit section: Other Memory Parameter settings">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The SYSBOS configuration file contains description of the Stack size and heap size. <br />
+</p><p>The GEL and the boot loader will contain (as a minimum) a basic device and memory configuration. <br />
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Interrupt">Interrupt</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=15" title="Edit section: Interrupt">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The general SOC board interrupts are configured using the APIs contained in:<br />
+</p>
+<dl><dd>{IA_SDK_HOME}\sdk\board\source\ and its subdirectories.<br /></dd></dl>
+<p>There are separate subdirectories for the AM335ICV2 and AM437ISDK board specific peripherals.
+PRU-ICSS interrupts are configured in the application. Example of the PRU-ICSS  interrupt configurations are available in:<br />
+</p>
+<dl><dd>C:\ti\sysbios_ind_sdk_2.1.1.2\sdk\examples\ethernetip_adapter\tieip_pruss_intc_mapping.h <br /></dd>
+<dd>C:\ti\sysbios_ind_sdk_2.1.1.2\sdk\examples\ethernet_mac\tiemac_pruss_intc_mapping.h <br /></dd></dl>
+<p>The [ICSS EMAC LLD developers guide <a rel="nofollow" class="external free" href="ICSS_EMAC_LLD_developers_guide.html">http://processors.wiki.ti.com/index.php/ICSS_EMAC_LLD_developers_guide</a>] has an excellent section on AMR / PRU interrupts.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="How_to_add_support_for_other_PHYs">How to add support for other PHYs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=16" title="Edit section: How to add support for other PHYs">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The TI example industrial Ethernet designs use the TLK1xx PHYs to date. A number of customers have successfully used the Texas Instruments the Texas Instruments DP83x PHYs. 
+For EtherCAT slave applications - Beckhoff provides an excellent Phy selection guide to assist in Phy selection and configuration. This is available at:<br />
+</p>
+<dl><dd><a rel="nofollow" class="external free" href="https://download.beckhoff.com/download/Document/io/ethercat-development-products/an_phy_selection_guidev2.3.pdf">https://download.beckhoff.com/download/Document/io/ethercat-development-products/an_phy_selection_guidev2.3.pdf</a>.<br /></dd></dl>
+<p>This document also specifies the LED display requirements for Ethernet PHY signals. 
+</p><p>The Texas Instruments EtherCAT slave implementation supports both Phys which provide a High Speed Link indication and those that do not. 
+This setting is changed using the using ICSS MDIO_LINK register. <br />
+The default configuration is that the High Speed Link indication is enabled. 
+</p>
+<dl><dd><b>mdioParamsInit.enhancedlink_enable = TIESC_MDIO_RX_LINK_ENABLE; </b><br /></dd></dl>
+<p>Different PHYs may use a positive or negative polarity for the highspeed link detection.
+This can be detected by making and breaking the Ethernet connection and observing the state reported by the 
+</p>
+<ul><li>MDIO PHY alive status register (MDIO_ALIVE) to verify the connection</li>
+<li>MDIO PHY link status register (MDIO_LINK) to verify the link.</li></ul>
+<p>The polarity of the link detection can be configured by:  
+</p>
+<dl><dd><b>mdioParamsInit.link0pol = TIESC_LINK_POL_ACTIVE_HIGH;</b><br /></dd></dl>
+<p>and 
+</p>
+<dl><dd><b>mdioParamsInit.link1pol = TIESC_LINK_POL_ACTIVE_LOW;</b><br /></dd></dl>
+<p>When a m/c based link polling link status detection mechanism is desired - the following setting is made:
+</p>
+<dl><dd><b>mdioParamsInit.enhancedlink_enable = TIESC_MDIO_RX_LINK_DISABLE;</b><br /></dd></dl>
+<p>This setting is used in the case of EtherCAT when the PHY does not have LED_LINK/LED_SPEED signal and when a m/c  based link detection is desired.
+The m/c  based link detection configuration is also used for the other industrial ethernet slave implementations (Profinet, EthernetIP, and Sercos III). 
+</p><p>When using the m/c  based link detection, the link detection is performed by reading the MDIOLink register and configuring an interrupt from MDIO through ICSS INTC. This is the mechanism that used by the ICSS-EMAC and briefly described in the Processor SDK EMAC design [<a rel="nofollow" class="external text" href="Processor_SDK_RTOS_ICSS-EMAC-Design.html#Link_Interrupt%7CLink">Interrupt</a>]<br />
+</p><p>The MDIO polling frequency is configurable.  The default frequency was selected for the TLK PHYs and is in the range of 200-250 usec. Other PHYs may require different polling frequencies. This value can set as low as 10us levels by programming SWCR3 register IIRC.
+</p><p>The PRU_ICSS MDIO host side APIs are explained in the PRU-IICSS EtherCAT firmware API guide   [<a rel="nofollow" class="external text" href="PRU_ICSS_EtherCAT_firmware_API_guide.html#PRU-ICSS_MDIO_host_side_APIs%7CPRU_ICSS">MDIO host side APIs</a>]. <br />
+</p><p><br />
+When the PHY does not have LED_LINK/LED_SPEED signal, the "pr1_mii0_rxlink" and "pr1_mii1_rxlink" inputs can be terminated inactive. <br /><br />
+</p><p><br />
+</p>
+<h3><span id="Adding_a_different_TCP/IP_Stack"></span><span class="mw-headline" id="Adding_a_different_TCP.2FIP_Stack">Adding a different TCP/IP Stack</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=17" title="Edit section: Adding a different TCP/IP Stack">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h3><span class="mw-headline" id="Adding_a_separate_Protocol_specific_stack">Adding a separate Protocol specific stack</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=18" title="Edit section: Adding a separate Protocol specific stack">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h3><span class="mw-headline" id="Debugging">Debugging</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;section=19" title="Edit section: Debugging">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Industrial Ethernet Debugging techniques
+</p><p>Check Link and Activity LEDs
+</p>
+<dl><dd>There are two LEDs just above the RJ-45 Ethernet port,
+<dl><dd>Right side indicates network speed
+<dl><dd>Orange for 10 MBPS</dd>
+<dd>Green for 100 MBPS</dd></dl></dd>
+<dd>Left side indicates the network activity
+<dl><dd>No color at all means no link present</dd>
+<dd>Solid color means that there is an active link</dd>
+<dd>Blinking means that there is data activity</dd></dl></dd>
+<dd>Each protocol has additional operation specific EDS</dd></dl></dd></dl>
+<p>Check master side log for errors<br />
+Check PRU MDIO for the PHY and link status
+</p>
+<dl><dd>The MDIO registers are standard for the PRU and CPSW. The definitions are in the:<br /></dd>
+<dd>TRM-CPSW section(Ethernet-:Subsystem-&gt;Ethernet Subsystem Registers-&gt;MDIO Registers)
+<dl><dd>AM335x PRU-MDIO base address is 0x4a33_2400</dd></dl></dd></dl>
+<p><br />
+</p>
+<dl><dd><dl><dd>AM437x PRU_MDIO base address is 0x5443_2400</dd></dl></dd></dl>
+<dl><dd>MDIO alive. - offset = 8h Each of the 32 bits of this register is set if the most recent access to the PHY with address corresponding to the register bit number was acknowledged by the PHY, the bit is reset if the PHY fails to acknowledge the access. Both the user and polling accesses to a PHY will cause the corresponding alive bit to be updated. The alive bits are only meant to be used to give an indication of the presence or not of a PHY with the corresponding address.</dd></dl>
+<dl><dd>MDIO_LINK  - offset = Ch This register is updated after a read of the Generic Status Register of a PHY. The bit is set if the PHY with the corresponding address has link and the PHY acknowledges the read transaction. The bit is reset if the PHY indicates it does not have link or fails to acknowledge the read transaction. Check to see if the Correct MDIO_ALIVE bits indicate the expected status.</dd></dl>
+<dl><dd>Check the Phy Status</dd></dl>
+<p><br />
+The <a rel="nofollow" class="external text" href="ICSS_EMAC_LLD_debug_guide.html">ICSS EMAC LLD debug guide</a> contains good information on debugging the ICSS EMAC LLD interfaces.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201084409
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.069 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 118/1000000
+Preprocessor generated node count: 168/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:45311-0!canonical and timestamp 20201201084409 and revision id 229736
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Industrial SDK EMAC Porting Guide1</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Industrial SDK EMAC Porting Guide1</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Industrial SDK EMAC Porting Guide1</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Industrial SDK EMAC Porting Guide1</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Industrial SDK EMAC Porting Guide1</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Industrial SDK EMAC Porting Guide1</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Industrial SDK EMAC Porting Guide1</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Industrial SDK EMAC Porting Guide1</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Industrial SDK EMAC Porting Guide1</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;oldid=229736">https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;oldid=229736</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Industrial+SDK+EMAC+Porting+Guide1" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Industrial_SDK_EMAC_Porting_Guide1.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Industrial_SDK_EMAC_Porting_Guide1.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Industrial_SDK_EMAC_Porting_Guide1.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Industrial_SDK_EMAC_Porting_Guide1.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;oldid=229736" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Industrial_SDK_EMAC_Porting_Guide1&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 20 July 2017, at 15:23.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.069","walltime":"0.071","ppvisitednodes":{"value":118,"limit":1000000},"ppgeneratednodes":{"value":168,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201084409","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":290});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Industrial_SDK_EMAC_Porting_Guide1 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 11:53:15 GMT -->
+</html>

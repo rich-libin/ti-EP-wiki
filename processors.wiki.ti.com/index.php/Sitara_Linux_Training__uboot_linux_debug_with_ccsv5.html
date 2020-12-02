@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:39:01 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Sitara Linux Training: uboot linux debug with ccsv5 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5","wgTitle":"Sitara Linux Training: uboot linux debug with ccsv5","wgCurRevisionId":157982,"wgRevisionId":157982,"wgArticleId":17452,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM437x","AM335x","AM35x","AM37x","AM1x","AM18x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5","wgRelevantArticleId":17452,"wgRequestId":"c83e52b7eb09ca08aa8a908d","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Sitara_Linux_Training_uboot_linux_debug_with_ccsv5 rootpage-Sitara_Linux_Training_uboot_linux_debug_with_ccsv5 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Sitara Linux Training: uboot linux debug with ccsv5</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br />
+Return to the <a href="Sitara_Linux_Training.html" title="Sitara Linux Training"><u><b>Sitara Linux Training List</b></u></a> 
+</p>
+<p><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a> </p><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Before_you_Begin_......"><span class="tocnumber">1</span> <span class="toctext">Before you Begin ......</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Lab_Configuration"><span class="tocnumber">2</span> <span class="toctext">Lab Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Hardware"><span class="tocnumber">2.1</span> <span class="toctext">Hardware</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Software"><span class="tocnumber">2.2</span> <span class="toctext">Software</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Configure_your_Development_Environment"><span class="tocnumber">3</span> <span class="toctext">Configure your Development Environment</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Description"><span class="tocnumber">3.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Key_Points"><span class="tocnumber">3.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Lab_Steps"><span class="tocnumber">3.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Setup_a_U-Boot_Debug_Project"><span class="tocnumber">4</span> <span class="toctext">Setup a U-Boot Debug Project</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Description_2"><span class="tocnumber">4.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Key_Points_2"><span class="tocnumber">4.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Lab_Steps_2"><span class="tocnumber">4.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Setup_Linux_Kernel_Debug_Project"><span class="tocnumber">5</span> <span class="toctext">Setup Linux Kernel Debug Project</span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="#Description_3"><span class="tocnumber">5.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Key_Points_3"><span class="tocnumber">5.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Lab_Steps_3"><span class="tocnumber">5.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Setup_Target_Configuration"><span class="tocnumber">6</span> <span class="toctext">Setup Target Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-18"><a href="#Description_4"><span class="tocnumber">6.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Key_Points_4"><span class="tocnumber">6.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Lab_Steps_4"><span class="tocnumber">6.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Build_U-Boot_for_Debug"><span class="tocnumber">7</span> <span class="toctext">Build U-Boot for Debug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#Description_5"><span class="tocnumber">7.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Key_Points_5"><span class="tocnumber">7.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Lab_Steps_5"><span class="tocnumber">7.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#Build_The_Linux_Kernel_for_Debug"><span class="tocnumber">8</span> <span class="toctext">Build The Linux Kernel for Debug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-26"><a href="#Description_6"><span class="tocnumber">8.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Key_Points_6"><span class="tocnumber">8.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Lab_Steps_6"><span class="tocnumber">8.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-29"><a href="#Change_ARM_mode"><span class="tocnumber">9</span> <span class="toctext">Change ARM mode</span></a>
+<ul>
+<li class="toclevel-2 tocsection-30"><a href="#Description_7"><span class="tocnumber">9.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Key_Points_7"><span class="tocnumber">9.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Lab_Steps_7"><span class="tocnumber">9.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-33"><a href="#Perform_SPL_Debug"><span class="tocnumber">10</span> <span class="toctext">Perform SPL Debug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-34"><a href="#Description_8"><span class="tocnumber">10.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Key_Points_8"><span class="tocnumber">10.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#Lab_Steps_8"><span class="tocnumber">10.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-37"><a href="#Perform_U-Boot_Debug"><span class="tocnumber">11</span> <span class="toctext">Perform U-Boot Debug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-38"><a href="#Description_9"><span class="tocnumber">11.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#Key_Points_9"><span class="tocnumber">11.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#Lab_Steps_9"><span class="tocnumber">11.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-41"><a href="#Perform_Linux_Kernel_Debug"><span class="tocnumber">12</span> <span class="toctext">Perform Linux Kernel Debug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-42"><a href="#Description_10"><span class="tocnumber">12.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="#Key_Points_10"><span class="tocnumber">12.2</span> <span class="toctext">Key Points</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#Lab_Steps_10"><span class="tocnumber">12.3</span> <span class="toctext">Lab Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-45"><a href="#Additional_Debug_Path_using_Debug_Access_Port_.28DAP.29"><span class="tocnumber">13</span> <span class="toctext">Additional Debug Path using Debug Access Port (DAP)</span></a></li>
+</ul>
+</div>
+ 
+<p><big><big><big>Introduction</big></big></big> 
+</p>
+<hr />
+<p><br />This lab is going to walk you through the process of using CCSv5 to debug U-Boot and the Linux kernel on the AM335x EVM. For more information on the overall debug flow please refer to the accompanying debug presentation. 
+</p>
+<h3><span class="mw-headline" id="Before_you_Begin_......">Before you Begin ......</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=1" title="Edit section: Before you Begin ......">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Just a reminder of directory notation, when seeing the ~/ti-sdk.... the ~ represents that user's home directory. 
+</p><p>In effort to make this article future proof in terms of SDK version numbers future proof please note the following method to be used to substitute the current SDK version numbers. There is a version number for the Sitara Linux SDK as well as a version number for the underlying PSP. 
+</p>
+<dl><dd>For example in this article Sitara Linux SDK and PSP versions will be displayed like this:
+<dl><dd><ul><li>ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/u-boot-2011.09-pspxx.xx.xx.xx</li></ul></dd></dl></dd>
+<dd>At the time this article was written, the version numbers translated to this
+<dl><dd><ul><li>ti-sdk-am335x-evm-05.05.00.00/board-support/u-boot-2011.09-psp04.06.00.08</li></ul></dd></dl></dd>
+<dd>Please note that the "tab" key can be used to auto-complete a version number</dd></dl>
+<p><br /> <br /> <br /><big><big><span style="color: red"><b>NOTE:</b> In this guide commands to be executed for each step will be marked in <b>BOLD</b></span></big></big> 
+</p>
+<h1><span class="mw-headline" id="Lab_Configuration">Lab Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=2" title="Edit section: Lab Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The following are the hardware and software configurations for this lab. The steps in this lab are written against this configuration. The concepts of the lab will apply to other configurations but will need to be adapted accordingly. 
+</p>
+<h3><span class="mw-headline" id="Hardware">Hardware</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=3" title="Edit section: Hardware">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>AM335x EVM-SK (<a rel="nofollow" class="external text" href="https://estore.ti.com/TMDSSK3358-AM335x-Starter-Kit-P3110.aspx">https://estore.ti.com/TMDSSK3358-AM335x-Starter-Kit-P3110.aspx</a>)
+<ul><li>You can also use a beaglebone for this lab (<a rel="nofollow" class="external text" href="http://beagleboard.org/buy">http://beagleboard.org/buy</a>)</li></ul></li>
+<li>5V power supply</li>
+<li>USB cable to connect the board to you Linux Host</li>
+<li>An XDS100 V2 emulator. For EVM-SK and Beaglebone this is built into the device and provided over the same USB connection as your serial console.
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Through trial and error it was found that XDS100 based emulators do not perform well under a VM environment.  This is due to the base VMWare driver for these devices and the low throughput they provide.  An XDS560 V2 was found to have the best performance under VMWare</div></dd></dl></li></ol>
+<h3><span class="mw-headline" id="Software">Software</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=4" title="Edit section: Software">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>A Linux host system configured as per the <a href="Sitara_Linux_Training__Linux_Host_Configuration.html" title="Sitara Linux Training: Linux Host Configuration">Linux Host Configuration</a> page
+<ul><li>Make sure you have installed the version of CCSv5 provided with the Sitara SDK installed under sudo mode so the JTAG drivers are installed (with either temporary license or permanent license)</li>
+<li>Sitara Linux SDK installed. This lab assumes the SDK is installed in <b>/home/sitara</b>. If you use a different location please modify the below steps accordingly.</li></ul></li>
+<li>setup.sh script in the SDK run to configure the target device for NFS and TFTP.
+<ul><li>For help configuring the NFS and TFTP setup see <a href="Sitara_Linux_Training__Hands_on_with_the_SDK.html" class="mw-redirect" title="Sitara Linux Training: Hands on with the SDK">Sitara Linux Training: Hands on with the SDK</a></li></ul></li>
+<li>SD card with Sitara Linux SDK installed.
+<ul><li>For help creating a 2 partition SD card with the SDK conent see the <a href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/Overview_Getting_Started_Guide.html#linux-sd-card-creation-guide" class="mw-redirect" title="Sitara Linux SDK create SD card script">create_sdcard.sh script page</a></li></ul>
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />For this lab you should either remove the uImage file on the boot partition of the SD card, or rename the file uImage-pre-built.  This is to prevent the board from booting automatically from the SD card when the card is installed</div></dd></dl></li></ol>
+<h1><span class="mw-headline" id="Configure_your_Development_Environment">Configure your Development Environment</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=5" title="Edit section: Configure your Development Environment">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=6" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section is going to walk you through the steps to make sure your development environment is properly configured. 
+</p>
+<h3><span class="mw-headline" id="Key_Points">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=7" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Setting up the system for Debug</li>
+<li>Verifying your console connection</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=8" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li><b>Remove the SD card from board</b></li>
+<li><b>Setup USB cable connection between the board and your Linux Host</b></li></ol>
+<ol><li>The following steps will help you validate that you have a valid serial connection with your target board
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />These steps are written for boards like the EVM-SK and Beaglebone which use an FTDI USB-to-Serial adapter.  For boards with a straight UART connection you can ignore the steps for /dev/ttyUSBx and instead just use the serial port on your Linux host that is connected to the board</div></dd></dl></li>
+<li>Connect the USB cable between your Linux host and your target board
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />On the AM335x EVM-SK, the USB cable enables a USB-to-serial interface to the Linux host PC.  If using a virtual machine, please insure the AM335x EVM-SK is a selected USB device.</div></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />If you are running your VMWare image with Windows 7 some USB-to-Serial adapters do not properly work with Windows 7. Make sure that your adapter specifically says that it supports Windows 7. You may also need to install an additional driver for your adapter.</div></dd></dl></li>
+<li>Open a terminal and run the following command to find the USB serial adapters available on the system. The FTDI chip used on the board presents two serial interfaces to the Linux host. The first interface is the JTAG interface and the second one is the serial console interface.
+<dl><dd><dl><dd><b>ls /dev/ttyUSB*</b></dd></dl></dd>
+<dd>You should see output like:
+<dl><dd>/dev/ttyUSB0</dd>
+<dd>/dev/ttyUSB1</dd></dl></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />If using VMWare you may need to pass the "Future Technology Devices" device into the VMWare image</div></dd></dl></li>
+<li>As mentioned above since the board's serial interface is the second interface you will want to open a serial console to the second device node. In this case that is <b>/dev/ttyUSB1</b>. This can be done by doing:
+<ul><li><b>minicom -w -s</b></li>
+<li><b>Select Serial port setup and press ENTER</b></li>
+<li><b>Press A to modify the Serial Device and change the device to /dev/ttyUSB1. Press ENTER</b></li>
+<li><b>Press ENTER to exit the serial setup</b></li>
+<li><b>Select Exit and press ENTER</b></li></ul></li>
+<li>You should now see a minicom window.</li>
+<li>Power on the board, you should see "ccccc" being printed in the window, if so the serial connection is working as expected.  Go ahead and leave this console RUNNING in the background.
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />For the EVM-SK board the power button is under the board in the upper-right hand corner.  You must press and hold this button to power on the board.</div></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />For the Beaglebone the board will power on as soon as the USB cable is connected.  you can reset the board by pressing the reset button which should provide you with the expected output</div></dd>
+<dd><a href="File_Sitara_linux_training_rom_boot_serial_output_1.html" class="image"><img alt="Sitara linux training rom boot serial output 1.jpg" src="https://processors.wiki.ti.com/images/7/7d/Sitara_linux_training_rom_boot_serial_output_1.jpg" width="541" height="68" /></a></dd></dl></li></ol>
+<h1><span class="mw-headline" id="Setup_a_U-Boot_Debug_Project">Setup a U-Boot Debug Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=9" title="Edit section: Setup a U-Boot Debug Project">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_2">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=10" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This lab will step you through the steps necessary to create a CCS project. Here a project for U-Boot will be created. 
+</p><p><br /> 
+</p>
+<h3><span class="mw-headline" id="Key_Points_2">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=11" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>A CCS project is set up and assigned a source tree that is indexed, this speeds up source level debug.</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_2">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=12" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Start CCS by double clicking the <b>Code Composer Studio v5</b> icon on the desktop
+<dl><dd><a href="File_Sitara-Linux-CCS-icon.html" class="image"><img alt="Sitara-Linux-CCS-icon.png" src="https://processors.wiki.ti.com/images/5/56/Sitara-Linux-CCS-icon.png" width="132" height="113" /></a></dd></dl></li>
+<li>You will see the CCSv5 splash screen appear while CCS loads
+<dl><dd><a href="File_Sitara-Linux-CCS-splash-screen.html" class="image"><img alt="Sitara-Linux-CCS-splash-screen.png" src="https://processors.wiki.ti.com/images/4/49/Sitara-Linux-CCS-splash-screen.png" width="601" height="351" /></a></dd></dl></li>
+<li>The next window will be the <b>Workspace Launcher</b> window which will ask you where you want to locate your CCSv5 workspace. Take the default value.
+<dl><dd><a href="File_Sitara-Linux-CCS-workspace.html" class="image"><img alt="Sitara-Linux-CCS-workspace.jpg" src="https://processors.wiki.ti.com/images/e/e1/Sitara-Linux-CCS-workspace.jpg" width="621" height="320" /></a></dd></dl></li>
+<li>CCS will load the workspace and then launch to the default <b>TI Resource Explorer</b> screen
+<dl><dd><a href="File_Sitara-Linux-CCS-resource-explorer.html" class="image" title="Sitara-Linux-CCS-resource-explorer.png"><img alt="Sitara-Linux-CCS-resource-explorer.png" src="https://processors.wiki.ti.com/images/4/4b/Sitara-Linux-CCS-resource-explorer.png" width="800" height="644" /></a></dd></dl></li>
+<li>Close the <b>TI Resource Explorer</b> screen. This screen is useful when making TI CCS projects which use TI tools. The Sitara Linux SDK uses open source tools with the standard Eclipse features and therefore does not use the TI Resource Explorer. You will be left in the Project Explorer default view.
+<dl><dd><a href="File_Sitara-Linux-CCS-project-explorer.html" class="image" title="Sitara-Linux-CCS-project-explorer.png"><img alt="Sitara-Linux-CCS-project-explorer.png" src="https://processors.wiki.ti.com/images/4/40/Sitara-Linux-CCS-project-explorer.png" width="800" height="664" /></a></dd></dl></li>
+<li>Create New User Project
+<ul><li>Select <b>File -&gt; New -&gt; Project</b></li>
+<li>Expand the <b>C/C++</b> category</li>
+<li>Select <b>Makefile Project with Existing Code</b></li></ul>
+<dl><dd><a href="File_Sitara_linux_training_new_project_create_u.html" class="image"><img alt="Sitara linux training new project create u.png" src="https://processors.wiki.ti.com/images/d/db/Sitara_linux_training_new_project_create_u.png" width="619" height="504" /></a></dd></dl>
+<ul><li>Click <b>Next</b> to enter the <i>Import Existing Code</i> dialog</li></ul></li>
+<li>Import the U-Boot code using the following steps
+<ul><li>Click the <b>Browse</b> button.</li>
+<li>Navigate the the U-Boot source directory. This is by default located at <b>/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/u-boot-xx.xx.xx.xx</b></li>
+<li>Click <b>OK</b> to select this as the root of the existing code
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />You should see the the <b>Project Name</b> has been filled in for you.  You should take this default value because it allows easy association between the binaries being loaded later and the sources for the project.  Changing this value can break that association.</div></dd></dl></li>
+<li>Your project configuration should look something like
+<dl><dd><a href="File_Sitara-linux-training-import-code.html" class="image"><img alt="Sitara-linux-training-import-code.png" src="https://processors.wiki.ti.com/images/d/d3/Sitara-linux-training-import-code.png" width="614" height="686" /></a></dd></dl></li>
+<li>Click <b>Finish</b></li></ul></li>
+<li>You should now be back at the main CCS screen. You should see your project listed in the <i>Project Explorer</i> tab and the <i>code indexer</i> running at the bottom right
+<dl><dd><a href="File_Sitara-linux-training-code-indexer.html" class="image" title="Sitara-linux-training-code-indexer.png"><img alt="Sitara-linux-training-code-indexer.png" src="https://processors.wiki.ti.com/images/a/a7/Sitara-linux-training-code-indexer.png" width="800" height="606" /></a></dd></dl></li></ol>
+<h1><span class="mw-headline" id="Setup_Linux_Kernel_Debug_Project">Setup Linux Kernel Debug Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=13" title="Edit section: Setup Linux Kernel Debug Project">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_3">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=14" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This lab will step you through the steps necessary to create a CCS project. Here a project for the Linux kernel is created. 
+</p>
+<h3><span class="mw-headline" id="Key_Points_3">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=15" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>A CCS project is set up and assigned a source tree that is indexed, this speeds up source level debug.</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_3">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=16" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>With CCS still running from <a href="Sitara_Linux_Training__uboot_linux_debug_with_ccsv5.html#Setup_a_U-Boot_Debug_Project_Setup_a_U-Boot_Debug_Project" title="Sitara Linux Training: uboot linux debug with ccsv5">Sitara Linux Training: uboot linux debug with ccsv5#Setup_a_U-Boot_Debug_Project_Setup_a_U-Boot_Debug_Project</a> re-run the steps with the following change
+<ul><li>Instead of browsing to the u-boot sources browse to the <b>/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/linux-xx.xx.xx</b> directory.</li></ul></li>
+<li>Once you have finished importing this project you should now see both the u-boot and Linux kernel projects in your <i>Project Explorer</i> tab.
+<dl><dd><a href="File_Sitara-linux-training-projects-imported.html" class="image" title="Sitara-linux-training-projects-imported.png"><img alt="Sitara-linux-training-projects-imported.png" src="https://processors.wiki.ti.com/images/9/94/Sitara-linux-training-projects-imported.png" width="800" height="605" /></a></dd></dl></li></ol>
+<h1><span class="mw-headline" id="Setup_Target_Configuration">Setup Target Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=17" title="Edit section: Setup Target Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_4">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=18" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section is going to walk you through the steps to set up a CCS target configuration. This is necessary to connect to a target for debugging both U-Boot and Linux. 
+</p>
+<h3><span class="mw-headline" id="Key_Points_4">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=19" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>How to create a new target connection</li>
+<li>Selecting the JTAG emulator and board type</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_4">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=20" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Select <b>File -&gt; New -&gt; Target Configuration File</b></li>
+<li>In the <b>New Target Configuration</b> dialog box give the configuration a name. For this lab we will use AM335x-TC
+<dl><dd><a href="File_Sitara-linux-training-new-target-config.html" class="image"><img alt="Sitara-linux-training-new-target-config.png" src="https://processors.wiki.ti.com/images/8/88/Sitara-linux-training-new-target-config.png" width="613" height="500" /></a></dd></dl></li>
+<li>Click <b>Use shared location</b>, then Click <b>Finish</b></li>
+<li>The <i>AM335x-TC</i> configuration you created will now be opened for editing. Perform the following steps to finish the target configuration.
+<ul><li>In the <b>Connection</b> drop-down box select <b>Texas Instruments XDS100v2 USB Emulator</b>
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />If you are using a different emulator please select that one instead.  You will only see emulators for which you have installed the drivers</div></dd></dl></li>
+<li>In the <b>Board or Device</b> selection list check the <b>AM335x</b> device</li>
+<li>You screen should look like
+<dl><dd><a href="File_Sitara-linux-training-am335x-tc.html" class="image" title="Sitara-linux-training-am335x-tc.png"><img alt="Sitara-linux-training-am335x-tc.png" src="https://processors.wiki.ti.com/images/4/4d/Sitara-linux-training-am335x-tc.png" width="800" height="606" /></a></dd></dl></li>
+<li>Click the <b>Save</b> button at the right of the screen</li></ul></li>
+<li>You can now test your target connection by pressing the <b>Test Connection</b> button at the right of the screen.
+<ul><li>You should see a dialog box open. Scroll to the bottom of the output and look for the <b>The JTAG DR Integrity scan-test has succeeded</b>
+<dl><dd><a href="File_Sitara-linux-training-test-connection.html" class="image"><img alt="Sitara-linux-training-test-connection.png" src="https://processors.wiki.ti.com/images/0/04/Sitara-linux-training-test-connection.png" width="747" height="495" /></a></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />There are other tests run during the connection test and the status of these tests is also displayed in the dialog box</div></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The JTAG scan test may take a few seconds to complete on slower laptops.</div></dd></dl></li></ul></li>
+<li>Close the <i>Test Connection</i> dialog box</li>
+<li>The target connection is now created</li></ol>
+<h1><span class="mw-headline" id="Build_U-Boot_for_Debug">Build U-Boot for Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=21" title="Edit section: Build U-Boot for Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_5">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=22" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section is going to walk you through the steps to build SPL and U-Boot for debugging. 
+</p>
+<h3><span class="mw-headline" id="Key_Points_5">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=23" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>The ELF images from a build of U-Boot contains the debug information necessary.</li>
+<li>Which images are used for debugging</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_5">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=24" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Open a console terminal</li>
+<li>Change Directories to the Sitara SDK Board Support U-Boot Source tree
+<ul><li><b>ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/u-boot-2011.09-pspxx.xx.xx.xx</b></li></ul></li>
+<li>Add the build tools from the SDK into your PATH
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You can also call the build tools with the absolute path, but this step will make it easier to type the following commands</div> Make sure the build tools from the SDK are in the Path</dd></dl>
+<ul><li><b>echo $PATH</b></li>
+<li>If you see something like this for the PATH, which contains the <b>linux-devkit/sysroot/i686-arago-linux/usr/bin/</b> directory then the tools are already in your PATH.
+<dl><dd><i>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:<b>/home/sitara/ti-sdk-am335x-evm-06.00.00.00/linux-devkit/sysroot/i686-arago-linux/usr/bin/</b></i></dd></dl></li>
+<li>If the tools are not in the PATH then add them with this command (hint:use the Tab key to complete directory paths)
+<dl><dd><b>export PATH=$PATH:/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/linux-devkit/sysroot/i686-arago-linux/usr/bin/</b></dd></dl></li></ul></li>
+<li>Clean the U-Boot sources to start with a known good setup
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In the following commands there should always be a space after the <b>arm-linux-gnueabihf-</b> entry</div></dd></dl>
+<ul><li><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- distclean</b></li></ul></li>
+<li>Perform configuration to default for the AM335x device
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The same configuration is used for the EVM, EVM-SK, and Beaglebone</div></dd></dl>
+<ul><li><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- am335x_evm_config</b></li></ul></li>
+<li>Compile SPL and U-Boot
+<ul><li><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-</b></li></ul></li>
+<li>When the build finishes you should have the following files created
+<ul><li>u-boot - ELF image that contains debug symbols</li>
+<li>spl/u-boot-spl.bin - stripped binary SPL image that can fit into the internal memory</li>
+<li>spl/u-boot-spl - Full SPL image containing all debug symbols. Too big for internal memory but can be used to load the symbols</li></ul></li>
+<li>Go ahead to the next lab step to build the kernel while U-Boot finishes building</li></ol>
+<h1><span class="mw-headline" id="Build_The_Linux_Kernel_for_Debug">Build The Linux Kernel for Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=25" title="Edit section: Build The Linux Kernel for Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_6">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=26" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section is going to walk you through the steps to build a Kernel Image with debug information. 
+</p><p><br /> 
+</p>
+<h3><span class="mw-headline" id="Key_Points_6">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=27" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Debug information needs to be stored in the vmlinux image.</li>
+<li>Using the kernel configuration utility kernel debug information can be enabled.</li></ul>
+<p><br /> 
+</p>
+<h3><span class="mw-headline" id="Lab_Steps_6">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=28" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Open another console terminal</li>
+<li>Change Directories to the Sitara SDK Board Support Linux Source tree
+<ul><li><b>ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/linux-xx.xx.xx-pspxx.xx.xx.xx</b></li>
+<li>This directory is where all commands below are referenced from</li></ul></li>
+<li>Add the build tools from the SDK into your PATH
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You can also call the build tools with the absolute path, but this step will make it easier to type the following commands</div> Make sure the build tools from the SDK are in the Path</dd></dl>
+<ul><li><b>echo $PATH</b></li>
+<li>If you see something like this for the PATH, which contains the <b>linux-devkit/sysroots/i686-arago-linux/usr/bin</b> directory then the tools are already in your PATH.
+<dl><dd><i>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:<b>/home/sitara/ti-sdk-am335x-evm-06.00.00.00/linux-devkit/sysroots/i686-arago-linux/usr/bin</b></i></dd></dl></li>
+<li>If the tools are not in the PATH then add them with this command (hint:use the Tab key to complete directory paths)
+<dl><dd><b>export PATH=$PATH:/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/linux-devkit/sysroots/i686-arago-linux/usr/bin</b></dd></dl></li></ul></li>
+<li>Clean the kernel sources
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In the following commands there should always be a space after the <b>arm-linux-gnueabihf-</b> entry</div></dd></dl>
+<ul><li><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- mrproper</b></li></ul>
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The make target of mrproper is used to reset the build configuration to a default state. This is done prior to configuring the kernel for a processor configuration.</div></dd></dl></li>
+<li>Start with the default Sitara Linux SDK configuration
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />There are two config files for the AM335x in the kernel tree.  This lab uses the <b>tisdk_am335x-evm_config</b> file which matches the configuration used for the Sitara Linux SDK build</div></dd></dl>
+<ul><li><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- tisdk_am335x-evm_defconfig</b></li></ul></li>
+<li>Modify the Kernel configuration for debug
+<ul><li><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig</b>
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />All the debug configuration information is enabled in the kernel hacking choice of kernel configuration. A quick note about navigating within menuconfig. The up/down move the cursor vertically on the menu choices. Use the left/right arrows to move the cursor between select and exit. Use the the space bar to select a kernel configuration choice. To navigate up from a submenu, use the right arrow to select exit and press enter.</div></dd></dl></li>
+<li>Navigate into the Kernel Hacking submenu. Use the down arrow to select the Kernel Hacking submenu and press enter. This will navigate into the submenu.
+<dl><dd><a href="File_Sitara_linux_training_kernel_config_1.html" class="image"><img alt="Sitara linux training kernel config 1.png" src="https://processors.wiki.ti.com/images/a/a7/Sitara_linux_training_kernel_config_1.png" width="458" height="409" /></a></dd></dl></li>
+<li>Enable <b>Kernel debug info</b> under Kernel Hacking submenu by using the <b>SPACE bar</b>
+<dl><dd><a href="File_Sitara_linux_training_kernel_debugging_1.html" class="image"><img alt="Sitara linux training kernel debugging 1.png" src="https://processors.wiki.ti.com/images/a/a6/Sitara_linux_training_kernel_debugging_1.png" width="502" height="470" /></a></dd></dl></li>
+<li>Enable <b>Compile Kernel with Debug info</b> under Kernel Hacking submenu. Using the up/down to navigate the submenu, use the space bar to select.
+<dl><dd><a href="File_Sitara_linux_training_kernel_debug_enable_9.html" class="image"><img alt="Sitara linux training kernel debug enable 9.png" src="https://processors.wiki.ti.com/images/c/ce/Sitara_linux_training_kernel_debug_enable_9.png" width="599" height="449" /></a></dd></dl></li>
+<li>Enable <b>Stack Unwinding support</b> under the Kernel Hacking submenu
+<dl><dd><a href="File_Sitara_linux_training_kernel_hack_2.html" class="image"><img alt="Sitara linux training kernel hack 2.png" src="https://processors.wiki.ti.com/images/9/90/Sitara_linux_training_kernel_hack_2.png" width="482" height="414" /></a></dd></dl></li>
+<li>Have to change submenus, use the right arrow to select exit and press enter.</li>
+<li>Navigate to <b>General Setup</b> at the top of the menuconfig and enter that submenu</li>
+<li>Enable <b>Prompt for development and/or incomplete code/drivers</b> support under General Support. If you do not see this option then you do not have the correct kernel defconfig.
+<dl><dd><a href="File_Sitara_linux_training_kernel_hack_3.html" class="image"><img alt="Sitara linux training kernel hack 3.png" src="https://processors.wiki.ti.com/images/a/a9/Sitara_linux_training_kernel_hack_3.png" width="549" height="424" /></a></dd></dl></li>
+<li>Navigate up to top menu by selecting exit</li>
+<li>Select exit again to leave the configuration utility</li>
+<li>Save the kernel configuration
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Be sure to save the kernel configuration. (Note this is where to put cursor on exit using the right arrow and pressing enter to navigate up the kernel configuration tree.</div></dd></dl></li></ul></li>
+<li>Build the kernel
+<ul><li><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- uImage</b></li></ul></li>
+<li>When the build is finished, copy the kernel into the tftp directory
+<ul><li><b>cp arch/arm/boot/uImage /tftpboot</b></li></ul></li>
+<li>Go ahead and continue with the next lab step while the kernel finishes building.</li></ol>
+<h1><span class="mw-headline" id="Change_ARM_mode">Change ARM mode</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=29" title="Edit section: Change ARM mode">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_7">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=30" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section will walk you through how to change the ARM core mode from THUMB-2 to ARM which is required to run the SPL and U-Boot binaries. This is normally done by the ROM code but since we are bypassing the ROM code load of the SPL we will need to do it ourselves. 
+</p>
+<h3><span class="mw-headline" id="Key_Points_7">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=31" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Changing the ARM core mode from THUMB-2 to ARM</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_7">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=32" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Switch back to your CCS window</li>
+<li>Launch your target configuration
+<ul><li>Click <b>View -&gt; Target Configurations</b>
+<dl><dd>This should open a tab on the right side of your screen called <b>Target Configurations</b></dd></dl></li>
+<li>Expand the <b>User Defined</b> list</li>
+<li>Right-Click the <b>AM335x-TC</b> configuration and select <b>Launch Selected Configuration</b></li></ul></li>
+<li>You view should have changed to now show a <b>Debug</b> tab and the scan chain for the AM335x
+<dl><dd><a href="File_Sitara-linux-training-scan-chain.html" class="image" title="Sitara-linux-training-scan-chain.png"><img alt="Sitara-linux-training-scan-chain.png" src="https://processors.wiki.ti.com/images/c/ca/Sitara-linux-training-scan-chain.png" width="800" height="606" /></a></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You can close the AM335x-TC file.  You may also want to re-arrange the windows to make viewing easier</div></dd></dl></li>
+<li>Right-Click the <b>CortxA8</b> line item and select <b>Connect Target</b>
+<dl><dd><a href="File_Sitara-linux-training-connect-target.html" class="image" title="Sitara-linux-training-connect-target.png"><img alt="Sitara-linux-training-connect-target.png" src="https://processors.wiki.ti.com/images/0/07/Sitara-linux-training-connect-target.png" width="800" height="604" /></a></dd></dl>
+<ul><li>This will connect to the target and halt the processor.
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You will likely see a message about no source available for some memory address.  This is not important</div></dd></dl></li></ul></li>
+<li>Now that you have connected you can set the processor in ARM Mode with CCS
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />The ROM code runs in Thumb2 Mode and before the SPL code can be run the processor must be set to ARM mode.  This would normally be done by the ROM code, but since we are bypassing the ROM load of the SPL we must do it ourselves</div></dd></dl>
+<ul><li>Select the <b>Registers</b> tab
+<dl><dd><a href="File_Sitara-linux-training-registers-tab.html" class="image" title="Sitara-linux-training-registers-tab.png"><img alt="Sitara-linux-training-registers-tab.png" src="https://processors.wiki.ti.com/images/0/0e/Sitara-linux-training-registers-tab.png" width="800" height="606" /></a></dd></dl></li>
+<li>Expand the <b>Core Registers</b></li>
+<li>Inside of <b>Core Registers</b> expand the <b>CPSR</b> list
+<dl><dd><a href="File_Sitara-linux-training-cpsr-regs.html" class="image" title="Sitara-linux-training-cpsr-regs.png"><img alt="Sitara-linux-training-cpsr-regs.png" src="https://processors.wiki.ti.com/images/2/2c/Sitara-linux-training-cpsr-regs.png" width="800" height="607" /></a></dd></dl></li>
+<li>Scroll down in the CPSR register list and change the <b>T</b> register from <b>1</b> to <b>0</b>. This is done by
+<ul><li>Clicking the the <b>Value</b> box for the T register where the 1 located</li>
+<li>Pressing <b>delete</b> to remove the value</li>
+<li>Entering <b>0</b></li>
+<li>Pressing <b>Enter</b></li></ul></li>
+<li>You should see the CPSR value change to reflect the new value
+<dl><dd><a href="File_Sitara-linux-training-setting-arm-mode.html" class="image" title="Sitara-linux-training-setting-arm-mode.png"><img alt="Sitara-linux-training-setting-arm-mode.png" src="https://processors.wiki.ti.com/images/f/f8/Sitara-linux-training-setting-arm-mode.png" width="800" height="605" /></a></dd></dl></li></ul>
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />You need to do this each time the board is powered completely off or reset.  If you use the JTAG to do a SW reset this value will be preserved as well.  Likewise, if you attach to a board that was already running a booted system this value will be configured properly but you should always go ahead and check it just to be safe</div></dd></dl></li></ol>
+<h1><span class="mw-headline" id="Perform_SPL_Debug">Perform SPL Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=33" title="Edit section: Perform SPL Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_8">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=34" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section will walk you through how to do source level debugging of the SPL code. This section is required before debugging U-Boot to make sure that the processor is set into the right mode and that the SPL has initialized device. 
+</p>
+<h3><span class="mw-headline" id="Key_Points_8">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=35" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Loading the SPL binary</li>
+<li>Loading the SPL symbols</li>
+<li>Setting break points</li>
+<li>Stepping through code</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_8">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=36" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Assuming that the processor is now in ARM mode from the previous lab you can now load the SPL binary into the internal chip memory. This is done using the following steps
+<ul><li>Click <b>Tools -&gt; Load Memory</b>
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />The <i>Load Memory</i> tool is used here because we are loading the SPL binary and not and ELF image.  The reason for this is that the binary is sized to be able to fit into the internal RAM of the SoC</div></dd></dl></li>
+<li>Click the <b>Browse</b> button and browse to the following directory
+<dl><dd><b>/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/u-boot-xx.xx.xx/spl</b></dd></dl></li>
+<li>Change the filter in the lower-right corner to <b>All (*)</b>
+<dl><dd><a href="File_Sitara-linux-training-spl-binary.html" class="image"><img alt="Sitara-linux-training-spl-binary.png" src="https://processors.wiki.ti.com/images/6/60/Sitara-linux-training-spl-binary.png" width="779" height="613" /></a></dd></dl></li>
+<li>Select the <b>u-boot-spl.bin</b> file and click <b>OK</b></li>
+<li>You should now be back at the <i>Load Memory</i> dialog. Select <b>Next</b></li>
+<li>In the next screen change the following settings
+<ul><li><b>Start Address: 0x402F0400</b>
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />This is the start address of the SPL binary as defined in the u-boot sources</div></dd></dl></li>
+<li><b>Type-size: 32 bits</b></li></ul>
+<dl><dd><a href="File_Sitara-linux-training-load-memory.html" class="image"><img alt="Sitara-linux-training-load-memory.png" src="https://processors.wiki.ti.com/images/4/46/Sitara-linux-training-load-memory.png" width="690" height="459" /></a></dd></dl></li>
+<li>Click <b>Finish</b></li>
+<li>You should see a box pop up showing the memory load operation
+<dl><dd><a href="File_Sitara-linux-training-memory-load.html" class="image" title="Sitara-linux-training-memory-load.png"><img alt="Sitara-linux-training-memory-load.png" src="https://processors.wiki.ti.com/images/9/91/Sitara-linux-training-memory-load.png" width="800" height="604" /></a></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />This may take a bit of time since the XDS100v2 is a slower JTAG emulator than some other devices.  Just be patient and allow the process to finish</div></dd></dl></li></ul></li>
+<li>Now that the SPL binary is loaded you can use the following commands to load the symbols for that binary to allow source level debugging
+<ul><li>Click <b>Run -&gt; Load -&gt; Load Symbols...</b></li>
+<li>In the dialog box click the <b>Browse</b> button</li>
+<li>Like before browse to the <b>spl</b> directory and change the filter to <b>All</b></li>
+<li>Select the <b>u-boot-spl</b> file which is the ELF executable that also contains the symbols and click <b>OK</b></li>
+<li>Click <b>OK</b></li></ul></li>
+<li>Now that the binary and symbols are loaded we need to set the program counter to the beginning of the SPL code. To do this go back to your <b>Registers</b> Tab and in the <b>Core Registers</b> list change the PC value to the start address you entered before (<b>0x402F0400</b>)
+<dl><dd><a href="File_Sitara-linux-training-set-PC.html" class="image" title="Sitara-linux-training-set-PC.png"><img alt="Sitara-linux-training-set-PC.png" src="https://processors.wiki.ti.com/images/b/b0/Sitara-linux-training-set-PC.png" width="800" height="606" /></a></dd></dl></li>
+<li>Click <b>View -&gt; Disassembly</b> to open the Disassembly view and see that the program counter is now at <i>0x402F0400</i> and that there appears to be valid content in the memory.
+<dl><dd><a href="File_Sitara-linux-training-spl-loaded.html" class="image" title="Sitara-linux-training-spl-loaded.png"><img alt="Sitara-linux-training-spl-loaded.png" src="https://processors.wiki.ti.com/images/b/b3/Sitara-linux-training-spl-loaded.png" width="800" height="608" /></a></dd></dl></li>
+<li>Now open the source file so we can set a breakpoint in the s_init function
+<ul><li>Click <b>File -&gt; Open File</b></li>
+<li>Browse to <b>/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/u-boot-xx.xx.xx/board/ti/am335x/</b></li>
+<li>select the <b>board.c</b> file and click <b>OK</b></li>
+<li>Use <b>CTRL+F</b> to search for <b>s_init</b></li></ul></li>
+<li>Set a hardware breakpoint by doing the following
+<ul><li><b>Right-Click</b> the line number on the left side that you want to set a breakpoint at</li>
+<li>Select <b>Breakpoint (Code Composer Studio) -&gt; Hardware Breakpoint</b>. For this lab select line <b>475</b></li>
+<li>You should now see a <b>Breakpoints</b> tab opened listing your new breakpoint
+<dl><dd><a href="File_Sitara-linux-training-spl-breakpoint.html" class="image" title="Sitara-linux-training-spl-breakpoint.jpg"><img alt="Sitara-linux-training-spl-breakpoint.jpg" src="https://processors.wiki.ti.com/images/a/aa/Sitara-linux-training-spl-breakpoint.jpg" width="800" height="455" /></a></dd></dl></li></ul></li>
+<li>You can now click the green run arrow to start execution of the SPL code. You should notice the execution stop at your breakpoint.
+<dl><dd><a href="File_Sitara-linux-training-run-arrow.html" class="image" title="Sitara-linux-training-run-arrow.jpg"><img alt="Sitara-linux-training-run-arrow.jpg" src="https://processors.wiki.ti.com/images/2/2c/Sitara-linux-training-run-arrow.jpg" width="800" height="455" /></a></dd></dl></li>
+<li>You can now use the step operations to step over and into functions. You can also double-click on variable names to see their values.
+<ul><li>For example click the <b>regVal</b> variable on line <b>516</b> and you can see the value of that structure
+<dl><dd><a href="File_Sitara-linux-training-header-value.html" class="image" title="Sitara-linux-training-header-value.jpg"><img alt="Sitara-linux-training-header-value.jpg" src="https://processors.wiki.ti.com/images/5/5d/Sitara-linux-training-header-value.jpg" width="800" height="455" /></a></dd></dl></li>
+<li>Go ahead and click the <b>Step Into</b> operation to step into the <b>preloader_console_init</b> function
+<dl><dd><a href="File_Sitara-linux-training-step-into.html" class="image" title="Sitara-linux-training-step-into.jpg"><img alt="Sitara-linux-training-step-into.jpg" src="https://processors.wiki.ti.com/images/6/61/Sitara-linux-training-step-into.jpg" width="800" height="455" /></a></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The yellow arrows are for source step operations, the green arrows are for assembly step operations</div></dd>
+<dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Because of compiler optimizations the source level step operations may not be 100% accurate, but they are generally close enough to give you an idea of what is going on</div></dd></dl></li></ul></li>
+<li>Go ahead and click the green run button to let SPL finish running to completion</li>
+<li>After a second or two press the yellow <b>pause</b> symbol to suspend execution#</li>
+<li>You should either see output on the console window of <b>### ERROR ### Please RESET the board ###</b> or the equivalent line in C code
+<dl><dd><a href="File_Sitara_linux_training_spl_error_message.html" class="image"><img alt="Sitara linux training spl error message.jpg" src="https://processors.wiki.ti.com/images/9/90/Sitara_linux_training_spl_error_message.jpg" width="430" height="83" /></a></dd>
+<dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />You will only see the console output on your minicom window.</div></dd></dl></li>
+<li>This means that SPL has run and tried to read the U-Boot image from the SD card, the default boot setting for the EVM. The processor now has the SPL context which means means the board is ready for U-Boot.
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />DO NOT RESET YOUR BOARD.  If you reset your board at this point you will need to re-run these steps and re-load SPL to go on to the debugging U-Boot lab</div></dd></dl></li></ol>
+<h1><span class="mw-headline" id="Perform_U-Boot_Debug">Perform U-Boot Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=37" title="Edit section: Perform U-Boot Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_9">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=38" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section is going to walk you through the steps to debug a U-Boot Image. In the previous step SPL was run to enable the SoC to be ready for the U-Boot image. A HW break point will be set in an intialization function. After the break point is triggered, CCS will be used to step in and over functions and a memory location will be accessed. 
+</p>
+<h3><span class="mw-headline" id="Key_Points_9">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=39" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Loading an ELF image into the processor memory instead of a raw binary</li>
+<li>Setting break points</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_9">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=40" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Assuming that you have executed SPL you can now perform the following steps to load the U-Boot ELF image.
+<ul><li>Click <b>Run -&gt; Load -&gt; Load Program...</b></li>
+<li>Click the <b>Browse</b> button and this time select the <b>u-boot</b> file in the <b>/ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/u-boot-xxxx.xx-pspxx.xx.xx.xx</b> directory
+<dl><dd><a href="File_Sitara-linux-training-select-uboot.html" class="image"><img alt="Sitara-linux-training-select-uboot.png" src="https://processors.wiki.ti.com/images/6/67/Sitara-linux-training-select-uboot.png" width="784" height="618" /></a></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />As always you will need to change the filter to <b>All</b></div></dd></dl></li>
+<li>Click <b>OK</b> to load the program
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />As with the SPL load this may take some time and you may see your screen gray out periodically.  This is OK.  Be patient and allow the operation to finish.  This is again due to the slower speed of the XDS100v2 emulator</div></dd></dl></li></ul></li>
+<li>Notice that this time because an ELF image was loaded the <b>PC</b> was automatically set for you because CCS had enough information in the image to do so.
+<dl><dd><a href="File_Sitara-linux-training-PC-auto-set.html" class="image" title="Sitara-linux-training-PC-auto-set.png"><img alt="Sitara-linux-training-PC-auto-set.png" src="https://processors.wiki.ti.com/images/2/2b/Sitara-linux-training-PC-auto-set.png" width="800" height="609" /></a></dd></dl></li>
+<li>Determine the U-Boot relocation offset.
+<ul><li>Now that U-Boot is loaded go ahead and run the executable by clicking the <b>green run arrow</b>
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In the minicom window you should see U-Boot start running and timeout after three seconds.  It will end with an error about being unable to get the kernel image.  This is OK</div></dd></dl></li>
+<li>In your minicom terminal use the command <b>bdinfo</b> to find the <b>relocaddr</b>.
+<dl><dd>You should see output like the following which shows the relocation address to be <b>0x8FF88000 - this value changes with different SDKs</b></dd>
+<dd><a href="File_Sitara-linux-training-relocaddr.html" class="image"><img alt="Sitara-linux-training-relocaddr.png" src="https://processors.wiki.ti.com/images/4/42/Sitara-linux-training-relocaddr.png" width="661" height="470" /></a></dd>
+<dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />You want to get the <b>relocaddr</b> value, NOT the 'reloc off<b> value.</b></div><b> </b></dd>
+<dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />The values shown here are for a beaglebone.  The <b>relocaddr</b> value can change depending on how much memory your target board has</div></dd></dl></li></ul></li>
+<li>Re-load U-Boot now that we have the relocation information so we can be ready to debug
+<ul><li>Click <b>Run -&gt; Load -&gt; Reload Program</b> and allow the load to finish</li></ul></li>
+<li>Now the U-Boot is loaded again we need to reload the symbols based on the relocation offset we determined before. This way the hardware breakpoints we set next will actually work.
+<ul><li>Click <b>Run -&gt; Load -&gt; Load Symbols...</b>
+<ul><li>Make sure that the <b>Program file</b> entry is still set to your <b>u-boot</b> file. If not then browse to the proper file.</li>
+<li>In the <b>Code offset</b> field enter the offset value you found before. i.e. <b>0x8FF88000</b></li>
+<li>In the <b>Data offset</b> field enter the offset value you found before. i.e. <b>0x8FF88000</b></li></ul>
+<dl><dd><a href="File_Sitara-linux-training-uboot-offset.html" class="image"><img alt="Sitara-linux-training-uboot-offset.png" src="https://processors.wiki.ti.com/images/8/8e/Sitara-linux-training-uboot-offset.png" width="622" height="224" /></a></dd>
+<dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />As was discussed in the presentation that accompanies this lab u-boot initially loads into low memory.  U-Boot then relocates itself into high memory later to make room for the Linux kernel.<br /><br />This relocation is done by the <b>relocate_code</b> function which is called very early in the U-Boot process, generally in areas that should not need modification.<br /><br />In this lab we will be setting a breakpoint <b>AFTER</b> the code has been relocated, so you will have to reload the symbols as instructed below.  However, if you truly did want to debug that early code you would not want to reload these symbols</div></dd></dl></li></ul></li>
+<li>The following steps will look familiar from the SPL debug lab and will cover setting breakpoints in U-Boot.
+<ul><li>If you do not already have the <b>board.c</b> file open then do <b>File -&gt; Open File</b> and navigate to the <b>ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/u-boot-2011.09-pspxx.xx.xx.xx/board/ti/am335x</b> dirctory and select <b>board.c</b></li>
+<li>Search for the definition of the <b>board_init</b> function (around line 564)</li>
+<li>Set A HW Break Point at the start of function <b>int board_init(void)</b> (around line <b>564</b>)
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />This is done the same way as with SPL, by right-clicking the line number and selecting the HW breakpoint</div></dd></dl></li></ul></li>
+<li>Click the green run arrow to resume execution. You should see you hardware breakpoint be hit.</li>
+<li>You can now do single step and step over operations in the same way you did for SPL.</li>
+<li>CCS also has be ability to show you the contents of memory, which can be useful when debugging register values. To view a memory location do:
+<ul><li>Click <b>View -&gt; Memory Browser</b></li>
+<li>In the text box enter the following address and press <b>ENTER</b>
+<ul><li><b>0x44E10600</b></li></ul></li>
+<li>You should see output like the following
+<dl><dd><a href="File_Sitara-linux-training-memory-view.html" class="image" title="Sitara-linux-training-memory-view.jpg"><img alt="Sitara-linux-training-memory-view.jpg" src="https://processors.wiki.ti.com/images/0/0c/Sitara-linux-training-memory-view.jpg" width="800" height="445" /></a></dd></dl></li></ul></li>
+<li>The value read above matches the <i>Device ID</i> value defined in the TRM
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You can find the Device ID value in the TRM in section 9.3.2 as well as its offset.  Adding that offset to the base address for the CONTROL_MODULE registers found in table 2-2 of section 2.1 gives the address used of 0x44E10600</div></dd></dl></li></ol>
+<h1><span class="mw-headline" id="Perform_Linux_Kernel_Debug">Perform Linux Kernel Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=41" title="Edit section: Perform Linux Kernel Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Description_10">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=42" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This lab will show how to set debug the kernel. Here MLO and U-Boot are being loaded from the SD card. Next the vmlinux image is loaded that contains the debug information. A HW break point will be set and then using the boot command from a U-Boot prompt the kernel will be tftp'd from the host machine and the bootm command issued. As the kernel boots this particular break point should be hit as it is set in an initialization in the target board file which is executed on kernel boot. 
+</p><p><br /> 
+</p>
+<h3><span class="mw-headline" id="Key_Points_10">Key Points</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=43" title="Edit section: Key Points">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Using vmlinux image to source level debug of the linux kernel</li>
+<li>Virtual to Physical location access</li></ul>
+<h3><span class="mw-headline" id="Lab_Steps_10">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=44" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>If CCS is still connected click the red square icon to <b>Terminate</b> the connection</li>
+<li>Make sure your SD card is not in the board</li>
+<li>Re-launch the target configuration by
+<ul><li>Right-clicking on the <b>AM335x-TC</b> file and selecting <b>Launch Selected Configuration</b></li>
+<li>Right-clicking on the <b>CortxA8</b> line and selecting <b>Connect Target</b></li></ul>
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />When using the XDS100v2 on a Beaglebone connecting to the target causes the system to reset and the boot sequence to start over.  In this case you should perform the following steps<br /># In CCS click the green run arrow<br /># In minicom press any key to stop the autoboot</div></dd></dl></li>
+<li>Put the SD card with the MLO and U-Boot image into the board</li>
+<li>Go to your minicom window</li>
+<li>Press the reset button on the EVM-SK and stop the autoboot</li>
+<li>After stopping the auto boot sequence this is the output that should be seen on the serial console.
+<dl><dd><a href="File_Sitara_linux_training_stopping_autoboot_1.html" class="image"><img alt="Sitara linux training stopping autoboot 1.jpg" src="https://processors.wiki.ti.com/images/0/02/Sitara_linux_training_stopping_autoboot_1.jpg" width="408" height="270" /></a></dd></dl></li>
+<li>Click the yellow pause icon to <b>Suspend</b> the processor</li>
+<li>From CCS load symbols from the vmlinux image from the debug configured kernel build
+<ul><li>Click <b>Run -&gt; Load -&gt; Load Symbols...</b></li>
+<li>Click the <b>Browse</b> button and navigate to the linux source directory
+<dl><dd><b>/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/linux-xx.xx.xx/</b></dd></dl></li>
+<li>Change the filter to <b>All</b> as usual and select the <b>vmlinux</b> file
+<dl><dd><a href="File_Sitara-linux-training-select-vmlinux.html" class="image"><img alt="Sitara-linux-training-select-vmlinux.png" src="https://processors.wiki.ti.com/images/9/92/Sitara-linux-training-select-vmlinux.png" width="782" height="617" /></a><br /><br /></dd></dl></li>
+<li>If you still have offsets configured from the U-Boot lab delete them<br /><br />
+<dl><dd><a href="File_Sitara-linux-training-vmlinux-offset.html" class="image"><img alt="Sitara-linux-training-vmlinux-offset.png" src="https://processors.wiki.ti.com/images/f/f1/Sitara-linux-training-vmlinux-offset.png" width="623" height="224" /></a></dd></dl></li>
+<li>Click <b>OK</b></li></ul></li>
+<li>Set a hardware breakpoint
+<ul><li>Click <b>File -&gt; Open File</b></li>
+<li>Navigate to the <b>/home/sitara/ti-sdk-am335x-evm-xx.xx.xx.xx/board-support/linux-xx.xx.xx/arch/arm/mach-omap2</b> directory</li>
+<li>Select the <b>board-am335xevm.c</b> file</li>
+<li>Set the hardware breakpoint at the entry to the <b>am335x_evm_setup</b> function</li></ul>
+<dl><dd><a href="File_Sitara_linux_training_set_break_bp_linux_1.html" class="image" title="Sitara linux training set break bp linux 1.jpg"><img alt="Sitara linux training set break bp linux 1.jpg" src="https://processors.wiki.ti.com/images/4/40/Sitara_linux_training_set_break_bp_linux_1.jpg" width="800" height="594" /></a><br /><br /></dd></dl>
+<ul><li>The break point will now be displayed in the break point window.<br /><br /></li></ul>
+<dl><dd><a href="File_Sitara_linux_training_bp_board_file.html" class="image" title="Sitara linux training bp board file.jpg"><img alt="Sitara linux training bp board file.jpg" src="https://processors.wiki.ti.com/images/e/e1/Sitara_linux_training_bp_board_file.jpg" width="800" height="594" /></a></dd></dl></li>
+<li>Resume the target by clicking the green run arrow</li>
+<li>After resuming from the serial console press the enter key a few times, the u-boot prompt should be printed on each key press. This shows that the processor is executing U-Boot.</li>
+<li>Boot the kernel uImage to the board by tftp'ing the kernel image into DDR and running the bootm command
+<ul><li>On a <b>HOST</b> console run
+<ul><li><b>ifconfig</b> to find out the ip address, this will be the u-boot serverip</li></ul></li>
+<li>On the minicom console to the target run
+<ul><li><b>setenv serverip &lt;host machine ip address&gt;</b></li>
+<li><b>setenv bootfile uImage</b></li>
+<li><b>dhcp</b>
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In U-Boot autoload is defaulted to <b>y</b>, this command will get both the ip address for the board and load the kernel.</div></dd></dl></li></ul></li>
+<li>From the minicom console <b>bootm 0x82000000</b>
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The kernel is told to boot from memory address 0x82000000, this is the location where tftp put the kernel, this is an environment variable in U-Boot.</div></dd></dl></li></ul></li>
+<li>The kernel should now start to boot and stop at the HW break point
+<ul><li>In the minicom window the processor is halted at the daughter card detection output</li>
+<li>In the CCS window the processor is halted at the break point
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Always pause the execution before setting a breakpoint.</div></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />A general note on pause and stop. Pause stops the execution so breakpoints, memory location etc. can be examined. The stop command terminates the debug session.</div></dd>
+<dd><a href="File_Sitara_linux_training_bp_board_file.html" class="image" title="Sitara linux training bp board file.jpg"><img alt="Sitara linux training bp board file.jpg" src="https://processors.wiki.ti.com/images/e/e1/Sitara_linux_training_bp_board_file.jpg" width="800" height="594" /></a></dd></dl></li></ul></li>
+<li>Like in the U-Boot portion of the lab the processor can be single stepped and step over functions.
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Because the kernel is compiled with optimizations enabled the step functions do not always correspond directly to the lines of code.  i.e. it may take multiple clicks to move one line.</div></dd></dl></li>
+<li>Open a Memory Browser and see how to look at a physical location through a virtual address
+<ul><li>The CCS memory browser is only able to use the virtual addresses that the Kernel has setup. To view a physical location an offset has to be added to the physical address that is in the TRM. For the AM335x that offset is 0xb5000000. This value is found here in the linux kernel source:
+<ul><li><b>linux-3.2-pspxx.xx.xx.xx.sdk/arch/arm/plat-omap/include/plat/io.h</b></li>
+<li><b>AM33XX_L4_WK_IO_OFFSET 0xb5000000</b></li></ul></li>
+<li>Enter the address 0xF9E10600, this is the Device ID, the actual physical location 0x44E10600</li></ul>
+<dl><dd><a href="File_Sitara_linux_training_linux_contxt_device_id.html" class="image"><img alt="Sitara linux training linux contxt device id.png" src="https://processors.wiki.ti.com/images/5/58/Sitara_linux_training_linux_contxt_device_id.png" width="518" height="279" /></a></dd></dl>
+<ul><li>Enter the address 0xF9E10630, this is the MAC IDs for the AM335x, the actual physical location 0x44E10630</li></ul>
+<dl><dd><a href="File_Sitara_linux_training_linux_context_mac_id.html" class="image"><img alt="Sitara linux training linux context mac id.png" src="https://processors.wiki.ti.com/images/6/6c/Sitara_linux_training_linux_context_mac_id.png" width="519" height="282" /></a></dd></dl></li>
+<li>Once done examining memory resume the target and let the kernel finish booting.
+<dl><dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Leave the board in this state for the next Lab.  You should be booted up into Linux now.</div></dd></dl></li></ol>
+<h1><span id="Additional_Debug_Path_using_Debug_Access_Port_(DAP)"></span><span class="mw-headline" id="Additional_Debug_Path_using_Debug_Access_Port_.28DAP.29">Additional Debug Path using Debug Access Port (DAP)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;section=45" title="Edit section: Additional Debug Path using Debug Access Port (DAP)">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ol><li>This Lab continues where the previous one left off with Linux fully booted and running and CCS connected to the Cortex-A8.
+<ul><li><dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Debugging so far has been through the ARM Cortex-A8, but what if something is wrong and you can't read memory mapped locatons. One example may be the MMU table is not correct. Then there is a another path to the L4 bus that bypasses the ARM/MMU and you can access physical memory addresses.</div></dd></dl></li></ul></li>
+<li>If CCS is still connected click the yellow square icon to <b>Pause</b> execution.</li>
+<li>Now we are going to connect to DAP and view memory.
+<ul><li>Start by Right-clicking on the <b>AM335x-TC</b> in the debug window on CCS and select <b>Show all cores</b></li></ul>
+<dl><dd><a href="File_ShowAllCores.html" class="image" title="showAllCores.png"><img alt="showAllCores.png" src="https://processors.wiki.ti.com/images/8/8e/ShowAllCores.png" width="800" height="416" /></a></dd></dl>
+<ul><li>Then you should see another entry appear called "Non Debuggable Devices".</li>
+<li>If you click on <b>Non Debuggable Devices</b>, you should see some more entries including: "CS_DAP_DebugSS" which maybe already connected.</li>
+<li>If Disconnected then right click on <b>CS_DAP_DebugSS</b> and connect.</li></ul>
+<dl><dd><a href="File_ConnectTarget.html" class="image" title="connectTarget.png"><img alt="connectTarget.png" src="https://processors.wiki.ti.com/images/f/f7/ConnectTarget.png" width="800" height="416" /></a></dd></dl>
+<ul><li>Once connected, go back to the Memory Debug window and type in the physical address: 0x44E10600. Notice that even though we are booted up to Linux with the MMU enabled, we can view this register bypassing the ARM.</li></ul>
+<dl><dd><a href="File_MemoryBrowser.html" class="image" title="memoryBrowser.png"><img alt="memoryBrowser.png" src="https://processors.wiki.ti.com/images/f/f8/MemoryBrowser.png" width="400" height="226" /></a></dd></dl>
+<ul><li><dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The Memory Browser is updated depending on which debug path you have highlighted. If you have highlighted the CS_DAP_DebugSS then you can bypass the ARM and read physical addresses. If you selected the Cortex-A8 and it is highlighted, then you will be reading through the ARM/MMU.</div></dd></dl></li></ul></li></ol>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130190736
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.208 seconds
+Real time usage: 0.239 seconds
+Preprocessor visited node count: 537/1000000
+Preprocessor generated node count: 1242/1000000
+Post‐expand include size: 18278/2097152 bytes
+Template argument size: 8558/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   14.064      1 -total
+ 24.01%    3.377     30 Template:SpNote
+ 20.66%    2.906      1 Template:Sitara_Linux_Serial_Configuration
+ 18.01%    2.533     19 Template:SpImportant
+  9.76%    1.373      1 Template:Sitara_Devices
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:17452-0!canonical and timestamp 20201130190736 and revision id 157982
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Sitara Linux Training: uboot linux debug with ccsv5</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;oldid=157982">https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;oldid=157982</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM437x.html" title="Category:AM437x">AM437x</a></li><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li><li><a href="Category_AM35x.html" title="Category:AM35x">AM35x</a></li><li><a href="Category_AM37x.html" title="Category:AM37x">AM37x</a></li><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_AM18x.html" title="Category:AM18x">AM18x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Sitara+Linux+Training%3A+uboot+linux+debug+with+ccsv5" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Sitara_Linux_Training__uboot_linux_debug_with_ccsv5.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Sitara_Linux_Training__uboot_linux_debug_with_ccsv5.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Sitara_Linux_Training__uboot_linux_debug_with_ccsv5.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Sitara_Linux_Training__uboot_linux_debug_with_ccsv5.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;oldid=157982" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 31 July 2013, at 15:56.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.208","walltime":"0.239","ppvisitednodes":{"value":537,"limit":1000000},"ppgeneratednodes":{"value":1242,"limit":1000000},"postexpandincludesize":{"value":18278,"limit":2097152},"templateargumentsize":{"value":8558,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%   14.064      1 -total"," 24.01%    3.377     30 Template:SpNote"," 20.66%    2.906      1 Template:Sitara_Linux_Serial_Configuration"," 18.01%    2.533     19 Template:SpImportant","  9.76%    1.373      1 Template:Sitara_Devices"]},"cachereport":{"timestamp":"20201130190736","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":229});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Sitara_Linux_Training:_uboot_linux_debug_with_ccsv5 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:39:48 GMT -->
+</html>

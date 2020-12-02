@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_EABI_Migration by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C6000 EABI Migration - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C6000_EABI_Migration","wgTitle":"C6000 EABI Migration","wgCurRevisionId":235350,"wgRevisionId":235350,"wgArticleId":3479,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C6000_EABI_Migration","wgRelevantArticleId":3479,"wgRequestId":"b46333f02c386328a0a0ce21","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C6000_EABI_Migration rootpage-C6000_EABI_Migration skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C6000 EABI Migration</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This document describes the changes which may be needed to existing COFF ABI libraries and applications to
+be compatible with the new EABI released in the <i>C6000 Code Generation Tools version 7.2.0</i>.  This is not an overview of EABI; only those details needed for migration are described here.
+</p><p>If you are not already familiar with the limitations of EABI support in the C6000 compiler, please see <a href="EABI_Support_in_C6000_Compiler.html" title="EABI Support in C6000 Compiler">EABI Support in C6000 Compiler</a>.
+</p><p>This document's audience is object library vendors and developers who have been supporting COFF and wish
+to migrate their code base to EABI.
+</p>
+<hr />
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_C6000_EABI"><span class="tocnumber">1</span> <span class="toctext">The C6000 EABI</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Version_Information"><span class="tocnumber">2</span> <span class="toctext">Version Information</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Most_Common_User_EABI_Migration_Issues"><span class="tocnumber">3</span> <span class="toctext">Most Common User EABI Migration Issues</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Migration_Strategies"><span class="tocnumber">4</span> <span class="toctext">Migration Strategies</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Distribute_Libraries_in_Both_COFF_and_ELF_Formats"><span class="tocnumber">4.1</span> <span class="toctext">Distribute Libraries in Both COFF and ELF Formats</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Support_Both_COFF_and_ELF"><span class="tocnumber">4.2</span> <span class="toctext">Support Both COFF and ELF</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Predefined_Symbol:_TI_EABI"><span class="tocnumber">4.2.1</span> <span class="toctext">Predefined Symbol: __TI_EABI__</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Dealing_With_COFF-Only_Object_Libraries"><span class="tocnumber">4.2.2</span> <span class="toctext">Dealing With COFF-Only Object Libraries</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#C_and_C.2B.2B_Implementation-Defined_Language_Changes"><span class="tocnumber">5</span> <span class="toctext">C and C++ Implementation-Defined Language Changes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#The_long_int_type_is_32_Bits"><span class="tocnumber">5.1</span> <span class="toctext">The long int type is 32 Bits</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#Use_Cases_for_Declarations_Involving_long_.2F_int40_t"><span class="tocnumber">5.1.1</span> <span class="toctext">Use Cases for Declarations Involving long / int40_t</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#40-Bit_Intrinsics_Type_Change"><span class="tocnumber">5.1.2</span> <span class="toctext">40-Bit Intrinsics Type Change</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#C_Declarations_of_Assembly_Functions_Involving_long_int"><span class="tocnumber">5.1.3</span> <span class="toctext">C Declarations of Assembly Functions Involving long int</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-14"><a href="#Bit-Field_Layout"><span class="tocnumber">5.2</span> <span class="toctext">Bit-Field Layout</span></a>
+<ul>
+<li class="toclevel-3 tocsection-15"><a href="#C_and_C.2B.2B_Standard_Requirements_for_Bit-Fields"><span class="tocnumber">5.2.1</span> <span class="toctext">C and C++ Standard Requirements for Bit-Fields</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#EABI_Layout_Scheme"><span class="tocnumber">5.2.2</span> <span class="toctext">EABI Layout Scheme</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#COFF_ABI_Layout_Scheme"><span class="tocnumber">5.2.3</span> <span class="toctext">COFF ABI Layout Scheme</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Compatibility_Impact_of_EABI"><span class="tocnumber">5.2.4</span> <span class="toctext">Compatibility Impact of EABI</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Access_Type"><span class="tocnumber">5.2.5</span> <span class="toctext">Access Type</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-20"><a href="#Enumerated_type_size"><span class="tocnumber">5.3</span> <span class="toctext">Enumerated type size</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#asm.28.29_Statements"><span class="tocnumber">5.4</span> <span class="toctext">asm() Statements</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Conflicts_between_variable_and_register_names"><span class="tocnumber">5.5</span> <span class="toctext">Conflicts between variable and register names</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-23"><a href="#Assembly_Code_Changes_.28C_and_C.2B.2B_ABI_Changes.29"><span class="tocnumber">6</span> <span class="toctext">Assembly Code Changes (C and C++ ABI Changes)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-24"><a href="#COFF_Underscore_Name_Mangling"><span class="tocnumber">6.1</span> <span class="toctext">COFF Underscore Name Mangling</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Removing_the_COFF_Underscore"><span class="tocnumber">6.2</span> <span class="toctext">Removing the COFF Underscore</span></a>
+<ul>
+<li class="toclevel-3 tocsection-26"><a href="#Conditional_Redefinition_Method"><span class="tocnumber">6.2.1</span> <span class="toctext">Conditional Redefinition Method</span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Double_Label_Method"><span class="tocnumber">6.2.2</span> <span class="toctext">Double Label Method</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Preprocessor_Redefinition_Method"><span class="tocnumber">6.2.3</span> <span class="toctext">Preprocessor Redefinition Method</span></a></li>
+<li class="toclevel-3 tocsection-29"><a href="#Backward_Compatibility:_--strip_coff_underscore"><span class="tocnumber">6.2.4</span> <span class="toctext">Backward Compatibility: --strip_coff_underscore</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-30"><a href="#C.2B.2B_Name_Mangling"><span class="tocnumber">6.3</span> <span class="toctext">C++ Name Mangling</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Structures_Passed_or_Returned_by_Value"><span class="tocnumber">6.4</span> <span class="toctext">Structures Passed or Returned by Value</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Legacy_.cinit_in_Assembly_Source"><span class="tocnumber">6.5</span> <span class="toctext">Legacy .cinit in Assembly Source</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Legacy_STABS_Directives_in_Assembly_Source"><span class="tocnumber">6.6</span> <span class="toctext">Legacy STABS Directives in Assembly Source</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#DP-Relative_Data_Pointers"><span class="tocnumber">6.7</span> <span class="toctext">DP-Relative Data Pointers</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Run-Time-Support_Library_Helper_Functions"><span class="tocnumber">6.8</span> <span class="toctext">Run-Time-Support Library Helper Functions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-36"><a href="#Linker_Command_File_Changes"><span class="tocnumber">7</span> <span class="toctext">Linker Command File Changes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-37"><a href="#EABI_Sections"><span class="tocnumber">7.1</span> <span class="toctext">EABI Sections</span></a>
+<ul>
+<li class="toclevel-3 tocsection-38"><a href="#DP-relative_Data_Sections"><span class="tocnumber">7.1.1</span> <span class="toctext">DP-relative Data Sections</span></a></li>
+<li class="toclevel-3 tocsection-39"><a href="#Read-Only_Sections"><span class="tocnumber">7.1.2</span> <span class="toctext">Read-Only Sections</span></a></li>
+<li class="toclevel-3 tocsection-40"><a href="#Read-Write_Sections"><span class="tocnumber">7.1.3</span> <span class="toctext">Read-Write Sections</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-41"><a href="#No_Leading_Underscores"><span class="tocnumber">7.2</span> <span class="toctext">No Leading Underscores</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#Conditional_Linking_Feature"><span class="tocnumber">7.3</span> <span class="toctext">Conditional Linking Feature</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-43"><a href="#Miscellaneous"><span class="tocnumber">8</span> <span class="toctext">Miscellaneous</span></a>
+<ul>
+<li class="toclevel-2 tocsection-44"><a href="#Relocation_Expressions_Are_Not_Supported"><span class="tocnumber">8.1</span> <span class="toctext">Relocation Expressions Are Not Supported</span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#Partial_Linking"><span class="tocnumber">8.2</span> <span class="toctext">Partial Linking</span></a></li>
+<li class="toclevel-2 tocsection-46"><a href="#--symdebug:coff_and_--symdebug:profile_coff_Are_Not_Supported"><span class="tocnumber">8.3</span> <span class="toctext">--symdebug:coff and --symdebug:profile_coff Are Not Supported</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-47"><a href="#Special_Symbols"><span class="tocnumber">9</span> <span class="toctext">Special Symbols</span></a>
+<ul>
+<li class="toclevel-2 tocsection-48"><a href="#Symbol_Name_Changes"><span class="tocnumber">9.1</span> <span class="toctext">Symbol Name Changes</span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#Backward_Compatibility"><span class="tocnumber">9.2</span> <span class="toctext">Backward Compatibility</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-50"><a href="#C6x_EABI_Sections"><span class="tocnumber">10</span> <span class="toctext">C6x EABI Sections</span></a>
+<ul>
+<li class="toclevel-2 tocsection-51"><a href="#.neardata_and_.rodata_sections"><span class="tocnumber">10.1</span> <span class="toctext">.neardata and .rodata sections</span></a></li>
+<li class="toclevel-2 tocsection-52"><a href="#.fardata_section"><span class="tocnumber">10.2</span> <span class="toctext">.fardata section</span></a></li>
+<li class="toclevel-2 tocsection-53"><a href="#.init_array"><span class="tocnumber">10.3</span> <span class="toctext">.init_array</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="The_C6000_EABI">The C6000 EABI</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=1" title="Edit section: The C6000 EABI">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>C6000 code generation tools version 7.2.x introduces support for a new ELF-based ABI to support new features such as shared object files; this new ELF ABI is referred to as the EABI. This document does not describe ELF or the C6000 EABI, nor does it describe the new features available only in EABI. This document is focused on migration of COFF ABI applications to EABI and producing code which works equally well with both COFF ABI and EABI.
+</p><p>The details of the C6000 EABI can be found in The C6000 Embedded Application Binary Interface 
+Application Report (<a rel="nofollow" class="external text" href="http://www.ti.com/lit/sprab89">SPRAB89</a>). 
+</p><p>Documentation for features mentioned can be found in the TMS320C6000 Optimizing C Compiler User's Guide (<a rel="nofollow" class="external text" href="http://www.ti.com/lit/spru187">SPRU187</a>, revision P or later) and the TMS320C6000 Assembly Language Tools User's Guide (<a rel="nofollow" class="external text" href="http://www.ti.com/lit/spru186">SPRU186</a>, revision R or later).
+</p>
+<h1><span class="mw-headline" id="Version_Information">Version Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=2" title="Edit section: Version Information">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The first version of the C6000 compiler to support EABI is version 7.2.0.  The last version to support COFF ABI is version 7.4.24.  7 years elapsed between these releases.
+As of this writing, there are no plans for additional releases that support COFF ABI.
+</p>
+<h1><span class="mw-headline" id="Most_Common_User_EABI_Migration_Issues">Most Common User EABI Migration Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=3" title="Edit section: Most Common User EABI Migration Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>While this document details all the changes between COFF ABI and EABI and the changes needed to support both, most users will only need to perform a few changes to their code to move from COFF to ELF.  The most common issues users are likely to encounter are:
+</p>
+<dl><dd><ul><li><i><a href="#The_long_int_type_is_32_Bits">40 bit type support</a></i></li></ul>
+<dl><dd>The size of long has changed from 40 bits to 32 bits, and a new native type __int40_t is now supported for 40 bit calculations.</dd></dl>
+<ul><li><i><a href="#COFF_Underscore_Name_Mangling">No leading underscore on symbols</a></i></li></ul>
+<dl><dd>COFF adds a leading underscore to symbol names, but the EABI does not.  Assembly file references to symbols will need special handling.</dd></dl></dd></dl>
+<h1><span class="mw-headline" id="Migration_Strategies">Migration Strategies</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=4" title="Edit section: Migration Strategies">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Before beginning work to convert a COFF project to ELF, consider whether any EABI features are desired.  A working COFF program need not be converted to ELF immediately unless ELF-only features are needed. COFF will continue to be supported for some time. We encourage our customers to migrate to EABI for systems that are actively being developed. 
+</p><p>Library code which will be reused in a later ELF project may need adjustments to work for both COFF and
+ELF.
+</p>
+<h2><span class="mw-headline" id="Distribute_Libraries_in_Both_COFF_and_ELF_Formats">Distribute Libraries in Both COFF and ELF Formats</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=5" title="Edit section: Distribute Libraries in Both COFF and ELF Formats">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Library vendors are strongly encouraged to distribute both COFF and ELF versions of each library.  For portably-written C code, the effort to support both COFF and ELF is minor, and for assembly code is typically a matter of renaming global symbols using conditional compilation.
+</p>
+<h2><span class="mw-headline" id="Support_Both_COFF_and_ELF">Support Both COFF and ELF</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=6" title="Edit section: Support Both COFF and ELF">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>By using conditional compilation judiciously, it is easy to make code work with both COFF and ELF; 
+however, two sets of object files will be necessary, as linking COFF and ELF object files together is not 
+possible. 
+</p>
+<h3><span class="mw-headline" id="Predefined_Symbol:_TI_EABI">Predefined Symbol: __TI_EABI__</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=7" title="Edit section: Predefined Symbol: TI EABI">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Both the compiler and assembler pre-define the symbol __TI_EABI__ to indicate that the source is being 
+compiled under EABI. This option is defined when the --abi=eabi option is specified. Where the C code or 
+assembly code cannot be written in a way that works for both COFF ABI and EABI, use this symbol to 
+conditionally compile the appropriate version of the code. 
+</p>
+<pre>#if defined(__TI_EABI__) 
+static char abi[] = "EABI"; 
+#else 
+static char abi[] = "COFF ABI"; 
+#endif 
+printf("ABI used:&#160;%s\n", abi);
+</pre>
+<h3><span class="mw-headline" id="Dealing_With_COFF-Only_Object_Libraries">Dealing With COFF-Only Object Libraries</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=8" title="Edit section: Dealing With COFF-Only Object Libraries">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To convert an object file from COFF ABI to EABI, it is strongly recommended that you have access to at 
+least the assembly code so that it can be appropriately modified and reassembled. If you do not have 
+source code, such as the case when you only have an object library from a vendor, the best choices are 
+to either leave the application as a COFF ABI application, or to request the vendor release an EABI 
+version. 
+</p><p>There is no tool support for converting a COFF object file to an ELF object file; 
+reverse-engineering the assembly code by using a disassembler is error-prone and could violate licensing 
+agreements for some packages.
+</p>
+<h1><span id="C_and_C++_Implementation-Defined_Language_Changes"></span><span class="mw-headline" id="C_and_C.2B.2B_Implementation-Defined_Language_Changes">C and C++ Implementation-Defined Language Changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=9" title="Edit section: C and C++ Implementation-Defined Language Changes">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Programs written entirely in C or C++ will have the easiest migration path. Portably written C and C++ 
+code will probably not need any changes at all, so such code can be shared unmodified between COFF 
+and ELF projects. 
+</p><p>Maximally portable C and C++:
+</p>
+<ul><li>does not rely on exact sizes of types beyond what the C standard guarantees</li>
+<li>does not assume a particular bit-field layout</li>
+<li>does not assume a particular enum type size</li>
+<li>does not use intrinsics</li>
+<li>does not use asm("") statements</li></ul>
+<p>If your code avoids these non-portable assumptions, the code may be reused unmodified without inspection. Code which does make one of these assumptions will need to be examined to determine if the code will behave differently for EABI and COFF ABI. This section describes where EABI and COFF ABI differ with regard to C and C++ language features.
+</p>
+<h2><span class="mw-headline" id="The_long_int_type_is_32_Bits">The long int type is 32 Bits</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=10" title="Edit section: The long int type is 32 Bits">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>As required by the EABI standard, the long int (or just 'long') integer type is 32 bits wide in the EABI model, whereas it is 40 bits wide in the COFF ABI model.  To facilitate code that is meant for both COFF and EABI applications, the new 40 bit wide native integer type __int40_t should be used.  This type will provide 40 bits of precision when using either COFF or EABI.  
+</p><p>When including stdint.h, the int40_t type can be used.
+</p>
+<h3><span id="Use_Cases_for_Declarations_Involving_long_/_int40_t"></span><span class="mw-headline" id="Use_Cases_for_Declarations_Involving_long_.2F_int40_t">Use Cases for Declarations Involving long / int40_t</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=11" title="Edit section: Use Cases for Declarations Involving long / int40 t">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This table shows typical use cases for long, along with the suggested type to use in code shared between 
+COFF ABI and EABI: 
+</p>
+<table border="1" style="background:#F2F2F2;">
+<caption>Typical long Use Cases
+</caption>
+<tbody><tr>
+<th>Bits Needed</th>
+<th width="5%">Storage size a concern?</th>
+<th width="5%">Execution speed a concern?</th>
+<th>Native Types</th>
+<th>Compatible Types<br />from stdint.h
+</th></tr>
+<tr>
+<td>At least 32 bits</td>
+<td>No</td>
+<td>No</td>
+<td>long or int</td>
+<td>int32_t, int_least32_t, or int_fast32_t
+</td></tr>
+<tr>
+<td>At least 32 bits</td>
+<td>Yes</td>
+<td>--</td>
+<td>int</td>
+<td>int_least32_t
+</td></tr>
+<tr>
+<td>At least 32 bits</td>
+<td>--</td>
+<td>Yes</td>
+<td>int</td>
+<td>int_fast32_t
+</td></tr>
+<tr>
+<td>Exactly 32 bits</td>
+<td>--</td>
+<td>--</td>
+<td>int</td>
+<td>int32_t
+</td></tr>
+<tr>
+<td>At least 40 bits</td>
+<td>--</td>
+<td>No</td>
+<td>__int40_t</td>
+<td>int40_t, int_least40_t, or int_fast40_t
+</td></tr>
+<tr>
+<td>At least 40 bits</td>
+<td>--</td>
+<td>Yes</td>
+<td>__int40_t</td>
+<td>int_fast40_t
+</td></tr>
+<tr>
+<td>Exactly 40 bits <br /> (needs saturation and truncation)</td>
+<td>--</td>
+<td>--</td>
+<td>Not recommended</td>
+<td><b>int40_t</b>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="40-Bit_Intrinsics_Type_Change">40-Bit Intrinsics Type Change</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=12" title="Edit section: 40-Bit Intrinsics Type Change">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Because C6000 EABI does not support the 'long' native 40-bit integer type, the following native 40-bit intrinsics 
+have new prototypes utilizing the __int40_t type, for full support under COFF and EABI:
+</p>
+<table border="0" cellpadding="0">
+<tbody><tr><td>__int40_t</td><td style="padding-left:15px; padding-right:15px">_lsadd</td><td>(int, __int40_t)</td></tr>
+<tr><td>__int40_t</td><td style="padding-left:15px; padding-right:15px">_lssub</td><td>(int, __int40_t)</td></tr>
+<tr><td>__int40_t</td><td style="padding-left:15px; padding-right:15px">_labs</td><td>(__int40_t)</td></tr>
+<tr><td>__int40_t</td><td style="padding-left:15px; padding-right:15px">_dtol</td><td>(double)</td></tr>
+<tr><td>__int40_t</td><td style="padding-left:15px; padding-right:15px">_ldotp2</td><td>(int, int)</td></tr>
+<tr><td>int</td><td style="padding-left:15px; padding-right:15px">_sat</td><td>(__int40_t)</td></tr>
+<tr><td>unsigned int</td><td style="padding-left:15px; padding-right:15px">_lnorm</td><td>(__int40_t)</td></tr>
+<tr><td>double</td><td style="padding-left:15px; padding-right:15px">_ltod</td><td>(__int40_t)</td></tr>
+</tbody></table>
+<h3><span class="mw-headline" id="C_Declarations_of_Assembly_Functions_Involving_long_int">C Declarations of Assembly Functions Involving long int</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=13" title="Edit section: C Declarations of Assembly Functions Involving long int">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A C-callable assembly function written for COFF ABI which accepts or returns a 40-bit value in a register pair will have been declared in the C code with a prototype involving the long int type. Prototypes for such functions will need to be changed in EABI to use __int40_t. Changing the prototype to use __int40_t will also work for COFF.
+</p>
+<h2><span class="mw-headline" id="Bit-Field_Layout">Bit-Field Layout</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=14" title="Edit section: Bit-Field Layout">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The declared type of a bit-field is now the container type. This means that some structures will have a 
+different layout in COFF ABI and in EABI. 
+</p><p>For code that must be portable between COFF ABI and EABI, bit-fields should not be used. If they must 
+be used, the bit-field may need to declared with distinct conditionally-compiled code. 
+</p>
+<h3><span id="C_and_C++_Standard_Requirements_for_Bit-Fields"></span><span class="mw-headline" id="C_and_C.2B.2B_Standard_Requirements_for_Bit-Fields">C and C++ Standard Requirements for Bit-Fields</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=15" title="Edit section: C and C++ Standard Requirements for Bit-Fields">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The declared type of a bit-field is the type that appears in the source code. To hold the value of a bit-field, 
+the C and C++ standards allow an implementation to allocate any addressable storage unit large enough 
+to hold it, which need not be related to the declared type. The addressable storage unit is commonly 
+called the container type, and that is how we refer to it in this document. The container type is the major 
+determinant of how bit-fields are packed and aligned. 
+</p><p>C89, C99, and C++ have different requirements for the declared type: 
+</p>
+<ul><li>C89 int, unsigned int, signed int</li>
+<li>C99 int, unsigned int, signed int, _Bool, or "some other implementation-defined type"</li>
+<li>C++ any integral or enumeration type, including bool</li></ul>
+<p>There is no long long type in strict C++, but because C99 has it, C++ compilers commonly support it as an 
+extension. The C99 standard does not require an implementation to support long or long long declared 
+types for bit-fields, but because C++ allows it, it is not uncommon for C compilers to support them as well. 
+</p><p>The TI compiler supports using any integral type as the declared type in both C and C++, but only in 
+EABI. For COFF ABI, bit-fields must have declared type int, unsigned int, or signed int. 
+</p>
+<h3><span class="mw-headline" id="EABI_Layout_Scheme">EABI Layout Scheme</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=16" title="Edit section: EABI Layout Scheme">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For EABI, the declared type is also used as the container type. This has two major consequences: 
+</p>
+<ul><li>The containing structure will be at least as large as the declared type</li>
+<li>If there is not enough unused space in the current container, the bit-field will be aligned to the next container.</li></ul>
+<p>If a 1-bit field has declared type int, the EABI layout will allocate an entire int container for the bit-field. 
+Other fields can share the container, but each field is guaranteed to be stored in some container exactly 
+the size of the bit-field. 
+</p><p>Example 1 (P stands for padding): 
+</p>
+<pre>struct S { int a:1; };
+          1111111111222222222233
+01234567890123456789012345678901
+aPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP (one 32-bit container)
+</pre>
+<p>Example 2: 
+</p>
+<pre>struct S { int a:1; int b:1; };
+          1111111111222222222233
+01234567890123456789012345678901
+abPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP (one 32-bit container
+</pre>
+<p>Example 3: 
+</p>
+<pre>struct S { char a:7; char b:2; };
+          111111
+0123456789012345
+aaaaaaaPbbPPPPPP (two 8-bit containers)
+</pre>
+<p>Example 4: 
+</p>
+<pre>struct S { char a:2; short b:15; };
+          1111111111222222222233
+01234567890123456789012345678901
+aaPPPPPPPPPPPPPPbbbbbbbbbbbbbbbP (one 8-bit container, one 8-bit pad, 
+                                  and one 16-bit container)
+</pre>
+<p>Further reading on the bit-field layout can be found in the IA64 C++ ABI specification
+(<a rel="nofollow" class="external free" href="http://www.codesourcery.com/public/cxx-abi/abi.html">http://www.codesourcery.com/public/cxx-abi/abi.html</a>).
+</p>
+<h3><span class="mw-headline" id="COFF_ABI_Layout_Scheme">COFF ABI Layout Scheme</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=17" title="Edit section: COFF ABI Layout Scheme">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The COFF ABI scheme uses a different strategy. It starts by using the smallest possible container, and will 
+grow the current container if growing it will allow the bit-field to be allocated at the current position. 
+</p><p>Example 1: 
+</p>
+<pre>struct S { int a:1; };
+01234567
+aPPPPPPP (one 8-bit container)
+</pre>
+<p>Example 2: 
+</p>
+<pre>struct S { int a:1; int b:1; };
+01234567
+abPPPPPP (one 8-bit container)
+</pre>
+<p>Example 3: 
+</p>
+<pre>struct S { char a:7; char b:2; };
+          111111
+0123456789012345
+aaaaaaabbPPPPPPP (one 16-bit container)
+</pre>
+<p>Example 4: 
+</p>
+<pre>struct S { char a:2; short b:15; };
+          1111111111222222222233
+01234567890123456789012345678901
+aabbbbbbbbbbbbbbbPPPPPPPPPPPPPPP (one 32-bit container)
+</pre>
+<h3><span class="mw-headline" id="Compatibility_Impact_of_EABI">Compatibility Impact of EABI</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=18" title="Edit section: Compatibility Impact of EABI">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>EABI can produce a layout that is not quite the same as it would be in COFF ABI. Programs which rely on 
+using bit-fields for precise data layout, such as for reading a binary file or setting bits in a status register 
+should be examined for compatibility. Such test cases may need to use conditional compilation to change 
+the declared types of bit-field definitions. However, many existing test cases will be unchanged. 
+</p><p>Incompatibilities fall into one of two categories: structures that are larger than expected, and bit-fields that 
+are at different positions. 
+</p><p>Structures can be larger with EABI if they contain bit-fields with mostly unused bits. If the structure needs 
+to use the smaller size that would have been used with COFF ABI, the declared type needs to be changed 
+to a type of the desired size, such as char. 
+</p><p>Bit-fields can usually only be at a different position in cases when there is enough space left over in the 
+current container to fit the field width of the next bit-field, but not a properly-aligned object of the declared 
+type. The narrower the declared type on a bit-field, the more likely there will be an incompatibility. 
+Declaring all bit-fields with an int-sized type (as is typical of code written for C89), will minimize 
+incompatibility of bit-field position. 
+</p>
+<h3><span class="mw-headline" id="Access_Type">Access Type</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=19" title="Edit section: Access Type">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For efficiency, the compiler may access a bit-field with a type which does not match either the declared 
+type or the container type. The declared type and container type are strictly used to determine bit field 
+packing and alignment. The type used by the CG to actually load the bit-field is the access type. It can be 
+a narrower type, computed from the size and offset of the bit-field. For instance, in the following EABI 
+example, the container type is 32 bits, but the bit-field will be loaded using an 8-bit access: 
+</p>
+<pre>struct S { int&#160;:8; int bf:8; };
+</pre>
+<p>For EABI, the compiler will not use a narrower type for volatile bit-fields (bit fields declared with a 
+volatile-qualified type); it will instead use exactly the declared type. 
+</p>
+<h2><span class="mw-headline" id="Enumerated_type_size">Enumerated type size</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=20" title="Edit section: Enumerated type size">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Many enumeration types have members with values that are small enough to fit into integer types smaller than int. COFF ABI and EABI will use int-sized containers to store variables of such enumeration types. For C++ code, both COFF ABI and EABI will use integer 
+types wider than int for enumeration types with values larger than will fit into int. 
+</p><p>In short, there is no COFF ABI to EABI migration issue regarding enumeration types when using the 7.2 compiler.
+</p>
+<h2><span id="asm()_Statements"></span><span class="mw-headline" id="asm.28.29_Statements">asm() Statements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=21" title="Edit section: asm() Statements">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The contents of asm() statements are really assembly code, and need to be changed as shown <a href="#Assembly_Code_Changes_.28C_and_C.2B.2B_ABI_Changes.29">below</a>.
+</p>
+<h2><span class="mw-headline" id="Conflicts_between_variable_and_register_names">Conflicts between variable and register names</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=22" title="Edit section: Conflicts between variable and register names">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Take, for example, the following code, where the variables A0 and A10 are named the same as the machine registers A0 and A10:
+</p>
+<pre>extern unsigned long a0;
+       unsigned long a10;
+
+void foo(void)
+{
+   a10 = a0;
+}
+</pre>
+<p>When compiled under COFF ABI, the 'a0' and 'a10' symbols will get an underscore prefix in the assembly code that is generated by the compiler.  Under the EABI model, however, the compiler does not add an underscore prefix to symbol names as explained above. The compiler will avoid conflicts between variable names in C/C++ and register names by using an escape character sequence around C/C++ variables <i>whose name matches a C6x register</i>. In the above example, the compiler will refer to the 'a0' and 'a10' variables using "||a0||" and "||a10||", respectively.
+</p><p>For example, compiling the above yields assembly like the following:
+</p>
+<pre>        .global foo
+        .global ||a0||
+
+        .global ||a10||
+        .bss    ||a10||,4,4
+
+        .sect   ".text"
+foo:
+           RETNOP  .S2     B3,4            
+||         LDW     .D2T2   *+DP(||a0||),B4
+
+           STW     .D2T2   B4,*+DP(||a10||)
+          &#160;; BRANCH OCCURS {B3}          
+
+</pre>
+<h1><span id="Assembly_Code_Changes_(C_and_C++_ABI_Changes)"></span><span class="mw-headline" id="Assembly_Code_Changes_.28C_and_C.2B.2B_ABI_Changes.29">Assembly Code Changes (C and C++ ABI Changes)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=23" title="Edit section: Assembly Code Changes (C and C++ ABI Changes)">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The C ABI is how the compiler expresses C code programs in assembly language. Assembly code that defines a C-callable function or calls a C function must conform to the ABI. This section describes changes which must be made to assembly code due to the changes made by EABI to the way C and C++ features are implemented in assembly code.
+</p><p>The changes that will be necessary to existing assembly code are primarily limited to places where the assembly code interfaces with C or C++ code. Assembly functions which do not interface with C or C++ code directly do not need to be changed.
+</p>
+<h2><span class="mw-headline" id="COFF_Underscore_Name_Mangling">COFF Underscore Name Mangling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=24" title="Edit section: COFF Underscore Name Mangling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>COFF ABI uses underscores to keep the assembly code name space and the C code namespace separate.  The C compiler prepends an underscore to every externally-visible identifier so that it will not collide with an assembly object with the same name.  We call this the <i>COFF underscore</i>. 
+</p><p>For example, this source code:
+</p>
+<pre>int x;
+int func(int y) { }</pre>
+<p>Becomes in COFF ABI:
+</p>
+<pre>    .bss _x, 4, 4
+_func:</pre>
+<p>Note how the C/C++ symol 'x' has become '_x' in the assembly code.  Assembly functions that attempt to use 'x' will use the name '_x'.
+</p><p><b>EABI does not add the COFF underscore.</b> This is a generic ELF requirement.  The user is responsible for making sure user-defined names don’t collide. Assembly code which is intended to work for both COFF ABI and EABI will need to handle the difference in mangling (see <a href="#Conditional_Redefinition_Method">Conditional Redefinition Method</a> or <a href="#Double_Label_Method">Double Label Method</a>).
+</p><p>The same source code becomes in EABI:
+</p>
+<pre>    .bss x, 4, 4
+func:</pre>
+<h2><span class="mw-headline" id="Removing_the_COFF_Underscore">Removing the COFF Underscore</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=25" title="Edit section: Removing the COFF Underscore">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>COFF ABI adds a leading underscore to C and C++ symbols to prevent name collisions with symbols defined in hand-coded assembly, but EABI does not add this underscore. When using COFF ABI, a function named red_fish written in C will produce a function entry label with the name _red_fish in the assembly source. Under the EABI, the name of the function as it appears in the assembly source will be exactly as it appears in the C code, so the function entry label for red_fish will be red_fish.
+</p><p>Functions and variables may be defined in assembly code and used in C code. To use functions and variables in a hand-coded assembly file from a COFF ABI program in EABI, the symbol label needs to be changed, or augmented with a second label. There are several approaches to this issue.
+</p>
+<h3><span class="mw-headline" id="Conditional_Redefinition_Method">Conditional Redefinition Method</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=26" title="Edit section: Conditional Redefinition Method">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The preferred solution that will be compatible with both the COFF and EABIs is to replace the COFF ABI 
+mangled name with an EABI C name using an .asg assembler directive. For example, a function red_fish 
+called from C will have a definition in the COFF ABI assembly code with a function entry label named 
+_red_fish. Insert a conditional .asg directive in front of the definition as follows: 
+</p>
+<pre>	.if __TI_EABI__
+	.asg red_fish, _red_fish
+	.endif
+
+	.global _red_fish
+
+_red_fish:
+	&lt;start of function&gt;
+</pre>
+<p>In the above example, all instances of _red_fish will be replaced with red_fish due to substitution symbol 
+expansion. The assembler will define the label, red_fish and make it visible externally via the .global 
+directive. 
+</p>
+<h3><span class="mw-headline" id="Double_Label_Method">Double Label Method</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=27" title="Edit section: Double Label Method">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Another easy solution is to provide two labels, one providing the COFF ABI mangled name, and the other 
+providing the EABI name. 
+</p>
+<pre>	.global _red_fish, red_fish
+_red_fish:
+red_fish:
+	&lt;start of function&gt;
+</pre>
+<p>A drawback to this solution is that there remains an extra symbol name which might collide with a 
+user-defined name. 
+</p>
+<h3><span class="mw-headline" id="Preprocessor_Redefinition_Method">Preprocessor Redefinition Method</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=28" title="Edit section: Preprocessor Redefinition Method">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For projects where the assembly code cannot be readily modified, the assembler's substitution symbol 
+mechanism can be used to redefine individual symbols. The technique is to create either a C source 
+header file or an assembly include file which redefines each symbol. This include file can then be implicitly 
+included in an assembly file by using the --include_file assembler option. 
+</p>
+<h3><span class="mw-headline" id="Backward_Compatibility:_--strip_coff_underscore">Backward Compatibility: --strip_coff_underscore</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=29" title="Edit section: Backward Compatibility: --strip coff underscore">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For projects where the assembly code cannot be readily modified, the compiler provides the 
+--strip_coff_underscore option which instructs the assembler to translate COFF ABI mangled external 
+symbol names to EABI by removing one leading underscore. This provides some assistance in migrating 
+assembly source files to the EABI by reducing the need to alter your assembly source files. 
+</p><p>This option takes effect only for hand-code assembly files and
+assembly files generated by the compiler from linear assembly files.
+This option will not affect the assembly files generated by the
+compiler from C and C++ source code, nor will it take effect in the
+linker command file.
+</p><p>For many programs, just using this option will be sufficient to use COFF ABI assembly code in EABI 
+programs. However, name collisions are possible if the assembly source already has two external symbols 
+with names that collide when the underscore is removed, such as sym and _sym. 
+</p><p>Further changes may still be necessary; this option does not handle symbol names appearing in C asm() 
+statements or linker command files. Those cases must be modified manually. 
+</p><p>It is very likely that a particular hand-coded assembly file will only need the COFF underscore removed to be valid for EABI. For assembly files of this nature, compiler option --strip_coff_underscore instructs the assembler to strip the underscore from every external identifier.
+</p><p>For example, to use this source code:
+</p><p>main.c:
+</p>
+<pre>int main() { red_fish(); }
+</pre>
+<p>fish.asm:
+</p>
+<pre>.global _red_fish
+_red_fish: ...
+</pre>
+<p>For COFF ABI enter this on the command line:
+</p>
+<pre>cl6x main.c fish.asm -z</pre>
+<p>For EABI enter this on the command line:
+</p>
+<pre>cl6x main.c fish.asm --abi=eabi --strip_coff_underscore -z</pre>
+<p>For compiler-generated assembly code generated from linear assembly
+files, the assembler will recognize compiler helper function names
+(those prefixed with "__c6xabi_") and will not remove the COFF
+underscore.  
+</p><p>Note: bug SDSCM00038757 caused the assembler to
+incorrectly remove the underscore from these names for C64x+ linear
+assembly files compiled using "-ms".  As a workaround, do
+not use "-ms" to compile that linear assembly file.
+</p>
+<h2><span id="C++_Name_Mangling"></span><span class="mw-headline" id="C.2B.2B_Name_Mangling">C++ Name Mangling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=30" title="Edit section: C++ Name Mangling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The compiler uses name mangling to encode into the name of C++ functions the types of its parameters so that the linker can distinguish overloaded functions.
+</p><p>COFF ABI and EABI use different name mangling schemes for C++ functions, so assembly code which refers to the mangled names directly will need to be changed to use the EABI mangling.
+</p><p>This is an example of difference in name mangling:
+</p>
+<table>
+<tbody><tr>
+<th></th>
+<th>int func(int);</th>
+<th>int func(float);
+</th></tr>
+<tr>
+<td>COFF ABI</td>
+<td>_func__Fi</td>
+<td>_func__Ff
+</td></tr>
+<tr>
+<td>EABI</td>
+<td>_Z4funci</td>
+<td>_Z4funcf
+</td></tr></tbody></table>
+<p>Direct references to mangled C++ names are unlikely unless the output assembly file from compiling a C++ file was captured and hand-modified. The best migration path is to just re-compile the original C++ file. If the hand-modifications are too extensive to do this, the fastest method to find the EABI mangled names is to re-compile the original C++ file and examine the generated assembly code to see the EABI mangled names.
+</p><p>Pass the --abi=elfabi option to dem6x to demangle EABI C++ names.
+</p>
+<h2><span class="mw-headline" id="Structures_Passed_or_Returned_by_Value">Structures Passed or Returned by Value</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=31" title="Edit section: Structures Passed or Returned by Value">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In COFF ABI, all structs that are passed or returned by value in C code are transformed by the compiler so that in the generated assembly code they are passed by reference. The compiler puts the struct in a temporary location and passes a pointer to this temporary in place of the struct.
+</p><p>In EABI, small structures (64 bits or smaller) passed or returned by value in C code are passed or returned by value in the generated assembly code, either in a register or on the stack as appropriate. Larger structures are passed by reference as in COFF ABI.
+</p><p>C-callable assembly functions that accept, return, or pass small structures by value need to be re-written to follow this convention.
+</p>
+<h2><span class="mw-headline" id="Legacy_.cinit_in_Assembly_Source">Legacy .cinit in Assembly Source</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=32" title="Edit section: Legacy .cinit in Assembly Source">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The COFF ABI uses the .cinit mechanism to initialize global variables. This is intended to be used only by the compiler, but some hand-coded assembly source encodes variable initialization with hand-encoded .cinit tables. This will work under COFF ABI as long as the encoding is correct. However, this method will not work in EABI, because it uses direct initialization instead, which means the linker creates all .cinit records.
+</p><p>The recommended migration path is to rewrite the .cinit initialization as direct initialization and let the linker handle creating the initialization record. For example, the following .cinit record can be rewritten as shown:
+</p>
+<pre>glob: .usect ".far", 8, 4&#160;; 8 byte object aligned to 4 bytes in uninitialized section ".far"
+      .sect ".cinit"
+      .align 8
+      .field 8, 32&#160;; length in bytes
+      .field glob, 32&#160;; address of memory to initialize
+      .field 2, 32&#160;; initialize first word to 2
+      .field 3, 32&#160;; initialize second word to 3
+</pre>
+<pre>      .sect ".fardata", RW&#160;; 8 byte object in initialized section ".fardata"
+      .align 4
+glob: .field 2, 32&#160;; directly initialize first word to 2
+      .field 3, 32&#160;; directly initialize first word to 3
+</pre>
+<p>For more information on using direct initialization, see the TMS320C6000 Optimizing C Compiler Tools User’s Guide.
+</p>
+<h2><span class="mw-headline" id="Legacy_STABS_Directives_in_Assembly_Source">Legacy STABS Directives in Assembly Source</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=33" title="Edit section: Legacy STABS Directives in Assembly Source">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Some COFF ABI assembly code can contain STABS (COFF debug) directives, particularly if the assembly code was originally generated by the compiler.
+</p><p>ELF does not support STABS, and the assembler will give an error message if the input file contains STABS directives. To reuse the file for EABI, strip out all of the STABS directives.
+</p><p>Example STABS directives: .file, .func, .block, .sym
+</p>
+<h2><span class="mw-headline" id="DP-Relative_Data_Pointers">DP-Relative Data Pointers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=34" title="Edit section: DP-Relative Data Pointers">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The compiler places some data, typically non-aggregate objects, in the .bss section. This section is intended to be accessed by DP-relative addressing, also called near addressing.
+</p><p>All of the objects in the .bss section need to be addressable through the limited offset range from the DP register, so the linker takes care to collect all the input .bss sections into a contiguous output .bss section. This output section may be placed anywhere in memory. The address of the output section is placed in the DP register by the bootstrap routine.
+</p><p>In COFF ABI, the .bss section is the only near section. The symbolic name for the address of this section is $bss, and this is the symbol used to initialize DP. In EABI, the .bss section is not the only near section, so $bss may not accurately reflect the proper DP initialization value. Instead, the symbol used by EABI to initialize the DP register is __TI_STATIC_BASE. References to $bss in COFF ABI hand-coded assembly need to be changed to references to __TI_STATIC_BASE for EABI.
+</p><p>Because the symbol $bss may be used frequently in certain idioms where the address of a variable is loaded into a register, in EABI mode the assembler will recognize some uses of $bss and automatically change them to relocations involving __TI_STATIC_BASE. In COFF ABI, expressions involving $bss would have been handled with a relocation expression. A relocation expression is a series of stack-machine like instructions that dictate how to compute the value of a relocatable expression. The TI ELF object format does not support relocation expressions (see <a href="#Relocation_Expressions_Are_Not_Supported">below</a>).
+</p><p>DP-relative data accessed with a near access works the same in EABI as COFF ABI: 
+</p>
+<pre>	LDW *+DP(x), A4
+</pre>
+<p>However, code using a COFF ABI far idiom must be changed: 
+</p>
+<pre>	MVK (x-$bss), A4
+	ADD DP, A4, A4
+	LDW *A4, A4
+</pre>
+<p>to this: 
+</p>
+<pre>	MVK $DPR_byte(x), A4
+	ADD DP, A4, A4
+	LDW *A4, A4
+</pre>
+<p>The assembler will recognize the COFF idiom above and make the change automatically, but only for the 
+following expressions. The available operators are $DPR_word, $DPR_hword, and $DPR_byte. Refer to 
+the TMS320C6000 Assembly Language Tools User's Guide (SPRU186) for further details. 
+</p>
+<pre>	(x-$bss)    -&gt; $DPR_byte(x)
+	(x-$bss)/2  -&gt; $DPR_hword(x)
+	(x-$bss)&gt;&gt;1 -&gt; $DPR_hword(x)
+	(x-$bss)/4  -&gt; $DPR_word(x)
+	(x-$bss)&gt;&gt;2 -&gt; $DPR_word(x)
+</pre>
+<p>Other references to $bss, such as in the linker command file, will be changed to be references to __TI_STATIC_BASE. In this way, the assembler and linker will automatically change most references to $bss to __TI_STATIC_BASE. Any other uses of $bss, such as in arithmetic expressions involving $bss, will need to be changed by the user.
+</p>
+<h2><span class="mw-headline" id="Run-Time-Support_Library_Helper_Functions">Run-Time-Support Library Helper Functions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=35" title="Edit section: Run-Time-Support Library Helper Functions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The library contains some <i>helper functions</i> to perform complicated operations for certain high-level 
+language features. It is not expected that hand-coded assembly code would call these functions, but it is 
+possible, particularly if the output of the compiler is tweaked by hand and transformed to an assembly 
+input file. These helper functions have different names in EABI. If the assembly code directly calls a library 
+helper function, the code will need to use the new name for the function. The easiest way to deal with 
+these function is to use the assembler --include_file option to include a list of assembler defines to change 
+the names of the old functions. 
+</p><p>For example, create a C header file (coff_to_elf_helpers.h) 
+</p>
+<pre>#define __divi __c6xabi_divi
+#define __divu __c6xabi_divu
+</pre>
+<p>Include this file in another header (coff_to_elf_helpers.i): 
+</p>
+<pre>	.cdecls C, LIST, "coff_to_elf_helpers.h"
+</pre>
+<p>And include this file at the beginning of every assembly file: 
+</p>
+<pre>cl6x --include_file=coff_to_elf_helpers.i
+</pre>
+<h1><span class="mw-headline" id="Linker_Command_File_Changes">Linker Command File Changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=36" title="Edit section: Linker Command File Changes">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>When porting a COFF ABI application to EABI, the most likely pace the user will need to make a change is
+the linker command file. The linker supports linker command file preprocessing.  See The C6000 Assembly
+Language Tools User's Guide.
+</p>
+<h2><span class="mw-headline" id="EABI_Sections">EABI Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=37" title="Edit section: EABI Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>EABI re-uses most compiler-generated section names used by COFF ABI, and also introduces new 
+section names. Each section needs to be allocated to appropriate memory. See <a href="#C6x_EABI_Sections">below</a> for all the 
+sections generated by the toolset. 
+</p>
+<h3><span class="mw-headline" id="DP-relative_Data_Sections">DP-relative Data Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=38" title="Edit section: DP-relative Data Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>EABI introduces the following DP-relative data sections: 
+</p>
+<table>
+
+<tbody><tr>
+<td>.rodata</td>
+<td>initialized read-only data
+</td></tr>
+<tr>
+<td>.neardata</td>
+<td>initialized near read-write data
+</td></tr></tbody></table>
+<p>These sections are similar to .bss, except that they are initialized (contain data in the object file). The 
+three DP-relative sections must be contiguous, which is most easily accomplished by using GROUP in the 
+linker command file: 
+</p>
+<pre>GROUP (NEAR_DP_RELATIVE)
+{
+    .neardata
+    .rodata
+    .bss
+} &gt; BMEM
+</pre>
+<p>To aid migrating COFF ABI to EABI, the v7.2 linker will automatically create the above GROUP and allocate it to the BMEM if the linker command file has the following:
+</p>
+<pre>    .bss &gt; BMEM
+</pre>
+<h3><span class="mw-headline" id="Read-Only_Sections">Read-Only Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=39" title="Edit section: Read-Only Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>EABI introduces the following read-only sections 
+</p>
+<ul><li>.init_array data, used to register C++ global variable constructors</li>
+<li>.c6xabi.exidx data, index table for C++ exception handling</li>
+<li>.c6xabi.extab data, unwinding instructions for C++ exception hand</li></ul>
+<p>The data section .init_array serves the same purpose .pinit does for COFF ABI. EABI does not use the name .pinit. 
+</p>
+<h3><span class="mw-headline" id="Read-Write_Sections">Read-Write Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=40" title="Edit section: Read-Write Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>EABI introduces the following read-write sections: 
+</p>
+<ul><li>.fardata initialized far data</li></ul>
+<p>The v7.2 linker will allocate the ELF section .fardata to the same memory where .far section is allocated to help the EABI migration.
+</p>
+<h2><span class="mw-headline" id="No_Leading_Underscores">No Leading Underscores</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=41" title="Edit section: No Leading Underscores">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The symbol names used in linker command files are the names as they appear in object files, which for 
+COFF means the mangled names. For EABI, the object file names are the same as the high-level 
+language names, so any reference or definition of a symbol in a linker command file will need to be 
+changed. For instance, to set a symbol to the value of the function main. 
+</p><p>COFF ABI: 
+</p>
+<pre>mainaddr = _main;
+_symbol = 0x1234;
+</pre>
+<p>EABI: 
+</p>
+<pre>mainaddr = main;
+symbol = 0x1234;
+</pre>
+<h2><span class="mw-headline" id="Conditional_Linking_Feature">Conditional Linking Feature</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=42" title="Edit section: Conditional Linking Feature">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In COFF ABI mode, if an object file is explicitly included in the link step, or is pulled in from an object library to resolve a symbol definition, then, by default, the linker will include all of the sections in such an object file into the linked output file. This can be inefficient when a given object file contains many sections that are not needed in the link but are included anyway solely because one section in the file resolves a symbol.
+</p><p>To alleviate this inefficiency in COFF, the Code Generation Tools have for a long time provided a .clink assembler directive which allows the compiler or a user to indicate that a section is eligible for removal by the linker if it is not referenced.  This linker process is referred to as conditional linking.  In COFF ABI the compiler generates .clink directive for code sections automatically.  That is, for COFF, compiler generated code sections are eligible for removal via  conditional linking. (The compiler generated data sections are always linked by the linker.)
+</p><p>In EABI mode, all sections are eligible for removal via conditional linking <i>by default</i>. This means when migrating COFF ABI application to EABI, one must make sure that needed but unreferenced sections (such as overlays or debug functionality) are explicitly retained.
+</p><p>To help developers with the transition of existing COFF applications to the EABI model and the creation of new applications, the CGT 7.2 release supports the following:
+</p><p><br />
+1. The following pragma can be used in C/C++ source files
+</p>
+<dl><dd><dl><dt><tt>&#35;pragma RETAIN(&lt;symbol&gt;)</tt></dt>
+<dd>When this pragma is applied to a function or data object symbol, it instructs the compiler to generate a .retain assembler directive into the section that contains the definition of the symbol. This provides a mechanism for the developer to indicate in their C/C++ source that a section containing the specified symbol is to be considered ineligible for removal during conditional linking.</dd></dl></dd></dl>
+<table style="background:#F2F2F2; border:solid thin black; margin-left:20px; margin-right:80px; padding:8px;">
+
+<tbody><tr>
+<td>NOTE: When compiling code for an interrupt function that is written in C/C++, the compiler will generate a .retain directive into the section that contains the definition of the interrupt function. This can be overridden by applying a #pragma CLINK() to the interrupt function symbol.
+</td></tr></tbody></table>
+<p><br />
+2. The following directive can be used in the assembly source files:
+</p>
+<dl><dd><dl><dt><tt>.retain ["&lt;section name&gt;"]</tt></dt>
+<dd>If a "section name" argument is provided to the .retain directive, the assembler will mark the specified section as ineligible for removal by conditional linking. If no "section name" argument is specified, then the currently active initialized section is marked as ineligible for removal via conditional linking.</dd></dl></dd></dl>
+<p><br />
+3. The linker option <tt>--retain</tt> can be used to specify a symbol or section to be retained by the linker.
+</p><p><br />
+Note that the compiler automatically detects interrupt vectors in version 7.2, and marks them ineligible for conditional linking to help users easily migrate from COFF ABI to EABI.
+</p>
+<h1><span class="mw-headline" id="Miscellaneous">Miscellaneous</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=43" title="Edit section: Miscellaneous">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Relocation_Expressions_Are_Not_Supported">Relocation Expressions Are Not Supported</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=44" title="Edit section: Relocation Expressions Are Not Supported">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Assembler expressions involving two or more relocatable symbols cannot be represented in C6000 ELF 
+object files. Any such expression will need to be rewritten into two or more instructions. The COFF ABI 
+DP-relative idioms recognized by the assembler are the exceptions. 
+</p><p>For example, the following will not work if both symbols are resolved at link time:
+</p>
+<pre>   thing_size: .word (thing_end - thing_begin)
+</pre>
+<h2><span class="mw-headline" id="Partial_Linking">Partial Linking</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=45" title="Edit section: Partial Linking">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Relocation entries are not processed during a partial link under the EABI. Relocation entries involving a 
+static base reference will simply be carried forward until the user is ready to create an executable output 
+file with the linker. At that point, the linker will define a value for the __TI_STATIC_BASE symbol that is 
+used in the resolution of any static-base relative relocation that is encountered. 
+</p>
+<h2><span class="mw-headline" id="--symdebug:coff_and_--symdebug:profile_coff_Are_Not_Supported">--symdebug:coff and --symdebug:profile_coff Are Not Supported</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=46" title="Edit section: --symdebug:coff and --symdebug:profile coff Are Not Supported">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These options request the use of STABS debugging information, which is available only for COFF files. 
+ELF files must use DWARF as required by the ELF specification. If there are any STABS debug directives in an assembly file (this typically only happens for assembly code generated by the compiler), these directives must be deleted or 
+conditionally compiled out; the assembler will reject these directives when assembling to an ELF file.
+</p>
+<h1><span class="mw-headline" id="Special_Symbols">Special Symbols</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=47" title="Edit section: Special Symbols">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>COFF ABI and EABI define special symbols for management of ABI functionality and memory usage.  Some variables were 
+renamed for EABI to bring them in line with the EABI standard. Note that a __TI prefix is now a standard part of many symbol names.
+</p>
+<h2><span class="mw-headline" id="Symbol_Name_Changes">Symbol Name Changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=48" title="Edit section: Symbol Name Changes">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The COFF ABI name is the name as it would appear in assembly code or the linker command file.   The EABI name is the new name for the symbol in EABI; uses of the old name in linker command files or assembler files should be updated or conditionalized to refer to the new name, as appropriate.
+</p>
+<table border="1" style="background:#F4F4F4;">
+<caption><b>Special Symbols</b>
+</caption>
+<tbody><tr>
+<th>COFF ABI Name</th>
+<th>EABI Name</th>
+<th>Purpose</th>
+<th>COFF names<br />in EABI?</th>
+<th>Notes
+</th></tr>
+<tr>
+<td>___binit__ or binit</td>
+<td>__binit__ or binit</td>
+<td>Boot-time initialization</td>
+<td></td>
+<td>Note the change from 3 leading underscores to 2
+</td></tr>
+<tr>
+<td>___c_args__</td>
+<td>__c_args__</td>
+<td>Command-line arguments</td>
+<td>Yes</td>
+<td>Note the change from 3 leading underscores to 2
+</td></tr>
+<tr style="vertical-align:top;">
+<td>___cinit__ or cinit</td>
+<td>__TI_CINIT_Base</td>
+<td>Start of C global variable initializers table</td>
+<td>No</td>
+<td>New compressed table format in EABI. <br /> Not NULL terminated in EABI; see __TI_CINIT_Limit.
+</td></tr>
+<tr>
+<td><i>N/A</i></td>
+<td>__TI_CINIT_Limit</td>
+<td>End of C global variable initializer data</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>___data__</td>
+<td><i>N/A</i></td>
+<td>Beginning of the .data section</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>___edata__</td>
+<td><i>N/A</i></td>
+<td>End of the .data section</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>___end__</td>
+<td><i>N/A</i></td>
+<td>End of the .bss section</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>___etext__</td>
+<td><i>N/A</i></td>
+<td>End of the .text section</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>___pinit__ or pinit</td>
+<td>__TI_INITARRAY_BASE</td>
+<td>Start of C++ global object initializers table</td>
+<td>Yes</td>
+<td>Not NULL terminated in EABI; see __TI_INITARRAY_Limit
+</td></tr>
+<tr>
+<td><i>N/A</i></td>
+<td>__TI_INITARRAY_Limit</td>
+<td>End of C++ global object initializer data</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>___text__ or .text</td>
+<td><i>N/A</i></td>
+<td>Beginning of the .text section</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>__bss__ .bss or $bss</td>
+<td>__TI_STATIC_BASE</td>
+<td>Start of DP-relative data</td>
+<td>Yes</td>
+<td>
+</td></tr>
+<tr>
+<td>__STACK_SIZE</td>
+<td>__TI_STACK_SIZE</td>
+<td>Size available for function frame stack</td>
+<td>Yes</td>
+<td>
+</td></tr>
+<tr>
+<td>__SYSMEM_SIZE</td>
+<td>__TI_SYSMEM_SIZE</td>
+<td>Size available for heap allocation</td>
+<td>Yes</td>
+<td>
+</td></tr>
+<tr>
+<td>__STACK_END</td>
+<td>__TI_STACK_END</td>
+<td>End of the .stack section</td>
+<td>Yes</td>
+<td>
+</td></tr>
+<tr>
+<td>C$$EXIT</td>
+<td>C$$EXIT</td>
+<td>Special host I/O trap</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>C$$IO$$</td>
+<td>C$$IO$$</td>
+<td>Special host I/O trap</td>
+<td></td>
+<td>
+</td></tr></tbody></table>
+<p>While in COFF ABI .pinit and .cinit are terminated with NULL records, in EABI the ending addresses of .init_array and .cinit are indicated by the corresponding LIMIT symbol. For more information about the format of .init_array and .cinit, see the TMS320C6000 Optimizing C Compiler User's Guide and the C6000 EABI Application Note.
+</p><p>Also note that in EABI the CINIT table has a new compressed format.  For details, see the TMS320C6000 Optimizing C Compiler User's Guide, section 7.8.4.
+</p>
+<h2><span class="mw-headline" id="Backward_Compatibility">Backward Compatibility</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=49" title="Edit section: Backward Compatibility">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In an attempt to be backward compatible under EABI while users are migrating their code and process, the linker will still recognize several of the old symbols names and will define them at link time <i>if</i> they are used, while also generating a warning referring the user to their new name.  Refer to the 'COFF names in EABI' column to identify which symbols are supported in this manner.
+</p>
+<h1><span class="mw-headline" id="C6x_EABI_Sections">C6x EABI Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=50" title="Edit section: C6x EABI Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><a href="File_EABI_sects.html" class="image"><img alt="EABI sects.jpg" src="https://processors.wiki.ti.com/images/8/80/EABI_sects.jpg" width="800" height="533" /></a>
+</p><p>The linker tries to allocate most of the new EABI sections when the user doesn't allocate these sections explicitly.
+</p>
+<h2><span class="mw-headline" id=".neardata_and_.rodata_sections">.neardata and .rodata sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=51" title="Edit section: .neardata and .rodata sections">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>When .bss is allocated in the linker command file and when .neardata and .rodata are not allocated, then the linker groups the .bss, .neardata and .rodata sections together and allocates them where .bss is allocated. For example, if the linker command file had the following and .neardata/.rodata are not specified:
+</p>
+<pre>  .bss &gt; BMEM
+</pre>
+<p>then the linker automatically allocates as if the following is specified:
+</p>
+<pre>  GROUP (NEARDP_DATA)
+  {
+       .neardata
+       .rodata
+       .bss
+  }  &gt; BMEM
+</pre>
+<p>When this is done, under -w option, the linker generates the following warnings:
+</p>
+<pre> warning: creating output section ".neardata" without a SECTIONS specification. 
+    For additional information on this section, please see the 'C6000 EABI
+    Migration' guide at
+    <a rel="nofollow" class="external free" href="C6000_EABI_C6000_EABI_Migration.html#C6x_EABI_Sections">http://processors.wiki.ti.com/index.php/C6000_EABI:C6000_EABI_Migration#C6x_EABI_Sections</a>
+ warning: creating output section ".rodata" without a SECTIONS specification.
+    For additional information on this section, please see the 'C6000 EABI
+    Migration' guide at
+    <a rel="nofollow" class="external free" href="C6000_EABI_C6000_EABI_Migration.html#C6x_EABI_Sections">http://processors.wiki.ti.com/index.php/C6000_EABI:C6000_EABI_Migration#C6x_EABI_Sections</a>
+ warning: creating group "NEARDP_DATA" to co-locate output sections .neardata
+    and .rodata with .bss
+</pre>
+<p>If you want to avoid these warning please update the linker command file to specify the GROUP for the near DP section allocation.
+</p>
+<h2><span class="mw-headline" id=".fardata_section">.fardata section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=52" title="Edit section: .fardata section">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If .fardata is not allocated in the linker command file and .far section is allocated then the linker automatically allocates the .fardata section to the same memory area as .far section allocation. If -w option is used then the linker also generates the following warning:
+</p>
+<pre> warning: creating output section ".fardata" without a SECTIONS specification.
+    For additional information on this section, please see the 'C6000 EABI
+    Migration' guide at
+    <a rel="nofollow" class="external free" href="C6000_EABI_C6000_EABI_Migration.html#C6x_EABI_Sections">http://processors.wiki.ti.com/index.php/C6000_EABI:C6000_EABI_Migration#C6x_EABI_Sections</a>
+</pre>
+<p>Explicitly allocate the .fardata section to avoid this warning.
+</p>
+<h2><span class="mw-headline" id=".init_array">.init_array</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit&amp;section=53" title="Edit section: .init array">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If .init_array is not allocated in the linker command file and .pinit section is allocated then the linker automatically allocates the .init_array section to the same memory area as .pinit section allocation. If -w option is used then the linker also generates the following warning:
+</p>
+<pre> warning: creating output section ".init_array" without a SECTIONS specification.
+    For additional information on this section, please see the 'C6000 EABI
+    Migration' guide at
+    <a rel="nofollow" class="external free" href="C6000_EABI_C6000_EABI_Migration.html#C6x_EABI_Sections">http://processors.wiki.ti.com/index.php/C6000_EABI:C6000_EABI_Migration#C6x_EABI_Sections</a>
+</pre>
+<p>Either explicitly allocate the .init_array section in the linker command file or if there are no .pinit sections remove the .pinit allocation from the linker command file.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130165622
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.109 seconds
+Real time usage: 0.111 seconds
+Preprocessor visited node count: 535/1000000
+Preprocessor generated node count: 934/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3572/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:3479-0!canonical and timestamp 20201130165622 and revision id 235350
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 EABI Migration</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 EABI Migration</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C6000 EABI Migration</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C6000 EABI Migration</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C6000 EABI Migration</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 EABI Migration</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 EABI Migration</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C6000 EABI Migration</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C6000 EABI Migration</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;oldid=235350">https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;oldid=235350</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C6000+EABI+Migration" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C6000_EABI_Migration.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:C6000_EABI_Migration&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C6000_EABI_Migration.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C6000_EABI_Migration.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C6000_EABI_Migration.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;oldid=235350" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C6000_EABI_Migration&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 17 August 2018, at 08:31.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.109","walltime":"0.111","ppvisitednodes":{"value":535,"limit":1000000},"ppgeneratednodes":{"value":934,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3572,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130165622","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":233});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_EABI_Migration by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:56 GMT -->
+</html>

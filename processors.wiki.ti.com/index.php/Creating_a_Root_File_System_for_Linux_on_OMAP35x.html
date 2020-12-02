@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Creating_a_Root_File_System_for_Linux_on_OMAP35x by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:53:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Creating a Root File System for Linux on OMAP35x - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Creating_a_Root_File_System_for_Linux_on_OMAP35x","wgTitle":"Creating a Root File System for Linux on OMAP35x","wgCurRevisionId":114243,"wgRevisionId":114243,"wgArticleId":643,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM437x","AM335x","AM35x","AM37x","AM1x","AM18x","Linux","File system","OMAP35x","DaVinci Linux"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Creating_a_Root_File_System_for_Linux_on_OMAP35x","wgRelevantArticleId":643,"wgRequestId":"0111aaf21dd47184affbf987","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Creating_a_Root_File_System_for_Linux_on_OMAP35x rootpage-Creating_a_Root_File_System_for_Linux_on_OMAP35x skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Creating a Root File System for Linux on OMAP35x</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#ABSTRACT"><span class="tocnumber">1</span> <span class="toctext">ABSTRACT</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Introduction"><span class="tocnumber">2</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Nomenclature"><span class="tocnumber">3</span> <span class="toctext">Nomenclature</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Configure_the_Linux_Kernel_to_Support_File_Systems"><span class="tocnumber">4</span> <span class="toctext">Configure the Linux Kernel to Support File Systems</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Device_Node_Creation"><span class="tocnumber">4.1</span> <span class="toctext">Device Node Creation</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Configure_the_Linux_Kernel_for_Root_File_System_over_NFS"><span class="tocnumber">4.2</span> <span class="toctext">Configure the Linux Kernel for Root File System over NFS</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Configure_the_Linux_Kernel_for_RAMDISK_support"><span class="tocnumber">4.3</span> <span class="toctext">Configure the Linux Kernel for RAMDISK support</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Configure_the_Linux_Kernel_for_Memory_Technology_Devices_.28MTD.29"><span class="tocnumber">4.4</span> <span class="toctext">Configure the Linux Kernel for Memory Technology Devices (MTD)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Configure_the_Linux_Kernel_for_Flash_File_Systems_.28JFFS2_and_CRAMFS.29"><span class="tocnumber">4.5</span> <span class="toctext">Configure the Linux Kernel for Flash File Systems (JFFS2 and CRAMFS)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Download_and_Build_BusyBox"><span class="tocnumber">5</span> <span class="toctext">Download and Build BusyBox</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Configure_the_New_Target_Root_File_System"><span class="tocnumber">6</span> <span class="toctext">Configure the New Target Root File System</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Add_the_Shared_Libraries_Applications_will_Require"><span class="tocnumber">6.1</span> <span class="toctext">Add the Shared Libraries Applications will Require</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Mounting_the_Root_File_System_over_NFS"><span class="tocnumber">7</span> <span class="toctext">Mounting the Root File System over NFS</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Creating_and_Booting_a_RAMDISK"><span class="tocnumber">8</span> <span class="toctext">Creating and Booting a RAMDISK</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#MTD_Partitions"><span class="tocnumber">9</span> <span class="toctext">MTD Partitions</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Creating_and_Booting_a_JFFS2_Root_File_System"><span class="tocnumber">10</span> <span class="toctext">Creating and Booting a JFFS2 Root File System</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Creating_and_Booting_a_CRAMFS_Root_File_System"><span class="tocnumber">11</span> <span class="toctext">Creating and Booting a CRAMFS Root File System</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Enhancing_the_Root_File_System"><span class="tocnumber">12</span> <span class="toctext">Enhancing the Root File System</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#Add_the_Kernel_Driver_Modules_to_the_Root_File_System"><span class="tocnumber">12.1</span> <span class="toctext">Add the Kernel Driver Modules to the Root File System</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-20"><a href="#RAMDISK_Considerations"><span class="tocnumber">13</span> <span class="toctext">RAMDISK Considerations</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#Trouble_Shooting"><span class="tocnumber">14</span> <span class="toctext">Trouble Shooting</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="ABSTRACT">ABSTRACT</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=1" title="Edit section: ABSTRACT">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A Linux kernel is not very useful without a root file system containing applications and settings.  Root file systems can be created in several formats: mountable over a network (NFS), a RAMDISK, or stored in flash (flash file system).  Instructions on building and using these file systems is scattered over the Internet and/or in the Documentation directory in a Linux distribution.  This note will describe building a simple root file system in the following formats:  mountable over NFS, RAMDISK, Journaling Flash File System 2 (JFFS2), and a read-only flash file system known as CRAMFS.
+</p>
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=2" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The root file system built in this note is based on BusyBox, also known as “The Swiss Army Knife of Embedded Linux”.  BusyBox contains reduced size versions of the most commonly used Unix utilities, all in a single executable.  It is customizable so that only the utilities that are needed are built.
+This note guides the reader through the following:
+</p>
+<ul><li>Downloading and building BusyBox</li>
+<li>Mounting the root file system over NFS</li>
+<li>Building and testing a RAMDISK from the BusyBox target</li>
+<li>Building and testing a JFFS2 file system from the BusyBox target</li>
+<li>Building and testing a CRAMFS file system from the BusyBox target</li></ul>
+<p>This note assumes that the reader has root privileges on a PC running Linux.  The busybox executable and all symbolic links to it must have user and group ownership set to “root”.  This is required because the kernel boots as root.  If the generated root file system does not have user/group set to root, the kernel will not boot.  There are utility programs on the Internet that can change this, but these are out of the scope of this document.
+</p>
+<h2><span class="mw-headline" id="Nomenclature">Nomenclature</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=3" title="Edit section: Nomenclature">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>For this note, all source and target files are assumed to be in the user’s home directory.  For simplicity, this note will assume the user’s directory is “user”.  The home directory is then
+</p><p>/home/user
+</p><p>All source code will be in the “src” directory, or
+</p><p>/home/user/src
+</p><p>Code will be built in the “build” directory, or
+</p><p>/home/user/build
+</p><p>The target root file system will be built in the “target” directory, or
+</p><p>/home/user/target
+</p><p>To create these directories, go to /home/user and enter
+</p>
+<pre>[root@localhost user]<b># cd /home/user</b>
+[root@localhost user]<b># mkdir src</b>
+[root@localhost user]<b># mkdir build</b>
+[root@localhost user]<b># mkdir target</b>
+</pre>
+<h2><span class="mw-headline" id="Configure_the_Linux_Kernel_to_Support_File_Systems">Configure the Linux Kernel to Support File Systems</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=4" title="Edit section: Configure the Linux Kernel to Support File Systems">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Linux kernel must be configured to support the file systems described in this note.  To configure the kernel enter “make menuconfig” on the command line.  The sub-menus and options to select follow.  The Linux kernel source used in this note is from the Texas Instruments V2.6.22.18-OMAP3 release. The sub-menus may be different for other Linux sources and versions.
+</p>
+<h3><span class="mw-headline" id="Device_Node_Creation">Device Node Creation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=5" title="Edit section: Device Node Creation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In Linux root file systems the /dev directory contains device nodes – special files that give application access to devices on the system.  One example is a serial port.  The device node for the first serial port on the system could be /dev/ttyS0.  An application could open/read/write/close the serial port.  The problem when creating a root file system is which device nodes are needed and which are not?
+</p><p>Early on in Linux root file systems, the creator would statically build the nodes with the “mknod” command (e.g. mknod target/dev/ttyS0 c 4 64).  This led to missing nodes, unnecessary nodes, or nodes with the wrong name.  During the 2.4.x kernels, the devfs file system was introduced.  When device drivers loaded they would register with the devfs file system and the device node would be created.  There were problems with this so that starting at 2.6.11 kernels, devfs was removed and replaced.
+</p><p>The current method for dynamic device node creation is to use kernel hotplug with the sysfs and tmpfs file systems.  During initialization, when file systems are getting mounted, the tmpfs file system is mounted on /dev.  That way all device nodes are in virtual memory and are not saved between reboots of the board.
+</p><p>A driver registers with sysfs and gets added to the system.  The kernel then runs the application pointed to by /proc/sys/kernel/hotplug to create the device node and to run any additional scripts (e.g. mounting a device).  The application used by the Texas Instruments v2.6.22.x releases is built into busybox and is called “mdev.”  This will be described later.
+</p><p>The v2.6.22.x releases default to enabling hotplug, sysfs, and tmpfs.  To make sure hotplug is set, type in “make menuconfig” and from the “Main menu” use the down arrow key to scroll down to the “General setup” entry and press the Enter key to select it.  Scroll down to “Configure standard kernel features (for small systems)” and press the Enter key.  Scroll down to “Support for hot-pluggable devices” and make sure it is set.  The Space Bar selects and de-selects options.  A sample sub-menu is shown below:
+</p>
+<pre> ┌──────── Configure standard kernel features (for small systems) ─────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │    --- Configure standard kernel features (for small systems)       │ │
+ │ │    [*]   Enable 16-bit UID system calls                             │ │
+ │ │    [ ]   Sysctl syscall support                                     │ │
+ │ │    [*]   Load all symbols for debugging/ksymoops                    │ │
+ │ │    [ ]     Include all symbols in kallsyms                          │ │
+ │ │    [*]     Do an extra kallsyms pass                                │ │
+ │ │    <b>[*]   Support for hot-pluggable devices</b>                          │ │
+ │ │    [*]   Enable support for printk                                  │ │
+ │ │    [*]   BUG() support                                              │ │
+ │ │    [*]   Enable ELF core dumps                                      │ │
+ │ └────v(+)─────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+</pre>
+<p>To ensure sysfs and tmpfs are selected, start back at the “Main menu” and scroll down to the “File systems” option.  Press Enter to select it and then scroll down to the “Pseudo filesystems” option and press Enter to select it.  The file systems selected here should be: /proc, /proc/sys, sysfs, and “Virtual memory file system support.”  That last one is also referred to as /tmpfs.  A sample sub-menu is shown below.
+</p>
+<pre> ┌────────────────────────── Pseudo filesystems ───────────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │    <b>[*] /proc file system support</b>                                    │ │
+ │ │    <b>[*]   Sysctl support (/proc/sys)</b>                                 │ │
+ │ │    <b>[*] sysfs file system support</b>                                    │ │
+ │ │    <b>[*] Virtual memory file system support (former shm fs)</b>           │ │
+ │ │    [ ]   Tmpfs POSIX Access Control Lists                           │ │
+ │ │    &lt; &gt; Userspace-driven configuration filesystem (EXPERIMENTAL)     │ │
+ │ │                                                                     │ │
+ │ │                                                                     │ │
+ │ │                                                                     │ │
+ │ │                                                                     │ │
+ │ └─────────────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<h3><span class="mw-headline" id="Configure_the_Linux_Kernel_for_Root_File_System_over_NFS">Configure the Linux Kernel for Root File System over NFS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=6" title="Edit section: Configure the Linux Kernel for Root File System over NFS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In this configuration the root file system resides on a PC running a NFS server.  From the “Main Menu” use the down arrow to scroll down to “File systems” and select it by pressing the Enter key.  Under “File Systems” scroll down to “Network file systems” and select it.  On this page make sure that “NFS file system support”, “Provide NFSv3 client support”, “Provide NFSv4 client support,” and “Root file system on NFS” are selected.  A sample sub-menu is shown below.
+</p>
+<pre> ┌───────────────────────── Network File Systems ──────────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │    <b>&lt;*&gt; NFS file system support</b>                                      │ │
+ │ │    <b>[*]   Provide NFSv3 client support</b>                               │ │
+ │ │    [ ]     Provide client support for the NFSv3 ACL protocol extensi│ │
+ │ │    <b>[*]   Provide NFSv4 client support (EXPERIMENTAL)</b>                │ │
+ │ │    [ ]   Allow direct I/O on NFS files                              │ │
+ │ │    &lt; &gt; NFS server support                                           │ │
+ │ │    <b>[*] Root file system on NFS</b>                                      │ │
+ │ │    [ ] Support for rpcbind versions 3 &amp; 4 (EXPERIMENTAL)            │ │
+ │ │    --- Secure RPC: Kerberos V mechanism (EXPERIMENTAL)              │ │
+ │ │    &lt; &gt; Secure RPC: SPKM3 mechanism (EXPERIMENTAL)                   │ │
+ │ └────v(+)─────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<h3><span class="mw-headline" id="Configure_the_Linux_Kernel_for_RAMDISK_support">Configure the Linux Kernel for RAMDISK support</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=7" title="Edit section: Configure the Linux Kernel for RAMDISK support">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In this configuration the u-boot boot loader is used to download a binary image to RAM and pass parameters to the kernel telling it the root file system is on a ramdisk, where it is located, and its size.  From the “Main menu” scroll down to “Device Drivers” and select it.  Then scroll down to “Block devices” and select it.  On this sub-menu make sure “RAM disk support” is selected.  For the “Default RAM disk size” enter 16384.  The RAM disk built in this note is 16M.
+</p>
+<pre> ┌───────────────────────────── Block devices ─────────────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │    &lt;*&gt; Loopback device support                                      │ │
+ │ │    &lt; &gt;   Cryptoloop Support                                         │ │
+ │ │    &lt; &gt; Network block device support                                 │ │
+ │ │    &lt; &gt; Low Performance USB Block driver                             │ │
+ │ │    <b>&lt;*&gt; RAM disk support</b>                                             │ │
+ │ │    <b>(16)  Default number of RAM disks</b>                                │ │
+ │ │    <b>(16384) Default RAM disk size (kbytes)</b>                           │ │
+ │ │    <b>(1024) Default RAM disk block size (bytes)</b>                       │ │
+ │ │    &lt; &gt; Packet writing on CD/DVD media                               │ │
+ │ │    &lt; &gt; ATA over Ethernet support                                    │ │
+ │ └─────────────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<p>The step above configures the kernel for build in a ramdisk.  Now go back to the “Main menu” and again select “General setup.”  Scroll down and make sure “Initial RAM filesystem and RAM disk (initramfs/initrd) support” is selected.  By default in the T.I. kernel it is.
+</p>
+<pre> ┌───────────────────────────── General setup ─────────────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌────^(-)─────────────────────────────────────────────────────────────┐ │
+ │ │    [ ] Auditing support                                             │ │
+ │ │    &lt;*&gt; Kernel .config support                                       │ │
+ │ │    [*] Enable access to .config through /proc/config.gz             │ │
+ │ │    (14) Kernel log buffer size (16 =&gt; 64KB, 17 =&gt; 128KB)            │ │
+ │ │    [*] Create deprecated sysfs files                                │ │
+ │ │    [ ] Kernel-&gt;user space relay support (formerly relayfs)          │ │
+ │ │    <b>[*] Initial RAM filesystem and RAM disk (initramfs/initrd) suppor</b>│ │
+ │ │    ()    Initramfs source file(s)                                   │ │
+ │ │    [*] Optimize for size (Look out for broken compilers!)           │ │
+ │ │    [*] Configure standard kernel features (for small systems)  ---&gt; │ │
+ │ │        Choose SLAB allocator (SLAB)  ---&gt;                           │ │
+ │ └─────────────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<h3><span id="Configure_the_Linux_Kernel_for_Memory_Technology_Devices_(MTD)"></span><span class="mw-headline" id="Configure_the_Linux_Kernel_for_Memory_Technology_Devices_.28MTD.29">Configure the Linux Kernel for Memory Technology Devices (MTD)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=8" title="Edit section: Configure the Linux Kernel for Memory Technology Devices (MTD)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To use any of the flash file systems, such as JFFS2 or CRAMFS, the MTD layer must be configured.  MTD are typically flash devices used for storage.  Configuring the individual drivers can be tricky.  If a device is CFI compliant then all that is needed is to select the CFI options.  In this example, CFI is selected, as is Intel/Sharp just in case the part it not CFI compliant.
+Starting at the “Main menu” scroll down to “Device Drivers” and select it.  Scroll down to “Memory Technology Devices (MTD) support” and select it.  There are numerous options that can/should be selected.  The screen captures below are lengthy.
+</p>
+<pre> ┌──────────────── Memory Technology Device (MTD) support ─────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │    --- Memory Technology Device (MTD) support                       │ │
+ │ │    [ ]   Debugging                                                  │ │
+ │ │    &lt;*&gt;   MTD concatenating support                                  │ │
+ │ │    [*]   MTD partitioning support                                   │ │
+ │ │    &lt; &gt;     RedBoot partition table parsing                          │ │
+ │ │    [*]     Command line partition table parsing                     │ │
+ │ │    &lt; &gt;     ARM Firmware Suite partition parsing                     │ │
+ │ │    ---   User Modules And Translation Layers                        │ │
+ │ │    &lt;*&gt;   Direct char device access to MTD devices                   │ │
+ │ │    ---   Common interface to block layer for MTD 'translation layers│ │
+ │ │    &lt;*&gt;   Caching block device access to MTD devices                 │ │
+ │ │    &lt; &gt;   FTL (Flash Translation Layer) support                      │ │
+ │ │    &lt; &gt;   NFTL (NAND Flash Translation Layer) support                │ │
+ │ │    &lt; &gt;   INFTL (Inverse NAND Flash Translation Layer) support       │ │
+ │ │    &lt; &gt;   Resident Flash Disk (Flash Translation Layer) support      │ │
+ │ │    &lt; &gt;   NAND SSFDC (SmartMedia) read only translation layer        │ │
+ │ │          RAM/ROM/Flash chip drivers  ---&gt;                           │ │
+ │ │          Mapping drivers for chip access  ---&gt;                      │ │
+ │ │          Self-contained MTD device drivers  ---&gt;                    │ │
+ │ │    &lt;*&gt;   NAND Device Support  ---&gt;                                  │ │
+ │ │    &lt;*&gt;   OneNAND Device Support  ---&gt;                               │ │
+ │ │          UBI - Unsorted block images  ---&gt;                          │ │
+ │ └─────────────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<p>Select the “RAM/ROM/Flash chip drivers” and ensure CFI and Intel/Sharp are selected.
+</p>
+<pre> ┌────────────────────── RAM/ROM/Flash chip drivers ───────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │    <b>&lt;*&gt; Detect flash chips by Common Flash Interface (CFI) probe</b>     │ │
+ │ │    &lt; &gt; Detect non-CFI AMD/JEDEC-compatible flash chips              │ │
+ │ │    [ ] Flash chip driver advanced configuration options             │ │
+ │ │    <b>&lt;*&gt; Support for Intel/Sharp flash chips</b>                          │ │
+ │ │    &lt; &gt; Support for AMD/Fujitsu flash chips                          │ │
+ │ │    &lt; &gt; Support for ST (Advanced Architecture) flash chips           │ │
+ │ │    &lt; &gt; Support for RAM chips in bus mapping                         │ │
+ │ │    &lt; &gt; Support for ROM chips in bus mapping                         │ │
+ │ │    &lt; &gt; Support for absent chips in bus mapping                      │ │
+ │ │                                                                     │ │
+ │ │                                                                     │ │
+ │ └─────────────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<p><br />
+Finally, go back to the MTD menu and select the “Mapping drivers for chip access” option.  This option enables the partitioning of the MTD into four partitions: u-boot, u-boot environment, kernel, and file system.
+</p>
+<pre> ┌──────────────────── Mapping drivers for chip access ────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │    [ ] Support non-linear mappings of flash chips                   │ │
+ │ │    &lt; &gt; CFI Flash device in physical memory map                      │ │
+ │ │    &lt; &gt; CFI Flash device mapped on ARM Integrator/P720T              │ │
+ │ │    <b>&lt;*&gt; TI OMAP board mappings</b>                                       │ │
+ │ │    &lt; &gt; Map driver for platform device RAM (mtd-ram)                 │ │
+ │ │                                                                     │ │
+ │ │                                                                     │ │
+ │ └─────────────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<h3><span id="Configure_the_Linux_Kernel_for_Flash_File_Systems_(JFFS2_and_CRAMFS)"></span><span class="mw-headline" id="Configure_the_Linux_Kernel_for_Flash_File_Systems_.28JFFS2_and_CRAMFS.29">Configure the Linux Kernel for Flash File Systems (JFFS2 and CRAMFS)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=9" title="Edit section: Configure the Linux Kernel for Flash File Systems (JFFS2 and CRAMFS)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>JFFS2 is a second generation journaling flash file system with improved wear leveling and compression.  CRAMFS is a compressed ROM file system that is read-only, therefore any writes will generate error messages on the console.  If any of the logging utilities are started, they should re-direct their output to a file on a file system capable of read-write.  Otherwise, do not start any of the logging utilities at boot.
+To configure the kernel, start at the “Main menu”, scroll down to the “File systems” entry, and select it.  Scroll down to “Miscellaneous filesystems” and select it.  Scroll down to “Journalling Flash File System v2 (JFFS2) support” and select it.  There are other JFFS2 options to select – see the sub-menu below.  Continue scrolling down and select “Compressed ROM file system support (cramfs)”.
+</p>
+<pre> ┌─────────────────────── Miscellaneous filesystems ───────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; includes, &lt;N&gt; excludes, │
+ │  &lt;M&gt; modularizes features.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for Help, &lt;/&gt; │
+ │  for Search.  Legend: [*] built-in  [ ] excluded  &lt;M&gt; module  &lt; &gt;       │
+ │ ┌────^(-)─────────────────────────────────────────────────────────────┐ │
+ │ │    <b>&lt;*&gt; Journalling Flash File System v2 (JFFS2) support</b>             │ │
+ │ │    (0)   JFFS2 debugging verbosity (0 = quiet, 2 = noisy)           │ │
+ │ │    <b>[*]   JFFS2 write-buffering support</b>                              │ │
+ │ │    [ ]   JFFS2 summary support (EXPERIMENTAL)                       │ │
+ │ │    [ ]   JFFS2 XATTR support (EXPERIMENTAL)                         │ │
+ │ │    <b>[*]   Advanced compression options for JFFS2</b>                     │ │
+ │ │    <b>[*]     JFFS2 ZLIB compression support</b>                           │ │
+ │ │    <b>[*]     JFFS2 RTIME compression support</b>                          │ │
+ │ │    [ ]     JFFS2 RUBIN compression support                          │ │
+ │ │            JFFS2 default compression mode (priority)  ---&gt;          │ │
+ │ │    <b>&lt;*&gt; Compressed ROM file system support (cramfs)</b>                  │ │
+ │ │    &lt; &gt; FreeVxFS file system support (VERITAS VxFS(TM) compatible)   │ │
+ │ └────v(+)─────────────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<h2><span class="mw-headline" id="Download_and_Build_BusyBox">Download and Build BusyBox</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=10" title="Edit section: Download and Build BusyBox">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The source to BusyBox can be downloaded from <a rel="nofollow" class="external free" href="http://www.busybox.net/downloads">http://www.busybox.net/downloads</a>.  One of the smallest and most stable version at the time of this writing is busybox-1.11.1.tar.bz2.  Download it to the /home/user/src directory.  Change directory to the build directory and extract the source code with the tar utility.  The command line options to tar are:
+x	extract the files
+j	the is a file zipped with bzip2 so use bunzip2 to uncompress
+v	display the files as they are extracted
+f	the following file contains the source
+</p>
+<pre>[root@localhost src]<b># cd ../build</b>
+[root@localhost build]<b># tar -xjvf ../src/busybox-1.2.2.1.tar.bz2</b>
+</pre>
+<p>As the files are extracted, their names are displayed.
+</p><p>Under the /home/user/build directory there should now be a busybox-1.2.2.1 directory.  Change directory to it to start selecting build options.  To configure build options, type in make menuconfig.
+</p>
+<pre>[root@localhost build]<b># cd busybox-1.2.2.1</b>
+[root@localhost busybox-1.2.2.1]<b># make menuconfig</b>
+</pre>
+<p>The following screen should be displayed:
+</p>
+<pre> ┌───────────────────────── BusyBox Configuration ─────────────────────────┐
+ │  Arrow keys navigate the menu.  &lt;Enter&gt; selects submenus ---&gt;.          │
+ │  Highlighted letters are hotkeys.  Pressing &lt;Y&gt; selectes a feature,     │
+ │  while &lt;N&gt; will exclude a feature.  Press &lt;Esc&gt;&lt;Esc&gt; to exit, &lt;?&gt; for   │
+ │  Help, &lt;/&gt; for Search.  Legend: [*] feature is selected  [ ] feature is │
+ │ ┌─────────────────────────────────────────────────────────────────────┐ │
+ │ │               Busybox Settings  ---&gt;                                │ │
+ │ │           --- Applets                                               │ │
+ │ │               Archival Utilities  ---&gt;                              │ │
+ │ │               Coreutils  ---&gt;                                       │ │
+ │ │               Console Utilities  ---&gt;                               │ │
+ │ │               Debian Utilities  ---&gt;                                │ │
+ │ │               Editors  ---&gt;                                         │ │
+ │ │               Finding Utilities  ---&gt;                               │ │
+ │ │               Init Utilities  ---&gt;                                  │ │
+ │ │               Login/Password Management Utilities  ---&gt;             │ │
+ │ │               Linux Ext2 FS Progs  ---&gt;                             │ │
+ │ │               Linux Module Utilities  ---&gt;                          │ │
+ │ └───────────v(+)──────────────────────────────────────────────────────┘ │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │                    &lt;Select&gt;    &lt; Exit &gt;    &lt; Help &gt;                     │
+ └─────────────────────────────────────────────────────────────────────────┘
+</pre>
+<p>To save on space, a hierarchical listing of options that must be selected is shown below.
+</p>
+<pre>Busybox Settings
+  General Configuration
+     Show terse applet usage messages
+     Store applet usage messages in compressed form
+     Use the devpts filesystem for Unix98 PTYs
+     (/proc/self/exe) Path to BusyBox executable
+  Build Options
+     Build BusyBox as a static binary (no shared libs)
+     Build with Large File Support
+     Do you want to build BusyBox with a Cross Compiler
+     (/opt/arm-2007q3/bin/arm-none-linux-gnueabi-) Cross Compiler prefix
+  Coreutils
+     basename
+     cat
+     chmod
+     cp
+     cut
+     echo
+     false
+     head
+     hostid
+     ln
+     ls
+     mkdir
+     mkfifo
+     mknod
+     mv
+     pwd
+     rm
+     sync
+     tail
+     touch
+     true
+     uname
+     yes
+  Console Utilities
+     clear
+     reset
+  Editors
+     awk
+     sed
+     vi
+  Finding Utilities
+     find
+     grep
+  Init Utilities
+     init (keep the defaults that come with this selection)
+     Support running commands with a controlling-tty
+     poweroff, halt, and reboot
+     mesg
+  Login/Password Management Utilities
+     Use internal password and group functuions
+     getty
+     login
+       (de-select Support for /etc/securetty)
+  Linux Module Utilities
+     insmod
+     rmmod
+     lsmod
+     modprobe
+     Support version 2.6.x Linux kernels
+  Linux System Utilities
+     dmesg
+     mdev
+     Support /etc/mdev.conf
+     Support command execution at device addition/removal
+     mkswap
+     more
+     mount
+     swaponoff
+     umount
+     umount –a option
+  Networking Utilities
+     hostname
+     ifconfig
+     ping
+     telnet
+     telnetd
+ Process Utilities
+     kill
+     killall
+     pidof
+     ps
+  Shells
+     ash (keep all the defaults)
+     Expand prompt string
+     ---Bourne Shell Options
+        Command line editing
+        History saving
+        Tab completion
+        Fancy shell prompts
+  System Logging Utilities
+     syslogd
+     klogd
+</pre>
+<p>To build BusyBox, simply type in <b>make</b> at the command line.  After a few minutes the compile should be complete.  When compilation is complete install BusyBox to the target directory.  The make and install commands are show below:
+</p>
+<pre>[root@localhost busybox-1.2.2.1]<b># make</b>
+[root@localhost busybox-1.2.2.1]<b># make CONFIG_PREFIX=/home/user/target install</b>
+</pre>
+<h2><span class="mw-headline" id="Configure_the_New_Target_Root_File_System">Configure the New Target Root File System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=11" title="Edit section: Configure the New Target Root File System">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Looking at the newly built root file system, there are only three subdirectories of binaries and a symbolic link of bin/busybox to linuxrc.  More directories must be created before the file system can be used.  Some device nodes should be created, too.
+</p>
+<pre>[root@localhost bin]<b># cd /home/user/target/</b>
+[root@localhost target]<b># dir</b>
+total 28
+drwxr-xr-x  2 root root 4096 Nov 21 10:20 bin
+lrwxrwxrwx  1 root root   11 Nov 21 10:20 linuxrc -&gt; bin/busybox
+drwxr-xr-x  2 root root 4096 Nov 21 10:20 sbin
+drwxr-xr-x  4 root root 4096 Nov 21 10:20 usr
+[root@localhost target]#
+</pre>
+<p>Create the dev, dev/pts, etc, etc/init.d, lib, mnt, opt, proc, root, sys, tmp, var, and var/log directories.  Also create the device node for the initial console.
+</p>
+<pre>[root@localhost target]<b># mkdir dev</b>
+[root@localhost target]<b># mknod dev/console c 5 1</b>
+[root@localhost target]<b># mkdir dev/pts</b>
+[root@localhost target]<b># mkdir etc</b>
+[root@localhost target]<b># mkdir etc/init.d</b>
+[root@localhost target]<b># mkdir lib</b>
+[root@localhost target]<b># mkdir mnt</b>
+[root@localhost target]<b># mkdir opt</b>
+[root@localhost target]<b># mkdir proc</b>
+[root@localhost target]<b># mkdir root</b>
+[root@localhost target]<b># mkdir sys</b>
+[root@localhost target]<b># mkdir tmp</b>
+[root@localhost target]<b># mkdir var</b>
+[root@localhost target]<b># mkdir var/log</b>
+</pre>
+<p>Since 2.6.11 the debugfs has been introduced and so you may optionally create a directory called debug for mounting the debugfs. 
+</p>
+<pre>[root@localhost target]<b># mkdir debug</b>
+</pre>
+<p>To have the /proc and /dev/pts file systems mounted at boot time, the file etc/fstab must be created in the etc directory.  Use an editor to create the file.  The example below uses vi to create the file.  The two lines to enter into fstab are shown below the vi fstab line.
+</p>
+<pre>[root@localhost target]<b># cd etc</b>
+[root@localhost etc]<b># vi fstab</b>
+proc            /proc           proc    defaults        0 0
+none            /dev/pts        devpts  mode=0622       0 0
+</pre>
+<p>The login utilities use the files group, hosts, and passwd in the etc directory for logging in.  For now, only root needs to be defined in group and passwd while hosts just needs to have localhost defined.  The contents of the three files are show below:
+</p>
+<pre>[root@localhost etc]<b># vi group</b>
+root:x:0:root
+
+[root@localhost etc]<b># vi passwd</b>
+root::0:0:root:/root:/bin/ash 
+
+[root@localhost etc]<b># vi hosts</b>
+127.0.0.1       localhost
+</pre>
+<p>The kernel starts “/sbin/init” after it boots (actually the kernel attempts to execute several known programs until one succeeds).  Init reads the etc/inittab file to determine what to do at start up, shutdown, or when a user logs in.  These inittab files can get quite complicated.  A simple one is shown below:
+</p>
+<pre>[root@localhost etc]<b># vi inittab</b>
+::sysinit:/etc/init.d/rcS 
+
+# /bin/ash
+#
+# Start an "askfirst" shell on the serial port
+console::askfirst:-/bin/ash
+
+# Stuff to do when restarting the init process
+::restart:/sbin/init
+
+# Stuff to do before rebooting
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r
+::shutdown:/sbin/swapoff -a
+</pre>
+<p>The “sysinit” line tells init to run the /etc/init.d/rcS script to set up the system.  The rest are self explanatory.
+</p><p>A simple etc/init.d/rcS file could assume file systems existed in the kernel and would simply mount the mount points as needed.  A more complicated one would test for the existence of file systems and if found, mount them; if not found, find ways to still get the system booted.
+</p><p>The author has taken the etc/init.d/rcS and mdev.conf files from the V2.6.22.18-OMAP3 release for a simple example.  The rcS script will test for the existence of file systems and mount them accordingly.  The 1.11.1 version of BusyBox does not create a link for /bin/sh so change any /bin/sh to /bin/ash. The contents are shown below:
+</p>
+<pre>[root@localhost etc]<b># vi init.d/rcS</b>
+
+#!/bin/sh
+#   ---------------------------------------------
+#   Common settings
+#   ---------------------------------------------
+HOSTNAME=OMAP3EVM
+VERSION=1.0.0
+
+hostname $HOSTNAME
+
+#   ---------------------------------------------
+#   Prints execution status.
+#
+#   arg1&#160;: Execution status
+#   arg2&#160;: Continue (0) or Abort (1) on error
+#   ---------------------------------------------
+status ()
+{
+       if [ $1 -eq 0 ]&#160;; then
+               echo "[SUCCESS]"
+       else
+               echo "[FAILED]"
+
+               if [ $2 -eq 1 ]&#160;; then
+                       echo "... System init aborted."
+                       exit 1
+               fi
+       fi
+
+}
+
+#   ---------------------------------------------
+#   Get verbose
+#   ---------------------------------------------
+echo ""
+echo "    System initialization..."
+echo ""
+echo "    Hostname      &#160;: $HOSTNAME"
+echo "    Filesystem    &#160;: v$VERSION"
+echo ""
+echo ""
+echo "    Kernel release&#160;: `uname -s` `uname -r`"
+echo "    Kernel version&#160;: `uname -v`"
+echo ""
+
+
+#   ---------------------------------------------
+#   MDEV Support
+#   (Requires sysfs support in the kernel)
+#   ---------------------------------------------
+echo -n " Mounting /proc            &#160;: "
+mount -n -t proc /proc /proc
+status $? 1
+
+echo -n " Mounting /sys             &#160;: "
+mount -n -t sysfs sysfs /sys
+status $? 1
+
+echo -n " Mounting /dev             &#160;: "
+mount -n -t tmpfs mdev /dev
+status $? 1
+
+echo -n " Mounting /dev/pts         &#160;: "
+mkdir /dev/pts
+mount -t devpts devpts /dev/pts
+status $? 1
+
+echo -n " Enabling hot-plug         &#160;: "
+echo "/sbin/mdev" &gt; /proc/sys/kernel/hotplug
+status $? 0
+
+echo -n " Populating /dev           &#160;: "
+mkdir /dev/input
+mkdir /dev/snd
+
+mdev -s
+status $? 0
+
+#   ---------------------------------------------
+#   Disable power management
+#   (Requires sysfs support in the kernel)
+#   ---------------------------------------------
+# echo -n " Disabling Power mgmt      &#160;: "
+# echo -n "1" &gt; /sys/power/cpuidle_deepest_state
+# status $? 1
+
+#   ---------------------------------------------
+#   Turn off LCD after 1 hour of inactivity
+#   (Requires sysfs support in the kernel)
+#   ---------------------------------------------
+# echo -n " Turn off LCD after 1 hour &#160;: "
+# echo -n "3600" &gt; /sys/power/fb_timeout_value
+# status $? 1
+
+
+#   ---------------------------------------------
+#   Mount the default file systems
+#   ---------------------------------------------
+echo -n " Mounting other filesystems&#160;: "
+mount -a
+status $? 0
+
+
+#   ---------------------------------------------
+#   Set PATH
+#   ---------------------------------------------
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
+
+
+#   ---------------------------------------------
+#   Start other daemons
+#   ---------------------------------------------
+echo -n " Starting syslogd          &#160;: "
+/sbin/syslogd
+status $? 0
+
+echo -n " Starting telnetd          &#160;: "
+/usr/sbin/telnetd
+status $? 0
+
+
+#   ---------------------------------------------
+#   Done!
+#   ---------------------------------------------
+echo ""
+echo "System initialization complete."
+
+
+#   ---------------------------------------------
+#   Start demo app
+#   ---------------------------------------------
+#if &#91;&#91; -x /etc/init.d/demo_start &#93;&#93;; then
+#       echo " Starting Demo Application..."
+#       /etc/init.d/demo_start &amp;
+#       sleep 5
+#fi
+</pre>
+<p>Please note that in more recent kernels (2.6.29 and newer) the sysfs entries shown above to disable power management and control the LCD inactivity timeout shown above have been removed. For latest details on using OMAP Power Management in Linux please refer to <a rel="nofollow" class="external text" href="http://elinux.org/OMAP_Power_Management">this article</a>.
+</p><p>To automatically mount the debugfs on start-up the following can be added to the above rcS file. Please note that the debugfs needs to be selected in the kernel configuration and built into the kernel before you can mount it. The below script checks to see if the debugfs is supported by the kernel before attempting to mount the file-system. To enable the debugfs run "make menuconfig" and go to "Kernel Hacking" and select "Debug Filesystem".
+</p>
+<pre>cat /proc/filesystems | grep -q debugfs
+if [ $? -eq 0 ]&#160;; then
+        echo -n " Mounting /debug            &#160;: "
+        mount -n -t debugfs none /debug
+        status $? 1
+fi
+</pre>
+<p>After saving the file, change its access permissions so that it is executable for all.
+</p>
+<pre>[root@localhost etc]<b># vi mdev.conf</b>
+
+audio       0:5 0666
+console     0:5 0600
+control.*   0:0 0660 @/bin/mv /dev/$MDEV /dev/snd/
+dsp         0:5 0666
+event.*     0:0 0600 @/bin/mv /dev/$MDEV /dev/input/
+fb          0:5 0666
+nfs         0:5 0770
+null        0:0 0777
+pcm.*       0:0 0660 @/bin/mv /dev/$MDEV /dev/snd/
+rtc         0:0 0666
+tty         0:5 0660
+tty0*       0:5 0660
+tty1*       0:5 0660
+tty2*       0:5 0660
+tty3*       0:5 0660
+tty4*       0:5 0660
+tty5*       0:5 0660
+tty6*       0:5 0660
+ttyS*       0:5 0640
+urandom     0:0 0444
+zero        0:0 0666
+</pre>
+<h3><span class="mw-headline" id="Add_the_Shared_Libraries_Applications_will_Require">Add the Shared Libraries Applications will Require</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=12" title="Edit section: Add the Shared Libraries Applications will Require">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Various applications will be built using the libraries in the tool chain so the runtime libraries must be copied to the root file system.  Care should be taken to only copy the libraries that are required so that the root file system does not grow based on unused libraries.  This note will simply demonstrate how to copy all the shared libraries to the root file system and strip out any debug information from the libraries.
+</p><p>In the Code Sourcery tool chain, most of the libraries are found in the /opt/arm-2007q1/arm-none-linux-gnueabi/libc/lib directory.  Simply copy these files to the root file system, maintaining symbolic links and then strip out unneeded debug information.
+</p>
+<pre>[root@localhost user]<b># cd /home/user/target/lib</b>
+[root@localhost lib]<b># cp –r /opt/arm-2007q1/arm-none-linux-gnueabi/libc/lib/* .</b>
+[root@localhost lib]<b># arm-none-linux-gnueabi-strip *</b>
+</pre>
+<p>Some libraries might be in other directories in the tool chain; those would have to be found on a “trial and error” basis when applications do not load because of a missing shared library.
+</p><p>A minimal, working root file system has now been built.  It will boot, but does not have kernel modules yet.  These will be added later after testing.
+</p>
+<h2><span class="mw-headline" id="Mounting_the_Root_File_System_over_NFS">Mounting the Root File System over NFS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=13" title="Edit section: Mounting the Root File System over NFS">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In this scenario, the target device and the host system are connected via Ethernet, either directly through a crossover cable or to a hub or switch.  The host must export the target file system through NFS and the NFS server daemon must be running.  For configuring and running NFS on a Linux PC, see the HOWTOs at any Linux Documentation Internet site.  In this simple example, the exported file system is /home/user/target and anybody can mount it via NFS.  The /etc/exports file is shown below
+</p>
+<pre>/home/user/target        *(rw,no_root_squash)
+</pre>
+<p>On the target side, the u-boot environment variable bootargs must be set to boot from NFS and contain the mount address of the root file system.  In the example below, the NFS server is at IP address 192.168.1.104.
+</p>
+<pre>[root@OMAP3EVM /] <b># setenv bootargs mem=64M ip=dhcp noinitrd console=ttyS0,115200n8 root=/dev/nfs rw nfsroot=192.168.1.104:/home/user/target,nolock,rsize=1024,wsize=1024</b>
+[root@OMAP3EVM /] <b># saveenv</b>
+</pre>
+<p>After booting the kernel, the final boot messages should look similar to below.
+</p>
+<pre>Sending DHCP requests .&lt;6&gt;eth0: link up, 100Mbps, full-duplex, lpa 0xCDE1
+., OK
+IP-Config: Got DHCP answer from 255.255.255.255, my address is 128.247.107.23
+IP-Config: Complete:
+     device=eth0, addr=128.247.107.23, mask=255.255.254.0, gw=128.247.106.2,
+    host=128.247.107.23, domain=am.dhcp.ti.com, nis-domain=(none),
+    bootserver=255.255.255.255, rootserver=128.247.107.35, rootpath=
+Looking up port of RPC 100003/2 on 128.247.107.35
+Looking up port of RPC 100005/1 on 128.247.107.35
+VFS: Mounted root (nfs filesystem).
+Freeing init memory: 136K
+init started: BusyBox v1.11.1 (2008-10-05 04:40:51 CDT)
+starting pid 288, tty <i>: '/etc/init.d/rcS'</i>
+
+   System initialization...
+
+   Hostname      &#160;: OMAP3EVM
+   Filesystem    &#160;: v1.0.0
+
+   Kernel release&#160;: Linux 2.6.22.18-omap3
+   Kernel version&#160;: #12 Mon Oct 6 01:22:49 CDT 2008
+
+Mounting /proc            &#160;: [SUCCESS]
+Mounting /sys             &#160;: [SUCCESS]
+Mounting /dev             &#160;: [SUCCESS]
+Mounting /dev/pts         &#160;: [SUCCESS]
+Enabling hot-plug         &#160;: [SUCCESS]
+Populating /dev           &#160;: [SUCCESS]
+Disabling Power mgmt      &#160;: [SUCCESS]
+Turn off LCD after 1 hour &#160;: [SUCCESS]
+Mounting other filesystems&#160;: [SUCCESS]
+Starting syslogd          &#160;: [SUCCESS]
+Starting telnetd          &#160;: [SUCCESS]
+
+System initialization complete.
+
+Please press Enter to activate this console.
+</pre>
+<h2><span class="mw-headline" id="Creating_and_Booting_a_RAMDISK">Creating and Booting a RAMDISK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=14" title="Edit section: Creating and Booting a RAMDISK">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A ramdisk is simply an ext2 file system.  The tools to build one are shipped with just about every Linux distribution.  The steps to build the ramdisk from the target file system are as follows:
+</p>
+<ol><li>Change directory to the /home/user directory.</li>
+<li>Use the dd utility to create a 16M file of “zero” that will contain the file system.</li>
+<li>Use mke2fs to create the empty file system in the file from 2.</li>
+<li>Mount the file to a mount point using the loop device.</li>
+<li>Use tar to create an archive from the target and pipe it into tar to extract the target to the mount point.</li>
+<li>Un-mount the file.</li>
+<li>Copy it to the /tftpboot directory so that u-boot can download it to the target device.</li></ol>
+<pre>[root@localhost user]<b># cd /home/user</b>
+[root@localhost user]<b># dd if=/dev/zero of=rd-ext2.bin bs=1k count=16384</b>
+[root@localhost user]<b># mke2fs –F –m0 rd-ext2.bin</b>
+[root@localhost user]<b># mount –t ext2 rd-ext2.bin /mnt –o loop</b>
+[root@localhost user]<b># tar –C target –cf - . | tar –C /mnt –xf –</b>
+[root@localhost user]<b># umount /mnt</b>
+[root@localhost user]<b># cp rd-ext2.bin /tftpboot</b>
+</pre>
+<p>To boot the kernel with the root file system on the ramdisk, the u-boot environment variable “bootargs” must be modified.  The “bootargs” variable contains information that gets passed to the kernel at boot up time and has information such as memory size, ip address, where the root file system is, what kind of file system it is, etc.  For this note, a TI OMAP 3530 EVM is used so all RAM and flash addresses are specific to that platform.
+</p><p>Start up a terminal program on the host and turn on the target.  It is assumed that u-boot has already been flashed to the target board.  The ramdisk will be downloaded to RAM at address 0x81600000 and is 16M in size.  At the u-boot prompt, change the bootargs variable as follows:
+</p>
+<pre>[root@OMAP3EVM /] <b># setenv bootargs mem=88M ip=dhcp console=ttyS0,115200n8</b> 
+                    <b>root=/dev/ram0 rw initrd=0x81600000,16M ramdisk_size=16384</b>
+[root@OMAP3EVM /] <b># saveenv</b>
+</pre>
+<p>All the text should be entered as one line.
+Now download the kernel to 0x80000000 and the ramdisk to 0x81600000 and then boot the kernel.
+</p>
+<pre>[root@OMAP3EVM /] <b># tftp 81600000 rd-ext2.bin</b>
+[root@OMAP3EVM /] <b># tftp 80000000 uImage</b>
+[root@OMAP3EVM /] <b># bootm</b>
+</pre>
+<p>After the kernel boots, the terminal should show the usual boot up messages and then finally indicates that the filesystem is mounted as a RAMDISK.
+</p>
+<pre>RAMDISK: ext2 filesystem found at block 0
+RAMDISK: Loading 16384KiB [1 disk] into ram disk... done.
+VFS: Mounted root (ext2 filesystem).
+Freeing init memory: 136K
+init started: BusyBox v1.11.1 (2008-10-05 04:40:51 CDT)
+starting pid 287, tty <i>: '/etc/init.d/rcS'</i>
+
+   System initialization...
+
+   Hostname      &#160;: OMAP3EVM
+   Filesystem    &#160;: v1.0.0
+
+   Kernel release&#160;: Linux 2.6.22.18-omap3
+   Kernel version&#160;: #12 Mon Oct 6 01:22:49 CDT 2008
+
+Mounting /proc            &#160;: [SUCCESS]
+Mounting /sys             &#160;: [SUCCESS]
+Mounting /dev             &#160;: [SUCCESS]
+Mounting /dev/pts         &#160;: [SUCCESS]
+Enabling hot-plug         &#160;: [SUCCESS]
+Populating /dev           &#160;: [SUCCESS]
+Disabling Power mgmt      &#160;: [SUCCESS]
+Turn off LCD after 1 hour &#160;: [SUCCESS]
+Mounting other filesystems&#160;: [SUCCESS]
+Starting syslogd          &#160;: [SUCCESS]
+Starting telnetd          &#160;: [SUCCESS]
+
+System initialization complete.
+
+Please press Enter to activate this console.
+</pre>
+<h2><span class="mw-headline" id="MTD_Partitions">MTD Partitions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=15" title="Edit section: MTD Partitions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Before discussing flash file systems, “MTD partitions” must be explained.  A flash device must be partitioned on an embedded device just as a hard disk must be partitioned on a Linux PC.  On a Linux PC there would be a partition for /boot, a swap partition, a /usr partition, etc.  For the embedded device the partitions are usually just for the boot loader, its environment variables, the kernel, and a flash file system.
+</p><p>There is no “fdisk” for flash devices like there is for a hard disk.  Instead, the partitioning is done in software.  The exact file that does the partitioning is different based on the chip, board, CPU, and Linux source code.  For this note, the board used is the TI OMAP 3530 EVM and the kernel source is from the SDK1.0.0 release.  The file containing the MTD driver and partitions is linux/kernel_org/2.6_kernel/arch/arm/mach-omap2/board-omap3evm-flash.c.
+</p><p>Looking at the file, the structure omap_partitions[ ] contains the partition table for the H4 board.
+</p>
+<pre>static struct mtd_partition omap3evm_onenand_partitions[] = {
+       {
+               .name           = "X-Loader-ONENAND",
+               .offset         = 0,
+               .size           = 4 * (64 * 2048),
+               .mask_flags     = MTD_WRITEABLE /* force read-only */
+       },
+       {
+               .name           = "U-Boot-ONENAND",
+               .offset         = MTDPART_OFS_APPEND,
+               .size           =  14*(64*2048),
+               .mask_flags     = MTD_WRITEABLE /* force read-only */
+       },
+       {
+               .name           = "Boot Env-ONENAND",
+               .offset         = MTDPART_OFS_APPEND,
+               .size           = 2*(64*2048),
+       },
+       {
+               .name           = "Kernel-ONENAND",
+               .offset         = MTDPART_OFS_APPEND,
+               .size           = 40*(64*2048),
+       },
+       {
+               .name           = "File System - ONENAND",
+               .offset         = MTDPART_OFS_APPEND,
+               .size           = MTDPART_SIZ_FULL,
+       },
+</pre>
+<p>};
+The boot loader has a partition size of 256k.  The u-boot environment variables fit in a 128k partition for ES1.0 or 256k for ES2.0.  The kernel partion is 2M while what is left is used for a file system.
+</p><p>When the kernel boots and the driver loads, device nodes are created based on the partitions.  The device nodes take on the form /dev/mtdblock/x  or /dev/mtdblockx.  
+</p>
+<pre>                      Flash 
+Physical Adress Range  Bank  Device Node     Partition Name
+0x00080000-0x00020000  1     /dev/mtdblock0  "X-Loader-NAND"
+0x001c0000-0x00020000  1     /dev/mtdblock1  "U-Boot-NAND"
+0x00040000-0x00020000  1     /dev/mtdblock2  "Boot Env-NAND"
+0x00500000-0x00020000  1     /dev/mtdblock3  "Kernel-NAND"
+0x0f880000-0x00020000  1     /dev/mtdblock4  "File System - NAND"
+</pre>
+<p>The physical address is set by u-boot.  Look at the file u-boot/include/asm/arch/cpu.h to see the flash physical address mappings:
+</p>
+<pre>/* GPMC Mapping */
+# define FLASH_BASE             0x10000000  /* NOR flash (aligned to 256 Meg) */
+# define FLASH_BASE_SDPV1       0x04000000  /* NOR flash (aligned to 64 Meg) */
+# define FLASH_BASE_SDPV2       0x10000000  /* NOR flash (aligned to 256 Meg) */
+# define DEBUG_BASE             0x08000000  /* debug board */
+# define NAND_BASE              0x10000000  /* NAND addr (actual size small port)*/
+# define PISMO2_BASE            0x18000000  /* PISMO2 CS1/2 */
+# define ONENAND_MAP            0x20000000  /* OneNand addr (actual size small port */
+</pre>
+<h2><span class="mw-headline" id="Creating_and_Booting_a_JFFS2_Root_File_System">Creating and Booting a JFFS2 Root File System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=16" title="Edit section: Creating and Booting a JFFS2 Root File System">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Since jffs2 is used only on flash devices, a standard Linux distribution does not have the tools to make a jffs2 file system.  The Internet site <a rel="nofollow" class="external free" href="http://sources.redhat.com/jffs2">http://sources.redhat.com/jffs2</a> explains where and how to obtain the latest source to MTD code and file systems.  mkfs.jffs2 is the tool needed to build a jffs2 file system and the source is in this code.  All of the MTD code will be downloaded but only the code to build mkfs.jffs2 is built.
+</p><p>The source code is maintained in a CVS tree.  CVS is version control software and is usually installed when the Linux distribution is installed. CVS does not work across firewalls so a direct connection to the Internet is required.  From the command line enter the following:
+</p>
+<pre>[root@localhost user]<b># cd /home/user/build</b>
+[root@localhost build]<b># cvs –d&#160;:pserver:anoncvs@cvs.infradead.org:/home/cvs login</b> CVS password: <b>anoncvs</b>
+[root@localhost build]<b># cvs –d&#160;:pserver:anoncvs@cvs.infradead.org:/home/cvs co mtd</b>
+</pre>
+<p>There should now be a mtd directory under /home/user/build.  The source to mkfs.jffs2 is found in the util directory under mtd.  To build mkfs.jffs2 simply change directory to mtd/util and enter “make mkfs.jffs2”.  When the build is complete, copy the mkfs.jffs2 file to the /sbin directory; that is where the other utilities that make file systems reside.
+</p>
+<pre>[root@localhost build]<b># cd mtd/util</b>
+[root@localhost util]<b># make mkfs.jffs2</b>
+[root@localhost util]<b># cp mkfs.jffs2 /sbin</b>
+</pre>
+<p>With the mkfs.jffs2 utility built and in place it is now time to make the jffs2 file system from of the target directory.  Change to the /home/user directory and enter the mkfs.jffs2 command below.  Probably the most important argument to the utility is the erase block size.  For the NAND part on the OMAP3530 EVM board the erase block is 128k  Consult either u-boot, the kernel, or the data manual for the flash part used to find the erase block size.
+</p>
+<pre>[root@localhost util]<b># cd /home/user</b>
+[root@localhost util]<b># mkfs.jffs2 -lqnp –e 128 -r target -o /tftpboot/rd-jffs2.bin</b>
+</pre>
+<p>By building the file in the /tftpboot directory, the step of copying it over is eliminated.
+The file must now be written into flash at a specific location.  
+In u-boot, the flash file system will get flashed to the physical address 0x780000 and will be mounted by the kernel from /dev/mtdblock4.  The steps to perform this are:
+</p>
+<ol><li>Unprotect the flash area where the file system will reside.</li>
+<li>Erase that area.</li>
+<li>Download the rd-jffs2.bin file.</li>
+<li>Write it to flash.</li>
+<li>Modify bootargs to support a JFFS2 file system as root on /dev/mtdblock4.</li>
+<li>Save the environment variables.</li></ol>
+<p>NOTE: (Not up to date - based on a different kernel – see SDK1.0.0 reprogramming scripts:
+C:\OMAP35x_SDK_1.0.0\board_utilities\scripts\ reflash-samsung.txt)
+</p>
+<pre>[root@OMAP3EVM /] <b># onenand unlock 0x0 0x8000000</b>
+[root@OMAP3EVM /] <b># mw.b 0x81600000 0xff 0x1400000</b>
+[root@OMAP3EVM /] <b># onenand erase block 60-1023</b>
+[root@OMAP3EVM /] <b># tftpboot 0x81600000 rd-jffs2.bin</b>
+[root@OMAP3EVM /] <b># onenand write 0x81600000 0x780000 0x1400000</b>
+[root@OMAP3EVM /] <b># setenv bootargs mem=88M noinitrd ip=dhcp console=ttyS0,115200n8  root=/dev/mtdblock4 rootfstype=jffs2</b>
+[root@OMAP3EVM /] <b># saveenv</b>
+</pre>
+<p>Boot the kernel and near the end of boot-up the following messages should be seen:
+</p>
+<pre>IP-Config: Gateway not on directly connected network.
+VFS: Mounted root (jffs2 filesystem).
+Freeing init memory: 136K
+eth0: link up, 100Mbps, full-duplex, lpa 0xCDE1
+init started: BusyBox v1.11.1 (2008-10-05 04:40:51 CDT)
+starting pid 288, tty <i>: '/etc/init.d/rcS'</i>
+
+   System initialization...
+
+   Hostname      &#160;: OMAP3EVM
+   Filesystem    &#160;: v1.0.0
+
+   Kernel release&#160;: Linux 2.6.22.18-omap3
+   Kernel version&#160;: #1 Tue Jul 1 17:16:34 IST 2008
+
+Mounting /proc            &#160;: [SUCCESS]
+Mounting /sys             &#160;: [SUCCESS]
+Mounting /dev             &#160;: [SUCCESS]
+Mounting /dev/pts         &#160;: [SUCCESS]
+Enabling hot-plug         &#160;: [SUCCESS]
+Populating /dev           &#160;: [SUCCESS]
+Disabling Power mgmt      &#160;: [SUCCESS]
+Turn off LCD after 1 hour &#160;: [SUCCESS]
+Mounting other filesystems&#160;: [SUCCESS]
+Starting syslogd          &#160;: [SUCCESS]
+Starting telnetd          &#160;: [SUCCESS]
+
+System initialization complete.
+
+Please press Enter to activate this console.
+</pre>
+<h2><span class="mw-headline" id="Creating_and_Booting_a_CRAMFS_Root_File_System">Creating and Booting a CRAMFS Root File System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=17" title="Edit section: Creating and Booting a CRAMFS Root File System">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Since CRAMFS is another embedded file system, the host Linux distribution might not have the mkcramfs utility.  The source to the cramfs tools can be found at <a rel="nofollow" class="external free" href="http://sourceforge.net/projects/cramfs/">http://sourceforge.net/projects/cramfs/</a>.  As usual, download, build, and install them.
+</p><p>The first step is to edit the etc/init.d/rcS file so that the logging daemons do not get started.  Since CRAMFS is a read-only file system, the serial console would be filled with errors as these loggers try to write messages to disk.  After that, change to the /home/user directory and use the mkcramfs utility to create the file image.  The –v argument only says to be verbose and display messages as the file system is built.
+</p>
+<pre>[root@localhost home]<b># cd /home/user</b>
+[root@localhost user]<b># mkcramfs –v target /tftpboot/rd-cramfs.bin</b>
+</pre>
+<p>By building the file in the /tftpboot directory, the step of copying it over is eliminated.
+</p><p>The file must now be written into flash at a specific location. 
+</p><p>In u-boot, the flash file system will get flashed to the physical address 0x780000 and will be mounted by the kernel from /dev/mtdblock4.  The steps to perform this are:
+</p>
+<ol><li>Unprotect the flash area where the file system will reside.</li>
+<li>Erase that area.</li>
+<li>Download the rd-cramfs.bin file.</li>
+<li>Write it to flash.</li>
+<li>Modify bootargs to support a CRAMFS file system as root on /dev/mtdblock4.</li>
+<li>Save the environment variables.</li></ol>
+<pre>[root@OMAP3EVM /] <b># onenand unlock 0x0 0x8000000</b>
+[root@OMAP3EVM /] <b># mw.b 0x81600000 0xff 0x1400000</b>
+[root@OMAP3EVM /] <b># onenand erase block 60-1023</b>
+[root@OMAP3EVM /] <b># tftpboot 0x81600000 rd-cramfs.bin</b>
+[root@OMAP3EVM /] <b># onenand write 0x81600000 0x780000 0x1400000</b>
+[root@OMAP3EVM /] <b># setenv bootargs mem=88M noinitrd ip=dhcp console=ttyS0,115200n8 root=/dev/mtdblock4 rootfstype=cramfs</b>
+[root@OMAP3EVM /] <b># saveenv</b>
+</pre>
+<p>Boot the kernel and near the end of boot-up the following messages should be seen:
+NOTE: (Not up to date - based on a different kernel)
+</p>
+<pre>VFS: Mounted root (cramfs filesystem) readonly.
+Freeing init memory: 136K
+Mounting proc&#160;: OK
+Mounting sysfs&#160;: OK
+Mounting /dev&#160;: OK
+Creating local mdev devices
+
+   System initialization...
+
+   Hostname      &#160;: OMAP3EVM
+   Filesystem    &#160;: v1.0.0
+
+   Kernel release&#160;: Linux 2.6.22.18-omap3
+   Kernel version&#160;: #1 Tue Jul 1 17:16:34 IST 2008
+
+Mounting devpts&#160;: OK
+Setting up networking
+Configuring lo&#160;: OK
+Mounting filesystems&#160;: OK
+
+
+System initialization complete.
+
+Please press Enter to activate this console.
+</pre>
+<h2><span class="mw-headline" id="Enhancing_the_Root_File_System">Enhancing the Root File System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=18" title="Edit section: Enhancing the Root File System">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The root file system built contains only the bare minimum files to operate.  Kernel driver modules have not been added yet.  Also, as applications are built and added, the shared libraries used by the applications will need to be added.  The file system will get larger when these files are added.
+</p>
+<h3><span class="mw-headline" id="Add_the_Kernel_Driver_Modules_to_the_Root_File_System">Add the Kernel Driver Modules to the Root File System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=19" title="Edit section: Add the Kernel Driver Modules to the Root File System">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Any drivers built as modules need to be added to the target root file system.  This is fairly simple; after building the kernel, build the modules, and then use the same kernel Makefile to install the files to the target.
+</p>
+<pre>[root@localhost 2.6_kernel]<b># make modules</b>
+[root@localhost 2.6_kernel]<b># make INSTALL_MOD_PATH=/home/user/target modules_install</b>
+</pre>
+<p>After the second make is performed, the kernel modules will be copied to the /home/user/target/lib/modules directory.  One problem still exists – the modules still have debug information so they are larger than they need to be.  When debug information is no longer needed, use the arm-none-linux-gnueabi-strip utility to remove it.  Unfortunately the strip utility does not have a recursive option to go into each directory and strip the driver.  If there are only a few drivers, the find utility can be used to find each .o file recursively and then pass the file name to strip.  An example is shown below.
+</p>
+<pre>[root@localhost user]<b># cd /home/user/target/lib/modules</b>
+[root@localhost modules]<b># arm-none-linux-gnueabi-strip `find . –name “*.ko”`</b>
+</pre>
+<p>Note that the ` character is the “tick” key that is on the left-hand side of the keyboard and is a lowercase ~.
+</p>
+<h2><span class="mw-headline" id="RAMDISK_Considerations">RAMDISK Considerations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=20" title="Edit section: RAMDISK Considerations">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>As files get added to the target root file system, the image size will grow beyond 16M.  The kernel must be configured to the new RAMDISK size and re-built.  See section “3.3 Configure the Linux Kernel for RAMDISK support” for more information on how to change the RAMDISK size in the kernel.  The amount of RAM used for the RAMDISK should not be too big so that the kernel has enough RAM to load and run programs.  For example, on a board with only 32M RAM, a 20M RAMDISK would only leave 12M for the kernel to use.  This could cause a shortage of memory for programs to run.
+If a development platform has more then 32M, then that should also be reflected in the u-boot environment variable “bootargs”.  For example, assume a development platform now has 64M of RAM.  The bootargs variable could be changed from “mem=32M” to “mem=64M”.  A RAMDISK of 20M would no longer be a problem.
+One last hint on keeping the RAMDISK image small.  Use the arm-none-linux-gnueabi-strip program to strip off unneeded headers and debug information once an application or driver has been fully debugged and ready for inclusion in the image.
+</p>
+<h2><span class="mw-headline" id="Trouble_Shooting">Trouble Shooting</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit&amp;section=21" title="Edit section: Trouble Shooting">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you are having problems booting the kernel please refer to <a href="Kernel_-_Common_Problems_Booting_Linux.html" title="Kernel - Common Problems Booting Linux">this article</a> for help.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130214821
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.080 seconds
+Real time usage: 0.082 seconds
+Preprocessor visited node count: 86/1000000
+Preprocessor generated node count: 98/1000000
+Post‐expand include size: 116/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.206      1 Template:Sitara_Devices
+100.00%    1.206      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:643-0!canonical and timestamp 20201130214821 and revision id 114243
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Creating a Root File System for Linux on OMAP35x</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Creating a Root File System for Linux on OMAP35x</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Creating a Root File System for Linux on OMAP35x</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Creating a Root File System for Linux on OMAP35x</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Creating a Root File System for Linux on OMAP35x</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Creating a Root File System for Linux on OMAP35x</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Creating a Root File System for Linux on OMAP35x</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Creating a Root File System for Linux on OMAP35x</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Creating a Root File System for Linux on OMAP35x</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;oldid=114243">https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;oldid=114243</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM437x.html" title="Category:AM437x">AM437x</a></li><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li><li><a href="Category_AM35x.html" title="Category:AM35x">AM35x</a></li><li><a href="Category_AM37x.html" title="Category:AM37x">AM37x</a></li><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_AM18x.html" title="Category:AM18x">AM18x</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_File_system.html" title="Category:File system">File system</a></li><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li><li><a href="Category_DaVinci_Linux.html" title="Category:DaVinci Linux">DaVinci Linux</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Creating+a+Root+File+System+for+Linux+on+OMAP35x" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Creating_a_Root_File_System_for_Linux_on_OMAP35x.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Creating_a_Root_File_System_for_Linux_on_OMAP35x.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Creating_a_Root_File_System_for_Linux_on_OMAP35x.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Creating_a_Root_File_System_for_Linux_on_OMAP35x.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Creating_a_Root_File_System_for_Linux_on_OMAP35x.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;oldid=114243" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Creating_a_Root_File_System_for_Linux_on_OMAP35x&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 24 July 2012, at 16:00.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.080","walltime":"0.082","ppvisitednodes":{"value":86,"limit":1000000},"ppgeneratednodes":{"value":98,"limit":1000000},"postexpandincludesize":{"value":116,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.206      1 Template:Sitara_Devices","100.00%    1.206      1 -total"]},"cachereport":{"timestamp":"20201130214821","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":237});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Creating_a_Root_File_System_for_Linux_on_OMAP35x by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:53:52 GMT -->
+</html>

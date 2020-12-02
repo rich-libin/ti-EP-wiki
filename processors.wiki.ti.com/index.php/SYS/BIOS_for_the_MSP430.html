@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/SYS/BIOS_for_the_MSP430 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:04:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>SYS/BIOS for the MSP430 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"SYS/BIOS_for_the_MSP430","wgTitle":"SYS/BIOS for the MSP430","wgCurRevisionId":193345,"wgRevisionId":193345,"wgArticleId":9544,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["MSP430","SYSBIOS"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"SYS/BIOS_for_the_MSP430","wgRelevantArticleId":9544,"wgRequestId":"88c0ef429af3a57574cc619c","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-SYS_BIOS_for_the_MSP430 rootpage-SYS skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">SYS/BIOS for the MSP430</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br style="clear: both" />
+</p>
+<div class="floatright"><a href="../File_Sysbios_image.html" class="image"><img alt="Sysbios image.png" src="https://processors.wiki.ti.com/images/0/05/Sysbios_image.png" width="180" height="160" /></a></div><p>This page summarizes some MSP430-specific features, and implementation details of <a href="../Category_SYSBIOS.html" title="Category:SYSBIOS">SYS/BIOS</a> for MSP430 devices.  
+</p><p>On this page, SYS/BIOS configuration settings are described with configuration script snippets.  These configuration steps can also be accomplished via the XGCONF Graphical Configuration Tool, but that is not described here.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview_of_the_SYS.2FBIOS_boot_sequence"><span class="tocnumber">1</span> <span class="toctext">Overview of the SYS/BIOS boot sequence</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Normal_boot_sequence.2C_without_SYS.2FBIOS"><span class="tocnumber">1.1</span> <span class="toctext">Normal boot sequence, without SYS/BIOS</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Boot_sequence_with_SYS.2FBIOS"><span class="tocnumber">1.2</span> <span class="toctext">Boot sequence with SYS/BIOS</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Interrupt_Handling"><span class="tocnumber">2</span> <span class="toctext">Interrupt Handling</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Traditional_MSP430_interrupt_handling_in_C"><span class="tocnumber">2.1</span> <span class="toctext">Traditional MSP430 interrupt handling in C</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Enhancements_for_an_RTOS_environment"><span class="tocnumber">2.2</span> <span class="toctext">Enhancements for an RTOS environment</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#The_SYS.2FBIOS_interrupt_model_on_MSP430"><span class="tocnumber">2.3</span> <span class="toctext">The SYS/BIOS interrupt model on MSP430</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Example_Interrupt_Stubs"><span class="tocnumber">2.4</span> <span class="toctext">Example Interrupt Stubs</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Full_Stub_with_all_features"><span class="tocnumber">2.4.1</span> <span class="toctext">Full Stub with all features</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Reduced_stub_for_a_Swi-only_application"><span class="tocnumber">2.4.2</span> <span class="toctext">Reduced stub for a Swi-only application</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Minimal_Stub"><span class="tocnumber">2.4.3</span> <span class="toctext">Minimal Stub</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-12"><a href="#MSP430-unique_Hwi_configuration_parameters"><span class="tocnumber">2.5</span> <span class="toctext">MSP430-unique Hwi configuration parameters</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Important_note_regarding_the_function_called_by_a_SYS.2FBIOS_interrupt_stub"><span class="tocnumber">2.6</span> <span class="toctext">Important note regarding the function called by a SYS/BIOS interrupt stub</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Configuring_a_user_interrupt_with_no_SYS.2FBIOS_interrupt_stub"><span class="tocnumber">2.7</span> <span class="toctext">Configuring a user interrupt with no SYS/BIOS interrupt stub</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Power_Management"><span class="tocnumber">3</span> <span class="toctext">Power Management</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="#Idling_with_SYS.2FBIOS"><span class="tocnumber">3.1</span> <span class="toctext">Idling with SYS/BIOS</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Timers"><span class="tocnumber">4</span> <span class="toctext">Timers</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Clock_Tick_Suppression"><span class="tocnumber">5</span> <span class="toctext">Clock Tick Suppression</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#Important_Notes_Regarding_Clock_Tick_Suppression"><span class="tocnumber">5.1</span> <span class="toctext">Important Notes Regarding Clock Tick Suppression</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-20"><a href="#HOWTOs"><span class="tocnumber">6</span> <span class="toctext">HOWTOs</span></a>
+<ul>
+<li class="toclevel-2 tocsection-21"><a href="#Turn_off_SYS.2FBIOS.E2.80.99s_disabling_of_the_watchdog_timer"><span class="tocnumber">6.1</span> <span class="toctext">Turn off SYS/BIOS’s disabling of the watchdog timer</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Turn_off_SYS.2FBIOS.E2.80.99s_frequency_boost_at_boot"><span class="tocnumber">6.2</span> <span class="toctext">Turn off SYS/BIOS’s frequency boost at boot</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Have_all_interrupt_stubs_keep_the_CPU_awake_upon_return_from_interrupt"><span class="tocnumber">6.3</span> <span class="toctext">Have all interrupt stubs keep the CPU awake upon return from interrupt</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Set_a_breakpoint_at_the_entry_to_a_SYS.2FBIOS_interrupt_stub"><span class="tocnumber">6.4</span> <span class="toctext">Set a breakpoint at the entry to a SYS/BIOS interrupt stub</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Disable_auto-fill_of_unused_interrupt_vectors_with_traps"><span class="tocnumber">6.5</span> <span class="toctext">Disable auto-fill of unused interrupt vectors with traps</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Configure_SYS.2FBIOS_to_invoke_an_LPM_mode_when_idle.2C_with_no_threads_ready_to_run"><span class="tocnumber">6.6</span> <span class="toctext">Configure SYS/BIOS to invoke an LPM mode when idle, with no threads ready to run</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Specify_the_LPM_mode_to_be_use_by_SYS.2FBIOS_for_idling"><span class="tocnumber">6.7</span> <span class="toctext">Specify the LPM mode to be use by SYS/BIOS for idling</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Dynamically_change_the_LPM_mode_used_by_SYS.2FBIOS_for_idling"><span class="tocnumber">6.8</span> <span class="toctext">Dynamically change the LPM mode used by SYS/BIOS for idling</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Know_the_mapping_between_logical_Timer_IDs_and_physical_timers"><span class="tocnumber">6.9</span> <span class="toctext">Know the mapping between logical Timer IDs and physical timers</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Specify_the_input_clock_source_for_a_Timer"><span class="tocnumber">6.10</span> <span class="toctext">Specify the input clock source for a Timer</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Switch_Clock_module_from_using_TickMode_PERIODIC_to_TickMode_DYNAMIC"><span class="tocnumber">6.11</span> <span class="toctext">Switch Clock module from using TickMode_PERIODIC to TickMode_DYNAMIC</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Switch_Clock_module_from_using_TickMode_DYNAMIC_to_TickMode_PERIODIC"><span class="tocnumber">6.12</span> <span class="toctext">Switch Clock module from using TickMode_DYNAMIC to TickMode_PERIODIC</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Have_Clock_and_Timestamp_use_separate_timer_peripherals"><span class="tocnumber">6.13</span> <span class="toctext">Have Clock and Timestamp use separate timer peripherals</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Change_the_rate_of_Timestamps_.28for_the_dedicated_timer_case.29"><span class="tocnumber">6.14</span> <span class="toctext">Change the rate of Timestamps (for the dedicated timer case)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-35"><a href="#Training"><span class="tocnumber">7</span> <span class="toctext">Training</span></a></li>
+</ul>
+</div>
+
+<div id="BootAnchor"></div>
+<h2><span id="Overview_of_the_SYS/BIOS_boot_sequence"></span><span class="mw-headline" id="Overview_of_the_SYS.2FBIOS_boot_sequence">Overview of the SYS/BIOS boot sequence</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=1" title="Edit section: Overview of the SYS/BIOS boot sequence">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section summarizes the bootstrap sequence for SYS/BIOS.  It begins with a review of the boot sequence without SYS/BIOS.  This description includes some MSP430-specific items, but the general flow of the boot sequence applies to all the device families supported by SYS/BIOS.
+</p>
+<h3><span id="Normal_boot_sequence,_without_SYS/BIOS"></span><span class="mw-headline" id="Normal_boot_sequence.2C_without_SYS.2FBIOS">Normal boot sequence, without SYS/BIOS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=2" title="Edit section: Normal boot sequence, without SYS/BIOS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The picture below summarizes the typical device boot sequence to main(), without SYS/BIOS. The next section will describe SYS/BIOS additions to this sequence.  The source files mentioned in this section can be found in the rtssrc.zip file that typically resides in this directory: {CCS Install Directory}\tools\compiler\msp430\lib
+</p><p><a href="../File_Normal_boot.html" class="image"><img alt="Normal boot.jpg" src="https://processors.wiki.ti.com/images/3/3a/Normal_boot.jpg" width="202" height="270" /></a>
+</p><p>When the device is released from reset, the reset vector will initiate C runtime initialization, at the _c_int00() entry point (in the file boot.c).  The first step to initialize the device is to initialize the system stack pointer (to the value defined by the symbol __STACK_END).  This same stack is used during initial booting, as well as in and after main().  The size of the system stack defaults to 128 bytes, but can be overridden via the "-stack_size" linker option (defined via CCS project Build Properties-&gt;Tool Settings-&gt;MSP430 Linker-&gt;Basic Options). 
+</p><p>Once the stack pointer is initialized, the _system_pre_init() hook function (in file pre_init.c) is called.  By default, this function simply returns a value of 1.  The user can override this behavior by linking in their own _system_pre_init() function (before the rts430 library), to do their own application-specific initialization at this early stage of boot.  Because this function runs so early, it must not access any C global variables, because these have not been initialized yet.  If this function returns a non-zero value, the _auto_init() function (in the file autoinit.c) will be called.
+</p><p>The auto_init() function will process the global variable initialization records (the &#8220;cinit&#8221; records) to initialize the global variables in the .bss section.  After processing these records, auto_init() will traverse the table of .pinit functions (if any are defined), and call each function.  These .pinit functions are typically C++ constructor functions, but can be used for other purposes as well.  Once the table of .pinit functions has been processed, auto_init() returns back to _c_int00(), which will then call main().  If there are arguments to pass to main() (depending upon the application build options), the args_main() function (in the file SHARED\args_main.c) is used to call main().  At this point, the C runtime environment has been fully initialized, and the application can begin its intended purpose.
+</p>
+<h3><span id="Boot_sequence_with_SYS/BIOS"></span><span class="mw-headline" id="Boot_sequence_with_SYS.2FBIOS">Boot sequence with SYS/BIOS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=3" title="Edit section: Boot sequence with SYS/BIOS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The picture below shows additions to the boot sequence when using SYS/BIOS.  The dark blue boxes indicate hook mechanisms into the normal boot flow.  The green boxes indicate the additional control points that result, and allow calling of SYS/BIOS-defined, as well as user-defined functions, at progressive stages of the boot flow.  The red numeric bubbles are used to reference the description below.  
+</p><p>Note that for this section there are mentions to source files that are modified versions of those provided with TI's MSP430 compiler (which were mentioned in the previous section).  The modified files referenced here are delivered with XDCtools, and can be found at this location: {XDCtools Install Dir}\packages\ti\targets\msp430\rts430
+</p><p><a href="../File_Boot_sequence_updated.html" class="image"><img alt="Boot sequence updated.jpg" src="https://processors.wiki.ti.com/images/5/54/Boot_sequence_updated.jpg" width="597" height="574" /></a>
+</p><p><br />
+<span style="color: Red"><b>1.</b></span> Startup_reset() refers to a hook mechanism added to boot.c to allow a table of functions (see '1a' below) to be called immediately after the stack pointer has been initialized.  Since only the stack pointer is initialized at this point, these functions must not reference any global variables, because global variables have not been initialized yet, and their locations will be overwritten later in the boot sequence.  
+</p><p><span style="color: Red"><b>1a.</b></span> For the MSP430 there are two functions for SYS/BIOS that are typically called at this stage: one for disabling the watchdog timer, and another for boosting up the CPU frequency.  (The default boost frequency for booting is currently 8.192MHz; a user can change frequency later after booting, or disable the default boost, and add their own boost as an application-provided reset function.)  By default, both these reset functions will be called; you can disable these functions by adding the following configuration script statements to your application configuration file:
+</p><p>To disable the disabling of the watchdog:
+</p>
+<pre>var Boot = xdc.useModule('ti.catalog.msp430.init.Boot');
+Boot.disableWatchdog = false;
+</pre>
+<p>To disable the bootstap frequency boost:
+</p>
+<pre>var Boot = xdc.useModule('ti.catalog.msp430.init.Boot');
+Boot.configureDCO = false;
+</pre>
+<p>If you want to add your own functions to this table of early reset functions, you can do so by adding statements like the following to your application configuration file:
+</p>
+<pre>Reset = xdc.useModule('xdc.runtime.Reset');
+Reset.fxns[Reset.fxns.length++] = '&amp;myResetFxn';
+</pre>
+<p><span style="color: Red"><b>2.</b></span> After the table of reset functions has been processed, booting continues in _c_int00().  The next step is to call _system_pre_init() (in the file pre_init.c).  In this (XDCtools) implementation of the function, the .bss section will be initialized to zero.  After this, the auto_init() routine will be called to process .cinit records to initialize global variables.
+</p><p><span style="color: Red"><b>3.</b></span> After .cinit records have been processed, additional SYS/BIOS and user-defined initialization functions can be called via addition of the Startup_exec() hook mechanism added to auto_init() (in file autoinit.c).  Since global variables have been initialized, these functions have much more freedom in what they can do, compared to the early reset functions described in 1 and 1a above.  One thing that they must not do is to enable global interrupts, because that would allow interrupts to fire before the bootstrap sequence is completed.  The startup functions are partitioned into three categories: first functions, module initialization functions, and last functions.
+</p><p><span style="color: Red"><b>3a.</b></span> First functions execute before module initialization or last functions.  First functions are referenced in a table, and each function in the table is called before proceeding to the module initialization functions.  SYS/BIOS typically provides one first function: a function that initializes the system stack with a "watermark" value; this allows checking of the stack later, for depth of use, and overflow.
+</p><p>If you want to add your own first function to be called at this stage, you can do so by adding statements like the following to your application configuration file (*.cfg):
+</p>
+<pre>var Startup = xdc.useModule('xdc.runtime.Startup');
+Startup.firstFxns[Startup.firstFxns.length++] = '&amp;myFirstFxn';
+</pre>
+<p><span style="color: Red"><b>3b.</b></span> Module initialization functions are used to initialize the SYS/BIOS or other modules that have been configured into the application.  A typical use for these functions is to initialize statically-configured instances of module objects.  For example, if the application configuration file statically created two semaphores, the Semaphore module will initialize the corresponding data structures at this stage of boot.  Note that this stage only applies to *module* initialization; it cannot be hooked into for application-level initialization purposes.
+</p><p><span style="color: Red"><b>3c.</b></span> The last functions will be invoked after all regular SYS/BIOS module initialization functions have executed.  At this stage, SYS/BIOS will typically insert a function to start the Timestamp counter (if enabled in the application configuration). 
+</p><p>If you want to add your own last functions to be called at this state, you can add statements like the following to the application configuration file:
+</p>
+<pre>var Startup = xdc.useModule('xdc.runtime.Startup');
+Startup.lastFxns[Startup.lastFxns.length++] = '&amp;myLastFxn';
+</pre>
+<p><span style="color: Red"><b>4.</b></span> After all last functions have been executed, control returns back to auto_init(), which will proceed to invoke any .pinit functions that have been defined.  After this, control returns back to boot.c, which then calls to main().
+</p><p>Once in main() the C runtime has been fully initialized, and SYS/BIOS modules have been initialized.  But SYS/BIOS has not "started up" yet; this will happen at the end of main(), when BIOS_start() is called.  Before that point, the application can do many things, like creating new threads, doing application-specific initializations, etc.  Two things that the application must not do at this point are: do a global interrupt enable (i.e., set GIE=1), or to call a SYS/BIOS API that blocks execution waiting for some condition.  These types of calls must wait until after BIOS_start() is invoked.  See each SYS/BIOS module's API descriptions to see the valid calling contexts.
+</p><p><span style="color: Red"><b>5.</b></span> As the last step of bootstrap, BIOS_start() must be called at the end of main().   Note that once SYS/BIOS is "started up", control will never return back to main().  
+</p><p>The final steps for SYS/BIOS startup are:
+</p><p><b>a.</b> Execute any user-defined startup functions.  If you want to define a function that is called at this stage, you can add code like the following to your application configuration script:
+</p>
+<pre>var BIOS = xdc.useModule('ti.sysbios.BIOS');
+BIOS.addUserStartupFunction('&amp;myBiosStartFxn');
+</pre>
+<p><b>b.</b> Enable servicing of hardware interrupts (i.e., set GIE=1).  Any interrupts that are fully enabled can now be triggered.
+</p><p><b>c.</b> Initialize any Timers that have been configured for the application.  If individual timers are configured to "auto start", start them now.
+</p><p><b>d.</b> If enabled within the application configuration, enable the Software Interrupt (Swi) scheduler.  If any Swis are ready to run (i.e., they have been "posted"), they will preempt the startup sequence at this point, and control returns here when no Swis are ready to run.
+</p><p><b>e.</b> If enabled within the application configuration, enable the Task scheduler.  If any user-defined Tasks are ready to run they will run at this point.  When none are ready, the Idle Task runs.  
+</p><p><b>f.</b> If execution reaches this point (because Tasks are not enabled in the application configuration), any configured Idle functions will be run in a continuous loop.
+</p>
+<div id="HwiAnchor"></div>
+<h2><span class="mw-headline" id="Interrupt_Handling">Interrupt Handling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=4" title="Edit section: Interrupt Handling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section summarizes SYS/BIOS interrupt handling on the MSP430.  The design leverages MSP430-specific features, and differs from the traditional dispatched-interrupt model normally provided by SYS/BIOS.  
+</p><p>The description begins with a quick overview of traditional interrupt handling for straight-C programs.  Next is a list of some required as well as beneficial enhancements to the straight-C interrupt model for an RTOS environment.  Following this is the description of the interrupt model used by SYS/BIOS on MSP430, along with some examples.
+</p>
+<h3><span class="mw-headline" id="Traditional_MSP430_interrupt_handling_in_C">Traditional MSP430 interrupt handling in C</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=5" title="Edit section: Traditional MSP430 interrupt handling in C">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Typically an interrupt handler is a C function that is tagged with the "interrupt" keyword.  The function takes no arguments, and has a void return type.  A #pragma is used to associate the function to the corresponding interrupt vector.  For example:
+</p>
+<pre>#pragma vector = 54;
+interrupt void timerISR(void)
+{
+    /* service the timer interrupt */
+}
+</pre>
+<p>When the interrupt source has been enabled, and then the interrupt is asserted by the peripheral, the CPU is vectored to the interrupt service routine.  Because of the interrupt keyword, the return instruction at the end of the function is actually a "return from interrupt" instruction (RETI), which will additionally restore the Status Register (SR) that was pushed onto the stack at the start of servicing the interrupt.  
+</p><p>On the MSP430 there are bits in this Status Register that control transitions to low power modes (see the description of the SR in the corresponding MSP430 Family User's Guide, as well as the Idling with Low Power Modes description below).  Because these bits are restored as part of the return from interrupt, by default, the CPU will automatically return to the power mode in effect at the time the interrupt occurred.  The C compiler provides an intrinsic function (_bic_SR_register_on_exit()) that can be called from within the ISR function to modify the SR value that was pushed onto the stack, so that the CPU can instead be "kept awake" at the end of the ISR when this SR value is restored from the stack.  In this case, the CPU will resume execution following the statement that activated the low power mode from which the CPU was interrupted.
+</p>
+<h3><span class="mw-headline" id="Enhancements_for_an_RTOS_environment">Enhancements for an RTOS environment</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=6" title="Edit section: Enhancements for an RTOS environment">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>An enhancement to the standard "C" interrupt model that is typically required for an RTOS is:
+</p><p><b>Scheduler hold off</b> - For example, if in an ISR an OS thread is posted or "readied" to run, it is important that the OS scheduler be "held off" from immediately switching execution to the new thread, until it is appropriate and safe to do so.  An RTOS typically provides an API to be called at the start of an ISR to temporarily disable the scheduler, and another API to be called at the end of the ISR to re-enable the scheduler.
+</p><p>In addition to this required enhancement, there are some additional enhancements that can provide significant benefit:
+</p><p><b>Interrupt Stack</b> - If the OS provides a system "interrupt stack", and switches to this stack immediately upon servicing a first interrupt, and then switches back after the interrupt (and any nested-on-top interrupts) completes, it can significantly reduce the amount of memory required for individual task stacks - because they all do not need to be sized large enough to accommodate the maximum possible interrupt stack depth.  
+</p><p><b>Interrupt entry/exit tracking</b> - There may be some calling constraints on certain user or OS APIs, restricting them to not be called from a hardware interrupt context, for example.  So an OS typically has a mechanism to track interrupt entry/exit, so that it "knows" when execution is in the context of an interrupt, and calling constraints can be enforced.
+</p><p><b>Instrumentation</b> - The OS can generate ISR entry/exit instrumentation to data logs, to allow full profiling of interrupt execution.
+</p><p><b>Power management</b> - The OS can handle "keep awake" or transition back to a low power mode following completion of an interrupt, so that this does not need to be explicitly handled within each ISR function.
+</p>
+<h3><span id="The_SYS/BIOS_interrupt_model_on_MSP430"></span><span class="mw-headline" id="The_SYS.2FBIOS_interrupt_model_on_MSP430">The SYS/BIOS interrupt model on MSP430</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=7" title="Edit section: The SYS/BIOS interrupt model on MSP430">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The approach used by SYS/BIOS is to closely mimic the traditional C approach described first, but to conditionally allow add-on of all of the enhancements just described.  
+</p><p>To do this, scripting support from XDCtools is used to automatically generate SYS/BIOS "interrupt stub" functions, which will call user-defined ISR functions at the appropriate points of execution.  The auto-generated stub functions use the "interrupt" keyword, but the user-defined functions are standard C callable functions.
+</p><p>By default, all the enhancements described in the previous section will be automatically added to each SYS/BIOS interrupt stub.  However, the user can override these defaults via configuration changes (i.e., to reduce what is done in each interrupt stub), on an interrupt-by-interrupt basis, to fine-tune the processing for each interrupt.  For example, if no SYS/BIOS scheduler-related APIs (e.g., Semaphore_post()) are called for the particular interrupt, there is no need to hold off the SYS/BIOS schedulers, so the scheduler disable/re-enable calls can be eliminated from the generated stub function.
+</p>
+<h3><span class="mw-headline" id="Example_Interrupt_Stubs">Example Interrupt Stubs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=8" title="Edit section: Example Interrupt Stubs">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Full_Stub_with_all_features">Full Stub with all features</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=9" title="Edit section: Full Stub with all features">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>An example of a default stub for an ISR that schedules a Task to run from the ISR function is shown below.  The ISR function (hwiFxn53()) gets called after: the Task scheduler is disabled, the stack is switched from the interrupted Task's stack to the interrupt stack, the Swi scheduler is disabled, and the execution context is updated.  After the function returns, the interrupt unwinds by restoring the Swi scheduler, restoring the execution context, switching back to the interrupted Task's stack, and restoring the Task scheduler and returning from the interrupt.
+</p>
+<pre>#pragma vector = 53;
+interrupt Void ti_sysbios_family_msp430_Hwi53(Void)
+{
+    ti_sysbios_BIOS_ThreadType prevThreadType;
+    UInt taskKey;
+    UInt swiKey;
+    Char* stackKey;
+
+    /* disable Task scheduler */
+    taskKey = ti_sysbios_knl_Task_disable();
+
+    /* switch to ISR stack */
+    stackKey = ti_sysbios_family_xxx_Hwi_switchToIsrStack();
+
+    /* disable Swi scheduler */
+    swiKey = ti_sysbios_knl_Swi_disable();
+
+    /* set thread type to Hwi */
+    prevThreadType = ti_sysbios_BIOS_setThreadType(ti_sysbios_BIOS_ThreadType_Hwi);
+
+    /* run ISR function */
+    hwiFxn53(0);
+
+    /* run any posted Swis */
+    ti_sysbios_knl_Swi_restoreHwi(swiKey);
+
+    /* restore thread type */
+    ti_sysbios_BIOS_setThreadType(prevThreadType);
+
+    /* switch back to Task stack */
+    ti_sysbios_family_xxx_Hwi_switchToTaskStack(stackKey);
+
+    /* handle any Task re-scheduling as required */
+    ti_sysbios_knl_Task_restoreHwi(taskKey);
+}
+</pre>
+<p>Note that this stub looks like it carries "a lot" of overhead.  But keep in mind that this is the generated C code for the stub, and the compiler and linker will optimize this.  
+</p><p>The script for configuring this interrupt, with all default features:
+</p>
+<pre>var Hwi = xdc.useModule('ti.sysbios.family.msp430.Hwi');
+Hwi.create(53, '&amp;hwiFxn53');
+</pre>
+<h4><span class="mw-headline" id="Reduced_stub_for_a_Swi-only_application">Reduced stub for a Swi-only application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=10" title="Edit section: Reduced stub for a Swi-only application">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>An example of a stub for an ISR that posts a software interrupt (Swi) from the ISR function (e.g., via a call to Swi_post()) is shown below:
+</p>
+<pre>#pragma vector = 54;
+interrupt Void ti_sysbios_family_msp430_Hwi54(Void)
+{
+    UInt swiKey;
+
+    /* disable Swi scheduler */
+    swiKey = ti_sysbios_knl_Swi_disable();
+    
+    /* run ISR function */
+    hwiFxn54(0);
+    
+    /* run any posted Swis */
+    ti_sysbios_knl_Swi_restoreHwi(swiKey);
+}
+</pre>
+<p><br />
+This stub temporarily disables the Swi scheduler before calling the user's ISR function (hwiFxn54()).  After the function returns, the Swi scheduler state is restored and any Swis posted by the ISR run at this time, before the return from interrupt (RETI).
+</p><p>The script for configuring this interrupt:
+</p>
+<pre>var Hwi = xdc.useModule('ti.sysbios.family.msp430.Hwi');
+hwiParams.swiEnabled = true;
+hwiParams.taskEnabled = false;
+hwiParams.threadTypeEnabled = false;
+Hwi.create(54, '&amp;hwiFxn54', hwiParams);
+</pre>
+<h4><span class="mw-headline" id="Minimal_Stub">Minimal Stub</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=11" title="Edit section: Minimal Stub">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>An example of a minimal stub, which simply calls a user configured function (e.g., 
+"hwiFxn55()") is&#160;:
+</p>
+<pre>#pragma vector = 55;
+interrupt Void ti_sysbios_family_msp430_Hwi55(Void)
+{
+    /* run ISR function */
+    hwiFxn55(0);
+}
+</pre>
+<p>The script for configuring this interrupt:
+</p>
+<pre>var Hwi = xdc.useModule('ti.sysbios.family.msp430.Hwi');
+hwiParams.swiEnabled = false;
+hwiParams.taskEnabled = false;
+hwiParams.threadTypeEnabled = false;
+Hwi.create(55, '&amp;hwiFxn55', hwiParams);
+</pre>
+<h3><span class="mw-headline" id="MSP430-unique_Hwi_configuration_parameters">MSP430-unique Hwi configuration parameters</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=12" title="Edit section: MSP430-unique Hwi configuration parameters">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The MSP430 family Hwi Module-level configuration parameters are:
+</p>
+<table border="1" align="left" style="text-align:center;">
+<tbody><tr>
+<td><b>Parameter</b>
+</td>
+<td><b>Default</b>
+</td>
+<td><b>Usage</b>
+</td></tr>
+<tr>
+<td>fillVectors
+</td>
+<td>true
+</td>
+<td>Boolean: If "true", SYS/BIOS should trap unused interrupts.  Else, no traps.
+</td></tr>
+<tr>
+<td>resetFunc
+</td>
+<td>_c_int00
+</td>
+<td>The program entry point to execute after the CPU is released from reset.
+</td></tr>
+<tr>
+<td>alwaysWake
+</td>
+<td>false
+</td>
+<td>Boolean: If "true", the stubs for all Hwi instances will modify the Status Register (SR) pushed on the stack, so that the CPU always stays awake upon return from interrupt (RETI).  Else, whether the stub for a Hwi instance keeps the CPU awake or not is defined by that Hwi's individual keepAwakeEnabled configuration parameter.
+</td></tr></tbody></table>
+<p><br />
+The Hwi instance configuration parameters are:
+</p>
+<table border="1" align="left" style="text-align:center;">
+<tbody><tr>
+<td><b>Parameter</b>
+</td>
+<td><b>Default</b>
+</td>
+<td><b>Usage</b>
+</td></tr>
+<tr>
+<td>swiEnabled
+</td>
+<td>true
+</td>
+<td>Boolean: If "true", this stub should disable the Swi scheduler upon stub entry, and restore it upon interrupt completion.  If no Swi-scheduling APIs (e.g., Swi_post()) are called from within this interrupt's ISR function, then this can be set to "false".
+</td></tr>
+<tr>
+<td>taskEnabled
+</td>
+<td>true
+</td>
+<td>Boolean: If "true", this stub should disable the Task scheduler upon stub entry, and restore it upon interrupt completion.  If no Task-scheduling APIs (e.g., Semaphore_post()) are called from within this interrupt's ISR function, then this can be set to "false".
+</td></tr>
+<tr>
+<td>isrStackEnabled
+</td>
+<td>true
+</td>
+<td>Boolean: If "true", the SYS/BIOS interrupt/system stack should be used when running this interrupt's ISR function (instead of the interrupted Task's dedicated stack).  Else, no switching to the interrupt/system stack will occur for this interrupt.  Note that "isrStackEnabled" is only relevant for the Task module; if the Task module is not enabled, only a single stack is used (i.e., the "system/interrupt stack").
+</td></tr>
+<tr>
+<td>nestingEnabled
+</td>
+<td>false
+</td>
+<td>Boolean: Set to "true" if the configured interrupt function will enable global interrupts temporarily within the function, to allow other interrupts to nest on top of this interrupt.
+</td></tr>
+<tr>
+<td>loggingEnabled
+</td>
+<td>false
+</td>
+<td>Boolean: If "true", this stub will emit interrupt begin (LM_begin) and interrupt end (LM_end) Log messages.
+</td></tr>
+<tr>
+<td>threadTypeEnabled
+</td>
+<td>true
+</td>
+<td>Boolean: If "true", this stub will fully track the execution context.  For example, if this ISR's function (or one of the functions it calls) were to call BIOS_getThreadType(), the returned value would be BIOS_ThreadType_Hwi.
+</td></tr>
+<tr>
+<td>keepAwakeEnabled
+</td>
+<td>false
+</td>
+<td>Boolean: If "true", this interrupt stub should modify the SR pushed onto the stack so that when it is restored by the RETI instruction the CPU will stay in the Active mode.  Else, the unmodified SR will be restored upon RETI, and the CPU may return to a previous low power mode (LPM).
+</td></tr></tbody></table>
+<p><br />
+</p>
+<h3><span id="Important_note_regarding_the_function_called_by_a_SYS/BIOS_interrupt_stub"></span><span class="mw-headline" id="Important_note_regarding_the_function_called_by_a_SYS.2FBIOS_interrupt_stub">Important note regarding the function called by a SYS/BIOS interrupt stub</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=13" title="Edit section: Important note regarding the function called by a SYS/BIOS interrupt stub">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><span style="color: Red"><b>For interrupt functions called from a SYS/BIOS interrupt stub it is critical that the function does not use the "interrupt" keyword. Doing so will typically cause an application crash upon the first attempt to return from the interrupt.</b></span>
+</p>
+<h3><span id="Configuring_a_user_interrupt_with_no_SYS/BIOS_interrupt_stub"></span><span class="mw-headline" id="Configuring_a_user_interrupt_with_no_SYS.2FBIOS_interrupt_stub">Configuring a user interrupt with no SYS/BIOS interrupt stub</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=14" title="Edit section: Configuring a user interrupt with no SYS/BIOS interrupt stub">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Finally, it is important to note that one does not need to use SYS/BIOS interrupt stubs for all interrupts.  For example, if the interrupt is simply reading a port and setting a flag that is sampled elsewhere in the program, and it makes no SYS/BIOS API calls from within the ISR, then the user can simply plug this ISR directly, on their own, and not involve SYS/BIOS at all.  They can do this by providing an interrupt-keyworded ISR function, and then placing it with a "#pragma vector =" directive, as shown in the traditional C description above.  Note that to do this successfully, the user must set "Hwi.fillVectors=false;" (see below) to avoid a link error because both this #pragma and SYS/BIOS will be attempting to place a value at the vector location.
+</p><p><br />
+</p>
+<div id="PMAnchor"></div>
+<h2><span class="mw-headline" id="Power_Management">Power Management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=15" title="Edit section: Power Management">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>As mentioned earlier, the MSP430 supports several low power modes (LPM) that can be activated via bits in the Status Register (SR).  Once activated, the device will "power down" to a reduced power consumption state, until the next interrupt wakes the CPU to its Active state.  
+</p><p>The SR is pushed onto the stack as part of initially servicing an interrupt, and restored from the stack upon the return from interrupt (RETI).  This means that if an LPM is activated prior to the interrupt, by default, that same LPM mode will be resumed when the RETI instruction is invoked. To instead keep the CPU awake after the RETI instruction, one must modify the saved SR value on the stack, so that when it is restored during RETI the appropriate bits in the SR are cleared, and the CPU is kept in its Active state.  The C compiler provides an intrinsic (_bic_SR_register_on_exit()) that can be called in the interrupt routine, that takes care of the details of finding the SR value on the stack, and then clearing the specified bits.
+</p><p><b>Special note on nesting and keep awake:</b> When interrupts are allowed to nest upon one another, it is the saved SR value on the stack from the first occurring interrupt that will ultimately determine if the CPU stays awake.  Because, any interrupt that nests upon this first interrupt will interrupt the CPU while it is in its Active state, so the RETI for that interrupt will always restore the SR such that the CPU remains Active.  This means that an application that is structured to rely upon the CPU &#8216;keep awake&#8217; mechanism must be very careful when using interrupt nesting, to avoid deadlock situations.  For example, a control "super loop" is looping checking for flags set in an ISR, and using an LPM while waiting.  For the control loop to run, the ISR must use the "keep awake" feature.  But if this ISR nests on top of another interrupt that is not doing "keep awake", the set-the-flag ISR function attempts "keep awake" (by modifying the SR value on the stack), but this is ultimately ignored, because the interrupt at the bottom of the nest doesn't modify the SR in effect when *it* interrupted.  So, the CPU returns to the LPM, and the control loop does not run.
+</p><p>The LPM modes available on a particular MSP430 device are described in the corresponding device family user's guide.  For example, for the 5xx/6xx devices, the following operating modes are defined (see Table 1-2 in SLAU208):
+</p><p><a href="../File_Lp_modes.html" class="image"><img alt="Lp modes.png" src="https://processors.wiki.ti.com/images/6/6f/Lp_modes.png" width="576" height="463" /></a>
+</p><p>The SCG1, SCG0, OSC OFF and CPU OFF control bits are located at the following positions in the Status Register:
+</p><p><a href="../File_Sr_register.html" class="image"><img alt="Sr register.png" src="https://processors.wiki.ti.com/images/c/c8/Sr_register.png" width="576" height="70" /></a>
+</p>
+<h3><span id="Idling_with_SYS/BIOS"></span><span class="mw-headline" id="Idling_with_SYS.2FBIOS">Idling with SYS/BIOS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=16" title="Edit section: Idling with SYS/BIOS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>SYS/BIOS for the MSP430 provides a Power module, which can be used to automatically idle the CPU when no threads (i.e., no Hwi, Swi, or Tasks) are ready to run.  When enabled to do so, the Power module will automatically insert a function into the SYS/BIOS Idle loop that activates the specified LPM mode.  The CPU will stay in that LPM mode until an enabled hardware interrupt is triggered, to transition the CPU to its Active state.
+</p><p>To use the power module your application configuration needs to 'use' it:
+</p>
+<pre>var Power = xdc.useModule('ti.sysbios.family.msp430.Power');
+</pre>
+<p>Once the module is 'used', by default, SYS/BIOS will be enabled to idle the CPU in the Idle loop when no threads are ready to run, i.e.:
+</p>
+<pre>Power.idle = true;
+</pre>
+<p>The default LPM mode for idling is LPM0, but a deeper level can be configured, e.g.:
+</p>
+<pre>Power.idleMode = Power.LPM2;
+</pre>
+<p><br />
+</p>
+<div id="TimersAnchor"></div>
+<h2><span class="mw-headline" id="Timers">Timers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=17" title="Edit section: Timers">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>On the MSP430 SYS/BIOS can use any Timer_A or Timer_B type timer for implementing timing services.  The timers are configured to run in "compare" mode, and count upwards continuously from 0 to maximum count (0xFFFF) before rolling over.  The timer's channel 0 compare threshold is used to trigger interrupts to the CPU at the appropriate intervals.  For a one-shot Timer the timer peripheral is stopped after this first interrupt.  For periodic timers, the compare threshold is advanced for the next interrupt, while the timer is allowed to continue to count upwards (so there is no skew introduced to reprogram the timer).
+</p><p>The convention used to assign logical timer IDs to the physical timers on a particular MSP430 device type is: ID "0" corresponds to the first Timer_A peripheral (TA0) available (if any) on the device.  ID "1" is assigned to the next available Timer_A (TA1), and so on, until there are no more Timer_A peripherals.  Then the next ID is assigned to the first Timer_B peripheral (if any), and so on.  A summary page that describes the logical IDs and the corresponding physical mappings (timers, base addresses, interrupt numbers) for all the supported MSP430 device types is provided as the link "Timer Mapping Tables" in the documentation for the ti.sysbios.family.msp430.Timer module.
+</p>
+<div id="TickSuppressAnchor"></div>
+<h2><span class="mw-headline" id="Clock_Tick_Suppression">Clock Tick Suppression</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=18" title="Edit section: Clock Tick Suppression">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Clock tick suppression is a feature where the timer peripheral providing the tick interrupts for the Clock module is dynamically reprogrammed to interrupt not on the next periodic tick, but on the next *needed* tick.  
+</p><p>For example, in normal “TickMode_PERIODIC” mode, the timer peripheral will “tick” and cause a CPU interrupt on each period interval.  If the application does not have any work to do, say for the next 10 ticks, the CPU will still need to wake on each tick and then resume what it was doing.  If the CPU was waiting in a low power state, this is particularly wasteful, because the CPU wakes only for the purpose of counting ticks.  
+</p><p>For MSP430, SYS/BIOS provides a “TickMode_DYNAMIC” tick mode, where the Clock module’s timer peripheral is dynamically reprogrammed to interrupt on the next *needed* tick interval.  For example, if there are no timeouts registered within Clock until 10 ticks into the future, the timer peripheral is reprogrammed to interrupt the CPU after the longer, 10-tick interval.  The next needed tick is determined by dynamically tracking the active timeouts currently registered within the Clock module.  Depending upon the application, this can provide significant power savings, because the CPU can stay in a low power mode until it has work to do, rather than waking periodically to count ticks, and then going right back to the low power mode.
+</p><p>The following oscilloscope trace shows Clock tick suppression in action.  
+</p><p><a href="../File_TickSupress.html" class="image"><img alt="TickSupress.JPG" src="https://processors.wiki.ti.com/images/0/08/TickSupress.JPG" width="539" height="480" /></a>
+</p><p>The top trace (in yellow) is generated by a GPIO from a dedicated (separate) timer peripheral that interrupts every 1msec.  Here it is used as a reference that the Clock module’s activity can be compared to, and represents CPU wake activity when TickMode_PERIODIC is used.  The bottom trace (in blue) is generated by a GPIO toggled by the Clock module when it activates in TickMode_DYNAMIC, as needed, to service a timeout.  In this case, there are two periodic Clock functions, each running once every 10 ticks, but out of phase by 2 ticks.  With TickMode_DYNAMIC, the Clock module wakes the CPU only when there is work to be done, and the CPU can otherwise stay in a low power mode while waiting for the next needed tick.
+</p><p>The TickMode_DYNAMIC implementation uses the compare feature of the MSP430 timer peripherals to set an appropriate next interrupt “threshold”.  This avoids any timing skew that would be introduced if the timer was actually stopped, reprogrammed, and restarted.
+</p><p>Up until the SYS/BIOS 6.34 product release, TickMode_DYNAMIC was the default mode for the MSP430 Clock module.  With 6.34 and later, TickMode_PERIODIC is the default mode for Clock.  The Clock tick mode can optionally be changed to either TickMode_DYNAMIC or TickMode_PERIODIC, as described later in the HOWTO section.
+</p>
+<h3><span class="mw-headline" id="Important_Notes_Regarding_Clock_Tick_Suppression">Important Notes Regarding Clock Tick Suppression</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=19" title="Edit section: Important Notes Regarding Clock Tick Suppression">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><span style="color: Red"><b>1.</b></span> The implementation of Clock tick suppression requires timely servicing of the timer peripheral interrupt by the CPU.  If the CPU cannot service the timer tick interrupt quickly enough, then it is possible to get into a situation where the timer interrupt threshold is programmed too late, and won’t interrupt until the timer count “wraps around” again, typically about 2 seconds later.  There is logic in the implementation to reduce this likelihood, but there is a limitation to how long the servicing can be delayed.  Currently “quickly enough” is one Clock tick period.  For example, if the Clock tick period is 10msec, then the Clock module must not be delayed more than 10msec from servicing the timer peripheral once the interrupt is raised, otherwise the wraparound situation can occur.  
+</p><p>To avoid this situation, the following are required:
+</p><p><b>a.</b> Hardware interrupts must not be disabled too long, to exceed a Clock tick period interval.
+</p><p><b>b.</b> Non-nestable hardware ISRs must not run longer than the Clock tick period interval.
+</p><p><b>c.</b> No application Swi should be allowed to run at the same or higher priority as the Clock Swi, long enough to exceed the Clock tick period interval.
+</p><p><b>d.</b> The total execution time of Clock functions that execute on a given tick interrupt must not exceed the Clock tick period interval.
+</p><p>If these situations cannot be avoided, the Clock module should be configured to use TickMode_PERIODIC.
+</p><p><span style="color: Red"><b>2.</b></span> With TickMode_DYNAMIC, the function Clock_getTicks() will require more cycles to execute because it needs to read the timer peripheral and calculate the number of corresponding Clock ticks, as if the timer had actually been interrupting the CPU.  For TickMode_PERIODIC, no calculation is needed, and the tick interrupt count can be returned quickly.
+</p><p><span style="color: Red"><b>3.</b></span> If CCS is halted while servicing a Clock tick, the “tRemaining” fields in the ROV displays can be inaccurate, because the Clock module has not finished updating internal state.  Similarly, the Clock tick counts will often be tagged with “(stale data)”, to indicate that the Clock module is in the midst of a tick suppression interval, and ROV cannot accurately compute and present the tick count, as it could do with TickMode_PERIODIC.
+</p>
+<h2><span class="mw-headline" id="HOWTOs">HOWTOs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=20" title="Edit section: HOWTOs">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div id="WdtAnchor"></div>
+<h3><span id="Turn_off_SYS/BIOS’s_disabling_of_the_watchdog_timer"></span><span class="mw-headline" id="Turn_off_SYS.2FBIOS.E2.80.99s_disabling_of_the_watchdog_timer">Turn off SYS/BIOS’s disabling of the watchdog timer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=21" title="Edit section: Turn off SYS/BIOS’s disabling of the watchdog timer">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default, SYS/BIOS will immediately disable the watchdog timer (WDT) after release from reset.  To disable this, and let the WDT reset the MSP430 if it is not serviced in a timely fashion by the application, add the following to the application configuration script:
+</p>
+<pre>var Boot = xdc.useModule('ti.catalog.msp430.init.Boot');
+Boot.disableWatchdog = false;
+</pre>
+<div id="BoostAnchor"></div>
+<h3><span id="Turn_off_SYS/BIOS’s_frequency_boost_at_boot"></span><span class="mw-headline" id="Turn_off_SYS.2FBIOS.E2.80.99s_frequency_boost_at_boot">Turn off SYS/BIOS’s frequency boost at boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=22" title="Edit section: Turn off SYS/BIOS’s frequency boost at boot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default, after release from reset, SYS/BIOS will boost MCLK and SMCLK frequencies to 8.192MHz.  To disable this, and have the MSP430 boot with the device defaults, add this to the application configuration script:
+</p>
+<pre>var Boot = xdc.useModule('ti.catalog.msp430.init.Boot');
+Boot.configureDCO = false;
+</pre>
+<div id="WakeAnchor"></div>
+<h3><span class="mw-headline" id="Have_all_interrupt_stubs_keep_the_CPU_awake_upon_return_from_interrupt">Have all interrupt stubs keep the CPU awake upon return from interrupt</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=23" title="Edit section: Have all interrupt stubs keep the CPU awake upon return from interrupt">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There is a Hwi module configuration "switch" that will direct all the SYS/BIOS-generated interrupt stubs to emit __bic_SR_register_on_exit(0xF0) to keep the CPU awake upon return from interrupt.  This is provided as a debug aid, as well as a mechanism to ease porting of legacy MSP430 application code to run with SYS/BIOS.  Specifying this module-level "alwaysWake" Boolean will override all of the Hwi-instance-specific "keepAwakeEnabled" Booleans.  An example configuration script snippet:
+</p>
+<pre>var Hwi = xdc.useModule('ti.sysbios.family.msp430.Hwi');
+Hwi.alwaysWake = true;
+</pre>
+<div id="BreakpointAnchor"></div>
+<h3><span id="Set_a_breakpoint_at_the_entry_to_a_SYS/BIOS_interrupt_stub"></span><span class="mw-headline" id="Set_a_breakpoint_at_the_entry_to_a_SYS.2FBIOS_interrupt_stub">Set a breakpoint at the entry to a SYS/BIOS interrupt stub</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=24" title="Edit section: Set a breakpoint at the entry to a SYS/BIOS interrupt stub">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Each generated SYS/BIOS interrupt stub will have a unique label corresponding to the interrupt priority number.  This number corresponds to the "PRIORITY" number listed for the interrupt in the "Interrupt Vector Addresses" table in the device data sheet.  For example, for an MSP430F5438A, the ADC12_A has a vector location corresponding to interrupt priority 54.  A breakpoint can be set at the symbol "ti_sysbios_family_msp430_Hwi54" to halt execution upon activation of an ADC12_A interrupt.
+</p>
+<div id="TrapsAnchor"></div>
+<h3><span class="mw-headline" id="Disable_auto-fill_of_unused_interrupt_vectors_with_traps">Disable auto-fill of unused interrupt vectors with traps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=25" title="Edit section: Disable auto-fill of unused interrupt vectors with traps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default, SYS/BIOS provides a mechanism to trap unintended activation of unused device interrupts (which at times may cause an immediate application crash, but at others may cause odd application failures).  This mechanism can be *deactivated* via a single configuration switch, e.g., with the following script:
+</p>
+<pre>var Hwi = xdc.useModule('ti.sysbios.family.msp430.Hwi');
+Hwi.fillVectors = false;
+</pre>
+<p>When "fillVectors" defaults to true, SYS/BIOS configures a trap function for each interrupt that the user has not explicitly configured, nor has been implicitly configured (e.g., by use of the Timer module).  The default trap is a simple spin loop.  
+</p><p>Note that if there are any ISRs created explicitly to *not* use SYS/BIOS interrupt stubs (see earlier description of using #pragma directly), then specifying "fillVectors=true;" will cause linker errors, because there will be collisions for placement of those ISR vectors, and the traps from SYS/BIOS for what it considers to be unused interrupts.
+</p>
+<div id="LpmAnchor"></div>
+<h3><span id="Configure_SYS/BIOS_to_invoke_an_LPM_mode_when_idle,_with_no_threads_ready_to_run"></span><span class="mw-headline" id="Configure_SYS.2FBIOS_to_invoke_an_LPM_mode_when_idle.2C_with_no_threads_ready_to_run">Configure SYS/BIOS to invoke an LPM mode when idle, with no threads ready to run</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=26" title="Edit section: Configure SYS/BIOS to invoke an LPM mode when idle, with no threads ready to run">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To enable idling by SYS/BIOS when no threads are in the "ready" to run state, add the following to your application configuration script:
+</p>
+<pre>var Power = xdc.useModule('ti.sysbios.family.msp430.Power');
+Power.idle = true;
+</pre>
+<div id="LpmDepthAnchor"></div>
+<h3><span id="Specify_the_LPM_mode_to_be_use_by_SYS/BIOS_for_idling"></span><span class="mw-headline" id="Specify_the_LPM_mode_to_be_use_by_SYS.2FBIOS_for_idling">Specify the LPM mode to be use by SYS/BIOS for idling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=27" title="Edit section: Specify the LPM mode to be use by SYS/BIOS for idling">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The default depth for idling by SYS/BIOS is LPM0.  To configure a different LPM mode, you can add something like the following to your application configuration script:
+</p>
+<pre>var Power = xdc.useModule('ti.sysbios.family.msp430.Power');
+Power.idle = true;
+Power.idleMode = Power.LPM3;
+</pre>
+<p>Note that SYS/BIOS will activate the corresponding LPM mode by setting the appropriate bits in the status register (SR).  SYS/BIOS will not make any other changes to the device (e.g., configuring pins so there are no floating I/Os), which may be necessary to achieve lowest power consumption.  The application is responsible for doing any necessary device configuration, and SYS/BIOS handles the SR modifications when appropriate to activate the low power mode.
+</p>
+<div id="DynamicLpmAnchor"></div>
+<h3><span id="Dynamically_change_the_LPM_mode_used_by_SYS/BIOS_for_idling"></span><span class="mw-headline" id="Dynamically_change_the_LPM_mode_used_by_SYS.2FBIOS_for_idling">Dynamically change the LPM mode used by SYS/BIOS for idling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=28" title="Edit section: Dynamically change the LPM mode used by SYS/BIOS for idling">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default, when enabled to do idling SYS/BIOS will invoke a statically-defined LPM mode, specified in the application configuration (see previous HOWTOs).  If the application needs to dynamically change this LPM mode at runtime, it needs to: 1) enable dynamic changes via the application configuration (i.e., set “Power.allowDynamicMode = true;”), and then at runtime, 2) call a Power module API to change the LPM mode.  For example, the following configuration script will enable idling, and dynamic changes to the level, with a initial level of LPM2&#160;:
+</p>
+<pre>var Power = xdc.useModule('ti.sysbios.family.msp430.Power');
+Power.idle = true;
+Power.allowDynamicMode = true;
+Power.idleMode = Power.LPM2;
+</pre>
+<p>And then in the application source, calls are added to change the LPM mode when appropriate, for example:
+</p>
+<pre>Power_changeIdleMode(Power_LPM3);
+</pre>
+<div id="TimerMapAnchor"></div>
+<h3><span class="mw-headline" id="Know_the_mapping_between_logical_Timer_IDs_and_physical_timers">Know the mapping between logical Timer IDs and physical timers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=29" title="Edit section: Know the mapping between logical Timer IDs and physical timers">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The convention used to assign logical timer IDs to the physical timers on a particular MSP430 device type is: ID "0" corresponds to the first Timer_A peripheral (TA0) available (if any) on the device.  ID "1" is assigned to the next available Timer_A (TA1), and so on, until there are no more Timer_A peripherals.  Then the next ID is assigned to the first Timer_B peripheral (if any), and so on.  A summary page that describes the logical IDs and the corresponding physical mappings (timers, base addresses, interrupt numbers) for all the supported MSP430 device types is provided as the link "Timer Mapping Tables" in the documentation for the ti.sysbios.family.msp430.Timer module.
+</p>
+<div id="TimerSourceAnchor"></div>
+<h3><span class="mw-headline" id="Specify_the_input_clock_source_for_a_Timer">Specify the input clock source for a Timer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=30" title="Edit section: Specify the input clock source for a Timer">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>SYS/BIOS supports two input clock source selections for Timers: the auxiliary clock (ACLK) and the subsystem master clock (SMCLK).  (For a description of these clocks, see the corresponding MSP430 Family User&#8217;s Guide.)  The default selection is ACLK, but this can be changed via a configuration parameter specified during Timer creation, for example:
+</p>
+<pre>var Timer = xdc.useModule('ti.sysbios.family.msp430.Timer');
+var timerParams = new Timer.Params();
+...
+timerParams.clockSource = Timer.Source_SMCLK;
+...
+Timer.create(3, '&amp;myTickFxn', timerParams);
+</pre>
+<div id="ClockDynamicAnchor"></div>
+<h3><span class="mw-headline" id="Switch_Clock_module_from_using_TickMode_PERIODIC_to_TickMode_DYNAMIC">Switch Clock module from using TickMode_PERIODIC to TickMode_DYNAMIC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=31" title="Edit section: Switch Clock module from using TickMode PERIODIC to TickMode DYNAMIC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To enable the SYS/BIOS Clock tick suppression feature add the following to your application configuration script:
+</p>
+<pre>var Clock = xdc.useModule('ti.sysbios.knl.Clock');
+Clock.tickMode = Clock.TickMode_DYNAMIC;
+</pre>
+<div id="ClockPeriodicAnchor"></div>
+<h3><span class="mw-headline" id="Switch_Clock_module_from_using_TickMode_DYNAMIC_to_TickMode_PERIODIC">Switch Clock module from using TickMode_DYNAMIC to TickMode_PERIODIC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=32" title="Edit section: Switch Clock module from using TickMode DYNAMIC to TickMode PERIODIC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To disable the SYS/BIOS Clock tick suppression feature, and have the timer peripheral used underneath Clock interrupt the CPU on every tick interval (i.e., every Clock.tickPeriod), add the following to your application configuration script:
+</p>
+<pre>var Clock = xdc.useModule('ti.sysbios.knl.Clock');
+Clock.tickMode = Clock.TickMode_PERIODIC;
+</pre>
+<div id="SeparateAnchor"></div>
+<h3><span class="mw-headline" id="Have_Clock_and_Timestamp_use_separate_timer_peripherals">Have Clock and Timestamp use separate timer peripherals</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=33" title="Edit section: Have Clock and Timestamp use separate timer peripherals">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default on MSP430, if both the SYS/BIOS Clock and Timestamp modules are used in an application they will share a single timer peripheral, to implement both types of timing services.  The timer will use its ACLK input clock, and will generate interrupts at the appropriate intervals to implement Clock ticks and timeouts.  If there is an extra timer peripheral available, Timestamp can be configured to use a separate (dedicated) timer peripheral, which defaults to the same ACLK rate:
+</p>
+<pre>var Timestamp = xdc.useModule('ti.sysbios.family.msp430.TimestampProvider');
+Timestamp.useClockTimer = false;
+</pre>
+<div id="TsRateAnchor"></div>
+<h3><span id="Change_the_rate_of_Timestamps_(for_the_dedicated_timer_case)"></span><span class="mw-headline" id="Change_the_rate_of_Timestamps_.28for_the_dedicated_timer_case.29">Change the rate of Timestamps (for the dedicated timer case)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=34" title="Edit section: Change the rate of Timestamps (for the dedicated timer case)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For the case where a dedicated timer has been select for Timestamping (see above), the default is to have this timer run at the ACLK rate.  To change the timer to use its SMCLK clock source (which is typically faster, giving better timestamp resolution), the following configuration script can be used: 
+</p>
+<pre>var Timestamp = xdc.useModule('ti.sysbios.family.msp430.TimestampProvider');
+Timestamp.useClockTimer = false;
+Timestamp.clockSource = Timestamp.Source_SMCLK;
+</pre>
+<h1><span class="mw-headline" id="Training">Training</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit&amp;section=35" title="Edit section: Training">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The "Intro to TI-RTOS Kernel Workshop" is now available. Follow the link below to find out more. The TI-RTOS Kernel Workshop covers the SYS/BIOS operating system available for all TI embedded processors - C28x, MSP430, Tiva-C, C6000 and AM335x (Cortex A-8). You can take a LIVE workshop (scheduled at various sites around the U.S.) or download/stream the videos of each chapter online and watch at your own pace. All of the labs, solutions, powerpoint slides, student guides, installation instructions, lab procedures, etc., are all available to you. The workshop labs run on all MCU platforms and the C6000. Check it out...
+</p><p><a rel="nofollow" class="external text" href="https://e2e.ti.com/support/processors/f/791/t/840835">Intro to TI-RTOS Kernel Workshop</a>
+<br /> <br />
+</p><p>Additionally, you can refer to the "MSP430 Design Workshop" for more information about the MSP430: <br />
+<a href="https://training.ti.com/search-catalog/field_language/EN/categories/msp430-ultra-low-power-mcus" title="MSP430 Design Workshop"> MSP430 Design Workshop </a>
+<br /> <br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201020132
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.099 seconds
+Real time usage: 0.104 seconds
+Preprocessor visited node count: 172/1000000
+Preprocessor generated node count: 210/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:9544-0!canonical and timestamp 20201201020132 and revision id 193345
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>SYS/BIOS for the MSP430</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>SYS/BIOS for the MSP430</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>SYS/BIOS for the MSP430</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>SYS/BIOS for the MSP430</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>SYS/BIOS for the MSP430</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>SYS/BIOS for the MSP430</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>SYS/BIOS for the MSP430</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>SYS/BIOS for the MSP430</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>SYS/BIOS for the MSP430</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;oldid=193345">https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;oldid=193345</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../Category_MSP430.html" title="Category:MSP430">MSP430</a></li><li><a href="../Category_SYSBIOS.html" title="Category:SYSBIOS">SYSBIOS</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=SYS%2FBIOS+for+the+MSP430" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="BIOS_for_the_MSP430.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:SYS/BIOS_for_the_MSP430&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="BIOS_for_the_MSP430.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/SYS/BIOS_for_the_MSP430.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/SYS/BIOS_for_the_MSP430.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;oldid=193345" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=SYS/BIOS_for_the_MSP430&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 February 2015, at 15:32.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.099","walltime":"0.104","ppvisitednodes":{"value":172,"limit":1000000},"ppgeneratednodes":{"value":210,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201020132","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":251});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/SYS/BIOS_for_the_MSP430 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:04:55 GMT -->
+</html>

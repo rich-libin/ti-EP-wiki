@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C64x+_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:31:31 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C64x+_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector","wgTitle":"C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector","wgCurRevisionId":216133,"wgRevisionId":216133,"wgArticleId":6692,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Codec Engine","DM6437","DM6467","DVEVM","OMAP35x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C64x+_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector","wgRelevantArticleId":6692,"wgRequestId":"6f812c0d839685468ac01397","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":["sysop"],"wgRestrictionMove":["sysop"]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C64x_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector rootpage-C64x_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div style="padding:5px; background: #eeeeee; color: #FF0000">
+<p><i><b>Important Note:</b></i><br />
+</p><p><i><b>The software found on this site is available for download, but is no longer being actively developed. This wiki is in maintenance mode and the software is supported on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp">C6000 DSP E2E forum</a></b></i>
+</p>
+</div> <p><br />
+</p><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Software_Requirements"><span class="tocnumber">2</span> <span class="toctext">Software Requirements</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Software_Required_to_Build_DSP_codec"><span class="tocnumber">2.1</span> <span class="toctext">Software Required to Build DSP codec</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Software_Requirements_to_Package_Algorithm_as_Codec_and_Server"><span class="tocnumber">2.2</span> <span class="toctext">Software Requirements to Package Algorithm as Codec and Server</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Creating_a_new_Application_and_DSP_Codec_Package"><span class="tocnumber">3</span> <span class="toctext">Creating a new Application and DSP Codec Package</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Create_Application"><span class="tocnumber">3.1</span> <span class="toctext">Create Application</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Create_Codec"><span class="tocnumber">3.2</span> <span class="toctext">Create Codec</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#How_can_algorithm_request_hardware_resources_from_the_system"><span class="tocnumber">3.3</span> <span class="toctext">How can algorithm request hardware resources from the system</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Canny_Edge_Detection_Codec_using_VLib_on_DM6437"><span class="tocnumber">4</span> <span class="toctext">Canny Edge Detection Codec using VLib on DM6437</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Memory_Management"><span class="tocnumber">4.1</span> <span class="toctext">Memory Management</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Canny_Algorithm"><span class="tocnumber">4.2</span> <span class="toctext">Canny Algorithm</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Image_Format_Conversion"><span class="tocnumber">4.3</span> <span class="toctext">Image Format Conversion</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Building_the_example_code"><span class="tocnumber">4.4</span> <span class="toctext">Building the example code</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Using_the_Cache_to_process_data_from_External_Memory"><span class="tocnumber">4.5</span> <span class="toctext">Using the Cache to process data from External Memory</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Using_Slices_to_process_data_in_Internal_L1_Memory"><span class="tocnumber">4.6</span> <span class="toctext">Using Slices to process data in Internal L1 Memory</span></a>
+<ul>
+<li class="toclevel-3 tocsection-16"><a href="#Applying_Slicing_to_the_Pre_and_Post_Processing_Algorithms"><span class="tocnumber">4.6.1</span> <span class="toctext">Applying Slicing to the Pre and Post Processing Algorithms</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Applying_Slicing_to_the_Canny_Algorithm"><span class="tocnumber">4.6.2</span> <span class="toctext">Applying Slicing to the Canny Algorithm</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Taking_Codec_Package_and_integrating_in_a_Codec_Server_for_a_DM6467"><span class="tocnumber">5</span> <span class="toctext">Taking Codec Package and integrating in a Codec Server for a DM6467</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#Building_the_Codec_Server"><span class="tocnumber">5.1</span> <span class="toctext">Building the Codec Server</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#Packaging_the_Codec_Server_using_the_Wizard"><span class="tocnumber">5.1.1</span> <span class="toctext">Packaging the Codec Server using the Wizard</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Building_Codec_Unit_Server_in_the_DVSDK"><span class="tocnumber">5.1.2</span> <span class="toctext">Building Codec Unit Server in the DVSDK</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-22"><a href="#Building_the_Linux_Application"><span class="tocnumber">5.2</span> <span class="toctext">Building the Linux Application</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Running_the_Linux_Application"><span class="tocnumber">5.3</span> <span class="toctext">Running the Linux Application</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-24"><a href="#Taking_Codec_Package_and_integrating_in_a_Codec_Server_for_a_OMAP3530"><span class="tocnumber">6</span> <span class="toctext">Taking Codec Package and integrating in a Codec Server for a OMAP3530</span></a>
+<ul>
+<li class="toclevel-2 tocsection-25"><a href="#Building_the_Codec_Server_2"><span class="tocnumber">6.1</span> <span class="toctext">Building the Codec Server</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Building_the_Linux_Application_2"><span class="tocnumber">6.2</span> <span class="toctext">Building the Linux Application</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Running_the_Linux_Application_2"><span class="tocnumber">6.3</span> <span class="toctext">Running the Linux Application</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-28"><a href="#Creating_a_Codec_on_DM644x"><span class="tocnumber">7</span> <span class="toctext">Creating a Codec on DM644x</span></a></li>
+<li class="toclevel-1 tocsection-29"><a href="#Migrating_the_demo_applications_to_another_DVSDK"><span class="tocnumber">8</span> <span class="toctext">Migrating the demo applications to another DVSDK</span></a></li>
+<li class="toclevel-1 tocsection-30"><a href="#Recommended_Development_Flow_for_DSP_Codec_Development"><span class="tocnumber">9</span> <span class="toctext">Recommended Development Flow for DSP Codec Development</span></a></li>
+<li class="toclevel-1 tocsection-31"><a href="#Conclusions"><span class="tocnumber">10</span> <span class="toctext">Conclusions</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The purpose of this application note is to explain the principles of developing and optimizing a DSP Video Analytics application in an IUNIVERSAL <a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a> framework using the TI Video Analytics Library (VLib, <a rel="nofollow" class="external free" href="http://www.ti.com/vlibrequest">http://www.ti.com/vlibrequest</a>). The algorithm used as the example is the <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Canny_edge_detector">Canny Edge Detector</a>.
+</p><p>In addition it will show how to develop the algorithm as an XDM Compliant codec using IUNIVERSAL interface to Codec Engine. Developing the algorithm in this way allows us to write a single C64x+ core algorithm that can be used on either a DSP only device such as the DM6437 or on an ARM+DSP device such as the DM644x, DM6467 or OMAP35xx. The following article aims to provide a worked example. It should be read in conjunction with this <a href="Getting_started_with_IUNIVERSAL.html" title="Getting started with IUNIVERSAL">IUNIVERSAL</a> article.
+</p><p>The Canny Edge Detection algorithm will be used to illustrate how to architect the DSP software to break down an image processing algorithm based on large frames of data into slices where possible. Using slices allows optimal use of the small but fast internal memory available on these devices to improve performance.
+</p><p>The algorithm development is done on the DM6437 EVM using the DVSDK1.11 as the software environment with both CCS v3.3 and 4.1 and will run on a PAL or NTSC video stream at full frame rate. The algorithm is then packaged as a codec server and integrated into the DM6467 DVSDK 2.00.00.22 GA release and the OMAP3 DVSDK 3.01.00.10 release. This process is then formalized into a recommended development flow for creating a DSP codec for a multi-processor platform.
+</p><p><br />The available demonstrations are summarized in this table which gives the name of the file from the package to be used for that configuration. The software package can be downloaded <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/c6000/web/iuniversal_canny/latest/index_FDS.html">here</a>.
+In order to run the Linux applications you must copy your module .ko files that match your uImage into the application directory. Also the boot args must match those for the DVSDK used (<a href="OMAP35x_DVEVM_Bootargs_Options.html" title="OMAP35x DVEVM Bootargs Options">OMAP3530</a> and <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/dvsdk/DVSDK_2_00/latest/exports/docs/spruf88e.pdf">DM6467</a>)
+</p><p><br />
+</p><p><br />
+</p><p><br />
+</p>
+<table style="width: 859px; height: 182px" cellspacing="1" cellpadding="1" width="859" border="1">
+
+<tbody><tr>
+<td><b>Description</b>
+</td>
+<td><b>Performance</b>
+</td>
+<td>
+<p><b>Hardware Requirements<br /></b>
+</p>
+</td>
+<td><b>Demo Binaries<br /></b>
+</td>
+<td><b>Demo Sources<br /></b>
+</td></tr>
+<tr>
+<td>DM6437 Frame Based Canny
+</td>
+<td>17fps PAL @ 100% DSP
+</td>
+<td>DM6437 EVM + D1 camera + composite Display
+</td>
+<td><b>dm6437_binaries/video_canny_universal_dman3_frame.out</b>
+</td>
+<td><b>dvsdk_1_11_00_00_universal_codecs_ccs_v1_1.zip</b>
+</td></tr>
+<tr>
+<td>DM6437 Slice Based Canny
+</td>
+<td>25fps PAL @100% DSP
+</td>
+<td>DM6437 EVM + D1 camera + composite Display
+</td>
+<td><b>dm6437_binaries/video_canny_universal_dman3_slice.out</b>
+</td>
+<td><b>dvsdk_1_11_00_00_universal_codecs_ccs_v1_1.zip</b>
+</td></tr>
+<tr>
+<td>DM6467 Frame Based Canny
+</td>
+<td>16fps PAL @ 100% DSP
+</td>
+<td>DM6467 EVM + D1 camera + composite Display
+</td>
+<td>pre-compiled executable uses slice mode
+</td>
+<td><b>dvsdk_2_00_00_22_Canny_iUniversal_v1_0.tar.gz</b>
+</td></tr>
+<tr>
+<td>DM6467 Slice Based Canny
+</td>
+<td>25fps PAL @ 60% DSP
+</td>
+<td>DM6467 EVM + D1 camera + composite Display
+</td>
+<td><b>dvsdk_2_00_00_22_6467_canny_executable_v1_1.tar.gz</b>
+</td>
+<td><b>dvsdk_2_00_00_22_Canny_iUniversal_v1_0.tar.gz</b>
+</td></tr>
+<tr>
+<td>OMAP3530 Frame Based Canny + video decode
+</td>
+<td>8fps NTSC @ 95% DSP
+</td>
+<td>OMAP3 EVM<br />
+</td>
+<td>pre-compiled executable uses slice mode
+</td>
+<td><b>dvsdk_3_01_00_10_Canny_iUniversal_v1_1.tar.gz</b>
+</td></tr>
+<tr>
+<td>OMAP3530 Slice Based Canny + video decode
+</td>
+<td>13fps NTSC @ 98% DSP
+</td>
+<td>OMAP3 EVM<br />
+</td>
+<td><b>dvsdk_3_01_00_10_canny_executable_omap3530_v1_0.tar.gz</b>
+</td>
+<td><b>dvsdk_3_01_00_10_Canny_iUniversal_v1_1.tar.gz</b>
+</td></tr></tbody></table>
+<p><br />
+</p><p>Note that the VLib package is not included in the source packages. It must be requested from the link <a rel="nofollow" class="external free" href="http://www.ti.com/vlibrequest">http://www.ti.com/vlibrequest</a>.
+</p>
+<h2><span class="mw-headline" id="Software_Requirements">Software Requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=2" title="Edit section: Software Requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Software_Required_to_Build_DSP_codec">Software Required to Build DSP codec</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=3" title="Edit section: Software Required to Build DSP codec">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This algorithm was developed on the DM6437 as it is easier to write and debug C64x+ code in a Code Composer Studio environment on a single core DSP with an Emulator. It was developed in DVSDK v1.11.00.00 for the DM6437 which is available from <a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/targetcontent/dvsdk/bios_dvsdk/index.html">https://www-a.ti.com/downloads/sds_support/targetcontent/dvsdk/bios_dvsdk/index.html</a>.
+</p><p>The IUNIVERSAL XDM interface was introduced in XDM1.1. The latest official DVSDK version for the DM6437 includes Codec Engine v1.20.02 which does not support this interface. Therefore, it is necessary to upgrade the Codec Engine and some other tools within the DVSDK to the latest version from <a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/targetcontent/index.html">https://www-a.ti.com/downloads/sds_support/targetcontent/index.html</a>. Whilst some of the DVSDK needs upgrading the original DVSDK is still used for the drivers (Peripheral Support Package) and examples. The following tools version upgrades were downloaded and installed in the DVSDK 1.11.00.00 directory <a rel="nofollow" class="external text" href="Codec_Engine_FAQ.html#Why_do_some_distributions_have_a_cetools_directory_and_others_don.27t.3F">Codec Engine FAQ</a>.
+</p><p>The DSP/BIOS update is installed in <i>\CCStudio_3.3</i>
+</p><p>DVSDK 1.11 was developed for CCS v3.3 and so these instructions are specific to CCS 3.3. This is not required for CCS v4. In order to use these new tools the following changes need to be made to paths in the file <i>C:\dvsdk_1_11_00_00\xdcpaths_evmDM6437.dat</i>
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+xdcpaths =
+</p><p>//Codec Engine
+dvsdkInstallDir + "codec_engine_2_21/packages;" +
+dvsdkInstallDir + "codec_engine_2_21/examples;" +
+</p><p>// Framework Components
+dvsdkInstallDir + "codec_engine_2_21/cetools/packages;" +
+</p><p>// XDAIS
+dvsdkInstallDir + "codec_engine_2_21/cetools/packages;" +
+</p><p>// Codecs
+dvsdkInstallDir + "codecs_1_10/packages;" +
+</p><p>// NDK package
+dvsdkInstallDir + "ndk_1_92_00_22_eval/packages;" +
+</p><p>// BIOS utilities
+dvsdkInstallDir + "codec_engine_2_21/cetools/packages;" +
+</p><p>// PSP Package
+dvsdkInstallDir + "pspdrivers_1_10_00/packages;" +
+</p><p>// EDMA3 Package
+dvsdkInstallDir + "edma3_lld_1_05_00/packages;" +
+</p><p>// TCONF import path to .tci files imported by projects' .tcf files
+dvsdkInstallDir + "examples/common/evmDM6437;" +
+</p><p>"";
+&lt;/syntaxhighlight&gt;
+and the following environment variables which ensure that the packaging wizard picks up expected XDCTOOLS from DVSDK 1.11 rather than the later tools installed by CCSv4.
+</p>
+<pre>XDC_INSTALL_DIR=C:\dvsdk_1_11_00_00\xdctools_3_10_03;
+XDCPATH=%XDC_INSTALL_DIR%
+XDCROOT=%XDC_INSTALL_DIR%</pre>
+<p><br />
+</p><p><br />To validate that the new tools are correctly installed rebuild an existing example application such as <i>\dvsdk_1_11_00_00\examples\video_encdec\evmDM6437\video_encdec.pjt</i>.
+</p>
+<h3><span class="mw-headline" id="Software_Requirements_to_Package_Algorithm_as_Codec_and_Server">Software Requirements to Package Algorithm as Codec and Server</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=4" title="Edit section: Software Requirements to Package Algorithm as Codec and Server">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In order to create a DSP algorithm package to be consumed by the application, the RTSC Codec and Server Package Wizard needs to be downloaded as part of CE UTILS v1.07 from:
+</p><p><a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/applications_packages/ceutils/index.htm">https://www-a.ti.com/downloads/sds_support/applications_packages/ceutils/index.htm</a>
+</p><p>Install CE UTILS to <i>C:\dvsdk_1_11_00_00\ceutils_1_07</i> and edit XDCPATH environment variable to add:
+</p><p><tt>C:\dvsdk_1_11_00_00\codec_engine_2_21\cetools\packages;C:\dvsdk_1_11_00_00\codec_engine_2_21\packages;C:\dvsdk_1_11_00_00\ceutils_1_07\packages</tt>
+</p><p>The packaging wizard also requires a utility called CG_XML. CG_XML v2.10 can be found at:
+</p><p><a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/applications_packages/cg_xml/index.htm">https://www-a.ti.com/downloads/sds_support/applications_packages/cg_xml/index.htm</a>
+</p>
+<h2><span class="mw-headline" id="Creating_a_new_Application_and_DSP_Codec_Package">Creating a new Application and DSP Codec Package</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=5" title="Edit section: Creating a new Application and DSP Codec Package">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The best way to create a new application and algorithm codec package is to rework some of the supplied examples in the DVSDK. The purpose of this section is to explain how to create a new blank application and codec which can be used as a basis for a new project. The overall architecture of the build process is shown in Figure 1.
+</p><p>This document will use the following terms to describe the different blocks of code.
+</p>
+<ul><li>Application</li></ul>
+<p>This refers to the code that is managing the I/O drivers (video capture and display), creating the Codec Engine instance and passing blocks of data to the DSP algorithm (or codec) for processing using the Codec Engine XDM APIs.
+</p>
+<ul><li>DSP Codec</li></ul>
+<p>This is the DSP algorithm that implements the XDM interface and the actual processing algorithm. In this case the algorithm is a simple loopback from input to output. For more details on the TI eXpressDSP architecture refer to the book " <i>OMAP and DaVinci Software for Dummies" (</i> <a rel="nofollow" class="external text" href="http://www.ti.com/dummiesbook">www.ti.com/dummiesbook</a>) or the Wiki documented <a rel="nofollow" class="external text" href="Main_Page.html">here</a>.
+</p><p>In the case of the single core DM6437 used in this application note these functional blocks of code exist on the same core but are logically separate.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:362px;"><a href="File_Build_architecture.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/6/63/Build_architecture.jpg" width="360" height="391" class="thumbimage" /></a>  <div class="thumbcaption">Figure 1: Application and DSP Codec Build Architecture</div></div></div></div>
+<p><br />
+The source package is expected to be extracted to the C: drive and is provided with project files to build with both CCS v3.3 and 4.1. There is a common code directory which will be extracted to <i>C:\dvsdk_1_11_00_00_universal_codecs_source</i>. The CCS 3.3 project files will be in <i>C:\dvsdk_1_11_00_00_universal_codecs_ccsv3_3</i> and the v4.1 files in <i>C:\dvsdk_1_11_00_00_universal_codecs_ccs_v4</i>. The project build folders both follow the same structure containing a packaged codecs directory ( <i>\codecs_1_10_new</i>), a DSP codec source and build directory ( <i>\dsp_alg</i>) and an application directory ( <i>\examples</i>).
+</p><p>The source package is thus independent of the main DVSDK install but refers to it for all the component packages. In this example <i>C:/dvsdk_1_11_00_00_universal_codecs_XXX</i> will be used. The CCS v3.3 directory has a new copy of <i>xdcpaths_evmDM6437.dat</i> that adds the following line to xdcpath variable <tt>//Add path for the new universal codecs</tt>
+</p><p>"C:/dvsdk_1_11_00_00_universal_codecs_ccsv3_3/codecs_1_10_new/packages;" +
+</p><p>This allows the compiler to pick up all the component definitions from the main DVSDK and the new codecs and applications from the new directory.
+</p><p>The instructions in the rest of the document are for use of CCS v3.3 but can be easily translated to CCS 4.1. CCS v4.1 is very similar except that the source file build is in a different project to the RTSC package + DSP/BIOS configuration. So in CCS v4.1 each of the examples is actually composed of two linked projects. This can be illustrated using the CCS v3.3 project file <i>C:\dvsdk_1_11_00_00_universal_codecs\examples\video_universal_app_empty\evmDM6437\video_universal_app_empty.cfg</i>. In CCS v4.1 there is the main project in the directory <i>C:\dvsdk_1_11_00_00_universal_codecs_ccs_v4\examples\video_universal_app_empty</i>, this controls the build of the source files and also links to the RTSC configuration project <i>C:\dvsdk_1_11_00_00_universal_codecs_ccs_v4\examples\video_universal_app_empty_configuration</i> which has the project's .tcf and .cfg files.
+</p>
+<h3><span class="mw-headline" id="Create_Application">Create Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=6" title="Edit section: Create Application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The easiest way to create a new application is to copy and adapt an existing one from the DVSDK. This section will create a new application project called video_analytic_app_empty. It is based on the video_encdec project which loops video through a video encode algorithm and subsequent video decode algorithm for final display. [Note: Codec Engine supplies a file IO based test application in <i>\codec_engine_2_21\examples\ti\sdo\ce\examples\apps\universal_copy</i> ]
+</p><p><br /><i>video_encdec.cfg</i> to <i>video_universal_copy_app_empty.cfg</i>
+</p><p><i>video_encdec.tcf</i> to <i>video_universal_copy_app_empty.tcf</i>
+</p><p><i>video_encdec.c</i> to <i>video_universal_copy_app_empty.c</i>
+</p><p>[Note: that RTSC requires that the project has a .cfg and .tcf file with the same name as the project. ]
+</p><p>This will create a new application called video_universal_copy_app_empty that at this stage still implements the video encode and decode operation as it still calls the VIDENC and VIDDEC codec packages. The application will automatically pull the required codecs from the .\dvsdk_1_11_00_00\codecs_1_10 directory due to the <i>video_universal_copy_app_empty.cfg</i> file.
+</p><p>In order to use a new UNIVERSAL codec package the application must be rewritten to use the UNIVERSAL VISA API rather than VIDENC and VIDDEC.
+</p><p>As a summary this involves changing the .cfg file:
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+var UNIVERSAL_COPY = xdc.useModule('ti.sdo.codecs.universal_copy.ce.UNIVERSAL_COPY')
+</p><p>var Engine = xdc.useModule('ti.sdo.ce.Engine');
+</p><p>/* This creates a engine called analytics with the codec UNIVERSAL_COPY. */
+</p><p>/* On a DM6437 this codec is local to codec engine as it is on same DSP */
+</p><p>var vcr = Engine.create("analytics", [
+</p>
+<pre>$ {name: "universal",mod: UNIVERSAL_COPY,groupId:0, local: true},
+</pre>
+<p>]);
+</p><p>&lt;/syntaxhighlight&gt;
+</p><p><br />A reference copy of this video_universal_copy_app_empty application which loops video through the algorithm UNIVERSAL_COPY is supplied in the directory <i>\dvsdk_1_11_00_00\examples\video_universal_copy_app_empty</i>. The UNIVERSAL_COPY codec is supplied by Codec Engine as an XDAIS example in <i>\codec_engine_2_21\examples\ti\xdais\dm\examples\universal_copy</i>.
+</p><p>For the purposes of building this video_universal_copy_app_empty application a copy of the codec has already been copied to <i>codecs_1_10\packages\ti\sdo\codecs\universal_copy</i>. The instructions to build this codec from source are described in the next section.
+</p><p>Note:
+</p><p>The example application provides a different project configuration to speed algorithm development and debugging. There is a project file <i>dvsdk_1_11_00_00_universal_codecs_ccsv3_3\examples\video_universal_app_empty\evmDM6437s\video_universal_app_empty_simulator_no_codec_engine.pjt</i> which adds the defines SIMULATOR and DO_NOT_USE_CODEC_ENGINE as well as changing the tcf file to change RTDX to simulator mode.
+</p><p>This configuration changes the application behaviour to:
+</p><p>- Use small input test patterns (eg 32 x 32 byte matrix) rather than live video. This allows debugging with entire known input image in a CCS memory window.
+</p><p>- The define INPUT422 allows the passing of 16 bit pixels to test implementation for a device such as DM6437 or OMPA3530 whose capture driver provides YUYV interleaved images. By not using this define it defaults to 8 bit pixels such in a 420SP image as captured by DM6467. This is designed for analytics images where only the Luma plane is of interest as in the Canny algorithm.
+</p><p>- Allows the application to directly call the algorithm function and bypass Codec Engine infrastructure. This has the main benefits of avoiding the codec packaging process and separating the debug of the algorithm itself from that of the integration into iUniversal and codec engine.
+</p><p>- Build the algorithm file as part of the application build.
+</p><p>The DO_NOT_USE CODEC_ENGINE option is only supplied on the example universal_copy application.
+</p>
+<h3><span class="mw-headline" id="Create_Codec">Create Codec</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=7" title="Edit section: Create Codec">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Again the best way to create a new codec project is to copy and modify an existing example. In this section a new copy of the UNIVERSAL_COPY codec from <i>\codec_engine_2_21\examples\ti\xdais\dm\examples\universal_copy</i> will be build and packaged to create a DSP codec called universal_copy. The purpose of this exercise to understand the build and configuration steps in creating a new DSP codec.
+</p><p>Start the wizard by opening a DOS command shell in <i>C:\dvsdk_1_11_00_00\xdctools_3_10_03</i>:
+</p><p><code>
+xs ti.sdo.codecutils.genpackage
+</code>
+</p><p><br />
+</p><p>Step 1
+</p><p>Package Name: ti.fae.codecs.universal_copy - This defines final directory path in codecs directory
+</p><p>Module: UNIVERSAL_COPY - This defines the Module name
+</p><p>Version: 0.0.1
+</p><p>Codec Class: ti.sdo.ce.universal.IUNIVERSAL
+</p><p>Instruction Architecture Set: C64P
+</p><p>Create ce content:
+</p><p>Set Output Repository: <i>C:/dvsdk_1_11_00_00_universal_codecs_ccsv3_3/dsp_alg/codec_packaging</i> - Directory where codec package is placed.
+</p><p>Select "Next" .
+</p><p>Step 2
+</p><p>Leave watermark as the only boolean in use.
+</p><p>Select the False radio button and add the patch to the DSP algorithm library <i>C:/dvsdk_1_11_00_00_universal_codecs_ccsv3_3/dsp_alg/universal_copy/lib/debug/universal_copy.a64P</i>
+</p><p>Leave True radio button with a NULL library
+</p><p>This page allows different versions of the library to be packaged in the codec and then chosen via .cfg file by the application.
+</p><p>Select "Next".
+</p><p>Step 3
+</p><p>Use "Browse for files" to add the file <i>C:/dvsdk_1_11_00_00_universal_codecs_ccsv3_3/dsp_alg/universal_copy/universal_copy_ti.h</i>
+</p><p>to the package
+</p><p>Select "Next"
+</p><p>Step 4
+</p><p>Browse for the appropriate executables:
+</p><p>cg_xml: <i>C:/dvsdk_1_11_00_00/cg_xml_2_10</i>
+</p><p>ofd6x: <i>C:/CCStudio_v3.3/C6000/cgtools/bin/ofd6x.exe</i>
+</p><p>nm6x: <i>C:/CCStudio_v3.3/C6000/cgtools/bin/nm6x.exe</i>
+</p><p>Tick the "Check to guess GetStackSize()" tick box.
+</p><p>Stack Size Pad&#160;%: 20
+</p><p>Leave ticked the "Check to update section info:" tick box.
+</p><p>Select "Next"
+</p><p>Step 5
+</p><p>This will automatically populate the ialgFxns box with the structure name for the algorithm. In this case <i>UNIVERSALCOPY_TI_ALG</i>.
+</p><p>Note: In the more general case if an algorithm has been build with DMAN3 support then idma3Fxns entry will also be populated with the algorithm IDMA3 table. This will be of the form ALGNAME_TI_IDMA3. Similarly if IRES support has been used then there is an iresFxns entry.
+</p><p>Select "Next"
+</p><p>Step 6
+</p><p>This step allows alignment to be added to the algorithm's memory sections. In this case leave them blank.
+</p><p>Note:If the table in the wizard shows a section ".const:.string" then untick the Use box and press "Guess Link.xdt" button to update the Link.xdt file. This section ".const:.string" contains any DSP/BIOS LOG_printf() strings and these need to be placed by the Server into a .const section to be picked up by CCS. With this line in the xdt file they are explicitly placed separately and so break DSP/BIOS logging.
+</p><p>Select "Finish"
+</p><p>At this stage select yes to save the values that have been added into a package XML file. Save as <i>C:\dvsdk_1_11_00_00_universal_codecs_ccsv3_3\dsp_alg\ti_fae_codecs_universal_copy_wizard.xml</i>. This allows subsequent runs of the wizard to use the same settings. The next time the wizard is run open the predefined xml configuration with File-&amp;gt;Open
+</p><p><i>C:\dvsdk_1_11_00_00_universal_codecs_ccsv3_3\dsp_alg\ti_fae_codecs_universal_copy_wizard.xml</i>
+</p><p>and simply click "Finish" and this will create an output package in
+</p><p><i>C:\dvsdk_1_11_00_00_universal_codecs_ccsv3_3\dsp_alg\codec_packaging</i>
+</p><p>This directory will be the output directory of the codec packaging process.
+</p><p>The first time a codec is packaged create a file containing details of the compiler \ <i>codec_packaging\ti\fae\codecs\universal_copy\config.bld</i>.
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+/*
+</p>
+<pre>* ==== config.bld ====
+* User note: YOU MUST MODIFY THIS FILE TO SPECIFY THE COMPILER TOOL PATHS.
+*
+* Edit this file to specify compiler toolchain paths, and any custom
+* compiler/linker options.
+*/
+</pre>
+<p>/* location of your C6000 codegen tools */
+var C64P = xdc.useModule('ti.targets.C64P');
+C64P.rootDir = "C:\CCStudio_v3.3\C6000\cgtools\bin ";
+</p><p>/* add support for building .sa files */
+C64P.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+/*
+</p>
+<pre>* ==== Build.targets ====
+* list of targets (ISAs + compilers) to build for
+*/
+</pre>
+<p>Build.targets = [
+C64P,];
+&lt;/syntaxhighlight&gt;
+</p><p>Each time edit the file <i>codec_packaging\ti\fae\codecs\universal_copy\UNIVERSAL_COPY.xdc</i> to add the memory allocation of "DDR2".
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+metaonly module UNIVERSAL_COPY
+{
+/*!
+</p>
+<pre>* ======== watermark ========
+* This config param allows the user to indicate whether to include
+* a watermark or not.
+*/
+</pre>
+<p>config Bool watermark = false;
+/*!
+</p>
+<pre>* ======== Code Section ========
+*/
+</pre>
+<p>config String codeSection = "DDR2";
+/*!
+</p>
+<pre>* ======== Uninitialized Data Section ========
+*/
+</pre>
+<p>config String udataSection = "DDR2";
+/*!
+</p>
+<pre>* ======== Initialized Data Section ========
+*/
+</pre>
+<p>config String dataSection = "DDR2";
+}
+&lt;/syntaxhighlight&gt;
+</p><p>Open a DOS command shell in <i>codec_packaging\ti\fae\codecs\universal_copy</i> and execute
+</p>
+<pre>xdc release -PR .
+</pre>
+<p>This will create 2 tar files that form the release of the packaged codec. A codec should only ever be released as a pair of tar files. They are:
+</p><p><i>codec_packaging\ti\fae\codecs\universal_copy\ti_fae_codecs_universal_copy.tar</i>
+</p><p><i>codec_packaging\ti\fae\codecs\universal_copy\ce\ti_fae_codecs_universal_copy_ce.tar</i>
+</p><p>The two files need to be extracted to <i>C:\dvsdk_1_11_00_00_universal_codecs_ccsv3_3\codecs_1_10_new_codecs\packages</i> to allow them to be consumed by the application code.
+</p>
+<h3><span class="mw-headline" id="How_can_algorithm_request_hardware_resources_from_the_system">How can algorithm request hardware resources from the system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=8" title="Edit section: How can algorithm request hardware resources from the system">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>One of the features of an XDM compliant algorithm is that it is independent of the actual silicon it is running on. This means that the algorithm does not know the details or have any dependencies on hardware resources such as EDMA channels or memory resources. The algorithm must always request resources from a resource manager in Codec Engine that is configured as part of the Application build via its cfg file.
+</p><p>The universal_copy example described previously requests memory from the system via the UNIVERSALCOPY_TI_alloc() function. This section will describe how an algorithm can request EDMA channels. This is complicated by the fact that different DVSDKs use different resource managers for different product families, for EDMA channels they either use DMAN or the newer and more flexible RMAN. This is shown in the table below. All these DVSDKs contain support for both DMAN and RMAN and so if only a single iUniversal Algorithm is being written either can be used. The main restriction comes if the algorithm is going to be integrated into an existing codec server where it must reuse the resource manager already in use by the server.
+</p>
+<table style="color: black; background-color: #eeeeee" cellspacing="2" cellpadding="4" border="1" align="center">
+
+<tbody><tr>
+<th align="left"><b>Silicon Family</b>
+</th>
+<th align="left"><b>DVSDK</b>
+</th>
+<th align="left"><b>Resource Manager for EDMA by codecs</b>
+</th></tr>
+<tr>
+<td align="left"><b>DM6437</b>
+</td>
+<td align="left">1.11
+</td>
+<td align="left">DMAN
+</td></tr>
+<tr>
+<td align="left"><b>DM6446</b>
+</td>
+<td align="left">2.00.00.22
+</td>
+<td align="left">DMAN
+</td></tr>
+<tr>
+<td align="left"><b>DM6467</b>
+</td>
+<td align="left">2.00.00.22
+</td>
+<td align="left">RMAN
+</td></tr>
+<tr>
+<td align="left"><b>OMAP3530</b>
+</td>
+<td align="left">3.01.00.10
+</td>
+<td align="left">DMAN
+</td></tr></tbody></table>
+<p><br />
+</p><p>In order to provide an example of both implementations there are two additional versions of the Universal_copy algorithm provided that uses EDMA instead of <i>memcpy().</i> These are <i>universal_copy_dman</i> and <i>universal_copy_rman</i>. These projects can be used as the basis for other algorithms that require EDMA.
+</p><p>The implementations of these versions of the UNIVERSALCOPY algorithms can be found in the directories <i>dvsdk_1_11_00_00_universal_codecs_ccsv3_3\dsp_alg\universal_copy_dman3</i> and <i>dvsdk_1_11_00_00_universal_codecs_ccsv3_3\dsp_alg\universal_copy_ires</i>.
+</p><p>Associated with these codecs are test applications in <i>dvsdk_1_11_00_00_universal_codecs_ccsv3_3\examples\video_universal_app_empty_dman3</i> and <i>dvsdk_1_11_00_00_universal_codecs_ccsv3_3\examples\video_universal_app_empty_ires</i>.
+</p><p>These are provided as examples to provide examples to use as the basis for new algorithms
+</p>
+<h2><span class="mw-headline" id="Canny_Edge_Detection_Codec_using_VLib_on_DM6437">Canny Edge Detection Codec using VLib on DM6437</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=9" title="Edit section: Canny Edge Detection Codec using VLib on DM6437">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Canny Edge Detection Algorithm is used to illustrate the creation of a "real life" analytics algorithm. It conveniently illustrates the different memory management models possible, the architecture choices to make and also creates an easily visualized demo application for display. This section describes the codec architecture, build process and integration into an application on the DM6437.
+</p><p>The source code to build this algorithm are available from the link in section 1.
+</p><p>Pre-built out files are available for loading with CCS. The code uses JP1 to determine if it is running PAL or NTSC:
+</p>
+<h3><span class="mw-headline" id="Memory_Management">Memory Management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=10" title="Edit section: Memory Management">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The architecture of C64x+ core devices provides a small block of L1 Internal RAM which can be accessed at full speed by the CPU and a two layer L1/L2 cache architecture to minimize the performance impact of having to access the relatively slow external DDR2 memory. The exact size of these blocks varies between devices. On the DM6437 there is 64k of mapped L1 RAM available for data and on the DM6467 there is only 32k of mapped L1 RAM. One of the keys to successful DSP optimization is to make the best use of this available memory. In order to generate an algorithm that is portable between these two processors it is necessary to architect the codec to fit in the smaller 32kbyte L1 RAM. In most cases the optimal solution is to process the data (in this case an image) in slices. This involves using DMA to quickly copy a slice of data into internal memory, process it with the data in internal memory and then use DMA to output the data back to external memory.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Canny_Algorithm">Canny Algorithm</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=11" title="Edit section: Canny Algorithm">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The VLib (v2.1) provides 5 functions that are used to implement the steps of a Canny Edge Detector. The input to the Canny Filter should be an image with 8 bit Luminance data only.
+</p><p>This smoothes the raw input 8bits per pixel (bpp) Luma image with a 7x7 Gaussian filter. It actually comes from the <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/sprc264.html">IMG v2.01</a> library rather than VLIB. It operates on rows of the image and so is a candidate for slicing.
+</p><p>This takes the smoothed 8bpp image and calculates 3 gradient images. These are the horizontal gradient (GradX), vertical gradient (GradY) and gradient magnitude (GradMag). It operates on rows of the image and so is a candidate for slicing.
+</p><p>This takes the 3 gradient images and calculates which pixels are possible edges. It operates on rows of the image and so is a candidate for slicing.
+</p><p>This takes the possible edges frame uses hysterysis thresholding to identify possible edges. It outputs an array containing the indices of possible edges. It operates on rows of the image and so is a candidate for slicing.
+</p><p>This function takes the possible edges and tries to link them to form continuous "definite" edges. This function does not operate on discrete lines of data as it must be able to link together any number of pixels in any direction. Therefore, it is not possible to implement this function in slices. It must use the cache to operate on the full frame in external DDR2.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Image_Format_Conversion">Image Format Conversion</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=12" title="Edit section: Image Format Conversion">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The VLib functions only operate on Luma data, ignoring the Chrominance bytes from the camera. On the DM6437 (and OMAP3530) the video data is captured in an Interleaved YUYV 422 format and so the Luminance values must be extracted from the interleaved data. On the DM6467 however the video is captured in a semiplanar 420 format with a single Luma plane. Therefore, in order for the codec to be portable it must be able to handle both of these formats. When required the codec uses the following function to extract the Luma from the 422 Interleaved (YUYV) frame:
+</p><p>This is a VLib function to extract only the 8bpp Luma data from the input YUYV 422 Frame.
+</p><p>The recreation of the 16bpp YUYV frame is done within the loop through the edge map which clears all possible edges (value 127) to 0 leaving only the definite edges (value 255). This loop inserts a neutral chroma value of 0x80 between each luma edge value..
+</p><p>The codec is passed the parameter VidAnalyticsParams.inputChromaFormat which specifies the format to be XDM_YUV_422ILE (DM6437 or OMAP3530) or 8 bit planar XDM_YUV_420SP (DM6467).
+</p><p>The overall flow of data in the example application is shown in Figure 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:538px;"><a href="File_Canny_flowchart.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/9/90/Canny_flowchart.jpg" width="536" height="592" class="thumbimage" /></a>  <div class="thumbcaption">Figure 2: Algorithm Flow</div></div></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Building_the_example_code">Building the example code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=13" title="Edit section: Building the example code">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The Canny code is found in the directory <i>C:\dvsdk_1_11_00_00_universal_codecs_source\dsp_alg\universal_canny_dman3</i>. This is the source code for the Canny algorithm and is built in CCS using the project <i>C:\dvsdk_1_11_00_00_universal_codecs_ccsv3_3\dsp_alg\canny\pjt\universal_canny_dman3.pjt</i>. The codec is build to either use external memory buffers and the DSP's cache or to use DMA channels to bring small slices into DSP internal memory for processing. These will be refered to as "cache" and "slice" modes of operation. The mode of operation is selected by the application using the algorithm's parameter frameNotSlice. This version of the algorithm uses DMAN3 to request EDMA channels. The
+</p><p>Once the code is built the package wizard must be used to build the appropriate codec package into the package release dir as described in section 3.2. The package wizard configuration in <i>dsp_alg\ti_fae_codecs_universal_canny_dman3_wizard.xml</i> can be used for this.
+</p><p>The wizard place the packaged codec in <i>dsp_alg\codec_packaging.</i> After packaging the UNIVERSAL_CANNY_DMAN3.xdc file must be edited to add the "DDR2" placement. Finally the package can be released by opening a command window in dsp_alg\codec_packaging\ti\fae\codecs\universal_canny_dman3 and running
+</p>
+<pre>xdc release -PR .
+</pre>
+<p>which will generate the codecs release .tar files in
+</p><p>These two release tar files need to be extracted to the <i>codecs_1_10_new\packages</i> directory so they can be consumed by the application side source code in <i>\examples\video_canny_universal_dman3\evmDM6437</i>. The application is built in CCS using video_canny_universal.pjt which pulls in the requested "CANNY" DSP codec via the file \examples\video_analytic\evmDM6437\video_canny_universal.cfg with the line: &lt;syntaxhighlight lang="javascript"&gt;
+var CANNY = xdc.useModule('ti.fae.codecs.universal_canny_dman3.ce.UNIVERSAL_CANNY_DMAN3');
+&lt;/syntaxhighlight&gt;
+</p>
+<h3><span class="mw-headline" id="Using_the_Cache_to_process_data_from_External_Memory">Using the Cache to process data from External Memory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=14" title="Edit section: Using the Cache to process data from External Memory">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The benchmarking of the Canny Edge Detection function using the default external frame + cache based codec is shown in Table 1. This was on a DM6437 EVM at 594MHz on a D1 PAL input stream. The benchmarking is found using CCS's log tracing capability in the LOG buffer <i>CANNY_TI_trace</i>.
+</p>
+<table style="color: black; background-color: #eeeeee" cellspacing="2" cellpadding="4" border="1" align="center">
+
+<tbody><tr>
+<th align="left"><b>Function</b>
+</th>
+<th align="left"><b>Time(ms)</b>
+</th></tr>
+<tr>
+<td align="left">Extract Luma
+</td>
+<td align="left">3.9
+</td></tr>
+<tr>
+<td align="left">Fill Luma
+</td>
+<td align="left">10.6
+</td></tr>
+<tr>
+<td align="left">Total pre+post processing
+</td>
+<td align="center"><b>14.5</b>
+</td></tr>
+<tr>
+<td align="left">Gaussian Filtering
+</td>
+<td align="left">7.0
+</td></tr>
+<tr>
+<td align="left">Gradient Calculation
+</td>
+<td align="left">16.9
+</td></tr>
+<tr>
+<td align="left">Non Maximal Edge Suppression
+</td>
+<td align="left">12.4
+</td></tr>
+<tr>
+<td align="left">Double Thresholding
+</td>
+<td align="left">8.0
+</td></tr>
+<tr>
+<td align="left">Edge Relaxation
+</td>
+<td align="left">2.2
+</td></tr>
+<tr>
+<td align="left">Total Canny
+</td>
+<td align="center"><b>46.5</b>
+</td></tr></tbody></table>
+<p><br /><b>Table 1: Frame + Cache Benchmarking</b>
+</p><p>This gives a total time of 61.3ms per frame which corresponds to a frame rate of 15fps.
+</p><p>The configuration file <i>\video_canny_universal.tcf</i> takes the default DM6437 EVM cache settings from <i>examples\common\evmDM6437\common.tci</i>
+</p><p>This tci file also sets up a 64k internal heap in L1 mapped memory. The DSP codec requests memory to be allocated from the heaps in <i>CANNY_TI_alloc()</i>. However, as all the arrays (except pZeroLine) that are requested for the processing buffers are of size &gt;64k they cannot be allocated from this heap and so they default to the external heap.
+</p>
+<h3><span class="mw-headline" id="Using_Slices_to_process_data_in_Internal_L1_Memory">Using Slices to process data in Internal L1 Memory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=15" title="Edit section: Using Slices to process data in Internal L1 Memory">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As noted before all the functions except <i>VLIB_hysteresisThresholding()</i> operate on lines in the image. This means that they are suitable for processing in slices. The principle of using slices can be summarized as follows:
+</p><p>The benefit of this technique scales with the number of data operands that the function has to process. The cache is able to bring in lines of 128 bytes to on chip memory but there is still a significant penalty for the first cache miss. The slicing technique takes advantage of <i>a priori</i> knowledge of the algorithm which allows more efficient use of the DMA to bring in Kbytes of required data as efficiently as possible.
+</p><p><br />
+</p>
+<h4><span class="mw-headline" id="Applying_Slicing_to_the_Pre_and_Post_Processing_Algorithms">Applying Slicing to the Pre and Post Processing Algorithms</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=16" title="Edit section: Applying Slicing to the Pre and Post Processing Algorithms">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Applying slicing to the pre/post processing functions would be simple as there is a direct pixel to pixel mapping between the input and output arrays. If the image is broken up into slices each with <i>OUTPUT_SLICE_SIZE</i> (=7) lines, then each chunk of 720*7 pixels can be copied into a buffer in internal L1 memory by DMA, processed and then copied out again by DMA. If the algorithm is only to be ported to the DM6437 then it would make sense to move the pre and post processing routines to the codec side where they can share the internal RAM. However, the aim of this document is to describe how to make a portable codec so this optimization is not included in the source code.
+</p><p>The improvement that could be gained is shown below.
+</p>
+<table style="color: black; background-color: #eeeeee" cellspacing="2" cellpadding="4" border="1" align="center">
+
+<tbody><tr>
+<th align="left"><b>Function</b>
+</th>
+<th align="left"><b>Frame/Cache (ms)</b>
+</th>
+<th align="left"><b>Slicing (ms)</b>
+</th></tr>
+<tr>
+<td align="left">Luma Extraction
+</td>
+<td align="left">3.9
+</td>
+<td align="left">1.7
+</td></tr>
+<tr>
+<td align="left">Luma Filling
+</td>
+<td align="left">10.6
+</td>
+<td align="left">8.0
+</td></tr>
+<tr>
+<td align="left"><b>Total Pre/Post Processing</b>
+</td>
+<td align="left"><b>14.6</b>
+</td>
+<td align="left"><b>9.7</b>
+</td></tr></tbody></table>
+<p><br />
+</p><p>The algorithm uses the ACPY3 interface in the codec engine framework to control access to the EDMA channel via DMAN3. The IDMA3 interface is used to add the function vTable CANNY_TI_IDMA3. For more details on the use of IDMA3 and ACPY3 see the <a href="Framework_Components_DMAN3/ACPY3_Users_Guide.html" title="Framework Components DMAN3/ACPY3 Users Guide">DMAN3/ACPY3 User's Guide</a>.
+</p>
+<h4><span class="mw-headline" id="Applying_Slicing_to_the_Canny_Algorithm">Applying Slicing to the Canny Algorithm</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=17" title="Edit section: Applying Slicing to the Canny Algorithm">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The implementation of the Canny Edge Detection algorithm in <i>CannyEdgeDetectorInSlices()</i> involves more complex management of the slices. This is a result of the signal processing in the functions producing output slices that are smaller than the input slice as shown in Figure 3.
+</p><p>Moving backwards through the algorithm, the functions <i>VLIB_doubleThresholding()</i> and <i>VLIB_nonMaximumSuppressionCanny()</i> requires N+2 lines of gradient images to generate N lines of Canny edges. Both these functions use the same buffer. See VLib API documentation for more details.
+</p><p>Similarly, <i>VLIB_xyGradientsAndMagnitude()</i> requires N+4 lines of smoothed image to generate N+2 lines of gradient images, which then produces N lines of Canny edges.
+</p><p>Finally, <i>VLIB_gaussianFilter7X7()</i> requires N+10 lines of raw image to generate N+6 lines of smoothed image.
+</p><p>However the last function of the Canny Edge detection, <i>VLIB_hysteresisThresholding()</i> must be calculated on a complete frame as it does not operate on discrete lines in the image. This means that its inputs must be in external DDR2. The impact of this on the overall algorithm will be discussed after the slicing.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a href="File_Slice_overlap_full_slicing.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/0/07/Slice_overlap_full_slicing.jpg" width="693" height="613" class="thumbimage" /></a>  <div class="thumbcaption">Figure 3: Slice Management in Canny Edge Detector</div></div></div></div>
+<p>In order to be able to fit all the slice buffers in the 64k of L1 Heap available on the DM6437 the number of output slices N was set to 7. This means that to generate the each 7 lines of Canny Edge data 17 lines of raw image must be read in and processed. Each subsequent slice of N Canny Edge lines can take advantage of the fact that due to this overlap some of the intermediate lines are already in the internal memory buffers.
+</p><p>As an example for the smoothed image slice, the last 4 lines calculated will be reused in calculating the next slice of N+2 gradient image lines. Therefore, each loop in the code will copy the last 4 lines of the smoothed image slice from the previous loop to the top of the slice and only the last N lines of gradient image will be calculated. This optimization means that each line in the raw image is only read in from external memory once and each intermediate line calculated once.
+</p><p>The final function <i>VLIB_edgeRelaxation()</i> must read the possible edge image from external DDR2 and write its output definite edge image back to DDR2. For optimal performance this means that it must use caching. This introduces the issue of cache coherency, as the cache has not been aware of the slice processing in internal mapped RAM to calculate the possible edges. Therefore, the cache contains "dirty" values for this image. In order to force the cache to read the correct image from external memory the cache must be invalidated before calling the function. Similarly after the function has been called the cache must undergo a WriteBack operation to ensure that all the output definite edge data is written into DDR2. This ensures that the drivers output a clean edge image to the display.
+</p><p>However, the aim is to make a portable codec that will run in either the 64k on DM6437 or 32k in DM6467. This means that the algorithm must be sized to use the 32k. There are two optimisations used here as shown in Figure 4.
+</p><p>-Reducing the number of lines N per slice to 3. This is controlled via <i>#define OUTPUT_SLICE_SIZE 3</i>
+</p><p>-Making use of the fact that the Gaussian smoothing function is only reading from cache and writing to internal RAM, that each input pixel will be reread 49 times and that the pixels are sequential and so will be fetched as lines by the cache. This means there is a very high cache hit rate. This mode is enabled via <i>#define SMOOTH_EXTERNAL</i>
+</p><p>These reduce L1 RAM memory usage to less than 32k.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a href="File_Slice_overlap_gaussian_cache_rest_slicing.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/b/b3/Slice_overlap_gaussian_cache_rest_slicing.jpg" width="725" height="608" class="thumbimage" /></a>  <div class="thumbcaption">Figure 4: Using cache for Gaussian Filter</div></div></div></div>
+<p>The benchmarking of the slicing implementation is shown in Table 2 which also shows for comparison the caching data.
+</p>
+<table style="color: black; background-color: #eeeeee" cellspacing="2" cellpadding="4" border="1" align="center">
+
+<tbody><tr>
+<th align="left">
+</th>
+<th align="left"><b>Slice N=3 (ms)</b>
+</th>
+<th align="left"><b>Slice N=7 (ms)</b>
+</th>
+<th align="left"><b>Gaussian Cache, Slice N=3 (ms)</b>
+</th>
+<th align="left"><b>Cache (ms)</b>
+</th></tr>
+<tr>
+<td align="left">Gaussian Filtering
+</td>
+<td align="left">4.8
+</td>
+<td align="left">4.8
+</td>
+<td align="left">5.4
+</td>
+<td align="left">7.0
+</td></tr>
+<tr>
+<td align="left">Gradient Calculation
+</td>
+<td align="left">0.7
+</td>
+<td align="left">0.8
+</td>
+<td align="left">0.7
+</td>
+<td align="left">16.9
+</td></tr>
+<tr>
+<td align="left">Non-maximal Suppression
+</td>
+<td align="left">5.7
+</td>
+<td align="left">5.8
+</td>
+<td align="left">5.7
+</td>
+<td align="left">12.4
+</td></tr>
+<tr>
+<td align="left">Double Thresholding
+</td>
+<td align="left">2.4
+</td>
+<td align="left">2.9
+</td>
+<td align="left">2.4
+</td>
+<td align="left">8.0
+</td></tr>
+<tr>
+<td align="left">Edge Relaxation
+</td>
+<td align="left">2.1
+</td>
+<td align="left">3.0
+</td>
+<td align="left">2.0
+</td>
+<td align="left">2.2
+</td></tr>
+<tr>
+<td align="left">Slice DMA/cache management
+</td>
+<td align="left">4.8
+</td>
+<td align="left">2.5
+</td>
+<td align="left">3.1
+</td>
+<td align="left">
+</td></tr>
+<tr>
+<td align="left"><b>Canny Total</b>
+</td>
+<td align="left"><b>20.5</b>
+</td>
+<td align="left"><b>19.8</b>
+</td>
+<td align="left"><b>19.3</b>
+</td>
+<td align="left"><b>46.5</b>
+</td></tr>
+<tr>
+<td align="left">Preprocessing - Luma Extraction
+</td>
+<td align="left">1.7
+</td>
+<td align="left">1.5
+</td>
+<td align="left">1.7
+</td>
+<td align="left">3.9
+</td></tr>
+<tr>
+<td align="left">Pre-processing - Chroma insertion
+</td>
+<td align="left">8.3
+</td>
+<td align="left">8.0
+</td>
+<td align="left">8.3
+</td>
+<td align="left">10.6
+</td></tr>
+<tr>
+<td align="left"><b>Pre-Post Processing Total</b>
+</td>
+<td align="left"><b>10.0</b>
+</td>
+<td align="left"><b>9.5</b>
+</td>
+<td align="left"><b>10.0</b>
+</td>
+<td align="left"><b>14.5</b>
+</td></tr>
+<tr>
+<td align="left"><b>Total</b>
+</td>
+<td align="left"><b>31.2</b>
+</td>
+<td align="left"><b>28.8</b>
+</td>
+<td align="left"><b>30.3</b>
+</td>
+<td align="left"><b>61.3</b>
+</td></tr></tbody></table>
+<p><br />
+</p><p><b>Table 2: Benchmarking of Slicing vs Caching on DM6437</b>
+</p><p>These results allow the following conclusions to be drawn:
+</p><p>- Use of internal memory via slicing brings a major performance with a 50% reduction in time for this algorithm compared to use of cache.
+</p><p>- The overhead for managing the slicing with EDMA channels while noticable at 3ms is negligible compared to the overall system gain.
+</p><p>- The use of even small slices such as N=3 shows only a slight performance hit of 5% compared to N=7 while using a significantly smaller amount of internal RAM.
+</p><p>- Analysis of the relative performance individual functions such as the Gaussian with cache and slice modes allowed a significant internal memory saving to be made on the largest buffers with minimal impact on performance.
+</p><p>- As a general rule functions such as the gaussian ( <i>IMG_conv_7x7_i8_c8s()</i>)which do 49 data reads for each write are not impacted so much by reading via the cache. On the other hand a function such as <i>VLIB_xyGradientsAndMagnitude()</i> which does 3 writes per 6 reads are heavily impacted by the cache.
+</p>
+<h2><span class="mw-headline" id="Taking_Codec_Package_and_integrating_in_a_Codec_Server_for_a_DM6467">Taking Codec Package and integrating in a Codec Server for a DM6467</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=18" title="Edit section: Taking Codec Package and integrating in a Codec Server for a DM6467">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In order for the DSP codec algorithm to be run on a dual core ARM+DSP device such as a DM6467 the codec must be integrated into a codec server package that will run in Codec Engine on the DSP. This section explains how to migrate the codec package generated for the DM6437 to a codec server and then creates a Linux application on the ARM9 to run it. The DM6467 code is build in the GA release for DVSDK2.00 which is DVSDK2.00.00.22.
+</p><p>The DM6467 codec server defaults to using RMAN to allocate its resources and so a separate version of the Canny algorithm which uses RMAN is found in <i>\dsp_alg\universal_canny_ires</i>. This algorithm is the same, it is just the iUniversal wrapper and DMA function that is different.
+</p>
+<h3><span class="mw-headline" id="Building_the_Codec_Server">Building the Codec Server</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=19" title="Edit section: Building the Codec Server">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The Codec Server is built in two steps. It is firstly packaged by the wizard in \CE_UTILS and then built by make in the DVSDK.
+</p>
+<h4><span class="mw-headline" id="Packaging_the_Codec_Server_using_the_Wizard">Packaging the Codec Server using the Wizard</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=20" title="Edit section: Packaging the Codec Server using the Wizard">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The Codec Server must be packaged into the Unit Server using the DVSDK 1.11 version (ie on the PC for the DM6437). This is because this DVSDK built the codec package with version 1.07 of the Ceutils. The GA release of the DM6467 DVSDK only includes Ceutils 1.06 and so is unable to build the unit server from the later codec package.
+</p><p>Open a command window in the directory <i>C:\dvsdk_1_11_00_00\xdctools_3_10_03</i> and run the wizard
+</p>
+<pre>xs ti.sdo.codecutils.genserver
+</pre>
+<p>When wizard opens populate the Codec Package, Platform and Output Repository names as follows. Note that the output repository is the path to the DVSDK 2.00 codec combos directory on the Linux machine.
+</p><p>Codec Package name ti.fae.codecs.universal_canny_ires<br />Module name: Is automatically filled from codec name<br />Platform: ti.platforms.evmDM6467<br />Server package name: Is automatically filled from module and platform name <b>BUT</b> reduce the length of the name to <b>ti.fae.servers.unicanny_dm6467</b> to avoid a DSP/Link internal limitation. The server name (unicanny_dm6467) needs to be &lt; 24 chars to avoid a limit of 32 chars (DSP_MAX_STRLEN) including the NULL in the name of MSGQs.
+</p><p>If ever in doubt the concatentated name that in subject to the 32 char limit can be found by running the application with CE_DEBUG=2 and looking for the following trace
+</p>
+<pre>OC - Comm_create('universalcanny_dm6467_1382_1', ...) failed: status 0x8000800b
+</pre>
+<p>Set Output Server Repository: <i>X:/dvsdk_2_00_00_22/trunk/dm6467_dvsdk_combos_2_05/packages</i>
+</p><p>Click Finish
+</p><p>If the wizard reports that it cannot find the package then in the DOS shell add the codec package path to the XDCPATH
+</p>
+<pre>set XDCPATH=C:\dvsdk_1_11_00_00_universal_codecs_working\codecs_1_10_new/packages;%XDCPATH%
+</pre>
+<p>Now export the codec tar files for universalcanny (eg ti.fae.codecs.universalcanny.tar &amp; ti.fae.codecs.universalcanny.ce.tar) to the Linux DVSDK by extracting them to <i>~/dvsdk_2_00_00_22_Canny_iUniversal/dm6467_dvsdk_combos_2_05/packages</i>
+</p><p>Note: This packaging step only needs to be done once. If subsequent changes are only to the codec the only step required is that of exporting the new codec files to the DVSDK.
+</p><p><br />
+</p>
+<h4><span class="mw-headline" id="Building_Codec_Unit_Server_in_the_DVSDK">Building Codec Unit Server in the DVSDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=21" title="Edit section: Building Codec Unit Server in the DVSDK">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Before making the codec unit server in the Linux DVSDK a couple of configuration steps are required
+</p><p>1. Edit <i>/dvsdk_2_00_00_22_Canny_iUniversal/dm6467_dvsdk_combos_2_05/packages/ti/sdo/servers/unicanny_dm6467/codec.cfg</i> to set the 3 code sections to "DDR2".
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+UNIVERSAL_CANNY_IRES.alg.codeSection = "DDR2";
+UNIVERSAL_CANNY_IRES.alg.udataSection = "DDR2";
+UNIVERSAL_CANNY_IRES.alg.dataSection = "DDR2";
+</p><p>&lt;/syntaxhighlight&gt;
+</p><p>2. Tell the codec server to link in the VLib and IMGLib libraries used by the codec by adding to _unicanny_dm6467/link.cmd<i>. Note that the imglib2.l64P library has a capital P in the extension.</i>
+</p>
+<pre>-l vlib.l64p
+-l imglib2.l64P
+</pre>
+<p>3. Copy these libs from their install dirs under CCS ( <i>C:\CCStudio_v3.3\c6400\VLIB_V_2_1\library\c64plus</i>) to <i>\dvsdk_2_00_00_22_Canny_iUniversal \dm6467_dvsdk_combos_2_05\packages\ti\fae\servers\unicanny_dm6467</i>.
+</p><p>4. Open the file server.tcf in a text editor to add to BIOS the LOG buffer CANNY_TI_trace that is used by the codec. Add the two lines with the comments at the end of the file as shown below:
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+if (config.hasReportedError == false) {
+</p><p>bios.MEM.instance("IRAM").createHeap = 1;
+bios.MEM.instance("IRAM").heapSize = 0x00018000;
+bios.MEM.instance("IRAM").enableHeapLabel = 1;
+bios.MEM.instance("IRAM").heapLabel = prog.extern("IRAM_HEAP", "asm");
+</p><p>/* Add these two lines to create a LOG buffer of length 1024 words */
+bios.LOG.create("CANNY_TI_trace");
+bios.LOG.instance("CANNY_TI_trace").bufLen = 1024;
+/* end of add CANNY_TI_trace */
+</p><p>//&#160;!GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
+</p>
+<pre>prog.gen();
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>5. Build the server as follows.
+</p>
+<pre>#cd dvsdk_2_00_00_22_Canny_iUniversal
+#make codecs
+</pre>
+<p>This will build the executable files which are sufficient for further development on the local machine <i>\dvsdk_2_00_00_22_Canny_iUniversal \dm6467_dvsdk_combos_2_05\packages\ti\fae\servers\unicannyi_dm6467\unicanny_dm6467.x64P</i>
+</p><p>In order to generate a distributable tar package for the server it will be necessary to run the xdc packaging tool:
+</p>
+<pre>#cd  \dvsdk_2_00_00_22_Canny_iUniversal \dm6467_dvsdk_combos_2_05\packages\ti\fae\servers\unicanny_dm6467
+#/opt/xdctools_3_10_03/xdc release -PR .
+</pre>
+<h3><span class="mw-headline" id="Building_the_Linux_Application">Building the Linux Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=22" title="Edit section: Building the Linux Application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The ARM9 Linux application are packaged in a standalone directory dvsdk_2_00_00_22_Canny_iUniversal which contains only the new codecs/servers, an updated DMAI to support composite capture and the applications (in file <b>dvsdk_2_00_00_22_Canny_iUniversal_v1_0.tar.gz</b>). This standalone directory has a Rules.mak file that must be edited to point to the main DVSDK directory to pick up all the components. The configuration of each application to select the server is done as follows:
+</p><p>The configuration file canny.cfg includes the specific unit server as follows: &lt;syntaxhighlight lang="javascript"&gt;
+var demoEngine = Engine.createFromServer( "unicanny_dm6467",
+"./unicanny_dm6467.x64P",
+"ti.fae.servers.unicanny_dm6467");
+&lt;/syntaxhighlight&gt;
+</p><p>The application hardcodes the name of the server to use in the files codecs.c. This name is the one given in the first parameter of the createFromServer() API &lt;syntaxhighlight lang="c"&gt;
+static Engine encodeDecodeEngine = {
+"unicanny_dm6467", /* Engine string name used by CE to find the engine */
+NULL, /* Speech decoders in engine (not supported) */
+NULL, /* Audio decoders in engine (not supported) */
+NULL, /* NULL terminated list of video decoders in engine */
+NULL, /* Speech encoders in engine (not supported) */
+NULL, /* Audio encoders in engine (Not supported) */
+NULL /* NULL terminated list of video encoders in engine */};
+&lt;/syntaxhighlight&gt;
+</p><p>and the name of the codec in the server in video.c &lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>/* Create video analytics instance */
+hVaEnv.hAnalytics = UNIVERSAL_create(hEngine, "universal_canny_ires", (UNIVERSAL_Params *)&amp;VanalyticsParams);
+</pre>
+<pre>if (hVaEnv.hAnalytics == NULL) {
+ERR("Failed to create video analytics codec:&#160;%s\n", "universal_canny_ires");
+cleanup(THREAD_FAILURE);
+}
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>The DM6467 captures video frames on the Linux side in a 420SemiPlanar format which has a single plane of Luma data and then separate Chroma planes. This means that there is no pre/post-processing to be done on the Application side to pass the data to the DSP codec.
+</p><p>Build and install the application from a terminal window
+</p>
+<pre>#cd dvsdk_2_00_00_22_Canny_iUniversal
+#make demos
+#make install
+</pre>
+<p>The install will copy the application canny to the EXEC_DIR.
+</p>
+<h3><span class="mw-headline" id="Running_the_Linux_Application">Running the Linux Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=23" title="Edit section: Running the Linux Application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A pre-built executable directory is in <b>dvsdk_2_00_00_22_6467_canny_executable_v1_0.tar.gz</b> and extracted to the /root directory of the MV 5.0 file system (remember to copy your .ko files into /6467_canny). Connect the D1 camera to the composite input J13 and the D1 composite display to J7 the DM6467 EVM. The particular EVM used for benchmarking is configured to run the DSP at 729MHz and ARM at 364MHz. Then boot it and cd to the EXEC_DIR in the NFS.
+</p>
+<pre>#./loadmodules.sh
+#./canny
+</pre>
+<p>It will log the performance of the frame and slice based versions as it runs. The performance achieved is shown below:
+</p>
+<table style="color: black; background-color: #eeeeee" cellspacing="2" cellpadding="4" border="1" align="center">
+
+<tbody><tr>
+<th align="left">
+</th>
+<th align="left">
+<p><b>Slice</b>
+</p><p><b>(ms)</b>
+</p>
+</th>
+<th align="left">
+<p><b>Cache</b>
+</p><p><b>(ms)</b>
+</p>
+</th></tr>
+<tr>
+<td align="left">Gaussian Filtering
+</td>
+<td align="left">5.9
+</td>
+<td align="left">7.0
+</td></tr>
+<tr>
+<td align="left">Gradient Calculation
+</td>
+<td align="left">0.7
+</td>
+<td align="left">18.2
+</td></tr>
+<tr>
+<td align="left">Non-maximal Suppression
+</td>
+<td align="left">5.0
+</td>
+<td align="left">16.3
+</td></tr>
+<tr>
+<td align="left">Double Thresholding
+</td>
+<td align="left">1.9
+</td>
+<td align="left">14.1
+</td></tr>
+<tr>
+<td align="left">Edge Relaxation
+</td>
+<td align="left">0.8
+</td>
+<td align="left">1.3
+</td></tr>
+<tr>
+<td align="left">Chroma Insertion(Edge cleanup on 6467)
+</td>
+<td align="left">1.2
+</td>
+<td align="left">5.8
+</td></tr>
+<tr>
+<td align="left">Slice Overhead
+</td>
+<td align="left">3.0
+</td>
+<td align="left">
+</td></tr>
+<tr>
+<td align="left"><b>Total</b>
+</td>
+<td align="left"><b>18.6</b>
+</td>
+<td align="left"><b>62.8</b>
+</td></tr></tbody></table>
+<p><br />
+</p><p><b>Table 3: Benchmarking of Slicing vs Caching on DM6467</b>
+</p><p>This means that with the slicing on the DM6467 it can achieve 25fps PAL with only 50% DSP CPU load but when the cache is used the maximum frame rate is 16fps with a 100% DSP load.
+</p><p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Taking_Codec_Package_and_integrating_in_a_Codec_Server_for_a_OMAP3530">Taking Codec Package and integrating in a Codec Server for a OMAP3530</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=24" title="Edit section: Taking Codec Package and integrating in a Codec Server for a OMAP3530">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section explains how to migrate the codec package generated for the DM6437 to a codec server for an OMAP3530 and then modifies a DVSDK Linux application on the Cortex A8 to run it. The application is based upon the DVSDK decode demo from DVSDK 3.01.00.10. This version of the DVSDK does not have an encode application which will capture a video input and so the demo with the Canny edge detector uses the decode demo to decode a D1 720x480 stream which can then be edge filtered before display on the LCD. As the DSP is already 70% utilised for the decode at 30fps this means the decode + canny edge filter run at a reduced frame rate as they must share the DSP. This project can be found in <b>dvsdk_3_01_00_10_Canny_iUniversal_v1_0.tar.gz</b> and built in a separate directory ( <i>dvsdk_3_01_00_10_Canny_iUniversal</i>) and refers to the main DVSDK for all the components.
+</p><p>The OMAP3530 codec server defaults to using DMAN3 to allocate its resources and so it uses the universal_canny_dman3 codec.A prebuilt version of the demo is in file <b>dvsdk_3_01_00_10_canny_executable_omap3530_v1_0.tar.gz</b> and then extracted to <i>/home/root</i> in the Arago filesystem (remember to copy your Linux kernel's .ko files into /canny). In order to pick up this application the /etc/init.d/omap-demo file will need to be modified to:
+</p>
+<pre>#!/bin/sh
+
+echo 65355 &gt; /sys/devices/platform/omapfb/sleep_timeout
+if [[ -x /home/root/canny/loadmodules.sh ]]; then
+   cd /home/root/canny
+        ./loadmodules.sh
+fi
+</pre>
+<p>The decode_canny application can now be run from the command line as follows (or the shell script run.sh can be used)
+</p>
+<pre>./decode_canny -i -o -v data/videos/davincieffect_ntsc_1_50s.m4v -a data/sounds/davincieffect_HEv2.aac  -l
+</pre>
+<h3><span class="mw-headline" id="Building_the_Codec_Server_2">Building the Codec Server</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=25" title="Edit section: Building the Codec Server">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Codec Engine can only have one server package opened at once and so the Canny codec must be added to the existing server package that includes the video decoders. This is a different process to that carried out on DM6467 when there was a new server created. The following instructions describe how to add the codec to a server. Either of these techniques can be used on either a DM6467 or OMAP35xx project as appropriate and so they are not specific to the device.
+</p><p>Install the Codec server package (cs1omap3530_setupLinux_1_01_00-prebuilt-dvsdk3.01.00.10.bin for OMAP3530 from <a rel="nofollow" class="external free" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/dvsdk/DVSDK_3_00/latest/index_FDS.html">http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/dvsdk/DVSDK_3_00/latest/index_FDS.html</a>) to ~/dvsdk_3_01_00_10_Canny_iUniversal
+</p><p>Export the codec tar files for universal_canny_dman3 (eg ti.fae.codecs.universal_canny_dman3.tar &amp; ti.fae.codecs.universal_canny_dman3.ce.tar) to the Linux DVSDK 3.01.00.10 by extracting them to <i>~/dvsdk_3_01_00_10_Canny_iUniversal/cs1omap3530_1_01_00/packages</i>
+</p><p>Before making the codec server in the Linux DVSDK the following configuration steps are required to extend the existing server to include the new canny filter codec:
+</p><p>1. Edit <i>/dvsdk_3_01_00_10_Canny_iUniversal/cs1omap3530_1_01_00/packages/ti/sdo/server/cs/codec.cfg</i> to add the following lines which describe the codec itself: &lt;syntaxhighlight lang="javascript"&gt;
+var UNIVERSAL_CANNY = xdc.useModule('ti.fae.codecs.universal_canny_dman3.ce.UNIVERSAL_CANNY_DMAN3');
+// Package Config
+UNIVERSAL_CANNY.alg.watermark = false;
+UNIVERSAL_CANNY.alg.codeSection = "DDR2";
+UNIVERSAL_CANNY.alg.udataSection = "DDR2";
+UNIVERSAL_CANNY.alg.dataSection = "DDR2";
+&lt;/syntaxhighlight&gt;
+</p><p>and then the following lines to the Server.algs structure to add that codec to the server
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+</p>
+<pre>{name: "universalcanny", mod: UNIVERSAL_CANNY , threadAttrs: {
+stackMemId: 0, priority: Server.MINPRI + 1},
+groupId&#160;: 0,
+},
+</pre>
+<p>&lt;/syntaxhighlight&gt; This adds the codec UNIVERSAL_CANNY_DMAN3 to the server. The <a rel="nofollow" class="external text" href="Codec_Engine_Server_Integrator_User%27s_Guide.html">groupId</a> is used to indentify which group of codecs this codec should be assigned to in the server. Each group of codecs in the server will share the same scratch memory and EDMA resources . These resources are allocated in the cfg files
+</p><p>2. Tell the codec server to link in the VLib and IMGLib libraries used by the codec by adding to <i>ti/sdo/servers/cs/link.cmd</i>
+</p>
+<pre>-l vlib.l64p
+-l imglib2.l64p
+</pre>
+<p>3. Open the file server.tcf in a text editor to add to BIOS the LOG buffer CANNY_TI_trace that is used by the codec. Add the two lines with the comments at the end of the file as shown below: &lt;syntaxhighlight lang="javascript"&gt;
+/* Add these two lines to create a LOG buffer of length 1024 words */
+bios.LOG.create("CANNY_TI_trace");
+bios.LOG.instance("CANNY_TI_trace").bufLen = 1024;
+/* end of add CANNY_TI_trace */
+</p><p><br />
+/* ===========================================================================
+</p>
+<pre>* Generate configuration files...
+* ===========================================================================
+*/
+</pre>
+<p>if (config.hasReportedError == false) {
+</p>
+<pre>prog.gen();
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>4. Copy the libs _vlib.l64p_ and _imglib2.l64P_ from their install dirs under CCS ( <i>C:\CCStudio_v3.3\c6400\VLIB_V_2_1\library\c64plus</i>) to <i>\dvsdk_3_01_00_10_Canny_iUniversal/cs1omap3530_1_01_00/packages/ti/sdo/servers/cs</i>.
+</p><p><br />
+</p><p>With this configuration the cs engine will be rebuilt next time the DVSDK is built and then installed correctly to the NFS.
+</p>
+<h3><span class="mw-headline" id="Building_the_Linux_Application_2">Building the Linux Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=26" title="Edit section: Building the Linux Application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The cortex Linux application ./decode_canny is in the directory <i>\dvsdk_3_01_00_10_Canny_iUniversal\dvsdk_demos_3_01_00_13\omap3530\decode_canny</i>. This application will simply use the cs.x64p server with which ever canny algorithm it was built with. This application adds a call to the canny codec after the decode codec is called.
+</p><p>Build and install the application from a terminal window
+</p>
+<pre>#cd dvsdk_3_01_00_10_Canny_iUniversal
+#make
+#make install
+
+</pre>
+<p>The install will copy the application canny to the EXEC_DIR.
+</p>
+<h3><span class="mw-headline" id="Running_the_Linux_Application_2">Running the Linux Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=27" title="Edit section: Running the Linux Application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The standard Arago filesystem on the DVSDK will autorun demo through the /etc/init.d/omap-demo file which by default will configure the memory and modules by running ./loadmodules.sh and then running the interface application. This file can be edited as follows to only do the configuration stage:
+</p>
+<pre>#!/bin/sh
+
+echo 65355 &gt; /sys/devices/platform/omapfb/sleep_timeout
+if [[ -x /home/root/canny/loadmodules.sh ]]; then
+   cd /home/root/canny
+        ./loadmodules.sh
+fi
+
+</pre>
+<p>The decode_canny application can now be run from the command line as follows
+</p>
+<pre>./decode_canny -i -o -v data/videos/davincieffect_ntsc_1_50s.m4v -a data/sounds/davincieffect_HEv2.aac  -l
+</pre>
+<p>This will decode the davincieffect video and display the edge map with a performance overlay on the LCD. As the DSP has to do both the decode and canny filtering in this demo the frame rates are reduced. Using the cache mode a frame rate of 8fps (video decode + canny) is achieved and with the slice mode 13fps. The performance breakdown of the Canny algorithm is shown in Table 4.
+</p>
+<table style="color: black; background-color: #eeeeee" cellspacing="2" cellpadding="4" border="1" align="center">
+
+<tbody><tr>
+<th align="left">
+</th>
+<th align="left">
+<p><b>Slice</b>
+</p><p><b>(ms)</b>
+</p>
+</th>
+<th align="left">
+<p><b>Cache</b>
+</p><p><b>(ms)</b>
+</p>
+</th></tr>
+<tr>
+<td align="left">Luma extraction
+</td>
+<td align="left">3.0
+</td>
+<td align="left">10.9
+</td></tr>
+<tr>
+<td align="left">Gaussian Filtering
+</td>
+<td align="left">6.1
+</td>
+<td align="left">7.7
+</td></tr>
+<tr>
+<td align="left">Gradient Calculation
+</td>
+<td align="left">18.5
+</td>
+<td align="left">0.9
+</td></tr>
+<tr>
+<td align="left">Non-maximal Suppression
+</td>
+<td align="left">6.3
+</td>
+<td align="left">20.3
+</td></tr>
+<tr>
+<td align="left">Double Thresholding
+</td>
+<td align="left">2.3
+</td>
+<td align="left">6.8
+</td></tr>
+<tr>
+<td align="left">Edge Relaxation
+</td>
+<td align="left">1.0
+</td>
+<td align="left">1.2
+</td></tr>
+<tr>
+<td align="left">Chroma Insertion + Edge cleanup
+</td>
+<td align="left">9.7
+</td>
+<td align="left">11.7
+</td></tr>
+<tr>
+<td align="left">Slice Overhead
+</td>
+<td align="left">4.8
+</td>
+<td align="left">
+</td></tr>
+<tr>
+<td align="left"><b>Total</b>
+</td>
+<td align="left"><b>41.4</b>
+</td>
+<td align="left"><b>79.1</b>
+</td></tr></tbody></table>
+<p><br />
+</p><p><b>Table 4: Benchmarking of Slicing vs Caching on OMAP3530</b>
+</p><p>These numbers again show the benefit of using internal memory. The OMAP3530 EVM is running with a DSP clock speed of 450MHz as compared to the DM6467 which was running the DSP at 729MHz. In addition the OMAP codec has to run the Luma extraction algorithm and then reinsert neutral chroma as the Linux driver uses an interleave YUV format.
+</p>
+<h2><span class="mw-headline" id="Creating_a_Codec_on_DM644x">Creating a Codec on DM644x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=28" title="Edit section: Creating a Codec on DM644x">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There are no demo packages here for creating a codec server on DM644x. In principle the process is exactly the same. The only known issue is that if your codec is using ACPY3 to access the DMA channels then there is a small change to make in the <i>server.cfg</i> file. ACPY3 uses the IDMA controller (Internal DMA controller, see SPRU871K <a rel="nofollow" class="external text" href="http://focus.ti.com/general/docs/lit/getliterature.tsp?literatureNumber=spru871k&amp;fileType=pdf">TMS320C64x+ DSP Megamodule Reference Guide</a> for details) which can only access internal memory. This means that DMAN3 memory needs to be allocated from internal memory rather than the default server configuration of external. To do this make the following change to <i>server.cfg</i> to allocate <code>DMAN3.heapInternal</code> from an internal memory pool "L1DHEAP".
+&lt;syntaxhighlight lang="javascript"&gt;
+/*
+</p>
+<pre>*  This setting would affect performance very lightly.
+*
+*  By setting DMAN3.heapInternal = &lt;external-heap&gt;  DMAN3 *may not* supply
+*  ACPY3_PROTOCOL IDMA3 channels the protocol required internal memory for
+*  IDMA3 channel 'env' memory. To deal with this catch-22 situation we
+*  configure DMAN3 with hook-functions to obtain internal-scratch memory
+*  from the shared scratch pool for the associated algorithm's
+*  scratch-group (i.e. it first tries to get the internal scratch memory
+*  from DSKT2 shared allocation pool, hoping there is enough extra memory
+*  in the shared pool, if that doesn't work it will try persistent
+*  allocation from DMAN3.internalHeap).
+*/
+</pre>
+<p>DMAN3.heapInternal    = "L1DHEAP";       /* L1DHEAP is an internal segment */
+//DMAN3.heapInternal = "DDRALGHEAP";    /* DDRALGHEAP is an external segment */
+</p><p>&lt;/syntaxhighlight&gt;
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Migrating_the_demo_applications_to_another_DVSDK">Migrating the demo applications to another DVSDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=29" title="Edit section: Migrating the demo applications to another DVSDK">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These demo applications were developed with the production DVSDKs for these devices at the time of writing. In order to migrate to later DVSDKs the following information must be borne in mind.
+</p><p>The C6467 canny application was based on the encodedecode example found at <i>dvsdk_2_00_00_22/dvsdk_demos_2_00_00_07/dm6467/encodedecode</i> so in order to identify the changes required by the Canny application it is necessary to do a file compare. The identified Canny specific changes can then be applied to a new application folder in the DVSDK of choice.
+</p><p>Similarly the OMAP3530 Canny application was based on the decode demo found at <i>dvsdk_3_00_02_44/dvsdk_demos_3_00_01_13/omap3530/decode</i>.
+</p><p>This is important as there are often changes in underlying components that the demo applications need to adapt to in their API usage.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Recommended_Development_Flow_for_DSP_Codec_Development">Recommended Development Flow for DSP Codec Development</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=30" title="Edit section: Recommended Development Flow for DSP Codec Development">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This work can be used to develop the following process flow for efficient development of a DSP codec.
+</p><p>1. If the application uses a library such as VLib that comes with PC platform libraries (C++ dlls and Matlab m models) then develop the algorithm on a PC to take advantage of the visualisation tools these platforms provide.
+</p><p>2. The first development with actual DSP code should take place on a single core DSP platform such as a DM6437 EVM or a DM6437 simulator. This should be the actual algorithm development as suggested in the universal_copy examples with the DO_NOT_USE_CODEC_ENGINE flag. This avoids the cycle time for the codec build and integration stage and allows the focus to be on algorithm only.
+</p><p>3. Now add the Codec Engine support to the algorithm in DM6437/simulator. This step is to debug the codec engine/resource management infrastructure only with the assumption that in step 2 the algorithm is correct.
+</p><p>4. Integrate the DSP codec into the target multi-core build environment. This step is to concentrate on the multi-core issues such as memory coherency and application API usage. The DSP debugging for this step can be done in CCS using CE_DSPDEBUG=1 on the command line as described [<a rel="nofollow" class="external autonumber" href="Debugging_the_DSP_side_of_a_CE_application_on_DaVinci_using_CCS.html">[1]</a>[here]].
+</p>
+<h2><span class="mw-headline" id="Conclusions">Conclusions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit&amp;section=31" title="Edit section: Conclusions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This application note has explained how to create an XDM compliant iUniversal algorithm that can be integrated into Codec Engine on either single or multicore devices. The example application used TI's VLib to get the optimum performance for video analytic applications using the Canny Edge detection algorithm as an example. This example illustrate the benefits of using slicing versus the basic cache model where appropriate and the trade offs required between the use of precious internal memory and the cache. Finally it pulled together all the examples to propose a development flow for codec development for a multicore platform.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130075830
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.128 seconds
+Real time usage: 0.131 seconds
+Preprocessor visited node count: 278/1000000
+Preprocessor generated node count: 472/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1494/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:6692-0!canonical and timestamp 20201130075830 and revision id 216133
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C64x+ iUniversal Codec Creation - from memcpy to Canny Edge Detector</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;oldid=216133">https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;oldid=216133</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li><li><a href="Category_DM6437.html" title="Category:DM6437">DM6437</a></li><li><a href="Category_DM6467.html" title="Category:DM6467">DM6467</a></li><li><a href="Category_DVEVM.html" title="Category:DVEVM">DVEVM</a></li><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C64x%2B+iUniversal+Codec+Creation+-+from+memcpy+to+Canny+Edge+Detector" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C64x%2b_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_C64x%2b_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C64x%2b_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C64x%2b_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C64x%2b_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;oldid=216133" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C64x%2B_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 8 May 2016, at 22:27.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.128","walltime":"0.131","ppvisitednodes":{"value":278,"limit":1000000},"ppgeneratednodes":{"value":472,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1494,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130075830","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":232});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C64x+_iUniversal_Codec_Creation_-_from_memcpy_to_Canny_Edge_Detector by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:31:39 GMT -->
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/HOWTO_Change_the_Linux_Kernel_Start_Address by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:57:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>HOWTO Change the Linux Kernel Start Address - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"HOWTO_Change_the_Linux_Kernel_Start_Address","wgTitle":"HOWTO Change the Linux Kernel Start Address","wgCurRevisionId":181594,"wgRevisionId":181594,"wgArticleId":1517,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","DaVinci Linux"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"HOWTO_Change_the_Linux_Kernel_Start_Address","wgRelevantArticleId":1517,"wgRequestId":"574951285d5f1258d88b1beb","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-HOWTO_Change_the_Linux_Kernel_Start_Address rootpage-HOWTO_Change_the_Linux_Kernel_Start_Address skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">HOWTO Change the Linux Kernel Start Address</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Purpose"><span class="tocnumber">1</span> <span class="toctext">Purpose</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Kernel_Modifications"><span class="tocnumber">2</span> <span class="toctext">Kernel Modifications</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Using_Kernel_Config"><span class="tocnumber">2.1</span> <span class="toctext">Using Kernel Config</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Kernels_without_Config_Option"><span class="tocnumber">2.2</span> <span class="toctext">Kernels without Config Option</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Modifying_board-evm.c"><span class="tocnumber">2.2.1</span> <span class="toctext">Modifying board-evm.c</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Modifying_Makefile.boot"><span class="tocnumber">2.2.2</span> <span class="toctext">Modifying Makefile.boot</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Modifying_memory.h"><span class="tocnumber">2.2.3</span> <span class="toctext">Modifying memory.h</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#U-Boot_Modifications"><span class="tocnumber">3</span> <span class="toctext">U-Boot Modifications</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#U-Boot_using_UBOOT_START"><span class="tocnumber">3.1</span> <span class="toctext">U-Boot using UBOOT_START</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Other_U-Boot_versions"><span class="tocnumber">3.2</span> <span class="toctext">Other U-Boot versions</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#Modifying_config.mk"><span class="tocnumber">3.2.1</span> <span class="toctext">Modifying config.mk</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Modifying_davinci.h"><span class="tocnumber">3.2.2</span> <span class="toctext">Modifying davinci.h</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Updating_CMEM_Memory_Region"><span class="tocnumber">4</span> <span class="toctext">Updating CMEM Memory Region</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Additional_Information"><span class="tocnumber">5</span> <span class="toctext">Additional Information</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Purpose">Purpose</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=1" title="Edit section: Purpose">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The purpose of this article is to instruct users on how to change the start address for the Linux kernel.  This is useful if you wish to leave a section of memory at the beginning of DDR for use by the DSP and allocate the rest of the DDR memory to the Linux kernel.  For example if you have a system with 256MB of DDR and a codec server which requires 16MB of DDR you could partition the system like:
+</p>
+<ul><li>Linux Kernel: 0 - 232MB</li>
+<li>CMEM memory: 232 - 240MB</li>
+<li>DSP: 240 - 256MB</li></ul>
+<p>In this system if you change the amount of memory in the system you will need to rebuild the DSP image to be positioned at a new spot in DDR.  This can be a complicated process.
+</p><p>However, if you instead use a memory map like:
+</p>
+<ul><li>DSP: 0 - 16MB</li>
+<li>Linux Kernel: 16 - 248MB</li>
+<li>CMEM memory: 248 - 256MB</li></ul>
+<p>Then when increasing the amount of DDR in the system you would only need to recompile the kernel.
+</p><p>Having the DSP image at the beginning of DDR also allows you to easily change the DSP image without having to modify anything else in the system as long as the new DSP image will fit within 16MB.
+</p>
+<h2><span class="mw-headline" id="Kernel_Modifications">Kernel Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=2" title="Edit section: Kernel Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section will discuss the modifications required in the kernel to relocate the start address of the kernel to leave DDR space at the beginning of DDR for the DSP.
+</p>
+<pre>NOTE:  It is important to note that as of now the Linux kernel requires the start address to be a multiple of 16MB.
+       This means that the addresses should be incremented by 0x1000000.
+</pre>
+<h3><span class="mw-headline" id="Using_Kernel_Config">Using Kernel Config</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=3" title="Edit section: Using Kernel Config">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>On later versions of the LSP 2.6.18 kernel there are configuration options in the kernel that allow you to change the kernel start address.  To check if your kernel supports config time setting of the start address do:
+</p>
+<ol><li>make xconfig (or menuconfig)</li>
+<li>Go to <i>System Type</i>-&gt;<i>TI DaVinci Implementations</i></li>
+<li>Look for the following options:
+<ol><li>SDRAM offset for the Kernel</li>
+<li>ZRELADDR location for the Kernel</li>
+<li>PARAMS_PHYS location for the Kernel</li>
+<li>INITRD_PHYS location</li></ol></li></ol>
+<p>You should see something like the picture below:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Kernel_start_address_xconfig.html" class="image"><img alt="Kernel start address xconfig.jpg" src="https://processors.wiki.ti.com/images/a/a4/Kernel_start_address_xconfig.jpg" width="300" height="210" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Kernel_start_address_xconfig.html" class="internal" title="Enlarge"></a></div></div></div></div>
+<p>While still in xconfig you can change the SDRAM, ZRELADDR, PARAMS_PHYS, and INITRD_PHYS locations for you memory map.  For example to allocate 16MB of memory at the beginning of DDR for the DSP image you can double click on each item and change the value.  Press ENTER to save each value.  i.e.
+</p>
+<ul><li>SDRAM = 0x1000000</li>
+<li>ZRELADDR = 0x81008000</li>
+<li>PARAMS_PHYS = 0x81000100</li>
+<li>INITRD_PHYS = 0x81800000</li></ul>
+<p>Save the configuration and compile the kernel.  The kernel will now start at 16MB of DDR.
+</p>
+<h3><span class="mw-headline" id="Kernels_without_Config_Option">Kernels without Config Option</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=4" title="Edit section: Kernels without Config Option">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Some versions of the 2.6.18 kernel may not have support for changing the kernel start address from the configuration menu.  For these kernels you will need to modify the kernel files themselves to do this (you can use this <a href="https://processors.wiki.ti.com/images/7/72/Kernel_start_address_change.patch.gz" class="internal" title="Kernel start address change.patch.gz">example patch</a> as a reference).  This section will cover what changes are required in the kernel.  In this example the modifications are for the DM6446 device.
+</p>
+<pre>NOTE: These instructions are for the 2.6.18 kernel.  They have not been validated against any other kernel
+      versions but the changes should be similar.
+</pre>
+<p>The files to be modified are:
+</p>
+<ol><li>arch/arm/mach-davinci/board-evm.c</li>
+<li>arch/arm/mach-davinci/Makefile.boot</li>
+<li>include/asm-arm/arch-davinci/memory.h</li></ol>
+<p>For boards other than DM6446 please modify the corresponding board files.
+</p>
+<h4><span class="mw-headline" id="Modifying_board-evm.c">Modifying board-evm.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=5" title="Edit section: Modifying board-evm.c">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In the board-evm.c file you need to change the value of BOOT_PARAMS in the MACHINE_START section.  For example:
+Original code:
+</p>
+<pre>BOOT_PARAMS(0x80000100)
+</pre>
+<p>New code:
+</p>
+<pre>BOOT_PARAMS(0x81000100).
+</pre>
+<h4><span class="mw-headline" id="Modifying_Makefile.boot">Modifying Makefile.boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=6" title="Edit section: Modifying Makefile.boot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In the Makefile.boot file you need to change the values for zreladdr-y, params_phys-y, and initrd_phys-y.  For example:
+Original code:
+</p>
+<pre>zreladdr-y &#160;:= 0x80008000
+params_phys-y &#160;:= 0x80000100
+initrd_phys-y &#160;:= 0x80800000
+</pre>
+<p>New code:
+</p>
+<pre>zreladdr-y &#160;:= 0x81008000
+params_phys-y &#160;:= 0x81000100
+initrd_phys-y &#160;:= 0x81800000
+</pre>
+<h4><span class="mw-headline" id="Modifying_memory.h">Modifying memory.h</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=7" title="Edit section: Modifying memory.h">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In the memory.h file you need to change the value of DAVINCI_DDR_BASE.  For example:
+Original code:
+&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>define DAVINCI_DDR_BASE    0x80000000</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>New code:
+&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>define DAVINCI_DDR_BASE    0x81000000</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="U-Boot_Modifications">U-Boot Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=8" title="Edit section: U-Boot Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section will discuss the modifications required in u-boot to change the start address of the Linux kernel to leave DDR space at the beginning of DDR for the DSP.  By default u-boot loads itself into DDR at 16MB.  If the kernel start address is modified to be at 16MB then u-boot will overwrite itself when loading the Linux kernel and be unable to start kernel execution.
+</p>
+<h3><span class="mw-headline" id="U-Boot_using_UBOOT_START">U-Boot using UBOOT_START</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=9" title="Edit section: U-Boot using UBOOT START">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In some versions of u-boot (i.e. DM357) the board/davinci/config.mk file contains two variables that must be set to change the start address of u-boot and the Linux kernel load address.  These variables are UBOOT_START and SDRAM_OFFSET.  To determine if you are using this version of u-boot you can do:
+</p>
+<pre>grep -r UBOOT_START *
+</pre>
+<p>from the root of the u-boot source tree.  If you see this variable used for your board then follow these instruction.  If not follow the instructions in the next section.
+</p>
+<ul><li>Change the TEXT_BASE value to the location where u-boot should be located in DDR.  For example:</li></ul>
+<p>Original code:
+</p>
+<pre>TEXT_BASE = 0x81080000
+</pre>
+<p>New code:
+</p>
+<pre>TEXT_BASE = 0x82080000
+</pre>
+<ul><li>Change the SDRAM_OFFSET to the offset in DDR where you want the kernel loaded.  For example:</li></ul>
+<p>Original code:
+</p>
+<pre>SDRAM_OFFSET = 0x0
+</pre>
+<p>New code:
+</p>
+<pre>SDRAM_OFFSET = 0x1000000
+</pre>
+<h3><span class="mw-headline" id="Other_U-Boot_versions">Other U-Boot versions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=10" title="Edit section: Other U-Boot versions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In other versions of u-boot which do yet define BOOT_START and SDRAM_OFFSET you must modify the following files (you can use this <a href="https://processors.wiki.ti.com/images/0/08/U-boot_start_address_change.patch.gz" class="internal" title="U-boot start address change.patch.gz">example patch</a> as a reference):
+</p>
+<ol><li>board/davinci/config.mk</li>
+<li>include/configs/davinci.h</li></ol>
+<pre>NOTE:  The above listed files are for the DM6446.  For other boards please change the files to point to the
+       proper config.mk and davinci header files for that board.
+</pre>
+<h4><span class="mw-headline" id="Modifying_config.mk">Modifying config.mk</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=11" title="Edit section: Modifying config.mk">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The config.mk file needs to be modified to change the address where the u-boot code is loaded.  For example:
+Original code:
+</p>
+<pre>TEXT_BASE = 0x81080000
+</pre>
+<p>New code:
+</p>
+<pre>TEXT_BASE = 0x82080000
+</pre>
+<h4><span class="mw-headline" id="Modifying_davinci.h">Modifying davinci.h</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=12" title="Edit section: Modifying davinci.h">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The davinci.h file needs to be modified to change the address where the Linux boot parameters are stored.  Optionally you can change the amount of memory that u-boot uses.  Check the <a href="https://processors.wiki.ti.com/images/0/08/U-boot_start_address_change.patch.gz" class="internal" title="U-boot start address change.patch.gz">example patch</a> for information on changing the amount of DDR used by u-boot.
+Original code:
+&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>define LINUX_BOOT_PARAM_ADDR  0x80000100</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>New code:
+&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>define LINUX_BOOT_PARAM_ADDR  0x81000100</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Updating_CMEM_Memory_Region">Updating CMEM Memory Region</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=13" title="Edit section: Updating CMEM Memory Region">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you change the amount of memory in your system you will often need to update the CMEM memory region as well.  To show how this works we will consider the changes required to CMEM when moving from 256MB of DDR to 128MB.
+</p><p>Original Memory Map:
+</p>
+<ul><li>DSP: 0 - 16MB</li>
+<li>Linux Kernel: 16 - 248MB</li>
+<li>CMEM memory: 248 - 256MB</li></ul>
+<p>New Memory Map:
+</p>
+<ul><li>DSP: 0 - 16MB</li>
+<li>Linux Kernel: 16 - 120MB</li>
+<li>CMEM memory: 120 - 128MB</li></ul>
+<p>In the original case CMEM would be set to have it's <i>phys_start</i> and <i>phys_end</i> parameters specify the memory region between 248-256MB.  An example <i>modules.sh</i> file then might be: -
+</p>
+<pre># insert cmemk, tell it to occupy physical 248MB-256MB.
+insmod cmemk.ko phys_start=0x8F800000 phys_end=0x90000000 pools=1x4145728,5x829440,1x61440,1x10240
+</pre>
+<p>This corresponds to the settings:
+</p>
+<pre>phys_start = 0x8F800000
+phys_end   = 0x90000000
+</pre>
+<p>To change the CMEM memory region you need to change the <i>phys_start</i> and <i>phys_end</i> parameters.  Remember that the start of DDR memory is based at 0x80000000.  In this case the new <i>modules.sh</i> would be:
+</p>
+<pre># insert cmemk, tell it to occupy physical 248MB-256MB.
+insmod cmemk.ko phys_start=0x87800000 phys_end=0x88000000 pools=1x4145728,5x829440,1x61440,1x10240
+</pre>
+<p>i.e. the phys_start, phys_end changes but not the individual pools or sizes.
+</p><p>These values were calculated using the following formula:
+</p>
+<pre>phys_start = &lt;DDR Base&gt; + (&lt;CMEM start MB&gt; * 1024 * 1024)
+phys_end   = &lt;phys_start&gt; + (&lt;CMEM size&gt; * 1024 * 1024)
+</pre>
+<pre>i.e.
+phys_start = 0x80000000 + (120 * 1024 * 1024) &lt;---- convert to hex
+phys_end   = 0x87800000 + (8 * 1024 * 1024) &lt;---- convert to hex
+</pre>
+<p>You can change these values in the loadmodules.sh script that is part of the DVSDK demos so that you do not need to enter them after each boot.
+</p>
+<h2><span class="mw-headline" id="Additional_Information">Additional Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;section=14" title="Edit section: Additional Information">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>For more information on changing the system memory map see the links below:
+</p>
+<ul><li><a href="Changing_the_DVEVM_memory_map.html" title="Changing the DVEVM memory map"> Changing the DVEVM memory map</a></li>
+<li><a href="Changing_DSPLink_Memory_Map.html" title="Changing DSPLink Memory Map"> Changing DSPLink Memory Map</a></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130175110
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.057 seconds
+Real time usage: 0.060 seconds
+Preprocessor visited node count: 54/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:1517-0!canonical and timestamp 20201130175109 and revision id 181594
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>HOWTO Change the Linux Kernel Start Address</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>HOWTO Change the Linux Kernel Start Address</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>HOWTO Change the Linux Kernel Start Address</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>HOWTO Change the Linux Kernel Start Address</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>HOWTO Change the Linux Kernel Start Address</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>HOWTO Change the Linux Kernel Start Address</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>HOWTO Change the Linux Kernel Start Address</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>HOWTO Change the Linux Kernel Start Address</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>HOWTO Change the Linux Kernel Start Address</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;oldid=181594">https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;oldid=181594</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_DaVinci_Linux.html" title="Category:DaVinci Linux">DaVinci Linux</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=HOWTO+Change+the+Linux+Kernel+Start+Address" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="HOWTO_Change_the_Linux_Kernel_Start_Address.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="HOWTO_Change_the_Linux_Kernel_Start_Address.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/HOWTO_Change_the_Linux_Kernel_Start_Address.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/HOWTO_Change_the_Linux_Kernel_Start_Address.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;oldid=181594" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=HOWTO_Change_the_Linux_Kernel_Start_Address&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 14:16.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.057","walltime":"0.060","ppvisitednodes":{"value":54,"limit":1000000},"ppgeneratednodes":{"value":60,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130175110","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":229});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/HOWTO_Change_the_Linux_Kernel_Start_Address by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:57:26 GMT -->
+</html>

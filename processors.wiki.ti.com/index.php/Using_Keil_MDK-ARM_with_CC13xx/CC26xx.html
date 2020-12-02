@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_Keil_MDK-ARM_with_CC13xx/CC26xx by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:12:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Using Keil MDK-ARM with CC13xx/CC26xx - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Using_Keil_MDK-ARM_with_CC13xx/CC26xx","wgTitle":"Using Keil MDK-ARM with CC13xx/CC26xx","wgCurRevisionId":220405,"wgRevisionId":220405,"wgArticleId":37957,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["CC13xx","CC26xx","SW Development Tools, IDEs, Compilers"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Using_Keil_MDK-ARM_with_CC13xx/CC26xx","wgRelevantArticleId":37957,"wgRequestId":"a41ca4a9b49d3b9f6a6d1e3d","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Using_Keil_MDK-ARM_with_CC13xx_CC26xx rootpage-Using_Keil_MDK-ARM_with_CC13xx skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Using Keil MDK-ARM with CC13xx/CC26xx</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This article describes how to get device and debug support for CC13xx and CC26xx devices in Keil MDK-ARM using Segger J-Link.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Supported_debuggers_and_devices"><span class="tocnumber">1</span> <span class="toctext">Supported debuggers and devices</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Hardware_and_software"><span class="tocnumber">2</span> <span class="toctext">Hardware and software</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Installing.2Fupdating_J-Link_driver"><span class="tocnumber">3</span> <span class="toctext">Installing/updating J-Link driver</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Installing_CC13xx.2FCC26xx_Device_Family_Pack"><span class="tocnumber">4</span> <span class="toctext">Installing CC13xx/CC26xx Device Family Pack</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Create_.C2.B5Vision_project_for_CC26xx"><span class="tocnumber">5</span> <span class="toctext">Create &#181;Vision project for CC26xx</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Add_necessary_files"><span class="tocnumber">5.1</span> <span class="toctext">Add necessary files</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Configure_project_options"><span class="tocnumber">5.2</span> <span class="toctext">Configure project options</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Build_the_project"><span class="tocnumber">5.3</span> <span class="toctext">Build the project</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Configure_Segger_J-Link_as_debugger"><span class="tocnumber">5.4</span> <span class="toctext">Configure Segger J-Link as debugger</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Known_issues"><span class="tocnumber">6</span> <span class="toctext">Known issues</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#CC13xx.2FCC26xx_Device_Support_Pack_Versions"><span class="tocnumber">7</span> <span class="toctext">CC13xx/CC26xx Device Support Pack Versions</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Supported_debuggers_and_devices">Supported debuggers and devices</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=1" title="Edit section: Supported debuggers and devices">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following debug probes are supported:
+</p>
+<ul><li>Segger J-Link</li></ul>
+<p>The following devices are supported:
+</p>
+<ul><li>CC2650F128, CC2640F128, CC2630F128, CC2620F128</li>
+<li>CC1310F128, CC1310F64, CC1310F32</li></ul>
+<h2><span class="mw-headline" id="Hardware_and_software">Hardware and software</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=2" title="Edit section: Hardware and software">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The steps described in this article are tested using the following hardware and software components
+</p>
+<ul><li>SmartRF06EB + CC2650EM-7ID and CC1310EM</li>
+<li>Keil MDK-ARM 5.14 Pro</li>
+<li>Segger J-Link debug probe (driver version 6.00g or later recommended)</li>
+<li><a href="../CC26xxware-2.html" class="mw-redirect" title="CC26xxware">CC26xxWare</a> v2.22.00.16101</li>
+<li>CC13xx and CC26xx Device Family Pack v0.0.2</li></ul>
+<p>It is in the following assumed that you already have MDK-ARM installed on your computer.
+</p>
+<h2><span id="Installing/updating_J-Link_driver"></span><span class="mw-headline" id="Installing.2Fupdating_J-Link_driver">Installing/updating J-Link driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=3" title="Edit section: Installing/updating J-Link driver">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>CC26xx and CC13xx support requires J-Link driver version 6.00g or higher. The latest drivers are recommended and can be downloaded from <a rel="nofollow" class="external text" href="https://www.segger.com/jlink-software.html">here</a>. 
+</p>
+<ol><li>Run the J-Link installer as administrator</li>
+<li>During installation you should be prompted to update existing J-Link DLLs on your system, make sure you select the J-Link DLL in your MDK-ARM installation.</li></ol>
+<p>If you are not prompted to update DLL during installation: Make sure you have MDK-ARM installed. The Segger DLL Updater can be found in the SEGGER folder of your Start Menu.
+</p>
+<h2><span id="Installing_CC13xx/CC26xx_Device_Family_Pack"></span><span class="mw-headline" id="Installing_CC13xx.2FCC26xx_Device_Family_Pack">Installing CC13xx/CC26xx Device Family Pack</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=4" title="Edit section: Installing CC13xx/CC26xx Device Family Pack">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section describes the steps to install the CC13xx/CC26xx Device Family Pack into MDK-ARM v5. 
+</p>
+<ol><li>Download CC13xx/CC26xx Device Family Pack: <a href="../File_MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.2.html" title="File:MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.2.zip">File:MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.2.zip</a>.</li>
+<li>Open MDK-ARM</li>
+<li>Open the Pack installer (<b>Project &gt; Manage &gt; Pack Installer...</b>)</li>
+<li>In the Pack installer, select <b>File &gt; Import...</b> and browse to the CC13xx/CC26xx Device Family Pack</li>
+<li>You should now be able to see CC26xx and CC13xx devices in the "Devices" tab</li>
+<li>Close the Pack installer and return to MDK-ARM</li>
+<li>If MDK-ARM prompts to update device definitions, click yes</li></ol>
+<p><b>Note: CC13xx and CC26xx devices require the Customer configuration area (CCFG) to be correctly set up for the device to boot. The following sections explain how to create an empty MDK-ARM project.</b>
+</p>
+<h2><span id="Create_µVision_project_for_CC26xx"></span><span class="mw-headline" id="Create_.C2.B5Vision_project_for_CC26xx">Create &#181;Vision project for CC26xx</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=5" title="Edit section: Create µVision project for CC26xx">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section describes how to create a new project in MDK-ARM with CC2650F128 as device.
+</p><p><b>Prerequisites</b><br />
+</p>
+<ul><li>Download <a href="../CC26xxWare.html" title="CC26xxWare">CC26xxWare</a> 2.22.00.16101 and extract it to e.g. C:\ti\cc26xxware_2_22_00_16101</li></ul>
+<p>In MDK-ARM, go to <b>Project &gt; New &#181;Vision project...</b> to create a new project. 
+</p><p>Choose a location and name for your &#181;Vision project file. Click Save.
+</p><p>The Select Device dialog appears. Select CC2650F128 as your device and click OK.
+</p><p><a href="../File_CC26xx-jlink-mdkarm-select-device.html" class="image"><img alt="CC26xx-jlink-mdkarm-select-device.jpg" src="https://processors.wiki.ti.com/images/e/e2/CC26xx-jlink-mdkarm-select-device.jpg" width="640" height="474" /></a>
+</p><p><br />
+The Manage Run-time Environment dialog appears. Don't select anything, just click OK.
+</p>
+<h3><span class="mw-headline" id="Add_necessary_files">Add necessary files</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=6" title="Edit section: Add necessary files">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Create empty main.c</b><br />
+In your project, expand the "Target 1" folder.
+</p>
+<ul><li>Right click "Source Group 1" and select "Add New Item to Group 'Source Group 1'...".
+<ul><li>Select C File (.c)</li>
+<li>Specify "main.c" as name</li>
+<li>Click Add</li></ul></li></ul>
+<p>Add the following content to main.c file and save the changes (Ctrl + S):
+</p>
+<pre>#include &lt;stdint.h&gt;
+
+int main(void)
+{
+    while(1);
+}
+ 
+</pre>
+<p><b>Add startup file and required CC26xxWare files</b><br />
+</p>
+<ul><li>Right click "Source Group 1" and select "Add Existing item to Group 'Source Group 1'...".</li>
+<li>In the appearing dialog, browse and add the following folders (make sure you show "All files")
+<ul><li>Select &lt;cc26xxware_dir&gt;\startup_files\startup_keil.s and click Add</li>
+<li>Select &lt;cc26xxware_dir&gt;\startup_files\ccfg.c and click Add</li>
+<li>Select &lt;cc26xxware_dir&gt;\driverlib\bin\keil\driverlib.lib and click Add</li></ul></li>
+<li>Close the dialog</li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Configure_project_options">Configure project options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=7" title="Edit section: Configure project options">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Right click "Target 1" and select "Options for Target 'Target 1'..." to open the configuration dialog.
+</p><p><b>Add CC26xxWare to project include path</b><br />
+</p>
+<ol><li>Go to the C/C++ tab</li>
+<li>In the Include path field, add the CC26xxWare installation directory
+<ol><li>The include path should specify the folder containing the 'driverlib' and 'inc' folders, e.g. "C:\ti\cc26xxware_2_22_00_16101".</li>
+<li>Multiple include paths can be separated by semicolon</li></ol></li>
+<li>It is recommended to enable the "C99 Mode" checkbox</li></ol>
+<p><b> Use scatter load file</b><br />
+To correctly place the CCFG area (in ccfg.c), the scatter load file included in CC13xx/CC26xx Device Family Pack should be used.
+</p>
+<ol><li>Go to the Linker tab</li>
+<li>Uncheck "Use Memory Layout from Target Dialog"</li>
+<li>Select scatter file by clicking "..."</li>
+<li>Browse to &lt;cc26xxware_dir&gt;\linker_files\cc26x0f128.sct and click Open.<br /><b>Note</b>: If you are using CC26xxWare 2.20.06.14829 or older: Use the scatter file included in the CC13xx/CC26xx Device Family pack: &lt;mdk_arm_dir&gt;\ARM\Pack\TexasInstruments\CC13xxCC26xx\&lt;version&gt;\Device\Linker\cc26x0f128.sct</li></ol>
+<p>Click OK to close the Options dialog.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Build_the_project">Build the project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=8" title="Edit section: Build the project">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In MDK-ARM, build the project by selecting <b>Project &gt; Build target</b>.
+</p><p>You may get some warning messages. This is expected and will be fixed in future versions of CC26xxWare.
+</p>
+<h3><span class="mw-headline" id="Configure_Segger_J-Link_as_debugger">Configure Segger J-Link as debugger</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=9" title="Edit section: Configure Segger J-Link as debugger">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section describes how to configure your &#181;Vision project to use Segger J-Link as debugger.
+</p><p>1. In your MDK-ARM project, open the target options (e.g. <b>Project &gt; Options for Target 1 'Target 1'...</b>).
+</p><p>2. Go to the "Utilities" tab and uncheck "Update Target before debugging".
+</p><p><a href="../File_CC26xx-jlink-mdkarm-utilities.html" class="image"><img alt="CC26xx-jlink-mdkarm-utilities.jpg" src="https://processors.wiki.ti.com/images/e/e0/CC26xx-jlink-mdkarm-utilities.jpg" width="640" height="474" /></a>
+</p><p>3. Go to the "Debug" tab and select "J-LINK / J-TRACE Cortex" before clicking the Settings" button
+</p><p>4. In the Driver setup window, enable the Download options as shown below. Here you can also see the Segger J-Link debug probe driver version (if the probe is plugged into your computer).
+</p><p><a href="../File_CC26xx-jlink-mdkarm-debug-settings.html" class="image"><img alt="CC26xx-jlink-mdkarm-debug-settings.jpg" src="https://processors.wiki.ti.com/images/e/ed/CC26xx-jlink-mdkarm-debug-settings.jpg" width="633" height="512" /></a>
+</p><p>5. Close the two dialogs by clicking OK twice.
+</p><p>You can now debug your target by selecting <b>Debug &gt; Start/Stop Debug Session</b> from the menu.
+</p><p><a href="../File_CC26xx-jlink-mdkarm-active-debug.html" class="image"><img alt="CC26xx-jlink-mdkarm-active-debug.jpg" src="https://processors.wiki.ti.com/images/a/a1/CC26xx-jlink-mdkarm-active-debug.jpg" width="787" height="623" /></a>
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Known_issues">Known issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=10" title="Edit section: Known issues">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Earlier versions of the Segger J-Link did not work reliable when low power modes were used. This has been fixed, and we recommend using version 6.00g or later of the drivers. Get the latest version <a rel="nofollow" class="external text" href="https://www.segger.com/jlink-software.html">here</a>.</li></ul>
+<p><br />
+</p>
+<h2><span id="CC13xx/CC26xx_Device_Support_Pack_Versions"></span><span class="mw-headline" id="CC13xx.2FCC26xx_Device_Support_Pack_Versions">CC13xx/CC26xx Device Support Pack Versions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;section=11" title="Edit section: CC13xx/CC26xx Device Support Pack Versions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section lists the available versions of the CC13xx/CC26xx Device Support Pack versions.
+</p>
+<ul><li><a href="../File_MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.2.html" title="File:MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.2.zip">File:MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.2.zip</a></li>
+<li><a href="../File_MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.1.html" title="File:MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.1.zip">File:MDKARM-DFP-TexasInstruments.CC13xxCC26xx.0.0.1.zip</a></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130164702
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.056 seconds
+Real time usage: 0.061 seconds
+Preprocessor visited node count: 57/1000000
+Preprocessor generated node count: 78/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 73/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:37957-0!canonical and timestamp 20201130164702 and revision id 220405
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Using Keil MDK-ARM with CC13xx/CC26xx</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;oldid=220405">https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;oldid=220405</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../Category_CC13xx.html" title="Category:CC13xx">CC13xx</a></li><li><a href="../Category_CC26xx.html" title="Category:CC26xx">CC26xx</a></li><li><a href="../Category_SW_Development_Tools%2c_IDEs%2c_Compilers.html" title="Category:SW Development Tools, IDEs, Compilers">SW Development Tools, IDEs, Compilers</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Using+Keil+MDK-ARM+with+CC13xx%2FCC26xx" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="CC26xx.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="CC26xx.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/Using_Keil_MDK-ARM_with_CC13xx/CC26xx.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/Using_Keil_MDK-ARM_with_CC13xx/CC26xx.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;oldid=220405" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Using_Keil_MDK-ARM_with_CC13xx/CC26xx&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 22 August 2016, at 07:09.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.056","walltime":"0.061","ppvisitednodes":{"value":57,"limit":1000000},"ppgeneratednodes":{"value":78,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":73,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130164702","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":227});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_Keil_MDK-ARM_with_CC13xx/CC26xx by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:12:24 GMT -->
+</html>

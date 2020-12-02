@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:34:37 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Soft-UART Implementation on OMAPL PRU - Software Users Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide","wgTitle":"Soft-UART Implementation on OMAPL PRU - Software Users Guide","wgCurRevisionId":100488,"wgRevisionId":100488,"wgArticleId":13448,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["PRU","AM1x","OMAPL1"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide","wgRelevantArticleId":13448,"wgRequestId":"fc96174d1246582e464b993a","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide rootpage-Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Soft-UART Implementation on OMAPL PRU - Software Users Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br /> 
+</p><p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Features"><span class="tocnumber">2</span> <span class="toctext">Features</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Calculating_Number_of_Supported_Soft-UARTs"><span class="tocnumber">3</span> <span class="toctext">Calculating Number of Supported Soft-UARTs</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Overview"><span class="tocnumber">3.1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Single_PRU_Mode_Calculation"><span class="tocnumber">3.2</span> <span class="toctext">Single PRU Mode Calculation</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Both_PRU_Mode_Calculation"><span class="tocnumber">3.3</span> <span class="toctext">Both PRU Mode Calculation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Hardware_Requirements"><span class="tocnumber">4</span> <span class="toctext">Hardware Requirements</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Location_of_the_Source_Code"><span class="tocnumber">5</span> <span class="toctext">Location of the Source Code</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Soft-UART_Configuration_Options"><span class="tocnumber">6</span> <span class="toctext">Soft-UART Configuration Options</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#PRU_operating_frequency"><span class="tocnumber">6.1</span> <span class="toctext">PRU operating frequency</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#PRU_mode:_Both_PRU_cores_or_Single_PRU_core"><span class="tocnumber">6.2</span> <span class="toctext">PRU mode:  Both PRU cores or Single PRU core</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#McASP_serializer_to_Soft-UART_mapping"><span class="tocnumber">6.3</span> <span class="toctext">McASP serializer to Soft-UART mapping</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Soft-UART_mode:_Full_duplex_or_Half_duplex"><span class="tocnumber">6.4</span> <span class="toctext">Soft-UART mode: Full duplex or Half duplex</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Maximum_baud_rate"><span class="tocnumber">6.5</span> <span class="toctext">Maximum baud rate</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Receiver_over-sampling"><span class="tocnumber">6.6</span> <span class="toctext">Receiver over-sampling</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#McASP_instance_number"><span class="tocnumber">6.7</span> <span class="toctext">McASP instance number</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#FIFO_timeout"><span class="tocnumber">6.8</span> <span class="toctext">FIFO timeout</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Build_Procedure"><span class="tocnumber">7</span> <span class="toctext">Build Procedure</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#Building_using_OpenEmbedded"><span class="tocnumber">7.1</span> <span class="toctext">Building using OpenEmbedded</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#Prerequisites"><span class="tocnumber">7.1.1</span> <span class="toctext">Prerequisites</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Install_Required_Packages"><span class="tocnumber">7.1.2</span> <span class="toctext">Install Required Packages</span></a>
+<ul>
+<li class="toclevel-4 tocsection-22"><a href="#Install_the_Toolchain"><span class="tocnumber">7.1.2.1</span> <span class="toctext">Install the Toolchain</span></a></li>
+<li class="toclevel-4 tocsection-23"><a href="#Change_Default_Shell"><span class="tocnumber">7.1.2.2</span> <span class="toctext">Change Default Shell</span></a></li>
+<li class="toclevel-4 tocsection-24"><a href="#Disk_Space_Requirements"><span class="tocnumber">7.1.2.3</span> <span class="toctext">Disk Space Requirements</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-25"><a href="#Obtain_the_Sources"><span class="tocnumber">7.1.3</span> <span class="toctext">Obtain the Sources</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#Setup_the_Environment_File"><span class="tocnumber">7.1.4</span> <span class="toctext">Setup the Environment File</span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Setup_the_Configuration_File"><span class="tocnumber">7.1.5</span> <span class="toctext">Setup the Configuration File</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Source_Environment_Script"><span class="tocnumber">7.1.6</span> <span class="toctext">Source Environment Script</span></a></li>
+<li class="toclevel-3 tocsection-29"><a href="#Build_the_Distribution"><span class="tocnumber">7.1.7</span> <span class="toctext">Build the Distribution</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-30"><a href="#Soft-UART_Recipes"><span class="tocnumber">7.2</span> <span class="toctext">Soft-UART Recipes</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Building_Firmware"><span class="tocnumber">7.3</span> <span class="toctext">Building Firmware</span></a>
+<ul>
+<li class="toclevel-3 tocsection-32"><a href="#Prerequisites_2"><span class="tocnumber">7.3.1</span> <span class="toctext">Prerequisites</span></a></li>
+<li class="toclevel-3 tocsection-33"><a href="#Building_SUART_Firmware"><span class="tocnumber">7.3.2</span> <span class="toctext">Building SUART Firmware</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-34"><a href="#Building_Linux_Kernel_and_Device_Driver"><span class="tocnumber">7.4</span> <span class="toctext">Building Linux Kernel and Device Driver</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-35"><a href="#Components_on_Target_File_System"><span class="tocnumber">8</span> <span class="toctext">Components on Target File System</span></a></li>
+<li class="toclevel-1 tocsection-36"><a href="#Running_the_Soft-UART_Sample_Application"><span class="tocnumber">9</span> <span class="toctext">Running the Soft-UART Sample Application</span></a></li>
+<li class="toclevel-1 tocsection-37"><a href="#Additional_Documentation"><span class="tocnumber">10</span> <span class="toctext">Additional Documentation</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This article serves as the User's Guide for the Soft-UART implementation on the Programmable Real-Time Unit (<a href="Category_PRU.html" title="Category:PRU">PRU</a>) of the OMAP-L13x and AM1x devices from Texas Instruments. This user's guide will detail the features supported, location of source code, software configuration options and selection method, build procedure, and sample test procedure.   
+</p><p>The Soft-UART software emulates a UART protocol on the PRU. The implementation uses the serializers of one on-chip McASP for the UART TX and RX lines.  The following high level components create the Soft-UART solution:
+</p>
+<dl><dd><ol><li>PRU Firmware - This firmware is responsible for controlling the physical transmission/reception of data.</li>
+<li>Linux Driver - The driver is implemented using the serial subsystem of the Linux kernel as in interface to send and receive data.</li>
+<li>OpenEmbedded Recipes - The building of the entire system including bootloaders, kernel, and file system is accomplished using an overlay to the <a rel="nofollow" class="external text" href="http://openembedded.org/">OpenEmbedded</a> project.  The OpenEmbedded project is a community effort for building custom embedded distributions.  It solves the often complex cross-compilation and linking issues as well and handling generation of file system images.  More details for using this overlay can be found in the <a href="#Build_Procedure"> Build Procedure</a> section below.</li></ol></dd></dl>
+<pre>   Note: The Linux Driver is implemented on the 2.6.32 kernel.  Currently there no plans to port this driver to a newer kernel version.
+</pre>
+<h1><span class="mw-headline" id="Features">Features <br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=2" title="Edit section: Features">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The Soft-UART implementation supports the following features:
+</p>
+<dl><dd><ul><li>6 - 8 bits per character (configurable)</li>
+<li>LSB-first</li>
+<li>1 or 2 stop bits</li>
+<li>Receiver oversampling of x8 and x16 (configurable)</li>
+<li>Parity generation and error detection (even, odd, or no parity)</li>
+<li>Configurable FIFO depth from 1 to 16</li>
+<li>Configurable FIFO timeout</li>
+<li>Configurable McASP serializer mapping for each TX &amp; RX signal</li>
+<li>Configurable half or full duplex</li>
+<li>Independent baud rates supported for Soft-UART ports
+<ul><li>Configurable maximum baud rate (up to 115200 baud)</li>
+<li>Dependent baud rate for each Soft-UART based upon software-configurable maximum baud rate divided by 1, 2, 4, 6, 12, 16, 24, 48, 64, 96, 192, &amp; 384</li></ul></li>
+<li>Two - four full duplex Soft-UARTS per PRU
+<ul><li><b>NOTE:</b> The number of UARTs supported depends on software configuration options and baud rate of each UART.  Refer to the <a href="#Calculating_Number_of_Supported_Soft-UARTs"> Calculating Number of Supported Soft-UARTs</a> and <a href="#Soft-UART_Configuration_Options"> Soft-UART Configuration Options</a> sections for additional details.</li></ul></li></ul></dd></dl>
+<h1><span class="mw-headline" id="Calculating_Number_of_Supported_Soft-UARTs">Calculating Number of Supported Soft-UARTs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=3" title="Edit section: Calculating Number of Supported Soft-UARTs">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Overview">Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=4" title="Edit section: Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The number of supported Soft-UARTs depends on user-defined software configuration options and the operating baud rate of each Soft-UART.  The <a href="#Soft-UART_Configuration_Options"> Soft-UART Configuration Options</a> section provides additional details on the software configuration options impacting the number of Soft-UARTs (primarily PRU frequency, maximum baud rate, and PRU mode).  This section explains the dependency between the software configuration and number of supported Soft-UARTs, outlines how to calculate the maximum number of Soft-UARTs achievable, and advises how to select the optimal software configuration. 
+</p><p>In general, the dependency is attributed to a PRU cycle constraint associated with the PRU's single-threaded architecture and requirement of polling for interrupts. The Soft-UART implementation uses the McASP to handle the physical input and output of the data on the Tx and Rx lines. The McASP interrupts the PRU after transmitting and receiving each data frame. Because of the PRU's single-threaded architecture, the PRU core must complete all data processing during the time interval between these interrupts. The rate of McASP Tx and Rx interrupts are explained below.
+</p>
+<dl><dd><dl><dd><i><b>Tx side:</b></i> <br /> On the Tx side, the McASP is configured to operate at the same clock as the software configured <a href="#Maximum_baud_rate"> maximum baud rate</a>.  All data is transmitted at this clock rate.  Note to achieve slower baud rates, the Soft-UART implementation repeats each transmitted bit the baud rate divisor number of times.  For example, if the max baud rate is 57600, 9600 baud is achieved by repeating each bit 6 times (57600 / 9600 = 6).  The McASP will interrupt the PRU after each data transmission is complete, or a maximum of every 1/ (Max baud rate) seconds during continuous transmission of data.</dd></dl></dd></dl>
+<dl><dd><dl><dd><i><b>Rx side:</b></i> <br /> On the Rx side, the McASP Rx clock is operating at a higher, or oversampled, clock compared to the software configured <a href="#Maximum_baud_rate"> maximum baud rate</a>.  When configured for 8x over-sampling (default), the receive section of the McASP is clocked eight times the maximum baud rate (that is 8 * Maximum baud-rate).  The McASP generates an interrupt every time a serializer receives data. During a continuous stream of data, the McASP would then generate receive interrupts once every 1/ (8 * baud-rate) seconds, where baud-rate is the baud-rate of each Soft-UART.</dd></dl></dd></dl>
+<p>For successful reception, the PRU must carryout all the data processing and read the new data available on every McASP interrupt. Therefore, by extension, all data processing and read of new data is constrained to the number of PRU cycles available between the McASP interrupts. The available PRU cycles are calculated based on the fastest possible interval between McASP interrupts, 1/ (8 * Maximum Baud-rate), or by
+</p>
+<pre>      PRU Cycles = (PRU Frequency)/ (8 * Maximum Baud-rate)
+</pre>
+<p>Figure 1 below provides a representation of the PRU Cycles available for different PRU frequency and various maximum or Maximum (or Base) Baud rates.
+</p>
+<div class="center"><div class="floatnone"><a href="File_PRU_cycles_total.html" class="image"><img alt="PRU cycles total.png" src="https://processors.wiki.ti.com/images/2/2c/PRU_cycles_total.png" width="700" height="353" /></a></div></div>
+<center><b>Figure 1.</b> PRU cycles available between McASP interrupts </center>
+<p><br />
+</p><p>Figure 2 below provides the graphical representation of the PRU Cycles Consumed by single UART for different divide factor.  Note, the baud rate divisor = max baud rate / configured UART baud rate.  
+</p>
+<div class="center"><div class="floatnone"><a href="File_UART_rx_tx_cycles.html" class="image"><img alt="UART rx tx cycles.png" src="https://processors.wiki.ti.com/images/0/09/UART_rx_tx_cycles.png" width="626" height="387" /></a></div></div>
+<center><b>Figure 2.</b> PRU Cycles Requirement for single UART for various Baud rate divisors ***</center>
+<p><br />
+</p>
+<dl><dd><dl><dd>***<i><b>Note:</b></i> The values in Figure 2 do not include a buffer. Therefore, one should allow for a buffer or extra available PRU cycles when evaluating whether the number of total PRU cycles is within the available PRU cycles. If the sum of cycles consumed by the UARTs is very close to the total available cycles, the system may be prone to data loss.</dd></dl></dd></dl>
+<p>The number of supported Soft-UARTs calculation depends on the <a href="#PRU_mode:_Both_PRU_cores_or_Single_PRU_core"> PRU mode</a>.  Therefore, the calculation details for <a href="#Single_PRU_Mode_Calculation"> Single PRU mode</a> and <a href="#Single_PRU_Mode_Calculation"> Both PRU mode</a> are explained separately.
+</p>
+<h2><span class="mw-headline" id="Single_PRU_Mode_Calculation">Single PRU Mode Calculation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=5" title="Edit section: Single PRU Mode Calculation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In Single PRU mode, one PRU core handles both Tx and Rx lines for all Soft-UART ports. This mode can support at most 4 Soft-UARTs.  
+</p><p>Using the chart above, the number of UARTs, the PRU Frequency, and the Base or base baud rate can be selected for the desired combination.  The total number of cycles consumed by all UART (Tx &amp; Rx) would be sum total of each individual UART. For the UARTs to be able to operate reliably, this sum total needs to be kept within the values identified in Figure 1. Failure to do so may result in data loss. 
+</p><p>For example: for the single UART @ baud rate of 115200 while the Base baud rate is set to 115200 the following is true.
+</p>
+<ol><li>The Baud rate divisor is 1</li>
+<li>PRU Cycles for Tx is 250</li>
+<li>PRU Cycles for Rx is 290</li>
+<li>Total PRU Cycles for Tx &amp; Rx is 540</li></ol>
+<p>While the PRU is running 150 MHz, the total available cycles for base baud is 1302. In this scenario, one can have up to 2 UARTs in full duplex mode on single PRU following PRU Cycles.
+</p>
+<ol><li>1080 PRU cycles while both UARTs are at 115200.</li>
+<li>1225 PRU cycles while one UART is at 115200 and other at 57600.</li>
+<li>1195 PRU cycles while one UART is at 115200 and other at 9600.</li></ol>
+<p>On the other hand while PRU is running at 150 MHz, the total PRU cycles available at base baud of 57600 is 2604. In this scenario, one can have 
+</p>
+<ol><li>Up to 4 UARTs at 57600 requiring 2160 (540 * 4) PRU Cycles.</li>
+<li>Up to 3 UARTs at varying baud rate totaling up to 2100 (700 * 3) PRU Cycles.</li></ol>
+<p><br />
+Thus, with the increased PRU frequency, there will be improvements that can be achieved. The table below provides a summary of possible combinations.  
+</p>
+<center> <b>Table 4 1:</b> Soft-UARTs on Single PRU </center>
+<table width="70%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>PRU Frequency</b></center>
+</td>
+<td><center><b>Default Base Baud</b></center>
+</td>
+<td><center><b>Maximum Number Soft UART</b></center>
+</td>
+<td><center><b>Baud Rate Supported</b></center>
+</td></tr>
+<tr>
+<td>150
+</td>
+<td>115200
+</td>
+<td>1 - 2
+</td>
+<td>115200, 57600, 38400, 19200, 9600, 4800, 2400, 1200, 600, 300
+</td></tr>
+<tr>
+<td>150
+</td>
+<td>57600 and below
+</td>
+<td>3 - 4 *
+</td>
+<td>57600, 19200, 9600, 4800, 2400, 1200, 600, 300 <br /> See the <a href="#Maximum_baud_rate"> Maximum baud rate</a> section for a complete list of baud rates supported for each base baud.
+</td></tr>
+<tr>
+<td>228
+</td>
+<td>115200
+</td>
+<td>2 - 3
+</td>
+<td>115200, 57600, 38400, 19200, 9600, 4800, 2400, 1200, 600, 300
+</td></tr>
+<tr>
+<td>228
+</td>
+<td>57600 and below
+</td>
+<td>4 *
+</td>
+<td>57600, 19200, 9600, 4800, 2400, 1200, 600, 300 <br /> See the <a href="#Maximum_baud_rate"> Maximum baud rate</a> section for a complete list of baud rates supported for each base baud.
+</td></tr></tbody></table>
+<dl><dd><dl><dd>* This is based on theoretical calculation. However, validation is carried out with 3 physical ports only.</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Both_PRU_Mode_Calculation">Both PRU Mode Calculation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=6" title="Edit section: Both PRU Mode Calculation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In Both PRU mode, one PRU is dedicated to handle the transmit operation while the other is dedicated to handle the receive operations. Thus, while calculating the maximum baud rate and number of UARTs, the PRU cycles are to be applied separately for transmit and receive paths.  This mode can support at most 8 Soft-UARTs. 
+</p><p>For example with the PRU is running at 150 MHz, and base baud set as 115200, single UART would require following.
+</p>
+<ol><li>290 PRU Cycles for receive operations on the Receive PRU with Pre-scalar of 1.</li>
+<li>250 PRU Cycles for transmit operations on the Transmit PRU with Pre-scalar of 1.</li>
+<li>280 PRU Cycles for receive operations on the Receive PRU with the Pre-scalar of 2.</li>
+<li>405 PRU cycles for transmit operations on the Transmit PRU with pre-scalar of 2.</li></ol>
+<p>So for having three UARTs, the following would be true.
+</p>
+<ol><li>870 (290 x 3 @ Pre-Scalar 1) cycles are consumed for receive operation on the receive PRU.</li>
+<li>750 (250 x 3 @ Pre-Scalar 1) cycles are consumed for transmit operation on the transmit PRU.</li>
+<li>1060 (250 + 405 + 405) cycles are consumed for transmit operation on the transmit PRU while using the Pre-Scalar of 1, 2, and 6.</li></ol>
+<p>Thus, with the increased PRU frequency, there will be improvements that can be achieved. The table below provides a summary of possible combinations for both PRUs enabled.
+</p>
+<center><b>Table 4-2:</b> Soft-UARTs on Both PRUs</center>
+<table width="70%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>PRU Frequency</b></center>
+</td>
+<td><center><b>Default Base Baud</b></center>
+</td>
+<td><center><b>Maximum Number Soft UART</b></center>
+</td>
+<td><center><b>Baud Rate Supported</b></center>
+</td></tr>
+<tr>
+<td>150
+</td>
+<td>115200
+</td>
+<td>3 - 4 *
+</td>
+<td>115200, 57600, 38400, 19200, 9600, 4800, 2400, 1200, 600, 300
+</td></tr>
+<tr>
+<td>150
+</td>
+<td>57600 and below
+</td>
+<td>6 * - 8 *
+</td>
+<td>57600, 19200, 9600, 4800, 2400, 1200, 600, 300
+<p>See the <a href="#Maximum_baud_rate"> Maximum baud rate</a> section for a complete list of baud rates supported for each base baud. 
+</p>
+</td></tr>
+<tr>
+<td>228
+</td>
+<td>115200
+</td>
+<td>4* - 6 *
+</td>
+<td>115200, 57600, 38400, 19200, 9600, 4800, 2400, 1200, 600, 300
+</td></tr>
+<tr>
+<td>228
+</td>
+<td>57600 and below
+</td>
+<td>8 *
+</td>
+<td>57600, 19200, 9600, 4800, 2400, 1200, 600, 300
+<p>See the <a href="#Maximum_baud_rate"> Maximum baud rate</a> section for a complete list of baud rates supported for each base baud. 
+</p>
+</td></tr></tbody></table>
+<dl><dd><dl><dd>* This is based on theoretical calculation. However, validation is carried out with 3 physical ports only.</dd></dl></dd></dl>
+<h1><span class="mw-headline" id="Hardware_Requirements">Hardware Requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=7" title="Edit section: Hardware Requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This code depends on additional hardware not found in the EVM box.  A reference schematic for the soft-UART hardware can be found <a href="https://processors.wiki.ti.com/images/5/56/Am18x_UARTdaughtercard_schematic.pdf" class="internal" title="Am18x UARTdaughtercard schematic.pdf">here</a>.
+</p><p>The hardware to support the Soft-UART implementation requires the following signals and AM1808 pins:
+</p>
+<table width="50%" cellspacing="0" cellpadding="2" border="2">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<th scope="col">SIGNAL
+</th>
+<th scope="col">DIRECTION
+</th>
+<th scope="col">EXPECTED PIN
+</th></tr>
+<tr>
+<td><center>SUART&lt;n&gt; TX </center>
+</td>
+<td><center>Output</center>
+</td>
+<td><center>McASP Serializer (AXR&lt;m&gt;)</center>
+</td></tr>
+<tr>
+<td><center>SUART&lt;n&gt; RX </center>
+</td>
+<td><center>Input</center>
+</td>
+<td><center>McASP Serializer (AXR&lt;k&gt;)</center>
+</td></tr></tbody></table>
+<h1><span class="mw-headline" id="Location_of_the_Source_Code">Location of the Source Code<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=8" title="Edit section: Location of the Source Code">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Source code for all the Soft-UART software components are maintained in Gitorious. Following is the list of software components with their repositories and the branch details. <br /> 
+</p>
+<table cellspacing="1" cellpadding="1" border="1">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<th scope="col">COMPONENT
+</th>
+<th scope="col">GITORIOUS REPOSITORY
+</th>
+<th scope="col">GIT CLONE URL
+</th>
+<th scope="col">LATEST BRANCH
+</th></tr>
+<tr>
+<td>SUART Firmware<br />
+</td>
+<td><a rel="nofollow" class="external text" href="http://www.gitorious.org/pru/pru-uart-fw">pru/pru-uart-fw</a>
+</td>
+<td><a rel="nofollow" class="external free" href="git://gitorious.org/pru/pru-uart-fw.git">git://gitorious.org/pru/pru-uart-fw.git</a>
+</td>
+<td><a rel="nofollow" class="external text" href="http://www.gitorious.org/pru/pru-uart-fw/commits/master">master</a>
+</td></tr>
+<tr>
+<td>Linux Kernel and Driver Source
+</td>
+<td><a rel="nofollow" class="external text" href="http://www.gitorious.org/pru/pru-linux-drivers">pru/pru-linux-drivers</a>
+</td>
+<td><a rel="nofollow" class="external free" href="git://gitorious.org/pru/pru-linux-drivers.git">git://gitorious.org/pru/pru-linux-drivers.git</a>
+</td>
+<td><a rel="nofollow" class="external text" href="http://www.gitorious.org/pru/pru-linux-drivers/commits/master">master</a>
+</td></tr>
+<tr>
+<td>OpenEmbedded Recipes
+</td>
+<td><a rel="nofollow" class="external text" href="http://www.gitorious.org/pru/pru-recipes">pru/pru-recipes</a>
+</td>
+<td><a rel="nofollow" class="external free" href="git://gitorious.org/pru/pru-recipes.git">git://gitorious.org/pru/pru-recipes.git</a>
+</td>
+<td><a rel="nofollow" class="external text" href="http://www.gitorious.org/pru/pru-recipes/commits/master">master</a>
+</td></tr></tbody></table>
+<p><br />
+The source code from the git repository can be pulled into local host using the git commands below replacing the values in &lt;&gt; marks with the value from the table above.  <b>Note:</b> Install git if not available on the local host
+</p>
+<pre>git clone &lt;GIT CLONE URL&gt;    # Command to pull the repository
+git checkout &lt;LATEST BRANCH&gt;  # Command to checkout to the required branch, if needed
+</pre>
+<p>Following are the example commands to pull the Linux driver source code
+</p>
+<pre>git clone <a rel="nofollow" class="external free" href="git://gitorious.org/pru/pru-linux-drivers.git">git://gitorious.org/pru/pru-linux-drivers.git</a>
+
+</pre>
+<p>It is also work noting that many of these repositories also have git tags corresponding to particular releases.  These tags can be viewed online, or in the checked out repository by using the <i>git tag</i> command.
+</p>
+<h1><span class="mw-headline" id="Soft-UART_Configuration_Options">Soft-UART Configuration Options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=9" title="Edit section: Soft-UART Configuration Options">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The following parameters can be configured within the Soft-UART code.  Note some of these configuration options may impact the number of UARTs and baud rates supported.  Refer to the <a href="#Calculating_Number_of_Supported_Soft-UARTs"> Calculating Number of Supported Soft-UARTs</a> section for additional details. 
+</p>
+<ol><li>PRU operating frequency  *</li>
+<li>PRU mode (Both PRU cores or Single PRU core)</li>
+<li>McASP serializer to Soft-UART mapping</li>
+<li>Soft-UART mode (Full Duplex or Half Duplex)</li>
+<li>Maximum baud rate</li>
+<li>Receiver over-sampling</li>
+<li>McASP instance number</li>
+<li>FIFO time-out  *</li></ol>
+<dl><dd><dl><dd> *  <i>Indicates run-time configuration options.</i></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="PRU_operating_frequency">PRU operating frequency</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=10" title="Edit section: PRU operating frequency">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The PRU operating frequency is not directly configurable from the SUART driver source code. However, the PRU frequency does have a direct impact on the behavior of the Soft-UART driver. Please refer to the <a href="#Calculating_Number_of_Supported_Soft-UARTs"> Calculating Number of Supported Soft-UARTs</a> section for details on the number of UARTs that can be supported while operating at a higher PRU frequency. 
+</p><p>On AM18x/AM17x/L13x the PRU frequency can be changed by changing the ARM operating frequency. The PRU operating frequency is half of the ARM frequency. Please refer to the Linux-PSP notes (<a rel="nofollow" class="external text" href="GSG__Building_Software_Components_for_OMAP-L1/AM1x.html">Building_Software_Components_for_L1x/AM1x</a> section) on how to change the ARM operating frequency. 
+</p><p>For example in Linux PSP (03.20.00.12) from TI, the ARM (and therefore the PRU) operating frequency can be set to 456 (228 for PRU) by executing the following command:
+</p>
+<pre>    # echo userspace &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    # echo 456000 &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+</pre>
+<p>To change the ARM Frequency to 372 MHz (or the PRU Frequency to 186 MHz), the following command may be executed on Linux Console:
+</p>
+<pre>    # echo userspace &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    # echo 372000 &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
+</pre>
+<h2><span class="mw-headline" id="PRU_mode:_Both_PRU_cores_or_Single_PRU_core">PRU mode:  Both PRU cores or Single PRU core</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=11" title="Edit section: PRU mode: Both PRU cores or Single PRU core">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Soft-UARTs can use a single PRU core or two (both) PRU cores.  Refer to the <a href="#Calculating_Number_of_Supported_Soft-UARTs"> Calculating Number of Supported Soft-UARTs</a> section  for details on the number of UARTs and baud rates that can be supported while operating in each mode.
+</p><p>To modify the PRU mode, edit the macro <b>PRU_ACTIVE</b> in the file <i><b>pru/hal/uart/include/suart_api.h</b></i>.
+</p>
+<table width="75%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>Macro Name</b></center>
+</td>
+<td><center><b>Description</b></center>
+</td>
+<td><center><b>Allowed values</b></center>
+</td></tr>
+<tr>
+<td>PRU_ACTIVE
+</td>
+<td><center>PRU mode, defining number of active PRUs.</center>
+</td>
+<td rowspan="16" valign="top"><center>SINGLE_PRU</center> <center>BOTH_PRU</center>
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="McASP_serializer_to_Soft-UART_mapping">McASP serializer to Soft-UART mapping</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=12" title="Edit section: McASP serializer to Soft-UART mapping">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The McASP serializers numbers mapped to the Soft-UART ports can be updated in the omapl_suart_board.h header file within the SUART driver source code.  To assign different serializers, edit the macros: <b>PRU_SUARTn_CONFIG_RX/TX_SER</b> in the file <i><b>pru/hal/uart/include/omapl_suart_board.h</b></i>.
+</p><p>It is recommended to mark the unused UARTs <i>DISABLED</i> (refer to the description of <b>PRU_SUARTn_CONFIG_DUPLEX</b>) and corresponding serializer number as <i>PRU_SUART_SERIALIZER_NONE.</i>
+</p>
+<table width="75%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>Macro Name</b></center>
+</td>
+<td><center><b>Description</b></center>
+</td>
+<td><center><b>Allowed values</b></center>
+</td></tr>
+<tr>
+<td>PRU_SUART1_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 1.</center>
+</td>
+<td rowspan="16" valign="top"><center>PRU_SUART_SERIALIZER_NONE</center> <center>PRU_SUART_SERIALIZER_0</center> <center>PRU_SUART_SERIALIZER_1</center> <center>PRU_SUART_SERIALIZER_2</center> <center>PRU_SUART_SERIALIZER_3</center> <center>PRU_SUART_SERIALIZER_4</center> <center>PRU_SUART_SERIALIZER_5</center> <center>PRU_SUART_SERIALIZER_6</center> <center>PRU_SUART_SERIALIZER_7</center> <center>PRU_SUART_SERIALIZER_8</center> <center>PRU_SUART_SERIALIZER_9</center> <center>PRU_SUART_SERIALIZER_10</center> <center>PRU_SUART_SERIALIZER_11</center> <center>PRU_SUART_SERIALIZER_12</center> <center>PRU_SUART_SERIALIZER_13</center> <center>PRU_SUART_SERIALIZER_14</center> <center>PRU_SUART_SERIALIZER_15</center>
+</td></tr>
+<tr>
+<td>PRU_SUART1_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 1.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART2_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 2.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART2_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 2.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART3_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 3.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART3_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 3.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART4_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 4.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART4_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 4.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART5_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 5.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART5_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 5.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART6_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 6.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART6_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 6.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART7_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 7.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART7_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 7.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART8_CONFIG_RX_SER
+</td>
+<td><center>Serialzier for Receive pin for Soft-UART 8.</center>
+</td></tr>
+<tr>
+<td>PRU_SUART8_CONFIG_TX_SER
+</td>
+<td><center>Serialzier for Transmit pin for Soft-UART 8.</center>
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Soft-UART_mode:_Full_duplex_or_Half_duplex">Soft-UART mode: Full duplex or Half duplex</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=13" title="Edit section: Soft-UART mode: Full duplex or Half duplex">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To modify the duplex of a Soft-UART port, edit the macros <b>PRU_SUARTn_CONFIG_DUPLEX</b>, in the file <i><b>pru/hal/uart/include/omapl_suart_board.h</b></i>. 
+</p>
+<table width="75%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>Possible value</b></center>
+</td>
+<td><center><b>Description</b></center>
+</td></tr>
+<tr>
+<td>PRU_SUART_HALF_TX_DISABLED | PRU_SUART_HALF_RX_DISABLED
+</td>
+<td>UART is disabled for both Tx &amp; Rx operation
+</td></tr>
+<tr>
+<td>PRU_SUART_HALF_TX | PRU_SUART_HALF_RX
+</td>
+<td>UART is enabled for both direction Tx &amp; Rx
+</td></tr>
+<tr>
+<td>PRU_SUART_HALF_TX_DISABLED | PRU_SUART_HALF_RX
+</td>
+<td>UART is enabled for only Receive operations
+</td></tr>
+<tr>
+<td>PRU_SUART_HALF_RX_DISABLED | PRU_SUART_HALF_TX
+</td>
+<td>UART is enabled for only Transmit operations
+</td></tr></tbody></table>
+<p>It is recommended to have the UART disabled if there is no physical serializer and no Soft-UART Port associated with it.
+</p>
+<h2><span class="mw-headline" id="Maximum_baud_rate">Maximum baud rate</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=14" title="Edit section: Maximum baud rate">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To modify the base baud rate, edit the macro <b>SUART_DEFAULT_BAUD</b> in the file <i><b>pru/hal/uart/include/suart_api.h</b></i>. Note that there exist limitations with maximum number of UARTs with different baud rates.  Please refer to the <a href="#Calculating_Number_of_Supported_Soft-UARTs"> Calculating Number of Supported Soft-UARTs</a> section for more details on this limitation.
+</p>
+<table width="50%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>Possible value</b></center>
+</td>
+<td><center><b>Description</b></center>
+</td></tr>
+<tr>
+<td><center>115200</center>
+</td>
+<td>This implies that any Soft-UART can have the maximum baud rate of 115200. The various baud rate supported with this configuration would be 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1200.
+</td></tr>
+<tr>
+<td><center>57600</center>
+</td>
+<td>This implies that any Soft-UART can have the maximum baud rate of 57600. The various baud rate supported with this configuration would be 57600, 19200, 9600, 4800, 2400, 1200, 300.
+</td></tr>
+<tr>
+<td><center>38400</center>
+</td>
+<td>This implies that any Soft-UART can have the maximum baud rate of 38400. The various baud rate supported with this configuration would be 38400, 19200, 9600, 2400, 1200.
+</td></tr>
+<tr>
+<td><center>19200</center>
+</td>
+<td>This implies that any Soft-UART can have the maximum baud rate of 19200. The various baud rate supported with this configuration would be 19200, 9600, 4800, 1200.
+</td></tr></tbody></table>
+<p><br />
+The table below provides the list of supported baud-rates for the given maximum baud rate and the baud rate divisor values. 
+</p>
+<table width="50%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>Baud Rate divisor</b></center>
+</td>
+<td><center><b>115200</b></center>
+</td>
+<td><center><b>57600</b></center>
+</td>
+<td><center><b>38400</b></center>
+</td>
+<td><center><b>19200</b></center>
+</td></tr>
+<tr>
+<td><center>1</center>
+</td>
+<td><center>115200</center>
+</td>
+<td><center>57600</center>
+</td>
+<td><center>38400</center>
+</td>
+<td><center>19200</center>
+</td></tr>
+<tr>
+<td><center>2</center>
+</td>
+<td><center>57600</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>28800</center>
+</td>
+<td><center>19200</center>
+</td>
+<td><center>9600</center>
+</td></tr>
+<tr>
+<td><center>3</center>
+</td>
+<td><center>38400</center>
+</td>
+<td><center>19200</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>12800</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>6400</center>
+</td></tr>
+<tr>
+<td><center>4</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>28800</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>14400</center>
+</td>
+<td><center>9600</center>
+</td>
+<td><center>4800</center>
+</td></tr>
+<tr>
+<td><center>6</center>
+</td>
+<td><center>19200</center>
+</td>
+<td><center>9600</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>6400</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>3200</center>
+</td></tr>
+<tr>
+<td><center>12</center>
+</td>
+<td><center>9600</center>
+</td>
+<td><center>4800</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>3200</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>1600</center>
+</td></tr>
+<tr>
+<td><center>16</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>7200</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>3600</center>
+</td>
+<td><center>2400</center>
+</td>
+<td><center>1200</center>
+</td></tr>
+<tr>
+<td><center>24</center>
+</td>
+<td><center>4800</center>
+</td>
+<td><center>2400</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>1600</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>800</center>
+</td></tr>
+<tr>
+<td><center>32</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>3600</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>1800</center>
+</td>
+<td><center>1200</center>
+</td>
+<td><center>600</center>
+</td></tr>
+<tr>
+<td><center>48</center>
+</td>
+<td><center>2400</center>
+</td>
+<td><center>1200</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>800</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>400</center>
+</td></tr>
+<tr>
+<td><center>96</center>
+</td>
+<td><center>1200</center>
+</td>
+<td><center>600</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>400</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>200</center>
+</td></tr>
+<tr>
+<td><center>192</center>
+</td>
+<td><center>600</center>
+</td>
+<td><center>300</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>200</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>100</center>
+</td></tr>
+<tr>
+<td><center>384</center>
+</td>
+<td><center>300</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>150</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>100</center>
+</td>
+<td style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top"><center>50</center>
+</td></tr></tbody></table>
+<dl><dd><dl><dd><i>Note: The shaded boxes are not supported by any standard terminal emulation programs like (mini-com, Tera-term; HyperTerminal etc).</i></dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Receiver_over-sampling">Receiver over-sampling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=15" title="Edit section: Receiver over-sampling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To modify the over sampling, edit the macro <b>SUART_DEFAULT_OVRSMPL</b> in the file <i><b>pru/hal/uart/include/suart_api.h</b></i>.
+</p><p><br />
+</p>
+<table width="50%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>Possible value</b></center>
+</td>
+<td><center><b>Description</b></center>
+</td></tr>
+<tr>
+<td>SUART_8X_OVRSMPL
+</td>
+<td>The receive line is over-sampled 8x times. This is the default setting and is recommended for most of the requirements.
+</td></tr>
+<tr>
+<td>SUART_16X_OVRSMPL
+</td>
+<td>The receive line is over-sampled 16x times. <b>Note that having this setting, the maximum baud rate supported would be 57600.</b>
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="McASP_instance_number">McASP instance number</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=16" title="Edit section: McASP instance number">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>McASP unit is configurable through the kernel config. This is fixed to “0” for AM18x/L138 and defaults to “1” for AM17x/L137. This is in accordance with the current HW connections. 
+</p><p><br />
+</p>
+<table width="50%" cellspacing="0" cellpadding="2" border="2" align="center">
+
+<tbody><tr style="background-color:#C0C0C0;font-weight:bold" align="center" valign="top">
+<td><center><b>Possible value</b></center>
+</td>
+<td><center><b>Description</b></center>
+</td></tr>
+<tr>
+<td>0
+</td>
+<td>The McASP instance 0 on the OMAP is to be used by the firmware implementation. This is tested for AM18x/L138 only.
+</td></tr>
+<tr>
+<td>1
+</td>
+<td>The McASP instance 1 on the OMAP is to be used by the firmware implementation. This is tested for AM17x/L137 only.
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="FIFO_timeout">FIFO timeout</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=17" title="Edit section: FIFO timeout">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>FIFO timeout is configurable at module init. See the <a href="#Running_the_Soft-UART_Sample_Application"> Running the Soft-UART Sample Application</a> section.
+</p>
+<h1><span class="mw-headline" id="Build_Procedure">Build Procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=18" title="Edit section: Build Procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This section will detail both how to build an entire distribution using OpenEmbedded and the overlay contained in the pru-recipes repository as well as building the Linux kernel and PRU firmware stand-alone.
+</p>
+<h2><span class="mw-headline" id="Building_using_OpenEmbedded">Building using OpenEmbedded</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=19" title="Edit section: Building using OpenEmbedded">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This sections covers using OpenEmbedded and the pru-recipes overlay to build the entire distribution.  This is required when building applications that will link with the pcsc-lite library to provide the proper cross-compilation environment and libraries.  The pru-recipes overlay was based on the Arago project overlay from <a rel="nofollow" class="external text" href="http://arago-project.org/">arago-project.org</a> and so you will see the use of the arago name throughout.
+</p>
+<h3><span class="mw-headline" id="Prerequisites">Prerequisites</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=20" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h3><span class="mw-headline" id="Install_Required_Packages">Install Required Packages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=21" title="Edit section: Install Required Packages">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For an Ubuntu 10.04 host you should install the following packages:
+</p>
+<ul><li>build-essential</li>
+<li>subversion</li>
+<li>ccache</li>
+<li>sed</li>
+<li>wget</li>
+<li>cvs</li>
+<li>git-core</li>
+<li>coreutils</li>
+<li>unzip</li>
+<li>texinfo</li>
+<li>docbook-utils</li>
+<li>gawk</li>
+<li>help2man</li>
+<li>diffstat</li>
+<li>file</li>
+<li>g++</li>
+<li>texi2html</li>
+<li>bison</li>
+<li>flex</li>
+<li>htmldoc</li>
+<li>chrpath</li>
+<li>libxext-dev</li>
+<li>xserver-xorg-dev</li>
+<li>doxygen</li>
+<li>corkscrew</li></ul>
+<p>You can use the following command to install all of these package:
+</p><p><i>sudo apt-get install build-essential subversion ccache sed wget cvs git-core coreutils unzip texinfo docbook-utils gawk help2man diffstat file g++ texi2html bison flex htmldoc chrpath libxext-dev xserver-xorg-dev doxygen corkscrew</i>
+</p>
+<h4><span class="mw-headline" id="Install_the_Toolchain">Install the Toolchain</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=22" title="Edit section: Install the Toolchain">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>You will also need to install the codesourcery toolchain.  The normal toolchain location to install to is in <b>/opt/arm-2009q1</b>.  You can find information on installing the toolchain at <a rel="nofollow" class="external text" href="http://arago-project.org/wiki/index.php/Getting_CodeSourcery_Toolchain">this link</a>
+</p><p><b>NOTE:</b> you may need to install the toolchain using sudo or change permissions of /opt/arm-2009q1 to allow you to write to that directory.
+</p>
+<h4><span class="mw-headline" id="Change_Default_Shell">Change Default Shell</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=23" title="Edit section: Change Default Shell">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>OpenEmbedded contains packages that may have shell script that is not Dash shell compliant.  To avoid possible issues it is best to change your /bin/sh shell to bash using the following command:
+</p>
+<pre>sudo dpkg-reconfigure dash
+</pre>
+<p>Select <b>No</b> when prompted
+</p>
+<h4><span class="mw-headline" id="Disk_Space_Requirements">Disk Space Requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=24" title="Edit section: Disk Space Requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Building an entire distribution can require a sizeable amount of disk space (Minimum of 19GB).
+</p>
+<h3><span class="mw-headline" id="Obtain_the_Sources">Obtain the Sources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=25" title="Edit section: Obtain the Sources">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In order to build with OpenEmbedded you will need to clone three repositories that contain the metadata (recipes) used to build all the packages.  <b>NOTE:</b> OpenEmbedded contains recipes for more packages than are required for SmartCard.  These packages can be used to add additional functionality to your system but are not built by default.
+</p>
+<pre>git clone <a rel="nofollow" class="external free" href="git://gitorious.org/pru/pru-recipes.git">git://gitorious.org/pru/pru-recipes.git</a> arago
+git clone <a rel="nofollow" class="external free" href="git://arago-project.org/git/arago-oe-dev.git">git://arago-project.org/git/arago-oe-dev.git</a>
+git clone <a rel="nofollow" class="external free" href="git://arago-project.org/git/arago-bitbake.git">git://arago-project.org/git/arago-bitbake.git</a>
+</pre>
+<p>For the arago-oe-dev and arago-bitbake repositories the last validated revisions are:
+</p>
+<ul><li>arago-oe-dev: 1428ddd69c31eb7f9874c8e7941ea614b423904b</li>
+<li>arago-bitbake: 789382350344a40a3d7c094b5a96bee2a69d01fa</li></ul>
+<p>To use these revisions you must do:
+</p>
+<ol><li>cd &lt;repo name&gt;</li>
+<li>git checkout &lt;revision&gt;</li></ol>
+<p>For example to use the correct revision for arago-oe-dev you would do:
+</p>
+<pre>cd arago-oe-dev
+git checkout 1428ddd69c31eb7f9874c8e7941ea614b423904b
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Setup_the_Environment_File">Setup the Environment File</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=26" title="Edit section: Setup the Environment File">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre> cd arago
+ cp setenv.sample setenv
+</pre>
+<p>Edit setenv and set OEBASE to the location where you cloned the arago repositories above.  For example if you made a directory in /home/user/build and cloned the repositories in this directory then OEBASE should be set to:
+</p>
+<pre> export OEBASE=/home/user/build
+</pre>
+<h3><span class="mw-headline" id="Setup_the_Configuration_File">Setup the Configuration File</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=27" title="Edit section: Setup the Configuration File">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre> cd arago/conf
+ cp local.conf.sample local.conf
+</pre>
+<p>Change MACHINE&#160;?= “arago” to MACHINE&#160;?= “am180x-evm”
+</p><p>If you have more than 1 CPU Uncomment the PARALLEL_MAKE and BB_NUMBER_THREADS lines and set the value to the number of CPUs you have
+</p><p><b>NOTE:</b> If you want to preserve disk space you can also uncomment the line <i>INHERIT += "rm_work"</i>.  However, if you do this then using the method described below to do custom one-off builds without updating recipes will no longer work since your work directories will be cleaned after each package is built.
+</p>
+<h3><span class="mw-headline" id="Source_Environment_Script">Source Environment Script</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=28" title="Edit section: Source Environment Script">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In the terminal you are going to use for building you will need to source the environment script to set the required variables.  This can be done using:
+</p>
+<pre>source arago/setenv
+</pre>
+<h3><span class="mw-headline" id="Build_the_Distribution">Build the Distribution</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=29" title="Edit section: Build the Distribution">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Using the following command will build the kernel, bootloader, and file system with all required packages for SUART support.
+</p>
+<pre>bitbake arago-pcsc-lite-image
+</pre>
+<p><b>NOTE:</b> It can take a long time to do the initial build of the file system depending on your system resources.  During this time the build system is downloading the package sources and compiling the packages that make up the system.  As long as you do not delete your arago-tmp and downloads directories which are created during the build process, subsequent builds will be done much faster because they will only have to build the delta changes.
+</p>
+<h2><span class="mw-headline" id="Soft-UART_Recipes">Soft-UART Recipes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=30" title="Edit section: Soft-UART Recipes">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following recipes (paths given from the OEBASE directory) were created to build the Soft-UART software components:
+</p>
+<ol><li>arago/recipes/pru/pasm.bb: Stages the pasm executable required to build PRU firmware</li>
+<li>arago/recipes/pru/pru-suart-firmware_1.0.bb: Builds the Soft-UART firmware.  This is required for the driver to load.</li>
+<li>arago/recipes/linux/linux-pru: Build the Linux kernel will support SUART Driver.</li></ol>
+<h2><span class="mw-headline" id="Building_Firmware">Building Firmware</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=31" title="Edit section: Building Firmware">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In case you wish to modify the SUART firmware and rebuild outside of the OpenEmbedded flow you can use the following command to build the firmware.
+</p>
+<h3><span class="mw-headline" id="Prerequisites_2">Prerequisites</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=32" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>You will need to have cloned the firmware repositories listed above in order to have access to the SUART firmwares.</li>
+<li>You will need to have the pasm tool.  You can download the tool from <a rel="nofollow" class="external text" href="https://gforge.ti.com/gf/download/frsrelease/552/4622/pasm">this link</a></li></ol>
+<h3><span class="mw-headline" id="Building_SUART_Firmware">Building SUART Firmware</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=33" title="Edit section: Building SUART Firmware">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>cd pru-uart-fw</li>
+<li>git checkout master</li>
+<li>mkdir -p bin</li>
+<li>pasm -b -DMCASP0 PRU_SUART_Emulation.p bin/PRU_SUART_Emulation</li></ol>
+<h2><span class="mw-headline" id="Building_Linux_Kernel_and_Device_Driver">Building Linux Kernel and Device Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=34" title="Edit section: Building Linux Kernel and Device Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Pull the Linux kernel source from the pru-linux-drivers Gitorious repository specified above and go to the latest branch. Execute the following commands in sequence 
+</p>
+<pre>cd pru-linux-drivers
+make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- distclean 
+make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- da850_am18x_pru_defconfig 
+make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- xconfig
+</pre>
+<p><b>NOTE:</b> In order to use xconfig you may need to install Qt support using <i>sudo apt-get install libqt3-mt-dev</i>.  If you do not want to use xconfig you may also use <i>menuconfig</i> to configure the kernel
+</p>
+<ol><li>Enable <i>Device Drivers</i> -&gt; <i>Character devices</i> -&gt; <i>Serial drivers</i> -&gt; <i>PRU based SUART emulation for OMAPL</i> as a <b>module</b>
+<dl><dd><div class="center"><div class="floatnone"><a href="File_EnableSmartCardDriver.html" class="image"><img alt="EnableSmartCardDriver.png" src="https://processors.wiki.ti.com/images/0/09/EnableSmartCardDriver.png" width="800" height="738" /></a></div></div></dd>
+<dd><b>NOTE:</b> It is OK to also have the <i>PRU based SmartCard interface for OMAPL</i> driver enabled as a module as well, but it cannot be built statically into the kernel.  These two drivers are mutually exclusive and cannot both be loaded at the same time.</dd>
+<dd>make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- uImage</dd>
+<dd>make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi-  modules</dd>
+<dd>make INSTALL_MOD_PATH=/home/user/target_rootfs modules_install</dd></dl></li></ol>
+<p>Any drivers built as modules need to be added to the target root file system.
+</p>
+<h1><span class="mw-headline" id="Components_on_Target_File_System">Components on Target File System<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=35" title="Edit section: Components on Target File System">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>All the software components of the Soft-UART have to be placed at specific directories in the target file sytem. Following table has the list of software components and their location on the target file system. <br /> 
+</p>
+<table cellspacing="1" cellpadding="1" border="1">
+
+<tbody><tr>
+<th scope="col">COMPONENT
+</th>
+<th scope="col">DESCRIPTION
+</th>
+<th scope="col">LOCATION ON FILE SYSTEM
+</th></tr>
+<tr>
+<td>SUART Firmware
+</td>
+<td>Firmware to run on PRU cores
+</td>
+<td>/lib/firmware/PRU_SUART_Emulation.bin
+</td></tr>
+<tr>
+<td>Linux Driver
+</td>
+<td>SUART driver.  Loads firmware and provides access to the SUART ports
+</td>
+<td>/lib/modules/&lt;kernel version&gt;/kernel/drivers/serial/omapl_pru/suart/suart_emu.ko
+</td></tr></tbody></table>
+<h1><span class="mw-headline" id="Running_the_Soft-UART_Sample_Application">Running the Soft-UART Sample Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=36" title="Edit section: Running the Soft-UART Sample Application">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This section describes the testing steps for a sample Soft-UART application:
+</p>
+<ol><li>Boot the board and login using root</li>
+<li>Insert the suart_emu.ko module to load the firmware and provide access to the Soft-UARTs.  The suart_timeout parameter can be set at this time (default of 5ms).
+<dl><dd>root@am180x-evm:~# modprobe suart_emu suart_timeout=&lt;timeout in ms&gt;
+<dl><dd>ti_omapl_pru_suart ti_omapl_pru_suart.1: firmware: requesting PRU_SUART_Emulation.bin</dd>
+<dd>ti_omapl_pru_suart ti_omapl_pru_suart.1: fw size 3968. downloading...</dd>
+<dd>ti_omapl_pru_suart.1: ttySU0 at MMIO 0x1d00000 (irq = 3) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart.1: ttySU1 at MMIO 0x1d00000 (irq = 4) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart.1: ttySU2 at MMIO 0x1d00000 (irq = 5) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart.1: ttySU3 at MMIO 0x1d00000 (irq = 6) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart.1: ttySU4 at MMIO 0x1d00000 (irq = 7) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart.1: ttySU5 at MMIO 0x1d00000 (irq = 8) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart.1: ttySU6 at MMIO 0x1d00000 (irq = 9) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart.1: ttySU7 at MMIO 0x1d00000 (irq = 10) is a suart_tty</dd>
+<dd>ti_omapl_pru_suart ti_omapl_pru_suart.1: ti_omapl_pru_suart device registered(pru_clk=228000000, asp_clk=132000000)</dd></dl></dd></dl></li>
+<li>Connect the SUART port to a PC with a serial cable. Open a terminal progrAam on the PC.</li>
+<li>For RX, run the following command on the L138/137 board. Type or transmit a file in the PC terminal program.
+<dl><dd>root@am180x-evm:~# microcom -s &lt;baud&gt; /dev/ttySUn</dd></dl></li>
+<li>For TX, run the following command on the L138/L137 board.
+<dl><dd>root@am180x-evm:~# cat SUART-README_For_Verification.txt &gt; /dev/ttySUn</dd></dl></li></ol>
+<p>Refer to the Test Guide under <a href="#Additional_Documentation"> Additional Documentation</a> for other test methods.
+</p>
+<h1><span class="mw-headline" id="Additional_Documentation">Additional Documentation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;section=37" title="Edit section: Additional Documentation">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd><ul><li><a href="https://processors.wiki.ti.com/images/5/52/L13XDC_SUART_Software_Arch.pdf" class="internal" title="L13XDC SUART Software Arch.pdf">Soft UART Software Architecture Document</a></li>
+<li><a href="https://processors.wiki.ti.com/images/6/6e/Soft_uart_sw_arch-addendum.pdf" class="internal" title="Soft uart sw arch-addendum.pdf">Soft UART Software Architecture Document Addendum</a></li>
+<li><a href="https://processors.wiki.ti.com/images/e/e8/L13XDC_Soft_UART_Test_Setup_Guide.pdf" class="internal" title="L13XDC Soft UART Test Setup Guide.pdf">Soft UART Test Setup Guide</a></li>
+<li><a href="https://processors.wiki.ti.com/images/2/21/Soft_uart_test_setup_guide-addendum.pdf" class="internal" title="Soft uart test setup guide-addendum.pdf">Soft UART Test Setup Guide Addendum</a></li></ul></dd></dl>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130180809
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.120 seconds
+Real time usage: 0.126 seconds
+Preprocessor visited node count: 219/1000000
+Preprocessor generated node count: 312/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 12/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:13448-0!canonical and timestamp 20201130180809 and revision id 100488
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Soft-UART Implementation on OMAPL PRU - Software Users Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;oldid=100488">https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;oldid=100488</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_PRU.html" title="Category:PRU">PRU</a></li><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Soft-UART+Implementation+on+OMAPL+PRU+-+Software+Users+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;oldid=100488" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 March 2012, at 07:42.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.120","walltime":"0.126","ppvisitednodes":{"value":219,"limit":1000000},"ppgeneratednodes":{"value":312,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":12,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130180809","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":227});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Soft-UART_Implementation_on_OMAPL_PRU_-_Software_Users_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:34:42 GMT -->
+</html>

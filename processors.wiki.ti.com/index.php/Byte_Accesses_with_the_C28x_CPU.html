@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Byte_Accesses_with_the_C28x_CPU by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 02:58:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Byte Accesses with the C28x CPU - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Byte_Accesses_with_the_C28x_CPU","wgTitle":"Byte Accesses with the C28x CPU","wgCurRevisionId":209259,"wgRevisionId":209259,"wgArticleId":5647,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["C2000","Compiler","Development Tools for C2000"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Byte_Accesses_with_the_C28x_CPU","wgRelevantArticleId":5647,"wgRequestId":"db58eeb8641d9060d7e03593","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Byte_Accesses_with_the_C28x_CPU rootpage-Byte_Accesses_with_the_C28x_CPU skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Byte Accesses with the C28x CPU</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Other_Resources"><span class="tocnumber">2</span> <span class="toctext">Other Resources</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Byte_Accesses_With_the_C28x_Compiler"><span class="tocnumber">3</span> <span class="toctext">Byte Accesses With the C28x Compiler</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Using_the_byte_Intrinsic"><span class="tocnumber">4</span> <span class="toctext">Using the __byte Intrinsic</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#What_are_Intrinsics.3F"><span class="tocnumber">4.1</span> <span class="toctext">What are Intrinsics?</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#The_byte.28.29_Intrinsic"><span class="tocnumber">4.2</span> <span class="toctext">The __byte() Intrinsic</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Example_1"><span class="tocnumber">4.3</span> <span class="toctext">Example 1</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Example_2"><span class="tocnumber">4.4</span> <span class="toctext">Example 2</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Byte_Addressing_Modes"><span class="tocnumber">5</span> <span class="toctext">Byte Addressing Modes</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Frequently_Asked_Questions"><span class="tocnumber">6</span> <span class="toctext">Frequently Asked Questions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#Q:_The_prototype_for_byte_is_.26_byte.28int_.2Aarray.2C_unsigned_int_byte_index.29._Is_the_.22.26.22_a_typo.3F"><span class="tocnumber">6.1</span> <span class="toctext">Q: The prototype for __byte is <i>&amp;__byte(int *array, unsigned int byte_index)</i>.  Is the "&amp;" a typo?</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Q:_What_is_the_difference_between_byte.28.29_and_mov_byte.28.29"><span class="tocnumber">6.2</span> <span class="toctext">Q: What is the difference between __byte() and __mov_byte()</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The C28x is a 16-bit addressable CPU.  That is, each unique address identifies 16-bits of data.   16-bit and 32-bit reads as well as writes are easily achieved via MOV and MOVL instructions.  To access 8-bit data, special MOVB instructions are used.  These instructions can access either the LSB or the MSB of the 16-bit word.
+</p><p>This article describes how these special instructions can be accessed when writing code in C or C++.
+</p>
+<h1><span class="mw-headline" id="Other_Resources">Other Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=2" title="Edit section: Other Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd>Wiki
+<dl><dd><ul><li><a href="Compiler.html" class="mw-redirect" title="Compiler"> Code Generation Tools Wiki</a></li></ul></dd></dl></dd></dl>
+<dl><dd>Reference Guides
+<dl><dd><ul><li><a href="http://www.ti.com/lit/pdf/spru430" class="extiw" title="tidoc:spru430">TMS320C28x CPU and Instruction Set Reference Guide (spru430</a>)</li>
+<li><a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">TMS320C28x Optimizing C/C++ Compiler User's Guide (spru514)</a></li></ul></dd></dl></dd></dl>
+<dl><dd>Application Notes
+<dl><dd><ul><li><a href="http://www.ti.com/lit/pdf/spra757" class="extiw" title="tidoc:spra757">Reading and Writing Binary Files on Targets With More Than 8-Bit Chars (spra757)</a></li></ul></dd></dl></dd></dl>
+<h1><span class="mw-headline" id="Byte_Accesses_With_the_C28x_Compiler">Byte Accesses With the C28x Compiler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=3" title="Edit section: Byte Accesses With the C28x Compiler">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The TMS320C28x byte is 16 Bits. By ANSI/ISO C definition, the sizeof operator yields the number of bytes required to store an object. ANSI/ISO further stipulates that when sizeof is applied to char, the result is 1. Since the TMS320C28x char is 16 bits (to make it separately addressable), a byte is also 16 bits.
+</p><p>This yields results you may not expect; for example, size of (int) = = 1 (not 2). It should also be noted that contrary to common usage, a byte is not defined as 8 bits.  A byte is defined as the unit of data capable of holding a single character on any given machine.  Hence, if the term "byte" is used on C2000 it refers to 16 bits. In summary: TMS320C28x bytes and words are equivalent (16 bits).
+</p><p>To access data in increments of 8 bits, use the __byte() intrinsic described in the <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">TMS320C28x Optimizing C/C++ Compiler User's Guide (spru514)</a>
+</p>
+<h1><span class="mw-headline" id="Using_the_byte_Intrinsic">Using the __byte Intrinsic</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=4" title="Edit section: Using the byte Intrinsic">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span id="What_are_Intrinsics?"></span><span class="mw-headline" id="What_are_Intrinsics.3F">What are Intrinsics?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=5" title="Edit section: What are Intrinsics?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The C28x compiler recognizes a number of intrinsic operators.  Intrinsics allow you to express the meaning of certain assembly statements that would otherwise be cumbersome or inexpressible in C/C++. Intrinsics are used like functions; you can use C/C++ variables with these intrinsics, just as you would with any normal function.
+</p><p>The intrinsics are specified with a leading underscore, and are accessed by calling them as you do a function.  Available intrinsics are documented in the <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">TMS320C28x Optimizing C/C++ Compiler User's Guide (spru514)</a>.  In addition, consult the release notes for your compiler to see if new intrinsics have been added since the documentation was last updated.
+</p><p><br />
+</p>
+<h3><span id="The_byte()_Intrinsic"></span><span class="mw-headline" id="The_byte.28.29_Intrinsic">The __byte() Intrinsic</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=6" title="Edit section: The byte() Intrinsic">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>Prototype int __&amp;byte(int *array, unsigned int byte_index);</dd></dl>
+<dl><dd>Generated Assembly:
+<dl><dd><ul><li>If the operation is a write: MOVB array[byte_index].LSB,</li>
+<li>If the operation is a read:  MOVB dst, array[byte_index].LSB</li></ul></dd></dl></dd></dl>
+<h3><span class="mw-headline" id="Example_1">Example 1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=7" title="Edit section: Example 1">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following example shows how the compiler will translate the __byte intrinsic to a MOVB.LSB operation.
+</p><p><br />
+&lt;syntaxhighlight lang='c'&gt;
+//
+// Example code to show the use of the __byte C28x Compiler intrinsic
+//
+int16 MyArray[20];
+int16 Val;
+int16 Read1;
+int16 Read2;
+int16 Read3;
+int16 Read4;
+void main(void)
+{
+</p>
+<pre>                                 // Note: - means value was unchanged
+                                 //         from the previous state
+                                 //
+  __byte(MyArray,0) = 0x00;      // MyArray[0] = 0x--00
+  __byte(MyArray,1) = 0x11;      // MyArray[0] = 0x1100
+  __byte(MyArray,2) = 0x22;      // MyArray[1] = 0x--22
+  __byte(MyArray,3) = 0x33;      // MyArray[1] = 0x3322
+  __byte(MyArray,4) = 0x44;      // MyArray[2] = 0x--44
+  __byte(MyArray,5) = 0x55;      // MyArray[2] = 0x5544
+</pre>
+<pre>  __byte(&amp;Val,0) = 0x66;         // Val1 = 0x--66
+  __byte(&amp;Val,1) = 0x77;         // Val1 = 0x7766
+</pre>
+<pre>  Read1 = __byte(MyArray,2);     // Read1 = 0x0022 (note: clears upper byte)
+  Read2 = __byte(MyArray,5);     // Read2 = 0x0055 (note: clears upper byte)
+</pre>
+<pre>  Read3 = __mov_byte(MyArray,4); // Read3 = 0x0044 (note: clears upper byte)
+  Read4 = __mov_byte(MyArray,5); // Read4 = 0x0055 (note: clears upper byte)
+</pre>
+<p>...
+&lt;/syntaxhighlight&gt;
+</p><p><br />
+Execution of this code will change memory contents as shown below:
+</p><p><br />
+</p>
+<dl><dd><dl><dd><a href="File_Movb003.html" class="image"><img alt="Movb003.jpg" src="https://processors.wiki.ti.com/images/1/1e/Movb003.jpg" width="200" height="190" class="thumbborder" /></a></dd></dl></dd></dl>
+<p><br />
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Example_2">Example 2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=8" title="Edit section: Example 2">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following example illustrates how __byte can be used on the left-hand side to set values.  This is the reason it returns a reference.
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<ol><li>include &lt;stdio.h&gt;</li></ol>
+<p>int array[3] = { 0xaaaa, 0xbbbb, 0xcccc };
+</p><p>void main()
+{
+</p>
+<pre>   int i;
+</pre>
+<pre>   __byte(array, 0) = 0;
+</pre>
+<pre>   for (i=0;i&lt;3;i++)
+       printf("%x\n", array[i]);
+</pre>
+<pre>   for (i=0;i&lt;6;i++)
+       printf("%x\n", __mov_byte(array, i));
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h1><span class="mw-headline" id="Byte_Addressing_Modes">Byte Addressing Modes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=9" title="Edit section: Byte Addressing Modes">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>For the most part you do not need to worry about the addressing modes when using the intrinsics.  It is useful to understand if you are looking at the generated assembly code or writing assembly code from scratch.
+</p><p>Example 1 shown in the previous section generates the following assembly code:
+</p>
+<dl><dd><dl><dd><a href="File_Movb001.html" class="image"><img alt="Movb001.jpg" src="https://processors.wiki.ti.com/images/a/a3/Movb001.jpg" width="401" height="510" class="thumbborder" /></a></dd></dl></dd></dl>
+<p>The instructions generated by the compiler follow the byte addressing mode rules shown below.  More detail and additional forms of MOVB can be found in the <a href="http://www.ti.com/lit/pdf/spru430" class="extiw" title="tidoc:spru430">TMS320C28x CPU and Instruction Set Reference Guide (spru430</a>).
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p><p>Instruction: MOVB AX.LSB, loc16
+Offset: AR0, AR1 or 3-bit value
+</p><p>if( loc16 == *+XARn[offset] )
+</p>
+<pre>   if( offset == even )
+       AX.LSB = [loc16].LSB;
+       AX.MSB = 0x00;
+   if( offset == odd )
+       AX.LSB = [loc16].MSB;
+       AX.MSB = 0x00;
+</pre>
+<p>else
+</p>
+<pre>   AX.LSB = [loc16].LSB;
+   AX.MSB = 0x00;
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p><p>Instruction: MOVB loc16,AX.LSB
+Offset: AR0, AR1 or 3-bit value
+</p><p>if( loc16 == *+XARn[offset] )
+</p>
+<pre>   if( offset == even )
+       [loc16].LSB = AX.LSB
+       [loc16].MSB = untouched;
+   if( offset == odd )
+       [loc16].LSB = untouched;
+       [loc16].MSB = AX.LSB;
+</pre>
+<p>else
+</p>
+<pre>   [loc16].LSB = AX.LSB;
+   [loc16].MSB = untouched;
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h1><span class="mw-headline" id="Frequently_Asked_Questions">Frequently Asked Questions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=10" title="Edit section: Frequently Asked Questions">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span id="Q:_The_prototype_for_byte_is_&amp;_byte(int_*array,_unsigned_int_byte_index)._Is_the_&quot;&amp;&quot;_a_typo?"></span><span class="mw-headline" id="Q:_The_prototype_for_byte_is_.26_byte.28int_.2Aarray.2C_unsigned_int_byte_index.29._Is_the_.22.26.22_a_typo.3F">Q: The prototype for __byte is <i>&amp;__byte(int *array, unsigned int byte_index)</i>.  Is the "&amp;" a typo?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=11" title="Edit section: Q: The prototype for byte is &amp; byte(int *array, unsigned int byte index). Is the &quot;&amp;&quot; a typo?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd><b>A:</b> It's not a typo, the __byte intrinsic returns a C++-style reference, even in C mode.</dd></dl>
+<h3><span id="Q:_What_is_the_difference_between_byte()_and_mov_byte()"></span><span class="mw-headline" id="Q:_What_is_the_difference_between_byte.28.29_and_mov_byte.28.29">Q: What is the difference between __byte() and __mov_byte()</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit&amp;section=12" title="Edit section: Q: What is the difference between byte() and mov byte()">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd><b>A:</b> The __byte() intrinsic is preferred over __mov_byte.</dd></dl>
+<dl><dd><dl><dd>__mov_byte is much older, and was implemented before the compiler could support an intrinsic that returns a reference.  To maintain backward compatibility, __mov_byte was left as-is, and a new intrinsic (__byte) was added which returns the reference.  There is nothing you can do with __mov_byte that you can't do with __byte.</dd></dl></dd></dl>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130171236
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.051 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 46/1000000
+Preprocessor generated node count: 52/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:5647-0!canonical and timestamp 20201130171236 and revision id 209259
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Byte Accesses with the C28x CPU</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Byte Accesses with the C28x CPU</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Byte Accesses with the C28x CPU</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Byte Accesses with the C28x CPU</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Byte Accesses with the C28x CPU</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Byte Accesses with the C28x CPU</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Byte Accesses with the C28x CPU</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Byte Accesses with the C28x CPU</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Byte Accesses with the C28x CPU</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;oldid=209259">https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;oldid=209259</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_C2000.html" title="Category:C2000">C2000</a></li><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li><li><a href="Category_Development_Tools_for_C2000.html" title="Category:Development Tools for C2000">Development Tools for C2000</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Byte+Accesses+with+the+C28x+CPU" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Byte_Accesses_with_the_C28x_CPU.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Byte_Accesses_with_the_C28x_CPU.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Byte_Accesses_with_the_C28x_CPU.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Byte_Accesses_with_the_C28x_CPU.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Byte_Accesses_with_the_C28x_CPU.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;oldid=209259" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Byte_Accesses_with_the_C28x_CPU&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 3 November 2015, at 13:45.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.051","walltime":"0.053","ppvisitednodes":{"value":46,"limit":1000000},"ppgeneratednodes":{"value":52,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130171236","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":226});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Byte_Accesses_with_the_C28x_CPU by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 02:58:43 GMT -->
+</html>

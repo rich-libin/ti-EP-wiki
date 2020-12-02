@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:20:42 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Writing V4L2 Media Controller Applications on Dm36x Video Capture - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture","wgTitle":"Writing V4L2 Media Controller Applications on Dm36x Video Capture","wgCurRevisionId":106882,"wgRevisionId":106882,"wgArticleId":9330,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture","wgRelevantArticleId":9330,"wgRequestId":"919cf820d0ae36b67bc98061","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture rootpage-Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Writing V4L2 Media Controller Applications on Dm36x Video Capture</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Writing_Media_Controller_Applications_for_Video_Capture_on_DM36X"><span class="tocnumber">1</span> <span class="toctext">Writing Media Controller Applications for Video Capture on DM36X</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Media_Controller_Basics"><span class="tocnumber">1.1</span> <span class="toctext">Media Controller Basics</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Media_Device"><span class="tocnumber">1.1.1</span> <span class="toctext">Media Device</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Media_Entity"><span class="tocnumber">1.1.2</span> <span class="toctext">Media Entity</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Sub-devices"><span class="tocnumber">1.1.3</span> <span class="toctext">Sub-devices</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Pads"><span class="tocnumber">1.1.4</span> <span class="toctext">Pads</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Link"><span class="tocnumber">1.1.5</span> <span class="toctext">Link</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Entity_Graph"><span class="tocnumber">1.1.6</span> <span class="toctext">Entity Graph</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#Modes_of_Operation"><span class="tocnumber">1.2</span> <span class="toctext">Modes of Operation</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Continuous_Mode_Operation"><span class="tocnumber">1.2.1</span> <span class="toctext">Continuous Mode Operation</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Single_Shot_Mode_Operation"><span class="tocnumber">1.2.2</span> <span class="toctext">Single Shot Mode Operation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-12"><a href="#Steps_for_writing_a_Media_Controller_application"><span class="tocnumber">1.3</span> <span class="toctext">Steps for writing a Media Controller application</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Writing_Media_Controller_Applications_for_Video_Capture_on_DM36X">Writing Media Controller Applications for Video Capture on DM36X</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=1" title="Edit section: Writing Media Controller Applications for Video Capture on DM36X">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Media_Controller_Basics">Media Controller Basics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=2" title="Edit section: Media Controller Basics">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Media Controller is a framework for developing V4L2 based drivers which, compared the earlier implementation of plain V4L2 has a broader view device architecture. While the plain v4L2 had a view of the device as a plain DMA based image drabber which connects the input data to the host memory, the Media Controller takes into consideration the fact that a typical video device might consist of multiple sub-devices in form of either sensors, video decoders, video encoders working in tandem, and also the fact that image grabbing and display is not a simple DMA but might consist of smaller sub-blocks which might do some processing like resizing, format conversion etc. The document below explains these changes in design philosophy and elaborates on the nuts and bolts that make the media Controller as it is today. It also dwells upon the DM365 specifics implementation details for the VPFE capture driver. 
+</p>
+<h3><span class="mw-headline" id="Media_Device">Media Device</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=3" title="Edit section: Media Device">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A Media device is the umbrella device under which multiple sub-entities called Media entities can be accessed, modified and worked upon. The Media Device is exposed to the user in form of  a device file, which can be opened to enumerate, set and get the parameters of each of the media entities. For example, in DM365 implementation the entire VPFE capture device with its IPIPE, IPIPEIF, CCDC etc is exposed as a Media Device -  /dev/media0. If there were a display driver, it would be exposed as a Media device too.  
+</p>
+<h3><span class="mw-headline" id="Media_Entity">Media Entity</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=4" title="Edit section: Media Entity">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A Media entity is a sub-block of a a particular media device which usually does a particular function, can be though about as an connect-able but self-contained block which might have a register set f its own for setting the parameters and can be programed in an independent way. This could be a sub-IP, or a helping device on the same board which offloads a particular function like RAW Capture, YUV Capture, filter etc. On DM365 all the sensors, Video Decoders are media entities and the core itself has been modeled with CCDC, Previewer, Resizer, H3A, AEW as entities. These could be enumerated in the standard V4L2 way using the Media device as the enumerating device. Each of these entities has one or more input and output pads, and is connect-able to another entity through a 'link', between the pads.
+</p>
+<h3><span class="mw-headline" id="Sub-devices">Sub-devices</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=5" title="Edit section: Sub-devices">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Conceptually similar to a media Entity, a subdevice is viewed as sub-block of a V4L2 Video device which is independently configurable through its own set of file operations. The file operations are exposed through V4L2 -like IOCTLS particular to subdevs.Each sub-device is exposed to the user level through device files starting with “subdev-*”. User applications need to configure V4L2 related settings like format, crop,, size parameters through these device handles for each of the sub-devices to make the work in tandem. Structurally, there is almost an one-to-one correspondence between a Media Entity and a sub-device.
+</p><p><a href="File_Subdev.html" class="image"><img alt="Subdev.png" src="https://processors.wiki.ti.com/images/9/99/Subdev.png" width="897" height="483" /></a>
+</p>
+<h3><span class="mw-headline" id="Pads">Pads</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=6" title="Edit section: Pads">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>“Pads” are input and output connect-able points of a Media Entity. Depending on the number of connections the entity can have the pads are pre-fixed in the driver. Typically, a device like a sensor or a video decoder would have only an output pad since it only feeds video into the system, and a /dev/video pad would be modeled as an input pad since it is the end of the stream.
+The other entities like Resizer, previewer would have typically an input and an output pad and sometimes more depending on the capability.
+</p>
+<h3><span class="mw-headline" id="Link">Link</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=7" title="Edit section: Link">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A link is a 'connection' between pads of different entities. These links can be set, get and enumerated through the Media Device. The application, for proper working of a driver is responsible for setting up of the links properly so that the driver understands the source and destination of the video data.
+</p>
+<h3><span class="mw-headline" id="Entity_Graph">Entity Graph</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=8" title="Edit section: Entity Graph">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>An entity graph is the complete setup of different entities, pads, and the links. For proper working of the software, an entity graph should be properly setup, and the driver, before it can start streaming will validate for the proper graph and the appropriate settings on the sub-device to get to know the intent of the application. Choice of if the video input is RAW BAYER or YUV video is determined by the appropriate setup of the entity graph.
+</p><p>The DM365 supports the following fixed entity and pad configuration.
+</p><p><br />
+<a href="File_Entities.html" class="image"><img alt="Entities.png" src="https://processors.wiki.ti.com/images/9/9d/Entities.png" width="893" height="578" /></a>
+</p>
+<h2><span class="mw-headline" id="Modes_of_Operation">Modes of Operation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=9" title="Edit section: Modes of Operation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Continuous_Mode_Operation">Continuous Mode Operation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=10" title="Edit section: Continuous Mode Operation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Continuous Mode refers to the configuration where the input data stream is regulated by the standard capture format like NTSC/720p etc and where the data is input from an external source t be stored int DDR. Here the input data is “streamed” to the DDR and thereby the exchange of buffers between drivers and applications happen on a continuous basis regulated by the interrupts generated at every field or frame. So, the sink is invariably a video node whereas the source is an external sensor or decoder or an inbuilt ADC. The streaming mode supported here is the standard V4L2 mode of streaming.
+</p><p><a href="File_Continuous.html" class="image"><img alt="Continuous.png" src="https://processors.wiki.ti.com/images/7/78/Continuous.png" width="986" height="519" /></a>
+</p>
+<h3><span class="mw-headline" id="Single_Shot_Mode_Operation">Single Shot Mode Operation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=11" title="Edit section: Single Shot Mode Operation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As opposed to “continuous mode”, “single-shot mode” is referred to setup where the data input is from DDR as opposed to an external source, and the output is  DDR again. So here both the source and sinks are video nodes. To facilitate this kind of interface, the input DDR source is mapped to a separate Video device, which is only used in case of single shot modes. Here the input video node supports a source media device pad, and the output video node supports a sink media device pad.
+</p><p>The driver here supports buffer exchanges on input and output using the standard V4L2 calls, with an exception that the present driver supports a single buffer at a time. In DM365, the list of Single shot drivers is as follows:
+</p><p><br />
+</p>
+<ul><li>Resizer</li>
+<li>Previewer</li>
+<li>Previewer + Resizer configuration</li></ul>
+<p><br />
+<a href="File_Singleshot.html" class="image"><img alt="Singleshot.png" src="https://processors.wiki.ti.com/images/2/26/Singleshot.png" width="921" height="481" /></a>
+</p>
+<h2><span class="mw-headline" id="Steps_for_writing_a_Media_Controller_application">Steps for writing a Media Controller application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;section=12" title="Edit section: Steps for writing a Media Controller application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br />
+</p>
+<hr />
+<p>Initial set of pre-defined strings and PAD identification numbers for each entity.
+</p>
+<pre>/* Media entity names */
+#define E_VIDEO_CCDC_OUT_NAME	"DAVINCI VIDEO CCDC output"
+#define E_VIDEO_PRV_OUT_NAME	"DAVINCI VIDEO PRV output"
+#define E_VIDEO_PRV_IN_NAME	"DAVINCI VIDEO PRV input"
+#define E_VIDEO_RSZ_OUT_NAME	"DAVINCI VIDEO RSZ output"
+#define E_VIDEO_RSZ_IN_NAME	"DAVINCI VIDEO RSZ input"
+#define E_TVP514X_NAME		"tvp514x"
+#define E_TVP7002_NAME		"tvp7002"
+#define E_MT9P031_NAME		"mt9p031"
+#define E_CCDC_NAME		"DAVINCI CCDC"
+#define E_PRV_NAME		"DAVINCI PREVIEWER"
+#define E_RSZ_NAME		"DAVINCI RESIZER"
+#define E_AEW_NAME		"DAVINCI AEW"
+#define E_AF_NAME		"DAVINCI AF"
+
+/* pad id's as enumerated by media device*/
+#define P_RSZ_SINK	0 /* sink pad of rsz */
+#define P_RSZ_SOURCE	1 /* source pad of rsz */
+#define P_PRV_SINK	0
+#define P_PRV_SOURCE	1
+#define P_RSZ_VID_OUT	0 /* only one pad for video node */
+#define P_RSZ_VID_IN	0 /* only one pad for video node */
+#define P_PRV_VID_IN	0
+#define P_PRV_VID_OUT	0
+#define P_TVP514X	0 /* only one pad for decoder */
+#define P_TVP7002	0 /* only one pad for decoder */
+#define P_MT9P031	0 /* only one pad for sensor */
+#define P_CCDC_SINK	0 /* sink pad of ccdc */
+#define P_CCDC_SOURCE	1 /* source pad which connects video node */
+#define P_VIDEO		0 /* only one input pad for video node */
+#define P_AEW		0
+#define P_AF		0
+</pre>
+<hr />
+<p><br />
+Open the Media Device
+</p>
+<pre>	/* 3.open media device */
+	media_fd = open("/dev/media0", O_RDWR);
+	if (media_fd &lt; 0) {
+		printf("%s: Can't open media device&#160;%s\n", __func__, "/dev/media0");
+		goto cleanup;
+	}
+</pre>
+<p>Enumerate media-entities. Here it is a good idea to store the indices of the entities so they can be addressed using index next time.
+</p>
+<pre>     
+       #define ENTITY_COUNT  15
+       struct media_entity_desc entity[ENTITY_COUNT];
+       ......
+	/* 4.enumerate media-entities */
+	printf("4.enumerating media entities\n");
+	index = 0;
+	do {
+		memset(&amp;entity[index], 0, sizeof(struct media_entity_desc));
+		entity[index].id = index | MEDIA_ENT_ID_FLAG_NEXT;
+
+		ret = ioctl(media_fd, MEDIA_IOC_ENUM_ENTITIES, &amp;entity[index]);
+		if (ret &lt; 0) {
+			if (errno == EINVAL)
+				break;
+		}else {
+			if (!strcmp(entity[index].name, E_VIDEO_CCDC_OUT_NAME)) {
+				E_VIDEO =  entity[index].id;
+			}
+			else if (!strcmp(entity[index].name, E_MT9P031_NAME)) {
+				E_MT9P031 =  entity[index].id;
+			}
+			else if (!strcmp(entity[index].name, E_CCDC_NAME)) {
+				E_CCDC =  entity[index].id;
+			}
+			printf("[%x]:%s\n", entity[index].id, entity[index].name);
+		}
+
+		index++;
+	} while (ret == 0 &amp;&amp; index &lt; ENTITY_COUNT);
+	entities_count = index;
+	printf("total number of entities:&#160;%x\n", entities_count);
+
+</pre>
+<p>Enumerate all the links and pads. This is just as an information.This step is optional.
+</p>
+<pre> 
+	/* 5.enumerate links for each entity */
+	printf("5.enumerating links/pads for entities\n");
+	
+        links.pads = malloc(sizeof( struct media_pad_desc) * entity[index].pads);
+	links.links = malloc(sizeof(struct media_link_desc) * entity[index].links);
+	
+        for(index = 0; index &lt; entities_count; index++) {
+
+		links.entity = entity[index].id;
+
+		ret = ioctl(media_fd, MEDIA_IOC_ENUM_LINKS, &amp;links);
+		if (ret &lt; 0) {
+			if (errno == EINVAL)
+				break;
+		}else{
+			/* display pads info first */
+			if(entity[index].pads)
+				printf("pads for entity&#160;%x=", entity[index].id);
+
+			for(i = 0;i&lt; entity[index].pads; i++)
+			{
+				printf("(%x,&#160;%s) ", links.pads-&gt;index,(links.pads-&gt;flags &amp; MEDIA_PAD_FL_INPUT)?"INPUT":"OUTPUT");
+				links.pads++;
+			}
+
+			printf("\n");
+
+			/* display links now */
+			for(i = 0;i&lt; entity[index].links; i++)
+			{
+				printf("[%x:%x]--------------&gt;[%x:%x]",links.links-&gt;source.entity,
+				       links.links-&gt;source.index,links.links-&gt;sink.entity,links.links-&gt;sink.index);
+				       if(links.links-&gt;flags &amp; MEDIA_LNK_FL_ENABLED)
+						printf("\tACTIVE\n");
+				       else
+						printf("\tINACTIVE \n");
+
+				links.links++;
+			}
+
+			printf("\n");
+		}
+	}
+
+</pre>
+<p>Enable the appropriate links. It is about connecting the pads in such a way that fulfills the application's need for Video Capture. If RAW capture is needed, MT9P031 can be linked, If processed YUV is needed, TVP514x link is enabled. Here we are assuming RAW BAYER and hence MT9P031.
+</p>
+<pre> 
+
+	/* 6. enable 'mt9p031--&gt;ccdc' link */
+	printf("6. ENABLEing link [tvp7002]-----------&gt;[ccdc]\n");
+	memset(&amp;link, 0, sizeof(link));
+
+	link.flags |=  MEDIA_LNK_FL_ENABLED;
+	link.source.entity = E_MT9P031;
+	link.source.index = P_MT9P031;
+	link.source.flags = MEDIA_PAD_FL_OUTPUT;
+
+	link.sink.entity = E_CCDC;
+	link.sink.index = P_CCDC_SINK;
+	link.sink.flags = MEDIA_PAD_FL_INPUT;
+
+	ret = ioctl(media_fd, MEDIA_IOC_SETUP_LINK, &amp;link);
+	if(ret) {
+		printf("failed to enable link between tvp7002 and ccdc\n");
+		goto cleanup;
+	} else
+		printf("[tvp7002]-----------&gt;[ccdc]\tENABLED\n");
+</pre>
+<pre> 
+	/* 7. enable 'ccdc-&gt;memory' link */
+	printf("7. ENABLEing link [ccdc]-----------&gt;[video_node]\n");
+	memset(&amp;link, 0, sizeof(link));
+
+	link.flags |=  MEDIA_LNK_FL_ENABLED;
+	link.source.entity = E_CCDC;
+	link.source.index = P_CCDC_SOURCE;
+	link.source.flags = MEDIA_PAD_FL_OUTPUT;
+
+	link.sink.entity = E_VIDEO;
+	link.sink.index = P_VIDEO;
+	link.sink.flags = MEDIA_PAD_FL_INPUT;
+
+	ret = ioctl(media_fd, MEDIA_IOC_SETUP_LINK, &amp;link);
+	if(ret) {
+		printf("failed to enable link between ccdc and video node\n");
+		goto cleanup;
+	} else
+		printf("[ccdc]-----------&gt;[video_node]\t ENABLED\n");
+
+	printf("**********************************************\n");
+
+</pre>
+<p><br />
+Now that all the links are set properly, It is time to open the capture device.
+</p>
+<pre> 
+	/* 14.open capture device */
+	if ((capt_fd = open("/dev/video0", O_RDWR | O_NONBLOCK, 0)) &lt;= -1) {
+		printf("failed to open&#160;%s \n", "/dev/video0");
+		goto cleanup;
+	}
+
+</pre>
+<p>Enumerate the inputs. For camera, 
+</p>
+<pre> 
+	/* 15.enumerate inputs supported by capture*/
+	printf("15.enumerating INPUTS\n");
+	bzero(&amp;input, sizeof(struct v4l2_input));
+	input.type = V4L2_INPUT_TYPE_CAMERA;
+	input.index = 0;
+	index = 0;
+  	while (1) {
+
+		ret = ioctl(capt_fd, VIDIOC_ENUMINPUT, &amp;input);
+		if(ret&#160;!= 0)
+			break;
+
+		printf("[%x].%s\n", index, input.name);
+
+		bzero(&amp;input, sizeof(struct v4l2_input));
+		index++;
+		input.index = index;
+  	}
+  	
+</pre>
+<p>Set Camera as the input.
+</p>
+<pre> 
+	/* 16.setting CAMERA as input */
+	printf("16. setting CAMERA as input. . .\n");
+	bzero(&amp;input, sizeof(struct v4l2_input));
+	input.type = V4L2_INPUT_TYPE_CAMERA;
+	input.index = 0;
+	if (-1 == ioctl (capt_fd, VIDIOC_S_INPUT, &amp;input.index)) {
+		printf("failed to set CAMERA with capture device\n");
+		goto cleanup;
+	} else
+		printf("successfully set CAMERA input\n");
+
+
+</pre>
+<p>Set the FORMAT on the output PAD of MT9P031. Here we are opening the appropriate sub-device node to do this. In this example, we know the sub-device number. However, it might not be known always.
+</p>
+<pre> 
+	/* 8. set format on pad of mt9p031 */
+	mt9p_fd = open("/dev/v4l-subdev0", O_RDWR);
+	if(mt9p_fd == -1) {
+		printf("failed to open&#160;%s\n", "/dev/v4l-subdev0");
+		goto cleanup;
+	}
+
+	printf("8. setting format on pad of mt9p031 entity. . .\n");
+	memset(&amp;fmt, 0, sizeof(fmt));
+
+	fmt.pad = P_MT9P031;
+	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+	fmt.format.code = CODE;
+	fmt.format.width = width;
+	fmt.format.height = height;
+	fmt.format.field = V4L2_FIELD_NONE;
+
+	ret = ioctl(mt9p_fd, VIDIOC_SUBDEV_S_FMT, &amp;fmt);
+	if(ret) {
+		printf("failed to set format on pad&#160;%x\n", fmt.pad);
+		goto cleanup;
+	}
+	else
+		printf("successfully format is set on pad&#160;%x\n", fmt.pad);
+</pre>
+<p>Similarly, set the format on the sink-pad of CCDC ( Sink&#160;: input , Source&#160;: output ) for a given entity.
+</p>
+<pre>	/* 9. set format on sink-pad of ccdc */
+	ccdc_fd = open("/dev/v4l-subdev1", O_RDWR);
+	if(ccdc_fd == -1) {
+		printf("failed to open&#160;%s\n", "/dev/v4l-subdev2");
+		goto cleanup;
+	}
+	/* set format on sink pad of ccdc */
+	printf("12. setting format on sink-pad of ccdc entity. . .\n");
+	memset(&amp;fmt, 0, sizeof(fmt));
+
+	fmt.pad = P_CCDC_SINK;
+	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+	fmt.format.code = CODE;
+	fmt.format.width = width;
+	fmt.format.height = height;
+	fmt.format.field = V4L2_FIELD_NONE;
+
+	ret = ioctl(ccdc_fd, VIDIOC_SUBDEV_S_FMT, &amp;fmt);
+	if(ret) {
+		printf("failed to set format on pad&#160;%x\n", fmt.pad);
+		goto cleanup;
+	}
+	else
+		printf("successfully format is set on pad&#160;%x\n", fmt.pad);
+</pre>
+<p>Now, set the format on the Source pad of CCDC which is connected to Video node.
+</p>
+<pre>	/* 13. set format on source-pad of ccdc */
+	printf("13. setting format on OF-pad of ccdc entity. . . \n");
+	memset(&amp;fmt, 0, sizeof(fmt));
+
+	fmt.pad = P_CCDC_SOURCE;
+	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+	fmt.format.code = CODE;
+	fmt.format.width = width;
+	fmt.format.height = height;
+	fmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
+	fmt.format.field = V4L2_FIELD_NONE;
+
+	ret = ioctl(ccdc_fd, VIDIOC_SUBDEV_S_FMT, &amp;fmt);
+	if(ret) {
+		printf("failed to set format on pad&#160;%x\n", fmt.pad);
+		goto cleanup;
+	}
+	else
+		printf("successfully format is set on pad&#160;%x\n", fmt.pad);
+
+</pre>
+<p>Setup the CCDC for proper configuration which might include a host of internal parameters. This is done through a private sub-device IOCTL for CCDC - VPFE_CMD_S_CCDC_RAW_PARAMS
+</p>
+<pre> 
+	/* 10. get ccdc raw params from ccdc*/
+	printf("10. getting RAW params from ccdc\n");
+	
+	bzero(&amp;raw_params, sizeof(raw_params));
+
+	if (-1 == ioctl(ccdc_fd, VPFE_CMD_G_CCDC_RAW_PARAMS, &amp;raw_params)) {
+		printf("failed to get raw params,&#160;%p", &amp;raw_params);
+		goto cleanup;
+	}
+
+	/* 11. set raw params in ccdc */
+	printf("11. setting raw params in ccdc\n");
+	raw_params.compress.alg = CCDC_NO_COMPRESSION;
+	raw_params.gain_offset.gain.r_ye = r;
+	raw_params.gain_offset.gain.gr_cy = gr;
+	raw_params.gain_offset.gain.gb_g = gb;
+	raw_params.gain_offset.gain.b_mg = b;
+	raw_params.gain_offset.gain_sdram_en = 1;
+	raw_params.gain_offset.gain_ipipe_en = 1;
+	raw_params.gain_offset.offset = 0;
+	raw_params.gain_offset.offset_sdram_en = 1;
+
+	/* To test linearization, set this to 1, and update the
+	 * linearization table with correct data
+	 */
+	if (linearization_en) {
+		raw_params.linearize.en = 1;
+		raw_params.linearize.corr_shft = CCDC_1BIT_SHIFT;
+		raw_params.linearize.scale_fact.integer = 0;
+		raw_params.linearize.scale_fact.decimal = 10;
+
+		for (i = 0; i &lt; CCDC_LINEAR_TAB_SIZE; i++)
+			raw_params.linearize.table[i] = i;
+	} else {
+		raw_params.linearize.en = 0;
+	}
+
+	/* csc */
+	if (csc_en) {
+		raw_params.df_csc.df_or_csc = 0;
+		raw_params.df_csc.csc.en = 1;
+		/* I am hardcoding this here. But this should
+		 * really match with that of the capture standard
+		 */
+		raw_params.df_csc.start_pix = 1;
+		raw_params.df_csc.num_pixels = 720;
+		raw_params.df_csc.start_line = 1;
+		raw_params.df_csc.num_lines = 480;
+		/* These are unit test values. For real case, use
+		 * correct values in this table
+		 */
+		raw_params.df_csc.csc.coeff[0] = csc_coef_val;
+		raw_params.df_csc.csc.coeff[1].decimal = 1;
+		raw_params.df_csc.csc.coeff[2].decimal = 2;
+		raw_params.df_csc.csc.coeff[3].decimal = 3;
+		raw_params.df_csc.csc.coeff[4].decimal = 4;
+		raw_params.df_csc.csc.coeff[5].decimal = 5;
+		raw_params.df_csc.csc.coeff[6].decimal = 6;
+		raw_params.df_csc.csc.coeff[7].decimal = 7;
+		raw_params.df_csc.csc.coeff[8].decimal = 8;
+		raw_params.df_csc.csc.coeff[9].decimal = 9;
+		raw_params.df_csc.csc.coeff[10].decimal = 10;
+		raw_params.df_csc.csc.coeff[11].decimal = 11;
+		raw_params.df_csc.csc.coeff[12].decimal = 12;
+		raw_params.df_csc.csc.coeff[13].decimal = 13;
+		raw_params.df_csc.csc.coeff[14].decimal = 14;
+		raw_params.df_csc.csc.coeff[15].decimal = 15;
+
+	} else {
+		raw_params.df_csc.df_or_csc = 0;
+		raw_params.df_csc.csc.en = 0;
+	}
+
+	/* vertical line defect correction */
+	if (vldfc_en) {
+		raw_params.dfc.en = 1;
+		// correction method
+		raw_params.dfc.corr_mode = CCDC_VDFC_HORZ_INTERPOL_IF_SAT;
+		// not pixels upper than the defect corrected
+		raw_params.dfc.corr_whole_line = 1;
+		raw_params.dfc.def_level_shift = CCDC_VDFC_SHIFT_2;
+		raw_params.dfc.def_sat_level = 20;
+		raw_params.dfc.num_vdefects = 7;
+		for (i = 0; i &lt; raw_params.dfc.num_vdefects; i++) {
+			raw_params.dfc.table[i].pos_vert = i;
+			raw_params.dfc.table[i].pos_horz = i + 1;
+			raw_params.dfc.table[i].level_at_pos = i + 5;
+			raw_params.dfc.table[i].level_up_pixels = i + 6;
+			raw_params.dfc.table[i].level_low_pixels = i + 7;
+		}
+		printf("DFC enabled\n");
+	} else {
+		raw_params.dfc.en = 0;
+	}
+
+	if (en_culling) {
+
+		printf("Culling enabled\n");
+		raw_params.culling.hcpat_odd  = 0xaa;
+		raw_params.culling.hcpat_even = 0xaa;
+		raw_params.culling.vcpat = 0x55;
+		raw_params.culling.en_lpf = 1;
+	} else {
+		raw_params.culling.hcpat_odd  = 0xFF;
+		raw_params.culling.hcpat_even = 0xFF;
+		raw_params.culling.vcpat = 0xFF;
+	}
+
+	raw_params.col_pat_field0.olop = CCDC_GREEN_BLUE;
+	raw_params.col_pat_field0.olep = CCDC_BLUE;
+	raw_params.col_pat_field0.elop = CCDC_RED;
+	raw_params.col_pat_field0.elep = CCDC_GREEN_RED;
+	raw_params.col_pat_field1.olop = CCDC_GREEN_BLUE;
+	raw_params.col_pat_field1.olep = CCDC_BLUE;
+	raw_params.col_pat_field1.elop = CCDC_RED;
+	raw_params.col_pat_field1.elep = CCDC_GREEN_RED;
+	raw_params.data_size = CCDC_12_BITS;
+	raw_params.data_shift = CCDC_NO_SHIFT;
+
+
+	if (-1 == ioctl(ccdc_fd, VPFE_CMD_S_CCDC_RAW_PARAMS, &amp;raw_params)) {
+		printf("failed to set raw params,&#160;%p", &amp;raw_params);
+		return -1;
+	} else
+		printf("successfully set raw params in ccdc\n");
+
+
+</pre>
+<p>Set the format on the Video node for capture. This format is used to store into the DDR.
+</p>
+<pre> 
+
+	/* 17.setting format */
+	printf("17. setting format V4L2_PIX_FMT_SBGGR16\n");
+	CLEAR(v4l2_fmt);
+	v4l2_fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	v4l2_fmt.fmt.pix.width = width;
+	v4l2_fmt.fmt.pix.height = height;
+	v4l2_fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_SBGGR16;
+	v4l2_fmt.fmt.pix.field = V4L2_FIELD_NONE;
+
+	if (-1 == ioctl(capt_fd, VIDIOC_S_FMT, &amp;v4l2_fmt)) {
+		printf("failed to set format on captute device \n");
+		goto cleanup;
+	} else
+		printf("successfully set the format\n");
+
+	/* 15.call G_FMT for knowing picth */
+	if (-1 == ioctl(capt_fd, VIDIOC_G_FMT, &amp;v4l2_fmt)) {
+		printf("failed to get format from captute device \n");
+		goto cleanup;
+	} else {
+		printf("capture_pitch:&#160;%x\n", v4l2_fmt.fmt.pix.bytesperline);
+		capture_pitch = v4l2_fmt.fmt.pix.bytesperline;
+	}
+
+
+</pre>
+<p>Request for buffers. This is the standard V4L2 procedure of doing REQ_BUFS
+</p>
+<pre> 
+	/* 18.make sure 3 buffers are supported for streaming */
+	printf("18. Requesting for 3 buffers\n");
+	CLEAR(req);
+	req.count = 3;
+	req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	req.memory = V4L2_MEMORY_USERPTR;
+
+	if (-1 == ioctl(capt_fd, VIDIOC_REQBUFS, &amp;req)) {
+		printf("call to VIDIOC_REQBUFS failed\n");
+		goto cleanup;
+	}
+
+	if (req.count&#160;!= 3) {
+		printf("3 buffers not supported by capture device");
+		goto cleanup;
+	} else
+		printf("3 buffers are supported for streaming\n");
+
+	
+</pre>
+<p>Initial set of pre-queing of buffers so that as soon as we start on streaming we can do the DQ-Q cycle. A minimum of 3 buffers are needed for minimum effective running of V4L2 capture. One buffer remains with the driver for current capture, one can be held with application and the other in a queued state so that a buffer is ready for next frame capture. This has do do with the sync nature of the hardware operation where the registers are shadowed and take effect at every VSYNC.
+</p>
+<pre> 
+
+	/* 19.queue the buffers */
+	printf("19. queing buffers\n");
+	for (i = 0; i &lt; 3; i++) {
+		struct v4l2_buffer buf;
+		CLEAR(buf);
+		buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+		buf.memory = V4L2_MEMORY_USERPTR;
+		buf.index = i;
+		buf.length = buf_size;
+		buf.m.userptr = (unsigned long)capture_buffers[i].user_addr;
+
+		if (-1 == ioctl(capt_fd, VIDIOC_QBUF, &amp;buf)) {
+			printf("call to VIDIOC_QBUF failed\n");
+			goto cleanup;
+		}
+	}
+
+</pre>
+<p>Start Streaming!!
+</p>
+<pre> 
+	/* 20.start streaming */
+	CLEAR(type);
+	type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	if (-1 == ioctl(capt_fd, VIDIOC_STREAMON, &amp;type)) {
+		printf("failed to start streaming on capture device");
+		goto cleanup;
+	} else
+		printf("streaming started successfully\n");
+
+</pre>
+<p>The DQ-Q cycle.
+</p>
+<pre> 
+	while(frame_count&#160;!= 5) {
+
+		CLEAR(cap_buf);
+
+		cap_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+		cap_buf.memory = V4L2_MEMORY_USERPTR;
+try_again:
+		ret = ioctl(capt_fd, VIDIOC_DQBUF, &amp;cap_buf);
+		if (ret &lt; 0) {
+			if (errno == EAGAIN) {
+				goto try_again;
+			}
+			printf("failed to DQ buffer from capture device\n");
+			goto cleanup;
+		}
+
+		temp = cap_buf.m.userptr;
+		source = (char *)temp;
+
+		/* copy frame to a file */
+		for(i=0&#160;; i &lt; height; i++) {
+			fwrite(source, 1 , width*2, file);
+			source += capture_pitch;
+		}
+
+		/* Q the buffer for capture, again */
+		ret = ioctl(capt_fd, VIDIOC_QBUF, &amp;cap_buf);
+		if (ret &lt; 0) {
+			printf("failed to Q buffer onto capture device\n");
+			goto cleanup;
+		}
+
+		frame_count++;
+
+	}
+
+</pre>
+<p>Once done, make sure to do Stream-off to indicate the stop for the capture.
+</p>
+<pre> 
+
+	/* 21. do stream off */
+	CLEAR(type);
+	type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	if (-1 == ioctl(capt_fd, VIDIOC_STREAMOFF, &amp;type)) {
+		printf("failed to stop streaming on capture device");
+		goto cleanup;
+	} else
+		printf("streaming stopped successfully\n");
+
+	
+</pre>
+<p>Start with relinquishing the linkages so a new/different set of linkages can be established for the next application.
+</p>
+<pre> 	
+cleanup:
+ /* 24. de-enable all the links which are active right now */
+	for(index = 0; index &lt; entities_count; index++) {
+
+		links.entity = entity[index].id;
+
+		links.pads = malloc(sizeof( struct media_pad_desc) * entity[index].pads);
+		links.links = malloc(sizeof(struct media_link_desc) * entity[index].links);
+
+		ret = ioctl(media_fd, MEDIA_IOC_ENUM_LINKS, &amp;links);
+		if (ret &lt; 0) {
+			if (errno == EINVAL)
+				break;
+		}else{
+
+			for(i = 0;i&lt; entity[index].links; i++)
+			{
+				       if(links.links-&gt;flags &amp; MEDIA_LNK_FL_ENABLED) {
+					        /* de-enable the link */
+					        memset(&amp;link, 0, sizeof(link));
+
+						link.flags |=  ~MEDIA_LNK_FL_ENABLED;
+						link.source.entity = links.links-&gt;source.entity;
+						link.source.index = links.links-&gt;source.index;
+						link.source.flags = MEDIA_PAD_FL_OUTPUT;
+
+						link.sink.entity = links.links-&gt;sink.entity;
+						link.sink.index = links.links-&gt;sink.index;
+						link.sink.flags = MEDIA_PAD_FL_INPUT;
+
+						ret = ioctl(media_fd, MEDIA_IOC_SETUP_LINK, &amp;link);
+						if(ret) {
+							printf("failed to de-enable link \n");
+						}
+
+				       }
+
+				links.links++;
+			}
+		}
+	}
+
+</pre>
+<p>Close the file Descriptors
+</p>
+<pre> 
+	/* 25.close all the file descriptors */
+	printf("closing all the file descriptors. . .\n");
+	if(capt_fd) {
+		close(capt_fd);
+		printf("closed capture device\n");
+	}
+	if(ccdc_fd) {
+		close(ccdc_fd);
+		printf("closed ccdc sub-device\n");
+	}
+	if(mt9p_fd) {
+		close(mt9p_fd);
+		printf("closed mt9p031 sub-device\n");
+	}
+	if(media_fd) {
+		close(media_fd);
+		printf("closed  media device\n");
+	}
+	if(file) {
+		fclose(file);
+		printf("closed the file \n");
+	}
+	return ret;
+}
+</pre>
+<p><br />
+<br />
+</p><p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130230911
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.052 seconds
+Real time usage: 0.056 seconds
+Preprocessor visited node count: 109/1000000
+Preprocessor generated node count: 472/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 16796/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:9330-0!canonical and timestamp 20201130230911 and revision id 106882
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Writing V4L2 Media Controller Applications on Dm36x Video Capture</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;oldid=106882">https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;oldid=106882</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Writing+V4L2+Media+Controller+Applications+on+Dm36x+Video+Capture" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;oldid=106882" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 May 2012, at 23:20.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.052","walltime":"0.056","ppvisitednodes":{"value":109,"limit":1000000},"ppgeneratednodes":{"value":472,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":16796,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130230911","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":220});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Writing_V4L2_Media_Controller_Applications_on_Dm36x_Video_Capture by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:20:48 GMT -->
+</html>

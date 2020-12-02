@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_GPP_code_to_DSP_and_Codec_Engine by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:28:09 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Porting GPP code to DSP and Codec Engine - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Porting_GPP_code_to_DSP_and_Codec_Engine","wgTitle":"Porting GPP code to DSP and Codec Engine","wgCurRevisionId":181626,"wgRevisionId":181626,"wgArticleId":2094,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["XDAIS","Codecs","Codec Engine"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Porting_GPP_code_to_DSP_and_Codec_Engine","wgRelevantArticleId":2094,"wgRequestId":"1bb69409674b6cc54ba5d2b3","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Porting_GPP_code_to_DSP_and_Codec_Engine rootpage-Porting_GPP_code_to_DSP_and_Codec_Engine skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Porting GPP code to DSP and Codec Engine</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Step_1:_Build.2C_Run.2C_Test_Golden_C_code_on_GPP"><span class="tocnumber">2</span> <span class="toctext">Step 1: Build, Run, Test Golden C code on GPP</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Step_2:_Build.2CRun.2CTest_Golden_C_code_on_DSP"><span class="tocnumber">3</span> <span class="toctext">Step 2: Build,Run,Test Golden C code on DSP</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#CCS_Setup"><span class="tocnumber">3.1</span> <span class="toctext">CCS Setup</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#CCS_Projects"><span class="tocnumber">3.2</span> <span class="toctext">CCS Projects</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#CCS_Resources"><span class="tocnumber">3.3</span> <span class="toctext">CCS Resources</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Step_3:_Basic_DSP_Optimization.2C_Profiling_and_Benchmarking"><span class="tocnumber">4</span> <span class="toctext">Step 3: Basic DSP Optimization, Profiling and Benchmarking</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Basic_Optimization"><span class="tocnumber">4.1</span> <span class="toctext">Basic Optimization</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Profile_Code_on_DSP_using_CCS"><span class="tocnumber">4.2</span> <span class="toctext">Profile Code on DSP using CCS</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Benchmark_Code_on_DSP_using_the_Time_Stamp_Counter_.28TSC.29"><span class="tocnumber">4.3</span> <span class="toctext">Benchmark Code on DSP using the Time Stamp Counter (TSC)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Sample_Results"><span class="tocnumber">4.4</span> <span class="toctext">Sample Results</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Step_4:_Make_the_Code_XDAIS_Compliant"><span class="tocnumber">5</span> <span class="toctext">Step 4: Make the Code XDAIS Compliant</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#XDAIS_Wizard"><span class="tocnumber">5.1</span> <span class="toctext">XDAIS Wizard</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Algorithm_Preparation"><span class="tocnumber">5.2</span> <span class="toctext">Algorithm Preparation</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Implementing_the_IALG_interface"><span class="tocnumber">5.3</span> <span class="toctext">Implementing the IALG interface</span></a>
+<ul>
+<li class="toclevel-3 tocsection-16"><a href="#Defining_the_Private_Instance_Object"><span class="tocnumber">5.3.1</span> <span class="toctext">Defining the Private Instance Object</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#IALG_Interface"><span class="tocnumber">5.3.2</span> <span class="toctext">IALG Interface</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Algorithm_Memory_Requirements"><span class="tocnumber">5.3.3</span> <span class="toctext">Algorithm Memory Requirements</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-19"><a href="#Testing_XDAIS_Compliance"><span class="tocnumber">5.4</span> <span class="toctext">Testing XDAIS Compliance</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Further_XDAIS_Examples"><span class="tocnumber">5.5</span> <span class="toctext">Further XDAIS Examples</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Step_5_:_Make_the_Code_XDM_Compliant"><span class="tocnumber">6</span> <span class="toctext">Step 5&#160;: Make the Code XDM Compliant</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#XDM:_An_extension_of_XDAIS"><span class="tocnumber">6.1</span> <span class="toctext">XDM: An extension of XDAIS</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Extending_XDM"><span class="tocnumber">6.2</span> <span class="toctext">Extending XDM</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#XDM_Resources"><span class="tocnumber">6.3</span> <span class="toctext">XDM Resources</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#Step_6_:_Create_RTSC_package_and_Unit_Server_for_Codec_Engine"><span class="tocnumber">7</span> <span class="toctext">Step 6&#160;: Create RTSC package and Unit Server for Codec Engine</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#Step_7_:_Test_the_package.2C_server_with_DMAI_GPP_sample_app_and_DVTB"><span class="tocnumber">8</span> <span class="toctext">Step 7&#160;: Test the package, server with DMAI GPP sample app and DVTB</span></a></li>
+<li class="toclevel-1 tocsection-27"><a href="#Step_8_:_Advanced_Optimization_of_the_DSP_Code"><span class="tocnumber">9</span> <span class="toctext">Step 8&#160;: Advanced Optimization of the DSP Code</span></a>
+<ul>
+<li class="toclevel-2 tocsection-28"><a href="#Use_Compiler_Intrinsics_to_Access_Assembly_Language_Statements"><span class="tocnumber">9.1</span> <span class="toctext">Use Compiler Intrinsics to Access Assembly Language Statements</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Inline_Functions"><span class="tocnumber">9.2</span> <span class="toctext">Inline Functions</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#MUST_ITERATE_Pragma"><span class="tocnumber">9.3</span> <span class="toctext">MUST_ITERATE Pragma</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Use_Assembly_Optimized_Functions_from_the_DSPLIB_and_IMGLIB"><span class="tocnumber">9.4</span> <span class="toctext">Use Assembly Optimized Functions from the DSPLIB and IMGLIB</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Using_the_DMA_Engine"><span class="tocnumber">9.5</span> <span class="toctext">Using the DMA Engine</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Further_Optimizations"><span class="tocnumber">9.6</span> <span class="toctext">Further Optimizations</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-34"><a href="#FAQ"><span class="tocnumber">10</span> <span class="toctext">FAQ</span></a>
+<ul>
+<li class="toclevel-2 tocsection-35"><a href="#What_happens_to_global_symbols_in_XDAIS.3F"><span class="tocnumber">10.1</span> <span class="toctext">What happens to global symbols in XDAIS?</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#Can_I_use_malloc.28.29_in_XDAIS.3F"><span class="tocnumber">10.2</span> <span class="toctext">Can I use malloc() in XDAIS?</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#How_do_I_make_C.2B.2B_code_XDAIS_compatible.3F"><span class="tocnumber">10.3</span> <span class="toctext">How do I make C++ code XDAIS compatible?</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#How_do_I_use_printf.28.29_with_Codec_Engine.3F"><span class="tocnumber">10.4</span> <span class="toctext">How do I use printf() with Codec Engine?</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#How_will_the_performance_be_affected_when_I_call_my_algorithm_from_the_GPP_through_Codec_Engine.3F"><span class="tocnumber">10.5</span> <span class="toctext">How will the performance be affected when I call my algorithm from the GPP through Codec Engine?</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#When_I_run_my_code_on_the_DSP_with_CCS_how_can_I_follow_which_functions_are_being_called.3F"><span class="tocnumber">10.6</span> <span class="toctext">When I run my code on the DSP with CCS how can I follow which functions are being called?</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-41"><a href="#Attachments"><span class="tocnumber">11</span> <span class="toctext">Attachments</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The purpose of this project is to show how to port GPP code to the DSP-side of <a href="Category_DM644x.html" title="Category:DM644x">DaVinci</a>, <a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a> or <a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a> platforms. This includes making the code <a href="QualiTI_XDAIS_Compliance_Tool.html" class="mw-redirect" title="QualiTI XDAIS Compliance Tool">XDAIS compliant</a>, implementing an <a href="XDM_1.html" title="XDM 1.x Semantics">XDM interface</a>, creating the <a href="RTSC_Codec_And_Server_Package_Wizards.html" title="RTSC Codec And Server Package Wizards">RTSC package</a> and running the code using a Linux application.
+</p><p>A JPEG Decoder will be used as an example to illustrate different steps. Source code for the implementation of the interfaces is provided. Source code for the algorithm itself is not yet available, however it is the wrappers and wizards that are the important detail.
+</p><p>Note that steps 1 -&gt; 6 are independent of any GPP Operating System in an Arm+DSP environment i.e. it does not matter whether you are using Linux or WinCE or another GPP OS. At step 7 it does matter because that's where you run standard GPP applications to exercise the result of steps 1 -&gt; 6 - these applications are different across Operating Systems.
+</p>
+<h2><span id="Step_1:_Build,_Run,_Test_Golden_C_code_on_GPP"></span><span class="mw-headline" id="Step_1:_Build.2C_Run.2C_Test_Golden_C_code_on_GPP">Step 1: Build, Run, Test Golden C code on GPP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=2" title="Edit section: Step 1: Build, Run, Test Golden C code on GPP">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Golden C code should include the following:
+</p><p>1) Source Code Project to build the source code into a library
+</p><p>2) Application Code Project that includes sample application to run the algorithm library. Project should include input and reference output vectors.
+</p><p>The code should also be benchmarked on the GPP. The GPP performance will be later compared to the DSP performance.
+</p><p>In this example there is a test-harness and project in Microsoft Visual Studio. A Visual C++ Workspace (.dsw file) is available. We downloaded the <a rel="nofollow" class="external text" href="http://www.microsoft.com/express/vc/">Express (free) version of MSVC</a> to run this.
+</p><p><br />
+</p>
+<h2><span id="Step_2:_Build,Run,Test_Golden_C_code_on_DSP"></span><span class="mw-headline" id="Step_2:_Build.2CRun.2CTest_Golden_C_code_on_DSP">Step 2: Build,Run,Test Golden C code on DSP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=3" title="Edit section: Step 2: Build,Run,Test Golden C code on DSP">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In order to build and run the code on the DSP we used the <a href="Category_CCS.html" title="Category:CCS">Code Composer Studio IDE</a>. Free trial CCS can be obtained from <a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspsupportaut.tsp?familyId=44&amp;sectionId=3&amp;tabId=416&amp;toolTypeId=30">Free Evaluation Tools</a>.
+</p><p>After building the code it is possible to run it on a hardware platform or on a <a href="Category_Simulation.html" title="Category:Simulation">simulator</a>. Running the code on a hardware platform will require an <a href="Category_Emulation.html" title="Category:Emulation">emulator</a> to connect CCS to the board. Information about how to connect CCS to an OMAP 3530 EVM can be found  <a href="Debugging_the_DSP_side_of_a_DSPLink_application_on_OMAP_using_CCS.html" title="Debugging the DSP side of a DSPLink application on OMAP using CCS">here</a>.
+</p><p>A large variety of simulators are provided with CCS. Some simulate only the DSP core, others simulate the DSP core and some peripherals. The features supported are described in the CCS Setup window, when the simulator is selected (See more details next). The simulators are CPU and Memory cycle accurate, however for system benchmarking it is advised to run the code on a hardware platform.
+</p>
+<h3><span class="mw-headline" id="CCS_Setup">CCS Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=4" title="Edit section: CCS Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following shows how to setup CCS to use the C64x+ Cycle Accurate Simulator.
+</p>
+<ul><li>Launch CCS Setup</li>
+<li>Select Family: C64x+; Platform: simulator; Endianness: little</li>
+<li>Selecting a simulator in the list provides the description of the features supported (right window).</li>
+<li>Select C64x+ Cycle Accurate Simulator, click "&lt;&lt;Add" or drag it to the System Configuration window.</li>
+<li>Save&amp;Quit, Yes Start Code Composer Studio</li></ul>
+<p><br />
+<a href="File_Gpptodsp01.html" class="image"><img alt="Gpptodsp01.jpg" src="https://processors.wiki.ti.com/images/c/c6/Gpptodsp01.jpg" width="871" height="206" /></a>
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="CCS_Projects">CCS Projects</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=5" title="Edit section: CCS Projects">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Code will be organized in the same way as on the GPP:
+</p><p>1) A CCS Project to create the library. In CCS this is called an 'archive'.
+</p><p>2) A CCS Project to run the algorithm library i.e. to create an executable.
+</p><p><br />
+<b>Library CCS Project Creation</b>
+</p>
+<ul><li>Start CCS</li>
+<li>Project -&gt; New
+<ul><li>Define Project Name, Location (CCS will create a folder Location\Name. If this is not the desired final location, modify the path.</li>
+<li>Define Project Type: Library(.lib) will be used for the algorithm lib project.</li>
+<li>Target will always be TMS320C64XX (for the heterogenous platforms mentioned above)</li></ul></li></ul>
+<p><br />
+<a href="File_Gpptodsp03.html" class="image"><img alt="Gpptodsp03.jpg" src="https://processors.wiki.ti.com/images/9/98/Gpptodsp03.jpg" width="444" height="256" /></a>
+</p><p><br />
+</p>
+<ul><li>The CCS Project is created. Notice that there are two pre-defined configurations: <b>Debug</b> and <b>Release</b></li></ul>
+<p><br />
+<a href="File_Gpptodsp04.html" class="image"><img alt="Gpptodsp04.jpg" src="https://processors.wiki.ti.com/images/a/a8/Gpptodsp04.jpg" width="625" height="393" /></a>
+</p><p><br />
+</p>
+<ul><li>Load Source Files to project: Right click project name -&gt; Add Files to Project</li>
+<li>Define Build Options: Project -&gt; Build Options
+<ul><li>Important Options: Compiler-&gt;Basic-&gt;Target Version: C64x+</li>
+<li>Important Options: Compiler-&gt;Preprocessor-&gt;Include Search Path</li>
+<li>Important Options: Compiler-&gt;Preprocessor-&gt;Pre-Define Symbol</li>
+<li>Important Options: Archiver-&gt;Output Filename</li></ul></li>
+<li>Build the <b>Debug'</b> library: Project-&gt;Build</li>
+<li>Perform similar steps and build the <b>Release</b> library</li></ul>
+<p><br />
+<b>Application CCS Project Creation</b>
+</p><p>Following are specific steps.
+</p>
+<ul><li>Project Creation -&gt; Project Type: Executable(.out)</li>
+<li>Build Options: Project -&gt; Build Options
+<ul><li>Important Options: Linker-&gt;Basic - Define Linker Options (Heap Size, Stack Size ...)</li>
+<li>Important Options: Linker-&gt;Libraries-&gt;Incl Libraries (.lib) - Include the Run Time Support Library rts64plus.lib. If the DSP Cache is used, include biosDM420.a64P. See <a href="Enabling_64x%2b_Cache.html" title="Enabling 64x+ Cache">Enabling 64x+ Cache</a>.</li>
+<li>Important Options: Linker-&gt;Libraries-&gt;Search Path</li></ul></li>
+<li>Add a linker command file to the project (Right click project name -&gt; Add Files to Project). See next for more details about linker command files.</li>
+<li>Make the Library CCS Project a Dependent Project (Right click on Dependent Projects -&gt; Add Dependent Projects).</li></ul>
+<p><br />
+<b>Linker Command File</b>
+</p><p>A linker command file allows to put linking information in a file.
+The linker concatenates each section from all input files, allocating memory to each section based on its length and location as specified by the MEMORY and SECTIONS command in the linker command file. The MEMORY command defines the target memory configuration and the SECTION command controls how sections are built and allocated
+</p><p>Previously we have seen that Linker Options can be defined in CCS Build Options. They can also be defined in the linker command file
+</p>
+<pre>/*******************************************************/
+/*               Specifiy Linker Options               */
+/*******************************************************/
+
+-stack    0x2000     /* Primary stack size   */
+-heap     0x1f0f000    /* Heap area size       */
+</pre>
+<p><br />
+</p><p>The MEMORY directive in the following example defines a target memory system that has  4 megabytes at address 0x80000000. If the memory required by an application does not fit, the size of the target memory system can be increased to 5,6,7 ... megabytes as long as there is enough physical memory on the board.
+</p>
+<pre>/*******************************************************/
+/*         Specifiy the Memory Configuration           */
+/*******************************************************/
+
+MEMORY
+{
+    /*target memory system*/
+    DSPDATA        org = 0x80000000  len= 0x4000000
+}
+</pre>
+<p>The SECTIONS directive gives great flexibility to control output sections. One of the purposes is to control where output sections are placed in memory. Read more about SECTIONS in the Linker chapter of <a href="http://www.ti.com/lit/pdf/spru186" class="extiw" title="tidoc:spru186">TMS320C6000 Assembly Language Tools</a>.
+</p><p><br />
+</p>
+<pre>/*******************************************************/
+/*             Specifiy the Output Sections            */
+/*******************************************************/
+
+SECTIONS
+{
+      .text&#160;:      &gt;  DSPDATA
+      .far&#160;:       &gt;  DSPDATA
+      .alignconst  &gt; (DSPDATA align(20h))
+      .jpd_table   &gt;  DSPDATA
+      .stack&#160;:     &gt;  DSPDATA
+      .sysmem&#160;:    &gt;  DSPDATA
+      .data&#160;:      &gt;  DSPDATA
+      .bss&#160;:       &gt;  DSPDATA
+      .cinit&#160;:     &gt;  DSPDATA
+      .cio&#160;:       &gt;  DSPDATA
+      .pinit&#160;:     &gt;  DSPDATA
+      .const&#160;:     &gt;  DSPDATA
+      .switch&#160;:    &gt;  DSPDATA
+      .bios:       &gt;  DSPDATA
+
+      .text:JPEGIDEC_TI_cSect &gt; DSPDATA
+      .const:JPEGIDEC_TI_dSect&gt; DSPDATA
+      ...
+
+}
+</pre>
+<p><br />
+<code>.text:JPEGIDEC_TI_cSect </code> and <code>.const:JPEGIDEC_TI_dSect</code> are subsections of <code>.text</code> and <code>.const</code> sections. Susections can be allocated separately if needed. The following shows how to use the CODE_SECTION pragma directive. This directive allows to allocate space for specific symbols in the section specified. Read more about Pragma Directives in the <a href="http://www.ti.com/lit/pdf/spru187" class="extiw" title="tidoc:spru187">TMS320C6000 Optimizing Compiler</a>.
+</p><p><br />
+</p>
+<pre>#pragma CODE_SECTION(JPEGDEC_TI_initDecoder, ".text:JPEGIDEC_TI_cSect");
+
+
+/* ======================================================================== */
+/* JPEGDEC_TI_initDecoder()                                                 */
+/* This function initializes the JPEGDEC_TI_Obj elements                    */
+/* This function needs to be called before every frame decoding             */
+/*                                                                          */
+/* ======================================================================== */
+
+S16 JPEGDEC_TI_initDecoder( JPEGDEC_TI_Obj *jpegdec,
+					JPEGDEC_TI_Input *pinterfaceIn)
+{
+    jpegdec-&gt;sof_marker = 0;
+    jpegdec-&gt;sos_marker = 0;
+    jpegdec-&gt;dht_marker = 0;
+
+    ...
+}
+</pre>
+<p>The following shows how to use the DATA_ALIGN and DATA_SECTION pragma directives.
+</p>
+<pre>
+
+#pragma DATA_ALIGN (JPEGDEC_TI_decNormOrderArray, 4);
+#pragma DATA_SECTION(JPEGDEC_TI_decNormOrderArray, ".const:JPEGIDEC_TI_dSect");
+
+
+const short JPEGDEC_TI_decNormOrderArray[] =
+        {
+          0,   1,   8,  16,   9,   2,   3,  10,
+          17,  24,  32,  25,  18,  11,   4,   5,
+          ...
+
+        };
+
+</pre>
+<h3><span class="mw-headline" id="CCS_Resources">CCS Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=6" title="Edit section: CCS Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Start CCS, Help -&gt; Tutorial</li>
+<li>See the CCS projects in the attached JPEGDEC_Wrapper.zip</li>
+<li>See presentation <a href="Tips_and_Tricks_for_CCStudio_IDE.html" title="Tips and Tricks for CCStudio IDE">Tips &amp; Tricks</a></li></ul>
+<p><br />
+</p>
+<h2><span id="Step_3:_Basic_DSP_Optimization,_Profiling_and_Benchmarking"></span><span class="mw-headline" id="Step_3:_Basic_DSP_Optimization.2C_Profiling_and_Benchmarking">Step 3: Basic DSP Optimization, Profiling and Benchmarking</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=7" title="Edit section: Step 3: Basic DSP Optimization, Profiling and Benchmarking">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Now that the code runs on the DSP, we want to perform some basic optimizations and benchmark the code to make sure that porting the code to DSP will provide us with the expected performance.
+</p>
+<h3><span class="mw-headline" id="Basic_Optimization">Basic Optimization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=8" title="Edit section: Basic Optimization">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>At this point we will perform basic optimization. More advanced optimization methods will be discussed later.
+</p><p>Following are basic optimization steps:
+</p>
+<ul><li>Allign data tables on 32-bit boundaries. See how to use pragma DATA_ALIGN above.</li>
+<li>Use the DSP Cache:
+<ul><li>Run code on hardware platform or simulator that supports the cache memory system.</li>
+<li>See Application CCS Project Creation for CCS requirements when cache is used</li>
+<li>Read <a href="Enabling_64x%2b_Cache.html" title="Enabling 64x+ Cache">Enabling 64x+ Cache</a></li>
+<li>See how to use BCACHE APIs in attached JPEGDEC_Wrapper.zip, TestAppDecoder.c. It will show how to enable the MAR bits without DSP/BIOS.</li></ul></li>
+<li>Modify Compiler Options for Library Release configuration</li></ul>
+<ul><li><ul><li>Use following Basic Compiler Options:</li></ul></li></ul>
+<p><a href="File_Gpptodsp05.html" class="image"><img alt="Gpptodsp05.jpg" src="https://processors.wiki.ti.com/images/d/df/Gpptodsp05.jpg" width="427" height="478" /></a>
+</p>
+<ul><li><ul><li>Use following Advanced Compiler Options:</li></ul></li></ul>
+<p><br />
+<a href="File_Gpptodsp06.html" class="image"><img alt="Gpptodsp06.jpg" src="https://processors.wiki.ti.com/images/a/a6/Gpptodsp06.jpg" width="427" height="478" /></a>
+</p>
+<h3><span class="mw-headline" id="Profile_Code_on_DSP_using_CCS">Profile Code on DSP using CCS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=9" title="Edit section: Profile Code on DSP using CCS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>CCS has several profiling capabilities that can be used to understand the performance of the code (i.e how many times each function is called, how long does a function call take ...). In order to fully understand how the profiler works please review the Tutorial provided in:
+</p>
+<ul><li>CCS Help-&gt;Tutorial_&gt;Application Code Tunning-&gt;Tools-&gt;Tunning Dashboard Tutorial</li></ul>
+<p>Here are the basic steps to start:
+</p>
+<ul><li>Open CCS project and rebuild it with Full Symbolic Debug (-g) option. (Optimization can still be enabled however full optimization will not be achieved because of -g compiler option. See <a href="http://software-dl.ti.com/ccs/esd/documents/sdto_cgt_debug_versus_optimization_tradeoff.html" title="Debug versus Optimization Tradeoff">Debug Vs Optimization Tradeoff</a>)</li>
+<li>Load Program</li>
+<li>Profile-&gt;Setup, Select "Collect Application Level ..."</li>
+<li>Activities Tab, Click on Clock to enable profiling (Enable/Disable Profiling)</li>
+<li>Click on icon next to Clock to enable all functions.</li>
+<li>The list of all the function should appear. A function can be removed by selecting it and typing Space key</li>
+<li>Profile-&gt;Viewer</li>
+<li>Run code (F5)</li>
+<li>Save results</li></ul>
+<p>One must be aware of the following limitations when using the Profiler
+</p>
+<ul><li>When using the Profiler on hardware the cycle results are not accurate because the profiler uses the cache in the background.</li>
+<li>When using the Profiler on simulator the cycle results are accurate when the code and data is placed in internal memory or cache. However when external memory is used the cycle results may not be accurate.</li></ul>
+<p>The Profiler is very useful to determine how many times a function is called. Because of the above limitations, to profile the number of cycles in the optimized code it may be necessary to use the TSC register as described in the next section.
+</p>
+<h3><span id="Benchmark_Code_on_DSP_using_the_Time_Stamp_Counter_(TSC)"></span><span class="mw-headline" id="Benchmark_Code_on_DSP_using_the_Time_Stamp_Counter_.28TSC.29">Benchmark Code on DSP using the Time Stamp Counter (TSC)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=10" title="Edit section: Benchmark Code on DSP using the Time Stamp Counter (TSC)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The Time Stamp Counter Registers (TSCL, TSCH) implement a 64-bit free running counter in the DSP. This counter can be used to count the number of cycles on the DSP. This is a very accurate method of benchmarking code on the DSP.
+For most applications the lower 32-bit (TSCL) counter is sufficient.
+</p><p>Slides 34-36 of <a href="https://processors.wiki.ti.com/images/6/6e/C64p_cgt_optimization.pdf" class="internal" title="C64p cgt optimization.pdf">C64p_cgt_optimization.pdf</a> show how to use the Time Stamp Counter.
+</p><p>An example of the benchmarking technique is shown below: -
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>include &lt;c6x.h&gt; // bring in references to TSCL, TSCH</li></ol>
+<p>void main() {
+</p>
+<pre>  ...
+  TSCL = 0; // Initiate CPU timer by writing any val to TSCL
+  ...
+  t1 = TSCL; // benchmark snapshot of free-running ctr
+  my_code_to_benchmark();
+  t2 = TSCL; // benchmark snapshot of free-running ctr
+</pre>
+<pre>  printf("# cycles ==&#160;%d\n", (t2-t1));
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Another example of the benchmarking technique using the full 64-bit TSCL/TSCH value is shown here. Note that this is not protected from an interrupt routine that may read TSCL between the _itoll() reads of TSCL and TSCH.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>include &lt;c6x.h&gt;   // bring in references to TSCL, TSCH</li>
+<li>include &lt;stdio.h&gt; // bring in reference to printf</li></ol>
+<p>void main() {
+</p>
+<pre>  unsigned long long t1, t2;
+  ...
+  TSCL = 0; // Initiate CPU timer by writing any val to TSCL
+  ...
+  t1 = _itoll( TSCH, TSCL ); // benchmark snapshot of free-running ctr
+  my_code_to_benchmark();
+  t2 = _itoll( TSCH, TSCL ); // benchmark snapshot of free-running ctr
+</pre>
+<pre>  printf("# cycles ==&#160;%ld\n", (t2-t1));
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>In the attached JPEGDEC_Wrapper.zip, <tt>tsc_h.asm</tt> is provided. <code>TSC_enable()</code> and <code>TSC_read()</code> are implemented in assembly. These APIs are used as follows:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>include &lt;c6x.h&gt; // bring in references to TSCL, TSCH</li></ol>
+<p>void main() {
+</p>
+<pre>  ...
+  TSC_enable(); // Initiate CPU timer by writing any val to TSCL
+  ...
+  t1 = TSC_read(); // benchmark snapshot of free-running ctr
+  my_code_to_benchmark();
+  t2 = TSC_read(); // benchmark snapshot of free-running ctr
+</pre>
+<pre>  printf("# cycles ==&#160;%d\n", (t2-t1));
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>The only reason you'd need this is if you need true 64 bit benchmarks. The asm functions atomically read both High &amp; Low 32 bits to ensure that no interrupts are taken between these reads which would skew results.
+</p>
+<h3><span class="mw-headline" id="Sample_Results">Sample Results</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=11" title="Edit section: Sample Results">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Set Up Hardware Platform: OMAP3530 EVM (Samsung Memory) + XDS510USB </b>
+</p>
+<ul><li>EVM Setup: Configure the OMAP board not to boot from Flash.
+<ul><li>Set Switch SW4 as follows:</li></ul></li></ul>
+<p>1=OFF
+2=ON
+3=ON
+4=ON
+5=OFF
+6=OFF
+7=OFF
+8=OFF
+</p><p><br />
+<b>Set up and connect to CCS </b>
+</p><p>See steps on <a href="Creating_a_New_DSP_BIOS_Project_on_OMAP35x.html#Important_Steps" title="Creating a New DSP BIOS Project on OMAP35x">connecting to OMAP35x with CCS</a>.
+</p><p><br />
+<b>Benchmarking Environment </b>
+</p>
+<ul><li>OMAP3530 running at 300MHz</li>
+<li>Cache Configuration:
+<ul><li>L1P = 32KB</li>
+<li>L1D = 16KB</li>
+<li>L2 = 64KB</li></ul></li></ul>
+<p><br />
+<b>Results</b>
+</p><p><br />
+</p>
+<table border="1">
+  <tbody><tr>
+    <th> <b>Optimization Level</b>   </th> <th> <b>Number of Cyles</b>  </th> <th> <b>Time (ms)</b>  </th>
+  </tr><tr>
+    <td> Debug + No Cache </td> <td> 2865979160 </td> <td> 955 </td>
+  </tr><tr class="mw-empty-elt">
+  </tr><tr>
+    <td> Debug + Cache </td> <td> 138761616 </td> <td> 462 </td>
+  </tr><tr class="mw-empty-elt">
+  </tr><tr>
+    <td> Release + No Cache </td> <td> 6983166 </td> <td> 23 </td>
+  </tr><tr class="mw-empty-elt">
+</tr></tbody></table>
+<p><br />
+</p>
+<ul><li>Note 1: Performance of the GPP code on a PC is in the 200ms range. However this is not an apples to apples comparism because an embedded GPP processor is different from a PC processor.</li></ul>
+<ul><li>Note 2: Performance of a fully optimized JPEG decoder is around 12ms.</li></ul>
+<h2><span class="mw-headline" id="Step_4:_Make_the_Code_XDAIS_Compliant">Step 4: Make the Code XDAIS Compliant</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=12" title="Edit section: Step 4: Make the Code XDAIS Compliant">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>An excellent reference to begin with is <a href="XDAIS_Documentation.html" title="XDAIS Documentation">XDAIS Docs</a> -&gt; <a href="http://www.ti.com/lit/pdf/spra579" class="extiw" title="tidoc:spra579">Making DSP Algorithms Compliant with the TMS320 DSP Algorithm Standard</a>.
+</p><p>XDAIS compliance is important because, as systems grow, consumers often add additional algorithms to their systems. If each algorithm allocates memory differently or they all have an external function named <i>doIt</i> then we quickly run into problems!
+</p>
+<h3><span class="mw-headline" id="XDAIS_Wizard">XDAIS Wizard</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=13" title="Edit section: XDAIS Wizard">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There is a XDAIS Wizard that can be used to generate the XDAIS wrappers.  It is available at <a rel="nofollow" class="external free" href="http://xdaiswiz.com/">http://xdaiswiz.com</a> for a low cost. This tool helps automate most of the XDAIS-wrapper and XDM-wrapper generation. It also generates the CCS library and application projects.
+</p>
+<h3><span class="mw-headline" id="Algorithm_Preparation">Algorithm Preparation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=14" title="Edit section: Algorithm Preparation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Before implementing the XDAIS interface, one needs to make sure that the implementation of the Algorithm obeys some rules that simply define good programming practices.
+</p><p>Here are some of the main rules. Details about these rules can be found in the <a href="http://www.ti.com/lit/pdf/spru352" class="extiw" title="tidoc:spru352">TMS320 DSP Algorithm Standard</a> User's Guide, Appendix A.
+</p>
+<ul><li>C-callable (Rule 1)</li>
+<li><a href="Reentrant.html" title="Reentrant">Re-entrant</a> (Rule 2)</li>
+<li>Relocatable (Rule 3,4)</li>
+<li>Framework independent (Rule 9)</li>
+<li>Hardware &amp; I/O independent (Rule 6)</li>
+<li>Able to run in any type of memory (Rule 27,33)</li>
+<li>Naming conventions (Rule 8,10)</li></ul>
+<h3><span class="mw-headline" id="Implementing_the_IALG_interface">Implementing the IALG interface</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=15" title="Edit section: Implementing the IALG interface">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The IALG memory interface is fundamental to XDAIS. The premise is to divide software between components and system integration
+to provide optimal reuse partitioning, allowing:
+</p>
+<ul><li>System Integrator/framework: full control of system resources</li>
+<li>Algorithm Author: to write components that can be used in any kind of system</li></ul>
+<p>Algorithms never ‘take’ memory directly: -
+</p>
+<ul><li>Algos tell system its needs ( algNumAlloc(), algAlloc() )</li>
+<li>Framework determines what memory to give/lend to algo (MEM_alloc() )</li>
+<li>Framework tells algo what memories it may use ( algInit() )</li>
+<li>Framework provides the memory typically via a malloc-like action</li>
+<li>Algos may request internal or external RAM, but must function with either</li>
+<li>Allows framework more control of system resources</li>
+<li>Framework should note algo cycle performance can/will be affected</li>
+<li>Algo authors can request memory as ‘scratch’ or ‘persistent’
+<ul><li>Persistent&#160;: ownership of resource must persist during life of algo</li>
+<li>Scratch&#160;: ownership or resource required only when algo is running</li></ul></li></ul>
+<h4><span class="mw-headline" id="Defining_the_Private_Instance_Object">Defining the Private Instance Object</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=16" title="Edit section: Defining the Private Instance Object">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The private instance object structure contains the data which is not exposed to customers. The first field of this structure must be the IALG_Obj. The other members are algorithm specific.The instance object is defined in <code>jpgdec_ti.h</code>.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+/*-------------------------------------------------------------------*/
+/* The JPEG Object structure                                         */
+/*-------------------------------------------------------------------*/
+/*
+</p>
+<pre>*  ======== JPEGDEC_TI_Obj ========
+*/
+</pre>
+<p>typedef struct JPEGDEC_TI_Obj {
+</p>
+<pre>   IALG_Obj	alg;		/* MUST be first field of all JPEGDEC objs */
+   unsigned int       *planar_buff;
+   unsigned int       *intl_buff;
+   unsigned int       *dct_buff;
+   unsigned char      *data_str;
+   unsigned char       *ptrCopyIntPersMem;
+</pre>
+<pre>    . . .
+</pre>
+<p>} JPEGDEC_TI_Obj;
+&lt;/syntaxhighlight&gt;
+</p>
+<h4><span class="mw-headline" id="IALG_Interface">IALG Interface</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=17" title="Edit section: IALG Interface">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The IALG Interface is defined in <code>ialg.h</code> header file. This file can be found in recent XDAIS releases in xdais_X_YY/packages/ti/xdais/ialg.h (as well as being distributed with CCS in C:\CCStudio_v3.3\C6000\xdais\include\ialg.h). This interface is preserved in all versions of <a href="Category_XDAIS.html" title="Category:XDAIS">XDAIS</a> releases.  The <code>IALG_Fxns</code> structure defines the list of methods that must be implemented
+by all XDAIS algorithms.
+</p>
+<ul><li><code>algActivate()</code> - initialize scratch memory buffers prior to processing</li>
+<li><code>algAlloc()</code> - get algorithm object's memory requirements.</li>
+<li><code>algControl()</code> - algorithm control and status.</li>
+<li><code>algDeactivate()</code> - save persistent data to non-scratch memory</li>
+<li><code>algFree()</code> - get algorithm object's initialized memory records.</li>
+<li><code>algInit()</code> - initialize algorithm's instance object</li>
+<li><code>algMoved()</code> - notify instance that instance memory has been relocated (optional, and often not implemented)</li>
+<li><code>algNumAlloc()</code> - number of memory allocations requests required</li></ul>
+<p>For the JPEG decoder, the implementations are provided in <code>jpegdec_ti.c</code> and the function table is defined in <code>jpegdec_ti_vtab.c</code>. For methods which are not implemented, NULL is passed in the vector table. Note that the IALG function table is extended with the <code>JPEGDEC_TI_decode()</code> and <code>JPEGDEC_TI_control()</code> functions. These functions are part of the XDM interface and will be discussed in more details in the following sections.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+/*
+</p>
+<pre>*  ======== JPEGDEC_TI_IJPEGDEC ========
+*  This structure defines TI's implementation of the IJPEGDEC interface
+*  for the JPEGDEC_TI module.
+*/
+</pre>
+<ol><li>define IALGFXNS                                                                \</li></ol>
+<pre>   &amp;JPEGDEC_TI_IALG,		    /* module ID */			        \
+   JPEGDEC_TI_activate,	    /* activate */		                \
+   JPEGDEC_TI_alloc,		    /* algAlloc */			        \
+   NULL,			    /* control (NULL =&gt; no ctrl ops) */         \
+   JPEGDEC_TI_deactivate,	    /* deactivate */		                \
+   JPEGDEC_TI_free,		    /* free */			                \
+   JPEGDEC_TI_initObj,		    /* init */				        \
+   NULL,	    	            /* moved (NULL =&gt; not suported) */          \
+   JPEGDEC_TI_numAlloc             /* numAlloc (NULL =&gt; IALG_DEFMEMRECS) */
+</pre>
+<ol><li>define IIMG_DEC_Fxns                                                           \</li></ol>
+<pre>   IALGFXNS,                                                                   \
+   JPEGDEC_TI_decode,                                                          \
+   JPEGDEC_TI_control
+</pre>
+<p>IJPEGDEC_Fxns JPEGDEC_TI_IJPEGDEC = {
+</p>
+<pre>   /* module_vendor_interface */
+   IIMG_DEC_Fxns
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p>
+<h4><span class="mw-headline" id="Algorithm_Memory_Requirements">Algorithm Memory Requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=18" title="Edit section: Algorithm Memory Requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The algorithm notifies the application how many memory blocks it needs through the <code>algNumAlloc()</code> API. For each memory block, the algorithm fills the following Memory Record Format through the <code>algAlloc()</code> API based on the static parameters provided in the call.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+typedef struct IALG_MemRec {
+</p>
+<pre>   Uns             size;       /* size in MAU of allocation */
+   Int             alignment;  /* alignment requirement (MAU) */
+   IALG_MemSpace   space;      /* allocation space */
+   IALG_MemAttrs   attrs;      /* memory attributes */
+   Void            *base;      /* base address of allocated buf */
+</pre>
+<p>} IALG_MemRec;
+&lt;/syntaxhighlight&gt;
+</p><p>These APIs are called in <code>ALG_create()</code> (Note that <code>ALG_create()</code> is not an IALG API. It is a "helper" API that invokes the IALG APIs). This <a href="Memory_management_in_XDAIS_with_DSKT2.html" title="Memory management in XDAIS with DSKT2">topic</a> explains the details of the various Framework Component modules (DSKT2) recommended for invoking XDAIS algorithms.
+</p><p>The algorithm fills out all the members of the structure except <code>IALG_MemRec.base</code> which will be filled by the application after it allocates the memory block. If the application allocates the memory successfully it will update <code>IALG_MemRec.base</code>.
+</p>
+<h3><span class="mw-headline" id="Testing_XDAIS_Compliance">Testing XDAIS Compliance</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=19" title="Edit section: Testing XDAIS Compliance">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The XDAIS Compliance can be tested using the <a href="QualiTI_XDAIS_Compliance_Tool.html" class="mw-redirect" title="QualiTI XDAIS Compliance Tool">QualiTI XDAIS Compliance Tool</a>.
+</p><p><a href="File_Qualiti_ScreenShot043.html" class="image"><img alt="Qualiti ScreenShot043.jpg" src="https://processors.wiki.ti.com/images/c/c8/Qualiti_ScreenShot043.jpg" width="684" height="713" /></a>
+</p><p>This tool checks the compliance rules and generates a report. An algorithm that passes these tests is considered XDAIS compliant.
+</p><p>For any given rule failure, the <a href="QualiTI_XDAIS_Compliance_Tool.html" class="mw-redirect" title="QualiTI XDAIS Compliance Tool">QualiTI wiki topic</a> and the tool itself tells you: -
+</p>
+<ul><li>what went wrong</li>
+<li>why it went wrong</li>
+<li>possible solutions to fixing the problem.</li></ul>
+<h3><span class="mw-headline" id="Further_XDAIS_Examples">Further XDAIS Examples</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=20" title="Edit section: Further XDAIS Examples">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>An example of a XDAIS FIR algorithm can be found here <a href="XDAIS_sample_algorithm.html" title="XDAIS sample algorithm">XDAIS sample algorithm</a>. This is useful because it is a complete, buildable example. Note however that it does <i>not</i> implement an XDM interface.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Step_5_:_Make_the_Code_XDM_Compliant">Step 5&#160;: Make the Code XDM Compliant</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=21" title="Edit section: Step 5 : Make the Code XDM Compliant">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>An algorithm should always implement the latest version of XDM. See more information about <a href="XDM_FAQ.html#What.27s_with_the_XDM_versioning.3F" title="XDM FAQ">XDM versioning</a> </b>
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="XDM:_An_extension_of_XDAIS">XDM: An extension of XDAIS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=22" title="Edit section: XDM: An extension of XDAIS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>XDM defines a set of IALG extensions which are required in order to use an algorithm with <a href="Codec_Engine.html" title="Codec Engine">Codec Engine</a>. These interfaces are defined for multimedia algorithms
+</p>
+<ul><li>video encode/decode: IVIDENC(1), IVIDDEC(2)</li>
+<li>imaging encode/decode: IIMGENC(1), IIMGDEC(1)</li>
+<li>speech encode/decode: ISPHENC(1), ISPHDEC(1)</li>
+<li>audio encode/decode: IAUDENC(1), IAUDDEC(1)</li>
+<li>video analytics: IVIDANALYTICS</li>
+<li>transcoding: IVIDTRANSCODE</li></ul>
+<p><a href="File_Gpptodsp07.html" class="image"><img alt="Gpptodsp07.jpg" src="https://processors.wiki.ti.com/images/e/e9/Gpptodsp07.jpg" width="565" height="311" /></a>
+</p><p><br />
+These interfaces are provided part of the XDAIS package in <code>\xdais_#_##\packages\ti\xdais\dm</code>
+</p><p>An XDM interface uses the standard XDAIS APIs, except for the algControl() which is replaced by a new control() API. In additon to that XDM defines a new process() API. An XDAIS algorithm must support the XDM parameters and implement the new APIs to become XDM compliant.
+</p><p>In the attached JPEGDEC_Wrapper.zip, the control() and process() APIs are called <code>JPEGDEC_TI_control()</code> and  <code>JPEGDEC_TI_decode()</code> respectively.
+</p>
+<h3><span class="mw-headline" id="Extending_XDM">Extending XDM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=23" title="Edit section: Extending XDM">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>An algorithm that requires more functionality than what a specific XDM interface is providing can extend the interface.
+There are some constraints when using Codec Engine. See <a href="Extending_data_structures_in_xDM-2.html" class="mw-redirect" title="Extending data structures in xDM">Extending data structures in xDM</a>. In the same topic, read also about [[Extending_data_structures_in_xDM#The_perils_of_extending_inArgs.2C_outArgsthe perils of extending inArgs, outArgs].
+</p><p><a href="File_Gpptodsp08.html" class="image"><img alt="Gpptodsp08.jpg" src="https://processors.wiki.ti.com/images/0/0e/Gpptodsp08.jpg" width="510" height="294" /></a>
+</p><p>For example, let's consider imaging decode algorithms. The XDM IIMGDEC interface was designed for this class of algorithms.
+</p><p>The following creation parameters are supported for this interface (defined in <code>\xdais_#_##\packages\ti\xdais\dm\iimgdec.h</code>)
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+/**
+</p>
+<pre>*  @brief      Defines the creation time parameters for
+*              all IIMGDEC instance objects.
+*
+*  @remarks    The application should set the parameters to 0 to use
+*              the algorithm's default values.
+*
+*  @extensibleStruct
+*/
+</pre>
+<p>typedef struct IIMGDEC_Params {
+</p>
+<pre>   XDAS_Int32 size;            /**&lt; @sizeField */
+   XDAS_Int32 maxHeight;       /**&lt; Maximum image height. */
+   XDAS_Int32 maxWidth;        /**&lt; Maximum image width. */
+   XDAS_Int32 maxScans;        /**&lt; Maximum number of scans. */
+   XDAS_Int32 dataEndianness;  /**&lt; Endianness of output data.
+                                *
+                                *   @sa    XDM_DataFormat
+                                */
+   XDAS_Int32 forceChromaFormat;/**&lt; @copydoc XDM_ChromaFormat
+                                *
+                                *   @sa XDM_ChromaFormat.
+                                */
+</pre>
+<p>}IIMGDEC_Params;
+&lt;/syntaxhighlight&gt;
+</p><p>Let's assume we are implementing a JPEG decoder which requires some additional creation parameters. We would need to extend the IIMGDEC interface.
+</p><p>In the attached JPEGDEC_Wrapper.zip, see file <code>JPEGDEC_Wrapper\AlgApi\Interface\ISA\C64x\include\ijpegdec.h </code>
+</p><p>The following shows how <code>IIMGDEC_Params</code> is extended.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+typedef struct IJPEGDEC_Params {
+	IIMGDEC_Params imgdecParams;
+</p>
+<pre>       XDAS_Int32	progressiveDecFlag;
+</pre>
+<p>	XDAS_Int32	outImgRes;
+</p>
+<pre>       XDAS_UInt8	RGB_Output;
+</pre>
+<p>} IJPEGDEC_Params;
+&lt;/syntaxhighlight&gt;
+</p><p>Note that the example above uses XDM 0.9 which is an older version of the interface. Current algorithms <b>should implement XDM 1.x</b> which is the latest version of the interface See more information about <a href="XDM_FAQ.html#What.27s_with_the_XDM_versioning.3F" title="XDM FAQ">XDM versioning</a>
+</p><p><br />
+If we have a GPP algorithm that belongs to one of these XDM categories, making the algorithm XDM compliant means implementing one of the XDM interfaces and possibly extending it. If the algorithm does not belong to any of these categories (e.g. Face Recognition, Barcode Scanner), then it would be easier to use the
+<a href="Getting_started_with_IUNIVERSAL.html" title="Getting started with IUNIVERSAL">IUNIVERSAL interface</a> instead of implementing one of the XDM interfaces. The IUNIVERSAL wiki topic also comes with complete sample code.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="XDM_Resources">XDM Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=24" title="Edit section: XDM Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>For more information about XDM see <a href="XDM_FAQ.html" title="XDM FAQ">XDM FAQ</a>.</li>
+<li>XDM codecs can be obtained from <a rel="nofollow" class="external text" href="http://www.ti-estore.com/Merchant2/merchant.mvc?Screen=CTGY&amp;Category_Code=dEmbSoft">TI eStore</a></li></ul>
+<h2><span class="mw-headline" id="Step_6_:_Create_RTSC_package_and_Unit_Server_for_Codec_Engine">Step 6&#160;: Create RTSC package and Unit Server for Codec Engine</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=25" title="Edit section: Step 6 : Create RTSC package and Unit Server for Codec Engine">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>At this point, we should have an XDM compliant library and the next goal is to invoke the algorithm from a Linux or WinCE application using Codec Engine and running on the ARM.
+</p><p>Codec Engine requires <a rel="nofollow" class="external text" href="http://wiki.eclipse.org/DSDP/RTSC">RTSC packages</a> to understand how to run the DSP executable. The package includes some information called meta-data that is used by the Codec Engine. Both, the codec and the DSP server must be packaged in the RTSC format. This can be done using the <a href="RTSC_Codec_And_Server_Package_Wizards.html" title="RTSC Codec And Server Package Wizards">RTSC Codec and Server Package Wizards</a>. The Wizards run both, on Linux and on Windows.
+</p>
+<h2><span id="Step_7_:_Test_the_package,_server_with_DMAI_GPP_sample_app_and_DVTB"></span><span class="mw-headline" id="Step_7_:_Test_the_package.2C_server_with_DMAI_GPP_sample_app_and_DVTB">Step 7&#160;: Test the package, server with DMAI GPP sample app and DVTB</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=26" title="Edit section: Step 7 : Test the package, server with DMAI GPP sample app and DVTB">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>After building the Unit-Server package, a server executable will be generated. This server includes the codec, DSP/BIOS, and all other software modules required to run the codec on the DSP.
+</p><p>There are currently several Linux application that can be used to test an XDM compliant codec.
+</p>
+<ul><li><a href="Davinci_Multimedia_Application_Interface.html" title="Davinci Multimedia Application Interface">DMAI</a> provides sample applications for all the XDM interfaces. Very useful to test XDM-compliant codecs and to understand the general flow of an application which uses XDM compliant codecs.</li></ul>
+<ul><li>The <a href="https://processors.wiki.ti.com/index.php?title=Category:DVTB&amp;action=edit&amp;redlink=1" class="new" title="Category:DVTB (page does not exist)">DVTBis</a> a Linux application that is used as a testbench to test XDM codecs. It does not support all the XDM interfaces.</li></ul>
+<p>WinCE applications will be available in the near future.
+</p>
+<h2><span class="mw-headline" id="Step_8_:_Advanced_Optimization_of_the_DSP_Code">Step 8&#160;: Advanced Optimization of the DSP Code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=27" title="Edit section: Step 8 : Advanced Optimization of the DSP Code">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There are many strategies to improve the performance of code running on a DSP. However all these strategies require that the original code is architectured to use block processing. An algorithm that uses sample by sample (or macroblock by macroblock) processing will not take advantage of the DSP architecture and will probably have the same performance on the DSP and on the GPP. For such an algorithm, the architecture must be modified to use blockprocessing before any further optimization is attempted.
+</p>
+<h3><span class="mw-headline" id="Use_Compiler_Intrinsics_to_Access_Assembly_Language_Statements">Use Compiler Intrinsics to Access Assembly Language Statements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=28" title="Edit section: Use Compiler Intrinsics to Access Assembly Language Statements">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Compiler intrinsics allow C code to access certain asm instructions through a function like API. When using intrinsics, the compiled code uses specific assembly instructions which increases the speed of the DSP code.
+</p><p>See <a href="http://www.ti.com/lit/pdf/spru187" class="extiw" title="tidoc:spru187">TMS320C6000 Optimizing Compiler v6.1</a> section 7.5.4
+</p><p>The following excerpt from <code>jpegdec_rgb.c</code> shows how the <code>unsigned _spacku4(int src1, int src2)</code> intrinsic is used.
+</p><p>&lt;syntaxhighlight lang= 'c' &gt;
+Y = _spacku4(0,*iDctInPtr_Y++);
+if (even == uv_inc) V = _spacku4(0,*iDctInPtr_V++);
+if (even == uv_inc) U = _spacku4(0,*iDctInPtr_U++);
+if (even == uv_inc) even = 0;
+even++;
+&lt;/syntaxhighlight&gt;
+</p><p>It is possible to run the same code using intrinsics on the GPP by using the C intrinsics host library. This library implements in C the intrinsic functions. See <a href="Run_Intrinsics_Code_Anywhere.html" title="Run Intrinsics Code Anywhere">Run Intrinsics Code Anywhere</a>.
+</p><p><i>Note</i> - this particular example code-base was written before the above Intrinsics library existed hence it has a custom implementation. We would advise customers to use the version linked above since it is maintained separately.
+</p>
+<h3><span class="mw-headline" id="Inline_Functions">Inline Functions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=29" title="Edit section: Inline Functions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The DSP code must have as few as possible function calls in order to be performant. Inline functions as much as possible.
+</p>
+<h3><span class="mw-headline" id="MUST_ITERATE_Pragma">MUST_ITERATE Pragma</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=30" title="Edit section: MUST ITERATE Pragma">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Compiler will be able to better schedule loops if it has loop count information. Use MUST_ITERATE pragma for that. See example in <a href="https://software-dl.ti.com/ccs/esd/documents/sdto_cgt_pragmas_you_can_understand.html" title="Pragmas You Can Understand">Pragmas You Can Understand</a>
+</p>
+<h3><span class="mw-headline" id="Use_Assembly_Optimized_Functions_from_the_DSPLIB_and_IMGLIB">Use Assembly Optimized Functions from the DSPLIB and IMGLIB</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=31" title="Edit section: Use Assembly Optimized Functions from the DSPLIB and IMGLIB">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/sprc265.html">C64x+ DSPLIB</a> and <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/sprc264.html">C64x+ IMGLIB</a> provide a set of optimized functions commonly used in digital signal and imaging applications (FFT, FIR, IIR, IDCT ...)
+These functions can be integrated in the code to improve the performance.
+</p>
+<h3><span class="mw-headline" id="Using_the_DMA_Engine">Using the DMA Engine</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=32" title="Edit section: Using the DMA Engine">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The DMA can be used to off load the DSP during memory copies. Usually ping/pong buffers are used. The DSP works on buffer ping while data is copied to pong. The ping/pong buffers are usually allocated in fast internal memory.
+</p>
+<h3><span class="mw-headline" id="Further_Optimizations">Further Optimizations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=33" title="Edit section: Further Optimizations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>See <a href="Optimization_Techniques_for_the_TI_C6000_Compiler.html" title="Optimization Techniques for the TI C6000 Compiler">TI C6000 Compiler Optimization Techniques</a>
+</p>
+<h2><span class="mw-headline" id="FAQ">FAQ</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=34" title="Edit section: FAQ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="What_happens_to_global_symbols_in_XDAIS?"></span><span class="mw-headline" id="What_happens_to_global_symbols_in_XDAIS.3F">What happens to global symbols in XDAIS?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=35" title="Edit section: What happens to global symbols in XDAIS?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>All global symbols must be compliant to the XDAIS Rules (8,9) to avoid name space collision. However, in many algorithms not all global symbols need to be exposed. It is possible to hide some of the global symbols using partial linking.
+</p><p>See <a href="CCStudio_FAQ.html#Q:_How_do_I_add_custom_build_steps_.28eg_partial_link.29_to_CCStudio_library_pjt.27s.3F" title="CCStudio FAQ">Partial linking in CCS</a>
+</p>
+<h3><span id="Can_I_use_malloc()_in_XDAIS?"></span><span class="mw-headline" id="Can_I_use_malloc.28.29_in_XDAIS.3F">Can I use malloc() in XDAIS?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=36" title="Edit section: Can I use malloc() in XDAIS?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>XDAIS does not allow algorithms to allocate memory directly. This enables memory to be shared among several algorithms. The algorithm will use the IALG interface to notify the application about its memory needs. The application will try to allocate this memory and, if successful, will provide to the algorithm the pointer to it.
+</p><p>So, an XDAIS compliant algorithm should not use malloc().
+</p>
+<h3><span id="How_do_I_make_C++_code_XDAIS_compatible?"></span><span class="mw-headline" id="How_do_I_make_C.2B.2B_code_XDAIS_compatible.3F">How do I make C++ code XDAIS compatible?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=37" title="Edit section: How do I make C++ code XDAIS compatible?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The XDAIS interface is C based and there is no support for C++ XDAIS algorithms. However, XDAIS algorithms can be consummed in a C++ environment.
+</p>
+<h3><span id="How_do_I_use_printf()_with_Codec_Engine?"></span><span class="mw-headline" id="How_do_I_use_printf.28.29_with_Codec_Engine.3F">How do I use printf() with Codec Engine?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=38" title="Edit section: How do I use printf() with Codec Engine?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Codec Engine has a trace module that has similar functionality: <a href="TraceUtil.html" title="TraceUtil">TraceUtil</a>
+</p>
+<h3><span id="How_will_the_performance_be_affected_when_I_call_my_algorithm_from_the_GPP_through_Codec_Engine?"></span><span class="mw-headline" id="How_will_the_performance_be_affected_when_I_call_my_algorithm_from_the_GPP_through_Codec_Engine.3F">How will the performance be affected when I call my algorithm from the GPP through Codec Engine?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=39" title="Edit section: How will the performance be affected when I call my algorithm from the GPP through Codec Engine?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>See <a href="Codec_Engine_Overhead.html" title="Codec Engine Overhead">Codec Engine Overhead</a>
+</p>
+<h3><span id="When_I_run_my_code_on_the_DSP_with_CCS_how_can_I_follow_which_functions_are_being_called?"></span><span class="mw-headline" id="When_I_run_my_code_on_the_DSP_with_CCS_how_can_I_follow_which_functions_are_being_called.3F">When I run my code on the DSP with CCS how can I follow which functions are being called?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=40" title="Edit section: When I run my code on the DSP with CCS how can I follow which functions are being called?">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Use the CCS Call Stack. In CCS, View-&gt;Call Stack. For best results should use
+</p><p>Build Options:
+</p>
+<ul><li>Basic: Generate Debug Info - Full Symbolic Debug (-g)</li>
+<li>Basic: Opt Level - None</li></ul>
+<h2><span class="mw-headline" id="Attachments">Attachments</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;section=41" title="Edit section: Attachments">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a href="https://processors.wiki.ti.com/images/5/5c/JPEGDEC_Wrapper.zip" class="internal" title="JPEGDEC Wrapper.zip">Media:JPEGDEC_Wrapper.zip</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130234146
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.118 seconds
+Real time usage: 0.127 seconds
+Preprocessor visited node count: 208/1000000
+Preprocessor generated node count: 270/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2425/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:2094-0!canonical and timestamp 20201130234146 and revision id 181626
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting GPP code to DSP and Codec Engine</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting GPP code to DSP and Codec Engine</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Porting GPP code to DSP and Codec Engine</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Porting GPP code to DSP and Codec Engine</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Porting GPP code to DSP and Codec Engine</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting GPP code to DSP and Codec Engine</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting GPP code to DSP and Codec Engine</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Porting GPP code to DSP and Codec Engine</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Porting GPP code to DSP and Codec Engine</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;oldid=181626">https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;oldid=181626</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_XDAIS.html" title="Category:XDAIS">XDAIS</a></li><li><a href="Category_Codecs.html" title="Category:Codecs">Codecs</a></li><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Porting+GPP+code+to+DSP+and+Codec+Engine" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Porting_GPP_code_to_DSP_and_Codec_Engine.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Porting_GPP_code_to_DSP_and_Codec_Engine.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Porting_GPP_code_to_DSP_and_Codec_Engine.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Porting_GPP_code_to_DSP_and_Codec_Engine.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;oldid=181626" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Porting_GPP_code_to_DSP_and_Codec_Engine&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 14:38.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.118","walltime":"0.127","ppvisitednodes":{"value":208,"limit":1000000},"ppgeneratednodes":{"value":270,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2425,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130234146","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":241});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_GPP_code_to_DSP_and_Codec_Engine by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:28:21 GMT -->
+</html>

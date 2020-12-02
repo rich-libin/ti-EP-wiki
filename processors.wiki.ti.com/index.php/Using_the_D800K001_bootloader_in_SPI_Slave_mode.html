@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_the_D800K001_bootloader_in_SPI_Slave_mode by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:31:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Using the D800K001 bootloader in SPI Slave mode - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Using_the_D800K001_bootloader_in_SPI_Slave_mode","wgTitle":"Using the D800K001 bootloader in SPI Slave mode","wgCurRevisionId":57073,"wgRevisionId":57073,"wgArticleId":2651,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["C674x","OMAPL1","Boot","OMAPL1x Topic Boot"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Using_the_D800K001_bootloader_in_SPI_Slave_mode","wgRelevantArticleId":2651,"wgRequestId":"bb6260f6bc0451aca50dbe5b","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Using_the_D800K001_bootloader_in_SPI_Slave_mode rootpage-Using_the_D800K001_bootloader_in_SPI_Slave_mode skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Using the D800K001 bootloader in SPI Slave mode</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This page is an extension to the existing application report <a rel="nofollow" class="external autonumber" href="http://www-s.ti.com/sc/techlit/sprab04">[1]</a> and provides a detailed description of the boot procedure from host perspective when SPI Slave boot mode is selected on the DSP side. 
+</p>
+<dl><dd><dl><dd><dl><dd><a href="File_D800K001_Signal_Connection_SPI.html" class="image"><img alt="D800K001 Signal Connection SPI.jpg" src="https://processors.wiki.ti.com/images/1/18/D800K001_Signal_Connection_SPI.jpg" width="520" height="205" /></a></dd></dl></dd></dl></dd></dl>
+<p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Generating_an_Application_Image_Script_.28AIS.29"><span class="tocnumber">1</span> <span class="toctext">Generating an Application Image Script (AIS)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#SPI_Slave_boot_procedure"><span class="tocnumber">2</span> <span class="toctext">SPI Slave boot procedure</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#About_the_AIS_interpreter_on_the_Host"><span class="tocnumber">2.1</span> <span class="toctext">About the AIS interpreter on the Host</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Start-word_synchronization_.28SWS.29"><span class="tocnumber">2.2</span> <span class="toctext">Start-word synchronization (SWS)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Ping_Op-code_synchronization_.28POS.29"><span class="tocnumber">2.3</span> <span class="toctext">Ping Op-code synchronization (POS)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Op-code_synchronization_.28OS.29"><span class="tocnumber">2.4</span> <span class="toctext">Op-code synchronization (OS)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Boot_Requirements.2C_Hardware_Setup_and_Default_Settings"><span class="tocnumber">3</span> <span class="toctext">Boot Requirements, Hardware Setup and Default Settings</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h2><span id="Generating_an_Application_Image_Script_(AIS)"></span><span class="mw-headline" id="Generating_an_Application_Image_Script_.28AIS.29">Generating an Application Image Script (AIS)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=1" title="Edit section: Generating an Application Image Script (AIS)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The AIS format is a format of storing the boot image which can be interpreted by the D800K001 bootloader. The AISgen tool converts a COFF-file for the DSP into AIS format (either a binary or a header file). Therefore several settings can be configured in the GUI of this tool:
+</p>
+<ul><li>Boot mode</li>
+<li>Clock source</li>
+<li>PLL configuration</li>
+<li>EMIF configuration</li>
+<li>"Standard" or compressed AIS</li>
+<li>…</li></ul>
+<p>Please refer to the application report <a rel="nofollow" class="external autonumber" href="http://www-s.ti.com/sc/techlit/sprab04">[2]</a> for a detailed description the AISgen tool and the required steps to generate AIS files.
+</p><p><b>Note:</b>	AIS files do not perform all of the configuration steps that a GEL file typically handles during development. Notably, AIS will not setup the Pin Multiplexing Control Register (PINMUX) and the Power and Sleep Controller Register (PSC) for any peripheral devices your DSP application uses. Be sure to add the necessary configuration steps to your application code before generating the AIS file.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="SPI_Slave_boot_procedure">SPI Slave boot procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=2" title="Edit section: SPI Slave boot procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="About_the_AIS_interpreter_on_the_Host">About the AIS interpreter on the Host</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=3" title="Edit section: About the AIS interpreter on the Host">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When booting from an external host processor, the host acts as the communication master, and the bootloader acts as the slave. Since the bootloader doesn’t have direct access to the AIS, the host processor must transfer it to the bootloader through a well-defined protocol explained in the following sections. An AIS interpreter is required on the host processor to control this transfer. 
+</p><p>The AIS interpreter on the host processor is responsible for transferring the AIS to the bootloader. Therefore, the host has to understand the transfer protocol and implement the required handshake mechanism.
+It is important to establish a reliable link between the host and the bootloader before starting a serial boot load using the AIS. Once this link is established, the AIS can be transferred to the bootloader. This complete synchronization and transmission process is divided into three states: 
+</p>
+<ul><li>Start-word synchronization (SWS),</li>
+<li>Ping Op-code synchronization (POS) and</li>
+<li>Op-code synchronization (OS).</li></ul>
+<h3><span id="Start-word_synchronization_(SWS)"></span><span class="mw-headline" id="Start-word_synchronization_.28SWS.29">Start-word synchronization (SWS)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=4" title="Edit section: Start-word synchronization (SWS)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>After power ON reset (POR), the bootloader takes some time to initialize and configure the boot peripheral. Similarly, the host also takes its own time to initialize and prepare to boot the device. A SWS mechanism is used to synchronize the device and host after POR. To achieve SWS, the host repeatedly sends transmit-start-word (XMT_START) to the device until it receives the receive-start-word (RECV_START) from the bootloader.
+</p>
+<dl><dd><dl><dd><dl><dd><a href="File_Flow_SWS.html" class="image"><img alt="Flow SWS.jpg" src="https://processors.wiki.ti.com/images/5/58/Flow_SWS.jpg" width="544" height="399" /></a></dd></dl></dd></dl></dd></dl>
+<p>For the SPI slave modes, the bootloader operates the SPI peripheral in 16-bit mode, so that both start words are 16-bit values:
+</p>
+<ul><li>XMT_START = 0x5853</li>
+<li>RECV_START = 0x5253</li></ul>
+<p><b>Note: 	</b>While XMT_START and RECV START are 16-bit in SPI Slave mode, all other data including op-codes are 32 bit, and all 32 bits need to be transmitted to the bootloader regardless of the boot mode.
+</p><p><br />
+</p>
+<h3><span id="Ping_Op-code_synchronization_(POS)"></span><span class="mw-headline" id="Ping_Op-code_synchronization_.28POS.29">Ping Op-code synchronization (POS)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=5" title="Edit section: Ping Op-code synchronization (POS)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The POS is used to further ensure that the serial link between the host and the device is reliable for exchanging boot information.
+</p><p><u>After successful SWS:</u>
+</p>
+<ul><li>The host sends the PING_DEVICE (0x5853590B) op-code to the bootloader and receives the RECV_PING_DEVICE (0x5253590B) as acknowledgment from the bootloader.</li>
+<li>The host sends an arbitrary 32-bit number (N) to the bootloader and gets back the same number (N) from the bootloader.</li>
+<li>The host counts from 1 to N, sending each number to the bootloader and receiving the same number in response. Each number sent or received is a 32-bit value.</li></ul>
+<p><b>Note: 	</b>All multi-word values transmitted by the host should be sent in little-endian order. For instance, the Ping opcode (0x5853590B) is sent as 0x590B, 0x5853 in 16-bit mode. The same applies to responses received from the bootloader.
+</p><p>The count (N) is selected by the host and should be appropriate to assure successful communication between the device and host. The recommended value of N is 2.
+</p>
+<dl><dd><dl><dd><dl><dd><a href="File_Flow_POS.html" class="image"><img alt="Flow POS.jpg" src="https://processors.wiki.ti.com/images/c/c5/Flow_POS.jpg" width="670" height="1032" /></a></dd></dl></dd></dl></dd></dl>
+<p>After the successful execution of POS, the host starts reading AIS commands (magic number is checked and ignored by the host) from its source and starts booting the device.
+</p><p><br />
+</p>
+<h3><span id="Op-code_synchronization_(OS)"></span><span class="mw-headline" id="Op-code_synchronization_.28OS.29">Op-code synchronization (OS)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=6" title="Edit section: Op-code synchronization (OS)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As the bootloader may take an indeterminate amount of time to execute an AIS command, a handshake mechanism is needed between the host and the bootloader before the host can send any command to the bootloader. The following opcode synchronization method is used for this purpose:
+</p>
+<dl><dd><dl><dd><dl><dd><a href="File_Flow_OS.html" class="image"><img alt="Flow OS.jpg" src="https://processors.wiki.ti.com/images/1/1c/Flow_OS.jpg" width="661" height="341" /></a></dd></dl></dd></dl></dd></dl>
+<p>All opcodes that are transmitted by the host to the bootloader are of the form 0x585359##, where ## varies for individual opcodes. The bootloader acknowledges each opcode with a corresponding RECV opcode. The RECV opcodes are generated from the original opcodes by changing the most significant byte to 0x52. Thus, they are of the form 0x525359##. Not getting a correct response (RECV opcode) from the bootloader indicates that the bootloader is busy executing the previous command. The host should continue sending the opcode until it is successfully acknowledged by the bootloader. After the correct RECV opcode was received by the host, it has to transmit the arguments belonging to this opcode. The arguments only have to be transmitted one by one, i.e. the bootloader is not sending these data back to the host.
+</p><p><br />
+<b>Note:</b>	Before the PLL is configured it is bypassed, i.e. the device is operating at the oscillator frequency. Because of that it is required to insert a delay between the transmission/reception of each 16-bit block, to ensure that the DSP can receive and process the data correctly (e.g. for-loop counting up to 0x3FF @ 160MHz). 
+After the PLL was configured (frequency as selected in the AISgen tool) this delay could either be completely removed or at least reduced tremendously (e.g. for-loop counting up to 0x3 @ 160MHz), depending on the baudrate and the configured PLL frequency. 
+</p><p><br />
+</p>
+<h2><span id="Boot_Requirements,_Hardware_Setup_and_Default_Settings"></span><span class="mw-headline" id="Boot_Requirements.2C_Hardware_Setup_and_Default_Settings">Boot Requirements, Hardware Setup and Default Settings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=7" title="Edit section: Boot Requirements, Hardware Setup and Default Settings">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li><b>Bootloader Memory Usage:</b> The bootloader uses 16 KB of DSP L2 RAM starting from 0x11800000 for multiple purposes. This memory should not be used by any initialized section of the user application.</li></ul>
+<ul><li><b>Decompression Heap:</b> When the compression option is used, the bootloader uses up to 64 KB of DSP L2 RAM starting from 0x11830000 to allocate heap for the decompression algorithms. This memory should not be used by any initialized section of the user application. The AISgen tool displays the actually required amount of memory for these algorithms for a particular COFF-file.</li></ul>
+<ul><li><b>Boot mode selection:</b> To configure the bootloader in the correct boot mode, the BOOT[x] pins have to be configured as shown in the table below:</li></ul>
+<dl><dd><dl><dd><table border="1">
+<tbody><tr>
+<th>Boot mode</th>
+<th>BOOT[7]</th>
+<th>BOOT[2]</th>
+<th>BOOT[1]</th>
+<th>BOOT[0]</th>
+<th>BOOT[3]
+</th></tr>
+<tr>
+<td>SPI0 Slave</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0
+</td></tr>
+<tr>
+<td>SPI1 Slave</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1
+</td></tr>
+</tbody></table></dd></dl></dd></dl>
+<ul><li><b>Hardware configuration:</b> In addition to the SPICLK, SPISIMO and SPISOMI signals, you also have to connect the <b>SPICS signal</b> (chip select) from the host and the DSP.</li></ul>
+<ul><li><b>SPICLK phase and polarity configuration:</b> In the SPI boot mode, the received data is sampled at the rising edge of the clock and the data to be transmitted on the falling edge of the clock:</li></ul>
+<dl><dd><a href="File_SPI_signal_sampling.html" class="image"><img alt="SPI signal sampling.JPG" src="https://processors.wiki.ti.com/images/b/bd/SPI_signal_sampling.JPG" width="470" height="194" /></a></dd></dl>
+<ul><li><b>SPI Baudrate:</b> After power on reset the device is running at its default PLL and clock configuration. Hence the maximum supported baudrate is 2 MBaud (recommended to start development with a slower baudrate of e.g. 1MBaud). When the PLL is configured, typically after the first 10 transmitted AIS words during opcode synchronization, the baudrate could be increased depending on the PLL settings and the SPI Master and Slave timings.</li></ul>
+<h2><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;section=8" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li><a rel="nofollow" class="external free" href="http://www-s.ti.com/sc/techlit/sprab04">http://www-s.ti.com/sc/techlit/sprab04</a></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130071719
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.051 seconds
+Real time usage: 0.055 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 36/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:2651-0!canonical and timestamp 20201130071719 and revision id 57073
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Using the D800K001 bootloader in SPI Slave mode</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;oldid=57073">https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;oldid=57073</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_C674x.html" title="Category:C674x">C674x</a></li><li><a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="Category_Boot.html" title="Category:Boot">Boot</a></li><li><a href="https://processors.wiki.ti.com/index.php?title=Category:OMAPL1x_Topic_Boot&amp;action=edit&amp;redlink=1" class="new" title="Category:OMAPL1x Topic Boot (page does not exist)">OMAPL1x Topic Boot</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Using+the+D800K001+bootloader+in+SPI+Slave+mode" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Using_the_D800K001_bootloader_in_SPI_Slave_mode.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Using_the_D800K001_bootloader_in_SPI_Slave_mode.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Using_the_D800K001_bootloader_in_SPI_Slave_mode.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Using_the_D800K001_bootloader_in_SPI_Slave_mode.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;oldid=57073" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Using_the_D800K001_bootloader_in_SPI_Slave_mode&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 21 April 2011, at 19:06.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.051","walltime":"0.055","ppvisitednodes":{"value":31,"limit":1000000},"ppgeneratednodes":{"value":36,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130071719","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":227});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_the_D800K001_bootloader_in_SPI_Slave_mode by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:31:27 GMT -->
+</html>

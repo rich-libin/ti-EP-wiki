@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:26:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Serial Boot and Flash Loading Utility for OMAP-L138 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138","wgTitle":"Serial Boot and Flash Loading Utility for OMAP-L138","wgCurRevisionId":221934,"wgRevisionId":221934,"wgArticleId":3018,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM1x","Boot","DaVinci Linux","Flash","OMAPL1","OMAPL1x Topic Boot","SPI"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138","wgRelevantArticleId":3018,"wgRequestId":"696e02bc20d738f17a4c9bf1","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138 rootpage-Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Serial Boot and Flash Loading Utility for OMAP-L138</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#TI_Flash_and_Boot_Utilities"><span class="tocnumber">1</span> <span class="toctext">TI Flash and Boot Utilities</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Obtaining_the_software"><span class="tocnumber">2</span> <span class="toctext">Obtaining the software</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Compiling"><span class="tocnumber">3</span> <span class="toctext">Compiling</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Running"><span class="tocnumber">4</span> <span class="toctext">Running</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Serial_Flasher_Options"><span class="tocnumber">5</span> <span class="toctext">Serial Flasher Options</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Restoring_the_OMAP-L138_EVM_SPI_Flash"><span class="tocnumber">6</span> <span class="toctext">Restoring the OMAP-L138 EVM SPI Flash</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Modifications_for_Custom_Boards"><span class="tocnumber">7</span> <span class="toctext">Modifications for Custom Boards</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Known_Issues"><span class="tocnumber">8</span> <span class="toctext">Known Issues</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#License"><span class="tocnumber">9</span> <span class="toctext">License</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="TI_Flash_and_Boot_Utilities">TI Flash and Boot Utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=1" title="Edit section: TI Flash and Boot Utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following software supports the OMAP-L138, C6748, and AM1808 families of devices.
+</p><p>This package contains a set of utilities running from the command-line on Windows for flashing the NAND, NOR, and SPI Flash of the OMAP-L138 EVM via the serial port. 
+</p><p>The Serial Flashing Host Utility (which offers the same functionality as a previous program called DVFlasher) executable is called sfh_OMAP-L138.exe. 
+</p><p>These programs each encapsulate a distinct binary UBL which is transferred via the UART. This implies that the chip must be operating in the UART boot mode, showing the BOOTME prompt. 
+</p><p>NOTE: The assumption is made that the UART of the device operates at 115200, 8N1. If the oscillator used with the device does not match the one used on the EVM (e.g. on a custom platform), the baud rate assumption may be incorrect. 
+</p>
+<h2><span class="mw-headline" id="Obtaining_the_software">Obtaining the software</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=2" title="Edit section: Obtaining the software">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The latest source code and binaries can be download from <a rel="nofollow" class="external text" href="https://sourceforge.net/projects/dvflashutils/files/OMAP-L138/v2.40/">here</a>.
+</p><p>Note that for flashing UBLs from PSP releases 03.20.00.13 and earlier, v2.29 of the serial flasher should be used. 
+</p><p>For flashing UBLs from PSP releases 3.20.00.14 and later, the latest version of the serial flasher should be used.
+</p>
+<h2><span class="mw-headline" id="Compiling">Compiling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=3" title="Edit section: Compiling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A makefile is included for compiling the host and target parts of each utility. The target portions are built first since they are embedded into the the host executables. These target portions are loaded to the OMAP-L138 device via the UART boot mode. 
+</p><p>Note that the pre-built executables have been tested to work on the EVMs. It is not necessary to rebuild them unless changes need to be made for a custom board. 
+</p><p><i><b>Under Windows</b></i> 
+</p><p>Please see the following page for detailed instructions for rebuilding the utilities in included in this package: 
+</p><p><a rel="nofollow" class="external text" href="Rebuilding_the_Flash_and_Boot_Utils_Package.html">http://processors.wiki.ti.com/index.php/Rebuilding_the_Flash_and_Boot_Utils_Package</a> 
+</p><p><i><b>Under Linux</b></i> 
+</p><p>The Mono Framework must be installed and in the path. RPMs are available at '<a rel="nofollow" class="external free" href="http://www.mono-project.com/Downloads'">http://www.mono-project.com/Downloads'</a>. The below instructions assume the that GNU ARM cross-compiler tools (arm-arago-linux-gnueabi-gcc, etc.) are in the current PATH. 
+</p><p>The C6x Compiler Tools are also required to build some components. These are available free of charge at <a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/TICodegenerationTools/download.htm">https://www-a.ti.com/downloads/sds_support/TICodegenerationTools/download.htm</a>. You will need to add the bin directory to your PATH and to set the environment variables as directed by the installer. Edit the build.mak file under Common directory and add the paths to ARM and C6x compilers.
+</p><p>Then go to the GNU directory of the package and run: 
+</p>
+<pre>    make
+</pre>
+<h2><span class="mw-headline" id="Running">Running</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=4" title="Edit section: Running">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><i><b>Under Windows</b></i> 
+</p><p>This utility can be run from the command line under Windows with the .Net Framework 2.0 or later installed through the following steps: 
+</p>
+<ol><li>Set the boot pins to UART2 boot mode. This is done by setting switch S7 on the LogicPD OMAP-L138 EVM according to the following table:</li></ol>
+<table cellspacing="2" cellpadding="4" border="1" style="color: black; background-color: rgb(238,238,238)">
+
+<tbody><tr>
+<td align="left">Pin#
+</td>
+<td align="center">1
+</td>
+<td align="center">2
+</td>
+<td align="center">3
+</td>
+<td align="center">4
+</td>
+<td align="center">5
+</td>
+<td align="center">6
+</td>
+<td align="center">7
+</td>
+<td align="center">8
+</td></tr>
+<tr>
+<td align="left">Position
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td>
+<td align="center">ON
+</td></tr></tbody></table>
+<p>For Spectrum Digital EVM: 
+</p>
+<table cellspacing="2" cellpadding="4" border="1" style="color: black; background-color: rgb(238,238,238)">
+
+<tbody><tr>
+<td align="left">Pin#
+</td>
+<td align="center">1
+</td>
+<td align="center">2
+</td>
+<td align="center">3
+</td>
+<td align="center">4
+</td>
+<td align="center">5
+</td>
+<td align="center">6
+</td>
+<td align="center">7
+</td>
+<td align="center">8
+</td></tr>
+<tr>
+<td align="left">Position
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td></tr></tbody></table>
+<ol><li>Connect a serial cable from the host computer to the OMAP-L138 EVM</li>
+<li>Open a command prompt on the host computer and change directory to where the SFH executable is located.</li>
+<li>Run the flashing utility with this command:
+<ul><li><b>..\OMAP-L138\gnu\sfh_OMAP-L138.exe [options]</b></li></ul></li>
+<li>Turn on the board</li></ol>
+<p><i><b>Under Linux</b></i> 
+</p><p>The serial flasher can be run on a Linux machine with the latest open-source Mono Framework installed. The steps are identical to the Windows environment except the command: 
+</p>
+<ul><li><b>mono ./sfh_OMAP-L138.exe [options]</b></li></ul>
+<h2><span class="mw-headline" id="Serial_Flasher_Options">Serial Flasher Options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=5" title="Edit section: Serial Flasher Options">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There are three modes for using the serial flasher: 
+</p>
+<ol><li>Erase the target flash type - This will erase the entire contents of the flash.
+<ul><li><b>..\sfh_OMAP-L138.exe -erase</b></li></ul></li>
+<li>Flash the memory with a single application image - This will place an application image at address 0x0 of the flash. This must be an AIS format binary, which can be created with the AISgen utilities bundled with the <a href="http://www.ti.com/lit/pdf/sprab41" class="extiw" title="tidoc:sprab41">Bootloader User Guide</a> and <a href="http://www.ti.com/lit/zip/sprab41" class="extiw" title="tizip:sprab41">associated files</a>.<br />
+<ul><li><b>..\sfh_OMAP-L138.exe -flash_noubl &lt;binary application file&gt; </b></li></ul></li>
+<li>Flash the memory with a UBL and application image - This will place a UBL at address 0x0 of the flash and an application image, such as u-boot, at address 0x10000. In general, a UBL is not required, and this mode is only used when restoring the default flash contents, as explained in the following section.<br />
+<ul><li><b>..\sfh_OMAP-L138.exe -flash &lt;UBL binary file&gt; &lt;binary application file&gt;</b></li></ul></li></ol>
+<p>For C6748 devices, use the following option: "-targetType C6748"
+</p><p>For AM1808 devices, use the following option: "-targetType AM1808"
+</p><p><b>Note: Only the UBL found in the OMAP-L138/GNU/UBL directory can be used with the serial flasher. Other UBLs are not compatible with the serial flasher format.</b> 
+</p><p><b>Note</b><i>:&#160;'</i><b>The 'flash_noubl' and 'flash' options will automatically erase the necessary amount of memory in order to fit the UBL and/or application image.</b> 
+</p><p>Currently, the only supported flash types are NAND, NOR, and SPI. 
+</p><p>Additional options are shown below: 
+</p>
+<pre>-targetType        &#160;: Specifies exact target type within OMAP-L138 family (default OMAP-L138)
+-flashType         &#160;: Specifies exact flash type (default SPI_MEM)
+-p &lt;COM PORT NAME&gt; &#160;: Allows specifying com port other than default 'COM1' or '/dev/ttyS0'.
+-h                 &#160;: Show help text.
+-v                 &#160;: See verbose output from target device
+-baud &lt;BAUD RATE&gt;  &#160;: Allows specifying baud rate other than default (115200)
+-APPStartAddr      &#160;: Changes entry point of application (default 0xC1080000)
+-APPLoadAddr       &#160;: Changes load address of application (default 0xC1080000)
+-APPFlashBlock     &#160;: Changes the block to flash the image into (only for no_ubl mode)
+</pre>
+<p>Once any command is run, the "Waiting for BOOTME..." prompt shows. Power cycle the board or press the reset button to continue.
+</p>
+<h2><span class="mw-headline" id="Restoring_the_OMAP-L138_EVM_SPI_Flash">Restoring the OMAP-L138 EVM SPI Flash</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=6" title="Edit section: Restoring the OMAP-L138 EVM SPI Flash">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If the contents of the OMAP-L138 SPI flash become corrupted, they can be restored through the following steps: 
+</p>
+<ol><li>Set the boot pins to UART2 boot mode. This is done by setting switch S7 on the OMAP-L138 EVM according to the following table:</li></ol>
+<table cellspacing="2" cellpadding="4" border="1" style="color: black; background-color: rgb(238, 238, 238);">
+
+<tbody><tr>
+<td align="left">Pin#
+</td>
+<td align="center">1
+</td>
+<td align="center">2
+</td>
+<td align="center">3
+</td>
+<td align="center">4
+</td>
+<td align="center">5
+</td>
+<td align="center">6
+</td>
+<td align="center">7
+</td>
+<td align="center">8
+</td></tr>
+<tr>
+<td align="left">Position
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td>
+<td align="center">ON
+</td></tr></tbody></table>
+<p>For Spectrum Digital EVM: 
+</p>
+<table cellspacing="2" cellpadding="4" border="1" style="color: black; background-color: rgb(238, 238, 238);">
+
+<tbody><tr>
+<td align="left">Pin#
+</td>
+<td align="center">1
+</td>
+<td align="center">2
+</td>
+<td align="center">3
+</td>
+<td align="center">4
+</td>
+<td align="center">5
+</td>
+<td align="center">6
+</td>
+<td align="center">7
+</td>
+<td align="center">8
+</td></tr>
+<tr>
+<td align="left">Position
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td></tr></tbody></table>
+<ol><li>Obtain the UBL and u-boot binary files and place them in the same directory as the SPI flashing utility.
+<ul><li><b>A pre-built UBL bin file is located in the OMAP-L138/GNU/ubl/ directory of this serial flashing project. The UBL bin file from the PSP installation will also work, located at images/u-boot/.</b></li>
+<li><b>A pre-built u-boot image is located in the images/u-boot/ directory of the PSP installation.</b></li></ul></li>
+<li>Run the following command to flash the UBL and u-boot binary files:
+<ul><li><b>..\sfh_OMAP-L138.exe -flash &lt;UBL binary file&gt; &lt;u-boot binary file&gt;</b></li>
+<li>Note that if the serial port is not on COM1, the correct port must be specified using the "-p" option. To determine which COM port to use, open HyperTerminal, connect to one of the ports, and make sure the word "BOOTME" appears when the EVM is reset.</li>
+<li>Note: If you are using a device other than OMAP-L138, such as C6748, you must use the "-flashType" option and specify the device you are using.<br /></li></ul></li>
+<li>Turn on the board</li>
+<li>After the UBL and u-boot files have been flashed, set the boot pins to SPI boot mode and reboot the board. This is done by setting switch S7 on the OMAP-L138 EVM according to the following table:</li></ol>
+<table cellspacing="2" cellpadding="4" border="1" style="color: black; background-color: rgb(238, 238, 238);">
+
+<tbody><tr>
+<td align="left">Pin#
+</td>
+<td align="center">1
+</td>
+<td align="center">2
+</td>
+<td align="center">3
+</td>
+<td align="center">4
+</td>
+<td align="center">5
+</td>
+<td align="center">6
+</td>
+<td align="center">7
+</td>
+<td align="center">8
+</td></tr>
+<tr>
+<td align="left">Position
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td></tr></tbody></table>
+<p>For Spectrum Digital EVM: 
+</p>
+<table cellspacing="2" cellpadding="4" border="1" style="color: black; background-color: rgb(238, 238, 238);">
+
+<tbody><tr>
+<td align="left">Pin#
+</td>
+<td align="center">1
+</td>
+<td align="center">2
+</td>
+<td align="center">3
+</td>
+<td align="center">4
+</td>
+<td align="center">5
+</td>
+<td align="center">6
+</td>
+<td align="center">7
+</td>
+<td align="center">8
+</td></tr>
+<tr>
+<td align="left">Position
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td>
+<td align="center">ON
+</td>
+<td align="center">OFF
+</td></tr></tbody></table>
+<ol><li>Once u-boot has loaded, follow the instructions in the Getting Started Guide to copy the Linux kernel and filesystem to the SPI flash.
+<ul><li><b><a href="GSG__OMAP-L138_DVEVM_Additional_Procedures.html#Booting_from_SPI_Flash_2" class="mw-redirect" title="GSG: OMAP-L138 DVEVM Additional Procedures">Booting from SPI Flash</a></b></li>
+<li><b>Note: This step requires that the setup procedures in the Getting Started guide have been followed:</b></li></ul>
+<dl><dd><dl><dd><ul><li><b><a href="GSG__Installing_the_Software_for_OMAP-L138.html" class="mw-redirect" title="GSG: Installing the Software for OMAP-L138">Install SDK Software</a></b></li>
+<li><b><a href="Setting_Up_a_TFTP_Server.html" title="Setting Up a TFTP Server">Setup a TFTP Server</a></b></li></ul></dd></dl></dd></dl></li></ol>
+<h2><span class="mw-headline" id="Modifications_for_Custom_Boards">Modifications for Custom Boards</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=7" title="Edit section: Modifications for Custom Boards">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The default settings used by the tools apply only to the EVMs. For custom boards, changes will most likely be required, and the tools must be rebuilt. The custom changes should be made to the files in the OMAP-L138/Common/src and OMAP-L138/Common/include directories. Common changes include: 
+</p>
+<ul><li>DDR Configuration
+<ul><li>OMAP-L138/Common/src/device.c: Modify the parameters passed to the function DEVICE_ExternalMemInit to match the DDR timing requirements for the custom board</li></ul></li></ul>
+<ul><li>UART Settings
+<ul><li>OMAP-L138/Common/include/device_uart.h: Modify the #define DEVICE_UART_PERIPHNUM to set which UART is connected to the host PC.</li>
+<li>Note that flow control is not used, so only the RX and TX lines need to be connected for boot and flashing purposes.</li></ul></li></ul>
+<ul><li>SPI Settings
+<ul><li>OMAP-L138/Common/include/device_spi.h: Modify the global macros to select the appropriate peripheral and chip select numbers.</li>
+<li>OMAP-L138/Common/src/device_spi.c: Modify the flash organization in DEVICE_SPI_MEM_params.</li>
+<li>The SPI flash on the EVM does not need to be unlocked in order to erase or write. Some SPI flashes may need to set the BL bits before writing. Check the device datasheet to see if this step needs to be added to the initialization.</li></ul></li></ul>
+<ul><li>NAND Settings
+<ul><li>OMAP-L138/Common/include/device_async_mem.h: Modify the #define DEVICE_ASYNC_MEM_NANDBOOT_BUSWIDTH to match the bus width of your NAND</li></ul></li></ul>
+<ul><li>PLL Settings (for non 24 MHz input clocks)
+<ul><li>OMAP-L138/Common/src/device.c: Modify the parameters passed into the function DEVICE_PLL0Init and DEVICE_PLL1Init to set the proper PLL output frequencies</li>
+<li>OMAP-L138/Common/src/device_uart.c: Modify the 'divider' field in DEVICE_UART_config to achieve 115200 baud rate</li></ul></li></ul>
+<h2><span class="mw-headline" id="Known_Issues">Known Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=8" title="Edit section: Known Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The software provided has no known issues on TI supported evaluation platforms. The software may need modifications in case of custom hardware.
+</p>
+<h2><span class="mw-headline" id="License">License</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit&amp;section=9" title="Edit section: License">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These tools are provided as freeware, with no guarantee.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130183430
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.041 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 26/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:3018-0!canonical and timestamp 20201130183430 and revision id 221934
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Serial Boot and Flash Loading Utility for OMAP-L138</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;oldid=221934">https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;oldid=221934</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_Boot.html" title="Category:Boot">Boot</a></li><li><a href="Category_DaVinci_Linux.html" title="Category:DaVinci Linux">DaVinci Linux</a></li><li><a href="Category_Flash.html" title="Category:Flash">Flash</a></li><li><a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="https://processors.wiki.ti.com/index.php?title=Category:OMAPL1x_Topic_Boot&amp;action=edit&amp;redlink=1" class="new" title="Category:OMAPL1x Topic Boot (page does not exist)">OMAPL1x Topic Boot</a></li><li><a href="Category_SPI.html" title="Category:SPI">SPI</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Serial+Boot+and+Flash+Loading+Utility+for+OMAP-L138" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;oldid=221934" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 13 October 2016, at 05:09.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.041","walltime":"0.043","ppvisitednodes":{"value":43,"limit":1000000},"ppgeneratednodes":{"value":60,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":26,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130183430","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":240});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Serial_Boot_and_Flash_Loading_Utility_for_OMAP-L138 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:27:00 GMT -->
+</html>

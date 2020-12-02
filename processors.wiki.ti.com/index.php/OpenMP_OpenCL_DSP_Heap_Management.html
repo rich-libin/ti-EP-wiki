@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OpenMP_OpenCL_DSP_Heap_Management by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 05:52:01 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OpenMP OpenCL DSP Heap Management - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OpenMP_OpenCL_DSP_Heap_Management","wgTitle":"OpenMP OpenCL DSP Heap Management","wgCurRevisionId":185484,"wgRevisionId":185484,"wgArticleId":35456,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OpenMP_OpenCL_DSP_Heap_Management","wgRelevantArticleId":35456,"wgRequestId":"c8ca6771a4d35ead940c29af","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OpenMP_OpenCL_DSP_Heap_Management rootpage-OpenMP_OpenCL_DSP_Heap_Management skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OpenMP OpenCL DSP Heap Management</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>Memory requests (malloc, calloc, etc.) within OpenMP target regions or OpenCL kernels are satisfied by allocating portions from DSP heaps. The OpenMP/OpenCL implementation specifies fixed sizes and placements for private DSP heaps as well as the heap that is shared by all the DSPs. The DSP runtime provides additional APIs to initialize and manage heaps in order to afford the user more flexibility to control the size and location of heaps.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#DSP_Heaps_in_Shared_Memory_.28DDR_or_MSMC.29"><span class="tocnumber">1</span> <span class="toctext">DSP Heaps in Shared Memory (DDR or MSMC)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Heap_Initialization_API"><span class="tocnumber">1.1</span> <span class="toctext">Heap Initialization API</span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Via_OpenMP"><span class="tocnumber">1.1.1</span> <span class="toctext">Via OpenMP</span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Via_OpenCL"><span class="tocnumber">1.1.2</span> <span class="toctext">Via OpenCL</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Via_a_DATA_SECTION_pragma_in_DSP_C_code"><span class="tocnumber">1.1.3</span> <span class="toctext">Via a DATA_SECTION pragma in DSP C code</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="#Dynamic_Memory_Management_APIs"><span class="tocnumber">1.2</span> <span class="toctext">Dynamic Memory Management APIs</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Heap_in_DDR"><span class="tocnumber">1.2.1</span> <span class="toctext">Heap in DDR</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Heap_in_MSMC"><span class="tocnumber">1.2.2</span> <span class="toctext">Heap in MSMC</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#DSP_Heap_in_Local_Memory_.28L2SRAM.29"><span class="tocnumber">2</span> <span class="toctext">DSP Heap in Local Memory (L2SRAM)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Heap_Initialization_API_2"><span class="tocnumber">2.1</span> <span class="toctext">Heap Initialization API</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#Via_the_local_map_type_in_OpenMP"><span class="tocnumber">2.1.1</span> <span class="toctext">Via the <i><b>local</b></i> map type in OpenMP</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Via_the_local_keyword_in_OpenCL"><span class="tocnumber">2.1.2</span> <span class="toctext">Via the __local keyword in OpenCL</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Via_a_DATA_SECTION_pragma_in_DSP_C_code_2"><span class="tocnumber">2.1.3</span> <span class="toctext">Via a DATA_SECTION pragma in DSP C code</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-14"><a href="#Dynamic_Memory_Management_APIs_2"><span class="tocnumber">2.2</span> <span class="toctext">Dynamic Memory Management APIs</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span id="DSP_Heaps_in_Shared_Memory_(DDR_or_MSMC)"></span><span class="mw-headline" id="DSP_Heaps_in_Shared_Memory_.28DDR_or_MSMC.29">DSP Heaps in Shared Memory (DDR or MSMC)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=1" title="Edit section: DSP Heaps in Shared Memory (DDR or MSMC)">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The DSP runtime provides the following APIs to initialize and manage heaps in shared memory.
+</p>
+<h2><span class="mw-headline" id="Heap_Initialization_API">Heap Initialization API</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=2" title="Edit section: Heap Initialization API">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The heap initialization functions __heap_init_[ddr|msmc] must be called by one of the DSP cores to initialize internal heap data structures before making any memory management calls such as __malloc_[ddr|msmc]. Once initialized, the heaps are accessible by all the DSP cores. These APIs are thread safe under the OpenMP and OpenCL programming models on the DSP (Each DSP is running a single thread of execution).
+</p><p>Note: If data allocated on the heap is shared across DSP cores, the programmer is responsible for cache consistency of allocated memory across cores . If OpenMP is used to parallelize the program, cache consistency is managed by the OpenMP runtime.
+</p><p>&lt;source lang="c" strict enclose="div" header="DSP heap initialization APIs" footer=""&gt;
+void  __heap_init_ddr(void *ptr, int size);
+void  __heap_init_msmc(void *ptr, int size);
+&lt;/source&gt;
+Note that <i>ptr</i> is a pointer to underlying memory to be configured as a user-controlled heap. Therefore, the underlying memory must be allocated before calling the heap initialization function. Initialized heaps are persistent across target regions and kernels until the underlying memory regions for them are deallocated.
+</p>
+<h3><span class="mw-headline" id="Via_OpenMP">Via OpenMP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=3" title="Edit section: Via OpenMP">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following code snippets illustrate how to allocate memory for heaps and call the initialization functions from OpenMP.
+&lt;source lang="c" strict enclose="div" header="OpenMP heap initialization and memory allocation" footer=""&gt;
+/*-----------------------------------------------------------------------------
+</p>
+<ul><li>User-controlled DSP heaps are initialized within a target region. The call</li>
+<li>to __heap_init_xxx can be included within any target region. However the</li>
+<li>initialization function must be called before any __malloc_xxx calls are</li>
+<li>made.</li>
+<li class="mw-empty-elt"></li>
+<li>User-controlled DSP heaps can be persistent across target regions as long as</li>
+<li>the underlying memory (aka buffers pointed to by p are not deallocated.</li>
+<li>----------------------------------------------------------------------------*/</li></ul>
+<p>void heap_init_ddr(char* p, size_t bytes) 
+{ 
+</p>
+<ol><li>pragma omp target map(to:bytes,p[0:bytes])</li></ol>
+<pre>  {
+     __heap_init_ddr(p,bytes); 
+  }
+</pre>
+<p>}
+</p><p>void heap_init_msmc(char *p, size_t bytes) 
+{ 
+</p>
+<ol><li>pragma omp target map(to: bytes, p[0:bytes])</li></ol>
+<pre>  {
+     __heap_init_msmc(p,bytes); 
+  }
+</pre>
+<p>}
+/*-----------------------------------------------------------------------------
+</p>
+<ul><li>The DSP core executing the enclosed target region will allocate from the</li>
+<li>heaps and then free the memory.</li>
+<li>----------------------------------------------------------------------------*/</li></ul>
+<p>void alloc_and_free(size_t bytes)
+{
+</p>
+<ol><li>pragma omp target map(to: bytes)</li></ol>
+<pre>  {
+     char *p1 = (char *) __malloc_ddr(bytes);
+     char *p2 = (char *) __malloc_msmc(bytes);
+</pre>
+<pre>     if (!p1 ||&#160;!p2) 
+        printf("Error\n");
+     else
+     {
+        printf("DDR  heap pointer is 0x%08x\n", p1);
+        printf("MSMC heap pointer is 0x%08x\n", p2);
+     }
+</pre>
+<pre>     __free_ddr(p1);
+     __free_msmc(p2);
+  }
+</pre>
+<p>}
+&lt;/source&gt;
+<br />
+</p><p>&lt;source lang="c" strict enclose="div" header="OpenMP host code" footer=""&gt;
+/*------------------------------------------------------------------------
+</p>
+<ul><li>From the host, create the underlying memory store for the heaps</li>
+<li>-----------------------------------------------------------------------*/</li></ul>
+<p>int ddr_heap_size  = 16 &lt;&lt; 20;
+int msmc_heap_size = 1 &lt;&lt; 20;
+char* HeapDDR = (char*) __malloc_ddr(ddr_heap_size);
+char* HeapMSMC = (char*) __malloc_msmc(msmc_heap_size);
+</p><p>/*------------------------------------------------------------------------
+</p>
+<ul><li>Initialize the pre-allocated buffers as new DDR and MSMC heaps</li>
+<li>accessible to DSP cores.</li>
+<li>-----------------------------------------------------------------------*/</li></ul>
+<p>heap_init_ddr (HeapDDR,  ddr_heap_size);
+heap_init_msmc(HeapMSMC, msmc_heap_size);
+/*------------------------------------------------------------------------
+</p>
+<ul><li>On each DSP core, alloc memory from both ddr and msmc and then free it.</li>
+<li>-----------------------------------------------------------------------*/</li></ul>
+<p>alloc_and_free(1024);
+&lt;/source&gt;
+<br />
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Via_OpenCL">Via OpenCL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=4" title="Edit section: Via OpenCL">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following code snippets illustrate how to allocate memory for heaps and call the initialization functions from OpenCL. The OpenCL example <b>dspheap</b> contains complete source.
+</p><p>&lt;source lang="c" strict enclose="div" header="OpenCL Kernel Code" footer=""&gt;
+/*-----------------------------------------------------------------------------
+</p>
+<ul><li>These kernels initialize user controlled heaps,  they do not have to be</li>
+<li>separate kernels.  The call to __heap_init_xxx can be rolled into an existing</li>
+<li>kernel and called before any __malloc_xxx calls are made.</li>
+<li class="mw-empty-elt"></li>
+<li>These heaps can be persistent across kernel boundaries as long as the</li>
+<li>underlying memory (aka buffers pointed to by p are not deallocated.</li>
+<li>----------------------------------------------------------------------------*/</li></ul>
+<p>kernel void heap_init_ddr(void *p, size_t bytes)
+</p>
+<pre>   { __heap_init_ddr(p,bytes); }
+</pre>
+<p>kernel void heap_init_msmc(void *p, size_t bytes)
+</p>
+<pre>   { __heap_init_msmc(p,bytes); }
+</pre>
+<p>/*-----------------------------------------------------------------------------
+</p>
+<ul><li>This kernel will allocate from the heaps and then free them memory.</li>
+<li>----------------------------------------------------------------------------*/</li></ul>
+<p>kernel void alloc_and_free(int bytes)
+{
+</p>
+<pre>   char *p1 = __malloc_ddr(bytes);
+   char *p2 = __malloc_msmc(bytes);
+</pre>
+<pre>   if (!p1 ||&#160;!p2) return;
+</pre>
+<pre>   printf("DDR  heap pointer is 0x%08x\n", p1);
+   printf("MSMC heap pointer is 0x%08x\n", p2);
+</pre>
+<pre>   __free_ddr(p1);
+   __free_msmc(p2);
+</pre>
+<p>}
+&lt;/source&gt;
+<br />
+</p><p>&lt;source lang="c" strict enclose="div" header="OpenCL Host Code" footer=""&gt;
+/*------------------------------------------------------------------------
+</p>
+<ul><li>Create the underlying memory store for the heaps with OpenCL Buffers</li>
+<li>-----------------------------------------------------------------------*/</li></ul>
+<p>int ddr_heap_size  = 16 &lt;&lt; 20;  // 16MB
+int msmc_heap_size = 1 &lt;&lt; 20;   // 1MB
+Buffer HeapDDR (context, CL_MEM_READ_WRITE, ddr_heap_size);
+Buffer HeapMSMC(context, CL_MEM_READ_WRITE|CL_MEM_USE_MSMC_TI, msmc_heap_size);
+</p><p>...
+</p><p>/*------------------------------------------------------------------------
+</p>
+<ul><li>Create a command queue and kernelfunctors for all kernels in our program</li>
+<li>-----------------------------------------------------------------------*/</li></ul>
+<p>CommandQueue Q(context, devices[0]);
+KernelFunctor heap_init_ddr  = Kernel(program, "heap_init_ddr") .bind(Q, NDRange(1), NDRange(1));
+KernelFunctor heap_init_msmc = Kernel(program, "heap_init_msmc").bind(Q, NDRange(1), NDRange(1));
+KernelFunctor alloc_and_free = Kernel(program, "alloc_and_free").bind(Q, NDRange(8), NDRange(1));
+</p><p>/*------------------------------------------------------------------------
+</p>
+<ul><li>Call kernels to initialize a DDR based and a MSMC based heap, the init</li>
+<li>step only needs to run once and one 1 core only.  See the functor</li>
+<li>mapping above that defines the global size to be 1.</li>
+<li>-----------------------------------------------------------------------*/</li></ul>
+<p>heap_init_ddr (HeapDDR,  ddr_heap_size) .wait();
+heap_init_msmc(HeapMSMC, msmc_heap_size).wait();
+</p><p>/*------------------------------------------------------------------------
+</p>
+<ul><li>On each core alloc memory from both ddr and msmc and the free it.</li>
+<li>-----------------------------------------------------------------------*/</li></ul>
+<p>alloc_and_free(1024).wait();
+&lt;/source&gt;
+<br />
+</p>
+<h3><span class="mw-headline" id="Via_a_DATA_SECTION_pragma_in_DSP_C_code">Via a DATA_SECTION pragma in DSP C code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=5" title="Edit section: Via a DATA SECTION pragma in DSP C code">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;source lang="c" strict enclose="div" header="Specifying storage for MSMC Heap" footer=""&gt;
+/* Array is already aligned on a 64b boundary. No need for DATA_ALIGN */
+</p>
+<ol><li>define MSMC_HEAP_SIZE (16*1024)</li>
+<li>pragma DATA_SECTION(msmc_heap, ".mem_msm")</li></ol>
+<p>char msmc_heap[MSMC_HEAP_SIZE];
+</p><p>...
+void foo()
+{
+</p>
+<pre>   __heap_init_msmc ((void *)msmc_heap, MSMC_HEAP_SIZE);
+   ...
+</pre>
+<pre>   double *p = (double *)__malloc_msmc(sizeof(double)*256);
+   ...
+   __free_msmc(p);
+</pre>
+<p>}
+&lt;/source&gt;
+<br /><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Dynamic_Memory_Management_APIs">Dynamic Memory Management APIs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=6" title="Edit section: Dynamic Memory Management APIs">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>After the DDR and/or MSMC heap is initialized by one of the DSP cores using the API specified in Section <a href="#Heap_Initialization_API_on_the_DSP">#Heap Initialization API on the DSP</a> , the following APIs are available from all DSP cores for dynamic memory management:
+</p>
+<h3><span class="mw-headline" id="Heap_in_DDR">Heap in DDR</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=7" title="Edit section: Heap in DDR">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;source lang="c" strict enclose="div" header="Allocation from DDR" footer=""&gt;
+void *__malloc_ddr   (size_t size);
+void *__calloc_ddr   (size_t num, size_t size);
+void *__realloc_ddr  (void *ptr,  size_t size);
+void  __free_ddr     (void *ptr);
+void *__memalign_ddr (size_t alignment, size_t size);
+&lt;/source&gt;
+</p>
+<h3><span class="mw-headline" id="Heap_in_MSMC">Heap in MSMC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=8" title="Edit section: Heap in MSMC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;source lang="c" strict enclose="div" header="Allocation from MSMC" footer=""&gt;
+void *__malloc_msmc   (size_t size);
+void *__calloc_msmc   (size_t num, size_t size);
+void *__realloc_msmc  (void *ptr, size_t size);
+void  __free_msmc     (void *ptr);
+void *__memalign_msmc (size_t alignment, size_t size);
+&lt;/source&gt;
+<br />
+</p>
+<h1><span id="DSP_Heap_in_Local_Memory_(L2SRAM)"></span><span class="mw-headline" id="DSP_Heap_in_Local_Memory_.28L2SRAM.29">DSP Heap in Local Memory (L2SRAM)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=9" title="Edit section: DSP Heap in Local Memory (L2SRAM)">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The DSP runtime provides a simplistic API to initialize a heap in L2 SRAM and allocate from it. This heap is local to the core which initialized it. 
+</p>
+<h2><span class="mw-headline" id="Heap_Initialization_API_2">Heap Initialization API</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=10" title="Edit section: Heap Initialization API">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A heap can be initialized in L2 SRAM via the following API:
+&lt;source lang="c" strict enclose="div" header="DSP heap creation APIs" footer=""&gt;
+void  __heap_init_l2(void *ptr, int size);
+&lt;/source&gt;
+</p><p>The storage associated with the heap must be start on a 64bit boundary. Unlike DDR and MSMC heaps, heaps initialized in L2 SRAM do not persist across target regions or kernels. Underlying storage for dsp heaps in local memory can be set up in one of the following ways:
+</p>
+<h3><span class="mw-headline" id="Via_the_local_map_type_in_OpenMP">Via the <i><b>local</b></i> map type in OpenMP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=11" title="Edit section: Via the local map type in OpenMP">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>TI's OpenMP implementation includes a TI-specific <i><b>local</b></i> map type that allows data to be allocated on a DSP's L2 SRAM. This allocated buffer can be used to initialize the heap.
+&lt;source lang="c" strict enclose="div" header="Specifying storage for L2 Heap using local clause" footer=""&gt;
+void l2_alloc_and_free(char *p, size_t bytes)
+{
+</p>
+<pre>  //p is actually just a dummy buffer. It will not be copied to the DSPs.
+</pre>
+<ol><li>pragma omp target map(to:bytes) map(local:p[0:bytes])</li></ol>
+<pre>  {
+     //p gets allocated in DSP L2 SRAMS at the start of the target region
+     char *p1;
+     __heap_init_l2(p, bytes); 
+     p1 = (char *) __malloc_l2(bytes);
+     if (!p1) 
+        printf("Error\n");
+     else
+        printf("L2SRAM  heap pointer is 0x%08x\n", p1);
+  }
+</pre>
+<p>}
+&lt;/source&gt;
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Via_the_local_keyword_in_OpenCL">Via the __local keyword in OpenCL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=12" title="Edit section: Via the local keyword in OpenCL">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Use the OpenCL __local approach to allocate of chunk of memory on L2 using OpenCL. This chunk can be used to initialize the heap:
+</p><p>&lt;source lang="c" strict enclose="div" header="OpenCL Kernel" footer=""&gt;
+kernel void L2MallocLocal(local void *ptr, int size)
+{
+</p>
+<pre>   __heap_init_l2(ptr, size);
+   ...
+   ... __malloc_l2(sizeof(double)));
+</pre>
+<p>}
+&lt;/source&gt;
+<br />
+&lt;source lang="c" strict enclose="div" header="OpenCL Host Code" footer=""&gt;
+Kernel kernel2(program, "L2MallocLocal");
+kernel2.setArg(0, __local(L2_HEAP_SIZE));
+kernel2.setArg(1, L2_HEAP_SIZE);
+&lt;/source&gt;
+</p>
+<h3><span class="mw-headline" id="Via_a_DATA_SECTION_pragma_in_DSP_C_code_2">Via a DATA_SECTION pragma in DSP C code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=13" title="Edit section: Via a DATA SECTION pragma in DSP C code">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;source lang="c" strict enclose="div" header="Specifying storage for L2 Heap" footer=""&gt;
+/* Array is already aligned on a 64b boundary. No need for DATA_ALIGN */
+</p>
+<ol><li>define L2_HEAP_SIZE (256)</li>
+<li>pragma DATA_SECTION(l2_heap, ".mem_l2")</li></ol>
+<p>char l2_heap[L2_HEAP_SIZE];
+</p><p>...
+void foo()
+{
+</p>
+<pre>   __heap_init_l2 ((void *)l2_heap, L2_HEAP_SIZE);
+   ...
+</pre>
+<pre>   ... __malloc_l2(sizeof(double));
+</pre>
+<p>}
+&lt;/source&gt;
+</p>
+<h2><span class="mw-headline" id="Dynamic_Memory_Management_APIs_2">Dynamic Memory Management APIs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;section=14" title="Edit section: Dynamic Memory Management APIs">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>After the L2 heap is initialized by the DSP cores using the __heap_init_l2 call, the only API available is a malloc:
+</p><p>&lt;source lang="c" strict enclose="div" header="Allocation from DDR" footer=""&gt;
+void *__malloc_l2 (size_t size); /* Pointer returned is aligned to 64 bit boundary */
+&lt;/source&gt;
+<br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130181943
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.033 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 55/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:35456-0!canonical and timestamp 20201130181943 and revision id 185484
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OpenMP OpenCL DSP Heap Management</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OpenMP OpenCL DSP Heap Management</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OpenMP OpenCL DSP Heap Management</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OpenMP OpenCL DSP Heap Management</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OpenMP OpenCL DSP Heap Management</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OpenMP OpenCL DSP Heap Management</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OpenMP OpenCL DSP Heap Management</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OpenMP OpenCL DSP Heap Management</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OpenMP OpenCL DSP Heap Management</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;oldid=185484">https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;oldid=185484</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OpenMP+OpenCL+DSP+Heap+Management" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="OpenMP_OpenCL_DSP_Heap_Management.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="OpenMP_OpenCL_DSP_Heap_Management.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/OpenMP_OpenCL_DSP_Heap_Management.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/OpenMP_OpenCL_DSP_Heap_Management.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;oldid=185484" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_OpenCL_DSP_Heap_Management&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 22 September 2014, at 09:37.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.033","walltime":"0.035","ppvisitednodes":{"value":55,"limit":1000000},"ppgeneratednodes":{"value":60,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130181943","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":240});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OpenMP_OpenCL_DSP_Heap_Management by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 05:52:03 GMT -->
+</html>

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/TI81xx_PSP_Porting_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:02:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>TI81xx PSP Porting Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"TI81xx_PSP_Porting_Guide","wgTitle":"TI81xx PSP Porting Guide","wgCurRevisionId":114374,"wgRevisionId":114374,"wgArticleId":12987,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["DM816x","AM389x","DM814x","AM387x","DaVinci Linux","Linux","PSP"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"TI81xx_PSP_Porting_Guide","wgRelevantArticleId":12987,"wgRequestId":"fa896d55f15f67e539dc611d","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-TI81xx_PSP_Porting_Guide rootpage-TI81xx_PSP_Porting_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">TI81xx PSP Porting Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div style="width:800px; text-align:justify;"> 
+<div style="display:block; clear: both; margin: 10px 0px; padding: 0px; background-color: #ee1d23; text-align:right;"><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a></div>
+<div style="display:block; margin: 5px 0px; padding: 2px 5px; font-size:1.5em; font-weight:bold; text-align:left;">TI81xx PSP Porting Guide</div>
+<div style="display:block; margin: 5px 0px; padding: 2px; color: #666666; font-size:1.0em; font-weight:bold; text-align:right;">PSP</div>  
+<p><br /> 
+</p><p><br /> <span style="color: rgb(255, 0, 0);"><b>NOTE:</b></span> 
+</p><p><br />
+</p>
+<ol><li><span style="color: rgb(255, 0, 0);">This document interchangeably uses DM816x and AM389x. TI816x refers to DM816x/AM389x devices unless specified otherwise.</span></li>
+<li><span style="color: rgb(255, 0, 0);">This document interchangeably uses DM814x and AM387x. TI814x refers to DM814x/AM387x devices unless specified otherwise.</span></li>
+<li><span style="color: rgb(255, 0, 0);">TI81xx refers to both DM816x and DM814x.</span></li></ol>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#ReadMe_First"><span class="tocnumber">1</span> <span class="toctext">ReadMe First</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Prerequisites"><span class="tocnumber">2</span> <span class="toctext">Prerequisites</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Background"><span class="tocnumber">3</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Driver_porting"><span class="tocnumber">4</span> <span class="toctext">Driver porting</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#I2C_Driver"><span class="tocnumber">4.1</span> <span class="toctext">I2C Driver</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Enabling_Additional_Instances"><span class="tocnumber">4.1.1</span> <span class="toctext">Enabling Additional Instances</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Adding_additional_slaves_for_custom_boards"><span class="tocnumber">4.1.2</span> <span class="toctext">Adding additional slaves for custom boards</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Ethernet_Driver_-_Adding_Custom_Ethernet_Phy"><span class="tocnumber">4.2</span> <span class="toctext">Ethernet Driver - Adding Custom Ethernet Phy</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Introduction"><span class="tocnumber">4.2.1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#PHY_driver_support_in_Linux"><span class="tocnumber">4.2.2</span> <span class="toctext">PHY driver support in Linux</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Custom_PHY_driver"><span class="tocnumber">4.2.3</span> <span class="toctext">Custom PHY driver</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Writing_a_custom_PHY_driver_in_Linux"><span class="tocnumber">4.2.4</span> <span class="toctext">Writing a custom PHY driver in Linux</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Miscellaneous_details"><span class="tocnumber">4.2.5</span> <span class="toctext">Miscellaneous details</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#CPSW_MII_Phy"><span class="tocnumber">4.2.6</span> <span class="toctext">CPSW MII Phy</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#CPSW_RMII_Phy"><span class="tocnumber">4.2.7</span> <span class="toctext">CPSW RMII Phy</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#CPSW_EMAC_1_bringup_in_uboot"><span class="tocnumber">4.2.8</span> <span class="toctext">CPSW EMAC 1 bringup in uboot</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#PHY_driver_support_in_UBOOT"><span class="tocnumber">4.2.9</span> <span class="toctext">PHY driver support in UBOOT</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Writing_a_custom_PHY_driver_in_UBOOT"><span class="tocnumber">4.2.10</span> <span class="toctext">Writing a custom PHY driver in UBOOT</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-19"><a href="#Audio_driver_.28McASP.29"><span class="tocnumber">4.3</span> <span class="toctext">Audio driver (McASP)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#Board_hookup"><span class="tocnumber">4.3.1</span> <span class="toctext">Board hookup</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Clocking_related_changes"><span class="tocnumber">4.3.2</span> <span class="toctext">Clocking related changes</span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#ALSA_framework_hookup"><span class="tocnumber">4.3.3</span> <span class="toctext">ALSA framework hookup</span></a>
+<ul>
+<li class="toclevel-4 tocsection-23"><a href="#Multi-McASP_scenario"><span class="tocnumber">4.3.3.1</span> <span class="toctext">Multi-McASP scenario</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-24"><a href="#USB_driver"><span class="tocnumber">4.4</span> <span class="toctext">USB driver</span></a>
+<ul>
+<li class="toclevel-3 tocsection-25"><a href="#Introduction_2"><span class="tocnumber">4.4.1</span> <span class="toctext"><b>Introduction</b></span></a>
+<ul>
+<li class="toclevel-4 tocsection-26"><a href="#Enabling_usb_support_in_platform_specific_board_file"><span class="tocnumber">4.4.1.1</span> <span class="toctext"><b>Enabling usb support in platform specific board file</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-27"><a href="#About_TI81xx_CPPI4.1_DMA_Driver"><span class="tocnumber">4.4.2</span> <span class="toctext"><b>About TI81xx CPPI4.1 DMA Driver</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-28"><a href="#MMC.2FSD_Driver"><span class="tocnumber">4.5</span> <span class="toctext">MMC/SD Driver</span></a>
+<ul>
+<li class="toclevel-3 tocsection-29"><a href="#Introduction_3"><span class="tocnumber">4.5.1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-3 tocsection-30"><a href="#Adding_support_to_enable_multiple_MMC.2FSD_instances"><span class="tocnumber">4.5.2</span> <span class="toctext">Adding support to enable multiple MMC/SD instances</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#Using_polling_functionality"><span class="tocnumber">4.5.3</span> <span class="toctext">Using polling functionality</span></a></li>
+<li class="toclevel-3 tocsection-32"><a href="#Changing_transfer_type"><span class="tocnumber">4.5.4</span> <span class="toctext">Changing transfer type</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-33"><a href="#Using_Hardware_Timers_from_Kernel_Module.2FDriver"><span class="tocnumber">4.6</span> <span class="toctext">Using Hardware Timers from Kernel Module/Driver</span></a>
+<ul>
+<li class="toclevel-3 tocsection-34"><a href="#Example:_Using_Timer5_from_a_loadable_module"><span class="tocnumber">4.6.1</span> <span class="toctext">Example: Using Timer5 from a loadable module</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-35"><a href="#Using_different_UART_than_the_default_EVM_configuration_as_console"><span class="tocnumber">4.7</span> <span class="toctext">Using different UART than the default EVM configuration as console</span></a>
+<ul>
+<li class="toclevel-3 tocsection-36"><a href="#Example:_Setting_up_UART3_on_DM814x_as_console"><span class="tocnumber">4.7.1</span> <span class="toctext">Example: Setting up UART3 on DM814x as console</span></a></li>
+<li class="toclevel-3 tocsection-37"><a href="#Low_level_debugging_with_early_prints_on_console"><span class="tocnumber">4.7.2</span> <span class="toctext">Low level debugging with early prints on console</span></a></li>
+<li class="toclevel-3 tocsection-38"><a href="#Updating_U-Boot_to_use_different_UART_as_console"><span class="tocnumber">4.7.3</span> <span class="toctext">Updating U-Boot to use different UART as console</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-39"><a href="#SPI_Port_to_Custom_Hardware"><span class="tocnumber">4.8</span> <span class="toctext">SPI Port to Custom Hardware</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="ReadMe_First">ReadMe First</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=1" title="Edit section: ReadMe First">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The purpose of this document is to describe how to port the PSP releases for custom hardware where minimal changes are required in the kernel. This document <b>DOES NOT</b> describe how to add features to the drivers shipped in the PSP releases. Feature additions in the driver is outside the scope of this document. Driver features are typically listed in the PSP Data-Sheet (Performance Guide) or the respective Driver User Guides. 
+</p>
+<h1><span class="mw-headline" id="Prerequisites">Prerequisites</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=2" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ol><li>TI816x/TI814x Technical Reference Manual - Available on the TI website or with the local FAE.</li>
+<li>TI816x/TI814x EVM schematics - Available on the board vendor's website or with the local FAE.</li>
+<li>PSP release to be used as baseline for porting the drivers - Available on the software download page of the TI website or with the local FAE.</li></ol>
+<h1><span class="mw-headline" id="Background">Background</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=3" title="Edit section: Background">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>TBD 
+</p>
+<h1><span class="mw-headline" id="Driver_porting">Driver porting</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=4" title="Edit section: Driver porting">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="I2C_Driver">I2C Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=5" title="Edit section: I2C Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Enabling_Additional_Instances">Enabling Additional Instances</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=6" title="Edit section: Enabling Additional Instances">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>DM8148 has four I2C instances. I2C1 is enabled from Linux side. HWMOD and clock data are already setup for all four I2C instances in the respective files. 
+</p><p>Step 1: To add additional instance, arch/arm/mach-omap2/board-ti8148evm.c file needs to be modfied with additional defintions. 
+</p><p>Step 2: 
+</p><p>Modify arch/arm/mach-omap2/i2c.c to add correct mux entries. 
+</p><p><br />
+</p>
+<pre>     For example, for bus #3, following code needs to be added to function "omap2_i2c_mux_pins"
+</pre>
+<pre>               if ((bus_id == 3) &amp;&amp; cpu_is_ti814x()){
+              sprintf(mux_name, "mcasp0_axr1.i2c3_scl");
+              omap_mux_init_signal(mux_name, 0);
+              sprintf(mux_name, "mcasp0_axr2.i2c3_sda");
+              omap_mux_init_signal(mux_name, 0);
+              return;
+      }
+</pre>
+<p>For more details on setting up the mux, please refer to <a rel="nofollow" class="external free" href="DM814x_C6A814x_AM387x_PSP_User_Guide.html#Modifying_Pin_Mux_settings">http://processors.wiki.ti.com/index.php/DM814x_C6A814x_AM387x_PSP_User_Guide#Modifying_Pin_Mux_settings</a> 
+</p><p>Step 3: Function to be modified - ti814x_evm_i2c_init(void) 
+</p><p>Ex: for I2C1 instance, 
+</p><p><br />
+</p>
+<pre>  omap_register_i2c_bus(1, 100, ti814x_i2c_boardinfo,
+                              ARRAY_SIZE(ti814x_i2c_boardinfo));
+</pre>
+<p>for I2C2 instance, 
+</p>
+<pre>  omap_register_i2c_bus(2, 100, ti814x_i2c_boardinfo2,
+                             ARRAY_SIZE(ti814x_i2c_boardinfo2)); 
+</pre>
+<p>whereas first parameter is the bus number, (I2C instance #), second parameter is the I2C bus frequency,3rd parameter is the data structure to the slav devices in the bus. 
+</p>
+<h3><span class="mw-headline" id="Adding_additional_slaves_for_custom_boards">Adding additional slaves for custom boards</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=7" title="Edit section: Adding additional slaves for custom boards">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To add additional I2C slaves for the custom boards, following data structure need to be modified in arch/arm/mach-omap2/board-ti8148evm.c or board-ti8168evm.c 
+</p><p><br /> 
+</p>
+<pre>  static struct i2c_board_info __initdata ti816x_i2c_boardinfo0[] = {
+      {
+              I2C_BOARD_INFO("eeprom", 0x50),
+              .platform_data  = &amp;eeprom_info,
+      },
+      {
+              I2C_BOARD_INFO("cpld", 0x23),
+      },
+      {
+              I2C_BOARD_INFO("tlv320aic3x", 0x18),
+      },
+      {
+              I2C_BOARD_INFO("IO Expander", 0x20),
+      },
+ };
+</pre>
+<h2><span class="mw-headline" id="Ethernet_Driver_-_Adding_Custom_Ethernet_Phy">Ethernet Driver - Adding Custom Ethernet Phy</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=8" title="Edit section: Ethernet Driver - Adding Custom Ethernet Phy">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=9" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This discussion deals with the changes required to the Linux PSP Drivers when the Ethernet PHY device is changed to suit custom implementation 
+</p><p>DM8168 Evaluation Module (EVM) Contains 2 instances of on board Ethernet GIGABIT PHY from LSI (ET1011C) 
+</p>
+<h3><span class="mw-headline" id="PHY_driver_support_in_Linux">PHY driver support in Linux</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=10" title="Edit section: PHY driver support in Linux">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>PHY controller driver framework in Linux, presents a generic framework which can be used by the ethernet MAC drivers to easily interface with the PHY. Some of the drivers available are for PHY controllers from Broadcom, Realtek etc 
+</p><p>A PHY driver is attached to a PHY device based on the match for PHY ID as read from the "PHY Identification Register" 1 and 2 of the PHY. 
+</p><p>A "Generic PHY" driver is also available, which is attached dynamically when the on board PHY may not match the devices supported by the existing PHY drivers. This driver handles all basic functionality like PHY initialization, link advertisement/configuration, auto negotiation etc, 
+</p><p><br />
+</p><p>Usually the "Generic PHY" controller driver might be able to handle the PHY controller. However, if there are some configuration details that are not supported by the "Generic PHY" driver, then one may have to develop a custom PHY driver. 
+</p><p><br /> 
+</p>
+<h3><span class="mw-headline" id="Custom_PHY_driver">Custom PHY driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=11" title="Edit section: Custom PHY driver">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>PHY controller driver is required to provide a facility to interact with the PHY controller for initialization, link setup and change notification, and additionally some quirks or special handling required, if any, by the PHY. 
+</p><p>Some cases that may require PHY handling 
+</p>
+<ul><li>Special initialization and configuration sequence for a mode of operation</li>
+<li>Special features that are to be used and require additional configuration</li>
+<li>Special cases in interrupt handling</li>
+<li>PHY controller contains silicon errata and needs a workaround for standard operation</li></ul>
+<p>One can refer to - drivers/net/phy/broadcom.c which is classic example of cases mentioned above. 
+</p>
+<pre>  Note - The existing Linux PSP drivers use the "Generic PHY" driver but with an additional quirk. That is, the PHY needs to
+ be configured to generate clock on the TX_CLK pin. This is required to maintain the clock while switching to and from 
+ 100 and 1000 MBps mode of operation. This part of initialization is not added as part of the "Generic PHY" driver and is 
+ part of EMAC driver probe, as one time configuration.
+</pre>
+<h3><span class="mw-headline" id="Writing_a_custom_PHY_driver_in_Linux">Writing a custom PHY driver in Linux</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=12" title="Edit section: Writing a custom PHY driver in Linux">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The kernel documentation "Documenation/networking/phy.txt", explains this in section "Writing a PHY driver". 
+</p><p>Including the driver in the build 
+</p><p><br /> 
+</p>
+<ul><li>Add entry into the "drivers/net/phy/Kconfig" under "MII PHY device drivers"</li>
+<li>Edit the "drivers/net/phy/Makefile" to include compilation of the PHY driver file</li>
+<li>Invoke kernel menuconfig to select the PHY driver to be built into the kernel</li></ul>
+<p>"Device Drivers"-&gt;"Network device support"-&gt;"PHY Device support and infrastructure" - here the custom PHY driver should be selected. 
+</p>
+<h3><span class="mw-headline" id="Miscellaneous_details">Miscellaneous details</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=13" title="Edit section: Miscellaneous details">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>While a PHY is populated on the board, its address on the MDIO bus is to be noted. This is to be supplied as a mask to the EMAC driver platform data for probing the PHY by the MDIO bus framework. For example, if the PHY address on the bus is 2 (in decimal), then this goes into the phy_mask of the emac_platform_data as 0x04 (bit position/weight represents the PHY address) refer to include/linux/davinci_emac.h, arch/arm/mach-omap2/devices.c and drivers/net/davinci_emac.c for details. 
+</p><p><br /> 
+</p>
+<h3><span class="mw-headline" id="CPSW_MII_Phy">CPSW MII Phy</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=14" title="Edit section: CPSW MII Phy">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>While a PHY is populated on the board, its address on the MDIO bus is to be noted. This is to be supplied as a mask to the CPSW driver platform data for probing the PHY by the MDIO bus framework. For example, if the PHY address on the bus is 2 (in decimal), then this goes into the phy_mask of the cpsw_mdio_device as 0x04 (bit position/weight represents the PHY address). Please refer arch/arm/mach-omap2/devices.c and drivers/net/cpsw.c 
+</p>
+<ul><li>Pinmux configuration to support mii interface</li>
+<li>Program GMII_SEL in control module with 0x0 for MII Interface</li>
+<li>Reset Interface Control A of CPGMAC_SLx MAC Control Register to use MII Phy</li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="CPSW_RMII_Phy">CPSW RMII Phy</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=15" title="Edit section: CPSW RMII Phy">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>While a PHY is populated on the board, its address on the MDIO bus is to be noted. This is to be supplied as a mask to the CPSW driver platform data for probing the PHY by the MDIO bus framework. For example, if the PHY address on the bus is 2 (in decimal), then this goes into the phy_mask of the cpsw_mdio_device as 0x04 (bit position/weight represents the PHY address). Please refer arch/arm/mach-omap2/devices.c and drivers/net/cpsw.c 
+</p>
+<ul><li>Pinmux configuration to support rmii interface
+<ul><li>In u-Boot, this modification can be done in <b>evm.c:cpsw_pad_config()</b></li></ul></li>
+<li>Phy ID setting in Platform data
+<ul><li>In U-Boot Phy ID should be set in board/ti/&lt;SOC&gt;/evm.c:<b>struct cpsw_slave_data cpsw_slaves[]</b></li>
+<li>In kernel Phy ID should be set in arch/arm/mach-omap2/devices.c:<b>struct cpsw_slave_data cpsw_slaves[]</b></li></ul></li>
+<li>Program GMII_SEL in control module with 0x5 for RMII Interface
+<ul><li>In u-Boot, this modification can be done in <b>evm.c:board_init()</b></li></ul></li>
+<li>ifctl_a in mac control register has to be enabled to control the RMII gasket. (Has to be done in releases 04.01.00.xx and 04.04.00.01)
+<ul><li>In u-Boot, apply the following patch to enable mac control register in driver - <a rel="nofollow" class="external free" href="http://arago-project.org/git/projects/u-boot-omap3.git?p=projects/u-boot-omap3.git;a=commit;h=5ec2f004991f48c0705dcf9fab1aa486dffc60f9">http://arago-project.org/git/projects/u-boot-omap3.git?p=projects/u-boot-omap3.git;a=commit;h=5ec2f004991f48c0705dcf9fab1aa486dffc60f9</a>.</li>
+<li>In Kernel, apply the following patch to enable mac control register in driver - <a rel="nofollow" class="external free" href="http://arago-project.org/git/projects/?p=linux-omap3.git;a=commit;h=dd7bc15e62e1cd14ba9320f5367287ac31296db3">http://arago-project.org/git/projects/?p=linux-omap3.git;a=commit;h=dd7bc15e62e1cd14ba9320f5367287ac31296db3</a>.</li></ul></li>
+<li>When using external RMII ref clock, program the external clock source in RMII_REFCLK_SRC register.
+<ul><li>In u-Boot, this modification can be done in <b>evm.c:board_init()</b></li></ul></li>
+<li>Remove runtime phy id update in <b>devices.c:ti814x_cpsw_init()</b></li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="CPSW_EMAC_1_bringup_in_uboot">CPSW EMAC 1 bringup in uboot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=16" title="Edit section: CPSW EMAC 1 bringup in uboot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Uboot currently supports only CPSW EMAC 0, to bring up EMAC 1 following steps needs to be ported.
+</p>
+<ul><li>In evm file:
+<ul><li>Add pinmux for CPSW EMAC 1 in cpsw_pad_config()</li>
+<li>Interchange the cpsw_slaves platform data.</li></ul></li>
+<li>In driver: make cpsw_get_slave_port to return CPSW port 2 offset ie "2"</li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="PHY_driver_support_in_UBOOT">PHY driver support in UBOOT</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=17" title="Edit section: PHY driver support in UBOOT">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The guidelines - if a new PHY driver is required, as detailed above, holds good here too. 
+</p><p><br /> 
+</p>
+<h3><span class="mw-headline" id="Writing_a_custom_PHY_driver_in_UBOOT">Writing a custom PHY driver in UBOOT</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=18" title="Edit section: Writing a custom PHY driver in UBOOT">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The custom PHY driver can be placed under cpu/arm926ejs/davinci/xyz_phy.c Refer to Intel lxt972.c or dp83848.c for examples. Edit "cpu/arm926ejs/davinci/Makefile" to include xyz_phy.c in build Edit "include/asm-arm/arch-xyz/emac_defs.h" to define the PHY config variable Refer to "include/asm-arm/arch-davinci/emac_defs.h" for example. This defines PHY_LXT972. Include the PHY registration in "drivers/net/davinci_emac.c". This is in davinci_emac_initialize()
+</p>
+<h2><span id="Audio_driver_(McASP)"></span><span class="mw-headline" id="Audio_driver_.28McASP.29">Audio driver (McASP)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=19" title="Edit section: Audio driver (McASP)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The base EVM provides audio functionality using McASP2 and AIC3106 codec. Please refer to the [TI81xx-PSP-Audio-Driver-User-Guide PSP Audio Driver User Guide ] for more information on this. 
+</p>
+<h3><span class="mw-headline" id="Board_hookup">Board hookup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=20" title="Edit section: Board hookup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Before starting off, collect the following information from the docs listed in the prerequisites section 
+</p>
+<ol><li>No. of McASP instances on the device and the device specific info of each of the instances (eg: base address, IRQ no., EDMA event no., pin muxing etc)</li>
+<li>McASP instance used in PSP</li>
+<li>McASP instance to be used in custom hardware</li>
+<li>Codec used in PSP</li>
+<li>Codec used on the custom hardware</li>
+<li>McASP serializers used for establishing the path from the device (TI816/TI814x) to the codec in PSP</li>
+<li>McASP serializers used for establishing the path from the device (TI816/TI814x) to the codec in custom hardware</li>
+<li>I2C/SPI instance being used for controlling the codec in PSP</li>
+<li>I2C/SPI instance being used for controlling the codec in custom hardware</li></ol>
+<p>TI816x/TI814x use McASP2 (Serializer 0 for Tx and Serializer 1 for Rx) to communicate to the AIC3106 codec on the base EVM. The audio codec is controlled using I2C and uses I2C0 for this. If the custom hardware does not use I2C0, refer to the I2C driver section for the porting information. 
+</p><p>This information gets reflected in the board file and devices file for the device in the kernel source code. 
+</p>
+<ol><li>TI816x: <b>arch/arm/mach-omap2/board-ti8168evm.c</b> and <b>arch/arm/mach-omap2/devices.c</b></li>
+<li>TI814x: <b>arch/arm/mach-omap2/board-ti8148evm.c</b> and <b>arch/arm/mach-omap2/devices.c</b></li></ol>
+<pre>&lt;kernel-src&gt;/arch/arm/mach-omap2/board-ti8168evm.c
+
+static void __init ti8168_evm_init(void)
+{
+      [...]
+      ti816x_evm_i2c_init();
+      [...]
+      ti81xx_register_mcasp(0, &amp;ti8168_evm_snd_data);
+      ti816x_spi_init();
+      [...]
+}
+</pre>
+<p>Addition of another instance of McASP can be done by modifying the McASP2 related info shown below. 
+</p><p>The information associated with McASP2 is represented in the following manner: 
+</p>
+<pre>&lt;kernel-src&gt;/arch/arm/mach-omap2/board-ti8168evm.c
+
+static u8 ti8168_iis_serializer_direction[] = {
+       TX_MODE,        RX_MODE,        INACTIVE_MODE,  INACTIVE_MODE,
+       INACTIVE_MODE,  INACTIVE_MODE,  INACTIVE_MODE,  INACTIVE_MODE,
+       INACTIVE_MODE,  INACTIVE_MODE,  INACTIVE_MODE,  INACTIVE_MODE,
+       INACTIVE_MODE,  INACTIVE_MODE,  INACTIVE_MODE,  INACTIVE_MODE,
+};
+</pre>
+<pre>static struct snd_platform_data ti8168_evm_snd_data = {
+       .tx_dma_offset  = 0x46800000,
+       .rx_dma_offset  = 0x46800000,
+       .op_mode        = DAVINCI_MCASP_IIS_MODE,
+       .num_serializer = ARRAY_SIZE(ti8168_iis_serializer_direction),
+       .tdm_slots      = 2,
+       .serial_dir     = ti8168_iis_serializer_direction,
+       .asp_chan_q     = EVENTQ_2,
+       .version        = MCASP_VERSION_2,
+       .txnumevt       = 1,
+       .rxnumevt       = 1,
+};
+</pre>
+<p>Note that McASP2 of TI816x/TI814x does not require any pin muxing. If this is needed, refer to the section on pin-muxing. The pin muxing changes will go in the following function in the board file. 
+</p>
+<pre>&lt;kernel-src&gt;/arch/arm/mach-omap2/board-ti8168evm.c
+
+static struct omap_board_mux board_mux[] __initdata = {
+
+      /* PIN mux for non-muxed NOR */
+      TI816X_MUX(TIM7_OUT, OMAP_MUX_MODE1),   /* gpmc_a12 */
+       TI816X_MUX(UART1_CTSN, OMAP_MUX_MODE1), /* gpmc_a13 */
+       TI816X_MUX(UART1_RTSN, OMAP_MUX_MODE1), /* gpmc_a14 */
+       TI816X_MUX(UART2_RTSN, OMAP_MUX_MODE1), /* gpmc_a15 */
+       TI816X_MUX(SC1_RST, OMAP_MUX_MODE1),    /* gpmc_a15 TODO why 2 gpmc_a15 mux setting? */
+       TI816X_MUX(UART2_CTSN, OMAP_MUX_MODE1), /* gpmc_a16 */
+       TI816X_MUX(UART0_RIN, OMAP_MUX_MODE1),  /* gpmc_a17 */
+       TI816X_MUX(UART0_DCDN, OMAP_MUX_MODE1), /* gpmc_a18 */
+       TI816X_MUX(UART0_DSRN, OMAP_MUX_MODE1), /* gpmc_a19 */
+       TI816X_MUX(UART0_DTRN, OMAP_MUX_MODE1), /* gpmc_a20 */
+       TI816X_MUX(SPI_SCS3, OMAP_MUX_MODE1),   /* gpmc_a21 */
+       TI816X_MUX(SPI_SCS2, OMAP_MUX_MODE1),   /* gpmc_a22 */
+       TI816X_MUX(GP0_IO6, OMAP_MUX_MODE2),    /* gpmc_a23 */
+       TI816X_MUX(TIM6_OUT, OMAP_MUX_MODE1),   /* gpmc-a24 */
+       TI816X_MUX(SC0_DATA, OMAP_MUX_MODE1),   /* gpmc_a25 */
+       TI816X_MUX(GPMC_A27, OMAP_MUX_MODE1),   /* gpio-20 for controlling high address */
+       { .reg_offset = OMAP_MUX_TERMINATOR },
+};
+</pre>
+<pre>&lt;kernel-src&gt;/arch/arm/mach-omap2/devices.c
+
+static struct resource ti81xx_mcasp_resource[] = {
+       {
+               .name = "mcasp",
+               .start = TI81XX_ASP2_BASE,
+               .end = TI81XX_ASP2_BASE + (SZ_1K * 12) - 1,
+               .flags = IORESOURCE_MEM,
+       },
+       /* TX event */
+       {
+               .start = TI81XX_DMA_MCASP2_AXEVT,
+               .end = TI81XX_DMA_MCASP2_AXEVT,
+               .flags = IORESOURCE_DMA,
+       },
+       /* RX event */
+       {
+               .start = TI81XX_DMA_MCASP2_AREVT,
+               .end = TI81XX_DMA_MCASP2_AREVT,
+               .flags = IORESOURCE_DMA,
+       },
+};
+
+static struct platform_device ti81xx_mcasp_device = {
+       .name = "davinci-mcasp",
+       .id = 2,
+       .num_resources = ARRAY_SIZE(ti81xx_mcasp_resource),
+       .resource = ti81xx_mcasp_resource,
+};
+
+void __init ti81xx_register_mcasp(int id, struct snd_platform_data *pdata)
+{
+       ti81xx_mcasp_device.dev.platform_data = pdata;
+       platform_device_register(&amp;ti81xx_mcasp_device);
+}
+</pre>
+<p><br /> Instead of making modifications to the McASP2 related info, it is possible to register another instance of McASP in the board file and use both the McASPs simultaneously. Doing this will require changes on the following lines: 
+</p>
+<ol><li>Rename ti8168_iis_serializer_direction to ti8168_iis_serializer_direction_mcasp2</li>
+<li>Add ti8168_iis_serializer_direction_mcasp&lt;0/1&gt; similar to ti8168_iis_serializer_direction_mcasp2</li>
+<li>Convert ti8168_evm_snd_data into an array and add info related to the other McASP</li>
+<li>Rename ti81xx_mcasp_resource to ti81xx_mcasp2_resource</li>
+<li>Add ti81xx_mcasp_resource&lt;0/1&gt; similar to ti81xx_mcasp2_resource</li>
+<li>Rename ti81xx_mcasp_device to ti81xx_mcasp2_device</li>
+<li>Add ti81xx_mcasp_device&lt;0/1&gt; similar to ti81xx_mcasp2_device</li>
+<li>Register McASP&lt;0/1&gt; device as platform device</li>
+<li>Other logical changes due to the renaming done in the previous steps</li></ol>
+<p><i>Please note that the steps listed above are meant to serve as a guideline only. It has not been verified on the EVMs.</i> 
+</p>
+<h3><span class="mw-headline" id="Clocking_related_changes">Clocking related changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=21" title="Edit section: Clocking related changes">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>McASP2 on the TI81xx EVMs operates in a slave mode (codec driving the bit clock and the frame sync) and hence nothing specific handling is needed. 
+</p>
+<h3><span class="mw-headline" id="ALSA_framework_hookup">ALSA framework hookup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=22" title="Edit section: ALSA framework hookup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In addition to make changes in the board file, additional changes might be necessary in the ASoC drivers. Platform and EVM specific hookups with the ALSA framework is done in the files are present under <b>sound/soc/davinci/</b>. The codec driver used for AIC3106 is <b>sound/soc/codecs/tlv320aic3x.c</b> 
+</p>
+<pre>&lt;kernel-src&gt;/sound/soc/davinci/davinci-evm.c
+
+static struct snd_soc_dai_link ti81xx_evm_dai = {
+       .name = "TLV320AIC3X",
+       .stream_name = "AIC3X",
+       .cpu_dai_name= "davinci-mcasp.2",
+       .codec_dai_name = "tlv320aic3x-hifi",
+       .codec_name = "tlv320aic3x-codec.1-0018",
+       .platform_name = "davinci-pcm-audio",
+       .init = evm_aic3x_init,
+       .ops = &amp;evm_ops,
+};
+
+static struct snd_soc_card ti81xx_snd_soc_card = {
+       .name = "TI81XX EVM",
+       .dai_link = &amp;ti81xx_evm_dai,
+       .num_links = 1,
+};
+
+static int __init evm_init(void)
+{
+[...]
+       } else if (machine_is_ti8168evm() || machine_is_ti8148evm()) {
+               evm_snd_dev_data = &amp;ti81xx_snd_soc_card;
+               index = 0;
+[...]
+}
+</pre>
+<p>When the McASP instance or codec changes, modifications are to be done in <i>ti81xx_evm_dai</i> shown above. 
+</p>
+<h4><span class="mw-headline" id="Multi-McASP_scenario">Multi-McASP scenario</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=23" title="Edit section: Multi-McASP scenario">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><b>Note:The following changes have not been tested. The steps outlined below are meant to serve as a guideline only.</b> 
+</p><p>In order to have multiple McASPs working, extend the <i>ti81xx_evm_dai</i> struct on the following lines: 
+</p>
+<ol><li>Convert it to an array and extend it for supporting multiple instances.</li>
+<li>The number used in the cpu_dai_name indicates the McASP instance to be used</li>
+<li>The codec_name is made up of the name used in the codec driver alongwith the I2C bus and I2C address (1-0018 for the EVM).</li></ol>
+<p>If everything is fine, on kernel bootup you should see multiple sub-devices for the sound card. 
+</p><p><b>Refer to the ALSA wiki <a rel="nofollow" class="external free" href="http://alsa.opensrc.org/Main_Page">http://alsa.opensrc.org/Main_Page</a> for more information.</b> 
+</p><p><i><b>Refer to the kernel source code and Documentation/sound/* for more information about the various data structures and function used.</b></i> 
+</p>
+<h2><span class="mw-headline" id="USB_driver">USB driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=24" title="Edit section: USB driver">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Introduction_2"><b>Introduction</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=25" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section explains porting guidelines of USB module for TI81xx platform. The DM816X or DM814X platform consists of dual USB IP core based on Mentor Controller Graphics, shortly abbreviated as <b>musb</b>. The platform supports two musb controller musb0 and musb1 respectively and hence there are two independent usb bus/port. The musb driver source code is available in drivers/usb/musb directory. The musb core is integrated with CPPI4.1 complaint DMA which provides queue manager interface for queueing the usb transmit/receive request to/from DMA engine. There are 15 Tx/Rx CPPI4.1 DMA channels corresponding each Tx/Rx endpoint configuration for each musb controllers musb0/musb1 respectively. The USB-PHY is integrated within the SOCs and hence no external board specific configuration is required <br /> 
+</p><p>For DM816X/DM814X platform following configuration is done as part of TI81xx kernel release. 
+</p>
+<ol><li>Adding musb devices for dual instance of musb controller</li>
+<li>Adding musb resources</li>
+<li>USB Clock support</li>
+<li>USB PHY initialization</li></ol>
+<p>The USB charge pump circuitry is external to SOC, which is auto driven by USB0_DRVVBUS or USB1_DRVVBUS signal from SOCs. <b>There are no custom board specific configuration required in the usb driver except for enabling the usb support in custom board specifc file.</b> 
+</p>
+<h4><span class="mw-headline" id="Enabling_usb_support_in_platform_specific_board_file"><b>Enabling usb support in platform specific board file</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=26" title="Edit section: Enabling usb support in platform specific board file">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The <b>usb_musb_init</b>() function is called from platform board specific initialization routine <b>ti8168_evm_init</b>()/<b>ti8148_evm_init()</b> from arch/arm/mach-omap2/board-ti8168evm.c or arch/arm/mach-omap2/board-ti8148evm.c files respectively. The musb_board_data is passed as parameter to the usb_musb_init() function. 
+</p>
+<pre>    static void __init ti8168_evm_init(void)
+   {
+      ...
+      /* initialize usb */
+      usb_musb_init(&amp;musb_board_data);
+      ...
+   }
+</pre>
+<p>The musb_board_data structure is defined as 
+</p>
+<pre>   static struct omap_musb_board_data musb_board_data = {
+      .interface_type         = MUSB_INTERFACE_ULPI,
+  #ifdef CONFIG_USB_MUSB_OTG
+      .mode           = MUSB_OTG,
+  #elif defined(CONFIG_USB_MUSB_HDRC_HCD)
+      .mode           = MUSB_HOST,
+  #elif defined(CONFIG_USB_GADGET_MUSB_HDRC)
+      .mode           = MUSB_PERIPHERAL,
+  #endif
+      .power                  = 500,
+      .instances              = 1,
+  };
+</pre>
+<p>The mode parameter is set to usb operation mode (HOST/PERIPHERAL/OTG). The number of musb instances can be set by initializing musb_board_data.instances member variable. By default one instance of musb controller is supported by setting the musb_board_data.instances to zero. To configure two instances of musb controller set musb_board_data.instances to 1. 
+</p>
+<h3><span class="mw-headline" id="About_TI81xx_CPPI4.1_DMA_Driver"><b>About TI81xx CPPI4.1 DMA Driver</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=27" title="Edit section: About TI81xx CPPI4.1 DMA Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The CPPI4.1 consists of following components 
+</p>
+<ol><li>TX/RX DMA Channel</li>
+<li>Queue Manager</li>
+<li>DMA schedular</li></ol>
+<p>The ti81xx platform uses CPPI4.1 complaint DMA engine for transmit/reception of usb packets to/from mentor controller. The CPPI41 consists of 15 Tx/Rx DMA channel for each Tx/Rx endpoint of each musb controller. The Queue Manager responsible for queue/dequeue of usb transfer buffer descriptors (CPPI41 dma <b>BD</b>s) to/from queues. Each Tx DMA Channel reads the transmit BD from the two input queeus called tx-queues and push the completed BD to completed queue as configured in the Tx DMA channel configuration register. Similarly the Rx DMA channel takes the free rx-BDs from Rx free descriptor queues (configured in Rx DMA channel configuration registers) and fills the received packets into buffer descriptors, then pushes the completed received BDs into Rx-completion queues. The Tx/Rx completion queues are interrupting queue, interrupt will be generated whenever the DMA pushes any tx/rx completed BDs into these queues. 
+</p><p><b>There is no custom board specific changes required for CPPI4.1 DMA driver.</b> 
+</p>
+<h2><span id="MMC/SD_Driver"></span><span class="mw-headline" id="MMC.2FSD_Driver">MMC/SD Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=28" title="Edit section: MMC/SD Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Introduction_3">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=29" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This discussion deals with the changes required to the Linux PSP Drivers when the MMC/SD module has to be changed to suit custom implementation. 
+</p><p>DM8168 Evaluation Module (EVM) contains 1 instance of MMC/SD on base-board. 
+</p><p>DM8148 Evaluation Module (EVM) contains 1 instance of MMC/SD (MMC/SD1) on base-board and 2 instances of MMC/SD (MMC/SD0 and MMC/SD2) on daughter card. 
+</p><p><br />
+</p>
+<h3><span id="Adding_support_to_enable_multiple_MMC/SD_instances"></span><span class="mw-headline" id="Adding_support_to_enable_multiple_MMC.2FSD_instances">Adding support to enable multiple MMC/SD instances</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=30" title="Edit section: Adding support to enable multiple MMC/SD instances">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section explains the steps required to support multiple MMC/SD instances. 
+</p><p><u>1. Pin Muxing</u> 
+</p><p>Configure all pins related to the MMC/SD instance to be enabled. 
+</p><p><br /> For eg. 
+</p><p>The following pins are required to be configured for mmc0 in DM8148 
+</p><p>mmc0_clk (PINCNTL8) 
+</p><p>mmc0_cmd (PINCNTL9) 
+</p><p>mmc0_dat0 (PINCNTL10) 
+</p><p>mmc0_dat1 (PINCNTL11) 
+</p><p>mmc0_dat2 (PINCNTL12) 
+</p><p>mmc0_dat3 (PINCNTL13) 
+</p><p>mmc0_dat4 (PINCNTL35) 
+</p><p>mmc0_dat5 (PINCNTL36) 
+</p><p>mmc0_dat6 (PINCNTL41) 
+</p><p>mmc0_dat7 (PINCNTL42) 
+</p><p>mmc0_sdcd (PINCNTL72) 
+</p><p><br /> <u>2. Clocking</u> 
+</p><p>Figure out the clocking sequence that leads to the particular instance of MMC/SD to be enabled. Make sure that all the clocks in the sequence are active so that the MMC/SD instance gets the required clock. 
+</p><p>The frequency range supported is as follows: 
+</p><p>Minimum frequency: 400kHz 
+</p><p>Maximum frequency: 52MHz 
+</p><p>The frequency set is not hard-coded. Rather, the clock is decided by following a handshake mechanism between the card and the controller. 
+</p><p><br /> For eg. 
+</p><p>The clocking sequence for mmc0 in DM8148 is as follows 20MHz OSC0 / 20-30Mhz OSC1 (VCXO optional off-chip) -&gt; mainpll_oscclkmx -&gt; DPLL_L3 (GS70 ADPLLLJ) -&gt; dividers -&gt; SYSCLK6 -&gt; MMCHS0 
+</p><p><br /> <u>3. PRCM register</u> 
+</p><p>The PRCM register set has a register that enables a particular MMC/SD instance. The value of this register should be set appropriately. 
+</p><p><br /> For eg. 
+</p><p>CM_ALWON_MMCHS_0_CLKCTRL is a register in PRCM in DM8148. (Address Offset: 0x21C Physical address: 0x161C Instance: CM_ALWON Description: This register manages the MMCHS_0 clocks) 
+</p><p>It's default value might be set to 0x00030000 (the '3' here means that the module is disabled and cannot be accessed) 
+</p><p>Try writing 0x2 to this register (the '2' here would mean that the module is explicitly enabled. Interface clock (if not used for functions) may be gated according to the clock domain state. Functional clocks are guarantied to stay present. As long as in this configuration, power domain sleep transition cannot happen.) 
+</p><p><br /> 
+</p><p><u>4. Sample patch for board-file</u> 
+</p><p><u></u>The following patch adds support to enable multiple instances on AM3517 board: 
+</p>
+<pre>diff --git a/arch/arm/mach-omap2/board-am3517evm.c b/arch/arm/mach-omap2/board-am3517evm.c
+index 13ad60a..749c9dc 100644
+--- a/arch/arm/mach-omap2/board-am3517evm.c
++++ b/arch/arm/mach-omap2/board-am3517evm.c
+@@ -28,6 +28,7 @@
+#include &lt;linux/i2c/tsc2004.h&gt;
+#include &lt;linux/input.h&gt;
+#include &lt;linux/tca6416_keypad.h&gt;
++#include &lt;linux/mmc/host.h&gt;
+#include &lt;mach/hardware.h&gt;
+#include &lt;mach/am35xx.h&gt;
+@@ -45,6 +46,7 @@
+
+#include "mux.h"
+#include "control.h"
++#include "hsmmc.h"
+
+#define AM35XX_EVM_MDIO_FREQUENCY      (1000000)
+
+@@ -742,6 +744,23 @@ static void am3517_evm_hecc_init(struct ti_hecc_platform_data *pdata)
+platform_device_register(&amp;am3517_hecc_device);
+}
+
++static struct omap2_hsmmc_info mmc[] = {
++       {
++               .mmc            = 1,
++               .caps           = MMC_CAP_4_BIT_DATA,
++               .gpio_cd        = 127,
++               .gpio_wp        = 126,
++       },
++       {
++               .mmc            = 2,
++               .caps           = MMC_CAP_4_BIT_DATA,
++               .gpio_cd        = 128,
++               .gpio_wp        = 129,
++       },
++       {}      /* Terminator */
++};
++
++
+static void __init am3517_evm_init(void)
+{
+omap3_mux_init(board_mux, OMAP_PACKAGE_CBB);
+@@ -784,6 +803,9 @@ static void __init am3517_evm_init(void)
+
+/* Init TCA6416 keypad */
+tca6416_keypad_init_irq();
++
++       /* MMC init function */
++       omap2_hsmmc_init(mmc);
+}
+</pre>
+<p><br /> Set ".gpio_cd" and ".gpio_wp" as "-EINVAL" in case of DM8148 due to dedicated pins for CD (card detect) and WP (write protect): 
+</p>
+<pre>static struct omap2_hsmmc_info mmc[] = {
+   {
+           .mmc            = 1,
+           .caps           = MMC_CAP_4_BIT_DATA,
+           .gpio_cd        = -EINVAL,/* Dedicated pins for CD and WP */
+           .gpio_wp        = -EINVAL,
+           .ocr_mask       = MMC_VDD_33_34,
+   },
+   {}      /* Terminator */
+};
+</pre>
+<p><br /> <u>5. Sample patch for DMA Support</u> 
+</p><p>To use MMC/SD instance 1 in DM8148, the following piece of code can be added: 
+</p>
+<pre>diff --git a/arch/arm/plat-omap/include/plat/dma.h b/arch/arm/plat-omap/include/plat/dma.h 
+index 32a79ca..6e02755 100644 
+--- a/arch/arm/plat-omap/include/plat/dma.h 
++++ b/arch/arm/plat-omap/include/plat/dma.h 
+@@ -184,6 +184,9 @@ 
+#define OMAP24XX_DMA_SPI1_RX2          51      /* E_DMA_51 */ 
+#define OMAP24XX_DMA_SPI1_TX3          52      /* E_DMA_52 */ 
+#define OMAP24XX_DMA_SPI1_RX3          53      /* E_DMA_53 */ 
++ 
++#define OMAP24XX_DMA_MMC1_RX           3 
++#define OMAP24XX_DMA_MMC1_TX           2 
+#endif
+</pre>
+<p><br /> Similarly, to use any other instance (example MMC/SD0 or MMC/SD2 in DM8148), the DMA event information corresponding to that instance can be added.
+</p>
+<h3><span class="mw-headline" id="Using_polling_functionality">Using polling functionality</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=31" title="Edit section: Using polling functionality">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This sample patch shows how to implement polling functionality for MMC/SD cards. The polling functionality is used as a work around to detect the insertion/removal of the MMC/SD card when the card detect pin is not connected.
+</p><p>Note: The board specific file is used to add the polling capabilty.
+</p>
+<pre>diff --git a/arch/arm/mach-omap2/board-dm385evm.c b/arch/arm/mach-omap2/board-dm385evm.c
+index 4511c53..85f3896 100644
+--- a/arch/arm/mach-omap2/board-dm385evm.c
++++ b/arch/arm/mach-omap2/board-dm385evm.c
+@@ -64,7 +64,7 @@ static struct omap_board_mux board_mux[] __initdata = {
+ static struct omap2_hsmmc_info mmc[] = {
+        {
+                .mmc            = 1,
+-               .caps           = MMC_CAP_4_BIT_DATA,
++               .caps           = MMC_CAP_4_BIT_DATA | MMC_CAP_NEEDS_POLL,
+                .gpio_cd        = -EINVAL, /* Dedicated pins for CD and WP */
+                .gpio_wp        = -EINVAL,
+                .ocr_mask       = MMC_VDD_33_34,
+diff --git a/drivers/mmc/host/omap_hsmmc.c b/drivers/mmc/host/omap_hsmmc.c
+index c348898..f2eaea2 100644
+--- a/drivers/mmc/host/omap_hsmmc.c
++++ b/drivers/mmc/host/omap_hsmmc.c
+@@ -584,7 +584,10 @@ static int omap_hsmmc_gpio_init(struct omap_mmc_platform_data *pdata)
+                pdata-&gt;resume = omap_hsmmc_resume_cdirq;
+                pdata-&gt;slots[0].get_cover_state = omap_hsmmc_get_cover_state;
+                pdata-&gt;slots[0].get_ro = omap_hsmmc_get_wp;
+-               pdata-&gt;slots[0].card_detect = omap_hsmmc_card_detect;
++               if (pdata-&gt;slots[0].caps &amp; MMC_CAP_NEEDS_POLL)
++                       pdata-&gt;slots[0].card_detect = NULL;
++               else
++                       pdata-&gt;slots[0].card_detect = omap_hsmmc_card_detect;
+        }
+</pre>
+<h3><span class="mw-headline" id="Changing_transfer_type">Changing transfer type</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=32" title="Edit section: Changing transfer type">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>4-bit transfer type is selected as default. If the board in use can support 8-bit transfer type, the 8-bit transfer type capability can be used (as shown in the patch below).
+</p><p>Note: The board specific file is used to select the transfer type.
+</p>
+<pre>diff --git a/arch/arm/mach-omap2/board-ti8148evm.c b/arch/arm/mach-omap2/board-ti8148evm.c
+index 8519842..369a496 100644
+--- a/arch/arm/mach-omap2/board-ti8148evm.c
++++ b/arch/arm/mach-omap2/board-ti8148evm.c
+@@ -66,7 +66,7 @@ static struct omap_board_mux board_mux[] __initdata = {
+ static struct omap2_hsmmc_info mmc[] = {
+        {
+                .mmc            = 1,
+-               .caps           = MMC_CAP_4_BIT_DATA,
++               .caps           = MMC_CAP_8_BIT_DATA,
+                .gpio_cd        = -EINVAL, /* Dedicated pins for CD and WP */
+                .gpio_wp        = -EINVAL,
+                .ocr_mask       = MMC_VDD_33_34,
+</pre>
+<h2><span id="Using_Hardware_Timers_from_Kernel_Module/Driver"></span><span class="mw-headline" id="Using_Hardware_Timers_from_Kernel_Module.2FDriver">Using Hardware Timers from Kernel Module/Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=33" title="Edit section: Using Hardware Timers from Kernel Module/Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>DM816x devices have 7 h/w timers while DM814x devices have 8 timers. By default, the first two timers (labelled in kernel as Timer1 &amp; Timer2) are reserved for kernel as periodic tick timer and a free running timer respectively.
+</p><p>This section describes steps for using one of the remaining timers from a loadable kernel module or driver.
+</p><p>Note that, depending upon the platform and use cases, some of the other timers may also be reserved. Please refer the Feature and Performance Guide Datasheet associated with respective release for more details.
+</p>
+<h3><span class="mw-headline" id="Example:_Using_Timer5_from_a_loadable_module">Example: Using Timer5 from a loadable module</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=34" title="Edit section: Example: Using Timer5 from a loadable module">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Note that for exact API details, please refer file <tt>arch/arm/plat-omap/include/plat/dmtimer.h</tt> from kernel source directory. 
+</p><p>At bare minimum, the module has to make following <tt>dmtimer</tt> (the DM81xx timer driver in kernel) exported APIs in sequence: 
+</p>
+<ol><li><tt>omap_dm_timer_request_specific()</tt> - Reserves the specific timer indicated by number as id - for DM816x, valid id is within 1 to 7 and for DM814x it is 1 to 8. If the timer was already reserved, then you will get error. On success, timer handle will be returned which can be used for further APIs.</li>
+<li><tt>omap_dm_timer_request()</tt> - Alternatively, you can use this API to get the next free available timer. Note that, in this case it is assumed that every owner uses either of these APIs to reserve timers from kernel. On success, timer handle will be returned which can be used for further APIs.</li>
+<li>On DM814x, the default timer clock is at 32KHz while on DM816x, the default is main oscillator output. You can change the source to either by using API <tt>omap_dm_timer_set_source()</tt> and passing 0 (OMAP_TIMER_SRC_SYS_CLK) as argument to use oscillator clock output as timer clock or 1 (OMAP_TIMER_SRC_32_KHZ) to use 32KHz reference clock.</li>
+<li>Start the timer up counting using <tt>omap_dm_timer_set_load_start()</tt> by specifying load value.</li></ol>
+<p>Refer following patch which can go into a loadable kernel module to use Timer5 on DM814x: 
+</p>
+<pre> +#include &lt;linux/err.h&gt;
+ +#include &lt;linux/kernel.h&gt;
+ +#include &lt;linux/module.h&gt;
+ +#include &lt;linux/err.h&gt;
+ +#include &lt;linux/device.h&gt;
+ +#include &lt;linux/clk.h&gt;
+ +
+ +#include &lt;plat/dmtimer.h&gt;
+ +
+ +static struct omap_dm_timer *timer5;
+ +
+ +static int __init init_timer5(void)
+ +{
+ +       int rate;
+ +       unsigned int counter;
+ +
+ +       timer5 = omap_dm_timer_request_specific(5);
+ +
+ +       if(timer5 == NULL) {
+ +               pr_err("Failed to reserve timer5\n");
+ +               return -1;
+ +       }
+ +
+ +       if (IS_ERR_VALUE(omap_dm_timer_set_source(timer5, OMAP_TIMER_SRC_SYS_CLK)))
+ +               pr_err("Failed to set timer source\n");
+ +
+ +       /* Verify clock rate */
+ +       rate = clk_get_rate(omap_dm_timer_get_fclk(timer5));
+ +
+ +       pr_info("Timer5 will run at at&#160;%u Hz\n", rate);
+ +
+ +       /* Start timer with 0 as load value and autoreload on overflow enabled */
+ +       omap_dm_timer_set_load_start(timer5, 1, 0);
+ +       pr_info("Timer5 is loaded with 0 and started up count...\n");
+ +
+ +       counter = omap_dm_timer_read_counter(timer5);
+ +       pr_info("Current count =&#160;%u\n", counter);
+ +
+ +       return 0;
+ +}
+ +
+ +static void __exit release_timer5(void)
+ +{
+ +       unsigned int counter;
+ +
+ +       counter = omap_dm_timer_read_counter(timer5);
+ +       pr_info("Current count =&#160;%u\n", counter);
+ +
+ +       omap_dm_timer_free(timer5);
+ +}
+ +
+</pre> 
+<h2><span class="mw-headline" id="Using_different_UART_than_the_default_EVM_configuration_as_console">Using different UART than the default EVM configuration as console</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=35" title="Edit section: Using different UART than the default EVM configuration as console">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>DM816x devices have 3 UARTs and DM814x has 6 instances. This section refers these UARTs starting from 0 (e.g., UART0, UART1 etc) while the code refers them with suffix starting from 1 (e.g., TI81XX_UART1 etc). 
+</p><p>The default EVM configuration for respective devices enables and uses following UARTs as console: 
+</p>
+<ul><li>DM8168 EVM: UART2 as console</li>
+<li>DM8148 EVM: UART0 as console</li></ul>
+<p>In addition, the UART driver initializes all the other instances by default, but when using different UART as console, for example, on a custom board, pin multiplexing needs to be considered. 
+</p><p>Following table lists multiplexing pins of various UARTs: 
+</p><p><b>Note 1:</b> By default, all multiplexed pins associated with UARTs are set in MODE0 (in case of DM816x, this is h/w default while for DM814x, the U-Boot takes case of this) and hence no mux setting is required for UARTs needing respective pins in MODE0, unless those pins are set to some other mode. In other words, the case where a driver or custom board setup for DM816x/Dm814x changes the mux mode associated with certain UART pins to non MODE0, the pins need to be set back to MODE0 for using those pins that same way as you would need to set up the pins not part of MODE0. 
+</p><p><b>Note 2: </b>Certain UART pins may be available as part of more than one pin, in this case, the decision to use certain pin would be board dependent.<br /> 
+</p><p><b>Note 3:</b> To refer the exact mux configuration and mode to be set for using as UART pin, refer datasheet and files arch/arm/mach-omap2/mux81xx.c and arch/arm/mach-omap2/mux814x.c for DM816x and DM814x respectively. 
+</p>
+<table cellspacing="1" cellpadding="1" border="1" style="width: 545px; height: 169px;">
+
+<tbody><tr>
+<th scope="col">UART
+</th>
+<th scope="col">Multiplexed pin status on DM816x
+</th>
+<th scope="col">Multiplexed pin status on DM814x
+</th></tr>
+<tr>
+<td>UART0
+</td>
+<td>All pins MODE0<br />
+</td>
+<td>All pins MODE0<br />
+</td></tr>
+<tr>
+<td>UART1
+</td>
+<td>All pins MODE0<br />
+</td>
+<td>RXD, TXD, CTS, RTS in non MODE0<br />
+</td></tr>
+<tr>
+<td>UART2
+</td>
+<td>All pins MODE0<br />
+</td>
+<td>RXD, TXD in non MODE0<br />
+</td></tr>
+<tr>
+<td>UART3
+</td>
+<td>N/A
+</td>
+<td>RXD, TXD, CTS, RTS in non MODE0<br />
+</td></tr>
+<tr>
+<td>UART4
+</td>
+<td>N/A
+</td>
+<td>RXD, TXD, CTS, RTS in non MODE0 <br />
+</td></tr>
+<tr>
+<td>UART5
+</td>
+<td>N/A
+</td>
+<td>RXD, TXD, CTS, RTS, in non MODE0<br />
+</td></tr></tbody></table>
+<p><br /> The same considerations need to be taken into account even when using a UART through tty interface for some other purpose than as console from user space.<br />
+</p>
+<h3><span class="mw-headline" id="Example:_Setting_up_UART3_on_DM814x_as_console">Example: Setting up UART3 on DM814x as console</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=36" title="Edit section: Example: Setting up UART3 on DM814x as console">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In this example, we will only consider Tx &amp; Rx pins on UART3 to be set up in mux and ignore h/w flow control.<br />
+</p><p>Edit the board_mux array in arch/arm/mach-omap2/board-ti8148evm.c file (or any custom board file for DM814x board you are using) with following entries:
+</p>
+<pre> static struct omap_board_mux board_mux[] __initdata = {
+        TI814X_MUX(VOUT1_B_CB_C7, OMAP_MUX_MODE5), /* Set up pin as TXD */  
+        TI814X_MUX(VOUT1_B_CB_C6, OMAP_MUX_MODE5), /* Set up pin as RXD */
+
+        /* More entries for other peripheral pins .... */
+
+        { .reg_offset = OMAP_MUX_TERMINATOR },
+ };</pre>
+<p>Alternatively, the UART3 pins are also muxed with UART0 pins, so depending upon the routing on your board, you can set up to use UART0 pins as UART3 pins by:
+</p>
+<pre> static struct omap_board_mux board_mux[] __initdata = {
+        TI814X_MUX(UART0_DSRN, OMAP_MUX_MODE1), /* Set up pin as TXD */  
+        TI814X_MUX(UART0_DCDN, OMAP_MUX_MODE1), /* Set up pin as RXD */
+
+        /* More entries for other peripheral pins .... */
+
+        { .reg_offset = OMAP_MUX_TERMINATOR },
+ };</pre>
+<p>You could also use omap_mux_init_signal() to set up pinmux run time. Refer PSP User Guide section "Modifying_Pin_Mux_settings" for details.
+</p><p>Rebuild the kernel and now you can access the uart as /dev/ttyO3.
+</p><p>To use this UART for console, change 'console' parameter passed to bootargs as <tt>console=ttyO3,115200n8</tt>. Also ensure that the filesystem you are using is updated to use this device as console. 
+</p><p>E.g., change the default boot arguments for DM814x at U-Boot from --&gt;
+</p>
+<pre>'console=ttyO0,115200n8 root=/dev/nfs nfsroot=172.24.191.70:/srv/nfs/hp,nolock rw mem=128M ip=dhcp'
+</pre>
+<p>to following using <tt>setenv</tt> command,
+</p>
+<pre>TI8148_EVM#setenv bootargs 'console=ttyO3,115200n8 root=/dev/nfs nfsroot=172.24.191.70:/srv/nfs/hp,nolock rw mem=128M ip=dhcp'
+TI8148_EVM#saveenv
+</pre>
+<p>Since on DM816x, no mux settings are required for UARTs if the pins are left in default MODE0, you can readily use the 'console' argument to kernel command like and update init scripts to use the UART other than UART2 (/dev/ttyO2) as console.
+</p><p>In the above example case, update the occurrences of 'ttyO0' in <tt>/etc/inittab</tt> of the DM814x filesystem you are using with 'ttyO3'.
+</p><p>That is, change
+</p>
+<pre>/sbin/getty 115200 ttyO0
+</pre>
+<p>in /etc/inittab to,
+</p>
+<pre>/sbin/getty 115200 ttyO3
+</pre>
+<div style="padding: 5px; background: none repeat scroll 0% 0% rgb(238, 238, 238); color: rgb(21, 27, 84);">
+<p><b>Note:</b> It is most likely that when using an UART as console you will update U-Boot too accordingly and thus the mux setting would already be taken care in U-Boot. 
+</p>
+</div>
+<h3><span class="mw-headline" id="Low_level_debugging_with_early_prints_on_console">Low level debugging with early prints on console</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=37" title="Edit section: Low level debugging with early prints on console">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If you wish to use an UART different than the one supported in default EVM config for low level debugging with early prints, you need to ensure that the pin mux is set up for the uart to be used before kernel boots (in U-Boot). 
+</p><p>Also, following needs to be added in arch/arm/plat-omap/include/plat/uncompress.h. The example below assumes UART0 (referred in code as UART1) to be used as console with early debug on DM8168 board called as ti8168Cust. 
+</p><p>Update function <tt>__arch_decomp_setup()</tt> with:
+</p>
+<pre> /* TI8168 custom board using UART1 */
+ DEBUG_LL_TI81XX(1, ti8168Cust);</pre>
+<h3><span class="mw-headline" id="Updating_U-Boot_to_use_different_UART_as_console">Updating U-Boot to use different UART as console</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=38" title="Edit section: Updating U-Boot to use different UART as console">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For DM816x, change the address defined as CONFIG_SYS_NS16550_COM1 in <tt>include/configs/ti8168_evm.h</tt> to the base address of the UART you want to designate for console.
+</p><p>Similarly, for DM814x, update file <tt>include/configs/ti8148_evm.h</tt>.
+</p><p>In addition, if the chosen UART requires pinmux to be set (non-mode0 setting), this needs to be done in board_init() function.
+</p><p>For DM814x:
+</p>
+<ol><li>Identify the mux configuration register number and the mode to be set for UART pin(s)</li>
+<li>Update the bit fields in <tt>board/ti/ti8148/mux.h</tt> accordingly</li></ol>
+<p>E.g., to set UART3 Tx (mode5) on vout1_b_cb_c7 pin, which comes to mux entry 211, change following in board/ti/ti8148/mux.h:
+</p>
+<pre> /* -212 */      BIT(0), BIT(0), BIT(0), BIT(0),</pre>
+<p>to,
+</p>
+<pre> /* -212 */      BIT(0), BIT(0), BIT(0), BIT(5),</pre>
+<h2><span class="mw-headline" id="SPI_Port_to_Custom_Hardware">SPI Port to Custom Hardware</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit&amp;section=39" title="Edit section: SPI Port to Custom Hardware">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a rel="nofollow" class="external free" href="DM81xx_AM38xx_PSP_McSPI_Driver_Guide.html#Porting_to_custom_hardware">http://processors.wiki.ti.com/index.php/DM81xx_AM38xx_PSP_McSPI_Driver_Guide#Porting_to_custom_hardware</a>
+</p></div>
+<!-- 
+NewPP limit report
+Cached time: 20201130123229
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.096 seconds
+Real time usage: 0.099 seconds
+Preprocessor visited node count: 231/1000000
+Preprocessor generated node count: 354/1000000
+Post‐expand include size: 478/2097152 bytes
+Template argument size: 27/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2319/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    3.327      1 -total
+ 53.23%    1.771      1 Template:SpArticleStart
+ 42.90%    1.427      1 Template:SpLicenseCC-SA
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:12987-0!canonical and timestamp 20201130123229 and revision id 114374
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>TI81xx PSP Porting Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>TI81xx PSP Porting Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>TI81xx PSP Porting Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>TI81xx PSP Porting Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>TI81xx PSP Porting Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>TI81xx PSP Porting Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>TI81xx PSP Porting Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>TI81xx PSP Porting Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>TI81xx PSP Porting Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;oldid=114374">https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;oldid=114374</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_DM816x.html" title="Category:DM816x">DM816x</a></li><li><a href="Category_AM389x.html" title="Category:AM389x">AM389x</a></li><li><a href="Category_DM814x.html" title="Category:DM814x">DM814x</a></li><li><a href="Category_AM387x.html" title="Category:AM387x">AM387x</a></li><li><a href="Category_DaVinci_Linux.html" title="Category:DaVinci Linux">DaVinci Linux</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_PSP.html" title="Category:PSP">PSP</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=TI81xx+PSP+Porting+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="TI81xx_PSP_Porting_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_TI81xx_PSP_Porting_Guide.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="TI81xx_PSP_Porting_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/TI81xx_PSP_Porting_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/TI81xx_PSP_Porting_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;oldid=114374" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=TI81xx_PSP_Porting_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 24 July 2012, at 19:37.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.096","walltime":"0.099","ppvisitednodes":{"value":231,"limit":1000000},"ppgeneratednodes":{"value":354,"limit":1000000},"postexpandincludesize":{"value":478,"limit":2097152},"templateargumentsize":{"value":27,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2319,"limit":5000000},"timingprofile":["100.00%    3.327      1 -total"," 53.23%    1.771      1 Template:SpArticleStart"," 42.90%    1.427      1 Template:SpLicenseCC-SA"]},"cachereport":{"timestamp":"20201130123229","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/TI81xx_PSP_Porting_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:02:17 GMT -->
+</html>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AM335X_DCAN_Driver_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:49:27 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>AM335X DCAN Driver Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"AM335X_DCAN_Driver_Guide","wgTitle":"AM335X DCAN Driver Guide","wgCurRevisionId":127383,"wgRevisionId":127383,"wgArticleId":13656,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM335x","Linux","PSP"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"AM335X_DCAN_Driver_Guide","wgRelevantArticleId":13656,"wgRequestId":"e84fe9efc9ca5b1cae594147","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AM335X_DCAN_Driver_Guide rootpage-AM335X_DCAN_Driver_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">AM335X DCAN Driver Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div style="width:800px; text-align:justify;"> 
+<div style="display:block; clear: both; margin: 10px 0px; padding: 0px; background-color: #ee1d23; text-align:right;"><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a></div>
+<div style="display:block; margin: 5px 0px; padding: 2px 5px; font-size:1.5em; font-weight:bold; text-align:left;">AM335X DCAN Linux Driver Guide</div>
+<div style="display:block; margin: 5px 0px; padding: 2px; color: #666666; font-size:1.0em; font-weight:bold; text-align:right;">Linux PSP</div> 
+<div style="width:800px; text-align:left;"><div style="display:block; margin: 10px 0px; padding: 0px; text-align:left;">
+</div></div> 
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext"><b>Introduction</b></span></a></li>
+<li class="toclevel-1"><a href="#Acronyms_.26_definitions"><span class="tocnumber">2</span> <span class="toctext"><b>Acronyms &amp; definitions</b></span></a></li>
+<li class="toclevel-1"><a href="#Setup_Details"><span class="tocnumber">3</span> <span class="toctext"><b>Setup Details</b></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Connection_details"><span class="tocnumber">3.1</span> <span class="toctext"><b>Connection details</b></span></a>
+<ul>
+<li class="toclevel-3"><a href="#am335x"><span class="tocnumber">3.1.1</span> <span class="toctext"><b>am335x</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-1"><a href="#Port_details"><span class="tocnumber">3.2</span> <span class="toctext"><b>Port details</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-2"><a href="#am335x_2"><span class="tocnumber">3.2.1</span> <span class="toctext"><b>am335x</b></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Driver_Usage"><span class="tocnumber">4</span> <span class="toctext"><b>Driver Usage</b></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Quick_Steps"><span class="tocnumber">4.1</span> <span class="toctext"><b>Quick Steps</b></span></a></li>
+<li class="toclevel-2"><a href="#Advanced_Usage"><span class="tocnumber">4.2</span> <span class="toctext"><b>Advanced Usage</b></span></a>
+<ul>
+<li class="toclevel-3"><a href="#Network_up.2Fdown"><span class="tocnumber">4.2.1</span> <span class="toctext"><b>Network up/down</b></span></a></li>
+<li class="toclevel-3"><a href="#Set_different_Bitrate"><span class="tocnumber">4.2.2</span> <span class="toctext"><b>Set different Bitrate</b></span></a></li>
+<li class="toclevel-3"><a href="#Test_mode"><span class="tocnumber">4.2.3</span> <span class="toctext"><b>Test mode</b></span></a>
+<ul>
+<li class="toclevel-4"><a href="#Loopback_mode"><span class="tocnumber">4.2.3.1</span> <span class="toctext"><i>Loopback mode</i></span></a></li>
+<li class="toclevel-4"><a href="#Silent_mode"><span class="tocnumber">4.2.3.2</span> <span class="toctext"><i>Silent mode</i></span></a></li>
+</ul>
+</li>
+<li class="toclevel-3"><a href="#Statistics_of_CAN"><span class="tocnumber">4.2.4</span> <span class="toctext"><b>Statistics of CAN</b></span></a></li>
+<li class="toclevel-3"><a href="#Error_frame_details"><span class="tocnumber">4.2.5</span> <span class="toctext"><b>Error frame details</b></span></a>
+<ul>
+<li class="toclevel-4"><a href="#DCAN_IP_Error_details"><span class="tocnumber">4.2.5.1</span> <span class="toctext"><i>DCAN IP Error details</i></span></a></li>
+<li class="toclevel-4"><a href="#DCAN_driver_provides"><span class="tocnumber">4.2.5.2</span> <span class="toctext"><i>DCAN driver provides</i></span></a></li>
+<li class="toclevel-4"><a href="#Error_frames_display_with_candump"><span class="tocnumber">4.2.5.3</span> <span class="toctext"><i>Error frames display with candump</i></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Linux_Driver_Configuration"><span class="tocnumber">5</span> <span class="toctext"><b>Linux Driver Configuration</b></span></a>
+<ul>
+<li class="toclevel-2"><a href="#How_DCAN_driver_fits_into_Linux_architecture"><span class="tocnumber">5.1</span> <span class="toctext">How DCAN driver fits into Linux architecture</span></a></li>
+<li class="toclevel-2"><a href="#Detailed_Kernel_Configuration"><span class="tocnumber">5.2</span> <span class="toctext">Detailed Kernel Configuration</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Building_D_CAN_driver_into_Kernel"><span class="tocnumber">5.2.1</span> <span class="toctext">Building D_CAN driver into Kernel</span></a></li>
+<li class="toclevel-3"><a href="#Building_D_CAN_driver_as_Loadable_Kernel_Module"><span class="tocnumber">5.2.2</span> <span class="toctext"><b>Building D_CAN driver as Loadable Kernel Module</b></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#DCAN_driver_Architecture"><span class="tocnumber">6</span> <span class="toctext"><b>DCAN driver Architecture</b></span></a>
+<ul>
+<li class="toclevel-2"><a href="#User_Space"><span class="tocnumber">6.1</span> <span class="toctext"><b>User Space</b></span></a></li>
+<li class="toclevel-2"><a href="#Kernel_Space"><span class="tocnumber">6.2</span> <span class="toctext"><b>Kernel Space</b></span></a></li>
+<li class="toclevel-2"><a href="#Hardware"><span class="tocnumber">6.3</span> <span class="toctext"><b>Hardware</b></span></a></li>
+<li class="toclevel-2"><a href="#Files"><span class="tocnumber">6.4</span> <span class="toctext"><b>Files</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#CAN_Utilities"><span class="tocnumber">7</span> <span class="toctext"><b>CAN Utilities</b></span></a>
+<ul>
+<li class="toclevel-2"><a href="#Source_code"><span class="tocnumber">7.1</span> <span class="toctext">Source code</span></a>
+<ul>
+<li class="toclevel-3"><a href="#ip_.28route2.29"><span class="tocnumber">7.1.1</span> <span class="toctext">ip (route2)</span></a></li>
+<li class="toclevel-3"><a href="#canutils"><span class="tocnumber">7.1.2</span> <span class="toctext">canutils</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Build_steps"><span class="tocnumber">7.2</span> <span class="toctext">Build steps</span></a>
+<ul>
+<li class="toclevel-3"><a href="#ip_cross_compilation"><span class="tocnumber">7.2.1</span> <span class="toctext">ip cross compilation</span></a></li>
+<li class="toclevel-3"><a href="#libsocketcan_cross_compilation"><span class="tocnumber">7.2.2</span> <span class="toctext">libsocketcan cross compilation</span></a></li>
+<li class="toclevel-3"><a href="#canutils_cross_compilation"><span class="tocnumber">7.2.3</span> <span class="toctext">canutils cross compilation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Generic_usage_details"><span class="tocnumber">7.3</span> <span class="toctext">Generic usage details</span></a>
+<ul>
+<li class="toclevel-3"><a href="#ip"><span class="tocnumber">7.3.1</span> <span class="toctext">ip</span></a></li>
+<li class="toclevel-3"><a href="#cansend"><span class="tocnumber">7.3.2</span> <span class="toctext">cansend</span></a></li>
+<li class="toclevel-3"><a href="#candump"><span class="tocnumber">7.3.3</span> <span class="toctext">candump</span></a></li>
+<li class="toclevel-3"><a href="#cansequence"><span class="tocnumber">7.3.4</span> <span class="toctext">cansequence</span></a></li>
+<li class="toclevel-3"><a href="#canconfig"><span class="tocnumber">7.3.5</span> <span class="toctext">canconfig</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Miscellaneous"><span class="tocnumber">8</span> <span class="toctext"><b>Miscellaneous</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Support_for_second_D_CAN_instance_.28AM335x.29"><span class="tocnumber">8.1</span> <span class="toctext">Support for second D_CAN instance (AM335x)</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction"><b>Introduction</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanIntro&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The Controller Area Network is a serial communications protocol which efficiently supports distributed
+real-time control with a high level of security. The DCAN module supports bitrates up to 1 Mbit/s and is
+compliant to the CAN 2.0B protocol specification. The core IP within DCAN is provided by Bosch.
+</p><p>This wiki page provides usage information of DCAN Linux driver on AM335x EVM.
+</p>
+<h1><span id="Acronyms_&amp;_definitions"></span><span class="mw-headline" id="Acronyms_.26_definitions"><b>Acronyms &amp; definitions</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanIntro&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<table border="1" cellspacing="0" cellpadding="5" width="40%">
+<caption><b>DCAN Driver: Acronyms</b>
+</caption>
+<tbody><tr>
+<th style="background-color: green;">Acronym
+</th>
+<th style="background-color: green;">Definition
+</th></tr>
+<tr>
+<td>CAN
+</td>
+<td>Controller Area Network
+</td></tr>
+<tr>
+<td>BTL
+</td>
+<td>Bit timing logic
+</td></tr>
+<tr>
+<td>DLC
+</td>
+<td>Data Length Code
+</td></tr>
+<tr>
+<td>MO
+</td>
+<td>Message Object
+</td></tr>
+<tr>
+<td>LEC
+</td>
+<td>Last Error Code
+</td></tr>
+<tr>
+<td>FSM
+</td>
+<td>Finite State Machine
+</td></tr>
+<tr>
+<td>CRC
+</td>
+<td>Cyclic Redundancy Check
+</td></tr></tbody></table>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Setup_Details"><b>Setup Details</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanSetup&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Connection_details"><b>Connection details</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanSetup&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="am335x"><b>am335x</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanSetup&amp;action=edit&amp;section=T-3" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>DCAN interface is available on DB9 connectors on the daughter board. The DCAN pin details are as follows:</li></ul>
+<ol><li>Pin 7 - CAN-H</li>
+<li>Pin 2 - CAN-L</li>
+<li>Pin 3 - Ground</li></ol>
+<dl><dd><ul><li>DB9F-DB9F straight cable for board-board connection is required and details can be found from <a rel="nofollow" class="external text" href="http://search.digikey.com/us/en/products/AK152-2-R/AE9872-ND/821627">digikey</a> website &amp; corresponding <a rel="nofollow" class="external text" href="http://www.assmann.us/specs/AK152-2-R.pdf">datasheet</a></li></ul></dd></dl>
+<dl><dd><ul><li>To connect two EVM's then the following connections needs to be made. Board A connecter pins 7,2,3 needs to be connected to pins 7,2,3 of Board B connector</li></ul></dd></dl>
+    <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a href="File_Am335x_dcan_cable_details.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/6/67/Am335x_dcan_cable_details.png" width="600" height="354" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Am335x_dcan_cable_details.html" class="internal" title="Enlarge"></a></div><b>am335x-am335x connection diagram</b></div></div></div></div> 
+<h2><span class="mw-headline" id="Port_details"><b>Port details</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;action=edit&amp;section=1" title="Edit section: Port details">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="am335x_2"><b>am335x</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;action=edit&amp;section=2" title="Edit section: am335x">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>DCAN is available in Profile #1 of AM335X EVM with General purpose daughter card, go through <a rel="nofollow" class="external text" href="AM335x_General_Purpose_EVM_HW_User_Guide.html#Configuration.2FSetup">EVM hardware user guide</a> to know how to set different profiles. Transceiver port number on the daughter card is J11 and below figure is for reference</li></ul>
+    <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a href="File_Am335x_dcan_port_details.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/2/2d/Am335x_dcan_port_details.png" width="600" height="450" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Am335x_dcan_port_details.html" class="internal" title="Enlarge"></a></div><b>AM335X DCAN port details</b></div></div></div></div>
+<h1><span class="mw-headline" id="Driver_Usage"><b>Driver Usage</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Quick_Steps"><b>Quick Steps</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Utilities required for DCAN driver usage are ip, canconfig, cansend, candump and cansequence. Details of these utilities are elaborated in <a href="#CAN_Utilities">CAN Utilities</a> section
+</p><p>Steps for transmitting/receiving CAN packets
+</p>
+<ul><li>Set bit-timing</li></ul>
+<p>Set the bit-rate to 50Kbits/sec with triple sampling using the following command 
+</p>
+<pre>$ ip link set can0 type can bitrate 50000 triple-sampling on
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 bitrate 50000 ctrlmode triple-sampling on
+</pre>
+<ul><li>Device bring up</li></ul>
+<p>Bring up the device using the command:
+</p>
+<pre>$ ip link set can0 up
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 start 
+</pre>
+<ul><li>Transfer packets</li></ul>
+<p>Packet transmission can be achieve by using cansend and cansequence utilities.
+</p><p>a. Transmit 8 bytes with standard packet id number as 0x10
+</p>
+<pre>$ cansend can0 -i 0x10 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88
+</pre>
+<p>b. Transmit 8 bytes with extended packet id number as 0x800
+</p>
+<pre>$ cansend can0 -i 0x800 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 -e
+</pre>
+<p>c. Transmit 20 packets of 8 bytes each with same extended packet id number as 0xFFFFF
+</p>
+<pre>$ cansend can0 -i 0xFFFFF 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 -e --loop=20
+</pre>
+<p>d. Transmit a sequence of numbers from 0x00-0xFF, till the buffer availability
+</p>
+<pre>$ cansequence can0
+</pre>
+<p>e. Transmit a sequence of numbers from 0x00-0xFF and roll-back in a continuous loop 
+</p>
+<pre>$ cansequence can0 -p
+</pre>
+<ul><li>Receive packets</li></ul>
+<p>Packet reception can be achieve by using candump utility
+</p>
+<pre>$ candump can0
+</pre>
+<h2><span class="mw-headline" id="Advanced_Usage"><b>Advanced Usage</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-3" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="Network_up/down"></span><span class="mw-headline" id="Network_up.2Fdown"><b>Network up/down</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-4" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Bring up the device</li></ul>
+<pre>$ ip link set can0 up
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 start
+</pre>
+<ul><li>Bring down the device</li></ul>
+<pre>$ ip link set can0 down
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 stop
+</pre>
+<h3><span class="mw-headline" id="Set_different_Bitrate"><b>Set different Bitrate</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-5" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For setting up the different bitrate form what was set before then follow these steps. In this example bitrate is setting it to 1MBPS
+</p>
+<ul><li>Bring down the device if it was up</li></ul>
+<pre>$ ip link set can0 down
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 stop
+</pre>
+<ul><li>Set bitrate</li></ul>
+<pre>$ ip link set can0 type can bitrate 1000000 triple-sampling on
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 bitrate 1000000 ctrlmode triple-sampling on
+</pre>
+<ul><li>Bring up the device</li></ul>
+<pre>$ ip link set can0 up
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 start
+</pre>
+<h3><span class="mw-headline" id="Test_mode"><b>Test mode</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-6" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To test the DCAN module then follow these steps
+</p>
+<h4><span class="mw-headline" id="Loopback_mode"><i>Loopback mode</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-7" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>For testing the module in loopback mode then use below steps
+</p>
+<ul><li>Bring down the device if it was up</li></ul>
+<pre>$ ip link set can0 down
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 stop
+</pre>
+<ul><li>Configure the loopback mode with triple sampling on and 100KBPS bitrate</li></ul>
+<pre>$ canconfig can0 bitrate 100000 ctrlmode triple-sampling on loopback on
+</pre>
+<ul><li>Bring up the device</li></ul>
+<pre>$ ip link set can0 up
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 start
+</pre>
+<h4><span class="mw-headline" id="Silent_mode"><i>Silent mode</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-8" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>For testing the module in silent mode then use below steps
+</p>
+<ul><li>Bring down the device if it was up</li></ul>
+<pre>$ ip link set can0 down
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 stop
+</pre>
+<ul><li>Configure the listen-only mode with triple sampling on and 500KBPS bitrate</li></ul>
+<pre>$ canconfig can0 bitrate 500000 ctrlmode triple-sampling on listen-only on
+</pre>
+<ul><li>Bring up the device</li></ul>
+<pre>$ ip link set can0 up
+</pre>
+<p>or
+</p>
+<pre>$ canconfig can0 start
+</pre>
+<h3><span class="mw-headline" id="Statistics_of_CAN"><b>Statistics of CAN</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-9" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Statistics of CAN device can be seen from these commands
+</p>
+<pre>$ ip -d -s link show can0
+</pre>
+<p>Below command also used to know the details
+</p>
+<pre>$ cat /proc/net/can/stats
+</pre>
+<h3><span class="mw-headline" id="Error_frame_details"><b>Error frame details</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-10" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="DCAN_IP_Error_details"><i>DCAN IP Error details</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-11" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>If the CAN bus is not properly connected or some hardware issues DCAN has the intelligence to generate an Error interrupt and corresponding error details on hardware registers.
+</p><p>In CAN terminology errors are divided into three categories
+</p>
+<ul><li>Error warning state, this state is reached if the error count of transmit or receive is more than 96.</li>
+<li>Error passive state, this state is reached if the core still detecting more errors and error counter reaches 127 then bus will enter into</li>
+<li>Bus off state, still seeing the problems then it will go to Bus off mode.</li></ul>
+<h4><span class="mw-headline" id="DCAN_driver_provides"><i>DCAN driver provides</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-12" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>For the above error state, driver will send the error frames to inform that there is error encountered. Frame details with respect to different states are listed here:
+</p>
+<ul><li>Error warning frame</li></ul>
+<pre>&lt;0x004&gt; [8] 00 08 00 00 00 00 60 00
+</pre>
+<p>ID for error warning is 0x004
+[8] represents 8 bytes have received
+0x08 at 2nd byte represents type of error warning. 0x08 for transmission error warning, 0x04 for receive error warning frame
+0x60 at 7th byte represent tx error count. 
+</p>
+<ul><li>Error passive frame</li></ul>
+<pre>&lt;0x004&gt; [8] 00 10 00 00 00 00 00 64
+</pre>
+<p>ID for error passive frame is 0x004
+[8] represents 8 bytes have received
+0x10 at 2nd byte represents type of error passive. 0x10 for receive error passive, 0x20 for transmission error passive
+0x64 at 8th byte represent rx error count.
+</p>
+<ul><li>Buss off state</li></ul>
+<pre>&lt;0x040&gt; [8] 00 00 00 00 00 00 00 00
+</pre>
+<p>ID for bus-off state is 0x040
+</p>
+<h4><span class="mw-headline" id="Error_frames_display_with_candump"><i>Error frames display with candump</i></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverUsage&amp;action=edit&amp;section=T-13" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>candump has the capability to display the error frames along with data frames on the console. Some of the error frames details are mentioned in the previous section
+</p>
+<pre>$ candump can0 --error
+</pre>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Linux_Driver_Configuration"><b>Linux Driver Configuration</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanConfig&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>DCAN device driver in Linux is provided as a networking driver that confirms to the socketCAN interface</li>
+<li>The driver is currently build-into the kernel with the right configuration items enabled (details below)</li></ul>
+<h2><span class="mw-headline" id="How_DCAN_driver_fits_into_Linux_architecture">How DCAN driver fits into Linux architecture</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanConfig&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>DCAN driver is a can "networking" driver that fits into the Linux Networking framework</li>
+<li>It is available as a configuration item in the Linux kernel configuration as follows:</li></ul>
+<pre>  Linux Kernel Configuration
+     Networking support
+        CAN bus subsystem support
+           CAN device drivers
+              Bosch D_CAN devices
+                Generic Platform Bus based D_CAN driver
+</pre>
+<h2><span class="mw-headline" id="Detailed_Kernel_Configuration">Detailed Kernel Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanConfig&amp;action=edit&amp;section=T-3" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To enable/disable CAN driver support, start the <i>Linux Kernel Configuration</i>&#160;tool: 
+</p>
+<pre>$ make menuconfig ARCH=arm
+</pre>
+<p>Select <i>Networking support</i> from the main menu.
+</p>
+<pre>    ...
+    ...
+    Power management options ---&gt;
+[*] <b>Networking support ---&gt;</b>
+    Device Drivers ---&gt;
+    File systems ---&gt;
+    Kernel hacking ---&gt;
+    ...
+    ...
+
+</pre>
+<p>Select <i>CAN bus subsystem support</i> as shown here: 
+</p>
+<pre>    ...
+    ...
+    Networking options  ---&gt;
+[ ] Amateur Radio support  ---&gt;
+&lt;*&gt; <b>CAN bus subsystem support  ---&gt;</b>
+    IrDA (infrared) subsystem support  ---&gt;
+    ...
+</pre>
+<p>Select <i>Raw CAN Protocol</i> &amp; <i>Broadcast Manager CAN Protocol</i> as shown here: 
+</p>
+<pre>    ...
+    --- CAN bus subsystem support
+&lt;*&gt; <b>Raw CAN Protocol (raw access with CAN-ID filtering)</b>
+&lt;*&gt; <b>Broadcast Manager CAN Protocol (with content filtering)</b>
+    CAN Device Drivers  ---&gt;
+</pre>
+<h3><span class="mw-headline" id="Building_D_CAN_driver_into_Kernel">Building D_CAN driver into Kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanConfig&amp;action=edit&amp;section=T-4" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default D_CAN driver is included in the Kernel
+</p><p>Select <i>Bosch D_CAN devices</i> in the above menu and then select the following options:
+</p>
+<pre>&lt;*&gt; Virtual Local CAN Interface (vcan)
+&lt;*&gt; Platform CAN drivers with Netlink support
+[*]   CAN bit-timing calculation
+&lt; &gt;   TI High End CAN Controller 
+&lt; &gt;   Microchip MCP251x SPI CAN controllers
+&lt; &gt; Philips/NXP SJA1000 devices  ---&gt;  
+&lt; &gt; Bosch C_CAN devices  ---&gt;
+&lt;*&gt; <b>Bosch D_CAN devices  ---&gt;</b>
+    CAN USB interfaces  ---&gt; 
+          ...
+</pre>
+<p><i>Note: "CAN bit-timing calculation" needs to be enabled to use "ip" utility to set CAN bitrate</i>
+</p><p>Select <i>Generic Platform Bus based D_CAN driver</i> as shown here: 
+</p>
+<pre>--- Bosch D_CAN devices
+&lt;*&gt;   <b>Generic Platform Bus based D_CAN driver</b>
+</pre>
+<h3><span class="mw-headline" id="Building_D_CAN_driver_as_Loadable_Kernel_Module"><b>Building D_CAN driver as Loadable Kernel Module</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanConfig&amp;action=edit&amp;section=T-5" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To build the <i>Bosch D_CAN devices</i> components as module, press 'M' key after navigating to config entries
+</p>
+<pre>&lt;*&gt; Virtual Local CAN Interface (vcan)
+&lt;*&gt; Platform CAN drivers with Netlink support
+[*]   CAN bit-timing calculation
+&lt; &gt;   TI High End CAN Controller 
+&lt; &gt;   Microchip MCP251x SPI CAN controllers
+&lt; &gt; Philips/NXP SJA1000 devices  ---&gt;  
+&lt; &gt; Bosch C_CAN devices  ---&gt;
+<b>&lt;M&gt; Bosch D_CAN devices  ---&gt;</b>
+    CAN USB interfaces  ---&gt; 
+          ...
+</pre>
+<p><i>Note: "CAN bit-timing calculation" needs to be enabled to use "ip" utility to set CAN bitrate</i>
+</p><p>To build the <i>Generic Platform Bus based D_CAN driver</i> components as module, press 'M' key after navigating to config entries 
+</p>
+<pre>--- Bosch D_CAN devices
+<b>&lt;M&gt;   Generic Platform Bus based D_CAN driver</b>
+</pre>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="DCAN_driver_Architecture"><b>DCAN driver Architecture</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverArch&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>DCAN driver architecture shown in the figure below, is mainly divided into three layers Viz user space, kernel space and hardware.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:592px;"><a href="File_Dcan_driver_architecture.html" class="image"><img alt="Dcan driver architecture.png" src="https://processors.wiki.ti.com/images/0/0b/Dcan_driver_architecture.png" width="590" height="374" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Dcan_driver_architecture.html" class="internal" title="Enlarge"></a></div></div></div></div></div>
+<h2><span class="mw-headline" id="User_Space"><b>User Space</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverArch&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>CAN utils are used as the application binaries for transfer/receive frames. These utils are very useful for debugging the driver.
+</p>
+<h2><span class="mw-headline" id="Kernel_Space"><b>Kernel Space</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverArch&amp;action=edit&amp;section=T-3" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This layer mainly consists of the socketcan interface, network layer and DCAN driver.
+</p><p>Socketcan interface provides a socket interface to user space applications and which builds upon the Linux network layer.  DCAN device driver for CAN controller hardware registers itself with the Linux network layer as a network device. So that CAN frames from the controller can be passed up to the network layer and on to the CAN protocol family module and vice-versa.
+</p><p>The protocol family module provides an API for transport protocol modules to register, so that any number of transport protocols can be loaded or unloaded dynamically.
+</p><p>In fact, the can core module alone does not provide any protocol and cannot be used without loading at least one additional protocol module.  Multiple sockets can be opened at the same time, on different or the same protocol module and they can listen/send frames on different or the same CAN IDs.
+</p><p>Several sockets listening on the same interface for frames with the same CAN ID are all passed the same received matching CAN frames. An application wishing to communicate using a specific transport protocol, e.g. ISO-TP, just selects that protocol when opening the socket. Then can read and write application data byte streams, without having to deal with CAN-IDs, frames, etc.
+</p>
+<h2><span class="mw-headline" id="Hardware"><b>Hardware</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverArch&amp;action=edit&amp;section=T-4" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This layer mainly consisting of DCAN core and DCAN IO pins for packet Transmission or reception.
+</p>
+<h2><span class="mw-headline" id="Files"><b>Files</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanDriverArch&amp;action=edit&amp;section=T-5" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<table border="1" cellspacing="0" cellpadding="4" rules="all" style="margin:1em 1em 1em 0; border:solid 1px #aaa; border-collapse:collapse;empty-cells:show;">
+ 
+
+<tbody><tr style="background: #DDFFDD;">
+<th>S.No
+</th>
+<th>Location
+</th>
+<th>Description
+</th></tr>
+<tr>
+<td>1
+</td>
+<td>drivers/net/can/d_can/d_can.c
+</td>
+<td>DCAN driver core file
+</td></tr>
+<tr>
+<td>2
+</td>
+<td>drivers/net/can/d_can/d_can_platform.c
+</td>
+<td>Platform DCAN bus driver
+</td></tr>
+
+
+
+<tr>
+<td>3
+</td>
+<td>arch/arm/mach-omap2/board-am335xevm.c
+</td>
+<td>DCAN board specific data addition
+</td></tr>
+<tr>
+<td>4
+</td>
+<td>arch/arm/mach-omap2/devices.c
+</td>
+<td>DCAN soc specific data addition
+</td></tr></tbody></table>
+<h1><span class="mw-headline" id="CAN_Utilities"><b>CAN Utilities</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-1" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>Since CAN is a "networking" interface and uses the socket layer concepts, many utilities have been developed in open source for utilizing CAN interface.</li>
+<li>For testing CAN we commonly use the cansend /cangen and candump utilities to send and receive packets via CAN module.</li>
+<li>To configure the CAN interface netlink standard utilities are used and this requires iproute2 utilities.</li></ul>
+<p>Note that if the kernel configuration for "CAN bit-timing calculation" is not enabled then each of the parameters: tq, PROP_SEG etc need to be set individually. When bit-timing calculation is enabled in the kernel then only setting the bitrate is sufficient as it calculates other parameters
+</p>
+<h2><span class="mw-headline" id="Source_code">Source code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-2" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="ip_(route2)"></span><span class="mw-headline" id="ip_.28route2.29">ip (route2)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-3" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Source for iproute2 is available at <a rel="nofollow" class="external text" href="http://pkgs.fedoraproject.org/repo/pkgs/iproute/iproute2-2.6.39.tar.gz/8a3b6bc77c2ecf752284aa4a6fc630a6/iproute2-2.6.39.tar.gz">fedora project</a>
+</p>
+<h3><span class="mw-headline" id="canutils">canutils</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-4" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>canutils build is depends on libsocketcan binaries so build libsocketcan first then proceed to canutils
+</p><p>Source for canutils are available at <a rel="nofollow" class="external text" href="http://git.pengutronix.de/?p=tools/canutils.git;a=shortlog;h=refs/heads/master">pengutronix website</a>
+</p><p>Source for libsocketcan is available at <a rel="nofollow" class="external text" href="http://www.pengutronix.de/software/libsocketcan/download/libsocketcan-0.0.8.tar.bz2">pengutronix website</a>
+</p>
+<h2><span class="mw-headline" id="Build_steps">Build steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-5" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="ip_cross_compilation">ip cross compilation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-6" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Modifications</li></ul>
+<p>Makefile modifications are needed for cross compiling the source for ARM
+</p><p>Comment these lines from top Makefile, and set appropriate environment variables for building
+</p>
+<pre>- DESTDIR=/usr/
++ #DESTDIR=/usr/
+ROOTDIR=$(DESTDIR)
+LIBDIR=/usr/lib/
+</pre>
+<pre># Path to db_185.h include
+- DBM_INCLUDE:=$(ROOTDIR)/usr/include
++ #DBM_INCLUDE:=$(ROOTDIR)/usr/include
+</pre>
+<pre>- CC = gcc
++ #CC = gcc
+</pre>
+<p>Note: Do not build arpd
+</p>
+<pre>cp misc/Makefile{,.orig}
+sed '/^TARGETS/s@arpd@@g' misc/Makefile.orig &gt; misc/Makefile
+</pre>
+<ul><li>Environment variables</li></ul>
+<p>Make sure that TOOL CHAIN path (TOOL_CHAIN_PATH) and target file system (FILESYS_PATH) paths are exported along with these
+</p>
+<pre>export GNUEABI=arm-arago-linux-gnueabi
+export CC=$GNUEABI-gcc
+export LD=$GNUEABI-ld
+export NM=$GNUEABI-nm
+export AR=$GNUEABI-ar
+export RANLIB=$GNUEABI-ranlib
+export CXX=$GNUEABI-c++
+export PREFIX=$FILESYS_PATH/usr
+export CROSS_COMPILE_PREFIX=$PREFIX
+export PATH=$TOOL_CHAIN_PATH/bin:$PATH
+export DBM_INCLUDE=/usr/include
+export INCLUDES=/usr/include
+export DESTDIR=$PREFIX/
+</pre>
+<ul><li>Configuration</li></ul>
+<p>./configure --host=arm-arago-linux --prefix=$PREFIX --enable-debug
+</p>
+<ul><li>Build &amp; Install</li></ul>
+<pre>make
+sudo make install
+</pre>
+<ul><li>Move ip executable to correct directory</li></ul>
+<p>Above steps will install binary under $FILESYS_PATH/usr/sbin, rename ip to ip.iproute2 and move it to $FILESYS_PATH/sbin/. folder.
+</p>
+<pre>mv /usr/sbin/ip /sbin/ip.iproute2
+</pre>
+<h3><span class="mw-headline" id="libsocketcan_cross_compilation">libsocketcan cross compilation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-7" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Environment variables</li></ul>
+<p>Make sure that TOOL CHAIN path (TOOL_CHAIN_PATH) and target file system (INSTALL_PATH) paths are exported along with these variables. Example INSTALL_PATH is PWD/install (present working directory is LIBSOCKETCAN_PATH).
+</p><p>Note, create "install" directory under LIBSOCKETCAN_PATH.
+</p>
+<pre>export GNUEABI=arm-arago-linux-gnueabi
+export CC=$GNUEABI-gcc
+export LD=$GNUEABI-ld
+export NM=$GNUEABI-nm
+export AR=$GNUEABI-ar
+export RANLIB=$GNUEABI-ranlib
+export CXX=$GNUEABI-c++
+export INSTALL_PATH=$PWD
+export PREFIX=$INSTALL_PATH/
+export CROSS_COMPILE_PREFIX=$PREFIX
+export PATH=$TOOL_CHAIN_PATH/bin:$PATH
+</pre>
+<ul><li>Configuration</li></ul>
+<pre>./configure --host=arm-arago-linux --prefix=$PREFIX --enable-debug
+</pre>
+<ul><li>Build</li></ul>
+<pre>make
+</pre>
+<ul><li>Install</li></ul>
+<pre>make install
+</pre>
+<h3><span class="mw-headline" id="canutils_cross_compilation">canutils cross compilation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-8" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Environment variables</li></ul>
+<p>Make sure that TOOL CHAIN path (TOOL_CHAIN_PATH) and target file system (FILESYS_PATH) paths are exported along with these. Package configuration path (PKG_CONFIG_PATH) should point to libsocketcan config file which is present under libsocketcan source folder (LIBSOCKETCAN_PATH). 
+</p>
+<pre>export GNUEABI=arm-arago-linux-gnueabi
+export CC=$GNUEABI-gcc
+export LD=$GNUEABI-ld
+export NM=$GNUEABI-nm
+export AR=$GNUEABI-ar
+export RANLIB=$GNUEABI-ranlib
+export CXX=$GNUEABI-c++
+export PREFIX=$FILESYS_PATH/usr
+export CROSS_COMPILE_PREFIX=$PREFIX
+export PATH=$TOOL_CHAIN_PATH/bin:$PATH
+export LIBSOCKETCAN_INSTALL_DIR=$LIBSOCKETCAN_PATH/install
+export PKG_CONFIG_PATH=$LIBSOCKETCAN_PATH/config
+export LD_LIBRARY_PATH=${LIBDIR}:${LD_LIBRARY_PATH}
+export LD_RAN_PATH=${LIBDIR}:${LD_RAN_PATH}
+export LDFLAGS="-Wl,--rpath -Wl,$LIBSOCKETCAN_INSTALL_DIR/lib"
+export INCLUDES="-I$LIBSOCKETCAN_INSTALL_DIR/include"
+</pre>
+<ul><li>Configuration</li></ul>
+<pre>./configure --host=arm-arago-linux --prefix=$PREFIX --enable-debug
+</pre>
+<ul><li>Build &amp; Install</li></ul>
+<pre>make
+sudo make install
+</pre>
+<h2><span class="mw-headline" id="Generic_usage_details">Generic usage details</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-9" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="ip">ip</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-10" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>"ip" utility help - ensure you are using iproute2 utility as only that supports CAN interface.</li></ul>
+<pre>$ ./ip link help
+</pre>
+<pre>Usage: ip link add link DEV [ name ] NAME
+                  [ txqueuelen PACKETS ]
+                  [ address LLADDR ]
+                  [ broadcast LLADDR ]
+                  [ mtu MTU ]
+                  type TYPE [ ARGS ]
+      ip link delete DEV type TYPE [ ARGS ]
+
+      ip link set { dev DEVICE | group DEVGROUP } [ { up | down } ]
+                         [ arp { on | off } ]
+                         [ dynamic { on | off } ]
+                         [ multicast { on | off } ]
+                         [ allmulticast { on | off } ]
+                         [ promisc { on | off } ]
+                         [ trailers { on | off } ]
+                         [ txqueuelen PACKETS ]
+                         [ name NEWNAME ]
+                         [ address LLADDR ]
+                         [ broadcast LLADDR ]
+                         [ mtu MTU ]
+                         [ netns PID ]
+                         [ alias NAME ]
+                         [ vf NUM [ mac LLADDR ]
+                                  [ vlan VLANID [ qos VLAN-QOS ] ]
+                                  [ rate TXRATE ] ]
+                         [ master DEVICE ]
+                         [ nomaster ]
+      ip link show [ DEVICE | group GROUP ]
+
+TYPE&#160;:= { vlan | veth | vcan | dummy | ifb | macvlan | can }
+</pre>
+<p><span style="color: red"><b>Note: check the result of <tt>ip link help</tt>&#160;;ensure that the <tt>TYPE</tt> field contains <tt>can</tt></b></span>
+</p>
+<ul><li>Ensure you are using the right ip utility (from iproute2)</li></ul>
+<pre>$ ./ip -V
+ip utility, iproute2-ss110629
+</pre>
+<h3><span class="mw-headline" id="cansend">cansend</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-11" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>$ ./cansend can0 -i 0x10 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88
+$ ./cansend can0 -i 0x55 0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88 -e
+</pre>
+<h3><span class="mw-headline" id="candump">candump</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-12" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>$ candump can0
+</pre>
+<h3><span class="mw-headline" id="cansequence">cansequence</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-13" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>$ cansequence can0
+$ cansequence can0 -p
+</pre>
+<h3><span class="mw-headline" id="canconfig">canconfig</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Template:AkDcanUtils&amp;action=edit&amp;section=T-14" title="Edit section: ">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>$ canconfig can0 bitrate 100000
+$ canconfig can0 start
+$ canconfig can0 stop
+$ canconfig can0 ctrlmode loopback on
+</pre>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Miscellaneous"><b>Miscellaneous</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;action=edit&amp;section=3" title="Edit section: Miscellaneous">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span id="Support_for_second_D_CAN_instance_(AM335x)"></span><span class="mw-headline" id="Support_for_second_D_CAN_instance_.28AM335x.29">Support for second D_CAN instance (AM335x)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;action=edit&amp;section=4" title="Edit section: Support for second D CAN instance (AM335x)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>On AM335x EVM only D_CAN1 is supported. Hence in <tt>arch/arm/mach-omap2/board-am335xevm.c</tt> only D_CAN1 is support is enabled by default. To add support for D_CAN0 on your custom board, follow these steps.
+</p><p><b>Add pinmux configurations</b>
+</p><p>Add a <tt>pinmux_config</tt> structure in your custom AM335x board file for instance 0. AM335x SoC provides multiple options for D_CAN0 pins. Refer to the schematic of your board to find which exact D_CAN0 pins are connected to the transceiver. In the example below, we assume pin UART0 RXD (primary function) is used as D_CAN0 TX pin and UART0 TXD (primary function) is used as D_CAN0 RX pin. 
+</p>
+<pre>static struct pinmux_config d_can0_pin_mux[] = {
+       {"uart0_rxd.d_can0_tx", OMAP_MUX_MODE2 | AM33XX_PULL_ENBL},
+       {"uart0_txd.d_can0_rx", OMAP_MUX_MODE2 | AM33XX_PIN_INPUT_PULLUP},
+       {NULL, 0},
+};
+</pre>
+<p>Now, call the <tt>setup_pin_mux()</tt> API to affect these mux configurations. This has to be done inside the <tt>d_can_init()</tt> API in <tt>arch/arm/mach-omap2/board-am335xevm.c</tt>, which is called from the board initialization code.
+</p>
+<pre>setup_pin_mux(d_can0_pin_mux);
+</pre>
+<p><b>Registering platform device</b>
+</p><p>Next, the D_CAN0 platform device needs to be registered. For this, just call <tt>am33xx_d_can_init()</tt> with instance number argument passed as 0. This also needs to be done in the board initialization sequence.
+</p>
+<pre>am33xx_d_can_init(0);
+</pre>
+<p>You are now all set to test the second D_CAN instance. Note that the CAN instance which is registered first appears as <tt>can0</tt> irrespective of which instance number it corresponds to. The second CAN instance appears as <tt>can1</tt>.
+</p><p><br />
+</p></div>
+<!-- 
+NewPP limit report
+Cached time: 20201130161847
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.100 seconds
+Real time usage: 0.107 seconds
+Preprocessor visited node count: 114/1000000
+Preprocessor generated node count: 337/1000000
+Post‐expand include size: 20534/2097152 bytes
+Template argument size: 69/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 38/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   15.378      1 -total
+ 18.55%    2.852      1 Template:AkDcanDriverArch
+ 15.87%    2.441      1 Template:AkDcanConfig
+ 12.07%    1.856      1 Template:AkDcanUtils
+ 11.01%    1.693      1 Template:AkDcanDriverUsage
+ 10.05%    1.546      1 Template:AkDcanSetup
+  9.94%    1.528      1 Template:SpArticleStart
+  9.62%    1.479      1 Template:AkDcanIntro
+  8.28%    1.273      1 Template:Prettytable
+  7.90%    1.215      1 Template:SpLicenseCC-SA
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:13656-0!canonical and timestamp 20201130161846 and revision id 127383
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AM335X DCAN Driver Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AM335X DCAN Driver Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>AM335X DCAN Driver Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>AM335X DCAN Driver Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>AM335X DCAN Driver Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AM335X DCAN Driver Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AM335X DCAN Driver Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>AM335X DCAN Driver Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>AM335X DCAN Driver Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;oldid=127383">https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;oldid=127383</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_PSP.html" title="Category:PSP">PSP</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=AM335X+DCAN+Driver+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="AM335X_DCAN_Driver_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_AM335X_DCAN_Driver_Guide.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="AM335X_DCAN_Driver_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/AM335X_DCAN_Driver_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/AM335X_DCAN_Driver_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;oldid=127383" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=AM335X_DCAN_Driver_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 20 November 2012, at 03:04.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.100","walltime":"0.107","ppvisitednodes":{"value":114,"limit":1000000},"ppgeneratednodes":{"value":337,"limit":1000000},"postexpandincludesize":{"value":20534,"limit":2097152},"templateargumentsize":{"value":69,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":38,"limit":5000000},"timingprofile":["100.00%   15.378      1 -total"," 18.55%    2.852      1 Template:AkDcanDriverArch"," 15.87%    2.441      1 Template:AkDcanConfig"," 12.07%    1.856      1 Template:AkDcanUtils"," 11.01%    1.693      1 Template:AkDcanDriverUsage"," 10.05%    1.546      1 Template:AkDcanSetup","  9.94%    1.528      1 Template:SpArticleStart","  9.62%    1.479      1 Template:AkDcanIntro","  8.28%    1.273      1 Template:Prettytable","  7.90%    1.215      1 Template:SpLicenseCC-SA"]},"cachereport":{"timestamp":"20201130161847","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":263});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AM335X_DCAN_Driver_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:49:33 GMT -->
+</html>

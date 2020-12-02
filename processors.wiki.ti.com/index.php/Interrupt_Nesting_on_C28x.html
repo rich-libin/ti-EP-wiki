@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Interrupt_Nesting_on_C28x by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:53:57 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Interrupt Nesting on C28x - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Interrupt_Nesting_on_C28x","wgTitle":"Interrupt Nesting on C28x","wgCurRevisionId":808971,"wgRevisionId":808971,"wgArticleId":6912,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Interrupt_Nesting_on_C28x","wgRelevantArticleId":6912,"wgRequestId":"f49cb18984a05dd752b7ec38","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Interrupt_Nesting_on_C28x rootpage-Interrupt_Nesting_on_C28x skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Interrupt Nesting on C28x</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Interrupt_Prioritization"><span class="tocnumber">2</span> <span class="toctext">Interrupt Prioritization</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Hardware_Prioritization"><span class="tocnumber">2.1</span> <span class="toctext">Hardware Prioritization</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#PIE_Interrupt_Organization"><span class="tocnumber">2.2</span> <span class="toctext">PIE Interrupt Organization</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#C28x_Interrupt_Response_-_No_Nesting_.28Default_Behavior.29"><span class="tocnumber">2.3</span> <span class="toctext">C28x Interrupt Response - No Nesting (Default Behavior)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Global_and_Group_Priority"><span class="tocnumber">2.4</span> <span class="toctext">Global and Group Priority</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Adding_Simple_Software_Prioritization_.28Nesting.29"><span class="tocnumber">2.5</span> <span class="toctext">Adding Simple Software Prioritization (Nesting)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#Example_Code"><span class="tocnumber">2.5.1</span> <span class="toctext">Example Code</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#Example:_Using_Mask_Values_to_Manage_the_Prioritization"><span class="tocnumber">2.6</span> <span class="toctext">Example: Using Mask Values to Manage the Prioritization</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Example_Configuration"><span class="tocnumber">2.6.1</span> <span class="toctext">Example Configuration</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#MASK_Values_Generated"><span class="tocnumber">2.6.2</span> <span class="toctext">MASK Values Generated</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Using_the_MASK_Values"><span class="tocnumber">2.6.3</span> <span class="toctext">Using the MASK Values</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A common question is whether C28x interrupts can be nested. This article explains how interrupt nesting can be achieved with simple changes to the interrupt service routine (ISR) code.
+</p><p>This article assumes the reader is already familiar with the following:
+</p>
+<dl><dd><dl><dd><ul><li>C28x PIE module: control registers, vector table, PIE groups</li>
+<li>C28x interrupt control registers: IER, IFR, INTM in particular.</li></ul></dd></dl></dd></dl>
+<p>For more information on these topics please refer to the following:
+</p>
+<dl><dd><dl><dd><ul><li>Interrupts at the CPU level and how the CPU responds to an interrupt is documented in the <a href="http://www.ti.com/lit/pdf/SPRU430" class="extiw" title="tidoc:SPRU430"> TMS320C28x CPU and Instruction Set Reference Guide (spru430)</a></li>
+<li>The <a href="https://training.ti.com/" title="Category:C2000 Training"> Workshop material</a> contains information on C28x interrupts.</li>
+<li>The peripheral interrupt expansion block (PIE) is described in the PIE section of the Technical Reference Manual (TRM) for a particular device family.</li></ul></dd></dl></dd></dl>
+<h1><span class="mw-headline" id="Interrupt_Prioritization">Interrupt Prioritization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=2" title="Edit section: Interrupt Prioritization">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="Hardware_Prioritization">Hardware Prioritization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=3" title="Edit section: Hardware Prioritization">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>Interrupts are automatically prioritized by the C28x hardware. Prioritization for all interrupts can be found in the System Control guide specific to the particular device family. The following table shows the priority for multiplexed interrupts. Group 1, which corresponds to CPU INT1, has the highest priority. Within each group there are 8 interrupts with INTx.1 being the highest priority and INTx.8 having the lowest.</dd></dl>
+<table cellpadding="3" border="1" align="center" style="width: 265px; height: 420px;">
+<caption><b>Hardware Interrupt Priority</b>
+</caption>
+<tbody><tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th>Priority
+</th>
+<th>Group<br />
+</th>
+<th>Interrupt
+</th></tr>
+<tr>
+<th scope="row">Highest<br />
+</th>
+<td><br />
+</td>
+<td><br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>Group 1<br />
+</td>
+<td>INT1.1<br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>Group 1<br />
+</td>
+<td>INT1.2<br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>...<br />
+</td>
+<td>...<br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>Group 1 <br />
+</td>
+<td>INT1.8<br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>Group 2<br />
+</td>
+<td>INT2.1<br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>Group 2<br />
+</td>
+<td>INT2.2
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>...<br />
+</td>
+<td><br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>...<br />
+</td>
+<td><br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>Group 12<br />
+</td>
+<td>INT12.1<br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>Group 12<br />
+</td>
+<td>INT12.2<br />
+</td></tr>
+<tr>
+<th scope="row"><br />
+</th>
+<td>...<br />
+</td>
+<td><br />
+</td></tr>
+<tr>
+<th scope="row">Lowest<br />
+</th>
+<td>Group 12<br />
+</td>
+<td>INT12.8<br />
+</td></tr></tbody></table>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="PIE_Interrupt_Organization">PIE Interrupt Organization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=4" title="Edit section: PIE Interrupt Organization">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>The PIE block is organized such that the interrupts are in a logical order. Interrupts that typically require higher priority, are organized higher up in the table and will thus be serviced with a higher priority by default.</dd></dl>
+<dl><dd>The interrupts in a 28x system can be categorized as follows (ordered highest to lowest priority):</dd></dl>
+<dl><dd><ul><li><b>Non-Periodic, Fast Response</b></li></ul></dd></dl>
+<dl><dd><dl><dd>These are interrupts that can happen at any time and when they occur, they must be serviced as quickly as possible. Typically these interrupts monitor an external event.</dd></dl></dd></dl>
+<dl><dd><dl><dd>Such interrupts are allocated to the first few interrupts within PIE Group 1 and PIE Group 2. This position gives them the highest priority within the PIE group. In addition, Group 1 is multiplexed into the CPU interrupt INT1. CPU INT1 has the highest hardware priority. PIE Group 2 is multiplexed into the CPU INT2 which is the 2nd highest hardware priority.</dd></dl></dd></dl>
+<dl><dd><ul><li><b>Periodic, Fast Response</b></li></ul></dd></dl>
+<dl><dd><dl><dd>These interrupts occur at a known period, and when they do occur, they must be serviced as quickly as possible to minimize latency. The A/D converter is one good example of this. The A/D sample must be processed with minimum latency. Such interrupts are allocated to the group 1 in the PIE table. Group 1 is multiplexed into the CPU INT1. CPU INT1 has the highest hardware priority.</dd></dl></dd></dl>
+<dl><dd><ul><li><b>Periodic</b></li></ul></dd></dl>
+<dl><dd><dl><dd>These interrupts occur at a known period and must be serviced before the next interrupt. Some of the PWM interrupts are an example of this. Many of the registers are shadowed, so the user has the full period to update the register values. Such interrupts are mapped to group 2 - group 5. These groups are multiplexed into CPU INT3 to INT5 (the ePWM, eCAP and eQEP), which are the next lowest hardware priority.</dd></dl></dd></dl>
+<dl><dd><ul><li><b>Periodic, Buffered</b></li></ul></dd></dl>
+<dl><dd><dl><dd>These interrupts occur at periodic events, but are buffered and hence the processor need only service such interrupts when the buffers are ready to filled/emptied. All of the serial ports (SCI / SPI / I2C / CAN) either have FIFO's or multiple mailboxes such that the CPU has plenty of time to respond to the events without fear of losing data. Such interrupts are mapped to INT6, INT8, and INT9, which are the next lowest hardware priority.</dd></dl></dd></dl>
+<h3><span id="C28x_Interrupt_Response_-_No_Nesting_(Default_Behavior)"></span><span class="mw-headline" id="C28x_Interrupt_Response_-_No_Nesting_.28Default_Behavior.29">C28x Interrupt Response - No Nesting (Default Behavior)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=5" title="Edit section: C28x Interrupt Response - No Nesting (Default Behavior)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>The remainder of this article describes how the C28x CPU responds to an interrupt request.  It is assumed that the interrupt was enabled at the (a) peripheral level, the (b) PIE level and the (c) CPU level (IER and INTM) and now the CPU is ready to begin the interrupt service routine.&#160;:The following table shows the steps taken when an interrupt is serviced .</dd></dl>
+<dl><dd><ul><li><b>Hardware:</b> Items are performed by the silicon itself.&#160; No action is required on the part of the software.<br /></li>
+<li><b>Software:</b> Items are performed in software.&#160; When using the compiler these steps are handled by the compiler for any interrupt.&#160; If the interrupt is in assembly, then these items must be taken care of by the user. <br /></li></ul></dd></dl>
+<dl><dd>Notice the following:</dd></dl>
+<dl><dd><ul><li>Interrupts are automatically disabled when an interrupt service routine begins.</li>
+<li>Steps 1-3 are protected from interrupts by the hardware.</li>
+<li>Step 4 disables interrupts by setting the INTM and DBGM (global interrupt mask) bits. This prevents new interrupts from being serviced during the ISR.</li>
+<li>INTM and DBGM will stay set unless the software re-enables interrupts or the CPU returns from the ISR.</li>
+<li>The automatic context restore includes the INTM and DBGM bits.</li></ul></dd></dl>
+<p><br />
+</p>
+<table cellpadding="3" border="1" align="center">
+<caption><b>C28x Interrupt Service Routine Without Nesting</b>
+</caption>
+<tbody><tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th>Step
+</th>
+<th>Hardware
+</th>
+<th>Software
+</th>
+<th>Notes
+</th></tr>
+<tr>
+<th scope="row">1
+</th>
+<td>Empty the pipeline<br />Automatic context Save
+</td>
+<td><br />
+</td>
+<td>Protected from interrupts<br />Context save is documented in <a href="http://www.ti.com/lit/pdf/spru430" class="extiw" title="tidoc:spru430">C28x CPU Ref Guide (SPRU430)</a>
+</td></tr>
+<tr>
+<th scope="row">2
+</th>
+<td>Clear corresponding IFRx bit
+</td>
+<td><br />
+</td>
+<td>Protected from interrupts
+</td></tr>
+<tr>
+<th scope="row">3
+</th>
+<td>Clear corresponding IERx bit
+</td>
+<td><br />
+</td>
+<td>Protected from interrupts
+</td></tr>
+<tr>
+<th scope="row">4
+</th>
+<td><b>Set INTM/DBGM</b><br />Clear LOOP, EALLOW, IDLESTAT
+</td>
+<td><br />
+</td>
+<td><b>INTM=1 means maskable interrupts are now disabled</b><br />These bits are in ST1 which was saved on the stack in step 1.
+</td></tr>
+<tr>
+<th scope="row">5
+</th>
+<td>Request interrupt vector from PIE
+</td>
+<td><br />
+</td>
+<td><br />
+</td></tr>
+<tr>
+<th scope="row">6
+</th>
+<td>PC = Vector
+</td>
+<td><br />
+</td>
+<td><br />
+</td></tr>
+<tr>
+<th scope="row">7
+</th>
+<td><br />
+</td>
+<td>Execute the ASP instruction
+</td>
+<td>In C/C++ the compiler takes care of this. Makes sure the stack is even aligned<br /><b>INTM=1 so maskable interrupts are still disabled</b><br />
+</td></tr>
+<tr>
+<th scope="row">8
+</th>
+<td><br />
+</td>
+<td>Manual context save (if needed)<br />
+</td>
+<td>In C/C++ the compiler takes care of this.&#160; Depends on what registers are used in the ISR.&#160;
+</td></tr>
+<tr>
+<th scope="row">9
+</th>
+<td><br />
+</td>
+<td>Execute ISR routine<br />Clear any required flags (ex:&#160;peripheral level)<br />Acknowledge PIE group (PIEACK)<br />
+</td></tr>
+<tr>
+<th scope="row">10
+</th>
+<td><br />
+</td>
+<td>Manual context restore (if needed)<br />
+</td>
+<td>In C/C++ the compiler takes care of this
+</td></tr>
+<tr>
+<th scope="row">11
+</th>
+<td><br />
+</td>
+<td>Execute the NASP instruction
+</td>
+<td>In C/C++ the compiler takes care of this. Reverses any alignment made by ASP
+</td></tr>
+<tr>
+<th scope="row">12
+</th>
+<td><br />
+</td>
+<td>Execute IRET instruction
+</td>
+<td>Interrupt return
+</td></tr>
+<tr>
+<th scope="row">13
+</th>
+<td>Automatic context restore<br />
+</td>
+<td><br />
+</td>
+<td><b>This will restore INTM to its previous state (enable interrupts). </b>DBGM and IER
+</td></tr>
+<tr>
+<th scope="row">14
+</th>
+<td>PC = return address
+</td>
+<td><br />
+</td>
+<td><br />
+</td></tr>
+<tr>
+<th scope="row">15
+</th>
+<td><br />
+</td>
+<td>Continues execution
+</td>
+<td><br />
+</td></tr></tbody></table>
+<p><br /> <br />
+</p>
+<h3><span class="mw-headline" id="Global_and_Group_Priority">Global and Group Priority</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=6" title="Edit section: Global and Group Priority">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>The application software is in control of when interrupts are re-enabled within a interrupt service routine.  This might be at the beginning of the routine or after some time-critical code has completed.</dd></dl>
+<dl><dd>There are two controls the software has:
+<dl><dd><ul><li><b>Global Priority:</b></li></ul>
+<dl><dd>This priority can be managed by manipulating the CPU IER register. This register controls the 16 maskable CPU interrupts (INT1 - INT16).</dd></dl>
+<ul><li><b>Group Priority:</b></li></ul>
+<dl><dd>This can be managed by manipulating the PIE block interrupt enable registers (PIEIERx).  It is very important that only the PIEIERx register for the same group be changed.</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><span style="color: RED"><b>CAUTION</b></span></dd>
+<dd><span style="color: RED"><b>Do not modify PIEIER registers outside of an ISR for that group.  For example, PIEIER1 should only be modified within an ISR from group 1.  Likewise PIEIER2 should only be modified within a group 2 ISR.</b></span></dd></dl></dd></dl>
+<dl><dd><dl><dd><span style="color: RED"><b>This modification should be done while the PIEACK bit for the group is still set and therefore no interrupts will be sent to the CPU while the modification is being done.</b> </span></dd></dl></dd></dl>
+<dl><dd><dl><dd><span style="color: RED"><b>If this rule is violated, then spurious INTx.1 interrupts can be triggered.  If this is required for an application, then the procedure outlined in the <a href="System_Control_and_Interrupts_Reference_Guides_for_C28x.html" title="System Control and Interrupts Reference Guides for C28x"> System, Control and Interrupts Guide</a> must be followed to avoid these spurious interrupts.</b></span></dd></dl></dd></dl>
+<h3><span id="Adding_Simple_Software_Prioritization_(Nesting)"></span><span class="mw-headline" id="Adding_Simple_Software_Prioritization_.28Nesting.29">Adding Simple Software Prioritization (Nesting)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=7" title="Edit section: Adding Simple Software Prioritization (Nesting)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>Therefore, the steps required to nest interrupts are:</dd></dl>
+<dl><dd><b>Step 1: Set the global priority:</b>
+<dl><dd><ul><li>Modify the IER register to allow CPU interrupts with a higher user priority to be serviced.</li>
+<li>Note: at this time IER has already been saved on the stack.</li></ul></dd></dl></dd>
+<dd><b>Step 2: Set the group priority:</b> (optional)
+<dl><dd><ul><li>Modify the appropriate PIEIERx register to allow group interrupts with a higher user set priority to be serviced.</li>
+<li>Do NOT clear PIEIER register bits from another group other than that being serviced by this ISR.  Doing so can cause erroneous interrupts to occur.</li></ul></dd></dl></dd>
+<dd><b>Step 3: Enable interrupts: </b>
+<dl><dd><ul><li>There are three steps to do this:</li></ul>
+<dl><dd><ol><li>Clear the PIEACK bits</li>
+<li>Wait at least one cycle</li>
+<li>Clear the INTM bit. Use the assembly statement asm("  CLRC INTM"); or TI examples use #define EINT  asm("   CLRC INTM")</li></ol></dd></dl></dd></dl></dd>
+<dd><b>Step 4: Run the main part of the ISR</b></dd>
+<dd><b>Step 5: Set INTM to disable interrupts.  Use asm("  SETC INTM"); or TI examples use #define DINT  asm("   SETC INTM")</b></dd>
+<dd><b>Step 6: Restore PIEIERx  (optional depending on step 2)</b></dd>
+<dd><b>Step 7: Return from ISR</b>
+<dl><dd><ul><li>This will restore INTM and IER automatically.</li></ul></dd></dl></dd></dl>
+<h4><span class="mw-headline" id="Example_Code">Example Code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=8" title="Edit section: Example Code">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>&lt;syntaxhighlight lang='c'&gt;
+//
+// C28x ISR Code
+//
+// Enable nested interrupts
+//
+//
+interrupt void EPWM1_TZINT_ISR(void)
+{
+</p>
+<pre>   uint16_t TempPIEIER;
+   TempPIEIER = PieCtrlRegs.PIEIER2.all; // Save PIEIER register for later
+   IER |= 0x002;                         // Set global priority by adjusting IER
+   IER &amp;= 0x002;
+   PieCtrlRegs.PIEIER2.all &amp;= 0x0002;    // Set group priority by adjusting PIEIER2 to allow INT2.2 to interrupt current ISR
+   PieCtrlRegs.PIEACK.all = 0xFFFF;      // Enable PIE interrupts
+   asm("       NOP");                    // Wait one cycle
+   EINT;                                 // Clear INTM to enable interrupts
+   //
+   // Insert ISR Code here.......
+   // for now just insert a delay
+   //
+   for(i = 1; i &lt;= 10; i++) {}
+   //
+   // Restore registers saved:
+   //
+   DINT;
+   PieCtrlRegs.PIEIER2.all = TempPIEIER;
+</pre>
+<p>}
+</p>
+<ol><li>endif</li></ol>
+<p><br />
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Example:_Using_Mask_Values_to_Manage_the_Prioritization">Example: Using Mask Values to Manage the Prioritization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=9" title="Edit section: Example: Using Mask Values to Manage the Prioritization">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<dl><dd>In most cases a system will only require one or two interrupts to be nested.  This is easily handled by the example shown previously.</dd></dl>
+<dl><dd>There is, however, an example provided by which covers possibilities for every single interrupt in the group.  This example provides a method for managing the global and group priorities using simple mask values that are configured during compile time. This allows the priorities to be managed easily. <br /></dd></dl>
+<dl><dd>This scheme is included in C2000Ware.  Refer to the software prioritization example in the device support for your particular device.</dd></dl>
+<h3><span class="mw-headline" id="Example_Configuration">Example Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=10" title="Edit section: Example Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>The configuration used by the example is done in the DSP280x_SWPrioritizedIsrLevels.h file.  To configure the prioritization:</dd></dl>
+<dl><dd><ul><li><b>Assign global priority levels</b></li></ul>
+<dl><dd>INT1PL - INT16PL</dd></dl></dd></dl>
+<dl><dd><dl><dd>These values are used to assign a priority level to each of the 16 interrupts controlled by the CPU IER register. A value of 1 is the highest priority while a value of 16 is the lowest. More then one interrupt can be assigned the same priority level. In this case the default hardware priority would determine which would be serviced first. A priority of 0 is used to indicate that the interrupt is not used.</dd></dl></dd></dl>
+<dl><dd><ul><li><b>Assign PIE group priority levels</b></li></ul>
+<dl><dd>GxyPL (where x = PIE group number 1 - 12 and y = interrupt number 1 - 8)</dd></dl></dd></dl>
+<dl><dd><dl><dd>These values are used to assign a priority level to each of the 8 interrupts within a PIE group. A value of 1 is the highest priority while a value of 8 is the lowest. More then one interrupt can be assigned the same priority level. In this case the default hardware priority would determine which would be serviced first. A priority of 0 is used to indicate that the interrupt is not used.</dd></dl></dd></dl>
+<dl><dd>The compiler will use the assigned global and group priority levels to generate mask values that can be used to change the IER and PIEIERx registers.&#160; The application uses these mask values within each ISR to specify which interrupts are allowed to be serviced within an ISR.</dd></dl>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="MASK_Values_Generated">MASK Values Generated</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=11" title="Edit section: MASK Values Generated">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>The masks that are generated at compile time are:</dd></dl>
+<dl><dd><ul><li><b>IER mask values:</b></li></ul>
+<dl><dd>MINT1 - MINT16</dd></dl></dd></dl>
+<dl><dd><dl><dd>The user assigned INT1PL - INT16PL values are used at compile time to calculate an IER mask for each CPU interrupt. This mask value will be used within an ISR to allowCPU interrupts with a higher priority to interrupt the current ISR and thus be serviced at a higher priority level. <br /></dd></dl></dd></dl>
+<dl><dd><ul><li><b>PIEIERxy mask values:</b></li></ul>
+<dl><dd>MGxy (where x = PIE group number 1 - 12 and y = interrupt number 1 - 8)</dd></dl></dd></dl>
+<dl><dd><dl><dd>The assigned group priority levels (GxyPL) are used at compile time to calculate PIEIERx masks for each PIE group. This mask value will be used within an ISR to allow interrupts within the same group that have a higher assigned priority to interrupt the current ISR and thus be serviced at a higher priority level.</dd></dl></dd></dl>
+<h3><span class="mw-headline" id="Using_the_MASK_Values">Using the MASK Values</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit&amp;section=12" title="Edit section: Using the MASK Values">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>Within an interrupt service routine, the global and group priority can be changed by software to allow other interrupts to be serviced. The steps are the same as described before. The only difference is the mask values for IER and PIEIERx have been managed in the DSP28_SWPrioritizedIsrLevels.h file.</dd></dl>
+<dl><dd><dl><dd><b>Step 1: Set the global priority</b>
+<ul><li>Modify IER to allow CPU interrupts from the same PIE group as the current ISR.</li>
+<li>Modify IER to allow CPU interrupts with a higher user defined priority to be serviced.</li></ul></dd>
+<dd><b>Step 2: Set the group priority</b>
+<ul><li>Save the current PIEIERx value to a temporary register.</li>
+<li>The PIEIER register is then set to allow interrupts with a higher priority within a PIE group to be serviced.</li></ul></dd>
+<dd><b>Step 3: Enable interrupts</b>
+<ul><li>This requires 3 steps:</li></ul>
+<dl><dd><ol><li>Enable all PIE interrupt groups by writing all 1’s to the PIEACK register</li>
+<li>Wait at least one cycle</li>
+<li>Enable global interrupts by clearing INTM</li></ol></dd></dl></dd>
+<dd><b>Step 4: Execute ISR.</b>
+<ul><li>Interrupts that were enabled in steps 1-3 (those with a higher software priority) will be allowed to interrupt the current ISR and thus be serviced first.</li></ul></dd>
+<dd><b>Step 5: Disable interrupts</b></dd>
+<dd><b>Step 6: Restore the PIEIERx register</b></dd>
+<dd><b>Step 7: Exit</b></dd></dl></dd></dl>
+<p>&lt;syntaxhighlight lang='c'&gt;
+</p><p>//
+// C28x ISR Code
+//
+// Enable nested interrupts using masks defined
+// in the software prioritization example code
+//
+// Connected to PIEIER2_1 (use MINT2 and MG21 masks)
+//
+</p>
+<ol><li>if (G21PL&#160;!= 0)</li></ol>
+<p>interrupt void EPWM1_TZINT_ISR(void) // EPWM1 Trip Zone
+{
+</p>
+<pre>   uint16_t TempPIEIER;
+   TempPIEIER = PieCtrlRegs.PIEIER2.all;
+   IER |= M_INT2;
+   IER &amp;= MINT2;                         // Set "global" priority
+   PieCtrlRegs.PIEIER2.all &amp;= MG21;      // Set "group" priority
+   PieCtrlRegs.PIEACK.all = 0xFFFF;      // Enable PIE interrupts
+   asm("       NOP");                    // Wait one cycle
+   EINT;                                 // Clear INTM to enable interrupts
+   //
+   // Insert ISR Code here.......
+   // for now just insert a delay
+   //
+   for(i = 1; i &lt;= 10; i++) {}
+   //
+   // Restore registers saved:
+   //
+   DINT;
+   PieCtrlRegs.PIEIER2.all = TempPIEIER;
+</pre>
+<p>}
+</p>
+<ol><li>endif</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130101011
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.050 seconds
+Real time usage: 0.052 seconds
+Preprocessor visited node count: 50/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:6912-0!canonical and timestamp 20201130101011 and revision id 808971
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Interrupt Nesting on C28x</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Interrupt Nesting on C28x</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Interrupt Nesting on C28x</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Interrupt Nesting on C28x</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Interrupt Nesting on C28x</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Interrupt Nesting on C28x</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Interrupt Nesting on C28x</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Interrupt Nesting on C28x</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Interrupt Nesting on C28x</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;oldid=808971">https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;oldid=808971</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Interrupt+Nesting+on+C28x" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Interrupt_Nesting_on_C28x.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Interrupt_Nesting_on_C28x&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Interrupt_Nesting_on_C28x.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Interrupt_Nesting_on_C28x.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Interrupt_Nesting_on_C28x.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;oldid=808971" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Interrupt_Nesting_on_C28x&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 18 May 2020, at 08:55.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.050","walltime":"0.052","ppvisitednodes":{"value":50,"limit":1000000},"ppgeneratednodes":{"value":60,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130101011","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":225});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Interrupt_Nesting_on_C28x by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:53:59 GMT -->
+</html>

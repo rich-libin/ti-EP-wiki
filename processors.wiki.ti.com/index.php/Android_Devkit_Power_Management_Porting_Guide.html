@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Android_Devkit_Power_Management_Porting_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:12:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Android Devkit Power Management Porting Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Android_Devkit_Power_Management_Porting_Guide","wgTitle":"Android Devkit Power Management Porting Guide","wgCurRevisionId":217975,"wgRevisionId":217975,"wgArticleId":8235,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Android","Sitara Android"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Android_Devkit_Power_Management_Porting_Guide","wgRelevantArticleId":8235,"wgRequestId":"4d11d884b584bba4ae822d8a","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":["sysop"],"wgRestrictionMove":["sysop"]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Android_Devkit_Power_Management_Porting_Guide rootpage-Android_Devkit_Power_Management_Porting_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Android Devkit Power Management Porting Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><b><big><big><big><span style="color:red">Content is no longer maintained and is being kept for reference only!</span></big></big></big></b>
+</p><p><br />
+</p><p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#About_this_manual"><span class="tocnumber">1</span> <span class="toctext">About this manual</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Features"><span class="tocnumber">2</span> <span class="toctext">Features</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Linux_PM_Features"><span class="tocnumber">2.1</span> <span class="toctext">Linux PM Features</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Android_PM_Features"><span class="tocnumber">2.2</span> <span class="toctext">Android PM Features</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#PM_Framworks"><span class="tocnumber">3</span> <span class="toctext">PM Framworks</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Linux_Framework"><span class="tocnumber">3.1</span> <span class="toctext">Linux Framework</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Wake_up_enabled_devices"><span class="tocnumber">3.1.1</span> <span class="toctext">Wake up enabled devices</span></a>
+<ul>
+<li class="toclevel-4 tocsection-8"><a href="#EXAMPLE:_matrix_keypad_driver"><span class="tocnumber">3.1.1.1</span> <span class="toctext">EXAMPLE: matrix keypad driver</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#Android_Framework"><span class="tocnumber">3.2</span> <span class="toctext">Android Framework</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Application_Framework"><span class="tocnumber">3.3</span> <span class="toctext">Application Framework</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#PM_Flow"><span class="tocnumber">4</span> <span class="toctext">PM Flow</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Linux_PM_Flow"><span class="tocnumber">4.1</span> <span class="toctext">Linux PM&#160; Flow</span></a>
+<ul>
+<li class="toclevel-3 tocsection-13"><a href="#Linux_Suspend_Resume_Sequence"><span class="tocnumber">4.1.1</span> <span class="toctext">Linux Suspend Resume Sequence</span></a>
+<ul>
+<li class="toclevel-4 tocsection-14"><a href="#suspend_prepare"><span class="tocnumber">4.1.1.1</span> <span class="toctext">suspend_prepare</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-15"><a href="#suspend_devices_and_enter"><span class="tocnumber">4.1.2</span> <span class="toctext">suspend_devices_and_enter</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-16"><a href="#AndroidPM_Flow"><span class="tocnumber">4.2</span> <span class="toctext">AndroidPM Flow</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Linux_features_supported"><span class="tocnumber">5</span> <span class="toctext">Linux features supported</span></a>
+<ul>
+<li class="toclevel-2 tocsection-18"><a href="#Exercising_linux_features"><span class="tocnumber">5.1</span> <span class="toctext">Exercising linux features</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Limitations"><span class="tocnumber">5.2</span> <span class="toctext">Limitations</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-20"><a href="#Android_features_supported"><span class="tocnumber">6</span> <span class="toctext">Android features supported</span></a>
+<ul>
+<li class="toclevel-2 tocsection-21"><a href="#Exercising_android_features"><span class="tocnumber">6.1</span> <span class="toctext">Exercising android features</span></a>
+<ul>
+<li class="toclevel-3 tocsection-22"><a href="#Basic_Settings"><span class="tocnumber">6.1.1</span> <span class="toctext">Basic Settings</span></a></li>
+<li class="toclevel-3 tocsection-23"><a href="#Advanced_Settings"><span class="tocnumber">6.1.2</span> <span class="toctext">Advanced Settings</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-24"><a href="#Limitations_2"><span class="tocnumber">6.2</span> <span class="toctext">Limitations</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#Adding_device_specific_changes"><span class="tocnumber">7</span> <span class="toctext">Adding device specific changes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-26"><a href="#Limitations_3"><span class="tocnumber">7.1</span> <span class="toctext">Limitations</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="About_this_manual">About this manual</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=1" title="Edit section: About this manual">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b><big><big><big><span style="color:red">Content is no longer maintained and is being kept for reference only!</span></big></big></big></b>
+</p><p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Features">Features</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=2" title="Edit section: Features">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Linux_PM_Features">Linux PM Features</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=3" title="Edit section: Linux PM Features">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>States
+</p><p>DVFS
+</p><p>SmartReflex
+</p><p>Idle PM
+</p>
+<h3><span class="mw-headline" id="Android_PM_Features">Android PM Features</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=4" title="Edit section: Android PM Features">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Wakelocks
+</p><p>Early Suspend
+</p>
+<h2><span class="mw-headline" id="PM_Framworks">PM Framworks</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=5" title="Edit section: PM Framworks">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Linux_Framework">Linux Framework</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=6" title="Edit section: Linux Framework">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Wake_up_enabled_devices">Wake up enabled devices</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=7" title="Edit section: Wake up enabled devices">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>There are two requirements for a device to be wake up capable. 
+Firstly the wake up event from the device should trigger any of the pins (GPIO bank 0 or any other configured wake up source) connected to the wake up domain of the cpu. 
+</p><p>Secondly the device must be configured stay partially awake in suspended state in order to trigger the wake up event. 
+</p><p>When the system enters a low power state, each device's driver is asked to suspend the device by putting it into state compatible with the target system state. The wakeup-enabled devices will usually stay partly functional in order to wake the system. 
+</p><p>This capability of a device is initialized by bus or device driver code using device_init_wakeup(dev,can_wakeup). This is also controlled through one of the sysfs entry "/sys/devices/.../power/wakeup". The "can_wakeup" flag just records whether the device (and its driver) can physically support wakeup events. When that flag is clear, the sysfs "wakeup" file is empty, and "device_may_wakeup()" returns false. 
+</p><p>Usually a wake up capable device will invoke device_init_wakeup(dev,pdata-&gt;wakeup) during its .probe routine with the pdata is being its device specific data. While .remove routine the device invoke device_init_wakeup(dev,0). 
+</p><p>The device's .suspend function will contain the call to enable_irq_wake for the particular irq line and the .resume function will contain a call to disable_irq_line. So device can be partially functional in suspended state. 
+</p>
+<h5><span class="mw-headline" id="EXAMPLE:_matrix_keypad_driver">EXAMPLE: matrix keypad driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=8" title="Edit section: EXAMPLE: matrix keypad driver">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<hr />
+<p>matrix keypad is a simple gpio based keypad 
+</p><p>Let's see platform-dependent keypad data of this driver 
+</p>
+<pre>struct matrix_keypad_platform_data {
+       .......................
+       bool            wakeup;
+}; </pre> 
+<p>It has a field wakeup controls whether the device should be set up as wakeup source. 
+</p><p>This field can be set us "true" in the board initialization file of the device. 
+</p><p>Now lets explore the ".probe" and ".remove" functions of the driver 
+</p>
+<pre>static int __devinit matrix_keypad_probe(struct platform_device *pdev) {
+
+       const struct matrix_keypad_platform_data *pdata;
+       ................................
+       pdata = pdev-&gt;dev.platform_data;
+       ................................
+       device_init_wakeup(&amp;pdev-&gt;dev, pdata-&gt;wakeup);
+
+} </pre> 
+<pre>static int __devexit matrix_keypad_remove(struct platform_device *pdev) {
+
+      struct matrix_keypad *keypad = platform_get_drvdata(pdev);
+      const struct matrix_keypad_platform_data *pdata = keypad-&gt;pdata;
+      int i;
+      device_init_wakeup(&amp;pdev-&gt;dev, 0);
+      .................................
+}</pre>
+<p>Also in the suspend routine of the driver, enable_irq_wake is called for the irq lines corresponding to the gpio keys 
+</p>
+<pre>static int matrix_keypad_suspend(struct device *dev)
+{
+        struct platform_device *pdev = to_platform_device(dev);
+        .................................
+        if (device_may_wakeup(&amp;pdev-&gt;dev))
+                for (i = 0; i &lt; pdata-&gt;num_row_gpios; i++)
+                        enable_irq_wake(gpio_to_irq(pdata-&gt;row_gpios[i]));
+
+        return 0;
+}</pre>
+<pre>static int matrix_keypad_resume(struct device *dev)
+{
+        struct platform_device *pdev = to_platform_device(dev);
+        .................................
+        if (device_may_wakeup(&amp;pdev-&gt;dev))
+                for (i = 0; i &lt; pdata-&gt;num_row_gpios; i++)
+                        disable_irq_wake(gpio_to_irq(pdata-&gt;row_gpios[i]));
+        .................................
+}
+</pre>
+<h3><span class="mw-headline" id="Android_Framework">Android Framework<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=9" title="Edit section: Android Framework">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Android supports its own Power Management (on top of the standard Linux Power Management) designed with the premise that the CPU shouldn't consume power if no applications or services require power. 
+</p><p>Android requires that applications and services request CPU resources with "wake locks" through the Android application framework and native Linux libraries. If there are no active wake locks, Android will shut down the CPU.
+</p><p>The image below illustrates the Android power management architecture. 
+</p><p><a href="File_AndroidPMArchitecture.html" class="image" title="Android Power Management Architecture"><img alt="Android Power Management Architecture" src="https://processors.wiki.ti.com/images/0/0d/AndroidPMArchitecture.gif" width="660" height="624" /></a>
+</p>
+<h3><span class="mw-headline" id="Application_Framework">Application Framework</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=10" title="Edit section: Application Framework">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>By default, Android will go through different power states depending on the user activity and time. Please look at the diagrams in Android PM Flow. But applications can keep the system in different states by acquiring different kind of wake locks.<br />
+</p><p>The API's provided by PowerManager class will allow applications to do this. For reference read <a rel="nofollow" class="external free" href="http://developer.android.com/reference/android/os/PowerManager.html">http://developer.android.com/reference/android/os/PowerManager.html</a><br />
+Also, you can take a look at the <a rel="nofollow" class="external text" href="http://www.apptraction.com/">mobile app development company</a>.
+</p>
+<h2><span class="mw-headline" id="PM_Flow">PM Flow</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=11" title="Edit section: PM Flow">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Linux_PM_Flow">Linux PM&#160; Flow</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=12" title="Edit section: Linux PM  Flow">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Linux_Suspend_Resume_Sequence">Linux Suspend Resume Sequence</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=13" title="Edit section: Linux Suspend Resume Sequence">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Linux Suspending Process include three parts
+</p><p>1) Freezing Tasks
+2) Calling each driver's suspend routine
+3) Calling Device specific suspend routine to shut down the power
+</p><p>In omap3evm, you can the suspend the device by writing the desired state string to the sysfs entry, "/sys/power/state"
+</p>
+<pre>echo mem &gt; /sys/power/state</pre>
+<p>Now let's see what happens after this. Checkout the following files from arago linux-omap3 kernel source code for the reference.
+</p>
+<pre>linux-omap3/kernel/power/suspend.c
+linux-omap3/arch/arm/mach-omap2/pm34xx.c
+</pre>
+<p>After some checking related with the validity of the requested state, the control jump to the enter_state function of linux-omap3/kernel/power/suspend.c
+</p>
+<pre>int enter_state(suspend_state_t state)
+{
+        int error;
+
+        if (!valid_state(state))
+                return -ENODEV;
+
+        if (!mutex_trylock(&amp;pm_mutex))
+                return -EBUSY;
+
+        printk(KERN_INFO "PM: Syncing filesystems ... ");
+        sys_sync();
+        printk("done.\n");
+
+        pr_debug("PM: Preparing system for&#160;%s sleep\n", pm_states[state]);
+        error = suspend_prepare();
+        if (error)
+                goto Unlock;
+
+        if (suspend_test(TEST_FREEZER))
+                goto Finish;
+
+        pr_debug("PM: Entering&#160;%s sleep\n", pm_states[state]);
+        error = suspend_devices_and_enter(state);
+
+ Finish:
+        pr_debug("PM: Finishing wakeup.\n");
+        suspend_finish();
+ Unlock:
+        mutex_unlock(&amp;pm_mutex);
+        return error;
+}
+</pre>
+<p>First task is syncing file system. After this suspend_prepare function is called. This function take care of all device independent steps for suspending the device. Finally suspend_devices_and_enter is called to suspend all the devices and enter into low power state of the system.
+</p>
+<h5><span class="mw-headline" id="suspend_prepare">suspend_prepare</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=14" title="Edit section: suspend prepare">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<pre>static int suspend_prepare(void)
+{
+        int error;
+
+        if (!suspend_ops ||&#160;!suspend_ops-&gt;enter)
+                return -EPERM;
+
+        pm_prepare_console();
+
+        error = pm_notifier_call_chain(PM_SUSPEND_PREPARE);
+        if (error)
+                goto Finish;
+
+        error = usermodehelper_disable();
+        if (error)
+                goto Finish;
+
+        error = suspend_freeze_processes();
+        if (!error)
+                return 0;
+
+        suspend_thaw_processes();
+        usermodehelper_enable();
+ Finish:
+        pm_notifier_call_chain(PM_POST_SUSPEND);
+        pm_restore_console();
+        return error;
+}
+</pre>
+<p>This function does all the preparation work before entering into low-power state.
+It runs suspend notifiers, allocate a console and stop all processes
+If any step fails in between it restores all the state which was there before.
+suspend_ops is the platform specific global suspend method table set by the function suspend_set_ops.
+</p>
+<ul><li>Direct kernel messages to a newly created console (SUSPEND_CONSOLE</li>
+<li>notifies all the blocks registered to pm blocking chain about the event PM_SUSPEND_PREPARE</li>
+<li>prevents user land processes from being created</li>
+<li>suspend_freeze_processes freezes all processes to RAM</li></ul>
+<h4><span class="mw-headline" id="suspend_devices_and_enter">suspend_devices_and_enter</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=15" title="Edit section: suspend devices and enter">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>If begin function of the global method table is defined, it will be invoked first. In omap3evm the begin function disable UART interrupts. 
+</p>
+<h3><span class="mw-headline" id="AndroidPM_Flow">AndroidPM Flow<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=16" title="Edit section: AndroidPM Flow">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Here are four state diagrams which relates time and user events to various power states. 
+</p><p><a href="File_Pm_1.html" class="image" title="Time out behavior when we have set Stay Awake option is true"><img alt="Time out behavior when we have set Stay Awake option is true" src="https://processors.wiki.ti.com/images/4/4e/Pm_1.jpg" width="640" height="480" /></a><br /> 
+</p><p>Time out behavior when we have set Stay Awake option is false<br /><br /> 
+</p><p><a href="File_Pm_2.html" class="image" title="Time out behavior when we have set Stay Awake option is true"><img alt="Time out behavior when we have set Stay Awake option is true" src="https://processors.wiki.ti.com/images/6/6b/Pm_2.jpg" width="640" height="480" /></a><br /> 
+</p><p>Time out behavior when we have set Stay Awake option is true<br /> 
+</p><p><a href="File_Pm_3.html" class="image" title="POWER Button behavior when we have set Stay Awake option is false"><img alt="POWER Button behavior when we have set Stay Awake option is false" src="https://processors.wiki.ti.com/images/6/69/Pm_3.jpg" width="640" height="480" /></a><br /> 
+</p><p>POWER Button behavior when we have set Stay Awake option is false<br /> 
+</p><p><a href="File_Pm_4.html" class="image" title="POWER Button behavior when we have Stay Awake option is true"><img alt="POWER Button behavior when we have Stay Awake option is true" src="https://processors.wiki.ti.com/images/6/6b/Pm_4.jpg" width="640" height="480" /></a><br /> 
+</p><p>POWER Button behavior when we have set Stay Awake option is false<br />
+</p>
+<h2><span class="mw-headline" id="Linux_features_supported">Linux features supported<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=17" title="Edit section: Linux features supported">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Exercising_linux_features">Exercising linux features<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=18" title="Edit section: Exercising linux features">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h3><span class="mw-headline" id="Limitations">Limitations<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=19" title="Edit section: Limitations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h2><span class="mw-headline" id="Android_features_supported">Android features supported<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=20" title="Edit section: Android features supported">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Below are the features supported in TI-Android-GingerBread-2.3-DevKit-1.0
+</p><p><b>AM37X, OMAP35X</b>
+</p>
+<ul><li>Change of LCD backlights based on Wake Locks and Screen Timeouts (DIM,OFF) <br /></li>
+<li>LCD back light brightness control from Settings Application <br /></li>
+<li>Suspending the device to Memory.The device can be suspended in two ways.</li></ul>
+<ol><li>Pressing the POWER key on the keypad</li>
+<li>Allowing the system go to suspend after a screen timeout</li></ol>
+<ul><li>Prevent Suspend based on Wake Locks</li>
+<li>System Resume on Key Press&#160;</li>
+<li>CPU Dynamic Voltage and Frequency Scaling (ondemand, performance, powersave and userspace governors)</li>
+<li>CPU Idle States</li>
+<li>Enabling system for hitting retention during idle</li>
+<li>Enabling system for hitting OFF</li></ul>
+<p><b>AM35X</b>
+</p>
+<ul><li>Suspending the device to Memory.The device can be suspended in two ways.</li></ul>
+<ol><li>Pressing the POWER key on the keypad</li>
+<li>Allowing the system go to suspend after a screen timeout</li></ol>
+<ul><li>Prevent Suspend based on Wake Locks</li>
+<li>System Resume on Key Press&#160;</li>
+<li>Android Early Suspend Feature for frame buffer driver</li></ul>
+<h3><span class="mw-headline" id="Exercising_android_features">Exercising android features<br /><br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=21" title="Edit section: Exercising android features">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Basic_Settings">Basic Settings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=22" title="Edit section: Basic Settings">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>To go in suspend mode<br />
+</p>
+<ul><li>Press POWER key on the keypad</li></ul>
+<p>To resume from suspend mode<br />
+</p>
+<ul><li>Press any button on the key pad</li></ul>
+<p>To set the Screen timeout to go suspend<br />
+</p>
+<ul><li>Select Settings-&gt;Display-&gt; Screen Timeout</li>
+<li>Select one of the options from the list</li></ul>
+<p>To set set the screen always on preventing suspend<br />
+</p>
+<ul><li>Select Settings-&gt; Applications-&gt; Development-&gt; Stay awake</li></ul>
+<p>To set Screen brightness
+</p>
+<ul><li>Select Settings-&gt;Display-&gt; Brightness</li></ul>
+<h4><span class="mw-headline" id="Advanced_Settings">Advanced Settings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=23" title="Edit section: Advanced Settings">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><b>To Disable Power Management</b>
+</p>
+<ul><li>Edit init.rc file on the root directory.</li>
+<li>Set the property hw.nopm to true<br /></li>
+<li>This will prevent POWER key suspend</li>
+<li>Select Settings-&gt; Applications-&gt; Development-&gt; Stay awake</li>
+<li>The above will prevent screen timeout suspend</li></ul>
+<p><b>Enabling system for hitting retention during idle</b> 
+</p>
+<pre>   #echo 1 &gt; /debug/pm_debug/sleep_while_idle
+</pre>
+<p><b>Enabling system for hitting OFF</b> 
+</p>
+<pre>   #echo 1 &gt; /debug/pm_debug/enable_off_mode
+</pre>
+<p>By default sleep_while_idle is set to false and enable_off_mode is set to true
+</p><p><b>CPU Dynamic Voltage Frequency Scaling settings</b>
+</p><p><b>Enabling ondemand frequency governor</b>
+</p><p>The ondemand governor enables DVFS(frequency/OPP) transitions based on CPU load. 
+</p>
+<pre>  #echo ondemand &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+</pre>
+<p><b>Enabling performance frequency governor</b>
+</p><p>The performance governor keeps the CPU always at the highest frequency.
+</p>
+<pre>  #echo performance &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+</pre>
+<p><b>Enabling powersave frequency governor</b>
+</p><p>The powersave governor keeps the CPU always at the lowest frequency.
+</p>
+<pre>  #echo powersave &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+</pre>
+<p><b>Enabling userspace frequency governor</b>
+</p><p>Once this governor is enabled, DVFS( frequency) transitions will be manually triggered by a userspace application by using the CPUfreq sysfs interface
+</p>
+<pre>  #echo userspace &gt; /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+</pre>
+<p>See all the available operating points
+</p>
+<pre>  #cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+</pre>
+<p>Application can select any of the available frequency from the above
+</p>
+<pre>  #echo  &lt;Desired Frequancy&gt; &gt; /sys/devices/system/cpu/cpu0/cpufreq/ scaling_setspeed
+</pre>
+<p><b>Checking CPU IDLE states usage</b>
+</p><p>There are seven power states introduced by CPU Idle
+</p><p>The usage and time count for these different states can be checked via
+</p>
+<pre>  #cat /sys/devices/system/cpu/cpu0/cpuidle/state*/time
+  #cat /sys/devices/system/cpu/cpu0/cpuidle/state*/usage
+</pre>
+<h3><span class="mw-headline" id="Limitations_2">Limitations<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=24" title="Edit section: Limitations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>In beagle and am35x platforms there is no keypad connected to the main board. So wake up is not possible by pressing keys.To enable power management in am35x platform, set Settings -&gt; Applications -&gt; Development -&gt; Stay Awake to true.</li></ul>
+<p>In this case one workaround in am35x platform for wake up is like below. 
+</p>
+<pre>  Press ENTER on Serial Port console and then press any key on the keypad to wake up the device.
+</pre>
+<ul><li>If the usb device connected to the USB EHCI port when suspending the device, it might not work properly after resume.</li></ul>
+<p>So Disconnect any usb device connected to USB EHCI port when suspending the device. 
+</p>
+<ul><li>After pressing the POWER key the device will go to early suspend mode. It will take a while to go to the complete suspend state.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Adding_device_specific_changes">Adding device specific changes<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=25" title="Edit section: Adding device specific changes">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Files to edit
+POWER HA LAYER
+hardware/ti/omap3
+LIGHTS HA LAYER
+hardware/ti/omap3/liblights
+</p>
+<h3><span class="mw-headline" id="Limitations_3">Limitations<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;section=26" title="Edit section: Limitations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><br />
+</p><p><br />
+</p><p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130222834
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.067 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 186/1000000
+Preprocessor generated node count: 292/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3145/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:8235-0!canonical and timestamp 20201130222833 and revision id 217975
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Android Devkit Power Management Porting Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Android Devkit Power Management Porting Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Android Devkit Power Management Porting Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Android Devkit Power Management Porting Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Android Devkit Power Management Porting Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Android Devkit Power Management Porting Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Android Devkit Power Management Porting Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Android Devkit Power Management Porting Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Android Devkit Power Management Porting Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;oldid=217975">https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;oldid=217975</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Android.html" title="Category:Android">Android</a></li><li><a href="Category_Sitara_Android.html" title="Category:Sitara Android">Sitara Android</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Android+Devkit+Power+Management+Porting+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Android_Devkit_Power_Management_Porting_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Android_Devkit_Power_Management_Porting_Guide&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Android_Devkit_Power_Management_Porting_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Android_Devkit_Power_Management_Porting_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Android_Devkit_Power_Management_Porting_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;oldid=217975" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Android_Devkit_Power_Management_Porting_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 28 June 2016, at 09:28.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.067","walltime":"0.071","ppvisitednodes":{"value":186,"limit":1000000},"ppgeneratednodes":{"value":292,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3145,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130222834","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":231});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Android_Devkit_Power_Management_Porting_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:12:56 GMT -->
+</html>

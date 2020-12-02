@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/USB_OTG_on_DaVinci by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:39:17 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>USB OTG on DaVinci - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"USB_OTG_on_DaVinci","wgTitle":"USB OTG on DaVinci","wgCurRevisionId":20179,"wgRevisionId":20179,"wgArticleId":375,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["USB","DVEVM","Linux"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"USB_OTG_on_DaVinci","wgRelevantArticleId":375,"wgRequestId":"2a4835a731141e70f7beff7d","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.page.gallery.styles":"ready","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.page.gallery.styles%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-USB_OTG_on_DaVinci rootpage-USB_OTG_on_DaVinci skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">USB OTG on DaVinci</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br />
+This page describes how to bring up USB On-The-Go for the DM6446 EVM and for the DM355 EVM using the LSP 1.20 kernel and a set of beta patches.
+For the DM6446 this process further requires some electrical board patches.
+The operation and visible behaviour of the devices after those change is documented.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Prerequisites"><span class="tocnumber">1</span> <span class="toctext">Prerequisites</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Limitations"><span class="tocnumber">2</span> <span class="toctext">Limitations</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Configuring_the_EVM_Hardware"><span class="tocnumber">3</span> <span class="toctext">Configuring the EVM Hardware</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#DM355"><span class="tocnumber">3.1</span> <span class="toctext">DM355</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#DM6446"><span class="tocnumber">3.2</span> <span class="toctext">DM6446</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Hardware_Modifications"><span class="tocnumber">3.2.1</span> <span class="toctext">Hardware Modifications</span></a>
+<ul>
+<li class="toclevel-4 tocsection-7"><a href="#Replace_USB_Connector"><span class="tocnumber">3.2.1.1</span> <span class="toctext">Replace USB Connector</span></a></li>
+<li class="toclevel-4 tocsection-8"><a href="#Replace_R132"><span class="tocnumber">3.2.1.2</span> <span class="toctext">Replace R132</span></a></li>
+<li class="toclevel-4 tocsection-9"><a href="#Connect_DRVVBUSz"><span class="tocnumber">3.2.1.3</span> <span class="toctext">Connect DRVVBUSz</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-10"><a href="#Jumper_Settings"><span class="tocnumber">3.2.2</span> <span class="toctext">Jumper Settings</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Creating_the_Kernel_Image"><span class="tocnumber">4</span> <span class="toctext">Creating the Kernel Image</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Obtaining_USB_OTG_Patches"><span class="tocnumber">4.1</span> <span class="toctext">Obtaining USB OTG Patches</span></a>
+<ul>
+<li class="toclevel-3 tocsection-13"><a href="#DM355_2"><span class="tocnumber">4.1.1</span> <span class="toctext">DM355</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#DM6446_2"><span class="tocnumber">4.1.2</span> <span class="toctext">DM6446</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Beta_Patches"><span class="tocnumber">4.1.3</span> <span class="toctext">Beta Patches</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-16"><a href="#Applying_USB_OTG_Patches"><span class="tocnumber">4.2</span> <span class="toctext">Applying USB OTG Patches</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Configuring_the_Kernel_for_USB_OTG"><span class="tocnumber">4.3</span> <span class="toctext">Configuring the Kernel for USB OTG</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Building_the_Kernel_Image"><span class="tocnumber">4.4</span> <span class="toctext">Building the Kernel Image</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#Testing_USB_OTG_Functionality"><span class="tocnumber">5</span> <span class="toctext">Testing USB OTG Functionality</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#Test_Configuration"><span class="tocnumber">5.1</span> <span class="toctext">Test Configuration</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Initial_Setup"><span class="tocnumber">5.2</span> <span class="toctext">Initial Setup</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Doing_Initial_Role_Negotiation"><span class="tocnumber">5.3</span> <span class="toctext">Doing Initial Role Negotiation</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Doing_Dynamic_Role_Switching"><span class="tocnumber">5.4</span> <span class="toctext">Doing Dynamic Role Switching</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Mounting_the_File_Backed_Storage_Device"><span class="tocnumber">5.5</span> <span class="toctext">Mounting the File Backed Storage Device</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Ending_a_Session_and_Restarting"><span class="tocnumber">5.6</span> <span class="toctext">Ending a Session and Restarting</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-26"><a href="#Changing_the_GPIO_used_for_USB_OTG"><span class="tocnumber">6</span> <span class="toctext">Changing the GPIO used for USB OTG</span></a>
+<ul>
+<li class="toclevel-2 tocsection-27"><a href="#Limitations_2"><span class="tocnumber">6.1</span> <span class="toctext">Limitations</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Change_in_Hardware_Modifications"><span class="tocnumber">6.2</span> <span class="toctext">Change in Hardware Modifications</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Change_in_USB_Driver"><span class="tocnumber">6.3</span> <span class="toctext">Change in USB Driver</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Change_in_Kernel_Configuration"><span class="tocnumber">6.4</span> <span class="toctext">Change in Kernel Configuration</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Prerequisites">Prerequisites</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=1" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>TI DaVinci LSP kernel version 1.20.00.014 or later (this is contains the musb_hdrc driver for the <a href="Inventra_HDRC_USB_Controller.html" title="Inventra HDRC USB Controller">Inventra HDRC USB Controller</a>).</li>
+<li>A DaVinci EVM.  Either DM355 or DM6446 rev F.  NOTE: If you wish to test this functionality following the procedures below you will need two DaVinci EVMs.</li>
+<li>A USB mini-A to mini-B cable.  Testing was performed using a goldx cable P/N GXQU-06.</li>
+<li>A root file system where the g_file_storage gadget driver used in testing can be installed.  NFS was used during testing.</li></ul>
+<h2><span class="mw-headline" id="Limitations">Limitations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=2" title="Edit section: Limitations">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>OTG specification requires that the driver (USB Linux Kernel stack + MUSB Controller Driver) 
+communicate several events to the “Application Layer”.  MV 2.6.10 kernel lacks infrastructure 
+to communicate OTG events to the “Application Layer”.
+</p><p>Pro v4.0 MV 2.6.10 kernel lacks interface for “Application Layer” to request for USB bus access.  
+This is required in OTG mode to initiate a Device/Host modes from “Application Layer” and to
+perform role switching.
+</p><p>MUSB Controller driver uses a “/proc” interface to work around the kernel limitation, 
+to expose a interface to the user for requesting USB bus access and to perform role switching.
+The MUSB driver is tested for OTG functionalities using this interface on the DaVinci platform.
+</p><p>The above mentioned points are the limitations from the USB stack perspective in supporting the
+full fledged OTG functionality on Davinci platform.
+</p>
+<h2><span class="mw-headline" id="Configuring_the_EVM_Hardware">Configuring the EVM Hardware</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=3" title="Edit section: Configuring the EVM Hardware">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section will cover how to configure the DaVinci hardware for USB OTG support.
+</p>
+<h3><span class="mw-headline" id="DM355">DM355</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=4" title="Edit section: DM355">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>On the DM355 there are no hardware modification required for USB OTG.  In order to use the DM355 in USB OTG mode jumpers J9 and J10 must be un-jumpered.  This allows for the USB ID pin and VBUS to be driven correctly.  You can store the removed jumpers on J13.
+</p>
+<h3><span class="mw-headline" id="DM6446">DM6446</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=5" title="Edit section: DM6446">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The DM6446 rev F EVM requires the following hardware modifications to enable USB OTG functionality.  These modification use GPIO2 to controll the USB VBUS.  GPIO2 is pinmuxed with the G0 pin in RGB888 mode.  If you want to use RGB888 video then you will need to use a different GPIO for USB VBUS control that GPIO2.  You can refer to the <a href="#Changing_the_GPIO_used_for_USB_OTG">Changing the GPIO used for USB OTG</a> section at the end of this article for more information on using a different GPIO pin.
+</p>
+<h4><span class="mw-headline" id="Hardware_Modifications">Hardware Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=6" title="Edit section: Hardware Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The Hardware modification below are required for USB OTG support to function of the DM6446 EVM.  These modifications are valid only for revision F or later of the DM6446 EVM.  To check the revision of your EVM check REV field on the bottom of the EVM next to the hard disk drive.
+</p>
+<h5><span class="mw-headline" id="Replace_USB_Connector">Replace USB Connector</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=7" title="Edit section: Replace USB Connector">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Replace the full size A connector at J10 with a mini-A/B connector.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:277px;"><a href="File_USB_OTG_replace_connector.html" class="image"><img alt="USB OTG replace connector.jpg" src="https://processors.wiki.ti.com/images/9/99/USB_OTG_replace_connector.jpg" width="275" height="206" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_USB_OTG_replace_connector.html" class="internal" title="Enlarge"></a></div></div></div></div>
+<h5><span class="mw-headline" id="Replace_R132">Replace R132</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=8" title="Edit section: Replace R132">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Replace the zero Ohm resistor R132 with a 2-pin jumper.  With this jumper C133 can be switched into the circuit to control the VBUS charge/discharge rate in order to meet USB OTG requirements.  This jumper should be depopulated for OTG operation and populated for normal operation.
+</p><p>The pictures below will show the new circuit diagram and an example of the EVM modification
+</p>
+<ul class="gallery mw-gallery-traditional">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:38px auto;"><a href="File_USB_OTG_R132_replaced.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/9/9c/USB_OTG_R132_replaced.jpg" width="120" height="74" /></a></div></div>
+			<div class="gallerytext">
+<p>Circuit Diagram
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27px auto;"><a href="File_USB_OTG_R132_boardpic.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/6/6c/USB_OTG_R132_boardpic.jpg" width="120" height="96" /></a></div></div>
+			<div class="gallerytext">
+<p>Example EVM Modification
+</p>
+			</div>
+		</div></li>
+</ul>
+<h5><span class="mw-headline" id="Connect_DRVVBUSz">Connect DRVVBUSz</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=9" title="Edit section: Connect DRVVBUSz">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Disconnect the USB DRVVBUSz from U15 by lifting and rotating resistor R379 as illustrated.  In addition, install a 3-pin jumper with the following connections:
+</p>
+<ul><li>Pin 1: Connect to rotated resistor as shown</li>
+<li>Pin 2: Connect to TP71</li>
+<li>Pin 3: Connect to GPIO2 (Pin 2 of DC5 connector on the top of the board)</li></ul>
+<p>Shorting jumper pins 1&amp;2 enables USB VBUS drive via the I2C IO expander chip (EVM default setup).  Shorting pins 2&amp;3 enables USB VBUS drive via GPIO2 (USB OTG setup).  The pictures below will show the new circuit diagram and example board modifications.
+</p>
+<ul class="gallery mw-gallery-traditional">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:20.5px auto;"><a href="File_USB_OTG_GPIO2_circuit.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/6/6a/USB_OTG_GPIO2_circuit.jpg" width="120" height="109" /></a></div></div>
+			<div class="gallerytext">
+<p>Circuit Diagram
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:15px auto;"><a href="File_USB_OTG_R379_rotated.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/6/68/USB_OTG_R379_rotated.jpg" width="74" height="120" /></a></div></div>
+			<div class="gallerytext">
+<p>Rotation of R379
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:30px auto;"><a href="File_USB_OTG_3pin_Connector.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/7/77/USB_OTG_3pin_Connector.jpg" width="120" height="90" /></a></div></div>
+			<div class="gallerytext">
+<p>3-pin header and wiring
+</p>
+			</div>
+		</div></li>
+</ul>
+<h4><span class="mw-headline" id="Jumper_Settings">Jumper Settings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=10" title="Edit section: Jumper Settings">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>This section covers the jumpers settings used in USB OTG mode as well has how to revert these settings back to the default values.
+</p>
+<ul><li>Jumper J7 - This jumper should be set to jumper pins 1&amp;2 for USB OTG mode.  When not in USB OTG mode this jumper determines whether the board is a USB host or peripheral as defined in the DM6446 technical reference manual that shipped with the EVM.</li>
+<li>Jumper Replacing R132 - This jumper is used to control the capacitance used by the USB controller which controls the VBUS charge/discharge rate.  For USB OTG mode this jumper should be un-jumpered.  For normal EVM operation this jumper should be closed.</li>
+<li>3 pin Jumper for GPIO - This jumper is the 3 pin jumper installed on the bottom of the board which can be used to connect the DRVVBUSz line to either GPIO2 or the I2C line.  For USB OTG this jumper should be set to use GPIO2.  For normal EVM operation this jumper should be set to use I2C.</li></ul>
+<h2><span class="mw-headline" id="Creating_the_Kernel_Image">Creating the Kernel Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=11" title="Edit section: Creating the Kernel Image">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section will cover patching the kernel for USB OTG support, configuring the kernel for USB OTG, and building the kernel and modules.
+</p>
+<h3><span class="mw-headline" id="Obtaining_USB_OTG_Patches">Obtaining USB OTG Patches</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=12" title="Edit section: Obtaining USB OTG Patches">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Currently the USB OTG patches are still in system test and have not been released to the updates site.  These patches are listed below in the <a href="#Beta_Patches">Beta Patches</a> section.  Once these patches are released this section will be updated to their new location.
+</p><p>NOTE:  These patches are still listed as Beta and have only undergone basic testing.  When the patches are released to the updates site they will have been fully system tested.
+</p>
+<h4><span class="mw-headline" id="DM355_2">DM355</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=13" title="Edit section: DM355">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Pending patch release.  See <a href="#Beta_Patches">Beta Patches</a> for now.
+</p>
+<h4><span class="mw-headline" id="DM6446_2">DM6446</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=14" title="Edit section: DM6446">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Pending patch release.  See <a href="#Beta_Patches">Beta Patches</a> for now.
+</p>
+<h4><span class="mw-headline" id="Beta_Patches">Beta Patches</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=15" title="Edit section: Beta Patches">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>These patches are ones that have gone through basic functionality testing but have not been fully system tested.
+</p>
+<ol><li><a href="https://processors.wiki.ti.com/images/7/7d/Lsp_1_20_usb_otg_fixes_012.patch.gz" class="internal" title="Lsp 1 20 usb otg fixes 012.patch.gz">Patch 1</a> - This patch fixes the USB OTG support for DM355 and DM6446 in the LSP 1.20 kernel.</li>
+<li><a href="https://processors.wiki.ti.com/images/3/3c/Lsp_1_20_usb_otg_dm644x_use_gpio2_for_vbus_013.patch.gz" class="internal" title="Lsp 1 20 usb otg dm644x use gpio2 for vbus 013.patch.gz">Patch 2</a> - This patch allows the DM6446 EVM to use GPIO2 instead of the default GPIO3.3V_16 which would cause the ethernet to be disabled.</li>
+<li><a href="https://processors.wiki.ti.com/images/9/9d/Lsp_1_20_usb_otg_disconnect.patch.gz" class="internal" title="Lsp 1 20 usb otg disconnect.patch.gz">Patch 3</a> - This patch fixes a problem with OTG where the device node for the initial peripheral would persist on the initial host after a dynamic role switch.</li></ol>
+<h3><span class="mw-headline" id="Applying_USB_OTG_Patches">Applying USB OTG Patches</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=16" title="Edit section: Applying USB OTG Patches">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Download the above patches into a working directory.  i.e. /home/user/workdir</li>
+<li>gunzip the patches.
+<ul><li>gunzip *.gz</li></ul></li>
+<li>Copy the LSP 1.20 kernel sources to the working directory.
+<ul><li>cp -rf &lt;lsp install path&gt; ./ti-davinci</li></ul></li>
+<li>Change directory into the kernel sources directory.
+<ul><li>cd ti-davinci</li></ul></li>
+<li>Apply the patches using the patch command.
+<ul><li>patch -p1 &lt; ../lsp_1_20_usb_otg_fixes_012.patch</li>
+<li>patch -p1 &lt; ../lsp_1_20_usb_otg_dm644x_use_gpio2_for_vbus_013.patch</li>
+<li>patch -p1 &lt; ../lsp_1_20_usb_otg_disconnect.patch</li></ul></li></ol>
+<h3><span class="mw-headline" id="Configuring_the_Kernel_for_USB_OTG">Configuring the Kernel for USB OTG</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=17" title="Edit section: Configuring the Kernel for USB OTG">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In order to configure the LSP 1.20 kernel for USB OTG support the following options must be enabled in the kernel configuration.  The following steps will detail how to enable these options using xconfig.
+</p>
+<ol><li>Configure the kernel with the default options first.
+<ul><li>For DM6446
+<ul><li>make davinci_dm644x_defconfig</li></ul></li>
+<li>For DM355
+<ul><li>make davinci_dm355_evm_defconfig</li></ul></li></ul></li>
+<li>Enable <i>Support for USB Gadgets</i> as static and the <i>File-backed Storage Gadget</i> as a module
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Kernel_config_storage_gadget.html" class="image"><img alt="Kernel config storage gadget.jpg" src="https://processors.wiki.ti.com/images/7/74/Kernel_config_storage_gadget.jpg" width="300" height="208" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Kernel_config_storage_gadget.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>Configure the USB <i>Driver Mode</i> to be <i>Both host and peripheral: USB OTG (On The Go) Device</i>
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Kernel_config_OTG_support.html" class="image"><img alt="Kernel config OTG support.jpg" src="https://processors.wiki.ti.com/images/e/ef/Kernel_config_OTG_support.jpg" width="300" height="209" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Kernel_config_OTG_support.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>Disable the <i>Rely on OTG Targeted Peripheral List</i>.  This is done so that the USB OTG device can talk to any other OTG device.  If not you have to add your USB OTG device into the whitelist of devices which is outside of the scope of this page.
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Kernel_config_disable_wl.html" class="image"><img alt="Kernel config disable wl.jpg" src="https://processors.wiki.ti.com/images/2/25/Kernel_config_disable_wl.jpg" width="300" height="210" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Kernel_config_disable_wl.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li>
+<li>Verify the <i>USB Peripheral Controller</i> is set to <i><a href="Inventra_HDRC_USB_Controller.html" title="Inventra HDRC USB Controller">Inventra (M)HDRC USB Peripheral</a></i>
+<dl><dd><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Kernel_config_periph_controller.html" class="image"><img alt="Kernel config periph controller.jpg" src="https://processors.wiki.ti.com/images/7/78/Kernel_config_periph_controller.jpg" width="300" height="210" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Kernel_config_periph_controller.html" class="internal" title="Enlarge"></a></div></div></div></div></dd></dl></li></ol>
+<h3><span class="mw-headline" id="Building_the_Kernel_Image">Building the Kernel Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=18" title="Edit section: Building the Kernel Image">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Compile the kernel uImage
+<dl><dd>make uImage</dd></dl></li>
+<li>Compile the kernel modules (this includes the g_file_storage module)
+<dl><dd>make modules</dd></dl></li>
+<li>Install the modules to the target file system.  In this case it is easiest to install them to an NFS file system
+<dl><dd>make modules_install INSTALL_MOD_PATH=&lt;path to nfs&gt;</dd></dl></li></ol>
+<p>NOTE:  If you are going to build the kernel for both DM355 and DM6446 you will need to install the kernel modules into seperate file system so as not to overwrite the modules from the previous build.
+</p>
+<h2><span class="mw-headline" id="Testing_USB_OTG_Functionality">Testing USB OTG Functionality</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=19" title="Edit section: Testing USB OTG Functionality">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This section will discuss how to test the USB OTG functionality using two USB OTG enabled EVMs.  The EVMs can be DM355, DM6446, or a combination of the two.
+</p>
+<h3><span class="mw-headline" id="Test_Configuration">Test Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=20" title="Edit section: Test Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>One DM6446 to be the initial host</li>
+<li>One DM355 to be the initial peripheral</li>
+<li>An NFS target file system for each board</li>
+<li>A backing file for the g_file_storage module for each board.  For more information on how to create a backing file please see the <a href="USB_File_Storage_Gadget.html" title="USB File Storage Gadget">USB File Storage Gadget</a> page.</li></ul>
+<h3><span class="mw-headline" id="Initial_Setup">Initial Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=21" title="Edit section: Initial Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Boot both boards using the kernel image created <a href="#Building_the_Kernel_Image">above</a> and an NFS file system with the corresponding modules installed.</li>
+<li>Connect the boards with the mini-A to mini-B USB cable.  The board on the mini-A side is the initial host (in this case the DM6446) and the board on the mini-B side will be the initial peripheral (in this case the DM355)</li>
+<li>Load the g_file_storage module on the peripheral device (you can also load it on the host device at this time).  This can be done using the following command assuming the backing file is located at /root/test.  Adjust the file arguement accordingly for your setup.
+<dl><dd><dl><dd>modprobe g_file_storage file=/root/test</dd></dl></dd>
+<dd>You should see output similar to</dd></dl></li></ol>
+<pre>DVEVM# modprobe g_file_storage file=/root/test
+g_file_storage gadget: File-backed Storage Gadget, version: 20 October 2004
+g_file_storage gadget: Number of LUNs=1
+g_file_storage gadget-lun0: ro=0, file: /root/test
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Doing_Initial_Role_Negotiation">Doing Initial Role Negotiation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=22" title="Edit section: Doing Initial Role Negotiation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>On the board that is connected to the mini-A side of the cable, which is the initial host (in this case the DM6446) enter the following command to perform initial role negotiation.
+<dl><dd>echo i &gt; /proc/driver/otg</dd>
+<dd>You should see output like the following</dd>
+<dd></dd></dl></li></ol>
+<table border="1" cellspacing="0" cellpadding="4" rules="all" style="margin:1em 1em 1em 0; border:solid 1px #aaa; border-collapse:collapse;empty-cells:show;">
+
+<tbody><tr>
+<th>HOST OUTPUT
+</th>
+<th>PERIPHERAL OUTPUT
+</th></tr>
+<tr>
+<td style="font-size: 90%;">
+<pre>DVEVM# echo i &gt; /proc/driver/otg
+DVEVM# usb 1-1: new high speed USB device using musb_hdrc and address 2
+usb 1-1: Dual-Role OTG device on HNP port
+usb 1-1: device v0525 pa4a5 is not supported
+scsi0&#160;: SCSI emulation for USB Mass Storage devices
+  Vendor: Linux     Model: File-Stor Gadget  Rev: 0316
+  Type:   Direct-Access                      ANSI SCSI revision: 02
+SCSI device sda: 131072 512-byte hdwr sectors (67 MB)
+sda: assuming drive cache: write through
+SCSI device sda: 131072 512-byte hdwr sectors (67 MB)
+sda: assuming drive cache: write through
+ sda: sda1
+Attached scsi disk sda at scsi0, channel 0, id 0, lun 0
+</pre>
+</td>
+<td style="font-size: 90%;">
+<pre>DVEVM# g_file_storage gadget: high speed config #1
+</pre>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Doing_Dynamic_Role_Switching">Doing Dynamic Role Switching</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=23" title="Edit section: Doing Dynamic Role Switching">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>If you have not already loaded the file backed storage on the host device (DM6446) do so now.</li>
+<li>On the host board (in this case the DM6446) issue the following command to perform a dynamic role switch.  This will make the DM6446 a peripheral device and change the DM355 role to host.
+<dl><dd>echo s &gt; /proc/driver/otg</dd>
+<dd>You should see output like the following</dd>
+<dd></dd></dl></li></ol>
+<table border="1" cellspacing="0" cellpadding="4" rules="all" style="margin:1em 1em 1em 0; border:solid 1px #aaa; border-collapse:collapse;empty-cells:show;">
+
+<tbody><tr>
+<th>HOST OUTPUT
+</th>
+<th>PERIPHERAL OUTPUT
+</th></tr>
+<tr>
+<td style="font-size: 90%;">
+<pre>DVEVM# usb 1-1: USB disconnect, address 2
+g_file_storage gadget: high speed config #1
+</pre>
+</td>
+<td style="font-size: 90%;">
+<pre>usb 1-1: new high speed USB device using musb_hdrc and address 2
+usb 1-1: Dual-Role OTG device on HNP port
+usb 1-1: device v0525 pa4a5 is not supported
+scsi0&#160;: SCSI emulation for USB Mass Storage devices
+  Vendor: Linux     Model: File-Stor Gadget  Rev: 0316
+  Type:   Direct-Access                      ANSI SCSI revision: 02
+SCSI device sda: 131072 512-byte hdwr sectors (67 MB)
+sda: assuming drive cache: write through
+SCSI device sda: 131072 512-byte hdwr sectors (67 MB)
+sda: assuming drive cache: write through
+ sda: sda1
+Attached scsi disk sda at scsi0, channel 0, id 0, lun 0
+</pre>
+</td></tr></tbody></table>
+<p>You can continue to <i>echo s &gt; /proc/driver/otg</i> on whichever device is the host device to cause a role switch
+</p>
+<h3><span class="mw-headline" id="Mounting_the_File_Backed_Storage_Device">Mounting the File Backed Storage Device</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=24" title="Edit section: Mounting the File Backed Storage Device">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To test that the USB OTG session is properly working you can mount the peripheral device on the host device and perform I/O operations to it.
+</p><p>On the host device do:
+</p>
+<ol><li>Mount the peripheral device.  This is the sd device that was printed on the host screen when the session was started.  In this example the device is sda.
+<dl><dd>mount /dev/sda /mnt</dd></dl></li>
+<li>Change directory to the mounted device and view the contents (There will only be contents if you put them there when you created the <a href="USB_File_Storage_Gadget.html" title="USB File Storage Gadget">backing file</a>
+<dl><dd>cd /mnt</dd>
+<dd>ls</dd></dl></li>
+<li>Perform I/O by reading and writing to the device.  This can be done with the Linux dd command.
+<dl><dd>To test the write ability do:
+<dl><dd>dd if=/dev/zero of=./test.out bs=1M count=20</dd></dl></dd>
+<dd>To test the read ability do:
+<dl><dd>dd if=./test.out of=/dev/null</dd></dl></dd></dl></li>
+<li>Unmount the file system
+<dl><dd>cd /</dd>
+<dd>umount /mnt</dd></dl></li></ol>
+<p>If the above steps succeeded then the OTG session is working correctly.  You can then switch the roles on the devices and repeat the above steps to verify that the role switching works correctly.
+</p>
+<h3><span class="mw-headline" id="Ending_a_Session_and_Restarting">Ending a Session and Restarting</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=25" title="Edit section: Ending a Session and Restarting">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To end a session you must issue the <i>echo e &gt; /proc/driver/otg</i> command from the host device.  You should see output like the following on the host device
+</p>
+<pre> DVEVM# echo e &gt; /proc/driver/otg
+ otg_timeout 176: No response from B-device
+</pre>
+<p>This timeout is expected.  However, the device /dev/sda is still present on the system even though the session has ended.  You should not try to access this device node as there is not real device present.  This will be fixed in a future release.
+</p><p>If you wish to restart the session you can do initial role negotiation again and the session will be restarted.
+</p>
+<h2><span class="mw-headline" id="Changing_the_GPIO_used_for_USB_OTG">Changing the GPIO used for USB OTG</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=26" title="Edit section: Changing the GPIO used for USB OTG">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>NOTE:  These steps only apply to the DM6446 EVM as the DM355 EVM does not require modifications for USB OTG support.
+</p><p>If for some reason you do not want to use GPIO2 (i.e. you need RGB888 video output) it is possible to use other GPIOs for the USB DRVVBUSz signal.  There is already code present in the driver to allow the use of 3.3V GPIO16.
+</p>
+<h3><span class="mw-headline" id="Limitations_2">Limitations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=27" title="Edit section: Limitations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Using the 3.3V GPIO16 will cause the ethernet to become inoperative when USB OTG in enabled due to the pinmuxing of the EMAC pins and GPIO3.3V_16.
+</p>
+<h3><span class="mw-headline" id="Change_in_Hardware_Modifications">Change in Hardware Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=28" title="Edit section: Change in Hardware Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The only change in the hardware modifications required is in the <a href="#Connect_DRVVBUSz">Connect DRVVBUSz</a> step.  Instead of connecting pin 3 to pin 2 of the DC5 connector on the top of the board it should be connected to TP72.
+</p>
+<h3><span class="mw-headline" id="Change_in_USB_Driver">Change in USB Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=29" title="Edit section: Change in USB Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The files &lt;TI kernel dir&gt;/drivers/usb/musb/davinci.c and &lt;TI kernel dir&gt;/drivers/usb/musb/davinci.h will need to be modified to use GPIO3.3V_16 rather than GPIO2.  The easiest way to do this is to unapply the <a href="https://processors.wiki.ti.com/images/3/3c/Lsp_1_20_usb_otg_dm644x_use_gpio2_for_vbus_013.patch.gz" class="internal" title="Lsp 1 20 usb otg dm644x use gpio2 for vbus 013.patch.gz">lsp_1_20_usb_otg_dm644x_use_gpio2_for_vbus_013</a> patch.  If not you can use the patch as a reference and comment out the GPIO2 code and uncomment the GPIO3.3V_16 code.
+</p>
+<h3><span class="mw-headline" id="Change_in_Kernel_Configuration">Change in Kernel Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit&amp;section=30" title="Edit section: Change in Kernel Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In the kernel configuration for DM6446 you will need to disable the <i>TI DaVinci EMAC Support</i>.  This is located under <i>Networking support</i> -&gt; <i>Ethernet (10 or 100Mbit)</i> -&gt; <i>TI DaVinci EMAC Support</i>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130185202
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.088 seconds
+Real time usage: 0.097 seconds
+Preprocessor visited node count: 150/1000000
+Preprocessor generated node count: 213/1000000
+Post‐expand include size: 302/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2034/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.655      1 -total
+ 92.26%    1.527      2 Template:Prettytable
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:375-0!canonical and timestamp 20201130185202 and revision id 20179
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>USB OTG on DaVinci</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>USB OTG on DaVinci</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>USB OTG on DaVinci</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>USB OTG on DaVinci</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>USB OTG on DaVinci</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>USB OTG on DaVinci</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>USB OTG on DaVinci</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>USB OTG on DaVinci</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>USB OTG on DaVinci</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;oldid=20179">https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;oldid=20179</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_USB.html" title="Category:USB">USB</a></li><li><a href="Category_DVEVM.html" title="Category:DVEVM">DVEVM</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=USB+OTG+on+DaVinci" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="USB_OTG_on_DaVinci.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:USB_OTG_on_DaVinci&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="USB_OTG_on_DaVinci.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/USB_OTG_on_DaVinci.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/USB_OTG_on_DaVinci.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;oldid=20179" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=USB_OTG_on_DaVinci&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 24 November 2009, at 12:43.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.088","walltime":"0.097","ppvisitednodes":{"value":150,"limit":1000000},"ppgeneratednodes":{"value":213,"limit":1000000},"postexpandincludesize":{"value":302,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2034,"limit":5000000},"timingprofile":["100.00%    1.655      1 -total"," 92.26%    1.527      2 Template:Prettytable"]},"cachereport":{"timestamp":"20201130185202","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":223});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/USB_OTG_on_DaVinci by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:39:26 GMT -->
+</html>

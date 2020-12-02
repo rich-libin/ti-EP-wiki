@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_Compiler:_Tuning_Software_Pipelined_Loops by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C6000 Compiler: Tuning Software Pipelined Loops - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C6000_Compiler:_Tuning_Software_Pipelined_Loops","wgTitle":"C6000 Compiler: Tuning Software Pipelined Loops","wgCurRevisionId":181993,"wgRevisionId":181993,"wgArticleId":4807,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C6000_Compiler:_Tuning_Software_Pipelined_Loops","wgRelevantArticleId":4807,"wgRequestId":"e94c3f7fbbffb38bad206536","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C6000_Compiler_Tuning_Software_Pipelined_Loops rootpage-C6000_Compiler_Tuning_Software_Pipelined_Loops skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C6000 Compiler: Tuning Software Pipelined Loops</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#WARNING:_Don.27t_Lie_to_the_Compiler.21"><span class="tocnumber">1.1</span> <span class="toctext"><b>WARNING:</b> Don't Lie to the Compiler!</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Establishing_a_Baseline"><span class="tocnumber">2</span> <span class="toctext">Establishing a Baseline</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Eliminating_Loop-Carried_Dependencies"><span class="tocnumber">3</span> <span class="toctext">Eliminating Loop-Carried Dependencies</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Balancing_Resources"><span class="tocnumber">4</span> <span class="toctext">Balancing Resources</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Exploiting_Wide_Loads_and_Stores_.28SIMD.29"><span class="tocnumber">5</span> <span class="toctext">Exploiting Wide Loads and Stores (SIMD)</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Rebalancing_Resources"><span class="tocnumber">6</span> <span class="toctext">Rebalancing Resources</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Reference"><span class="tocnumber">7</span> <span class="toctext">Reference</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A particular area where the C6000 processor family shines is its ability to speed through looped code. This is quite advantageous in digital signal processing, image processing and other mathematical routines that tend to be loop-centric. A technique called <i>software pipelining</i> contributes the biggest boost to improving looped code performance. Software pipelining is only enabled at –o2 or –o3. On the C6000 variants C62x, C67x, and C64x, software pipelining is completely disabled when code size flags –ms2 and –ms3 (see <a href="C6000_Compiler__Recommended_Compiler_Options.html" title="C6000 Compiler: Recommended Compiler Options">C6000 Compiler: Recommended Compiler Options</a>) are used. On C64x
++ , C674x, and C66x cores, software pipelining is enabled if and only if the loop buffer (see section 2.1 of <a href="http://www.ti.com/lit/pdf/spra666" class="extiw" title="tidoc:spra666">Hand Tuning Loops and Control Code on the TMS320C6000</a>) can be used.
+</p><p>Without software pipelining, loops are scheduled so that loop iteration i completes before iteration i
++ 1 begins. Software pipelining allows iterations to be overlapped. Thus, as long as correctness can be preserved, iteration i
++ 1 can start before iteration i finishes. This generally permits a much higher utilization of the machine
+’ s resources than might be achieved from non-software-pipelined scheduling techniques.
+</p><p>In a software-pipelined loop, even though a single loop iteration might take s cycles to complete, a new iteration is initiated every ii cycles.
+</p><p><a href="File_Spra666_figure2.html" class="image"><img alt="Spra666 figure2.JPG" src="https://processors.wiki.ti.com/images/c/c4/Spra666_figure2.JPG" width="686" height="256" /></a>
+</p><p>In an efficient software-pipelined loop, where ii
+&lt; s, ii is called the <i>initiation interval </i>; it is the number of cycles between starting iteration i and iteration i
++ 1. ii is equivalent to the cycle count for the software-pipelined loop body. s is the number of cycles for the first iteration to complete, or equivalently, the length of a <i>single scheduled iteration </i>of the software-pipelined loop.
+</p><p>Because the iterations of a software-pipelined loop overlap, it can be difficult to understand the assembly code corresponding to the loop. If the source code is compiled with –mw, the software-pipelined loop information displays the scheduled instruction sequence for a single iteration of the software-pipelined loop. Examining this single scheduled iteration makes it easier to understand the compiler
+’ s output. This, in turn, makes tuning easier.
+</p>
+<h3><span id="WARNING:_Don't_Lie_to_the_Compiler!"></span><span class="mw-headline" id="WARNING:_Don.27t_Lie_to_the_Compiler.21"><b>WARNING:</b> Don't Lie to the Compiler!</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=2" title="Edit section: WARNING: Don&#039;t Lie to the Compiler!">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The more information the compiler has, the better the optimization decisions that it can make. When using annotations, make sure the information being communicated is correct. If the information is not correct, the resulting code will not be correct either.
+</p>
+<h1><span class="mw-headline" id="Establishing_a_Baseline">Establishing a Baseline</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=3" title="Edit section: Establishing a Baseline">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Given this function BasicLoop() ...
+</p><p>&lt;syntaxhighlight lang=c&gt;
+void BasicLoop(int *output, int *input1, int *input2, int n)
+{
+</p>
+<pre>   int i;
+   for (i=0; i&lt;n; i++)
+       output[i] = input1[i] + input2[i];
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Compile it with the <a href="C6000_Compiler__Recommended_Compiler_Options.html" title="C6000 Compiler: Recommended Compiler Options"> recommended options</a>: -o -s -mw -mv6400.
+</p><p>Open up the assembly file and look at the software pipelining information for this loop:
+</p>
+<pre>;*   SOFTWARE PIPELINE INFORMATION
+;*
+;*      Loop source line                &#160;: 5
+;*      Loop opening brace source line  &#160;: 5
+;*      Loop closing brace source line  &#160;: 6
+;*      Known Minimum Trip Count        &#160;: 1
+;*      Known Max Trip Count Factor     &#160;: 1
+;*      Loop Carried Dependency Bound(^)&#160;: 7
+;*      Unpartitioned Resource Bound    &#160;: 2
+;*      Partitioned Resource Bound(*)   &#160;: 2
+;*      Resource Partition:
+;*                                A-side   B-side
+;*      .L units                     0        0
+;*      .S units                     0        1
+;*      .D units                     2*       1
+;*      .M units                     0        0
+;*      .X cross paths               1        0
+;*      .T address paths             2*       1
+;*      Long read paths              0        0
+;*      Long write paths             0        0
+;*      Logical  ops (.LS)           0        0     (.L or .S unit)
+;*      Addition ops (.LSD)          1        0     (.L or .S or .D unit)
+;*      Bound(.L .S .LS)             0        1
+;*      Bound(.L .S .D .LS .LSD)     1        1
+;*
+;*      Searching for software pipeline schedule at ...
+;*         ii = 7  Schedule found with 1 iterations in parallel
+...
+;*        SINGLE SCHEDULED ITERATION
+;*
+;*        C25:
+;*   0              LDW     .D1T1   *A4++,A3         &#160;; |6|  ^
+;*     ||           LDW     .D2T2   *B4++,B5         &#160;; |6|  ^
+;*   1      [ B0]   BDEC    .S2     C24,B0           &#160;; |5|
+;*   2              NOP             3
+;*   5              ADD     .L1X    B5,A3,A3         &#160;; |6|  ^
+;*   6              STW     .D1T1   A3,*A5++         &#160;; |6|  ^
+;*   7             &#160;; BRANCHCC OCCURS {C25}          &#160;; |5|
+;*----------------------------------------------------------------------------*
+L1:   &#160;; PD LOOP PROLOG
+;** --------------------------------------------------------------------------*
+L2:   &#160;; PIPED LOOP KERNEL
+           LDW     .D1T1   *A4++,A3         &#160;; |6| &lt;0,0&gt;  ^
+||         LDW     .D2T2   *B4++,B5         &#160;; |6| &lt;0,0&gt;  ^
+
+   [ B0]   BDEC    .S2     L2,B0            &#160;; |5| &lt;0,1&gt;
+           NOP             3
+           ADD     .L1X    B5,A3,A3         &#160;; |6| &lt;0,5&gt;  ^
+           STW     .D1T1   A3,*A5++         &#160;; |6| &lt;0,6&gt;  ^
+;** --------------------------------------------------------------------------*
+L3:   &#160;; PIPED LOOP EPILOG
+;** --------------------------------------------------------------------------*
+</pre>
+<p>The software-pipelined loop information includes the source lines from which the loop originates, a description of the resource and latency requirements for the loop, and whether the loop was unrolled (among other information). When compiling with –mw, the information also contains a copy of the single scheduled iteration.  Details on the -mw comment block can be found in Chapter 4 of the <a href="http://www.ti.com/lit/pdf/spru198" class="extiw" title="tidoc:spru198"> C6000 Programmer's Guide</a>.  While this information is not completely up-to-date, it is the best available as of this writing.
+</p><p>The initiation interval (ii) is 7. This means that in the steady state, a result (equivalently, an original loop iteration) is computed every 7 CPU cycles. Therefore, the baseline CPU performance is 7 cycles/result.
+</p><p>Observe that the length of the single scheduled iteration is also 7. Thus, only one iteration is being executed at any given time, so there is no overlap across iterations (which would generally not be optimal).
+</p>
+<h1><span class="mw-headline" id="Eliminating_Loop-Carried_Dependencies">Eliminating Loop-Carried Dependencies</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=4" title="Edit section: Eliminating Loop-Carried Dependencies">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Look again at the software pipelining information in the assembly file. Where is the bottleneck? To find it, one must understand how the compiler computes a lower bound on the cycle count for the loop. This lower bound is the maximum of the <i>loop-carried dependency bound</i> and the <i>resource bound</i>. The loop-carried dependency bound is based on ordering constraints among the assembly instructions. For example, the two loads must complete before the add can proceed. The resource bound is based on hardware constraints, such as the required number of functional units of each given type. In actuality, there are two resource bounds: partitioned and unpartitioned. In this case, both are the same.
+</p><p>In this case, the partitioned resource bound is 2. Even if the assembly instructions could be executed out of order, at least two cycles would be required to execute all instructions in the loop body. However, the loop-carried dependency bound is 7.
+</p>
+<pre>;*      Loop Carried Dependency Bound(^)&#160;: 7
+;*      Unpartitioned Resource Bound    &#160;: 2
+;*      Partitioned Resource Bound(*)   &#160;: 2
+</pre>
+<p>Thus, ii ≥ max(2,7). To reduce the ii and consequently the number of cycles/result, the loop-carried dependency bound must be reduced.
+</p><p>The loop-carried dependency bound arises because there is a cycle in the ordering constraints for the instructions. The maximum cycle length is the loop-carried dependency bound. To reduce or eliminate a loop-carried dependency, one must identify the cycle and then find a way to shorten or break it.
+</p><p>To identify the maximum loop-carried dependency cycle, refer to the instructions in the single iteration. The instructions involved in the critical cycle are marked with a (
+^ ) sign. These instructions include the two loads, the add and the store.
+</p>
+<pre>;*        SINGLE SCHEDULED ITERATION
+;*
+;*        C25:
+;*   0              LDW     .D1T1   *A4++,A3         &#160;; |6|  ^
+;*     ||           LDW     .D2T2   *B4++,B5         &#160;; |6|  ^
+;*   1      [ B0]   BDEC    .S2     C24,B0           &#160;; |5|
+;*   2              NOP             3
+;*   5              ADD     .L1X    B5,A3,A3         &#160;; |6|  ^
+;*   6              STW     .D1T1   A3,*A5++         &#160;; |6|  ^
+;*   7             &#160;; BRANCHCC OCCURS {C25}          &#160;; |5|
+</pre>
+<p>With this information and by looking at which instructions feed into each other, one can reconstruct the loop-carried dependency cycle. The <i>nodes</i> in the graph are precisely the instructions denoted by (
+^ ) signs. The <i>edges</i> (arrows between node pairs) denote the ordering constraints. The edges are annotated by the number of cycles needed between the source and destination instructions. In most cases, results are written to registers at the end of the cycle in which the instruction executes and available on the following cycle. One of the few exceptions is that certain loads take 5 cycles for the data to be available in the target register.
+</p><p><a href="File_Spra666_figure3.html" class="image"><img alt="Spra666 figure3.JPG" src="https://processors.wiki.ti.com/images/7/71/Spra666_figure3.JPG" width="716" height="225" /></a>
+</p><p>In this graph, there are two critical cycles, each with length 7. To reduce the loop-carried-dependency bound, the largest cycle in the graph must be shortened or eliminated. This can be accomplished by eliminating one of the edges in the cycle. To do so, one must understand the origin of the edges.
+</p><p>The edges from the load instructions to the add instructions are straightforward. The destination registers for the loads are the source registers for the add instruction. A load instruction takes 5 cycles to populate its destination register. Consequently, the add instruction cannot be executed until 5 cycles after the last of the two loads has been executed.
+</p><p>The edge from the add to the store is also straightforward since the destination of the add is the source of the store. The result of the add is available after 1 cycle. Consequently, the edge between the add and the store is annotated with a 1. The store can be executed on the cycle immediately following the add.
+</p><p>The edges from the store back to the loads are less obvious. How does one know to put them in? Why are they there? The answer to these questions is determined by process of elimination. Since there is no register dependence, there is most likely a memory dependence. In this case, the compiler does not know whether the input arrays could reference the same memory locations as the output, so it is conservative and assumes this is possible. The edge from the store to the loads ensures that the store from one iteration executes before the loads in the next iteration, just in case those loads try to read the data written to by the store. Whether this occurs in practice depends on the values of "input1", "input2" and "output" at run time.  (For more background on data dependencies and graphs that represent them, see <a href="http://www.ti.com/lit/pdf/spra658" class="extiw" title="tidoc:spra658">Memory Alias Disambiguation on the TMS320C6000</a>.)
+</p><p>In reality, experienced programmers generally write code so that input parameter arrays and output parameter arrays are independent. The reason is that this makes their algorithm much more parallel, which in turn leads to better performance. Suppose that, across all call sites, neither "input1" nor "input2" ever accesses the same memory locations as "output". Tell this to the compiler and the back edges from the store to the loads will be eliminated. This is done either by using the <a href="C6000_Compiler__Recommended_Compiler_Options.html#When_safe.2C_consider_using_the_follow" title="C6000 Compiler: Recommended Compiler Options"> –mt option</a> or by using the restrict keyword.
+</p>
+<pre>void BasicLoop(int *restrict output,
+               int *restrict input1,
+               int *restrict input2,
+               int n)
+{
+    int i;
+    #pragma MUST_ITERATE(1)
+    for (i=0; i&lt;n; i++)
+        output[i] = input1[i] + input2[i];
+}
+</pre>
+<p>While it is sufficient for this example to restrict qualify either both loads or the single store, it is recommended to restrict qualify all parameters that can be restrict qualified (and local pointer variables as well). First, this is usually quicker than determining which actually need to be restrict-qualified. Second, this provides information to other programmers who might maintain or modify this code base in the future. However, before inserting restrict keywords, be sure that pointers being restrict-qualified cannot overlap with any other pointers. When writing a library routine and using restrict, be sure to document parameter restrictions for library users.
+</p><p>After adding the restrict keyword, rebuild the function. Observe that the loop-carried dependency bound has disappeared. This means that each iteration is independent. New iterations are now initiated as soon as resources are available.
+</p>
+<pre>;*      Loop Carried Dependency Bound(^)&#160;: 0
+</pre>
+<p>Further note that a new iteration is initiated every 2 cycles. Thus, in the steady state, a new result is produced every 2 cycles (instead of every 7 cycles).
+</p>
+<pre>;*         ii = 2  Schedule found with 4 iterations in parallel.
+</pre>
+<h1><span class="mw-headline" id="Balancing_Resources">Balancing Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=5" title="Edit section: Balancing Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Look at the software pipelining information for the loop. The limiting factor is now the number of functional units as indicated by the resource bound:
+</p>
+<pre>;*      Loop Carried Dependency Bound(^)&#160;: 0
+;*      Unpartitioned Resource Bound    &#160;: 2
+;*      Partitioned Resource Bound(*)   &#160;: 2
+</pre>
+<p>Which functional unit is the bottleneck? To determine this, look at the detailed breakdown of functional units required to execute a single iteration. Recall that the C6000 architecture is partitioned into two nearly symmetric halves. The resource breakdown displayed in the software pipelining information is computed after the compiler has partitioned instructions to either the A-side or the B-side.
+</p><p>Look for the machine resources with a (*) after them. Notice which ones are most congested. In this case, the bottleneck is on the D unit and the T address path.
+</p>
+<pre>;*      Resource Partition:
+;*                                A-side   B-side
+;*      .L units                     0        0
+;*      .S units                     0        1
+;*      .D units                     2*       1
+;*      .M units                     0        0
+;*      .X cross paths               1        0
+;*      .T address paths             2*       1
+;*      Long read paths              0        0
+;*      Long write paths             0        0
+;*      Logical  ops (.LS)           0        0     (.L or .S unit)
+;*      Addition ops (.LSD)          1        0     (.L or .S or .D unit)
+;*      Bound(.L .S .LS)             0        1
+;*      Bound(.L .S .D .LS .LSD)     1        1
+;*
+;*      Searching for software pipeline schedule at ...
+;*         ii = 2  Schedule found with 4 iterations in parallel
+...
+;*        SINGLE SCHEDULED ITERATION
+;*
+;*        C26:
+;*   0              LDW     .D1T1   *A5++,A4         &#160;; |9|
+;*   1              LDW     .D2T2   *B4++,B5         &#160;; |9|
+;*   2      [ B0]   BDEC    .S2     C26,B0           &#160;; |8|
+;*   3              NOP             3
+;*   6              ADD     .L1X    B5,A4,A3         &#160;; |9|
+;*   7              STW     .D1T1   A3,*A6++         &#160;; |9|
+;*   8             &#160;; BRANCHCC OCCURS {C26}          &#160;; |8|
+</pre>
+<p>From the single scheduled iteration, it can be seen that the D units and T address paths are used for loads and stores, one D unit and one T address path for each. There are three memory access instructions but only two D units and two T address paths available on each cycle. Thus, the resource bound is two cycles. This means that in the steady state, at least two cycles are required per result.
+</p><p>Performance can be improved by better utilizing the D units and T address paths. Assume it is known that the number of iterations is always even. If the loop is unrolled 2x (so that the resulting loop contains two copies of the original loop body and executes half the number of iterations), the compiler could balance out the D units and T address paths and achieve better resource utilization.
+</p><p>The following diagrams show the concept of unrolling the loop for better (more balanced) utilization of the critical D unit resource (the situation would be analogous for the critical T address path). On the left side, four loop iterations are shown, as indicated by the double-arrows, producing eight results in four cycles. One D unit is unused every other cycle. The right side shows performance after unrolling the loop by 2x. Both D units are executing useful instructions in every cycle. Of course, the order of the loads and stores must be rearranged, but the compiler takes care of this.
+</p><p><a href="File_Spra666_figure4.html" class="image"><img alt="Spra666 figure4.JPG" src="https://processors.wiki.ti.com/images/a/a6/Spra666_figure4.JPG" width="732" height="268" /></a>
+</p><p>One possibility for achieving this is to unroll the loop manually:
+</p>
+<pre>void BasicLoop(int *restrict output,
+               int *restrict input1,
+               int *restrict input2,
+               int n)
+{
+    int i;
+    #pragma MUST_ITERATE(1)
+    for (i=0; i&lt;n; i+=2) {
+        output[i]   = input1[i]   + input2[i];
+        output[i+1] = input1[i+1] + input2[i+1];
+    }
+}
+</pre>
+<p>Rebuilding yields the following results:
+</p>
+<pre>;*   SOFTWARE PIPELINE INFORMATION
+;*
+;*      Loop source line                &#160;: 8
+;*      Loop opening brace source line  &#160;: 8
+;*      Loop closing brace source line  &#160;: 11
+;*      Known Minimum Trip Count        &#160;: 1
+;*      Known Max Trip Count Factor     &#160;: 1
+;*      Loop Carried Dependency Bound(^)&#160;: 0
+;*      Unpartitioned Resource Bound    &#160;: 3
+;*      Partitioned Resource Bound(*)   &#160;: 3
+;*      Resource Partition:
+;*                                A-side   B-side
+;*      .L units                     0        0
+;*      .S units                     0        1
+;*      .D units                     3*       2
+;*      .M units                     0        0
+;*      .X cross paths               2        0
+;*      .T address paths             3*       3*
+;*      Long read paths              0        0
+;*      Long write paths             0        0
+;*      Logical  ops (.LS)           0        0     (.L or .S unit)
+;*      Addition ops (.LSD)          2        0     (.L or .S or .D unit)
+;*      Bound(.L .S .LS)             0        1
+;*      Bound(.L .S .D .LS .LSD)     2        1
+;*
+;*      Searching for software pipeline schedule at ...
+;*         ii = 3  Schedule found with 4 iterations in parallel
+...
+;*        SINGLE SCHEDULED ITERATION
+;*
+;*        C26:
+;*   0              LDW     .D2T2   *B5++(8),B6      &#160;; |10|
+;*   1              NOP             1
+;*   2              LDW     .D1T1   *A6++(8),A3      &#160;; |10|
+;*     ||           LDW     .D2T2   *-B5(4),B4       &#160;; |10|
+;*   3              LDW     .D1T1   *-A6(4),A3       &#160;; |10|
+;*   4              NOP             1
+;*   5      [ B0]   BDEC    .S2     C26,B0           &#160;; |8|
+;*   6              NOP             1
+;*   7              ADD     .S1X    B6,A3,A4         &#160;; |10|
+;*   8              ADD     .L1X    B4,A3,A5         &#160;; |10|
+;*   9              NOP             1
+;*  10              STNDW   .D1T1   A5:A4,*A7++(8)   &#160;; |10|
+;*  11             &#160;; BRANCHCC OCCURS {C26}          &#160;; |8|
+</pre>
+<p><br />
+The T address paths are now balanced. There is one less D unit than expected because the compiler chose to use a non-aligned double word store instead of two aligned single-word stores. Recall, non-aligned memory accesses use both T address paths but only one D unit.
+</p><p>When the loop is unrolled 2x, each iteration takes longer, but the loop now generates two results per iteration instead of one. Thus, the unrolled loop requires 1.5 cycles/result in the steady state, whereas the non-unrolled version requires 2 cycles/result.
+</p><p>Although manually unrolling a loop achieves the required results, it can be rather tedious for a large loop. An alternative is to let the compiler do this. If the compiler knows that the trip count for the loop (in this case <i>n</i>) is a multiple of 2, the compiler unrolls the loop automatically, if deemed profitable. To tell the compiler that the trip count is a multiple of 2, modify the MUST_ITERATE pragma preceding the loop. The MUST_ITERATE pragma has the syntax:
+</p>
+<pre>#pragma MUST_ITERATE(lower_bound, upper_bound, factor)
+</pre>
+<p>The lower bound is the lowest possible value for <i>n</i>. The upper bound is maximum possible value for <i>n</i>. The factor is a number that always divides <i>n</i>. Any of these parameters can be omitted.
+</p><p>Instead of unrolling the loop manually, simply modify the pragma instead:
+</p>
+<pre>void BasicLoop(int *restrict output,
+               int *restrict input1,
+               int *restrict input2,
+               int n)
+{
+    int i;
+    #pragma MUST_ITERATE(2,,2)
+    for (i=0; i&lt;n; i++) {
+        output[i] = input1[i] + input2[i];
+    }
+}
+</pre>
+<p>Now rebuild. The throughput is the same as when the loop was unrolled manually, namely 1.5 cycles/result. The extra line in the software pipelining information communicates that the compiler unrolled the loop 2x:
+</p>
+<pre>;*      Loop Unroll Multiple            &#160;: 2x
+</pre>
+<p>If the compiler had not deemed unrolling to be profitable (despite the use of the MUST_ITERATE pragma), one could force the compiler to unroll by inserting an UNROLL pragma in addition to the MUST_ITERATE pragma:
+</p>
+<pre>#pragma UNROLL(2)
+</pre>
+<p>Similarly, if the compiler chooses to unroll, and it is preferred not to have the loop unrolled, the loop can be preceded with
+</p>
+<pre>#pragma UNROLL(1)
+</pre>
+<p>The compiler usually succeeds at selecting the best unroll factor. Occasionally, however, you can do better by selecting the unrolling factor manually. The reason is that the compiler must make an educated guess up front (during high-level optimization) as to how many times to unroll (if any). The actual software-pipelining is not done until low-level optimization. At this point, the unrolling decision is not reversible. In contrast, as a user, you have the opportunity to iteratively try out various unrolling factors and pick the best one.
+</p><p>Loop pragmas must appear immediately before a loop, without any other intervening source code. Note the compiler may ignore an UNROLL pragma, unless there is an accompanying MUST_ITERATE pragma. The MUST_ITERATE pragma must note that the trip count is divisible by the unroll factor and that the minimum trip count is at least the unroll factor.
+</p><p>When targeting the C64x+, <i>beware of over-unrolling</i>. Otherwise, the loop may become too large for the compiler to exploit the loop buffer (see section 2.1 of <a href="http://www.ti.com/lit/pdf/spra666" class="extiw" title="tidoc:spra666">Hand Tuning Loops and Control Code on the TMS320C6000</a>). The loop buffer has power, code size, and performance benefits, but can only be used with loops that have an ii of 14 or less and a single scheduled iteration length of 48 or less.
+</p>
+<h1><span id="Exploiting_Wide_Loads_and_Stores_(SIMD)"></span><span class="mw-headline" id="Exploiting_Wide_Loads_and_Stores_.28SIMD.29">Exploiting Wide Loads and Stores (SIMD)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=6" title="Edit section: Exploiting Wide Loads and Stores (SIMD)">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Although a speed up of 4.7x has already been achieved, it is possible to do better. Note that the loop is still bottlenecked on the memory access instructions. Since the memory access instructions are balanced, unrolling more will not help. However, two improvements can be made:
+</p>
+<ul><li>Wider load instructions can be used instead of multiple loads to reduce the number of D unit resources.</li>
+<li>Aligned memory access instructions can be used instead of non-aligned memory access instructions to reduce the number of T address paths.</li></ul>
+<p>The C64x and C64x+ processors support both aligned and non-aligned double-word loads and stores. (Recall that the C67x and C67x+ support only aligned double-word loads and no double-word stores. The C62x supports only word-wide loads and stores.) If it is known that the function parameters are double-word aligned, switching to aligned, double-word memory accesses saves both D units and T address paths.
+</p><p>How does one get the compiler to select the double-word versions of the memory access instructions? There are two options: (1) use intrinsics, or (2) tell the compiler that the memory accesses are aligned. The second method is simpler, so it is best to try that first.
+</p><p>To tell the compiler that the memory accesses are aligned on double-word (64-bit) boundaries, use _nasserts() inside the function <i>just prior</i> to the loop of interest:
+</p>
+<pre>_nassert((int) input1&#160;% 8 == 0); // input1 is 64-bit aligned
+_nassert((int) input2&#160;% 8 == 0); // input2 is 64-bit aligned
+_nassert((int) output&#160;% 8 == 0); // output is 64-bit aligned
+</pre>
+<p>The _nassert() communicates that the pointer is aligned at the point in the function where the _nassert() is located. Although communicating alignment information once per function usually suffices, it is recommended to reassert the information immediately before each loop of interest.
+</p><p>If the data was not already aligned on a double-word boundary, it might be possible to force this alignment using the DATA_ALIGN pragma. _nasserts() make a statement about the value of variable at the point in the program where the _nassert() is located. From this information, the compiler can often derive the information about that variable at other locations in the program. For best performance, however, if the function contains multiple loops, it may be best to repeat the _nasserts() on entrance to each loop.
+</p><p>Rebuild. The resource bound, and consequently the ii, have been reduced to 2:
+</p>
+<pre>;*   SOFTWARE PIPELINE INFORMATION
+;*
+;*      Loop source line                &#160;: 13
+;*      Loop opening brace source line  &#160;: 13
+;*      Loop closing brace source line  &#160;: 15
+;*      Loop Unroll Multiple            &#160;: 2x
+;*      Known Minimum Trip Count        &#160;: 1
+;*      Known Max Trip Count Factor     &#160;: 1
+;*      Loop Carried Dependency Bound(^)&#160;: 0
+;*      Unpartitioned Resource Bound    &#160;: 2
+;*      Partitioned Resource Bound(*)   &#160;: 2
+;*      Resource Partition:
+;*                                A-side   B-side
+;*      .L units                     0        0
+;*      .S units                     0        1
+;*      .D units                     2*       1
+;*      .M units                     0        0
+;*      .X cross paths               2*       0
+;*      .T address paths             2*       1
+;*      Long read paths              0        0
+;*      Long write paths             0        0
+;*      Logical  ops (.LS)           0        0     (.L or .S unit)
+;*      Addition ops (.LSD)          2        0     (.L or .S or .D unit)
+;*      Bound(.L .S .LS)             0        1
+;*      Bound(.L .S .D .LS .LSD)     2*       1
+;*
+;*      Searching for software pipeline schedule at ...
+;*         ii = 2  Schedule found with 4 iterations in parallel
+...
+;*        SINGLE SCHEDULED ITERATION
+;*
+;*        C26:
+;*   0              LDDW    .D2T2   *B6++,B5:B4      &#160;; |14|
+;*     ||           LDDW    .D1T1   *A3++,A7:A6      &#160;; |14|
+;*   1              NOP             1
+;*   2      [ B0]   BDEC    .S2     C26,B0           &#160;; |13|
+;*   3              NOP             2
+;*   5              ADD     .S1X    B4,A6,A4         &#160;; |14|
+;*   6              ADD     .L1X    B5,A7,A5         &#160;; |14|
+;*   7              STDW    .D1T1   A5:A4,*A8++      &#160;; |14|
+;*   8             &#160;; BRANCHCC OCCURS {C26}          &#160;; |13|
+</pre>
+<p>In the steady state, the loop is now generating one result per cycle (more accurately, two results every two cycles), a 7x speedup, compared to the baseline.
+</p>
+<h1><span class="mw-headline" id="Rebalancing_Resources">Rebalancing Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=7" title="Edit section: Rebalancing Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Although the incorporation of wider loads and stores speeded up the loop, the loop is still bottlenecked on D units and T address paths. The number of memory accesses has been reduced to three. D units and the T address paths are again unbalanced. As before, further improvement can be achieved by unrolling one more time, if legal. Assuming that the trip count is indeed a multiple of 4, modify the MUST_ITERATE pragma to communicate this to the compiler. Rebuild. The resulting source code (which achieves optimal throughput) looks as follows:
+</p>
+<pre>void BasicLoop(int *restrict output,
+               int *restrict input1,
+               int *restrict input2,
+               int n)
+{
+    int i;
+
+    _nassert((int) input1&#160;% 8 == 0); // input1 is 8-byte aligned
+    _nassert((int) input2&#160;% 8 == 0); // input2 is 8-byte aligned
+    _nassert((int) output&#160;% 8 == 0); // output is 8-byte aligned
+
+    #pragma MUST_ITERATE(4,,4)       // n &gt;= 4, n&#160;% 4 = 0
+    for (i=0; i&lt;n; i++) {
+        output[i]   = input1[i] + input2[i];
+    }
+}
+</pre>
+<p>The software-pipelining information for the resulting assembly code, which yields one result every 0.75 cycles (or 4 results every 3 cycles), is as follows:
+</p>
+<pre>;*   SOFTWARE PIPELINE INFORMATION
+;*
+;*      Loop source line                &#160;: 13
+;*      Loop opening brace source line  &#160;: 13
+;*      Loop closing brace source line  &#160;: 15
+;*      Loop Unroll Multiple            &#160;: 4x
+;*      Known Minimum Trip Count        &#160;: 1
+;*      Known Max Trip Count Factor     &#160;: 1
+;*      Loop Carried Dependency Bound(^)&#160;: 0
+;*      Unpartitioned Resource Bound    &#160;: 3
+;*      Partitioned Resource Bound(*)   &#160;: 3
+;*      Resource Partition:
+;*                                A-side   B-side
+;*      .L units                     0        0
+;*      .S units                     1        0
+;*      .D units                     3*       3*
+;*      .M units                     0        0
+;*      .X cross paths               2        2
+;*      .T address paths             3*       3*
+;*      Long read paths              0        0
+;*      Long write paths             0        0
+;*      Logical  ops (.LS)           0        0     (.L or .S unit)
+;*      Addition ops (.LSD)          2        2     (.L or .S or .D unit)
+;*      Bound(.L .S .LS)             1        0
+;*      Bound(.L .S .D .LS .LSD)     2        2
+;*
+;*      Searching for software pipeline schedule at ...
+;*         ii = 3   Schedule found with 3 iterations in parallel
+...
+;*        SINGLE SCHEDULED ITERATION
+;*
+;*        C26:
+;*   0              LDDW    .D2T2   *B5++(16),B9:B8  &#160;; |14|
+;*     ||           LDDW    .D1T1   *A16++(16),A7:A6 &#160;; |14|
+;*   1              LDDW    .D2T2   *-B5(8),B7:B6    &#160;; |14|
+;*     ||           LDDW    .D1T1   *-A16(8),A9:A8   &#160;; |14|
+;*   2              NOP             1
+;*   3      [ A0]   BDEC    .S1     C26,A0           &#160;; |13|
+;*   4              NOP             1
+;*   5              ADD     .S1X    B9,A7,A5         &#160;; |14|
+;*   6              ADD     .L1X    B8,A6,A4         &#160;; |14|
+;*     ||           ADD     .L2X    B6,A8,B6         &#160;; |14|
+;*   7              ADD     .L2X    B7,A9,B7         &#160;; |14|
+;*   8              STDW    .D1T1   A5:A4,*A3++(16)  &#160;; |14|
+;*     ||           STDW    .D2T2   B7:B6,*++B4(16)  &#160;; |14|
+;*   9             &#160;; BRANCHCC OCCURS {C26}          &#160;; |13|
+</pre>
+<p>The loop has been sped up 9.3x compared to the original source code with no modifications other than the addition of restrict qualifiers, MUST_ITERATE pragmas and _nasserts().
+</p><p>For this example, only two of the three fields of the MUST_ITERATE pragma are exploited. The third (middle) field, which communicates an upper bound on the trip count, can also be useful for performance tuning. There are certain optimizations that are profitable when the loop trip count is large but can hurt performance when the trip count is small. By default, the compiler assumes that the expected trip count is large. Hence, if the upper bound on the trip count is small, it is best to communicate this to the compiler.
+</p>
+<h1><span class="mw-headline" id="Reference">Reference</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;section=8" title="Edit section: Reference">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This article is derived from the application note <a href="http://www.ti.com/lit/pdf/spra666" class="extiw" title="tidoc:spra666">Hand Tuning Loops and Control Code on the TMS320C6000</a>.
+</p><p><br />
+</p>
+<hr />
+<p><a href="C6000_Compiler__Tuning_Software_Pipelined_Loops/zh.html" class="mw-redirect" title="CN C6000 Compiler: Tuning Software Pipelined Loops">CN C6000 Compiler: Tuning Software Pipelined Loops</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130130223
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.064 seconds
+Real time usage: 0.067 seconds
+Preprocessor visited node count: 282/1000000
+Preprocessor generated node count: 596/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 12384/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4807-0!canonical and timestamp 20201130130223 and revision id 181993
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C6000 Compiler: Tuning Software Pipelined Loops</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;oldid=181993">https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;oldid=181993</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C6000+Compiler%3A+Tuning+Software+Pipelined+Loops" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C6000_Compiler__Tuning_Software_Pipelined_Loops.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C6000_Compiler__Tuning_Software_Pipelined_Loops.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C6000_Compiler__Tuning_Software_Pipelined_Loops.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C6000_Compiler__Tuning_Software_Pipelined_Loops.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;oldid=181993" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C6000_Compiler:_Tuning_Software_Pipelined_Loops&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 21 July 2014, at 05:46.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.064","walltime":"0.067","ppvisitednodes":{"value":282,"limit":1000000},"ppgeneratednodes":{"value":596,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":12384,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130130223","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":226});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_Compiler:_Tuning_Software_Pipelined_Loops by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:36 GMT -->
+</html>

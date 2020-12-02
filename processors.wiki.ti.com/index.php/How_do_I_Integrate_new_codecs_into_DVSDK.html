@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/How_do_I_Integrate_new_codecs_into_DVSDK by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:33:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>How do I Integrate new codecs into DVSDK - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"How_do_I_Integrate_new_codecs_into_DVSDK","wgTitle":"How do I Integrate new codecs into DVSDK","wgCurRevisionId":181637,"wgRevisionId":181637,"wgArticleId":2298,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["OMAP35x","DM644x","DM6467","OMAPL1","DVEVM","DVSDK","Codec Engine"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"How_do_I_Integrate_new_codecs_into_DVSDK","wgRelevantArticleId":2298,"wgRequestId":"118ce8db9ca1192bf0ad831e","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-How_do_I_Integrate_new_codecs_into_DVSDK rootpage-How_do_I_Integrate_new_codecs_into_DVSDK skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">How do I Integrate new codecs into DVSDK</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#How_to_Download_MP3_Decoder"><span class="tocnumber">2</span> <span class="toctext">How to Download MP3 Decoder</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#How_to_install_mp3_package"><span class="tocnumber">3</span> <span class="toctext">How to install mp3 package</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#On_Linux_hosts"><span class="tocnumber">3.1</span> <span class="toctext">On Linux hosts</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#On_Windows_hosts"><span class="tocnumber">3.2</span> <span class="toctext">On Windows hosts</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Changes_for_the_Codec_Server"><span class="tocnumber">4</span> <span class="toctext">Changes for the Codec Server</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Applying_a_patch_to_an_existing_codec-server_.28for_Linux_hosts.29"><span class="tocnumber">4.1</span> <span class="toctext">Applying a patch to an existing codec-server (for Linux hosts)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Integration_of_a_Codec_Package_to_a_Server.2FCombo_Package"><span class="tocnumber">4.2</span> <span class="toctext">Integration of a Codec Package to a Server/Combo Package</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#On_Linux_hosts_2"><span class="tocnumber">4.2.1</span> <span class="toctext">On Linux hosts</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#On_Windows_hosts_2"><span class="tocnumber">4.2.2</span> <span class="toctext">On Windows hosts</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Modifications_inside_the_Codec_Server"><span class="tocnumber">4.3</span> <span class="toctext">Modifications inside the Codec Server</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Demonstration_applications_changes_.28Linux_DVSDKs_only.29"><span class="tocnumber">5</span> <span class="toctext">Demonstration applications changes (Linux DVSDKs only)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Changes_in_the_server_name"><span class="tocnumber">5.1</span> <span class="toctext">Changes in the server name</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#A_new_codec_is_added_to_the_server"><span class="tocnumber">5.2</span> <span class="toctext">A new codec is added to the server</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Integrating_new_files_into_the_interface_application"><span class="tocnumber">5.3</span> <span class="toctext">Integrating new files into the interface application</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#DirectShow_Filter_changes_.28WinCE_DVSDKs_only.29"><span class="tocnumber">6</span> <span class="toctext">DirectShow Filter changes (WinCE DVSDKs only)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#If_there_are_changes_in_the_server_name"><span class="tocnumber">6.1</span> <span class="toctext">If there are changes in the server name</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Troubleshooting"><span class="tocnumber">7</span> <span class="toctext">Troubleshooting</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#See_Also"><span class="tocnumber">8</span> <span class="toctext">See Also</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This article is generally applicable to any codec package. However it focuses on adding and integrating an MP3 decoder into the DVSDK stack. This requires updates to: -
+</p>
+<ul><li>[required] codec servers (aka combo)</li>
+<li>[optional] demo application source code - only applicable to Linux DVSDKs</li>
+<li>[optional] demo configuration file (cfg) - only applicable to Linux DVSDKs</li></ul>
+<p>The good thing is that <a href="XDM_1.html" title="XDM 1.x Semantics">XDM 1.x codecs</a> (IAUDDEC1, IVIDDEC2 etc) are generally plug and play, within the same class, from a base parameters perspective so per-codec-custom-code is rarely required (again assuming base parameters).
+</p>
+<h2><span class="mw-headline" id="How_to_Download_MP3_Decoder">How to Download MP3 Decoder</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=2" title="Edit section: How to Download MP3 Decoder">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The TI MP3 decoder is a generic c64+ audio decoder. What this means is that it can run on any c64+ or c674+ platform i.e. the same codec can be (and is ) used on DM644x, DM646x, OMAP353x, OMAPL13x etc.
+</p><p>The MP3 Decoder package is available for download at the <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/codecs/C64XPlus_Audio/index_FDS.html">C64XPlus_Audio_Codecs Product Download Page</a> as "MP3 Decoder".
+</p><p>As you will observe the package name has "c64xplus" embedded inside it i.e. it is a generic MP3 c64+ decoder. <b>Hence you can use this link to download &amp; integrate this codec on non-OMAP3 platforms such as DM644x, DM646x, OMAPL13x</b>. To reiterate, it is the same codec package on both OMAP3 and Davinci DVSDK sites.
+</p><p>The codec can be downloaded and integrated to an existing Codec server package as described below.
+</p><p>Note that if you wish to use the codec-package outside of Codec Engine then check out <a href="How_to_use_a_RTSC_codec_package_in_a_non-RTSC_environment.html" title="How to use a RTSC codec package in a non-RTSC environment">How_to_use_a_RTSC_codec_package_in_a_non-RTSC_environment</a>.
+</p>
+<h2><span class="mw-headline" id="How_to_install_mp3_package">How to install mp3 package</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=3" title="Edit section: How to install mp3 package">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="On_Linux_hosts">On Linux hosts</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=4" title="Edit section: On Linux hosts">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>1. Once you have downloaded the mp3 package c64xplus_mp3dec_1_31_001_production.bin use the following command to install the package:
+</p>
+<pre>   <span style="color: Green">./c64xplus_mp3dec_1_31_001_production.bin</span>
+</pre>
+<p>The Binary installation will result in a tar file dm6446_mp3dec_1_31_001_production.tar(dm6446 here does not mean that it can only be used for DM6446 platform but as mentioned above this can be used for other platforms as well e.g. OMAP35xx platform.)
+</p><p>2. To untar dm6446_mp3dec_1_31_001_production.tar use the following command:
+</p>
+<pre>  <span style="color: Green">tar -xvf dm6446_mp3dec_1_31_001_production.tar</span>
+</pre>
+<h3><span class="mw-headline" id="On_Windows_hosts">On Windows hosts</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=5" title="Edit section: On Windows hosts">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>1. Once you have downloaded the mp3 package c64xplus_mp3dec_1_31_001_production.exe run it to install the package. The setup program will guide you though the installation.
+</p><p>The installation will result in a tar file dm6446_mp3dec_1_31_001_production.tar(dm6446 here does not mean that it can only be used for DM6446 platform but as mentioned above this can be used for other platforms as well e.g. OMAP35xx platform.)
+</p><p>2. To untar dm6446_mp3dec_1_31_001_production.tar, use a utility such as WinZip (<a rel="nofollow" class="external free" href="http://www.winzip.com/index.htm">http://www.winzip.com/index.htm</a>) to uncompress it.
+</p>
+<h2><span class="mw-headline" id="Changes_for_the_Codec_Server">Changes for the Codec Server</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=6" title="Edit section: Changes for the Codec Server">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A <a href="Codec_Engine_Server_Integrator_User%27s_Guide.html#What_is_a_Codec_Server.3F" title="Codec Engine Server Integrator User&#39;s Guide">Codec Server</a> is designed to allow the Codec Engine to access the different codecs that are designed to run on the DSP.  A Codec Server is usually packaged inside a package that contains the different codec packages being used, alongside the definitions for the server (or servers) that are defined to use these particular codecs.  The packages are usually named using either of the following naming conventions: <tt>&lt;PlatformName&gt;_dvsdk_combos_&lt;version&gt;</tt> or <tt>cs&lt;CodecServerNumber&gt;_&lt;PlatformName&gt;_&lt;version&gt;</tt> (e.g. <i>omap3530_dvsdk_combos_3_16</i> or <i>cs1omap3530_1_00_01</i>); the following sections cover the different elements needed in order to integrate a codec to a server of the first type.
+</p>
+<h3><span id="Applying_a_patch_to_an_existing_codec-server_(for_Linux_hosts)"></span><span class="mw-headline" id="Applying_a_patch_to_an_existing_codec-server_.28for_Linux_hosts.29">Applying a patch to an existing codec-server (for Linux hosts)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=7" title="Edit section: Applying a patch to an existing codec-server (for Linux hosts)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There may exist a patch to enable support for 1+ additional codecs integrated into a given codec combo.
+</p><p>For example <a rel="nofollow" class="external text" href="http://cgit.openembedded.org/cgit.cgi/openembedded/tree/recipes/ti/files/mp3dec_cs1omap3530.patch">mp3dec_cs1omap3530.patch</a> adds MP3 Decode support to the Codec Server 1 OMAP3530 package. In essence it does all the steps highlighted in <a href="How_do_I_Integrate_new_codecs_into_DVSDK.html#Modifications_inside_the_Codec_Server" title="How do I Integrate new codecs into DVSDK">How do I Integrate new codecs into DVSDK#Modifications inside the Codec Server</a> automatically.
+</p><p>If no patch exists for your platform or codec it may still be of use to refer to an existing one as a guideline.
+</p>
+<h3><span id="Integration_of_a_Codec_Package_to_a_Server/Combo_Package"></span><span class="mw-headline" id="Integration_of_a_Codec_Package_to_a_Server.2FCombo_Package">Integration of a Codec Package to a Server/Combo Package</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=8" title="Edit section: Integration of a Codec Package to a Server/Combo Package">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="On_Linux_hosts_2">On Linux hosts</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=9" title="Edit section: On Linux hosts">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>After installing the Codec Package, you need to copy this package into the Codec Server package. The key directory for the codec package is the one that contains the XDC file for the codec (i.e. MP3DEC.xdc for a MP3 Decoder package) i.e. /&lt;&gt;/packages/ti/sdo/codecs/mp3dec. Use the following command for copy:
+</p>
+<pre>   <span style="color: Green">cp -r /&lt;&gt;/packages/ti/sdo/codecs/mp3dec /&lt;&gt;/CS/packages/ti/sdo/codecs/.  </span>
+</pre>
+<p><b>NOTE</b>: In the above command CS is your codec server install directory.
+</p><p><b>NOTE</b>: For a TI distributed package this can be performed by copying the packages directory of the Codec package into the Codec Server directory which has the following structure:
+</p>
+<pre>   <span style="color: Green">packages/ti/sdo/codecs</span>
+</pre>
+<p>An alternative method is to use symbolic links as shown in <a href="Codec_FAQ.html#How_do_I_flip_between_evaluation_and_production_codecs.3F" title="Codec FAQ">this article</a>.
+</p>
+<h4><span class="mw-headline" id="On_Windows_hosts_2">On Windows hosts</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=10" title="Edit section: On Windows hosts">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>After installing the Codec Package, you need to copy this package into the Codec Server package. The key directory for the codec package is the one that contains the XDC file for the codec (i.e. MP3DEC.xdc for a MP3 Decoder package) i.e. /&lt;&gt;/packages/ti/sdo/codecs/mp3dec. Use the following command for copy:
+</p>
+<pre>   <span style="color: Green">xcopy /E /I &lt;path to mp3 package&gt;/packages/ti/sdo/codecs/mp3dec &lt;path to codec server&gt;/packages/ti/sdo/codecs/mp3dec  </span>
+</pre>
+<h3><span class="mw-headline" id="Modifications_inside_the_Codec_Server">Modifications inside the Codec Server</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=11" title="Edit section: Modifications inside the Codec Server">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Once the Codec Package is integrated inside the <a href="Codec_Servers_FAQ.html" title="Codec Servers FAQ">Codec Server</a>, the server needs to be configured in order to be able to use the new codec.
+</p><p>First, the configuration (cfg) file that defines the server needs to be modified to add the new codec. This file is usually located under the <tt>server(s)</tt> directory inside the particular server name.  (i.e. <tt>decode/decode.cfg</tt>).
+</p><p><b>NOTE</b>: Sometimes the configuration file could be divided into two separate files to differentiate the parameters that are relative to the server or to the codecs itself named <tt>server.cfg</tt> and <tt>codec.cfg</tt> respectively.  In the case the latter file contains the information that needs to be modified.
+</p>
+<ol><li>Declare usage of the new codec module e.g</li></ol>
+<p>&lt;syntaxhighlight lang="javascript"&gt;
+var MP3DEC = xdc.useModule('ti.sdo.codecs.mp3dec.ce.MP3DEC');
+&lt;/syntaxhighlight&gt;
+</p>
+<ol><li>The codec package might contain either an evaluation or a production version of the codec, in each case a watermark entry needs to be defined (sometimes it is defined in the codec package itself).  Continuing with the same variable defined before:&lt;syntaxhighlight lang="javascript"&gt;</li></ol>
+<p>MP3DEC.alg.watermark      = true; /*if it is evaluation version */&lt;/syntaxhighlight&gt; or &lt;syntaxhighlight lang="javascript"&gt;
+MP3DEC.alg.watermark      = false; /*if it is production version.*/&lt;/syntaxhighlight&gt;
+</p>
+<ol><li value="3">The XDC file in the codec directory (i.e. MP3DEC.xdc) contains the different sections that are defined in the algorithm that require to be mapped to defined memory sections by the server. Usually this memory definitions are contained in the TCF file (<i>server.tcf</i>).  For example to fulfill the requirements for the MP3 decoder algorithm, and continuing with the variable defined before, the following entries are added to the configuration file:
+&lt;syntaxhighlight lang="javascript"&gt;
+MP3DEC.alg.codeSection  = "DDR2";
+MP3DEC.alg.dataSection  = "DDR2";
+MP3DEC.alg.udataSection = "DDR2";
+&lt;/syntaxhighlight&gt;
+</li>
+<li value="4">Add the Algorithm to the server by adding a new set to the <i>Server.algs</i> array.  For example to add the MP3 decoder algorithm, the following entry needs to be added  (See <a href="#SeeAlso">3</a> for notes about priority and grouping).
+
+&lt;syntaxhighlight lang="javascript"&gt;
+     {name: "mp3dec", mod: MP3DEC,threadAttrs: {
+         stackMemId: 0, priority: Server.MINPRI + 2}, groupId&#160;: 1,
+     }
+&lt;/syntaxhighlight&gt;
+<b>NOTE</b>: Ensure that Audio/Speech Codecs have the highest priority of the algorithms since they have higher framerates than video algorithms hence need to preempt video algorithms from a BIOS TSK thread perspective.
+</li>
+<li value="5">
+To minimize any errors during the building of the Server, add the codec to the validation entries in <tt>package.xs</tt> file of the server. (This file might not be defined in all servers), following the same example:
+&lt;syntaxhighlight lang="javascript"&gt;
+         validate_one_codec( "ti.sdo.codecs.mp3dec", "MP3DEC" );
+&lt;/syntaxhighlight&gt;
+</li>
+</ol>
+<p>Now you can rebuild the server and the new codec will be part of the server. You will need to refer to your DVSDK documentation to find out how to rebuild the server.
+</p>
+<h2><span id="Demonstration_applications_changes_(Linux_DVSDKs_only)"></span><span class="mw-headline" id="Demonstration_applications_changes_.28Linux_DVSDKs_only.29">Demonstration applications changes (Linux DVSDKs only)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=12" title="Edit section: Demonstration applications changes (Linux DVSDKs only)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The current demo applications delivered as part of the DVSDK package are flexible enough to accommodate different codecs that are part of the Codec Server being used.  However the following sections describe different possibilities that can be encountered when changing the Codec Server, either because a new server is used, or because the server was modified to add or remove codecs.
+</p>
+<h3><span class="mw-headline" id="Changes_in_the_server_name">Changes in the server name</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=13" title="Edit section: Changes in the server name">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If the Codec Server name is different than the name of the previous version the following change is required:
+</p><p>The demo applications contain a Configuration file named <tt>application</tt>.cfg (e.g. decode.cfg), in which the information of the Engine configuration is supplied, for example:
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+var demoEngine = Engine.createFromServer(
+</p>
+<pre>   "decode",
+   "./decodeCombo.x64P",
+   "ti.sdo.servers.decode"
+   );
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>See <a href="Configuring_Codec_Engine_in_Arm_apps_with_createFromServer.html" title="Configuring Codec Engine in Arm apps with createFromServer">this wiki article</a> for complete details on <tt>createFromServer</tt> usage.
+</p>
+<ul><li>The first entry <i>decode</i>, refers to the internal name used by the application to specify the engine that needs to be used, and this name can remain unchanged.</li>
+<li>The second entry, refers to the name and path of the DSP Server binary file (with respect to the third entry).  This name is also part of the Codec Server Release Notes.</li>
+<li>Finally, the third entry, refers to the package name.  This information is part of the Release Notes.</li></ul>
+<h3><span class="mw-headline" id="A_new_codec_is_added_to_the_server">A new codec is added to the server</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=14" title="Edit section: A new codec is added to the server">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In order to know if the demo application being used supports or not the file extension and/or the codec is present in the server, it can be executed using the file needed as the input parameter.
+If it does not support the file extension or the codec is not yet associated with any extension, the application will fail and the following errors are returned respectively (In this case decoding of an MP3 file was attempted as an example)
+</p>
+<pre>Unknown audio file extension: .mp3
+</pre>
+<pre>Error: Failed to create audio decoder mp3dec
+</pre>
+<p>The <i>codecs.c</i> file contains the list of encoders or decoders supported (currently audio, video and speech codecs are supported).  The Codec structure looks like this:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+typedef struct Codec {
+</p>
+<pre>   /* String name of codec for CE to locate it */
+   Char    *codecName;
+   /* The string to show on the UI for this codec */
+   Char    *uiString;
+   /* NULL terminated list of file extensions */
+   Char   **fileExtensions;
+   /* Params to use with codec, if NULL defaults are used */
+   Void    *params;
+   /* Dynamic params to use with codec, if NULL defaults are used */
+   Void    *dynParams;
+</pre>
+<p>} Codec;
+&lt;/syntaxhighlight&gt;
+</p><p>Therefore, if support for MP3 decoding needs to be added to the codec, the following can be added to the array group:
+&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   {
+       "mp3dec",
+       "MP3",
+       mp3Extensions,
+       NULL,
+       NULL
+   }
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+where
+&lt;syntaxhighlight lang="c"&gt;
+static Char *mp3Extensions[] = { ".mp3", NULL };
+&lt;/syntaxhighlight&gt;
+At this point the application is ready to use the newly created server.
+</p>
+<h3><span class="mw-headline" id="Integrating_new_files_into_the_interface_application">Integrating new files into the interface application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=15" title="Edit section: Integrating new files into the interface application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The interface application is used as starting point to show the capabilities of the EVM, either by using a Remote Control or Buttons in the platform to drive different demonstrations included in the DVSDK release, or a customer created application.
+</p><p><i>Note</i> - recall that you don't need the interface application to test out the newly added codec. The demos have a keyboard interface (-k) option that serve the same purpose as the interface app in a low-touch simple, portable manner.
+</p><p>For the decode demo, a set of different file combinations are presented to the user in order to show different video clips and audio files using different decoders which can be selected via the Remote Control or Buttons on the platform.  To include a new file that is encoded in a format used by a new codec in the Codec Server, into the interface menu, the file <i>Dec.c</i> in the <tt>interface</tt> directory needs to be modified:
+</p>
+<ul><li>Increase the number of combos being used by the system as appropriately, e.g. To set the number of combinations to 6, change this definition:</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<ol><li>define NUM_FILE_COMBOS           6</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Update the <b>File Combo</b> structure to add the new structure, by adding the set to the Array present in the same file.  For example to add a combination of the H264 Video version of the DaVinci effect video clip with the MP3 audio source, the following set needs to be added:</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+{
+</p>
+<pre>   "data/videos/davincieffect_ntsc_1.264",
+   "data/sounds/davincieffect.mp3",
+   "1"
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<dl><dd>Where the last entry refers to the video resolution (NTSC in this case)</dd></dl>
+<h2><span id="DirectShow_Filter_changes_(WinCE_DVSDKs_only)"></span><span class="mw-headline" id="DirectShow_Filter_changes_.28WinCE_DVSDKs_only.29">DirectShow Filter changes (WinCE DVSDKs only)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=16" title="Edit section: DirectShow Filter changes (WinCE DVSDKs only)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The DirectShow filters delivered as part of the DVSDK package are structured to facilitate additional support for different codecs that are part of the Codec Server being used. For the MP3 codec, an MP3 decode filter is provided starting with version 1.10.00 of the filters. Refer to the DShow filters' release notes for additional information on rebuilding the TIMM library against the new server and enabling the MP3 decode filter.
+</p><p>For other codecs, you will need to write your own decode filter. See <a href="TI_DirectShow_Filters.html#Creating_a_filter_for_a_new_codec.2Falgorithm" title="TI DirectShow Filters">TI_DirectShow_Filters#Creating_a_filter_for_a_new_codec.2Falgorithm</a> for some guidelines.
+</p>
+<h3><span class="mw-headline" id="If_there_are_changes_in_the_server_name">If there are changes in the server name</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=17" title="Edit section: If there are changes in the server name">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If the Codec Server name is different than the name of the previous version the following change is required:
+</p><p>The DirectShow filters' TIMM library contains a Configuration file named timm.cfg, in which the information of the Engine configuration is supplied, for example:
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+var cs = Engine.createFromServer(
+</p>
+<pre>   "cs",
+   "./bin/cs.x64P",
+   "ti.sdo.server.cs"
+   );
+</pre>
+<p>cs.server = "windows\\\\cs.x64P";
+&lt;/syntaxhighlight&gt;
+</p><p>See <a href="Configuring_Codec_Engine_in_Arm_apps_with_createFromServer.html" title="Configuring Codec Engine in Arm apps with createFromServer">this wiki article</a> for complete details on <tt>createFromServer</tt> usage.
+</p>
+<ul><li>The first argument <i>cs</i>, refers to the internal name used by the filters to specify the engine that needs to be used, and this name can remain unchanged.</li>
+<li>The second argument, refers to the name and path of the DSP Server binary file (with respect to the third entry).  This name is also part of the Codec Server Release Notes.</li>
+<li>Finally, the third argument, refers to the server package name.  This information is part of the Release Notes.</li></ul>
+<p>cs.server designates the path to the DSP Server binary file on the target image in NK.bin.
+</p>
+<h2><span class="mw-headline" id="Troubleshooting">Troubleshooting</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=18" title="Edit section: Troubleshooting">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>In rebuilding the combos if you hit this error...</li></ul>
+<pre>gmake[1]: `.interfaces' is up to date.
+======== .interfaces [packages/ti/sdo/codecs/mp3dec] ========
+package.mak:17: *** target pattern contains no `%'.  Stop.
+gmake: *** [packages/ti/sdo/codecs/mp3dec,.interfaces] Error 2
+make: *** [.all-packages] Error 2
+</pre>
+<p>...then you should probably do a courtesy <tt>make clean</tt> from the top-level codec-combos directory and try <tt>make</tt> again.
+</p>
+<ul><li>In rebuilding the combos if you hit this error...</li></ul>
+<pre>undefined                        first referenced
+ symbol                              in file
+---------                        ----------------
+_MP3DEC_TII_IMP3DEC              package/cfg/decodeCombo_x64P.o64P
+&gt;&gt;   error: symbol referencing errors - 'decodeCombo.x64P' not built
+</pre>
+<p>...then double check that you are indeed linking in the codec properly. Scroll up the build log. If you see something like this...
+</p>
+<pre>will link with ti.sdo.codecs.mp3dec:null
+</pre>
+<p>...then you have a problem!
+</p><p>2 things to check in this scenario
+(a) ensure you got the syntax right in your cfg file with the <tt>useModule</tt> declaration.
+(b) make sure XDCARGS="prod" (as opposed to "eval") in the makefile for 'production' codecs. Except for some older Linux DVSDKs prior to Linux DVSDK 2.0, all TI codecs are now production codecs i.e. not watermarked.
+</p>
+<h2><span class="mw-headline" id="See_Also">See Also</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit&amp;section=19" title="Edit section: See Also">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li><a href="Configuring_Codec_Engine_in_Arm_apps_with_createFromServer.html" title="Configuring Codec Engine in Arm apps with createFromServer">Configuring_Codec_Engine_in_Arm_apps_with_createFromServer</a></li>
+<li><a href="Creating_and_Building_codec_combos_in_Windows.html" title="Creating and Building codec combos in Windows">Creating_and_Building_codec_combos_in_Windows</a></li>
+<li><a href="RTSC_Server_Package_Wizard_FAQ.html#How_do_I_create_a_server_combo.3F" title="RTSC Server Package Wizard FAQ">RTSC_Server_Package_Wizard_FAQ#How_do_I_create_a_server_combo.3F</a></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130141930
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.039 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 127/1000000
+Preprocessor generated node count: 196/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 725/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:2298-0!canonical and timestamp 20201130141930 and revision id 181637
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>How do I Integrate new codecs into DVSDK</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>How do I Integrate new codecs into DVSDK</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>How do I Integrate new codecs into DVSDK</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>How do I Integrate new codecs into DVSDK</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>How do I Integrate new codecs into DVSDK</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>How do I Integrate new codecs into DVSDK</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>How do I Integrate new codecs into DVSDK</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>How do I Integrate new codecs into DVSDK</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>How do I Integrate new codecs into DVSDK</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;oldid=181637">https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;oldid=181637</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li><li><a href="Category_DM644x.html" title="Category:DM644x">DM644x</a></li><li><a href="Category_DM6467.html" title="Category:DM6467">DM6467</a></li><li><a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="Category_DVEVM.html" title="Category:DVEVM">DVEVM</a></li><li><a href="Category_DVSDK.html" title="Category:DVSDK">DVSDK</a></li><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=How+do+I+Integrate+new+codecs+into+DVSDK" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="How_do_I_Integrate_new_codecs_into_DVSDK.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_How_do_I_Integrate_new_codecs_into_DVSDK.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="How_do_I_Integrate_new_codecs_into_DVSDK.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/How_do_I_Integrate_new_codecs_into_DVSDK.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/How_do_I_Integrate_new_codecs_into_DVSDK.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;oldid=181637" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=How_do_I_Integrate_new_codecs_into_DVSDK&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 17:48.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.039","walltime":"0.039","ppvisitednodes":{"value":127,"limit":1000000},"ppgeneratednodes":{"value":196,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":725,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130141930","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":234});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/How_do_I_Integrate_new_codecs_into_DVSDK by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:33:05 GMT -->
+</html>

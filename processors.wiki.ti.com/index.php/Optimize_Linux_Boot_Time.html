@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:30:03 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Optimize Linux Boot Time - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Optimize_Linux_Boot_Time","wgTitle":"Optimize Linux Boot Time","wgCurRevisionId":114351,"wgRevisionId":114351,"wgArticleId":9654,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM437x","AM335x","AM35x","AM37x","AM1x","AM18x","PSP","Linux","OMAP35x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Optimize_Linux_Boot_Time","wgRelevantArticleId":9654,"wgRequestId":"830e14a0683229852b42641b","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Optimize_Linux_Boot_Time rootpage-Optimize_Linux_Boot_Time skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Optimize Linux Boot Time</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br />
+</p>
+<div style="width:800px; text-align:justify;"> 
+<div style="display:block; clear: both; margin: 10px 0px; padding: 0px; background-color: #ee1d23; text-align:right;"><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a></div>
+<div style="display:block; margin: 5px 0px; padding: 2px 5px; font-size:1.5em; font-weight:bold; text-align:left;">Optimizing boot time on Linux based systems</div>
+<div style="display:block; margin: 5px 0px; padding: 2px; color: #666666; font-size:1.0em; font-weight:bold; text-align:right;">Sanjeev Premi</div>
+<p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext"><b>Introduction</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Objectives"><span class="tocnumber">1.1</span> <span class="toctext"><b>Objectives</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-3"><a href="#Use-case_1:_Boot_from_SDHC_Card"><span class="tocnumber">1.1.1</span> <span class="toctext"><b>Use-case 1: Boot from SDHC Card</b></span></a></li>
+<li class="toclevel-3 tocsection-4"><a href="#Use-case_2:_Boot_from_NAND"><span class="tocnumber">1.1.2</span> <span class="toctext"><b>Use-case 2: Boot from NAND</b></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Understanding_the_boot_sequence"><span class="tocnumber">2</span> <span class="toctext"><b>Understanding the boot sequence</b></span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Measuring_boot_time"><span class="tocnumber">3</span> <span class="toctext"><b>Measuring boot time</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Identify_markers"><span class="tocnumber">3.1</span> <span class="toctext"><b>Identify markers</b></span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Profiling_the_bootloaders"><span class="tocnumber">3.2</span> <span class="toctext"><b>Profiling the bootloaders</b></span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Profiling_the_Linux_Kernel"><span class="tocnumber">3.3</span> <span class="toctext"><b>Profiling the Linux Kernel</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Enable_timestamps_on_kernel_prints"><span class="tocnumber">3.3.1</span> <span class="toctext"><b>Enable timestamps on kernel prints</b></span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Instrument_kernel_initialization"><span class="tocnumber">3.3.2</span> <span class="toctext"><b>Instrument kernel initialization</b></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Areas_of_optimization"><span class="tocnumber">4</span> <span class="toctext"><b>Areas of optimization</b></span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Techniques_for_optimization"><span class="tocnumber">5</span> <span class="toctext"><b>Techniques for optimization</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="#Shedding_the_bulk"><span class="tocnumber">5.1</span> <span class="toctext"><b>Shedding the bulk</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-15"><a href="#x-loader"><span class="tocnumber">5.1.1</span> <span class="toctext"><b>x-loader</b></span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#u-boot"><span class="tocnumber">5.1.2</span> <span class="toctext"><b>u-boot</b></span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Linux_kernel"><span class="tocnumber">5.1.3</span> <span class="toctext"><b>Linux kernel</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-18"><a href="#Deferred_initialization"><span class="tocnumber">5.2</span> <span class="toctext"><b>Deferred initialization</b></span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Build_for_product"><span class="tocnumber">5.3</span> <span class="toctext"><b>Build for product</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#x-loader_2"><span class="tocnumber">5.3.1</span> <span class="toctext"><b>x-loader</b></span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#u-boot_2"><span class="tocnumber">5.3.2</span> <span class="toctext"><b>u-boot</b></span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#Linux_kernel_2"><span class="tocnumber">5.3.3</span> <span class="toctext"><b>Linux kernel</b></span></a></li>
+<li class="toclevel-3 tocsection-23"><a href="#Filesystem"><span class="tocnumber">5.3.4</span> <span class="toctext"><b>Filesystem</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-24"><a href="#Be_quiet"><span class="tocnumber">5.4</span> <span class="toctext"><b>Be quiet</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-25"><a href="#x-loader_3"><span class="tocnumber">5.4.1</span> <span class="toctext"><b>x-loader</b></span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#u-boot_3"><span class="tocnumber">5.4.2</span> <span class="toctext"><b>u-boot</b></span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Linux_kernel_3"><span class="tocnumber">5.4.3</span> <span class="toctext"><b>Linux kernel</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-28"><a href="#Avoid_duplication"><span class="tocnumber">5.5</span> <span class="toctext"><b>Avoid duplication</b></span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Leverage_the_SoC_speed"><span class="tocnumber">5.6</span> <span class="toctext"><b>Leverage the SoC speed</b></span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Don.27t_forget_to_remove_instrumentation"><span class="tocnumber">5.7</span> <span class="toctext"><b>Don't forget to remove instrumentation</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-31"><a href="#Doing_it_yourself"><span class="tocnumber">6</span> <span class="toctext"><b>Doing it yourself</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-32"><a href="#Getting_sources"><span class="tocnumber">6.1</span> <span class="toctext"><b>Getting sources</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-33"><a href="#x-loader_4"><span class="tocnumber">6.1.1</span> <span class="toctext"><b>x-loader</b></span></a></li>
+<li class="toclevel-3 tocsection-34"><a href="#U-Boot_4"><span class="tocnumber">6.1.2</span> <span class="toctext"><b>U-Boot</b></span></a></li>
+<li class="toclevel-3 tocsection-35"><a href="#Linux_Kernel_4"><span class="tocnumber">6.1.3</span> <span class="toctext"><b>Linux Kernel</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-36"><a href="#Building_sources"><span class="tocnumber">6.2</span> <span class="toctext"><b>Building sources</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-37"><a href="#Build_x-loader"><span class="tocnumber">6.2.1</span> <span class="toctext"><b>Build x-loader</b></span></a></li>
+<li class="toclevel-3 tocsection-38"><a href="#Build_u-boot"><span class="tocnumber">6.2.2</span> <span class="toctext"><b>Build u-boot</b></span></a></li>
+<li class="toclevel-3 tocsection-39"><a href="#Build_Linux_kernel"><span class="tocnumber">6.2.3</span> <span class="toctext"><b>Build Linux kernel</b></span></a></li>
+<li class="toclevel-3 tocsection-40"><a href="#Build_Linux_kernel_modules"><span class="tocnumber">6.2.4</span> <span class="toctext"><b>Build Linux kernel modules</b></span></a>
+<ul>
+<li class="toclevel-4 tocsection-41"><a href="#Install_Linux_kernel_modules"><span class="tocnumber">6.2.4.1</span> <span class="toctext"><b>Install Linux kernel modules</b></span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-42"><a href="#Pre-built_binaries"><span class="tocnumber">6.3</span> <span class="toctext"><b>Pre-built binaries</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-43"><a href="#What_is_current_status.3F"><span class="tocnumber">7</span> <span class="toctext"><b>What is current status?</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-44"><a href="#Comparing_size_of_binaries"><span class="tocnumber">7.1</span> <span class="toctext"><b>Comparing size of binaries</b></span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#Comparing_boot_times"><span class="tocnumber">7.2</span> <span class="toctext"><b>Comparing boot times</b></span></a></li>
+<li class="toclevel-2 tocsection-46"><a href="#Before_and_After_Demo"><span class="tocnumber">7.3</span> <span class="toctext"><b>Before and After Demo</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-47"><a href="#What_next.3F"><span class="tocnumber">8</span> <span class="toctext"><b>What next?</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-48"><a href="#Short_term"><span class="tocnumber">8.1</span> <span class="toctext"><b>Short term</b></span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#Long_term"><span class="tocnumber">8.2</span> <span class="toctext"><b>Long term</b></span></a></li>
+<li class="toclevel-2 tocsection-50"><a href="#More_things_to_try"><span class="tocnumber">8.3</span> <span class="toctext"><b>More things to try</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-51"><a href="#Frequently_Asked_Questions"><span class="tocnumber">9</span> <span class="toctext"><b>Frequently Asked Questions</b></span></a></li>
+<li class="toclevel-1 tocsection-52"><a href="#References"><span class="tocnumber">10</span> <span class="toctext"><b>References</b></span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction"><b>Introduction</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Boot-time i.e. the time taken by the system to show its "availability" since the power button was pushed on; is a becoming a key differentiator in the usability vector.
+</p><p>The definition of <i>availability</i> varies across the devices. For example:
+</p>
+<ul><li>Appearance of <i>home screen</i> for devices containing a display e.g. cellphone, media player</li>
+<li>An audible tone / LED turning on or changing color for devices without display</li>
+<li>Appearance of shell prompt on development systems with console.</li></ul>
+<p>As these examples suggest, there isn't an objective measure that can be used across. This article doesn't attempt to define boot-time. It recognizes the fact that boot-time must be measured in context of the device, its intended usage and associated user expectations.
+</p>
+<h3><span class="mw-headline" id="Objectives"><b>Objectives</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=2" title="Edit section: Objectives">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Specific usage of term 'optimizing' - instead of 'reducing' - sets the overall direction for this article. The reduction can be achieved by adding hacks/ quirks/ taking custom shortcuts - that are difficult to maintain across component versions. Optimizations are generic and easily maintainable.
+</p><p>This article describes a typical boot sequence and identifies the opportunities for optimization. It also walks through different techniques that can be used to optimize the boot time. These optimizations are illustrated with specific patches that <i>currently</i> apply against the latest PSP <a href="AM35x-OMAP35x-PSP_04.02.00-2.html" title="AM35x-OMAP35x-PSP 04.02.00.07 Release Notes">04.02.00.07 release</a> for OMAP35x and Sitara AM37x devices.
+</p><p>This article is augmented with actual patches across the boot-loader(s) and Linux kernel to illustrate the techniques discussed here. Therefore, discussion is limited to select techniques and changes. The commit messages in the individual patches provide more detailed description. The differences between SDK and an end-product will be visible in these patches as well.
+</p>
+<ul><li>The SDK tends to generic and inclusive. It is intended to demonstrate maximum features available on the platform and tools to leverage these features.</li>
+<li>An end-product is specific and exclusive. It implements only defined set of use-cases.</li></ul>
+<p>To provide a direction to the optimizations, these use-cases are being defined:
+</p>
+<h4><span class="mw-headline" id="Use-case_1:_Boot_from_SDHC_Card"><b>Use-case 1: Boot from SDHC Card</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=3" title="Edit section: Use-case 1: Boot from SDHC Card">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Boot from SDHC card</li>
+<li>Mount the filesystem from SDHC card itself</li>
+<li>Shell on serial console.</li>
+<li>A graphical application on the LCD</li></ul>
+<h4><span class="mw-headline" id="Use-case_2:_Boot_from_NAND"><b>Use-case 2: Boot from NAND</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=4" title="Edit section: Use-case 2: Boot from NAND">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Boot from NAND</li>
+<li>Mount the filesystem from NAND partition.</li>
+<li>Shell on serial console.</li>
+<li>A graphical application on the LCD</li></ul>
+<h2><span class="mw-headline" id="Understanding_the_boot_sequence"><b>Understanding the boot sequence</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=5" title="Edit section: Understanding the boot sequence">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A typical (and simplified) boot sequence in Linux based systems is illustrated below:
+</p><p><a href="File_Linux-boot-sequence.html" class="image"><img alt="Linux-boot-sequence.png" src="https://processors.wiki.ti.com/images/b/b2/Linux-boot-sequence.png" width="613" height="632" /></a>
+</p><p><br />
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />* Actual boot sequence depends upon the device used viz. NAND flash, MMC/SD Card, NOR flash etc.
+<ul><li>Two stage bootloading is required when the bootloader cannot fit into the internal memory of the processor.</li>
+<li>There are multiple inter-dependencies between loading modules and starting services. This picture is presenting a simplified view for illustration purpose.</li></ul></div>
+<h2><span class="mw-headline" id="Measuring_boot_time"><b>Measuring boot time</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=6" title="Edit section: Measuring boot time">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Optimization begins with knowing current boot-time, setting the target and defining the boundary conditions. The boundary conditions are derived from the characteristics of the end-product.
+</p><p>Optimization is an iterative process and we need a reliable mechanism for measure the time. Developers have a variety of options ranging from C programs that can be compiled to scripts that time stamp each line appearing on the serial port. (More details  <a rel="nofollow" class="external text" href="http://elinux.org/Boot_Time#Measuring_Boot-up_Time">here</a>.)
+</p><p>The author used <a rel="nofollow" class="external text" href="http://realterm.sourceforge.net/">RealTerm</a> for the purpose.
+</p>
+<ul><li>Supports logging in Unix date format - easy for analysis</li>
+<li>Ability to log directly to a file without displaying on the screen - more accurate measurement</li>
+<li>Ability to stop logging after predefined time</li>
+<li>No need to switch terminal for interactive session just for the measurement</li></ul>
+<h3><span class="mw-headline" id="Identify_markers"><b>Identify markers</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=7" title="Edit section: Identify markers">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As discussed above, the overall boot process involves boot-loader(s), Linux kernel and the filesystem. We must identify the markers in the boot log that can be used as delimiters for each stage of the boot process. This helps in determining the time spent in each stage.
+</p>
+<ul><li><b>x-loader</b>
+<dl><dd>First newline character received on the serial console indicates start of x-loader.</dd></dl></li></ul>
+<ul><li><b>u-boot</b>
+<dl><dd>The banner containing the U-Boot version indicates the start of u-boot.</dd>
+<dd><tt style="color: #a00080;">U-Boot 2010.06 (Apr 16 2011 - 15:22:19)</tt></dd></dl></li></ul>
+<ul><li><b>Linux kernel</b>
+<dl><dd>First line after this indicates the start of Linux kernel:<br /><tt style="color: #a00080;">Uncompressing Linux... done, booting the kernel.</tt></dd></dl></li></ul>
+<ul><li><b>File System</b>
+<dl><dd><tt style="color: #a00080;">INIT: version 2.86 booting</tt></dd></dl></li></ul>
+<p>Developers with intimate knowledge of the source code can point that some of the strings are printed much after the start (e.g. U-boot banner) or much before (e.g. filesystem marker) the actual event. While this is definitely true, these markers serve the purpose well.
+</p>
+<h3><span class="mw-headline" id="Profiling_the_bootloaders"><b>Profiling the bootloaders</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=8" title="Edit section: Profiling the bootloaders">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No built-in infrastructure exists to profile the bootloaders at the moment. Much of profiling is based upon various strings that are printed on the serial console. And it is quite effective!
+</p><p>Looking from the end-product perspective - when all development is complete - the bootloaders are required to perform only these 2 tasks:
+</p>
+<ol><li>Perform basic initialization</li>
+<li>Load binary for the next stage (x-loader loads u-boot and u-boot loads the kernel)</li></ol>
+<p>Profiling should be restricted to these actions only.
+</p>
+<h3><span class="mw-headline" id="Profiling_the_Linux_Kernel"><b>Profiling the Linux Kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=9" title="Edit section: Profiling the Linux Kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Enable_timestamps_on_kernel_prints"><b>Enable timestamps on kernel prints</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=10" title="Edit section: Enable timestamps on kernel prints">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A timestamp can be added to each string printed by the kernel. Auditing the timestamps can helps in calculating actual time spent in processing.
+To enable timestamp, select the option "<tt style="color: #a00080;">Show timing information on printks</tt>" when configuring the kernel.
+</p><p>This translates to following in the <tt>.config</tt>:
+</p><p><tt style="color: #0000bb;">CONFIG_PRINTK_TIME=y</tt>
+</p>
+<h4><span class="mw-headline" id="Instrument_kernel_initialization"><b>Instrument kernel initialization</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=11" title="Edit section: Instrument kernel initialization">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>When the Linux kernel boot up, all statically linked drivers and subsystems are initialized. This initialization happens via series of <b>initcalls</b>.
+These "initcalls" can be instrumented by adding bootarg <tt style="color: #0000bb;"><b>initcall_debug</b></tt> to the kernel command-line.
+</p><p>Raw data can be extracted by following command at the shell prompt:
+</p><p><tt style="color: #0000bb;">$ dmesg | grep initcall</tt>
+</p><p>However, sorting the drivers and subsystems by the time time spent in the respective "initcall" is more useful.
+</p>
+<ul><li>If <tt style="color: #0000bb;">CONFIG_PRINTK_TIME</tt> is enabled:
+<dl><dd><tt style="color: #0000bb;">$ dmesg | grep initcall | sort -k8 -n</tt></dd></dl></li>
+<li>If <tt style="color: #0000bb;">CONFIG_PRINTK_TIME</tt> is disabled:
+<dl><dd><tt style="color: #0000bb;">$ dmesg | grep initcall | sort -k6 -n</tt></dd></dl></li></ul>
+<p>Same information can be viewed graphically via <b>bootgraph</b> script included in the kernel sources. This requires <tt style="color: #0000bb;">CONFIG_PRINTK_TIME</tt> to be enabled.
+</p><p><tt style="color: #0000bb;">$ dmesg | perl scripts/bootgraph.pl &gt; boot.svg</tt>
+</p>
+<h2><span class="mw-headline" id="Areas_of_optimization"><b>Areas of optimization</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=12" title="Edit section: Areas of optimization">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Any optimization would fall into either of these categories:
+</p>
+<ul><li>Size
+<ul><li>Reduce the size of binaries for each successive component loaded.</li>
+<li>Remove features that are not required</li></ul></li></ul>
+<ul><li>Speed
+<ul><li>Optimize for target processor</li>
+<li>Use faster medium for loading primary, secondary boot loaders and kernel.</li>
+<li>Reduce number of tasks leading to the boot.
+<ul><li>Remove features that are not required</li></ul></li></ul></li></ul>
+<p><br />
+Optimization - in both these areas - must be viewed in full context of the target platform and its use cases.
+</p>
+<div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Optimization reduces general applicability due to loss of features. This is true for all components - bootloaders, kernel and filesystem.</div>
+<p><br />
+Reducing the size does help in increasing overall speed - mainly due to gains in time to load the components. But, beyond a certain point, efficiency of implementation gains prominence.
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />This article doesn't attempt to discuss possibility of optimizing the individual kernel subsystems and modules. However, this may be required in the context of the end-product. For example, code meant for handling out-of-protocol quirks, non-conforming devices etc. can be excluded if devices are known to follow defined specs.</div>
+<h2><span class="mw-headline" id="Techniques_for_optimization"><b>Techniques for optimization</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=13" title="Edit section: Techniques for optimization">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Shedding_the_bulk"><b>Shedding the bulk</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=14" title="Edit section: Shedding the bulk">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The boot-loaders and the Linux kernel contain a <i>default configuration</i> that decides which components are included in the build. These default configurations become starting point for creating a product specific configuration. These configurations must be tailored to ensure that unnecessary components aren't being included in the final build.
+</p><p>Some of the features may be required only by developers and don't have much use in the end-product. These features can also be removed.
+</p><p>Here are few examples of simple decisions that can result in a <b>tailored configuration</b> for a product.
+</p>
+<h4><span class="mw-headline" id="x-loader"><b>x-loader</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=15" title="Edit section: x-loader">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>If NAND support is not required, remove it from the configuration
+<dl><dd><tt style="color: #0000bb;">#undef CFG_NAND</tt></dd></dl></li></ul>
+<ul><li>If OneNAND support is not required, remove it from the configuration
+<dl><dd><tt style="color: #0000bb;">#undef CFG_ONENAND</tt></dd></dl></li></ul>
+<ul><li>If MMC/SD support is not required, remove these from the configuration
+<dl><dd><tt style="color: #0000bb;">#undef CONFIG_MMC</tt></dd>
+<dd><tt style="color: #0000bb;">#undef CFG_CMD_MMC</tt></dd>
+<dd><tt style="color: #0000bb;">#undef CFG_CMD_FAT</tt></dd>
+<dd><tt style="color: #0000bb;">#undef CONFIG_DOS_PARTITION</tt></dd></dl></li></ul>
+<h4><span class="mw-headline" id="u-boot"><b>u-boot</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=16" title="Edit section: u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Avoid long help text for the u-boot commands.
+<dl><dd><tt style="color: #0000bb;">#undef CONFIG_SYS_LONGHELP</tt></dd></dl></li>
+<li>Use simple parser - instead of hush
+<dl><dd><tt style="color: #0000bb;">#undef CONFIG_SYS_HUSH_PARSER</tt></dd></dl></li>
+<li>If USB support is not required, remove it from the configuration:
+<dl><dd><tt style="color: #0000bb;">#undef CONFIG_USB_OMAP3</tt></dd>
+<dd><tt style="color: #0000bb;">#undef CONFIG_MUSB_HCD</tt></dd>
+<dd><tt style="color: #0000bb;">#undef CONFIG_MUSB_UDC</tt></dd></dl></li>
+<li>If ETHERNET support is not required, remove it from the configuration:
+<dl><dd><tt style="color: #0000bb;">#undef CONFIG_CMD_NET</tt></dd></dl></li></ul>
+<h4><span class="mw-headline" id="Linux_kernel"><b>Linux kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=17" title="Edit section: Linux kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The drivers and subsystems that are not required in the product can simply be left out of the kernel configuration. Ones that are not "essential" at the system boot-up can be built as insertable modules. These modules can be <i>inserted</i> into the kernel when they are really needed.
+</p>
+<ul><li>If the product doesn't support any of MTD devices, the corresponding drivers and support for JFFS2 filesystem can be removed from the kernel configuration.</li>
+<li>Initialization of the capture driver can be delayed until it is really required.</li></ul>
+<p>Decision on "What is essential?" and "What is extra?" depends upon the actual product definition.
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br /><tt><b>#undef</b></tt> is used here to illustrate the configuration options that can be removed in x-loader and u-boot. To exclude them from product specific configuration, not defining them is sufficient.</div>
+<h3><span class="mw-headline" id="Deferred_initialization"><b>Deferred initialization</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=18" title="Edit section: Deferred initialization">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As discussed above, initcalls for some modules may take quite long delaying the boot process. A short patch had been created (against kernel version 2.6.27) to <b>defer</b> selected initcalls until after the system is booted - without having to explicitly define them as modules.
+</p>
+<ul><li>Identify the modules that are not essential for the system at boot-up</li>
+<li>Locate the initcall definition of these modules in the source code.</li>
+<li>Change the declaration of the initcalls from <tt style="color: #a00080;">module_init()</tt> to <tt style="color: #a00080;">deferred_module_init()</tt></li>
+<li>Once the system has booted, deferred initcalls can be executed by:
+<dl><dd><tt style="color: #0000bb;">$ echo 1 &gt;/proc/deferred_initcalls</tt></dd></dl></li></ul>
+<p>Refer to <a rel="nofollow" class="external text" href="http://elinux.org/Deferred_Initcalls">this</a> page for details and link to the original patch.
+</p>
+<h3><span class="mw-headline" id="Build_for_product"><b>Build for product</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=19" title="Edit section: Build for product">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The default configuration of u-boot and the Linux kernel is friendly for development systems - not the end products. This includes, building with debug information, additional code for traceability, etc.
+</p><p>Once the development is complete and the individual components have been well tested, much of the debug infrastructure can be removed.<br />Here are some suggestions:
+</p>
+<h4><span class="mw-headline" id="x-loader_2"><b>x-loader</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=20" title="Edit section: x-loader">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Remove option <tt style="color: #0000aa;">-g</tt> from the compiler.</li></ul>
+<h4><span class="mw-headline" id="u-boot_2"><b>u-boot</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=21" title="Edit section: u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Remove option <tt style="color: #0000aa;">-g</tt> from the compiler.</li>
+<li>u-boot is build for <tt style="color: #0000aa;">armv5</tt> for compatibility reasons. Update compiler flags to build it for <tt style="color: #0000aa;">armv7-a</tt>.</li></ul>
+<h4><span class="mw-headline" id="Linux_kernel_2"><b>Linux kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=22" title="Edit section: Linux kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Remove option <tt style="color: #0000aa;">-g</tt> from the compiler.</li>
+<li>Disable <tt style="color: #0000aa;">Kernel debugging</tt></li>
+<li>Disable <tt style="color: #0000aa;">Debug Filesystem</tt></li>
+<li>Disable <tt style="color: #0000aa;">Tracers</tt></li></ul>
+<p><br />
+When choosing the compiler options, a common dilemma is to optimize for <i>speed</i> or 'size<i>. Here are few data points that should help make the decision faster:</i>
+</p>
+<ul><li>Unless executing-in-place, the executable images have to be loaded into the memory from the storage media e.g. while booting from MMC/SD. Bigger means longer time to load the image... which impacts the boot time.</li>
+<li>When optimizing for size, the image would be smaller but the execution would is expected to be <i>little</i> slower.</li></ul>
+<p>It is common to see the balance shift on either side during the optimization cycles.
+</p>
+<h4><span class="mw-headline" id="Filesystem"><b>Filesystem</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=23" title="Edit section: Filesystem">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A <i>heavy</i> filesystem can negate all the efforts in optimizing the components. Most of the filesystems are derived from the <i>desktop based</i> systems that may not apply to embedded systems.
+</p>
+<div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Initialization scripts need to be reviewed to ensure that only necessary initializations are done.</div>
+<p><br />
+It is quite common for the filesystems to be built for generic architectures. This may not provide best performance.
+For example, ARMv7 based system using filesystem built for ARMv5.
+</p>
+<h3><span class="mw-headline" id="Be_quiet"><b>Be quiet</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=24" title="Edit section: Be quiet">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In the default configuration, boot-loaders and the Linux kernel print many verbose messages on the serial console. Though quite useful in the development stages, these messages are not required in the end product. Depending upon the number of prints, turning off these messages can save 1 - 2 seconds on the overall boot process.
+</p>
+<h4><span class="mw-headline" id="x-loader_3"><b>x-loader</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=25" title="Edit section: x-loader">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Add the following line to board specific configuration:
+<dl><dd><tt style="color: #0000bb;">#undef CFG_PRINTF</tt></dd></dl></li></ul>
+<h4><span class="mw-headline" id="u-boot_3"><b>u-boot</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=26" title="Edit section: u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Turning the prints <b>off</b> is a 2 step process:
+</p>
+<ul><li>Add the following line to board specific configuration:
+<dl><dd><tt style="color: #0000bb;">#define CONFIG_SILENT_CONSOLE    1</tt></dd></dl></li>
+<li>Set the environment variable <tt><b>silent</b></tt> to 1.
+<dl><dd><tt style="color: #0000bb;">OMAP3_EVM # set silent 1</tt></dd>
+<dd><tt style="color: #0000bb;">OMAP3_EVM # saveenv</tt></dd></dl></li></ul>
+<h4><span class="mw-headline" id="Linux_kernel_3"><b>Linux kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=27" title="Edit section: Linux kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The prints in the Linux kernel can be turned off by adding bootarg <tt style="color: #0000bb;"><b>quiet</b></tt> to the kernel command-line.
+</p>
+<div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />As we have seen above, most of the data used for optimizations is available via these prints. This should, therefore, be delayed till the last iteration. If the desired boot time isn't achieved, enable the prints again and look for more opportunities.</div>
+<h3><span class="mw-headline" id="Avoid_duplication"><b>Avoid duplication</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=28" title="Edit section: Avoid duplication">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Boot-loader(s) and the Linux kernel are independent systems. As generic products, they cannot make assumptions about the state of the devices before using them. This could lead to same device getting initialized - to same settings - across both. Product development happens in a controlled environment, where the responsibilities of each layer can be fixed upfront. This would help avoid unnecessary duplication of initialization code.
+</p><p>As an example, IVA was being initialized in the x-loader, u-boot and later in the Linux kernel for DM37x devices.
+</p>
+<ul><li>IVA is not being used in either of the boot-loaders - x-loader and u-boot.</li>
+<li>IVA needs to be initialized only for the SoC variants containing IVA e.g. OMAP3530, DM3730.<br />For devices like OMAP3503 and AM3703, this initialization is just a waste of time!</li></ul>
+<p>There could be similar instances for other drivers...
+</p>
+<h3><span class="mw-headline" id="Leverage_the_SoC_speed"><b>Leverage the SoC speed</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=29" title="Edit section: Leverage the SoC speed">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Running the SoC - processor and other peripherals - at maximum rated performance is easiest way to reduce the boot time. Since, this is too obvious and doesn't involve any optimization, it is being discussed at the end.
+</p>
+<h3><span id="Don't_forget_to_remove_instrumentation"></span><span class="mw-headline" id="Don.27t_forget_to_remove_instrumentation"><b>Don't forget to remove instrumentation</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=30" title="Edit section: Don&#039;t forget to remove instrumentation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In initial sections of the this article, additional instrumentation was added/ enabled to get objective measure to time spent in each software layer. One we are satisfied with the progress made, this instrumentation can be turned off. After a certain stage, amount of time spent in instrumentation becomes proportionally sizable.
+</p>
+<h2><span class="mw-headline" id="Doing_it_yourself"><b>Doing it yourself</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=31" title="Edit section: Doing it yourself">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Starting with the stock PSP release, a series of patches are available for each of x-loader, u-boot and Linux kernel - that indicate the changes done to optimize the boot time.
+</p><p>To illustrate the optimization steps, new configurations - specific to the use cases - were created. Key considerations behind this decision were:
+</p>
+<ul><li>The default configuration remains untouched for developers to try both configurations without changing branch/ reverting patches.</li>
+<li>This mimics the development flow customers would be taking to create product specific configuration - starting with a known base.</li></ul>
+<p>Each patch contains detailed description of the change being done.
+</p>
+<h3><span class="mw-headline" id="Getting_sources"><b>Getting sources</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=32" title="Edit section: Getting sources">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="x-loader_4"><b>x-loader</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=33" title="Edit section: x-loader">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Branch <a rel="nofollow" class="external text" href="http://arago-project.org/git/projects/?p=x-load-omap3.git;a=shortlog;h=refs/heads/qb_v1.51_OMAPPSP_04.02.00.07">qb_v1.51_OMAPPSP_04.02.00.07</a></li></ul>
+<h4><span class="mw-headline" id="U-Boot_4"><b>U-Boot</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=34" title="Edit section: U-Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Branch <a rel="nofollow" class="external text" href="http://arago-project.org/git/projects/?p=u-boot-omap3.git;a=shortlog;h=refs/heads/qb_v2010.06_OMAPPSP_04.02.00.07">qb_v2010.06_OMAPPSP_04.02.00.07</a></li></ul>
+<h4><span class="mw-headline" id="Linux_Kernel_4"><b>Linux Kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=35" title="Edit section: Linux Kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Branch <a rel="nofollow" class="external text" href="http://arago-project.org/git/projects/?p=linux-omap3.git;a=shortlog;h=refs/heads/qb_v2.6.37_OMAPPSP_04.02.00.07">qb_v2.6.37_OMAPPSP_04.02.00.07</a></li></ul>
+<p><br />
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />* Current set of patches are applicable for the OMAP3EVM. 
+<ul><li>In the process of optimizations few generic issues (not related to optimization) were found and fixed on the same branch. Since, these changes apply over a <i>code freeze</i> sources, they will be rolled into base PSP package in next cycle.</li>
+<li>Patches for use-case 2 shall be available soon</li></ul></div>
+<h3><span class="mw-headline" id="Building_sources"><b>Building sources</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=36" title="Edit section: Building sources">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Build_x-loader"><b>Build x-loader</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=37" title="Edit section: Build x-loader">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- omap3_evm_mmc_config
+$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi-
+</pre>
+<h4><span class="mw-headline" id="Build_u-boot"><b>Build u-boot</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=38" title="Edit section: Build u-boot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- omap3_evm_quick_mmc_config
+$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi-
+</pre>
+<h4><span class="mw-headline" id="Build_Linux_kernel"><b>Build Linux kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=39" title="Edit section: Build Linux kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- omap3_evm_quick_defconfig
+$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- uImage
+</pre>
+<h4><span class="mw-headline" id="Build_Linux_kernel_modules"><b>Build Linux kernel modules</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=40" title="Edit section: Build Linux kernel modules">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- modules
+</pre>
+<h5><span class="mw-headline" id="Install_Linux_kernel_modules"><b>Install Linux kernel modules</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=41" title="Edit section: Install Linux kernel modules">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<pre>$ make ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi- INSTALL_MOD_PATH=<span style="color: #bb0000;">&lt;fs-path&gt;</span> modules_install
+</pre>
+<ul><li>If same host machine is being used for building the Linux kernel and the filesystem, then <tt><span style="color: #bb0000;">&lt;fs-path&gt;</span></tt> should point to base of the target filesystem directory.</li>
+<li>If using a pre-built filesystem:
+<ul><li>Set <tt><span style="color: #bb0000;">&lt;fs-path&gt;</span></tt> to a local path e.g. <tt><span style="color: #bb0000;">./_install</span></tt></li>
+<li>Create a <i>tarball</i> of the <tt>./_install</tt> directory
+<dl><dd><tt style="color: #0000bb;">$ cd _install</tt></dd>
+<dd><tt style="color: #0000bb;">$ tar cvfz ../modules.tgz .</tt></dd></dl></li>
+<li>Copy this <i>tarball</i> to root of the installed filesystem and extract the contents.
+<dl><dd><tt style="color: #0000bb;">$ tar xvfz modules.tgz</tt></dd></dl></li>
+<li>Now modules can be installed individually / via scripts e.g.
+<dl><dd><tt style="color: #0000bb;">$ modprobe snd</tt></dd></dl></li></ul></li></ul>
+<p><br />
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Steps to prepare the MMC card and NAND flash are not covered in this article. These steps are described in the User Guide corresponding to each release.</div>
+<h3><span class="mw-headline" id="Pre-built_binaries"><b>Pre-built binaries</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=42" title="Edit section: Pre-built binaries">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ffffff; color: #cc00cc; border-left: 5px solid #cc00cc;">
+<p><b>TODO</b>&#160;:  Links to download pre-built binaries to be added
+</p>
+</div>
+<h2><span id="What_is_current_status?"></span><span class="mw-headline" id="What_is_current_status.3F"><b>What is current status?</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=43" title="Edit section: What is current status?">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>As described in initial sections, AM37x EVM was chosen as the first target for the optimization.
+</p>
+<h3><span class="mw-headline" id="Comparing_size_of_binaries"><b>Comparing size of binaries</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=44" title="Edit section: Comparing size of binaries">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This table compares the size of binaries generated with <i>optimized</i> configurations against <i>default</i> configurations.
+</p>
+<table cellpadding="5px" style="border-collapse: collapse; border: 1px solid #000;">
+
+<tbody><tr style="background-color: #ffffcc;">
+<th style="border: 1px solid #000;" width="150px">Component/ File
+</th>
+<th style="border: 1px solid #000;" width="150px">Default Config<br />(in bytes)
+</th>
+<th style="border: 1px solid #000;" width="150px">Opt for MMC<br />(in bytes)
+</th>
+<th style="border: 1px solid #000;" width="150px">Opt for NAND<br />(in bytes)
+</th></tr>
+<tr>
+<td style="border: 1px solid #000; text-align: left;"><b>x-loader.bin</b>
+</td>
+<td style="border: 1px solid #000; text-align: right;">18,932
+</td>
+<td style="border: 1px solid #000; text-align: right;">12,460
+</td>
+<td style="border: 1px solid #000; text-align: right;">7,712
+</td></tr>
+<tr>
+<td style="border: 1px solid #000; text-align: left;"><b>u-boot.bin</b>
+</td>
+<td style="border: 1px solid #000; text-align: right;">219,280
+</td>
+<td style="border: 1px solid #000; text-align: right;">64,808
+</td>
+<td style="border: 1px solid #000; text-align: right;">88,908
+</td></tr>
+</tbody></table>
+<p><br />
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Depending upon the compiler version used, there may be minor differences in the size of binaries generated. These numbers correspond to Codesourcery Lite v2009q1-203.</div>
+<h3><span class="mw-headline" id="Comparing_boot_times"><b>Comparing boot times</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=45" title="Edit section: Comparing boot times">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<table cellpadding="5px" style="border-collapse: collapse; border: 1px solid #000;">
+
+<tbody><tr>
+<th style="border: 1px solid #000;background-color: #ffffcc;" width="300px">Usage scenario
+</th>
+<th style="border: 1px solid #000;background-color: #ccffcc;" width="100px">Before<br />(in secs)
+</th>
+<th style="border: 1px solid #000;background-color: #ccff99;" width="100px">Opt for MMC<br />(in secs)
+</th>
+<th style="border: 1px solid #000;background-color: #ccff99;" width="100px">Opt for NAND<br />(in secs)
+</th></tr>
+<tr>
+<td style="border: 1px solid #000; text-align: left;">Time to console prompt
+</td>
+<td style="border: 1px solid #000; text-align: right;">TBD
+</td>
+<td style="border: 1px solid #000; text-align: right;">TBD
+</td>
+<td style="border: 1px solid #000; text-align: right;">TBD
+</td></tr>
+<tr>
+<td style="border: 1px solid #000; text-align: left;">Time to graphical app
+</td>
+<td style="border: 1px solid #000; text-align: right;">TBD
+</td>
+<td style="border: 1px solid #000; text-align: right;">TBD
+</td>
+<td style="border: 1px solid #000; text-align: right;">TBD
+</td></tr>
+</tbody></table>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ffffff; color: #cc00cc; border-left: 5px solid #cc00cc;">
+<p><b>TODO</b>&#160;:  Fill the table with actual values
+</p>
+</div>
+<div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Being a wiki these tables are open for editing. Request users to change add notes/comments and additional links bottom of the page. All values here will be backed up by actual patches. Please do not link individual website from the core article.</div>
+<h3><span class="mw-headline" id="Before_and_After_Demo"><b>Before and After Demo</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=46" title="Edit section: Before and After Demo">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ffffff; color: #cc00cc; border-left: 5px solid #cc00cc;">
+<p><b>TODO</b>&#160;:  Will be added soon...
+</p>
+</div>
+<h2><span id="What_next?"></span><span class="mw-headline" id="What_next.3F"><b>What next?</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=47" title="Edit section: What next?">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>As discussed earlier in the article, optimizations must be viewed in the context of the end use of product. In the continuum, it would be unfair to suggest/ believe that no further optimizations are possible.
+</p><p>This section describes additional steps that are planned in near future. It also lists alternatives that can be tried out.
+</p>
+<h3><span class="mw-headline" id="Short_term"><b>Short term</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=48" title="Edit section: Short term">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Specific patches shall be added soon to:
+<ul><li>Implement the use-case 2 described above</li>
+<li>Boost the MPU frequency early in the boot process</li></ul></li></ul>
+<h3><span class="mw-headline" id="Long_term"><b>Long term</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=49" title="Edit section: Long term">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Support for other platforms</li></ul>
+<h3><span class="mw-headline" id="More_things_to_try"><b>More things to try</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=50" title="Edit section: More things to try">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Developers would also notice that U-Boot sources in this PSP release are based-off 2010.06 release. Cache support was added to ARM architectures in 2010.09. Migration to this U-Boot version can speed up the U-Boot execution and kernel decompression.</li>
+<li><a rel="nofollow" class="external text" href="http://barebox.org/index.html">Barebox</a> is another bootloader that can be used instead of U-Boot.</li>
+<li><a rel="nofollow" class="external text" href="http://www.linux-mtd.infradead.org/doc/ubifs.html">UBIFS</a> is a new filesystem that may be considered instead of JFFS2. Since it doesn't need to scan the media while mounting, filesystem can be mounted in few milliseconds.</li>
+<li>Use LZO compression instead of default GZIP for the Linux kernel. It is expected to speed-up kernel decompression.
+<ul><li>If NOR flash is used then kernel compression isn't required.</li></ul></li></ul>
+<p><br />
+</p>
+<div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />Developers should identify the right set of patches to (rework and) apply in their products. Then, use the learnings from the discussion above to further optimize the boot time.</div>
+<h2><span class="mw-headline" id="Frequently_Asked_Questions"><b>Frequently Asked Questions</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=51" title="Edit section: Frequently Asked Questions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #990000; text-align:center;"><b>Q:</b></div>
+<div style="display: table-cell; padding:5px;">What does the prefix <tt><b>qb_</b></tt> in the branch names indicate?</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #009900; text-align:center;"><b>A:</b></div>
+<div style="display: table-cell; padding:5px;">This prefix is derived from <b>quick boot</b>. Since <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Fastboot">Fastboot</a> is already being used in entirely different context, this was next best choice.</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #990000; text-align:center;"><b>Q:</b></div>
+<div style="display: table-cell; padding:5px;">Where are the patches corresponding to use case 2 defined above?</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #009900; text-align:center;"><b>A:</b></div>
+<div style="display: table-cell; padding:5px;">They are work-in-progress. Will soon be posted to these same branches...</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #990000; text-align:center;"><b>Q:</b></div>
+<div style="display: table-cell; padding:5px;">Some of the patches are quite generic. Shouldn't they be up-streamed into respective projects?</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #009900; text-align:center;"><b>A:</b></div>
+<div style="display: table-cell; padding:5px;">Very true. Some of these patches were already posted upstream. They will be posted soon.</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #990000; text-align:center;"><b>Q:</b></div>
+<div style="display: table-cell; padding:5px;">Why don't we see compiler option <tt><b>-O3</b></tt> being turned on?</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #009900; text-align:center;"><b>A:</b></div>
+<div style="display: table-cell; padding:5px;">Overall time for execution includes two components:
+<ul><li>Time to load binary from the storage medium</li>
+<li>Actual execution time</li></ul>
+Adding option <tt>-O3</tt> causes significant increase in the size of generated binaries (as against <tt>-Os</tt>). Additional time taken to load the binary offsets any gains achieved through <tt>-O3</tt>. Based on current experiments, <tt>-O3</tt> would make more sense for platforms that use NOR flash as boot medium.</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #990000; text-align:center;"><b>Q:</b></div>
+<div style="display: table-cell; padding:5px;">Can it get me to 1 second boot?</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #009900; text-align:center;"><b>A:</b></div>
+<div style="display: table-cell; padding:5px;">Depends on the target system. If the product functionality can be met by a very small kernel and filesystem, then same techniques can help in achieving a 1-sec boot as well. May be less... because we may be able to eliminate a bootloader stage altogether.</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #990000; text-align:center;"><b>Q:</b></div>
+<div style="display: table-cell; padding:5px;">When should we add a splash?</div>
+</div>
+<div style="display: table-row; margin: 5px;">
+<div style="display: table-cell; width: 20px; padding:5px; color: #990000; text-align:center;"><b>Q:</b></div>
+<div style="display: table-cell; padding:5px;">Splash is added to indicate that system is <i>getting ready</i> - quite useful if system takes long to boot. Earliest opportunity (in current implementation) to show a splash screen is u-boot. Size of image being used for splash will impact the boot time.
+<br />This can be a useful mechanism for <i>branding</i> as well. To use / avoid a splash screen is a compromise between these factors.</div>
+</div>
+<h2><span class="mw-headline" id="References"><b>References</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit&amp;section=52" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li><a rel="nofollow" class="external free" href="http://elinux.org/Boot_Time">http://elinux.org/Boot_Time</a></li>
+<li><a rel="nofollow" class="external free" href="http://elinux.org/Deferred_Initcalls">http://elinux.org/Deferred_Initcalls</a></li>
+<li><a rel="nofollow" class="external free" href="http://www.linux-mtd.infradead.org/doc/ubifs.html">http://www.linux-mtd.infradead.org/doc/ubifs.html</a></li>
+<li><a rel="nofollow" class="external free" href="http://free-electrons.com/blog/lzo-kernel-compression/">http://free-electrons.com/blog/lzo-kernel-compression/</a></li></ol>
+</div>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201001926
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.134 seconds
+Real time usage: 0.140 seconds
+Preprocessor visited node count: 495/1000000
+Preprocessor generated node count: 1012/1000000
+Post‐expand include size: 9437/2097152 bytes
+Template argument size: 4404/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   17.639      1 -total
+ 10.33%    1.822      7 Template:SpQ
+ 10.15%    1.791      5 Template:SpImportant
+  9.85%    1.738      6 Template:SpNote
+  9.17%    1.618      3 Template:SpTodo
+  9.04%    1.594      1 Template:SpArticleClose
+  8.94%    1.577      5 Template:SpA
+  7.68%    1.355      1 Template:SpArticleStart
+  7.59%    1.338      1 Template:Sitara_Devices
+  7.01%    1.236      1 Template:SpLicenseCC-SA
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:9654-0!canonical and timestamp 20201201001926 and revision id 114351
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Optimize Linux Boot Time</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Optimize Linux Boot Time</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Optimize Linux Boot Time</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Optimize Linux Boot Time</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Optimize Linux Boot Time</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Optimize Linux Boot Time</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Optimize Linux Boot Time</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Optimize Linux Boot Time</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Optimize Linux Boot Time</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;oldid=114351">https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;oldid=114351</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM437x.html" title="Category:AM437x">AM437x</a></li><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li><li><a href="Category_AM35x.html" title="Category:AM35x">AM35x</a></li><li><a href="Category_AM37x.html" title="Category:AM37x">AM37x</a></li><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_AM18x.html" title="Category:AM18x">AM18x</a></li><li><a href="Category_PSP.html" title="Category:PSP">PSP</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Optimize+Linux+Boot+Time" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Optimize_Linux_Boot_Time.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Optimize_Linux_Boot_Time&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Optimize_Linux_Boot_Time.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Optimize_Linux_Boot_Time.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Optimize_Linux_Boot_Time.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;oldid=114351" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Optimize_Linux_Boot_Time&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 24 July 2012, at 19:17.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.134","walltime":"0.140","ppvisitednodes":{"value":495,"limit":1000000},"ppgeneratednodes":{"value":1012,"limit":1000000},"postexpandincludesize":{"value":9437,"limit":2097152},"templateargumentsize":{"value":4404,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%   17.639      1 -total"," 10.33%    1.822      7 Template:SpQ"," 10.15%    1.791      5 Template:SpImportant","  9.85%    1.738      6 Template:SpNote","  9.17%    1.618      3 Template:SpTodo","  9.04%    1.594      1 Template:SpArticleClose","  8.94%    1.577      5 Template:SpA","  7.68%    1.355      1 Template:SpArticleStart","  7.59%    1.338      1 Template:Sitara_Devices","  7.01%    1.236      1 Template:SpLicenseCC-SA"]},"cachereport":{"timestamp":"20201201001926","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":230});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Optimize_Linux_Boot_Time by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:30:05 GMT -->
+</html>

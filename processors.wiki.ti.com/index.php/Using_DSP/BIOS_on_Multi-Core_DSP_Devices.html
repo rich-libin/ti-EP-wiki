@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_DSP/BIOS_on_Multi-Core_DSP_Devices by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:10:53 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Using DSP/BIOS on Multi-Core DSP Devices - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Using_DSP/BIOS_on_Multi-Core_DSP_Devices","wgTitle":"Using DSP/BIOS on Multi-Core DSP Devices","wgCurRevisionId":78026,"wgRevisionId":78026,"wgArticleId":5701,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Multicore","DSPBIOS","C64x","C647x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Using_DSP/BIOS_on_Multi-Core_DSP_Devices","wgRelevantArticleId":5701,"wgRequestId":"ea76e5fd10f24a4c94c27e91","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Using_DSP_BIOS_on_Multi-Core_DSP_Devices rootpage-Using_DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Using DSP/BIOS on Multi-Core DSP Devices</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><i>Originally authored by Arnie Reynoso and Judah Vang, edited by Randyp for Wiki and CCSv4 with updates</i> 
+</p><p>Though DSP/BIOS 5 applications typically run on single-core devices, and DSP/BIOS 5 does not explicitly provide multi-processor APIs, your DSP/BIOS 5 applications can still take advantage of the shared memory available in multi-core devices. This application note contains information on how to configure, build, and debug multi-core applications using DSP/BIOS 5 with Code Composer Studio v4.2. It describes various application scenarios for multi-core devices — from a single application to be executed on multiple cores to different applications for each core that share from a common partial DSP/BIOS image. The examples in this document are built for a TMS320C6472 six-core device, but the techniques described apply to any multi-core DSP device. 
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#DSP.2FBIOS_Multi-Core_Device_Support"><span class="tocnumber">1</span> <span class="toctext">DSP/BIOS Multi-Core Device Support</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Single_Application_on_Multiple_Cores"><span class="tocnumber">2</span> <span class="toctext">Single Application on Multiple Cores</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#singleimage_Example_Application"><span class="tocnumber">2.1</span> <span class="toctext">singleimage Example Application</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Complete_Description_and_Step-By-Step_Procedures_for_Single_Application_on_Multiple_Cores"><span class="tocnumber">2.2</span> <span class="toctext">Complete Description and Step-By-Step Procedures for Single Application on Multiple Cores</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Multiple_Independent_Applications"><span class="tocnumber">3</span> <span class="toctext">Multiple Independent Applications</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#multipleimage_Example_Applications"><span class="tocnumber">3.1</span> <span class="toctext">multipleimage Example Applications</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Complete_Description_and_Step-By-Step_Procedures_for_Multiple_Independent_Applications"><span class="tocnumber">3.2</span> <span class="toctext">Complete Description and Step-By-Step Procedures for Multiple Independent Applications</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Multiple_Applications_Sharing_a_Partial_Image"><span class="tocnumber">4</span> <span class="toctext">Multiple Applications Sharing a Partial Image</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#sharedimage_Example_Applications"><span class="tocnumber">4.1</span> <span class="toctext">sharedimage Example Applications</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Complete_Description_and_Step-by-Step_Procedures_for_Multiple_Applications_Sharing_a_Partial_Image"><span class="tocnumber">4.2</span> <span class="toctext">Complete Description and Step-by-Step Procedures for Multiple Applications Sharing a Partial Image</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Example_files_referenced_in_this_Wiki_topic"><span class="tocnumber">5</span> <span class="toctext">Example files referenced in this Wiki topic</span></a></li>
+</ul>
+</div>
+
+<h1><span id="DSP/BIOS_Multi-Core_Device_Support"></span><span class="mw-headline" id="DSP.2FBIOS_Multi-Core_Device_Support">DSP/BIOS Multi-Core Device Support</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=1" title="Edit section: DSP/BIOS Multi-Core Device Support">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This application note focuses on ways to build and run applications that demonstrate how to use both local and shared memory on devices with multiple DSP cores. Techniques used to communicate between processors are not the focus of this application note. Such communication techniques include shared memory, the DSP/BIOS MSGQ module, and software solutions such as DSP/BIOS Link. In particular, you will want to look at the BIOS Multicore Software Development Kit (MCSDK); there are links in the Wiki pages at <a href="../Category_Multicore.html" title="Category:Multicore">Category:Multicore</a>.
+</p><p>TI devices are available with multiple DSP cores that share both internal memory and external memory. Using three instructive scenarios, this application note describes how you can modify the setup and code/data placement to take advantage of the multi-core device. 
+</p><p>In order to better support the configuration and use of these multi-core devices, DSP/BIOS 5.30 (or higher) provides configuration platforms for such devices (for example, the C6472). DSP/BIOS 5.41.07 (or higher) improves some of the stop-mode Real-Time Analysis (RTA) capabilities, so the examples in this application note use Code Composer Studio (CCS) 4.2.4 and DSP/BIOS 5.41. In the DSP/BIOS configuration for the C6472, there are separate MEM sections for local L2 memory (LL2RAM), shared L2 memory (SL2RAM) and shared DDR2 memory (DDR2). 
+</p><p>The CCSv4 code files associated with this application note provide simple examples that illustrate different multi-core memory-sharing scenarios. One basic application program is reused with minor changes to provide the various program scenarios. This basic application uses DSP/BIOS TSK threads that communicate within a single core using the DSP/BIOS SEM module. 
+</p><p>Three different archive files are provided, one for each of the major scenarios presented. These archive files are made available at the end of this overview page. The applications are provided with complete application source within Code Composer Studio (CCSv4) archived project zip files for your convenience. Instructions for installing, building, loading, and running the applications are included in each of the Complete Description sections. 
+</p><p>The following software is recommended to rebuild and run the examples: 
+</p>
+<ul><li>Code Composer Studio v4.2.4.00033 or greater</li>
+<li>Code Generation Tools 7.0.3 or greater</li>
+<li>DSP/BIOS 5.41.07 or greater</li></ul>
+<p><b>NOTE:</b> The examples read the processor ID at run-time on each core. This allows for uniquely identifiable debug output, so you can easily confirm which core has displayed which results. Also, any application that uses the MSGQ module for inter-processor communication must set a unique and sequential processor ID (starting at 0), so the technique used here can be used also with the MSGQ module. MSGQ is not used in these examples.
+</p>
+<h1><span class="mw-headline" id="Single_Application_on_Multiple_Cores">Single Application on Multiple Cores</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=2" title="Edit section: Single Application on Multiple Cores">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The singleimage example shows how a single application can run simultaneously on all the device cores. The cores run the same application independently of each other. 
+</p><p><a href="../File_Randyp_BIOS_Multicore_si_memory.html" class="image" title="Figure 1. Single Application on Each Core of C6472 Device"><img alt="Figure 1. Single Application on Each Core of C6472 Device" src="https://processors.wiki.ti.com/images/e/e5/Randyp_BIOS_Multicore_si_memory.png" width="900" height="676" class="thumbborder" /></a> <br /><b>Figure 1.</b> Single Application on Each Core of C6472 Device 
+</p>
+<h2><span class="mw-headline" id="singleimage_Example_Application">singleimage Example Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=3" title="Edit section: singleimage Example Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The example for this scenario is in the singleimage project folder. The basic application uses a QUE (DSP/BIOS queue) and SEM (DSP/BIOS semaphore) to send messages and to synchronize, respectively, between multiple writer() tasks to a single reader() task. The reader task, the three writer tasks, and the semaphore are statically created in the DSP/BIOS *.tcf configuration file. 
+</p><p>In each application on each core, three identical writer tasks will build a message and send it through the DSP/BIOS QUE mechanism, then each writer task will post a SEM to tell the reader task that a message is ready. The reader task will respond to the SEM by pulling a message off the QUE object and reporting the results using a LOG_printf message.<br /> 
+</p><p>You will be able to observe the results of the execution by each core by using the RTA-&gt;Printf Logs window.<br /> 
+</p><p>The application should be built using DSP/BIOS 5.41.07 or greater and CCS4.2.0.09 or greater. Earlier releases will not support the Printf Logs as well or at all. With DSP/BIOS 5.41.07 or greater and CCSv4.2.0.09 or greater, you will be able to observe the results of the execution by each core by using the RTA-&gt;Printf Logs window. With earlier releases of DSP/BIOS and CCSv4, you may have to use the ROV tool and click down into the log buffers to observe the results. 
+</p><p>The C6472's DSP/BIOS memory configuration for this example allows a single application image to be loaded and executed on all cores by placing all code and read-only data in a single location in shared L2 and by placing the interrupt vector table and read/write data in local L2. 
+</p>
+<h2><span class="mw-headline" id="Complete_Description_and_Step-By-Step_Procedures_for_Single_Application_on_Multiple_Cores">Complete Description and Step-By-Step Procedures for Single Application on Multiple Cores</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=4" title="Edit section: Complete Description and Step-By-Step Procedures for Single Application on Multiple Cores">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Click here for <a href="../DSP/BIOS_on_Multi-Core_singleimage.html" title="DSP/BIOS on Multi-Core singleimage">Single Application on Multiple Cores</a>
+</p>
+<h1><span class="mw-headline" id="Multiple_Independent_Applications">Multiple Independent Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=5" title="Edit section: Multiple Independent Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The multipleimage example shows how separate applications can run on different cores completely independently. The shared memory in the C6472 is partitioned such that each partition is "owned" by one and only one core. This example demonstrates how to place memory, load, and run such applications. The intent is to illustrate one method of avoiding memory access collisions when running independent applications on a multi-core device. Figure 2 shows how six different applications could be configured to run on the six cores of the C6472. Equal private partitions are created in both the Shared L2 and DDR memory; one common partition is also created in DDR memory but it is not used in this example. 
+</p><p><a href="../File_Randyp_BIOS_Multicore_mi_memory.html" class="image" title="Figure 2. Multiple Application Images Independent on Each Core of a C6472 Device"><img alt="Figure 2. Multiple Application Images Independent on Each Core of a C6472 Device" src="https://processors.wiki.ti.com/images/6/6f/Randyp_BIOS_Multicore_mi_memory.png" width="900" height="678" class="thumbborder" /></a> <br /><b>Figure 2.</b> Multiple Application Images Independent on Each Core 
+</p>
+<h2><span class="mw-headline" id="multipleimage_Example_Applications">multipleimage Example Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=6" title="Edit section: multipleimage Example Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The example for this scenario comprises the several multipleimage_appN (N=0..5) project folders. The same basic application code from the singleimage project is used for this example, with the exception that the number of writer tasks is equal to N+1 for CoreN and multipleimage_appN, just to make the applications different. The underlying application again uses a QUE (DSP/BIOS queue) to send messages and SEM (DSP/BIOS semaphore) to synchronize between one or more writer() tasks to a single reader() task. The reader task, the writer task(s), and the semaphore are statically created in the DSP/BIOS configuration .tcf files in each project folder. The memory location for the code and data are also set in the DSP/BIOS configuration .tcf files by setting different starting addresses for the memory elements. The memory partitions are implemented as shown in Figure 2. 
+</p><p>The writer tasks will load and send a message through the DSP/BIOS QUE mechanism, then post a SEM to tell the reader task that a message is ready. The reader task will respond to the SEM by pulling a message off the QUE object and reporting the results using a LOG_printf message.<br /> 
+</p><p>The application should be built using DSP/BIOS 5.41.07 or greater and CCS4.2.0.09 or greater. Earlier releases will not support the Printf Logs as well or at all. With DSP/BIOS 5.41.07 or greater and CCSv4.2.0.09 or greater, you will be able to observe the results of the execution by each core by using the RTA-&gt;Printf Logs window. With earlier releases of DSP/BIOS and CCSv4, you may have to use the ROV tool and click down into the log buffers to observe the results. 
+</p><p>Each project folder has a slightly different C source file and a slightly different DSP/BIOS&#160;Configuration .tcf file. <br /> 
+</p><p>The mi_appN.c files differ from one another only by the number of messages allocated. There are three (3) messages allocated for each of the writer tasks that are defined in the tcf file, so one #define NUMWRITERS constant is the only code difference. 
+</p><p>Each multipleimage_appN.tcf DSP/BIOS Configuration file defines N+1 writer tasks for CoreN, defines unique partitions in both SL2RAM and DDR2, defines a DDR2_COMMON memory partition that is identical for all cores, and places different parts of the application in different memory partitions. The partitioning of SL2RAM and DDR2 is what allows the cores to use shared memory components at the same time without interfering with each other. There are some duplicate code segments stored in shared memory for each core in this example, but if the applications' differences were greater than these simple examples then there would be a greater need to keep these segments separate. Using this method, there is no need to worry about where the various sections of BIOS and application code and data are placed - all are kept separate from the other cores by the memory partitioning. The memory partitioning was done manually by editing the *.tcf files and setting the memory section address, etc., to the values desired for the example. This partitioning is even across the cores and could easily be reused by other applications.<br /> 
+</p>
+<h2><span class="mw-headline" id="Complete_Description_and_Step-By-Step_Procedures_for_Multiple_Independent_Applications">Complete Description and Step-By-Step Procedures for Multiple Independent Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=7" title="Edit section: Complete Description and Step-By-Step Procedures for Multiple Independent Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Click here for <a href="../DSP/BIOS_on_Multi-Core_multipleimage.html" title="DSP/BIOS on Multi-Core multipleimage">Multiple Independent Applications</a>
+</p>
+<h1><span class="mw-headline" id="Multiple_Applications_Sharing_a_Partial_Image">Multiple Applications Sharing a Partial Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=8" title="Edit section: Multiple Applications Sharing a Partial Image">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The sharedimage example shows how separate applications can run on different cores while sharing a single, common, partial DSP/BIOS code image. Sharing common code between multiple applications reduces the overall memory requirement by up to 5x the size of that partial image. 
+</p><p>The shared memory in this example is partitioned differently than the purely independent partitions in the Multiple Independent Applications example. In this shared memory scenario, there is a common partition in both SL2RAM and DDR2, plus there are unique partitions "owned" separately by each core. This example demonstrates how to place memory, load, and run such applications. And most importantly, this section explains how to build a partial DSP/BIOS image and then how to link that partial image into the example applications. Figure 3 shows how six different applications are instantiated on the six cores of the C6472, with partitions of the Shared L2 and DDR2 memory, and with a shared partial DSP/BIOS image. 
+</p><p><a href="../File_Randyp_BIOS_Multicore_sh_memory.html" class="image" title="Figure 3. Multiple Applications Sharing a Partial DSP/BIOS Image"><img alt="Figure 3. Multiple Applications Sharing a Partial DSP/BIOS Image" src="https://processors.wiki.ti.com/images/a/a1/Randyp_BIOS_Multicore_sh_memory.png" width="900" height="679" class="thumbborder" /></a> <br /><b>Figure 3.</b> Multiple Applications Sharing a Partial DSP/BIOS Image 
+</p>
+<h2><span class="mw-headline" id="sharedimage_Example_Applications">sharedimage Example Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=9" title="Edit section: sharedimage Example Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The example for this scenario comprises the several sharedimage_appN (N=0..5) project folders and the BIOS_partial project folder. The same basic application code from the previous examples is used for this scenario, again with the number of writer tasks being equal to N+1 for CoreN and sharedimage_appN. The basic application uses a QUE (DSP/BIOS queue) to send messages and SEM (DSP/BIOS semaphore) to synchronize between one or more writer() tasks to a single reader() task. The reader task, the writer task(s), and the semaphore are statically created in the DSP/BIOS configuration .tcf files in each project folder. The memory location for the code and data are also set in the DSP/BIOS configuration .tcf files to implement the memory partition arrangement shown in Figure 3. 
+</p><p>The writer tasks will load and send a message through the DSP/BIOS QUE mechanism, then post a SEM to tell the reader task that a message is ready. The reader task will respond to the SEM by pulling a message off the QUE object and reporting the results using a LOG_printf message.<br /> 
+</p><p>The application should be built using DSP/BIOS 5.41.07 or greater and CCS4.2.0.09 or greater. Earlier releases will not support the Printf Logs as well or at all. With DSP/BIOS 5.41.07 or greater and CCSv4.2.0.09 or greater, you will be able to observe the results of the execution by each core by using the RTA-&gt;Printf Logs window. With earlier releases of DSP/BIOS and CCSv4, you may have to use the ROV tool and click down into the log buffers to observe the results.
+</p><p>Each project folder has a slightly different C source file and a slightly different DSP/BIOS&#160;Configuration .tcf file. <br /> 
+</p><p>The sh_appN.c files differ from one another only by the number of messages allocated. There are three (3) messages allocated for each of the writer tasks that are defined in the .tcf file, so one #define NUMWRITERS constant is the only code difference. 
+</p><p>The sharedimage_appN.tcf DSP/BIOS Configuration file defines N+1 writer tasks for CoreN, defines common plus unique partitions in both SL2RAM and DDR2, and places different parts of the application in different memory partitions. The partitioning of SL2RAM and DDR2 is what allows the cores to share a common partial image and also to use non-conflicting memory regions in the shared memory resources. Any DSP/BIOS code segments that are needed by any of the cores are stored in a single place in the SL2RAM shared memory in this example, minimizing the total memory requirements. Using this method, you will make the best use of shared memory for both common and unique uses by the several cores. 
+</p>
+<h2><span class="mw-headline" id="Complete_Description_and_Step-by-Step_Procedures_for_Multiple_Applications_Sharing_a_Partial_Image">Complete Description and Step-by-Step Procedures for Multiple Applications Sharing a Partial Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=10" title="Edit section: Complete Description and Step-by-Step Procedures for Multiple Applications Sharing a Partial Image">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Click here for <a href="../DSP/BIOS_on_Multi-Core_sharedimage.html" title="DSP/BIOS on Multi-Core sharedimage">Multiple Applications Sharing a Partial Image</a>
+</p>
+<h1><span class="mw-headline" id="Example_files_referenced_in_this_Wiki_topic">Example files referenced in this Wiki topic</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;section=11" title="Edit section: Example files referenced in this Wiki topic">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The following example archive project files are referenced in the topics above. You may need to remove the "Randyp_" prefix from the filename when you Extract the project files, but this has not been fully tested, yet. Still a work in progress....
+</p>
+<ul><li><a href="../File_Randyp_singleimage.html" title="File:Randyp singleimage.zip">File:Randyp singleimage.zip</a> (Date: Sep 16, 2011)</li>
+<li><a href="../File_Randyp_multipleimage.html" title="File:Randyp multipleimage.zip">File:Randyp multipleimage.zip</a> (Date: Sep 16, 2011)</li>
+<li><a href="../File_Randyp_sharedimage.html" title="File:Randyp sharedimage.zip">File:Randyp sharedimage.zip</a> (Date: Sep 16, 2011)</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201020256
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.055 seconds
+Real time usage: 0.060 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:5701-0!canonical and timestamp 20201201020256 and revision id 78026
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Using DSP/BIOS on Multi-Core DSP Devices</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;oldid=78026">https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;oldid=78026</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../Category_Multicore.html" title="Category:Multicore">Multicore</a></li><li><a href="../Category_DSPBIOS.html" title="Category:DSPBIOS">DSPBIOS</a></li><li><a href="../Category_C64x.html" title="Category:C64x">C64x</a></li><li><a href="../Category_C647x.html" title="Category:C647x">C647x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Using+DSP%2FBIOS+on+Multi-Core+DSP+Devices" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="BIOS_on_Multi-Core_DSP_Devices.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="BIOS_on_Multi-Core_DSP_Devices.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/Using_DSP/BIOS_on_Multi-Core_DSP_Devices.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/Using_DSP/BIOS_on_Multi-Core_DSP_Devices.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;oldid=78026" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Using_DSP/BIOS_on_Multi-Core_DSP_Devices&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 16 September 2011, at 19:31.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.055","walltime":"0.060","ppvisitednodes":{"value":43,"limit":1000000},"ppgeneratednodes":{"value":48,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201020256","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":224});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_DSP/BIOS_on_Multi-Core_DSP_Devices by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:11:04 GMT -->
+</html>

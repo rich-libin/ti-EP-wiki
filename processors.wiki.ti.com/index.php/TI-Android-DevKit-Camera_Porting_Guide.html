@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/TI-Android-DevKit-Camera_Porting_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:14:34 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>TI-Android-DevKit-Camera Porting Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"TI-Android-DevKit-Camera_Porting_Guide","wgTitle":"TI-Android-DevKit-Camera Porting Guide","wgCurRevisionId":182406,"wgRevisionId":182406,"wgArticleId":9213,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["OMAP35x","Android","Sitara Android","AM37x","DM37xx"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"TI-Android-DevKit-Camera_Porting_Guide","wgRelevantArticleId":9213,"wgRequestId":"82d10be5e3d0506abee438ca","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-TI-Android-DevKit-Camera_Porting_Guide rootpage-TI-Android-DevKit-Camera_Porting_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">TI-Android-DevKit-Camera Porting Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div class="floatleft"><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a></div>
+<p><br /><br /><br /><br /><br />
+This is a porting guide of - How to enable/add camera sensor on Android. Document will highlight on how to
+</p>
+<ul><li>Add camera module to linux kernel</li>
+<li>Enable camera module to kernel config</li>
+<li>Enable camera port on android</li></ul>
+<p>All example in this article is based on camera sensor 'mt9v113' and rowboat-android release.(<a rel="nofollow" class="external free" href="http://focus.ti.com/docs/toolsw/folders/print/androidsdk-sitara.html">http://focus.ti.com/docs/toolsw/folders/print/androidsdk-sitara.html</a>)
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Android.27s_Camera_Sub_System"><span class="tocnumber">1</span> <span class="toctext">Android's Camera Sub System</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Adding_Camera_Module_to_Linux_Kernel"><span class="tocnumber">2</span> <span class="toctext">Adding Camera Module to Linux Kernel</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Enable_Camera_Module_to_Kernel_Config"><span class="tocnumber">3</span> <span class="toctext">Enable Camera Module to Kernel Config</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Patch_reference"><span class="tocnumber">4</span> <span class="toctext">Patch reference</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Build_Kernel"><span class="tocnumber">5</span> <span class="toctext">Build Kernel</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Android_Camera_HAL_Reference"><span class="tocnumber">6</span> <span class="toctext">Android Camera HAL Reference</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Android_Camera_HAL_brief"><span class="tocnumber">7</span> <span class="toctext">Android Camera HAL brief</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Steps"><span class="tocnumber">7.1</span> <span class="toctext">Steps</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span id="Android's_Camera_Sub_System"></span><span class="mw-headline" id="Android.27s_Camera_Sub_System">Android's Camera Sub System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=1" title="Edit section: Android&#039;s Camera Sub System">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Android's camera application connect with android HAL through camera binding interface. HAL inturns connect physical camera sensor and provides control &amp; data interface between application and camera sensor.
+</p><p>The diagram below illustrates the structure of the camera subsystem. In the diagram proprietary camera libraries are nothing but camera HAL in current context. source&#160;: <a rel="nofollow" class="external free" href="http://source.android.com/porting/camera.html">http://source.android.com/porting/camera.html</a>
+</p>
+<div class="center"><div class="floatnone"><a href="File_Android-camera-subsystem.html" class="image"><img alt="Android-camera-subsystem.jpg" src="https://processors.wiki.ti.com/images/b/b8/Android-camera-subsystem.jpg" width="729" height="643" /></a></div></div>
+<h2><span class="mw-headline" id="Adding_Camera_Module_to_Linux_Kernel">Adding Camera Module to Linux Kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=2" title="Edit section: Adding Camera Module to Linux Kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Write/Get camera driver. (mt9v113.c/mt9v113.h)</li>
+<li>Put driver files at &lt;Kernel&gt;/drivers/media/video. Good to have header files at &lt;Kernel&gt;/include/media</li>
+<li>Open &amp; Edit &lt;Kernel&gt;drivers/media/video/Makefile <br /></li></ul>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+$vim &lt;Kernel&gt;/drivers/media/video/Makefile
+Add driver file to get compiled.
+e.x.
+obj-$(CONFIG_VIDEO_MT9V113) += mt9v113.o
+&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Open &amp; Edit &lt;Kernel&gt;/drivers/media/video/Kconfig</li></ul>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+$vim &lt;Kernel&gt;/drivers/media/video/Kconfig
+Add config entry for the driver.
+e.x.
+config VIDEO_MT9V113
+</p>
+<pre>tristate "Aptina MT9V113 VGA CMOS IMAGE SENSOR"
+depends on VIDEO_V4L2 &amp;&amp; I2C
+---help---
+This is a Video4Linux2 sensor-level driver for the Aptina MT9V113
+image sensor.
+</pre>
+<pre>To compile this driver as a module, choose M here: the
+module will be called mt9v113.
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Open &amp; Edit &lt;Kernel&gt;/arch/arm/mach-omap2/board-omap3beagle.c</li></ul>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+$vim &lt;Kernel&gt;/arch/arm/mach-omap2/board-omap3beagle.c
+/* Add i2c init data and regulator declaration for camera sensor.
+For more detail refer file - '&lt;Kernel&gt;/arch/arm/mach-omap2/board-omap3beagle.c' */
+e.x.
+static struct i2c_board_info __initdata beagle_i2c2_boardinfo[] = {
+</p>
+<ol><li>if defined(CONFIG_VIDEO_MT9V113) || defined(CONFIG_VIDEO_MT9V113_MODULE)</li></ol>
+<pre>{
+I2C_BOARD_INFO("mt9v113", MT9V113_I2C_ADDR),
+.platform_data = &amp;mt9v113_pdata,
+},
+</pre>
+<ol><li>endif</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Open &amp; Edit &lt;Kernel&gt;/arch/arm/mach-omap2/board-omap3beagle-camera.c
+<ul><li>Add board specific power settings for camera sensor</li>
+<li>For the reference refer file - '&lt;Kernel&gt;/arch/arm/mach-omap2/board-omap3beagle-camera.c'</li></ul></li></ul>
+<ul><li>Open &amp; Edit &lt;Kernel&gt;/arch/arm/mach-omap2/Makefile</li></ul>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+$vim &lt;Kernel&gt;/arch/arm/mach-omap2/Makefile
+Add board file for build
+obj-$(CONFIG_MACH_OMAP3_BEAGLE) += board-omap3beagle.o \
+</p>
+<pre>board-omap3beagle-camera.o \
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Enable_Camera_Module_to_Kernel_Config">Enable Camera Module to Kernel Config</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=3" title="Edit section: Enable Camera Module to Kernel Config">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Configure kernel and enable camera sensor</li></ul>
+<p>&lt;syntaxhighlight lang='bash'&gt;
+$cd &lt;Kernel&gt;
+$make CROSS_COMPILE=arm-eabi- ARCH=arm menuconfig
+&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Go to device drivers -&gt; multimedia support -&gt; video capture adapters -&gt; encoders/decoders and other helper chips</li>
+<li>select added camera driver</li></ul>
+<pre>General setup  ---&gt;
+[*] Enable loadable module support  ---&gt;
+[*] Enable the block layer  ---&gt;
+    System Type  ---&gt;
+    Bus support  ---&gt;
+    Kernel Features  ---&gt;
+    Boot options  ---&gt;
+    CPU Power Management  ---&gt;
+    Floating point emulation  ---&gt;
+    Userspace binary formats  ---&gt;
+    Power management options  ---&gt;
+[*] Networking support  ---&gt;
+    Device Drivers  ---&gt;
+    CBUS support  ---&gt;
+    File systems  ---&gt;
+</pre>
+<pre>    *** Multimedia core support ***
+&lt;*&gt;   Video For Linux
+[*]     Enable Video For Linux API 1 (DEPRECATED)
+&lt; &gt;   DVB for Linux
+    *** Multimedia drivers ***
+[ ]   Load and attach frontend and tuner driver modules as needed
+[ ]   Customize analog and hybrid tuner modules to build  ---&gt;
+[*]   Video capture adapters  ---&gt;
+[*]   Radio Adapters  ---&gt;
+[ ]   DAB adapters
+</pre>
+<pre>[ ]   Enable advanced debug functionality
+[ ]   Enable old-style fixed minor ranges for video devices
+[ ]   Autoselect pertinent encoders/decoders and other helper chips
+     Encoders/decoders and other helper chips  ---&gt;
+&lt; &gt;   Virtual Video Driver
+&lt; &gt;   CPiA Video For Linux
+&lt; &gt;   CPiA2 Video For Linux
+&lt; &gt;   SAA5246A, SAA5281 Teletext processor
+</pre>
+<pre>&lt; &gt; OmniVision OV7670 sensor support
+&lt;*&gt; Micron mt9v011 sensor support
+&lt;*&gt; Aptina MT9V113 VGA CMOS IMAGE SENSOR
+&lt; &gt; TCM825x camera sensor support
+&lt; &gt; Micron MT9P012 raw sensor driver (5MP)
+</pre>
+<h2><span class="mw-headline" id="Patch_reference">Patch reference</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=4" title="Edit section: Patch reference">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Kindly find patch reference at
+<a rel="nofollow" class="external free" href="http://processors.wiki.ti.com/images/a/aa/0001-camera-sensor-support-mt9v113-for-beagleboard.patch.gz">http://processors.wiki.ti.com/images/a/aa/0001-camera-sensor-support-mt9v113-for-beagleboard.patch.gz</a>
+</p><p>This patch will add camera sensor mt9v113 to kernel.
+</p>
+<h2><span class="mw-headline" id="Build_Kernel">Build Kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=5" title="Edit section: Build Kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Kindly refer - How to build kernel:
+<a rel="nofollow" class="external free" href="TI-Android-FroYo-DevKit-V2_UserGuide.html#Kernel">http://processors.wiki.ti.com/index.php/TI-Android-FroYo-DevKit-V2_UserGuide#Kernel</a>
+</p>
+<h2><span class="mw-headline" id="Android_Camera_HAL_Reference">Android Camera HAL Reference</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=6" title="Edit section: Android Camera HAL Reference">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a rel="nofollow" class="external free" href="http://processors.wiki.ti.com/images/6/6c/0001-HAL-camera-support-added-for-beagleboard.patch.gz">http://processors.wiki.ti.com/images/6/6c/0001-HAL-camera-support-added-for-beagleboard.patch.gz</a>
+</p>
+<h2><span class="mw-headline" id="Android_Camera_HAL_brief">Android Camera HAL brief</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=7" title="Edit section: Android Camera HAL brief">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>To implement a camera HAL ( also consider as driver between android camera subsystem and V4L2 kernel driver)&#160;; one need to create a shared library (named as libcamera.so) that implements the interface defined at “&lt;ANDROID_ROOT&gt;/frameworks/base/include/camera/CameraHardwareInterface.h”.</li>
+<li>Location of the shared library should be at &lt;ANDROID_ROOT&gt;/hardware/&lt;vendor&gt;/&lt;boardname&gt;/camera</li></ul>
+<p>e.g. In rowboat android - froyo release for omap3&#160;; it is at &lt;ANDROID_ROOT&gt;/hardware/ti/omap3/camera
+</p>
+<h3><span class="mw-headline" id="Steps">Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit&amp;section=8" title="Edit section: Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Create camera HAL at location explained above</li>
+<li>Create source files and implement interface defined at 'CameraHardwareInterface.h'. Kindly refer rowboat froyo release for the reference.</li></ul>
+<p>&lt;ANDROID_ROOT&gt;/hardware/ti/omap3/camera/CameraHardware.cpp <br />&lt;ANDROID_ROOT&gt;/hardware/ti/omap3/camera/CameraHardware.h
+</p>
+<ul><li>Following section brief above important interface needs to be defined under camera HAL.</li></ul>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+/* constructor */
+CameraHardware::CameraHardware()
+</p>
+<pre>: mParameters(),
+mPreviewHeap(0),
+mRawHeap(0),
+mCamera(0),
+mPreviewFrameSize(0),
+mNotifyCb(0),
+mDataCb(0),
+mDataCbTimestamp(0),
+mCallbackCookie(0),
+mMsgEnabled(0),
+previewStopped(true)
+</pre>
+<p>{
+</p>
+<pre>/* create camera, open camera sensor */
+/* init default paramets
+e.x.
+CameraParameters p;
+p.setPreviewSize(320, 240);
+p.set(CameraParameters::KEY_JPEG_QUALITY, 100);
+p.setPreviewFormat(CameraParameters::PIXEL_FORMAT_YUV422SP);
+*/
+initDefaultParameters();
+</pre>
+<p>}
+/* destructor */
+CameraHardware::~CameraHardware()
+{
+</p>
+<pre>/* close device and delete instance created */
+</pre>
+<p>}
+</p><p>sp&lt;IMemoryHeap&gt; CameraHardware::getPreviewHeap() const
+{
+</p>
+<pre>/* return preview frame pointer */
+return mPreviewHeap;
+</pre>
+<p>}
+</p><p><br />
+void CameraHardware::setCallbacks(notify_callback notify_cb,
+</p>
+<pre>data_callback data_cb,
+data_callback_timestamp data_cb_timestamp,
+void* user)
+</pre>
+<p>{
+</p>
+<pre>/* store callback to local pointers, need to callback at the time of preview/image capture
+e.x.
+mNotifyCb = notify_cb;
+mDataCb = data_cb;
+mDataCbTimestamp = data_cb_timestamp;
+mCallbackCookie = user;*/
+</pre>
+<p>}
+</p><p>void CameraHardware::enableMsgType(int32_t msgType)
+{
+</p>
+<pre>/* set local message flag. Application will give this notification to perform certain action while previewing.
+ex.start video, image caputure etc. */
+mMsgEnabled |= msgType;
+</pre>
+<p>}
+</p><p>void CameraHardware::disableMsgType(int32_t msgType)
+{
+</p>
+<pre>mMsgEnabled &amp;= ~msgType;
+</pre>
+<p>}
+</p><p>bool CameraHardware::msgTypeEnabled(int32_t msgType)
+{
+</p>
+<pre>/* return message value - presently enable at HAL
+return (mMsgEnabled &amp; msgType); */
+</pre>
+<p>}
+/* start preview */
+status_t CameraHardware::startPreview()
+{
+</p>
+<pre>/* configure device and start preview thread */
+/* in preview thread call
+- check message type
+- fill preview frame pointer with valid preview data
+- call data callback with data
+*/
+</pre>
+<p>}
+</p><p>void CameraHardware::stopPreview()
+{
+</p>
+<pre>/* stop preview */
+</pre>
+<p>}
+</p><p>status_t CameraHardware::startRecording()
+{
+</p>
+<pre>/* configure device &amp; start record thread */
+/* record thread
+- check message type
+- if message type contains - CAMERA_MSG_VIDEO_FRAME then call 'mDataCbTimestamp' with video frame captured
+*/
+</pre>
+<p>}
+</p><p>void CameraHardware::stopRecording()
+{
+</p>
+<pre>/* stop recording */
+</pre>
+<p>}
+</p><p>status_t CameraHardware::takePicture()
+{
+</p>
+<pre>/*
+- configure camera device
+- take a current frame
+- check message type
+- call callback
+*/
+}
+</pre>
+<p>status_t CameraHardware::setParameters(const CameraParameters&amp; params)
+{
+</p>
+<pre>/*
+- configure device as per parameters
+*/
+</pre>
+<p>}
+</p><p>CameraParameters CameraHardware::getParameters() const
+{
+</p>
+<pre>/*
+- return current value of parameter set
+*/
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Create and configure android.mk file</li></ul>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+LOCAL_PATH:= $(call my-dir)
+</p>
+<ol><li class="mw-empty-elt"></li>
+<li>libcamera</li>
+<li class="mw-empty-elt"></li></ol>
+<p>include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= \
+</p>
+<pre>source1.cpp \
+source2.cpp ...
+</pre>
+<p>LOCAL_MODULE:= libcamera
+LOCAL_SHARED_LIBRARIES:= \
+</p>
+<pre>libcutils \
+libui \
+libutils \
+libbinder \
+libjpeg \
+libcamera_client \
+</pre>
+<pre>libsurfaceflinger_client
+</pre>
+<p>LOCAL_C_INCLUDES += \
+</p>
+<pre>external/jpeg
+</pre>
+<p>include $(BUILD_SHARED_LIBRARY)
+include $(all-subdir-makefiles)
+&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Compile android system or one can also compile individal subsystem by</li></ul>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+Go to module directory
+$cd /projects/rowboat-android/hardware/ti/omap3/camera
+$source &lt;ANDROID_ROOT&gt;/build/envsetup.sh
+$mm TARGET_PRODUCT= &lt;TARGET PRODUCT NAME&gt;
+e.g.$ mm TARGET_PRODUCT=beagleboard
+copy libcamera.so to out/target/product/&lt;boardname&gt;/system/lib
+&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Create file system and test on target</li>
+<li>Kindly refer user guide for more information.</li></ul>
+<p><a rel="nofollow" class="external free" href="TI-Android-FroYo-DevKit-V2_UserGuide.html">http://processors.wiki.ti.com/index.php/TI-Android-FroYo-DevKit-V2_UserGuide</a><br />
+<a rel="nofollow" class="external free" href="TI-Android-GingerBread-2.3-DevKit-4.html">http://processors.wiki.ti.com/index.php/TI-Android-GingerBread-2.3-DevKit-1.0_UserGuide</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130055343
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.046 seconds
+Real time usage: 0.048 seconds
+Preprocessor visited node count: 67/1000000
+Preprocessor generated node count: 116/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1499/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:9213-0!canonical and timestamp 20201130055343 and revision id 182406
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>TI-Android-DevKit-Camera Porting Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;oldid=182406">https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;oldid=182406</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li><li><a href="Category_Android.html" title="Category:Android">Android</a></li><li><a href="Category_Sitara_Android.html" title="Category:Sitara Android">Sitara Android</a></li><li><a href="Category_AM37x.html" title="Category:AM37x">AM37x</a></li><li><a href="Category_DM37xx.html" title="Category:DM37xx">DM37xx</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=TI-Android-DevKit-Camera+Porting+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="TI-Android-DevKit-Camera_Porting_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_TI-Android-DevKit-Camera_Porting_Guide.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="TI-Android-DevKit-Camera_Porting_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/TI-Android-DevKit-Camera_Porting_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/TI-Android-DevKit-Camera_Porting_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;oldid=182406" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=TI-Android-DevKit-Camera_Porting_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 28 July 2014, at 03:52.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.046","walltime":"0.048","ppvisitednodes":{"value":67,"limit":1000000},"ppgeneratednodes":{"value":116,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1499,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130055343","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":229});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/TI-Android-DevKit-Camera_Porting_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:14:38 GMT -->
+</html>

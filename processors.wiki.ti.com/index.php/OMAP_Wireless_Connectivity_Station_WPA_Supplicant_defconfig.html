@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:29:34 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OMAP Wireless Connectivity Station WPA Supplicant defconfig - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig","wgTitle":"OMAP Wireless Connectivity Station WPA Supplicant defconfig","wgCurRevisionId":100482,"wgRevisionId":100482,"wgArticleId":10637,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig","wgRelevantArticleId":10637,"wgRequestId":"ccb87a7846548122adfa1830","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig rootpage-OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OMAP Wireless Connectivity Station WPA Supplicant defconfig</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><pre># Example wpa_supplicant build time configuration
+#
+# This file lists the configuration options that are used when building the
+# hostapd binary. All lines starting with # are ignored. Configuration option
+# lines must be commented out complete, if they are not to be included, i.e.,
+# just setting VARIABLE=n is not disabling that variable.
+#
+# This file is included in Makefile, so variables like CFLAGS and LIBS can also
+# be modified from here. In most cases, these lines should use += in order not
+# to override previous values of the variables.
+
+
+# Uncomment following two lines and fix the paths if you have installed OpenSSL
+# or GnuTLS in non-default location
+#CFLAGS += -I/usr/local/openssl/include
+#LIBS += -L/usr/local/openssl/lib
+
+# Some Red Hat versions seem to include kerberos header files from OpenSSL, but
+# the kerberos files are not in the default include path. Following line can be
+# used to fix build issues on such systems (krb5.h not found).
+#CFLAGS += -I/usr/include/kerberos
+
+# Example configuration for various cross-compilation platforms
+
+#### sveasoft (e.g., for Linksys WRT54G) ######################################
+#CC=mipsel-uclibc-gcc
+#CC=/opt/brcm/hndtools-mipsel-uclibc/bin/mipsel-uclibc-gcc
+#CFLAGS += -Os
+#CPPFLAGS += -I../src/include -I../../src/router/openssl/include
+#LIBS += -L/opt/brcm/hndtools-mipsel-uclibc-0.9.19/lib -lssl
+###############################################################################
+
+#### openwrt (e.g., for Linksys WRT54G) #######################################
+#CC=mipsel-uclibc-gcc
+#CC=/opt/brcm/hndtools-mipsel-uclibc/bin/mipsel-uclibc-gcc
+#CFLAGS += -Os
+#CPPFLAGS=-I../src/include -I../openssl-0.9.7d/include \
+#	-I../WRT54GS/release/src/include
+#LIBS = -lssl
+###############################################################################
+
+#CC=$(CROSS_COMPILE)gcc
+#CFLAGS += -DCONFIG_LIBNL20
+#CPPFLAGS += -DCONFIG_LIBNL20
+#LIBS += -L$(NFSROOT)/lib -lnl
+#LIBS_p += -L$(NFSROOT)/lib
+#LIBDIR = $(NFSROOT)/lib
+#BINDIR = $(NFSROOT)/usr/sbin
+
+CONFIG_WAPI=y
+CONFIG_LIBNL20=y
+NEED_BGSCAN=y
+CONFIG_BGSCAN_LEARN=y
+
+# Driver interface for Host AP driver
+#CONFIG_DRIVER_HOSTAP=y
+
+# Driver interface for Agere driver
+#CONFIG_DRIVER_HERMES=y
+# Change include directories to match with the local setup
+#CFLAGS += -I../../hcf -I../../include -I../../include/hcf
+#CFLAGS += -I../../include/wireless
+
+# Driver interface for madwifi driver
+# Deprecated; use CONFIG_DRIVER_WEXT=y instead.
+#CONFIG_DRIVER_MADWIFI=y
+# Set include directory to the madwifi source tree
+#CFLAGS += -I../../madwifi
+
+# Driver interface for ndiswrapper
+# Deprecated; use CONFIG_DRIVER_WEXT=y instead.
+#CONFIG_DRIVER_NDISWRAPPER=y
+
+# Driver interface for Atmel driver
+#CONFIG_DRIVER_ATMEL=y
+
+# Driver interface for old Broadcom driver
+# Please note that the newer Broadcom driver ("hybrid Linux driver") supportsBG
+# Linux wireless extensions and does not need (or even work) with the old
+# driver wrapper. Use CONFIG_DRIVER_WEXT=y with that driver.
+#CONFIG_DRIVER_BROADCOM=y
+# Example path for wlioctl.h; change to match your configuration
+#CFLAGS += -I/opt/WRT54GS/release/src/include
+
+# Driver interface for Intel ipw2100/2200 driver
+# Deprecated; use CONFIG_DRIVER_WEXT=y instead.
+#CONFIG_DRIVER_IPW=y
+
+# Driver interface for Ralink driver
+#CONFIG_DRIVER_RALINK=y
+
+# Driver interface for generic Linux wireless extensions
+CONFIG_DRIVER_WEXT=y
+
+# Driver interface for Linux drivers using the nl80211 kernel interface
+CONFIG_DRIVER_NL80211=y
+
+# Driver interface for FreeBSD net80211 layer (e.g., Atheros driver)
+#CONFIG_DRIVER_BSD=y
+#CFLAGS += -I/usr/local/include
+#LIBS += -L/usr/local/lib
+#LIBS_p += -L/usr/local/libBG
+#LIBS_c += -L/usr/local/lib
+
+# Driver interface for Windows NDIS
+#CONFIG_DRIVER_NDIS=y
+#CFLAGS += -I/usr/include/w32api/ddk
+#LIBS += -L/usr/local/lib
+# For native build using mingw
+#CONFIG_NATIVE_WINDOWS=y
+# Additional directories for cross-compilation on Linux host for mingw target
+#CFLAGS += -I/opt/mingw/mingw32/include/ddk
+#LIBS += -L/opt/mingw/mingw32/lib
+#CC=mingw32-gcc
+# By default, driver_ndis uses WinPcap for low-level operations. This can be
+# replaced with the following option which replaces WinPcap calls with NDISUIO.
+# However, this requires that WZC is disabled (net stop wzcsvc) before starting
+# wpa_supplicant.
+# CONFIG_USE_NDISUIO=y
+
+# Driver interface for development testing
+#CONFIG_DRIVER_TEST=y
+
+# Include client MLME (management frame processing) for test driver
+# This can be used to test MLME operations in hostapd with the test interface.
+# space.
+#CONFIG_CLIENT_MLME=y
+
+# Driver interface for wired Ethernet drivers
+CONFIG_DRIVER_WIRED=y
+
+# Driver interface for the Broadcom RoboSwitch family
+#CONFIG_DRIVER_ROBOSWITCH=y
+
+# Driver interface for no driver (e.g., WPS ER only)
+#CONFIG_DRIVER_NONE=y
+
+# Solaris libraries
+#LIBS += -lsocket -ldlpi -lnsl
+#LIBS_c += -lsocket
+
+# Enable IEEE 802.1X Supplicant (automatically included if any EAP method is
+# included)
+CONFIG_IEEE8021X_EAPOL=y
+
+# EAP-MD5
+CONFIG_EAP_MD5=y
+
+# EAP-MSCHAPv2
+CONFIG_EAP_MSCHAPV2=y
+
+# EAP-TLS
+CONFIG_EAP_TLS=y
+
+# EAL-PEAP
+CONFIG_EAP_PEAP=y
+
+# EAP-TTLS
+CONFIG_EAP_TTLS=y
+
+# EAP-FAST
+# Note: Default OpenSSL package does not include support for all the
+# functionality needed for EAP-FAST. If EAP-FAST is enabled with OpenSSL,
+# the OpenSSL library must be patched (openssl-0.9.8d-tls-extensions.patch)
+# to add the needed functions.
+#CONFIG_EAP_FAST=y
+
+# EAP-GTC
+CONFIG_EAP_GTC=y
+
+# EAP-OTP
+CONFIG_EAP_OTP=y
+
+# EAP-SIM (enable CONFIG_PCSC, if EAP-SIM is used)
+#CONFIG_EAP_SIM=y
+
+# EAP-PSK (experimental; this is _not_ needed for WPA-PSK)
+#CONFIG_EAP_PSK=y
+
+# EAP-PAX
+#CONFIG_EAP_PAX=y
+
+# LEAP
+CONFIG_EAP_LEAP=y
+
+# EAP-AKA (enable CONFIG_PCSC, if EAP-AKA is used)
+#CONFIG_EAP_AKA=y
+
+# EAP-AKA' (enable CONFIG_PCSC, if EAP-AKA' is used).
+# This requires CONFIG_EAP_AKA to be enabled, too.
+#CONFIG_EAP_AKA_PRIME=y
+
+# Enable USIM simulator (Milenage) for EAP-AKA
+#CONFIG_USIM_SIMULATOR=y
+
+# EAP-SAKE
+#CONFIG_EAP_SAKE=y
+
+# EAP-GPSK
+#CONFIG_EAP_GPSK=y
+# Include support for optional SHA256 cipher suite in EAP-GPSK
+#CONFIG_EAP_GPSK_SHA256=y
+
+# EAP-TNC and related Trusted Network Connect support (experimental)
+#CONFIG_EAP_TNC=y
+
+# Wi-Fi Protected Setup (WPS)
+CONFIG_WPS=y
+# Enable WSC 2.0 support
+CONFIG_WPS2=y
+
+# EAP-IKEv2
+#CONFIG_EAP_IKEV2=y
+
+# PKCS#12 (PFX) support (used to read private key and certificate file from
+# a file that usually has extension .p12 or .pfx)
+CONFIG_PKCS12=y
+
+# Smartcard support (i.e., private key on a smartcard), e.g., with openssl
+# engine.
+CONFIG_SMARTCARD=y
+
+# PC/SC interface for smartcards (USIM, GSM SIM)
+# Enable this if EAP-SIM or EAP-AKA is included
+#CONFIG_PCSC=y
+
+# Development testingBG
+#CONFIG_EAPOL_TEST=y
+
+# Select control interface backend for external programs, e.g, wpa_cli:
+# unix = UNIX domain sockets (default for Linux/*BSD)
+# udp = UDP sockets using localhost (127.0.0.1)
+# named_pipe = Windows Named Pipe (default for Windows)
+# y = use default (backwards compatibility)
+# If this option is commented out, control interface is not included in the
+# build.
+CONFIG_CTRL_IFACE=y
+
+# Include support for GNU Readline and History Libraries in wpa_cli.
+# When building a wpa_cli binary for distribution, please note that these
+# libraries are licensed under GPL and as such, BSD license may not apply for
+# the resulting binary.
+#CONFIG_READLINE=y
+
+# Remove debugging code that is printing out debug message to stdout.
+# This can be used to reduce the size of the wpa_supplicant considerably
+# if debugging code is not needed. The size reduction can be around 35%
+# (e.g., 90 kB).
+#CONFIG_NO_STDOUT_DEBUG=y
+
+# Remove WPA support, e.g., for wired-only IEEE 802.1X supplicant, to save
+# 35-50 kB in code size.
+#CONFIG_NO_WPA=y
+
+# Remove WPA2 support. This allows WPA to be used, but removes WPA2 code to
+# save about 1 kB in code size when building only WPA-Personal (no EAP support)
+# or 6 kB if building for WPA-Enterprise.
+#CONFIG_NO_WPA2=y
+
+# Remove IEEE 802.11i/WPA-Personal ASCII passphrase support
+# This option can be used to reduce code size by removing support for
+# converting ASCII passphrases into PSK. If this functionality is removed, the
+# PSK can only be configured as the 64-octet hexstring (e.g., from
+# wpa_passphrase). This saves about 0.5 kB in code size.
+#CONFIG_NO_WPA_PASSPHRASE=y
+
+# Disable scan result processing (ap_mode=1) to save code size by about 1 kB.
+# This can be used if ap_scan=1 mode is never enabled.
+#CONFIG_NO_SCAN_PROCESSING=y
+
+# Select configuration backend:
+# file = text file (e.g., wpa_supplicant.conf; note: the configuration file
+#	path is given on command line, not here; this option is just used to
+#	select the backend that allows configuration files to be used)
+# winreg = Windows registry (see win_example.reg for an example)
+CONFIG_BACKEND=file
+
+# Remove configuration write functionality (i.e., to allow the configuration
+# file to be updated based on runtime configuration changes). The runtime
+# configuration can still be changed, the changes are just not going to be
+# persistent over restarts. This option can be used to reduce code size by
+# about 3.5 kB.
+#CONFIG_NO_CONFIG_WRITE=y
+
+# Remove support for configuration blobs to reduce code size by about 1.5 kB.
+#CONFIG_NO_CONFIG_BLOBS=y
+
+# Select program entry point implementation:
+# main = UNIX/POSIX like main() function (default)
+# main_winsvc = Windows service (read parameters from registry)
+# main_none = Very basic example (development use only)
+#CONFIG_MAIN=main
+
+# Select wrapper for operatins system and C library specific functions
+# unix = UNIX/POSIX like systems (default)
+# win32 = Windows systems
+# none = Empty template
+#CONFIG_OS=unix
+
+# Select event loop implementation
+# eloop = select() loop (default)
+# eloop_win = Windows events and WaitForMultipleObject() loop
+# eloop_none = Empty template
+#CONFIG_ELOOP=eloop
+
+# Select layer 2 packet implementation
+# linux = Linux packet socket (default)
+# pcap = libpcap/libdnet/WinPcap
+# freebsd = FreeBSD libpcap
+# winpcap = WinPcap with receive thread
+# ndis = Windows NDISUIO (note: requires CONFIG_USE_NDISUIO=y)
+# none = Empty template
+#CONFIG_L2_PACKET=linux
+
+# PeerKey handshake for Station to Station Link (IEEE 802.11e DLS)
+CONFIG_PEERKEY=y
+
+# IEEE 802.11w (management frame protection)
+# This version is an experimental implementation based on IEEE 802.11w/D1.0
+# draft and is subject to change since the standard has not yet been finalized.
+# Driver support is also needed for IEEE 802.11w.
+#CONFIG_IEEE80211W=y
+
+# Select TLS implementation
+# openssl = OpenSSL (default)
+# gnutls = GnuTLS (needed for TLS/IA, see also CONFIG_GNUTLS_EXTRA)
+# internal = Internal TLSv1 implementation (experimental)
+# none = Empty template
+#CONFIG_TLS=openssl
+
+# Whether to enable TLS/IA support, which is required for EAP-TTLSv1.
+# You need CONFIG_TLS=gnutls for this to have any effect. Please note that
+# even though the core GnuTLS library is released under LGPL, this extra
+# library uses GPL and as such, the terms of GPL apply to the combination
+# of wpa_supplicant and GnuTLS if this option is enabled. BSD license may not
+# apply for distribution of the resulting binary.
+#CONFIG_GNUTLS_EXTRA=y
+
+# If CONFIG_TLS=internal is used, additional library and include paths are
+# needed for LibTomMath. Alternatively, an integrated, minimal version of
+# LibTomMath can be used. See beginning of libtommath.c for details on benefits
+# and drawbacks of this option.
+#CONFIG_INTERNAL_LIBTOMMATH=y
+#ifndef CONFIG_INTERNAL_LIBTOMMATH
+#LTM_PATH=/usr/src/libtommath-0.39
+#CFLAGS += -I$(LTM_PATH)
+#LIBS += -L$(LTM_PATH)
+#LIBS_p += -L$(LTM_PATH)
+#endif
+# At the cost of about 4 kB of additional binary size, the internal LibTomMath
+# can be configured to include faster routines for exptmod, sqr, and div to
+# speed up DH and RSA calculation considerably
+#CONFIG_INTERNAL_LIBTOMMATH_FAST=y
+
+# Include NDIS event processing through WMI into wpa_supplicant/wpasvc.
+# This is only for Windows builds and requires WMI-related header files and
+# WbemUuid.Lib from Platform SDK even when building with MinGW.
+#CONFIG_NDIS_EVENTS_INTEGRATED=y
+#PLATFORMSDKLIB="/opt/Program Files/Microsoft Platform SDK/Lib"
+
+# Add support for old DBus control interface
+# (fi.epitest.hostap.WPASupplicant)
+CONFIG_CTRL_IFACE_DBUS=y
+
+# Add support for new DBus control interface
+# (fi.w1.hostap.wpa_supplicant1)
+CONFIG_CTRL_IFACE_DBUS_NEW=y
+
+# Add introspection support for new DBus control interface
+CONFIG_CTRL_IFACE_DBUS_INTRO=y
+
+# Add support for loading EAP methods dynamically as shared libraries.
+# When this option is enabled, each EAP method can be either included
+# statically (CONFIG_EAP_&lt;method&gt;=y) or dynamically (CONFIG_EAP_&lt;method&gt;=dyn).
+# Dynamic EAP methods are build as shared objects (eap_*.so) and they need to
+# be loaded in the beginning of the wpa_supplicant configuration file
+# (see load_dynamic_eap parameter in the example file) before being used in
+# the network blocks.
+#
+# Note that some shared parts of EAP methods are included in the main program
+# and in order to be able to use dynamic EAP methods using these parts, the
+# main program must have been build with the EAP method enabled (=y or =dyn).
+# This means that EAP-TLS/PEAP/TTLS/FAST cannot be added as dynamic libraries
+# unless at least one of them was included in the main build to force inclusion
+# of the shared code. Similarly, at least one of EAP-SIM/AKA must be included
+# in the main build to be able to load these methods dynamically.
+#
+# Please also note that using dynamic libraries will increase the total binary
+# size. Thus, it may not be the best option for targets that have limited
+# amount of memory/flash.
+#CONFIG_DYNAMIC_EAP_METHODS=y
+
+# IEEE Std 802.11r-2008 (Fast BSS Transition)
+#CONFIG_IEEE80211R=y
+
+# Add support for writing debug log to a file (/tmp/wpa_supplicant-log-#.txt)
+CONFIG_DEBUG_FILE=y
+
+# Enable privilege separation (see README 'Privilege separation' for details)
+#CONFIG_PRIVSEP=y
+
+# Enable mitigation against certain attacks against TKIP by delaying Michael
+# MIC error reports by a random amount of time between 0 and 60 seconds
+#CONFIG_DELAYED_MIC_ERROR_REPORT=y
+
+# Enable tracing code for developer debugging
+# This tracks use of memory allocations and other registrations and reports
+# incorrect use with a backtrace of call (or allocation) location.
+#CONFIG_WPA_TRACE=y
+# For BSD, comment out these.
+#LIBS += -lexecinfo
+#LIBS_p += -lexecinfo
+#LIBS_c += -lexecinfo
+
+# Use libbfd to get more details for developer debugging
+# This enables use of libbfd to get more detailed symbols for the backtraces
+# generated by CONFIG_WPA_TRACE=y.
+#CONFIG_WPA_TRACE_BFD=y
+# For BSD, comment out these.
+#LIBS += -lbfd -liberty -lz
+#LIBS_p += -lbfd -liberty -lz
+#LIBS_c += -lbfd -liberty -lz
+
+# for p2p
+CONFIG_P2P=y
+CONFIG_AP=y
+</pre>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130194401
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.012 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 14794/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:10637-0!canonical and timestamp 20201130194401 and revision id 100482
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OMAP Wireless Connectivity Station WPA Supplicant defconfig</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;oldid=100482">https://processors.wiki.ti.com/index.php?title=OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;oldid=100482</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OMAP+Wireless+Connectivity+Station+WPA+Supplicant+defconfig" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;oldid=100482" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 March 2012, at 05:37.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.012","walltime":"0.012","ppvisitednodes":{"value":4,"limit":1000000},"ppgeneratednodes":{"value":24,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":14794,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130194401","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":227});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP_Wireless_Connectivity_Station_WPA_Supplicant_defconfig by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:29:36 GMT -->
+</html>

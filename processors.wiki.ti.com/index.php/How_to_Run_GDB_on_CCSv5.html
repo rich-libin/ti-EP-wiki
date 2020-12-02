@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/How_to_Run_GDB_on_CCSv5 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:03:34 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>How to Run GDB on CCSv5 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"How_to_Run_GDB_on_CCSv5","wgTitle":"How to Run GDB on CCSv5","wgCurRevisionId":198389,"wgRevisionId":198389,"wgArticleId":5169,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Code Composer Studio v5"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"How_to_Run_GDB_on_CCSv5","wgRelevantArticleId":5169,"wgRequestId":"28f800f9ae3a5096f24d5d24","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-How_to_Run_GDB_on_CCSv5 rootpage-How_to_Run_GDB_on_CCSv5 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">How to Run GDB on CCSv5</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>Return to the <a href="Sitara_Linux_Software_Developer%e2%80%99s_Guide.html" title="Sitara Linux Software Developer’s Guide"><u><b>Sitara Linux Software Developer's Guide</b></u></a> 
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Preliminary_Requirements"><span class="tocnumber">1</span> <span class="toctext">Preliminary Requirements</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Updated_Toolchain"><span class="tocnumber">1.1</span> <span class="toctext">Updated Toolchain</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Determining_the_Target_Board_Ethernet_IP_Address"><span class="tocnumber">1.2</span> <span class="toctext">Determining the Target Board Ethernet IP Address</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Creating_the_Debug_Configuration_for_the_Project"><span class="tocnumber">1.3</span> <span class="toctext">Creating the Debug Configuration for the Project</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Running_the_Debug_Session"><span class="tocnumber">1.4</span> <span class="toctext">Running the&#160;Debug Session</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#_Stopping_the_Debug_Session"><span class="tocnumber">1.5</span> <span class="toctext">&#160;Stopping the Debug Session</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Archived"><span class="tocnumber">2</span> <span class="toctext">Archived</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Preliminary_Requirements">Preliminary Requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit&amp;section=1" title="Edit section: Preliminary Requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ol><li>The Sitara&#160;SDK for your hardware platform has been installed on your&#160;Ubuntu host machine.</li>
+<li>A serial connection between your host machine and the target board with a serial terminal emulator running on the host.&#160; Minicom is recommended. &#160;You could also use a telnet window to the target system.</li>
+<li>An Ethernet connection between your host machine and the target board.</li>
+<li>This article assumes that the Remote System Explorer plug-in has been setup to provide an SSH connection to the remote file system.&#160; See&#160; <a href="How_to_setup_Remote_System_Explorer_plug-in.html" title="How to setup Remote System Explorer plug-in">How_to_setup_Remote_System_Explorer_plug-in</a></li>
+<li>Boot up the target EVM.</li>
+<li>Start CCSv5 and open the project you wish to debug.</li>
+<li>The executable to be debugged must reside in the target file system.&#160; It must have been built from the debug build configuration so that it contains the symbol information.<br /></li></ol>
+<p>NOTE: For this example, we are going to debug the dhrystone project 
+</p>
+<h2><span class="mw-headline" id="Updated_Toolchain">Updated Toolchain</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit&amp;section=2" title="Edit section: Updated Toolchain">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Starting with Sitara Linux SDK 6.0 the location of the toolchain has changed and for non ARM 9 devices a new Linaro based toolchain will be used. Details about the change in toolchain location can be found <a rel="nofollow" class="external text" href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/Overview_Getting_Started_Guide.html#gcc-toolchain#Updated.C2.A0Linux-Devkit_Structure">here</a>. Also details about the switch to Linaro can be found <a rel="nofollow" class="external text" href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/Overview_Getting_Started_Guide.html#gcc-toolchain#Switch_to_Linaro">here</a>. 
+</p><p>AM18x users are not affected by the switch to Linaro. Therefore, any references to the Linaro toolchain prefix "<b>arm-linux-gnueabihf</b>-" should be replaced with "<b>arm-arago-linux-gnueabi-</b>".
+</p>
+<h2><span class="mw-headline" id="Determining_the_Target_Board_Ethernet_IP_Address">Determining the Target Board Ethernet IP Address</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit&amp;section=3" title="Edit section: Determining the Target Board Ethernet IP Address">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br />&#160;&#160;&#160; 1.&#160;Get the&#160;target Ethernet&#160;IP address: 
+</p>
+<pre><a rel="nofollow" class="external text" href="mailto:root@am335x-evm">root@am335x-evm</a>:~# ifconfig   
+</pre>
+<p>You should see a response that is similar to this.&#160; The actual&#160;target Ethernet IP address&#160;will appear where the xxx.xxx.xxx.xxx is shown below.&#160; (This IP address will be used in a later step): 
+</p>
+<pre>eth0      Link encap:Ethernet  HWaddr 00:50:C2:7E:8F:D4                             
+         inet addr:xxx.xxx.xxx.xxx  Bcast:0.0.0.0  Mask:255.255.254.0              
+         UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1                        
+         RX packets:24 errors:0 dropped:0 overruns:0 frame:0                       
+         TX packets:3 errors:0 dropped:0 overruns:0 carrier:0                      
+         collisions:0 txqueuelen:1000                                              
+         RX bytes:3174 (3.0 KiB)  TX bytes:1770 (1.7 KiB)                          
+         Interrupt:80                                                              
+                                                                                   
+lo        Link encap:Local Loopback                                                 
+         inet addr:127.0.0.1  Mask:255.0.0.0                                       
+         UP LOOPBACK RUNNING  MTU:16436  Metric:1                                  
+         RX packets:0 errors:0 dropped:0 overruns:0 frame:0                        
+         TX packets:0 errors:0 dropped:0 overruns:0 carrier:0                      
+         collisions:0 txqueuelen:0                                                 
+         RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+</pre>
+<h2><span class="mw-headline" id="Creating_the_Debug_Configuration_for_the_Project">Creating the Debug Configuration for the Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit&amp;section=4" title="Edit section: Creating the Debug Configuration for the Project">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>In CCS, select the project you wish to work with by clicking on it and highlighting it.</li>
+<li>Select the Run -&gt; Debug Configurations menu item.&#160; This opens a dialog box as shown below.</li></ol>
+<p><br /> 
+</p><p><a href="File_Initial-debug-configurations.html" class="image"><img alt="Initial-debug-configurations.png" src="https://processors.wiki.ti.com/images/4/4f/Initial-debug-configurations.png" width="875" height="765" /></a><br /> 
+</p><p><br /> 
+</p><p>&#160;&#160;&#160; 3. Double click C/C++ Remote Application.&#160; You&#160;should then see a new debug configuration named "dhrystone Debug" as shown below.&#160; 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; Select your target connection from the Connection drop-down box.&#160; In the example the target connection is called My Target EVM. 
+</p><p><br /><a href="File_Dhrystone-debug-config1.html" class="image"><img alt="Dhrystone-debug-config1.png" src="https://processors.wiki.ti.com/images/7/73/Dhrystone-debug-config1.png" width="981" height="748" /></a> 
+</p><p><br /> 
+</p><p><br /> 
+</p><p>4. Click the Search Project button to open the Program Selection dialog box below.&#160; Click on the "armle -&#160;/dhrystone/Debug/dhrystone" item and click OK. 
+</p><p><br /> 
+</p><p><a href="File_Debug-config-2.html" class="image"><img alt="Debug-config-2.png" src="https://processors.wiki.ti.com/images/0/06/Debug-config-2.png" width="396" height="601" /></a><br /> 
+</p><p><br /> 
+</p><p>5. Click the "Browse..." button for&#160;"Remote Absolute File Path for C/C++ Application".&#160; Navgate to the executable file on the remote 
+</p><p>&#160;&#160;&#160; file system.&#160; For this example, the executable file is found at&#160;"/usr/bin/dhrystone". 
+</p><p><br />&#160;<a href="File_Auto-debug-config-main-tab.html" class="image"><img alt="Auto-debug-config-main-tab.png" src="https://processors.wiki.ti.com/images/a/a4/Auto-debug-config-main-tab.png" width="1047" height="720" /></a> 
+</p><p><br /> 
+</p><p>&#160;&#160; The .gdbinit file is used by GDB to locate source files and library files on the target. The .gdbinit file is created 
+</p><p>&#160;&#160; when the SDK environment script runs. Here is an example of a .gdbinit file. 
+</p><p><br /> 
+</p><p>&#160; <a href="File_Gdbinit.html" class="image"><img alt="Gdbinit.png" src="https://processors.wiki.ti.com/images/4/40/Gdbinit.png" width="786" height="164" /></a><br /> 
+</p><p><br /> 
+</p><p>6.&#160;Click the Debugger tab.&#160; On the Debugger page, the Main tab should be selected.&#160;&#160;Click Browse next to "GDB debugger" and browse to the GDB executable. 
+</p>
+<ul><li>in the 06.00.00.00 SDK, the path is&#160;: /home/sitara/ti-sdk-am335x-evm-06.00.00.00/linux-devkit/sysroot/i686-arago-linux/usr/bin/arm-linux-gnueabihf-gdb</li>
+<li>the GDB init file is located: /home/sitara/ti-sdk-am335x-evm-06.00.00.00/.gdbinit</li></ul>
+<p>&#160;&#160;&#160;Click browse next to "GDB command file" and browse&#160;to the .gdbinit file in the SDK install directory.&#160;&#160;When you try to browse to the .gdbinit&#160;file, you will need 
+</p><p>&#160;&#160; to R-Click -&gt; Show Hidden Files to see the file.&#160;&#160; Click the Close button and you are now ready to debug the application! 
+</p><p><br />&#160;&#160; <a href="File_Auto-debug-config-debugger-tab.html" class="image"><img alt="Auto-debug-config-debugger-tab.png" src="https://processors.wiki.ti.com/images/0/05/Auto-debug-config-debugger-tab.png" width="1610" height="794" /></a><br />&#160;<br /> 
+</p>
+<h2><span class="mw-headline" id="Running_the_Debug_Session">Running the&#160;Debug Session</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit&amp;section=5" title="Edit section: Running the Debug Session">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>1. Make sure that you are setup for the&#160;debug build configuration which contains symbol information.&#160; In the C/C++ perspective, click on the dhrystone project to select it and 
+</p><p>&#160;&#160; Project -&gt; Build Configurations -&gt; Set Active -&gt; Debug. 
+</p><p><br /> 
+</p><p>2. The executable file and the folder containing the executable file need to be set to Read-Write-Execute permissions for the GDB Automatic Remote Debugging Launcher to work. 
+</p><p>&#160;&#160;&#160; This only needs to be done the first time.&#160; Click the "&gt;&gt;" in the upper right corner of the CCS window and select the Remote System Explorer perspective.&#160; If you are prompted 
+</p><p>&#160;&#160;&#160; to enter a password, the username should be "root" and the password should be left blank.&#160; Open the Sftp Files node in the Remote Systems tree and navigate under the root 
+</p><p>&#160;&#160;&#160; node to the executable file.&#160; 
+</p><p>&#160;&#160; 
+</p><p>&#160;&#160;&#160; <a href="File_Browse-to-dhrystone-with-rse.html" class="image"><img alt="Browse-to-dhrystone-with-rse.png" src="https://processors.wiki.ti.com/images/c/c9/Browse-to-dhrystone-with-rse.png" width="1128" height="887" /></a> 
+</p><p>&#160;&#160; <br /> 
+</p><p><br /> 
+</p><p>&#160;&#160;&#160; 3.&#160; R-Click on the dhrystone file and select Properties.&#160; Click Permisions and change it so that all permissions are set.&#160; Also set all permissions on the /usr/bin folder. 
+</p><p><br /> 
+</p><p>&#160;&#160; <a href="File_Permissions.html" class="image"><img alt="Permissions.png" src="https://processors.wiki.ti.com/images/1/13/Permissions.png" width="740" height="538" /></a><br /> 
+</p><p><br /> 
+</p><p>4.&#160; Click the green "bug" icon to build the executable, transfer the executable to the target, start gdbserver and and start debugging. 
+</p><p>&#160;&#160;&#160; CCS will change to the CCS Debug perspective. The debug tab will show the running threads and their status. The source code window will show&#160; 
+</p><p>&#160;&#160;&#160; the program halted at the first executable source code line in the main() function. The Variables window will show the local variables and their current 
+</p><p>&#160;&#160;&#160; values. 
+</p><p><br />&#160;&#160;&#160; <a href="File_Auto-debugging.html" class="image"><img alt="Auto-debugging.png" src="https://processors.wiki.ti.com/images/9/95/Auto-debugging.png" width="1146" height="795" /></a> 
+</p><p><br /> 
+</p><p>5. To toggle a breakpoint, highlight the line of code in the source code window. Then click the Run -&gt; Toggle Breakpoint menu item. 
+</p><p><br />6. Use the debugger "Step Over" and "Step Into" icons to step through the source code. 
+</p><p><br />7. To resume program execution, click the Run -&gt; Resume menu item.&#160; 
+</p><p>&#160;&#160;&#160; NOTE: Do not click the Run -&gt; Debug menu item, as that will attempt to start a new debug session. 
+</p><p><br /> 
+</p><p>&#160;&#160;&#160; From here, you can make changes to the C source files, save the changes and then just click the green "Bug" icon again and you will be debugging the new executable on the target. 
+</p><p>&#160;&#160;&#160; (Each time you start the debugger the executable is built, automatically transferred to the target board and the gdbserver program is started for you.)<br /> 
+</p>
+<h2><span class="mw-headline" id="_Stopping_the_Debug_Session">&#160;Stopping the Debug Session <br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit&amp;section=6" title="Edit section:  Stopping the Debug Session">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>&#160;When finished debugging the dhrystone application, click the Run -&gt; Resume menu item.&#160;&#160;&#160;To terminate&#160;the program,&#160;&#160;click the Terminate icon in CCS (this icon is a red square). 
+</p><p>&#160; 
+</p><p>NOTE:&#160; If the program being debugged ends abnormally or crashes, the&#160;target console running 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; gdbserver may no longer respond.&#160; In that case, the target board must be rebooted to start another debug session. 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; To avoid having to reboot the target system, the Remote System Explorer Shell Processes feature can be used to terminate the 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; gdbserver process. 
+</p><p><br /> 
+</p><p>See <a href="How_to_setup_Remote_System_Explorer_plug-in.html" title="How to setup Remote System Explorer plug-in">How_to_setup_Remote_System_Explorer_plug-in</a>&#160;to setup the Remote System Explorer plug-in. 
+</p><p>Once setup, you can follow these steps to terminate gdbserver: 
+</p><p>1) Change to the Remote System Explorer perspective.&#160; R-Click on Shell Processes in the target connection tree and select Show in Table to open a Remote System Details window. 
+</p><p>2) Double-click on "All Processes" in the table to display the list of processes runnning on the target system. 
+</p><p>3) Click on "Executable Name" in the table headers to sort the list by executable name. 
+</p><p>4) Find the gdbserver process.&#160; R-Click on it and select Kill.&#160; This will open a "Send a Kill Signal" dialog box.&#160; Click the Kill button. 
+</p><p><br /><a href="File_Shell-processes.html" class="image"><img alt="Shell-processes.png" src="https://processors.wiki.ti.com/images/e/ec/Shell-processes.png" width="1146" height="795" /></a><br /><br /><a href="File_Kill-gdbserver.html" class="image"><img alt="Kill-gdbserver.png" src="https://processors.wiki.ti.com/images/7/79/Kill-gdbserver.png" width="452" height="317" /></a><br /> 
+</p><p><br /> 
+</p>
+<h1><span class="mw-headline" id="Archived">Archived</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit&amp;section=7" title="Edit section: Archived">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li><a rel="nofollow" class="external text" href="indexa7ba.html?title=How_to_Run_GDB_on_CCSv5&amp;oldid=198387"><i> <u><b>Sitara SDK 06.00 (archived)</b></u></i></a></li>
+<li><a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;oldid=128743"><u><b>Sitara SDK 05.07 (archived)</b></u></a></li>
+<li><a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;oldid=87960"><u><b>Sitara SDK 05.03 (archived)</b></u></a></li>
+<li><a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;oldid=77290"><u><b>Sitara SDK 05.02 (archived)</b></u></a></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201033510
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.086 seconds
+Real time usage: 0.094 seconds
+Preprocessor visited node count: 737/1000000
+Preprocessor generated node count: 5656/1000000
+Post‐expand include size: 925/2097152 bytes
+Template argument size: 4044/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   22.980      1 -total
+ 92.79%   21.324      1 Template:ArchiveLinks-AMSDKv08.00
+  6.41%    1.474      1 Template:Sitara_SDK_Linaro_Switch_Template
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:5169-0!canonical and timestamp 20201201033510 and revision id 198389
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>How to Run GDB on CCSv5</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>How to Run GDB on CCSv5</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>How to Run GDB on CCSv5</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>How to Run GDB on CCSv5</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>How to Run GDB on CCSv5</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>How to Run GDB on CCSv5</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>How to Run GDB on CCSv5</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>How to Run GDB on CCSv5</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>How to Run GDB on CCSv5</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;oldid=198389">https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;oldid=198389</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Code_Composer_Studio_v5.html" title="Category:Code Composer Studio v5">Code Composer Studio v5</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=How+to+Run+GDB+on+CCSv5" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="How_to_Run_GDB_on_CCSv5.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_How_to_Run_GDB_on_CCSv5.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="How_to_Run_GDB_on_CCSv5.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/How_to_Run_GDB_on_CCSv5.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/How_to_Run_GDB_on_CCSv5.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;oldid=198389" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=How_to_Run_GDB_on_CCSv5&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 22 April 2015, at 12:48.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.086","walltime":"0.094","ppvisitednodes":{"value":737,"limit":1000000},"ppgeneratednodes":{"value":5656,"limit":1000000},"postexpandincludesize":{"value":925,"limit":2097152},"templateargumentsize":{"value":4044,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%   22.980      1 -total"," 92.79%   21.324      1 Template:ArchiveLinks-AMSDKv08.00","  6.41%    1.474      1 Template:Sitara_SDK_Linaro_Switch_Template"]},"cachereport":{"timestamp":"20201201033510","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":320});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/How_to_Run_GDB_on_CCSv5 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:03:50 GMT -->
+</html>

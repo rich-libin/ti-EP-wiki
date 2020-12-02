@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:19:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Processor SDK Linux Training: Introduction to Device Driver Development - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development","wgTitle":"Processor SDK Linux Training: Introduction to Device Driver Development","wgCurRevisionId":209656,"wgRevisionId":209656,"wgArticleId":39793,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Sitara Linux SDK"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development","wgRelevantArticleId":39793,"wgRequestId":"374231223cfaf3ff85a48dbc","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Processor_SDK_Linux_Training_Introduction_to_Device_Driver_Development rootpage-Processor_SDK_Linux_Training_Introduction_to_Device_Driver_Development skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Processor SDK Linux Training: Introduction to Device Driver Development</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a> </p><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Lab_Configuration"><span class="tocnumber">1</span> <span class="toctext">Lab Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Hardware"><span class="tocnumber">1.1</span> <span class="toctext">Hardware</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Lab_1:_Setup"><span class="tocnumber">2</span> <span class="toctext">Lab 1: Setup</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Description"><span class="tocnumber">2.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Lab_Steps"><span class="tocnumber">2.2</span> <span class="toctext">Lab Steps</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Processor_SDK_Setup"><span class="tocnumber">2.2.1</span> <span class="toctext">Processor SDK Setup</span></a>
+<ul>
+<li class="toclevel-4 tocsection-7"><a href="#Download_and_Install_the_SDK"><span class="tocnumber">2.2.1.1</span> <span class="toctext">Download and Install the SDK</span></a></li>
+<li class="toclevel-4 tocsection-8"><a href="#Explore_the_SDK"><span class="tocnumber">2.2.1.2</span> <span class="toctext">Explore the SDK</span></a></li>
+<li class="toclevel-4 tocsection-9"><a href="#Setup_the_SDK"><span class="tocnumber">2.2.1.3</span> <span class="toctext">Setup the SDK</span></a></li>
+<li class="toclevel-4 tocsection-10"><a href="#Unpack_the_File_System"><span class="tocnumber">2.2.1.4</span> <span class="toctext">Unpack the File System</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-11"><a href="#Recompile_the_Kernel"><span class="tocnumber">2.2.2</span> <span class="toctext">Recompile the Kernel</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#MicroSD_Card_Setup"><span class="tocnumber">2.2.3</span> <span class="toctext">MicroSD Card Setup</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Board_Setup"><span class="tocnumber">2.2.4</span> <span class="toctext">Board Setup</span></a>
+<ul>
+<li class="toclevel-4 tocsection-14"><a href="#Getting_Familiar_with_the_Board"><span class="tocnumber">2.2.4.1</span> <span class="toctext">Getting Familiar with the Board</span></a></li>
+<li class="toclevel-4 tocsection-15"><a href="#Other_Useful_Technical_Documentation"><span class="tocnumber">2.2.4.2</span> <span class="toctext">Other Useful Technical Documentation</span></a></li>
+<li class="toclevel-4 tocsection-16"><a href="#Setup_Communication_with_the_Board"><span class="tocnumber">2.2.4.3</span> <span class="toctext">Setup Communication with the Board</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-17"><a href="#Board_Communication_Setup"><span class="tocnumber">2.2.5</span> <span class="toctext">Board Communication Setup</span></a>
+<ul>
+<li class="toclevel-4 tocsection-18"><a href="#Setup_NFS"><span class="tocnumber">2.2.5.1</span> <span class="toctext">Setup NFS</span></a></li>
+<li class="toclevel-4 tocsection-19"><a href="#Setup_Minicom"><span class="tocnumber">2.2.5.2</span> <span class="toctext">Setup Minicom</span></a></li>
+<li class="toclevel-4 tocsection-20"><a href="#Boot_the_Board"><span class="tocnumber">2.2.5.3</span> <span class="toctext">Boot the Board</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Lab_2:_Writing_an_Out-of-Tree_Module"><span class="tocnumber">3</span> <span class="toctext">Lab 2: Writing an Out-of-Tree Module</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#Description_2"><span class="tocnumber">3.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Lab_Steps_2"><span class="tocnumber">3.2</span> <span class="toctext">Lab Steps</span></a>
+<ul>
+<li class="toclevel-3 tocsection-24"><a href="#Setup_Skeleton_Directory"><span class="tocnumber">3.2.1</span> <span class="toctext">Setup Skeleton Directory</span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#Write_a_Hello_World_Module"><span class="tocnumber">3.2.2</span> <span class="toctext">Write a Hello World Module</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#Implement_Macros"><span class="tocnumber">3.2.3</span> <span class="toctext">Implement Macros</span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Use_Module_Parameters"><span class="tocnumber">3.2.4</span> <span class="toctext">Use Module Parameters</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Create_a_Runtime_Sensor"><span class="tocnumber">3.2.5</span> <span class="toctext">Create a Runtime Sensor</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-29"><a href="#Lab_3:_Debugging_Methods_and_Tools"><span class="tocnumber">4</span> <span class="toctext">Lab 3: Debugging Methods and Tools</span></a>
+<ul>
+<li class="toclevel-2 tocsection-30"><a href="#Description_3"><span class="tocnumber">4.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Lab_Steps_3"><span class="tocnumber">4.2</span> <span class="toctext">Lab Steps</span></a>
+<ul>
+<li class="toclevel-3 tocsection-32"><a href="#Changing_Priority_of_Console"><span class="tocnumber">4.2.1</span> <span class="toctext">Changing Priority of Console</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-33"><a href="#Lab_4:_I2C_Nunchuk_Module"><span class="tocnumber">5</span> <span class="toctext">Lab 4: I2C Nunchuk Module</span></a>
+<ul>
+<li class="toclevel-2 tocsection-34"><a href="#Description_4"><span class="tocnumber">5.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Lab_Steps_4"><span class="tocnumber">5.2</span> <span class="toctext">Lab Steps</span></a>
+<ul>
+<li class="toclevel-3 tocsection-36"><a href="#Setup_Nunchuk"><span class="tocnumber">5.2.1</span> <span class="toctext">Setup Nunchuk</span></a></li>
+<li class="toclevel-3 tocsection-37"><a href="#Declare_a_Second_I2C_Bus"><span class="tocnumber">5.2.2</span> <span class="toctext">Declare a Second I2C Bus</span></a>
+<ul>
+<li class="toclevel-4 tocsection-38"><a href="#Declare_Nunchuk_Device"><span class="tocnumber">5.2.2.1</span> <span class="toctext">Declare Nunchuk Device</span></a></li>
+<li class="toclevel-4 tocsection-39"><a href="#Recompile_Device_Tree"><span class="tocnumber">5.2.2.2</span> <span class="toctext">Recompile Device Tree</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-40"><a href="#Implement_Basic_I2C_Driver"><span class="tocnumber">5.2.3</span> <span class="toctext">Implement Basic I2C Driver</span></a></li>
+<li class="toclevel-3 tocsection-41"><a href="#Locate_Device_and_Driver_in_.2Fsys"><span class="tocnumber">5.2.4</span> <span class="toctext">Locate Device and Driver in /sys</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-42"><a href="#Lab_5:_Pin_Muxing_and_I.2FO_with_the_Nunchuk"><span class="tocnumber">6</span> <span class="toctext">Lab 5: Pin Muxing and I/O with the Nunchuk</span></a>
+<ul>
+<li class="toclevel-2 tocsection-43"><a href="#Description_5"><span class="tocnumber">6.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#Lab_Steps_5"><span class="tocnumber">6.2</span> <span class="toctext">Lab Steps</span></a>
+<ul>
+<li class="toclevel-3 tocsection-45"><a href="#Pin_Muxing_Configuration"><span class="tocnumber">6.2.1</span> <span class="toctext">Pin Muxing Configuration</span></a></li>
+<li class="toclevel-3 tocsection-46"><a href="#Add_pinctrl_Properties_to_Device_Tree"><span class="tocnumber">6.2.2</span> <span class="toctext">Add pinctrl Properties to Device Tree</span></a>
+<ul>
+<li class="toclevel-4 tocsection-47"><a href="#Test_the_Pin_Muxing"><span class="tocnumber">6.2.2.1</span> <span class="toctext">Test the Pin Muxing</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-48"><a href="#Device_Initialization"><span class="tocnumber">6.2.3</span> <span class="toctext">Device Initialization</span></a></li>
+<li class="toclevel-3 tocsection-49"><a href="#Read_Data_from_Nunchuk"><span class="tocnumber">6.2.4</span> <span class="toctext">Read Data from Nunchuk</span></a>
+<ul>
+<li class="toclevel-4 tocsection-50"><a href="#Understanding_the_Data"><span class="tocnumber">6.2.4.1</span> <span class="toctext">Understanding the Data</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-51"><a href="#Check_the_Button_Status"><span class="tocnumber">6.2.5</span> <span class="toctext">Check the Button Status</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-52"><a href="#Lab_6:_Polling_and_Device_Registration"><span class="tocnumber">7</span> <span class="toctext">Lab 6: Polling and Device Registration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-53"><a href="#Description_6"><span class="tocnumber">7.1</span> <span class="toctext">Description</span></a></li>
+<li class="toclevel-2 tocsection-54"><a href="#Lab_Steps_6"><span class="tocnumber">7.2</span> <span class="toctext">Lab Steps</span></a>
+<ul>
+<li class="toclevel-3 tocsection-55"><a href="#Recompile_the_Kernel_to_Support_Polling"><span class="tocnumber">7.2.1</span> <span class="toctext">Recompile the Kernel to Support Polling</span></a></li>
+<li class="toclevel-3 tocsection-56"><a href="#Create_Logical_Device_Structure"><span class="tocnumber">7.2.2</span> <span class="toctext">Create Logical Device Structure</span></a></li>
+<li class="toclevel-3 tocsection-57"><a href="#Follow_Device_Model_Conventions"><span class="tocnumber">7.2.3</span> <span class="toctext">Follow Device Model Conventions</span></a></li>
+<li class="toclevel-3 tocsection-58"><a href="#Create_Polling_Device"><span class="tocnumber">7.2.4</span> <span class="toctext">Create Polling Device</span></a>
+<ul>
+<li class="toclevel-4 tocsection-59"><a href="#Follow_Device_Model_Conventions_2"><span class="tocnumber">7.2.4.1</span> <span class="toctext">Follow Device Model Conventions</span></a></li>
+<li class="toclevel-4 tocsection-60"><a href="#Register_Polling_Device"><span class="tocnumber">7.2.4.2</span> <span class="toctext">Register Polling Device</span></a></li>
+<li class="toclevel-4 tocsection-61"><a href="#Implement_the_Polling_Routine"><span class="tocnumber">7.2.4.3</span> <span class="toctext">Implement the Polling Routine</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-62"><a href="#Implement_the_Remove_Routine"><span class="tocnumber">7.2.5</span> <span class="toctext">Implement the Remove Routine</span></a></li>
+<li class="toclevel-3 tocsection-63"><a href="#Test_Your_Module"><span class="tocnumber">7.2.6</span> <span class="toctext">Test Your Module</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+ 
+<p><big><big><big>Introduction</big></big></big>
+</p>
+<hr />
+<p><br /><big><b>NOTE:</b> Commands to be executed for each step of this guide will be marked in <b>BOLD.</b></big>
+</p><p>This lab and accompanying lecture was adapted from Free Electron's <a rel="nofollow" class="external text" href="http://free-electrons.com/training/kernel/">Embedded Linux kernel and driver development training</a>.
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Lab_Configuration">Lab Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=1" title="Edit section: Lab Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The following are the hardware and software configurations for this lab. The steps in this lab are written against this configuration. The concepts of the lab will apply to other configurations but will need to be adapted accordingly. 
+</p>
+<h2><span class="mw-headline" id="Hardware">Hardware</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=2" title="Edit section: Hardware">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>BeagleBone Black Board - <a rel="nofollow" class="external text" href="http://beagleboard.org/boards">Order Now</a></li>
+<li>Nintendo Nunchuk with UEXT Connector - <a rel="nofollow" class="external text" href="https://www.olimex.com/Products/Modules/Sensors/MOD-WII/MOD-Wii-UEXT-NUNCHUCK/open-source-hardware">Order Now</a></li>
+<li>miniUSB to USB Cable</li>
+<li>USB Serial Cable (female ends)</li>
+<li>Jumper Cables</li>
+<li>microSD Card</li>
+<li>microSD to SD Card Adapter and SD Card Reader <b>or</b> a microSD Card Reader</li>
+<li>2 Ethernet cables</li>
+<li>Router</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Lab_1:_Setup">Lab 1: Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=3" title="Edit section: Lab 1: Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Description">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=4" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This lab will instruct on how to install, setup, and navigate the SDK, the board and its communication, and the U-Boot environment. These steps are required for the remainder of the labs.
+</p>
+<h2><span class="mw-headline" id="Lab_Steps">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=5" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Processor_SDK_Setup">Processor SDK Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=6" title="Edit section: Processor SDK Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Download_and_Install_the_SDK">Download and Install the SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=7" title="Edit section: Download and Install the SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>First, run the command below to ensure that your sources are up to date:
+<dl><dd><b>sudo apt-get update</b></dd></dl></li>
+<li>You will also need to install git for this lab:
+<dl><dd><b>sudo apt-get install git</b></dd></dl></li>
+<li>Install the Processor Linux SDK package with these <a href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/Overview_Getting_Started_Guide.html#download-and-install-the-sdk" title="Processor SDK Linux Installer">instructions</a>.
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />There is an additional link on the Processor Linux SDK installer page with steps to complete if you are running a 64 bit version of Linux.</div></dd></dl></li></ol>
+<h4><span class="mw-headline" id="Explore_the_SDK">Explore the SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=8" title="Edit section: Explore the SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Navigate to the newly installed SDK directory in your home directory. Again, the actual filename will be based on the SDK version you download but could be for example ti-processor-sdk-linux-am335x-evm-02.00.00.00. You are encouraged to explore the SDK and Linux kernel sources at this point.</dd></dl>
+<dl><dd>The accompanying chart is a visual representation of the file paths of the important files and directories discussed in the lecture. It is by no means a representation of the entire SDK. It is simply a tool to help you locate resources.</dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />For later in the lab, observe that the root of you Linux kernel sources refers to the /board-support/linux-&lt;version&gt;-&lt;commit id&gt; directory of the SDK.</div></dd>
+<dd><br /><a href="File_SDKfilepaths.html" class="image"><img alt="SDKfilepaths.png" src="https://processors.wiki.ti.com/images/9/98/SDKfilepaths.png" width="500" height="282" /></a><br /></dd></dl>
+<h4><span class="mw-headline" id="Setup_the_SDK">Setup the SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=9" title="Edit section: Setup the SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Starting with Ubuntu 12.04, the user needs to be a part of the dialout group to access the serial port which we will use to communicate with the BeagleBone. Therefore, you need to add your user to the dialout group:
+<dl><dd><b>sudo adduser $USER dialout</b></dd></dl></li>
+<li>Log off and log back on in order for this change to take effect.</li>
+<li>Navigate to the /bin folder in your SDK directory and run <b>./setup-package-install.sh</b> to install all additional packages you will need during this lab.</li></ol>
+<h4><span class="mw-headline" id="Unpack_the_File_System">Unpack the File System</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=10" title="Edit section: Unpack the File System">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Create a folder called trainingNFS in the SDK directory.</li>
+<li>Navigate to /filesystem in your SDK directory and unpack the Arago file system into your trainingNFS directory.
+<dl><dd><b>sudo tar -xzvf arago-base-tisdk-image-am335x-evm.tar.gz -C &lt;SDK path&gt;/trainingNFS</b></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />&lt;SDK path&gt; refers to the SDK version directory, for example /home/sitara/ti-processor-sdk-linux-am335x-evm-02.00.00.00. This will be used throughout the lab.</div></dd></dl></li>
+<li>Navigate to &lt;SDK path&gt;/trainingNFS/boot and delete all files in this directory, as you will rebuild and replace the kernel and its accompanying .btd file in the next step of this lab.</li></ol>
+<h3><span class="mw-headline" id="Recompile_the_Kernel">Recompile the Kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=11" title="Edit section: Recompile the Kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Navigate to the root of your Linux kernel sources, noted earlier in the lab as &lt;SDK path&gt;/board-support/linux-&lt;version&gt;-&lt;commit id&gt;. A git repository should already exist here. Make sure that everything is up to date by running <b>git status</b>. Then create and switch to a new branch called training_kernel:
+<dl><dd><b>git checkout -b training_Kernel</b></dd></dl></li>
+<li>In order to use the cross compiler toolchain files arm-linux-gnueabihf- you must first define where these files can be found, meaning you will need to export the path in the terminal. You will need to do this each time you open a new terminal window and intend to use the make command:
+<dl><dd><b>export PATH=$PATH:&lt;SDK path&gt;/linux-devkit/sysroots/&lt;Arago Linux&gt;/usr/bin/</b></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />&lt;Arago Linux&gt; refers to the Arago filepath, for example x86_64-arago-linux. Be sure to include /home/&lt;user&gt;/ before your SDK directory.</div></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />If you forget to export the path and attempt to use the make command, you will see either an error that says: <br />make: *** No rule to make target "&lt;target&gt;". Stop. <br />or <br />arm-linux-gnueabihf-gcc: command not found.</div></dd></dl></li>
+<li>Before you compile your kernel for the first time, you should clean all previously built versions and configurations with the following command:
+<dl><dd><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- distclean</b></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />In the future, unless you are changing the configuration, you should clean the directory with the command <b>make clean</b> instead, which will remove previously build versions, but leave your .config file.</div></dd>
+<dd><div style="margin: 5px; padding: 5px 10px; background-color: #ffffec; border-left: 5px solid #ff6600;"><b>IMPORTANT</b><br /><br />You will need to define the ARCH and CROSS_COMPILE variables each time you use the make command.</div></dd></dl></li>
+<li>Now that you have cleaned your directory and removed your old configuration, you will need to remake your .config file. This lab will use a predefined configuration tisdk_am335x-evm_defconfig, so make the .config file with the following command:
+<dl><dd><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- tisdk_am335x-evm_defconfig</b></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Older SDK versions may use the configuration singlecore-omap2plus_defconfig</div></dd></dl></li>
+<li>Use the following commands to rebuild the kernel and its accompanying files. Run these commands one at a time.
+<dl><dd><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage</b></dd><b>
+<dd>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- am335x-boneblack.dtb</dd>
+<dd>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules</dd>
+</b><dd><b>sudo make INSTALL_MOD_PATH=&lt;SDK path&gt;/trainingNFS ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules_install</b></dd>
+<dd><br />The commands in more detail:
+<dl><dd><b>make zImage</b> builds the kernel image binary file zImage. This command will take some time to complete and will generate a long series of outputs.</dd>
+<dd><b>make am335x-boneblack.dtb</b> builds the accompanying .dtb file necessary for the BeagleBone Black board. More detail on this file will be included in future lectures.</dd>
+<dd><b>make modules</b> builds the dynamic modules specified by the configuration. More details on dynamic modules will be included in the following lecture.</dd>
+<dd><b>make modules_install</b> copies the dynamic modules to their proper location in the root file system. <br /></dd></dl></dd></dl></li>
+<li>Copy over the new zImage (in the arch/arm/boot folder) and the am335x-boneblack.dtb file (in the arch/arm/boot/dts folder) to the &lt;SDK path&gt;/trainingNFS/boot directory.</li></ol>
+<h3><span class="mw-headline" id="MicroSD_Card_Setup">MicroSD Card Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=12" title="Edit section: MicroSD Card Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Connect your microSD card to your Linux host using the adapter and card reader.</li>
+<li>Set up your SD card by running the create-sdcard.sh script with sudo (administrative privilege) found in the /bin folder of your SDK directory.
+<dl><dd><b>sudo ./create-sdcard.sh</b></dd></dl></li>
+<li>Follow the instructions as prompted, selecting your microSD card (which should be device number 1), choosing yes to partition the card, and selecting 2 partitions. For additional information, see <a href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/index.html" title="Processor SDK Linux create SD card script">Processor SDK Linux create SD card script</a>. When prompted to either continue installing the filesystem or safely exit the script, <b>select no</b> in order to exit the script.</li>
+<li>You should check to make sure that you now have a microSD card with a boot partition and a rootfs partition, both of which should be empty. The microSD card and its partitions can be accessed under /media/&lt;user&gt;. You may need to eject and reinsert the SD card adapter in order to access the microSD card as the script will have unmounted the card.</li>
+<li>Navigate to /board-support/prebuilt-images in your SDK directory. Copy the MLO and U-Boot image to the boot partition of your microSD card.
+<dl><dd><b>sudo cp MLO-am335x-evm /media/&lt;user&gt;/boot/MLO</b></dd><b>
+</b><dd><b>sudo cp u-boot-am335x-evm.img /media/&lt;user&gt;/boot/u-boot.img</b></dd></dl></li>
+<li>Eject the SD card and insert it into the SD card slot on the board.</li></ol>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Board_Setup">Board Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=13" title="Edit section: Board Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Getting_Familiar_with_the_Board">Getting Familiar with the Board</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=14" title="Edit section: Getting Familiar with the Board">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Take some time to read about the board features and connectors on <a rel="nofollow" class="external text" href="http://www.elinux.org/Beagleboard:BeagleBoneBlack">http://www.elinux.org/Beagleboard:BeagleBoneBlack</a>. Ensure you know how to properly power off and on the board without damaging it. Do not abruptly cut off power to your BeagleBone.
+<dl><dd><a href="File_Beagleboardblackdiagram.html" class="image"><img alt="Beagleboardblackdiagram.png" src="https://processors.wiki.ti.com/images/0/0c/Beagleboardblackdiagram.png" width="500" height="334" /></a></dd></dl></dd>
+<dd><br />Important things to note are the serial header, the miniUSB port (USB Client), the Ethernet port, the microSD card slot, the reset button, and the power button.</dd></dl>
+<h4><span class="mw-headline" id="Other_Useful_Technical_Documentation">Other Useful Technical Documentation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=15" title="Edit section: Other Useful Technical Documentation">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li><a rel="nofollow" class="external text" href="https://github.com/CircuitCo/BeagleBone-Black/blob/master/BBB_SRM.pdf?raw=true">Board System Reference Manual</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/ds/symlink/am3359.pdf">TI AM335x SoC Datasheet</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/product/am3359">TI AM3359 SoC Technical Reference Manual</a></li></ul>
+<h4><span class="mw-headline" id="Setup_Communication_with_the_Board">Setup Communication with the Board</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=16" title="Edit section: Setup Communication with the Board">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>The BeagleBone serial connector is exported on the 6 pins close to one of the 48 pins headers. Using your USB to Serial adapter (female ends), connect the ground wire (blue) to the pin closest to the power supply connector, and the TX (red) and RX (green) wires to the pins board RX and board TX. The setup is shown below.
+<dl><dd><a href="File_Beaglebone_serial_setup.html" class="image"><img alt="Beaglebone serial setup.png" src="https://processors.wiki.ti.com/images/3/3e/Beaglebone_serial_setup.png" width="500" height="334" /></a></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You should always make sure that you connect the TX pin of the cable to the RX pin of the board, and vice versa.</div></dd></dl></li>
+<li>Once the USB to Serial connector is plugged in, a new serial port should appear: /dev/ttyUSB0. You can also see this device appear by looking at the output of dmesg.</li>
+<li>Ensure that your microSD card is inserted into the microSD card slot on the board. Power up your board by plugging your board into the Linux machine with the miniUSB cable.</li>
+<li>Finally, use your Ethernet cables to connect the Ethernet port of your board to your router and your router to your Linux machine, as shown in the diagram.
+<dl><dd><a href="File_AM335x_Development_Environment.html" class="image"><img alt="AM335x Development Environment.png" src="https://processors.wiki.ti.com/images/8/8f/AM335x_Development_Environment.png" width="500" height="375" /></a></dd></dl></li></ol>
+<h3><span class="mw-headline" id="Board_Communication_Setup">Board Communication Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=17" title="Edit section: Board Communication Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Setup_NFS">Setup NFS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=18" title="Edit section: Setup NFS">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Use <b>sudo</b> to edit the file called <i>exports in </i>/etc<i>. Add the following line to the bottom. This will allow NFS to locate the directory you wish to export via NFS, where you wish to export the directory (the * means all IP addresses. You can replace it with the IP address of your board if you wish), and the permissions you wish to use while exporting.</i>
+<dl><dd><b>&lt;SDK path&gt;/trainingNFS *(rw,nohide,insecure,no_subtree_check,async,no_root_squash)</b></dd></dl></li>
+<li>Stop and restart the NFS server, which was installed when you ran the setup package script. Either enter the lines one at a time, or add a sleep 1 in between the 2 lines.
+<dl><dd><b>sudo /etc/init.d/nfs-kernel-server stop</b></dd><b>
+</b><dd><b>sudo /etc/init.d/nfs-kernel-server start</b></dd></dl></li></ol>
+<h4><span class="mw-headline" id="Setup_Minicom">Setup Minicom</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=19" title="Edit section: Setup Minicom">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Minicom is the serial communication program that was installed when you ran the setup-package.sh script earlier in the lab. You will use this program for interfacing with the board over the USB to serial cable. You will need to configure minicom the first time you run it. Start minicom into its configuration menu with the command:
+<dl><dd><b>sudo minicom -s</b></dd>
+<dd><a href="File_Minicom_serialportsetup.html" class="image"><img alt="Minicom serialportsetup.png" src="https://processors.wiki.ti.com/images/e/ea/Minicom_serialportsetup.png" width="600" height="361" /></a></dd></dl></li>
+<li>Scroll to and select the Serial port setup option. Press <b>a</b> to edit the Serial Device field to /dev/ttyUSB0, then press <b>Enter</b>. Press <b>e</b> to edit the Bps/Par/Bits field to 115200 8N1, then press <b>Enter</b>. Ensure both the Hardware and Software Flow Control fields are set to No. Your settings should now look like the ones in the image below.
+<dl><dd><a href="File_Minicom_settingsview.html" class="image"><img alt="Minicom settingsview.png" src="https://processors.wiki.ti.com/images/e/e8/Minicom_settingsview.png" width="600" height="415" /></a></dd></dl></li>
+<li>Press <b>Enter</b> to return to the main configuration menu and select Save setup as dfl. A confirmation message should appear.</li>
+<li>Select Exit from Minicom.</li></ol>
+<h4><span class="mw-headline" id="Boot_the_Board">Boot the Board</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=20" title="Edit section: Boot the Board">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Run the command ifconfig to find the ip address of your host machine. An example is shown below.
+<dl><dd><a href="File_Minicom_ipconfig.html" class="image"><img alt="Minicom ipconfig.png" src="https://processors.wiki.ti.com/images/6/6f/Minicom_ipconfig.png" width="600" height="510" /></a></dd></dl></li>
+<li>Open the serial communication program Minicom by calling:
+<dl><dd><b>minicom</b></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You can exit minicom at any time by hitting the keys Ctrl and A simultaneously, and then hitting X.</div></dd></dl></li>
+<li>Reboot your board by pressing the reboot button and when the line Hit any key to stop autoboot shows up, press any button on your keyboard to stop the U-boot countdown. You should now see the U-Boot prompt U-Boot# as shown below. If you miss the prompt, you can always hit the reboot button again.
+<dl><dd><a href="File_Minicom_rebootview.html" class="image"><img alt="Minicom rebootview.png" src="https://processors.wiki.ti.com/images/5/5d/Minicom_rebootview.png" width="600" height="353" /></a></dd></dl></li>
+<li>You can now use the command setenv &lt;target variable&gt; &lt;value&gt; to change your U-Boot environment variables to tell U-Boot to use NFS to mount your kernel and file system before booting. You will need to set the following variables:
+<dl><dd><b>setenv serverip &lt;your host ip&gt;</b></dd><b>
+<dd>setenv rootpath &lt;SDK path&gt;/trainingNFS</dd>
+<dd>setenv bootfile zImage</dd>
+<dd>setenv ip_method dhcp</dd>
+<dd>setenv nfs_bootfile 'nfs ${loadaddr} ${serverip}:${rootpath}${bootdir}/${bootfile}'</dd>
+<dd>setenv nfs_fdtfile 'nfs ${fdtaddr} ${serverip}:${rootpath}${bootdir}/${fdtfile}'</dd>
+</b><dd><b>setenv bootcmd 'setenv autoload no; dhcp; run nfs_bootfile; run findfdt; run nfs_fdtfile; run netargs; bootz ${loadaddr} - ${fdtaddr}'</b></dd>
+<dd><br /><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You can enable line wrapping in minicom by pressing Ctrl-A Z and then W each time the window is opened.</div></dd>
+<dd><br />bootcmd in more detail:
+<dl><dd><b>setenv autoload no</b> - prevents U-Boot from trying to autoload an image over TFTP when you use the dhcp command</dd>
+<dd><b>dhcp</b> - discovers the ip address of your board</dd>
+<dd><b>run nfs_bootfile</b> - runs the command nfs ${loadaddr} ${serverip}:${rootpath}${bootdir}/${bootfile} stored in the nfs_bootfile variable, which created in an earlier line. This command mounts your zImage file over NFS from your host IP and specified file path to the address in loadaddr</dd>
+<dd><b>run findfdt</b> - scans your board for the name of the necessary .dtb file to use</dd>
+<dd><b>run nfs_fdtfile</b> - runs the command nfs ${fdtaddr} ${serverip}:${rootpath}${bootdir}/${fdtfile} stored in the nfs_fdtfile variable, which created in an earlier line. This command mounts the necessary .dtb file over NFS from your host IP and specified file path to the address in fdtaddr</dd>
+<dd><b>run netargs</b> - sets bootagrs, a boot variable to be automatically passed to the kernel</dd>
+<dd><b>bootz ${loadaddr} - ${fdtaddr}</b> - boots the board from the zImage and .dtb file in the loadaddr and fdtaddr memory locations respectively</dd></dl></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The printenv and help commands are useful for understanding these variables in more depth. If you wish to view the current value of a specific environemtn variable, you can call echo $&lt;target&gt;. editenv &lt;target&gt; is another helpful command to know that can be used to edit an environment variable without the need to completely overwrite it.</div></dd></dl></li>
+<li>Save the changes to your uboot environment variables with the command <b>saveenv</b>. You should see a message like the one below.
+<dl><dd><a href="File_Minicom_ubootsaveenv.html" class="image"><img alt="Minicom ubootsaveenv.png" src="https://processors.wiki.ti.com/images/e/ec/Minicom_ubootsaveenv.png" width="274" height="89" /></a></dd>
+<dd>If you do not see this message, your board may be using the pre-installed version of U-Boot saved on the internal eMMC rather than the version you copied to your microSD card. You can follow the instructions <a href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/index.html#Clearing_the_eMMC" title="Processor SDK Linux Setup Script">here</a> to wipe the eMMC so your board will boot from the microSD card.</dd></dl></li>
+<li>Once your environment variables are saved, reboot your board again.
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />If your ip address changes, you will need to reset the serverip U-Boot variable or your board will not boot.</div></dd></dl></li>
+<li>If your board boots correctly, you should see a series of ###, as seen in the image below.
+<dl><dd><a href="File_Minicom_successfulboot.html" class="image"><img alt="Minicom successfulboot.png" src="https://processors.wiki.ti.com/images/d/d2/Minicom_successfulboot.png" width="600" height="510" /></a></dd>
+<dd><br />If your board boots incorrectly, you will see a series of TTT, as seen below.</dd>
+<dd><a href="File_Minicom_failedboot.html" class="image"><img alt="Minicom failedboot.png" src="https://processors.wiki.ti.com/images/5/51/Minicom_failedboot.png" width="600" height="510" /></a></dd>
+<dd><br />If you see this screen, you will need to go back and re-read the lab steps to find and correct your error. Common errors include a misspelling in your /etc/exports file, an incorrect ip address in the U-Boot environment variable serverip, or some other misspelled U-Boot environment variable.</dd></dl></li>
+<li>When the board is done booting, you will be prompted for a login. You should enter the login root, as seen below.
+<dl><dd><a href="File_Minicom_aragologin.html" class="image"><img alt="Minicom aragologin.png" src="https://processors.wiki.ti.com/images/5/57/Minicom_aragologin.png" width="600" height="510" /></a></dd>
+<dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />If you connect to the board over minicom when the board is already booted, you many need to hit Enter a few time to see the login prompt.</div></dd></dl></li></ol>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Lab_2:_Writing_an_Out-of-Tree_Module">Lab 2: Writing an Out-of-Tree Module</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=21" title="Edit section: Lab 2: Writing an Out-of-Tree Module">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Description_2">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=22" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The user will setup a skeleton directory for the remainder of the lab, learn to run a basic Hello World module, and implement that module using macros and module parameters. Solutions to all sections of the lab can be found in the git repository that is set up with the skeleton directory.
+</p>
+<h2><span class="mw-headline" id="Lab_Steps_2">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=23" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Setup_Skeleton_Directory">Setup Skeleton Directory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=24" title="Edit section: Setup Skeleton Directory">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Open a new terminal window on your Linux machine. You can leave your minicom window open in the background to be used later.</li>
+<li>If you have not used git before, you will first need to configure your name and email.
+<dl><dd><b>git config --global user.name "&lt;Your name&gt;"</b></dd><b>
+</b><dd><b>git config --global user.email "&lt;Your email&gt;"</b></dd></dl></li>
+<li>Clone the repository from git.ti.com/sitara-linux/driver_training into a new directory called Module_Training within your SDK directory. This repository contains skeleton code designed to save you time during the lab.
+<dl><dd><b>git clone git://git.ti.com/sitara-linux/driver_training &lt;SDK path&gt;/Module_Training</b></dd></dl></li>
+<li>Navigate to the new Module_Training folder. A git repository should already exist in this folder. Create and switch to a new branch called my_modules.
+<dl><dd><b>git checkout -b "my_modules"</b></dd></dl></li>
+<li>Navigate to the hello folder inside the Module_Training folder and open the Makefile. The Makefile is designed to compile your code and build your .ko file when you call make on the host PC. It will install the module in your target filesystem when you call make install. Finally, it will remove all files created during a build when you call make clean.</li>
+<li>Edit the path of the KDIR variable to point to your Linux kernel sources directory. For instance &lt;Linux kernel sources path&gt; could be replaced with:
+<dl><dd>ti-processor-sdk-linux-am335x-evm-02.00.00.00/board-support/linux-4.1.6-ga7db74e/</dd></dl></li>
+<li>Edit the path of the install directory to copy your .ko file from your current directory to /lib/modules/&lt;version number&gt;-&lt;commit id&gt;/extra on your board. If the extra folder does not already exist, you should create it. For instance the line in your Makefile could be changed to:
+<dl><dd>install hello_version.ko $(HOME)/ti-processor-sdk-linux-am335x-evm-02.00.00.00/trainingNFS/lib/modules/4.1.6-ga7db74e/extra</dd></dl></li></ol>
+<h3><span class="mw-headline" id="Write_a_Hello_World_Module">Write a Hello World Module</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=25" title="Edit section: Write a Hello World Module">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Open the hello_version.c file. Write a simple module that will print "Hello World" upon loading, and "Goodbye World" upon removal. You will need to create init_module() and cleanup_module() functions, both of which will include printk() statements. Do not forget to include linux/module.h.</li>
+<li>Call <b>make</b> to build your module. If your module compiles correctly, the output should look similar to the image below. Do not forget to export your path in this terminal instance or to define your ARCH and CROSS_COMPILE variables.
+<dl><dd><a href="File_Helloversion_buildmodule.html" class="image"><img alt="Helloversion buildmodule.png" src="https://processors.wiki.ti.com/images/3/3e/Helloversion_buildmodule.png" width="800" height="213" /></a></dd>
+<dd><br />If your module did not compile correctly, address any errors or warnings listed before proceeding.</dd>
+<dd><br />If you misspelled your path in the Makefile you should see an error that says:
+<dl><dd>No such file or directory.  Stop.</dd>
+<dd>make: *** [all] Error 2</dd></dl></dd>
+<dd><br />If you did not export your path in this terminal instance, you will see an error that says:
+<dl><dd>make[1]: arm-linux-gnueabihf-gcc: Command not found.</dd></dl></dd>
+<dd>Recall from the previous lab, we used the command:
+<dl><dd><b>export PATH=$PATH:/home/&lt;user&gt;/&lt;SDK&gt;/linux-devkit/sysroots/&lt;arago linux&gt;/usr/bin/</b></dd></dl></dd></dl></li>
+<li>When you module compiles with no errors or warnings, call <b>sudo make install</b> to copy the .ko file into your target filesystem.</li>
+<li>Open your minicom window and navigate to /lib/modules/&lt;version number&gt;-&lt;commit id&gt;/extra on the target. You should see the hello_version.ko file that you built and copied over in the previous steps. Load your module using the following command. You should see the "Hello World" statement appear. Ignore any warnings about kernel taints for now.
+<dl><dd><b>insmod hello_version.ko</b></dd></dl></li>
+<li>Check that your module is on the list of loaded modules with the <b>lsmod command</b>. Your module should also appear in /proc/modules which you can view with the command:
+<dl><dd><b>cat /proc/modules</b></dd></dl></li>
+<li>Then use <b>lsmod</b> to ensure that your module removes correctly after using the following command:
+<dl><dd><b>rmmod hello_version.ko</b></dd></dl></li>
+<li>On your host machine, commit your changes to git.
+<dl><dd><b>git add hello_version.c Makefile</b></dd><b>
+</b><dd><b>git commit -m "My first module"</b></dd></dl></li></ol>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Implement_Macros">Implement Macros</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=26" title="Edit section: Implement Macros">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Edit your module to use the __init and __exit macros.</li>
+<li>Edit your module to use the module_init() and module_exit() macros to rename the initialize and remove functions to hello_module_init and hello_module_exit respectively. Do not forget to include linux/init.h. Ensure that your module loads and removes correctly.</li>
+<li>Edit your module to display licensing information, your name, and a description of the module when you run modinfo helloversion.ko on your host machine using the following macros. The GPL license will also prevent kernel taint warnings from appearing in the future.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("&lt;Your name&gt;");
+MODULE_DESCRIPTION("Hello World");
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Ensure that your module still loads and removes properly, and then commit your changes to git.</li>
+<dl><dd><b>git add hello_version.c</b></dd><b>
+</b><dd><b>git commit -m "Module using macros"</b></dd></dl>
+</ol>
+<h3><span class="mw-headline" id="Use_Module_Parameters">Use Module Parameters</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=27" title="Edit section: Use Module Parameters">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Edit your module to to take in a parameter who from the user, so that your module will say "Hello &lt;who&gt;" and "Goodbye &lt;who&gt;" when loaded and removed. You should declare a global who variable, use module_param(), and edit your printk() statements.
+<dl><dd><b>static char *who = "World";</b></dd><b>
+</b><dd><b>module_param(who, charp, 0);</b></dd></dl></li>
+<li>Ensure that your module outputs "Hello &lt;Your name&gt;" and "Goodbye &lt;Your name&gt;" instead of "Hello World" and "Goodbye World" when loaded and removed with the following commands:
+<dl><dd><b>insmod hello_version.ko who="&lt;Your name&gt;"</b></dd><b>
+</b><dd><b>rmmod hello_version.ko</b></dd></dl></li>
+<li>Commit your changes to git.
+<dl><dd><b>git add hello_version.c</b></dd><b>
+</b><dd><b>git commit -m "Module with IO"</b></dd></dl></li></ol>
+<h3><span class="mw-headline" id="Create_a_Runtime_Sensor">Create a Runtime Sensor</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=28" title="Edit section: Create a Runtime Sensor">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Edit your module to display the number of seconds that the module was running when you remove it. You will need to create 2 global timeval structures and pass them as a pointers to the do_gettimeofday() function to populate them, then reference the tv_sec field of the structures for the time in seconds. Use the <a rel="nofollow" class="external text" href="http://lxr.free-electrons.com/">Linux Cross Reference</a> to identify the necessary include statement.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+struct timeval tstart;
+int time;
+do_gettimeofday(&amp;tstart);
+time = tstart.tv_sec;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>When your module is functioning correctly, commit the changes to your git repository.</li>
+<dl><dd><b>git add hello_version.c</b></dd><b>
+</b><dd><b>git commit -m "Runtime module"</b></dd></dl>
+<li>The solutions to all sections of lab 2 can be found in the repository you cloned at the beginning of the lab under Module_Training/Module_Solutions/Lab2. Compare your module to the solution module to ensure that you understood the lab correctly.</li>
+</ol>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Lab_3:_Debugging_Methods_and_Tools">Lab 3: Debugging Methods and Tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=29" title="Edit section: Lab 3: Debugging Methods and Tools">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Description_3">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=30" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h2><span class="mw-headline" id="Lab_Steps_3">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=31" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Changing_Priority_of_Console">Changing Priority of Console</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=32" title="Edit section: Changing Priority of Console">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Connect to your board over minicom. Clear the screen and check the current log level with the following command. If you do not clear the screen first, the values will often be illegible.
+<dl><dd><b>clear</b></dd><b>
+</b><dd><b>cat /proc/sys/kernel/printk</b></dd>
+<dd><br />The default settings should be 7 4 1 7, referring to the current console log level, the default output level, the minimum log level, and the boot-time default log level respectively.</dd></dl></li>
+<li>On your host PC, navigate to the debugging folder inside of the Module_Training folder on the host PC. Edit the Makefile to reference the correct paths, just as you did in the previous lab. Open drvbroken.c and read through it. Ensure that you understand what it is supposed to do.</li>
+<li>Make sure that you have exported your PATH variable in this terminal instance, and call <b>make</b> and <b>sudo make install</b> to compile drvbroken.c into a .ko file and copy it over to trainingNFS. Be sure to use the correct make command.</li>
+<li>Load the module and observe which lines appear in the console and which ones do not. Then remove the module.</li>
+<li>As seen earlier, the current console log level is 7. Change the log level to 4 with the following command:
+<dl><dd><b>dmesg -n 4</b></dd></dl></li>
+<li>Reload the module and observe which lines no longer appear. Remove your module.</li>
+<li>Change the priority of the printk() statement in the module. Recompile and reload your module each time you change the priority. Observe the statement appear and disappear as you change the priority.
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />You may have noticed that log level 7 messages and pr_debug() commands do not appear despite the console's priority level. Enabling these messages requires compiling the kernel with dynamic debugging. For most debugging purposes though, you can simply use printk(), which defaults to log level 4, or "warning," if no priority is specified.</div></dd></dl></li>
+<li>Change the log level of the console back to 7.</li></ol>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Lab_4:_I2C_Nunchuk_Module">Lab 4: I2C Nunchuk Module</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=33" title="Edit section: Lab 4: I2C Nunchuk Module">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Description_4">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=34" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>During this lab, you will wire a Nunchuk device to the board, create an I2C bus to recognize the device, and implement a basic I2C driver.
+</p>
+<h2><span class="mw-headline" id="Lab_Steps_4">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=35" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Setup_Nunchuk">Setup Nunchuk</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=36" title="Edit section: Setup Nunchuk">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Documentation on the nunchuk can be found <a rel="nofollow" class="external text" href="http://web.engr.oregonstate.edu/~sullivae/ece375/pdf/nunchuk.pdf">here</a>.
+<dl><dd><ul><li>Take note of the unique I2C address, 52, and the frequency used for communication, 100kHz, for later in the lab.</li>
+<li>The nunchuk itself has 6 pins as seen in the diagram below (taken from nunchuk documentation listed above).
+<dl><dd><a href="File_Nunchuk_pins.html" class="image"><img alt="Nunchuk pins.png" src="https://processors.wiki.ti.com/images/2/29/Nunchuk_pins.png" width="545" height="116" /></a></dd></dl></li>
+<li>The UEXT Connector breaks out these pins as seen in the image below:
+<dl><dd><a href="File_Nunchuk_i2cpinout.html" class="image"><img alt="Nunchuk i2cpinout.png" src="https://processors.wiki.ti.com/images/a/a1/Nunchuk_i2cpinout.png" width="206" height="204" /></a></dd></dl></li>
+<li>We will connect the nunchuk to the second I2C port of the CPU (i2c1). The pins for i2c1 are available on the P9 connector of your BeagleBone Black board.</li>
+<li>Information on P9 connector can be found in the <a rel="nofollow" class="external text" href="https://github.com/CircuitCo/BeagleBone-Black/blob/master/BBB_SRM.pdf?raw=true">BeagleBone Black documentation</a>. Click on Connector P9 under section 7.1.2 in the table of contents to see the pinout of the P9 connector.</li>
+<li>If you recall, I2C only requires 2 wires: SDA for data and SCL for a clock signal. If you look in the P9 connector pinout, you can see that SCL for I2C1 is pin 17 and that SDA for I2C1 is pin 18, as show in the snapshot of table 13 below. You can also see that ground can be found on pins 1 or 2 and that 3.3V can be found on pins 3 or 4.
+<dl><dd><a href="File_Beaglebone_p9pinout.html" class="image"><img alt="Beaglebone p9pinout.png" src="https://processors.wiki.ti.com/images/2/2e/Beaglebone_p9pinout.png" width="918" height="396" /></a></dd></dl></li></ul></dd></dl></li>
+<li>Now connect the nunchuk pins:
+<dl><dd><ul><li>GND pin on the nunchuk UNEXT connector to P9 pins 1 or 2 (GND)</li>
+<li>PWR pin on the nunchuk UNEXT connector to P9 pins 3 or 4 (DC_3.3V)</li>
+<li>CLK pin on the nunchuk UNEXT connector to P9 pin 17 (I2C1_SCL)</li>
+<li>DATA pin on the nunchuk UNEXT connector to P9 pin 18 (I2C1_SDA)
+<dl><dd><a href="File_Nunchuk_connectdiagram.html" class="image"><img alt="Nunchuk connectdiagram.png" src="https://processors.wiki.ti.com/images/c/cc/Nunchuk_connectdiagram.png" width="600" height="430" /></a></dd></dl></li></ul></dd></dl></li></ol>
+<h3><span class="mw-headline" id="Declare_a_Second_I2C_Bus">Declare a Second I2C Bus</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=37" title="Edit section: Declare a Second I2C Bus">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Navigate to &lt;SDK path&gt;/board-support/linux-&lt;version number&gt;-&lt;commit id&gt;/arch/arm/boot/dts</li>
+<li>Open the device tree file used by the BeagleBone Black, am335x-boneblack.dts. You can see at the top that this file includes 2 files</li>
+<dl><dd>include “am33xx.dtsi”</dd>
+<dd>include “am335x-bone-common.dtsi”</dd></dl>
+<li>Open both of these files.</li>
+<li>If you look through am33xx.dtsi, you will find the declaration of three I2C controllers, including i2c1. You will also see that i2c1 is currently disabled.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+i2c1: i2c@4802a000 {
+</p>
+<pre>  		 compatible = "ti,omap4-i2c";
+  		 address-cells = &lt;1&gt;;
+  		 size-cells = &lt;0&gt;;
+  		 ti,hwmods = "i2c2";
+  		 reg = &lt;0x4802a000 0x1000&gt;;
+  		 interrupts = &lt;71&gt;;
+  		 status = "disabled";
+  };
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<li>You will now need to declare a new I2C bus and enable it. Look through am335x-bone-common.dtsi for the node of the first I2C bus, i2c0. It should look something like:</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+&amp;i2c0 {
+</p>
+<pre>   &lt;Properties&gt;
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Just below the node of i2c0, add a new node declaring a second I2C bus, i2c1. Set the status to okay to enable it.</li>
+<li>If you recall when reading the nunchuk documentation, the nunchuk communicates at a frequency of 100kHz so set the clock-frequency property to 100000. Look at the node of i2c0 if you are confused about formatting. We will add the properties pinctrl-names and pinctrl-0 later.</li>
+</ol>
+<h4><span class="mw-headline" id="Declare_Nunchuk_Device">Declare Nunchuk Device</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=38" title="Edit section: Declare Nunchuk Device">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol>
+<li>Add a child node into your new bus corresponding to the nunchuk device. If you recall when reading the nunchuk documentation, the nunchuk has an I2C address of 52. Your device should also have a compatible property indicating that Nintendo manufactured the device and that the device is called a nunchuk.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+nunchuk: nunchuk@52 {
+	compatible = “nintendo,nunchuk”;
+	reg = &lt;0x52&gt;;
+};
+&lt;/syntaxhighlight&gt;
+</p>
+</ol>
+<h4><span class="mw-headline" id="Recompile_Device_Tree">Recompile Device Tree</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=39" title="Edit section: Recompile Device Tree">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Navigate to the root of your Linux kernel sources. If you recall from lab 1, you can recompile your device tree (.dtb file) by first exporting your PATH variable in this terminal instance and then using the make command.
+<dl><dd><b>export PATH=$PATH:&lt;SDK path&gt;/linux-devkit/sysroots/i686-arago-linux/usr/bin/</b></dd><b>
+</b><dd><b>make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- am335x-boneblack.dtb</b></dd></dl></li>
+<li>Replace your old device tree with the newly compiled version by copying the am335x-boneblack.dtb file to the &lt;SDK path&gt;/trainingNFS/boot directory.</li>
+<li>Reboot your board.</li>
+<li>If you edited the device tree properly, you should be able navigate to /proc/device-tree/ocp/i2c\@4802a000 in minicom and see your new nunchuk node nunchuk@52.</li></ol>
+<h3><span class="mw-headline" id="Implement_Basic_I2C_Driver">Implement Basic I2C Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=40" title="Edit section: Implement Basic I2C Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>On the host PC, navigate to the nunchuk folder inside the Module_Training folder that you downloaded in lab 2. Edit the Makefile so that it functions correctly. Refer to the Setup Skeleton Directory section of lab 2 if necessary.</li>
+<li>Open nunchuk.c. Write a static probe function called nunchuk_probe() that prints the message “Hello Nunchuk” when called and returns the int 0. The function should take in two parameters: a pointer to an i2c_client structure called client and a pointer to a constant i2c_device_id structure called id.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+static int nunchuk_probe(struct i2c_client *client, const struct i2c_device_id *id)
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Write a static remove function called nunchuk_remove() that prints the message "Goodbye Nunchuk" when called and returns the int 0. The function should take in a pointer to an i2c_client structure called client.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+static int nunchuk_remove(struct i2c_client *client)
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Next create a constant, static array of of_device_id structures called nunchuk_dt_ids. It should contain one structure with a compatible field set to "nintendo,nunchuk". The compatible string here must be exactly the same as the compatible string of the nunchuk child node in the I2C bus node in order to match new nunchuk devices to this driver. You will also need to use the MODULE_DEVICE_TABLE() macro.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+static const struct of_device_id nunchuk_dt_ids[] = {
+</p>
+<pre>   { .compatible = "nintendo,nunchuk", },
+   {}
+</pre>
+<p>};
+MODULE_DEVICE_TABLE(of, nunchuk_dt_ids);
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Create a constant, static array of i2c_driver structures called nunchuk_driver. It should contain one structure with the name and driver_data fields set to "nunchuk" and the int 0 respectively. You will also need to use the MODULE_DEVICE_TABLE() macro.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+static const struct i2c_device_id nunchuk_id[] = {
+</p>
+<pre>   { "nunchuk", 0 },
+   {}
+</pre>
+<p>};
+MODULE_DEVICE_TABLE(i2c, nunchuk_id);
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Below both of your new functions and both of your new structures, you can now define the driver itself in a static i2c_driver structure. Call the structure nunchuk_driver(). This function should have its probe and remove fields set to the probe and remove functions you wrote earlier. The id_table field should be set to the device identifier array, nunchuk_id(), which you wrote in the previous step. The driver field should be set to a new structure, with the fields set as shown below.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+static struct i2c_driver nunchuk_driver = {
+</p>
+<pre>   .probe = nunchuk_probe,
+   .remove = nunchuk_remove,
+   .id_table = nunchuk_id,
+   .driver = {
+  	 .name = "nunchuk",
+  	 .owner = THIS_MODULE,
+  	 .of_match_table = of_match_ptr(nunchuk_dt_ids)
+   }
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Finally, register the driver to the I2C bus with the macro module_i2c_driver().</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+module_i2c_driver(nunchuk_driver);
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Use the <b>make</b> and <b>sudo make install</b> commands to compile and copy your .ko module to the correct location. If there are any errors or warnings, address them before moving on to the next step. Remember you must first export your PATH variable before the make command will work.</li>
+</ol>
+<h3><span id="Locate_Device_and_Driver_in_/sys"></span><span class="mw-headline" id="Locate_Device_and_Driver_in_.2Fsys">Locate Device and Driver in /sys</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=41" title="Edit section: Locate Device and Driver in /sys">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Open your minicom window and load and remove your module. Ensure that the "Hello Nunchuk" and "Goodbye Nunchuk" messages appear as they should.</li>
+<li>If your module is working correctly, you should also be able to find a representation of both your device and your driver in /sys. The nunchuk device can be found under /sys/bus/i2c/devices/i2c-1/1-0052. You can cat the contents of the name file in this folder to see that the device is named nunchuk. The driver can be found under /sys/bus/i2c/drivers/nunchuk. The nunchuk driver representation will only appear when the nunchuk module is inserted into the kernel. You should also be able to find another representation of the device within this folder.</li>
+<li>When your module is working properly, commit your changes to git.
+<dl><dd><b>git add nunchuk.c Makefile</b></dd><b>
+</b><dd><b>git commit -m "Hello Nunchuk"</b></dd></dl></li>
+<li>The solutions to all sections of lab 4 can be found in the repository you cloned in lab 2 under Module_Training/Solutions/Lab4. Compare your module to the solution module to ensure that you understood the lab correctly.</li></ol>
+<p><br />
+</p>
+<h1><span id="Lab_5:_Pin_Muxing_and_I/O_with_the_Nunchuk"></span><span class="mw-headline" id="Lab_5:_Pin_Muxing_and_I.2FO_with_the_Nunchuk">Lab 5: Pin Muxing and I/O with the Nunchuk</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=42" title="Edit section: Lab 5: Pin Muxing and I/O with the Nunchuk">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Description_5">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=43" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In this lab, the user will use pin muxing to allow the nunchuk device to communicate with the board, add pinctrl properties to the device tree, and write functions to initialize and read data from the device.
+</p>
+<h2><span class="mw-headline" id="Lab_Steps_5">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=44" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Pin_Muxing_Configuration">Pin Muxing Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=45" title="Edit section: Pin Muxing Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>If you recall, our nunchuk and module are set up to use the bus i2c1. In order for the module to communicate with the nunchuk over the bus, we must first set up pin muxing. Therefore, we must look up the pin muxing configuration data from the BBB documentation.</dd></dl>
+<ol><li>I2C requires 2 wires: SDA for data and SCL for a clock signal. In the last lab, you located these two functionalities, I2C1_SCL and I2C_SDA, in the <a rel="nofollow" class="external text" href="https://github.com/CircuitCo/BeagleBone-Black/blob/master/BBB_SRM.pdf?raw=true">BBB System Reference Manual</a> under Connectors -&gt; Connector P9 -&gt; Expansion Header P9 Pinout. Locate these functionalities again, but this time use Table 13 to identify the mode and SoC pins (under the column PROC) used by these functionalities.
+<dl><dd><a href="File_Beaglebone_p9pinout_soc.html" class="image"><img alt="Beaglebone p9pinout soc.png" src="https://processors.wiki.ti.com/images/4/44/Beaglebone_p9pinout_soc.png" width="816" height="349" /></a></dd></dl></li>
+<li>Now that you know the SoC pins (A16 and B16) and the mode number (2), open the <a rel="nofollow" class="external text" href="http://www.ti.com/lit/ds/symlink/am3359.pdf">CPU datasheet</a>. Locate the ZCZ Pin Map under the Pin Diagrams section. Make sure you are not looking at the ZCE package information instead!</li>
+<li>Use this table to look up information on the SoC pins, as shown below. Take note of the SoC pin names. Confirm the mode of the I2C1_SCL and I2C1_SDA functionalities. Also confirm that each SoC pin supports pull-up mode, which is necessary for I2C to function properly.
+<dl><dd><a href="File_Nunchuk_ex_zczpinmap.html" class="image"><img alt="Nunchuk ex zczpinmap.png" src="https://processors.wiki.ti.com/images/c/cf/Nunchuk_ex_zczpinmap.png" width="600" height="419" /></a></dd></dl></li>
+<li>Finally, open the <a rel="nofollow" class="external text" href="http://www.ti.com/lit/ug/spruh73l/spruh73l.pdf">BBB Technical Reference Manual</a> and use the SoC pin names you just identified (SPI0_CS0 and SPI0_D1) to look up the offsets for the registers controlling each of these pins. This information can be found under CONTROL_MODULES Registers table, as shown below.
+<dl><dd><a href="File_Beaglebone_controlmodreg.html" class="image"><img alt="Beaglebone controlmodreg.png" src="https://processors.wiki.ti.com/images/2/2b/Beaglebone_controlmodreg.png" width="600" height="165" /></a></dd></dl></li></ol>
+<h3><span class="mw-headline" id="Add_pinctrl_Properties_to_Device_Tree">Add pinctrl Properties to Device Tree</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=46" title="Edit section: Add pinctrl Properties to Device Tree">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Navigate to &lt;SDK path&gt;/board-support/linux-&lt;version number&gt;-&lt;commit id&gt;/arch/arm/boot/dts and open am33xx.dtsi and am335x-bone-common.dtsi, the two .dtsi files used by the BeagleBone Black.</li>
+<li>Look through am33xx.dtsi for the declaration of the main pinctrl device, am33xx_pinmux. Note the base address of 0x800, which is different from the base address provided in the TRM, where we got the offset values for our SoC pins. Subtract 0x800 from both of the offset values to account for this difference. You should now have the offset values 0x158 and 0x15c.	</li>
+<li>Look through am335x-bone-common.dtsi for the declaration of i2c0_pins, the pinctrl configuration for i2c0. Just below this node, add a new node called pinmux_i2c1_pins, alias i2c1_pins, for the pinctrl configuration of i2c1. Use the pinctrl-single driver to set both of the offset registers to pull-up mode and mux mode 2, as you determined you should from the documentation.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+i2c1_pins: pinmux_i2c1_pins {
+	pinctrl-single,pins = &lt;
+		0x158 (PIN_INPUT_PULLUP | MUX_MODE2)	/* spi0_d1.i2c1_sda */
+		0x15c (PIN_INPUT_PULLUP | MUX_MODE2)	/* spi0_cs0.i2c1_scl */
+	&gt;;
+};
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Scroll down and add the pinctrl properties pinctrl-0 and pinctrl-name to your i2c1 bus node so that the bus knows which pin configuration it needs to use.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+pinctrl-names = "default";
+pinctrl-0 = &lt;&amp;i2c1_pins&gt;;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Recompile your device tree, copy the zImage and .dtb files as before, and reboot your board.</li>
+</ol>
+<h4><span class="mw-headline" id="Test_the_Pin_Muxing">Test the Pin Muxing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=47" title="Edit section: Test the Pin Muxing">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>If you set up your pin muxing correctly, the using the following command in your minicom terminal will scan the i2c1 bus for devices, which will allow you to see your nunchuk device at address 0x52, as seen below. You will need to select y to proceed when the warning prompt appears.
+<dl><dd><b>i2cdetect -r 1</b></dd>
+<dd><a href="File_I2cdetect_output.html" class="image"><img alt="I2cdetect output.png" src="https://processors.wiki.ti.com/images/c/cb/I2cdetect_output.png" width="600" height="241" /></a></dd>
+<dd><br />If your nunchuk does not appear, check the recent pin muxing configuration changes you made to your am225x-bone-common.dtsi file and verify that the wiring between your nunchuk and the BeagleBone Black is correct.</dd></dl></li></ol>
+<h3><span class="mw-headline" id="Device_Initialization">Device Initialization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=48" title="Edit section: Device Initialization">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>Now that communication with the nunchuk has been set up, the first thing the module probe function should do is initialize the nunchuk device.</dd></dl>
+<ol>
+<li>On your host machine, navigate to the nunchuk folder inside the Module_Training folder that you downloaded in lab 2 and open nunchuk.c.</li>
+<li>In the nunchuk <a rel="nofollow" class="external text" href="http://web.engr.oregonstate.edu/~sullivae/ece375/pdf/nunchuk.pdf">documentation</a>, you will see that in order to initialize the nunchuk, you need to send the bytes 0xf0 and 0x55 together, followed by the bytes 0xfb and 0x00 together.</li>
+<li>In order to send bytes to the nunchuk you should first implement a nunchuk_write_registers() function above your probe function. This function should take in a pointer to an i2c_client structure called client, a pointer to a constant character called buf, and an int called count. It should return void. </li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+void nunchuk_write_registers(struct i2c_client *client, const char *buf, int count)
+&lt;/syntaxhighlight&gt;
+</p>
+<li>nunchuk_write_registers() should write the bytes in buf to the nunchuk client using the int i2c_master_send(struct i2c_client *client, const char *buf, int count) function. The call to i2c_master_send() should be followed by a 1 ms delay, using the udelay() function. Use the <a rel="nofollow" class="external text" href="http://lxr.free-electrons.com/">Linux Cross Reference</a> to identify the necessary include statements.</li>
+<li>In your probe function, create two const char arrays. One should contain the bytes 0xf0 and 0x55 and the other should contain the bytes 0xfb and 0x00. Make two calls to your function nunchuk_write_registers() to write both of these arrays respectively to the nunchuk. This will initialize the nunchuk device. Keep in mind that a C array will already be a pointer to the first element in the array. You can get the size of the arrays with the sizeof() function.</li>
+<li>Recompile and load your module until there are no errors or warnings and the print statements appear as expected.</li>
+<li>Commit your changes to git.</li>
+<dl><dd><b>git add nunchuk.c</b></dd><b>
+</b><dd><b>git commit -m "Initialize Nunchuk"</b></dd></dl>
+</ol>
+<h3><span class="mw-headline" id="Read_Data_from_Nunchuk">Read Data from Nunchuk</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=49" title="Edit section: Read Data from Nunchuk">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Now that the probe function initializes the nunchuk, you should be able to read data from the nunchuk. Create a new function called nunchuk_read_registers() above your probe function. nunchuk_read_registers() should take in the same parameters as nunchuk_write_registers() except buf should no longer be const. nunchuk_write_registers() should also return void.</li>
+<li>The first thing you should do is place a 10ms delay at the beginning of the function using the mdelay(0 function. This delay will separate the following I2C action from any previous I2C action.</li>
+<li>If you look through the nunchuk documentation, you will see that each time you want to read from the nunchuk device, you must first send the byte 0x00. The nunchuk will then return 6 bytes of data. Therefore, the next thing your new nunchuk_read_registers() function should do is send the 0x00 byte with your nunchuk_write_registers() function. This action should be immediately followed by a 10ms delay using the mdelay() function.</li>
+<dl><dd><div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The nunchuk_write_registers() function already waits 1ms, so you only need to wait 9ms in your nunchuk_read_registers() function). This delay will separate the write I2C action from the read I2C action to follow.</div></dd></dl>
+<li>nunchuk_read_registers() should read count bytes of data from the nunchuk client and store them in buf using the int i2c_master_recv(struct i2c_client *client, const char *buf, int count) function.</li>
+<li>You should also write an if-else-statement that prints either an error message or the number of bytes read each time this function is called.</li>
+<li>Place a call into your probe function to read 6 bytes of data from the nunchuk with your new nunchuk_read_registers() function.</li>
+<li>At this point, it is important to note an unusual behavior of the nunchuk: the nunchuk will only update its internal register once the register has been read. Therefore in order to read the current state of the nunchuk, you will need to place a second call to your nunchuk_read_registers() function directly below the first.</li>
+<li>Print the data that you just read from the nunchuk. You will need to print each index of the function individually so it is easier to place the call in a for-loop, as shown below. Each index should print a hex value where buf is the character array you placed the data in.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+unsigned int i;
+for(i=0; i&lt;sizeof(buf); i++)
+{
+	printk("%x ", buf[i]);
+}
+printk("\n");
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Compile and load your module and ensure that there are no errors or warnings and that all print statements appears as expected. At this point, your module should write 2 bytes, write 2 bytes, write 1 byte, read 6 bytes, write 1 byte, read 6 bytes, and then print the current state of the nunchuk register.</li>
+<li>Then commit your changes to git.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+git add nunchuk.c
+git commit -m "Read Nunchuk Data"
+&lt;/syntaxhighlight&gt;
+</p>
+</ol>
+<h4><span class="mw-headline" id="Understanding_the_Data">Understanding the Data</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=50" title="Edit section: Understanding the Data">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>The meanings behind each of the 6 bytes you just printed can be found in the <a rel="nofollow" class="external text" href="http://web.engr.oregonstate.edu/~sullivae/ece375/pdf/nunchuk.pdf">nunchuk documentation</a>. As shown below, to view the status of buttons C and Z, we will look at the bottom two bits of the 6th byte.
+<dl><dd><a href="File_Nunchuk_buttonstatus.html" class="image"><img alt="Nunchuk buttonstatus.png" src="https://processors.wiki.ti.com/images/7/75/Nunchuk_buttonstatus.png" width="600" height="247" /></a></dd></dl></dd></dl>
+<h3><span class="mw-headline" id="Check_the_Button_Status">Check the Button Status</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=51" title="Edit section: Check the Button Status">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Comment out the number of bytes written statement, the number of bytes read statement, and the loop in your probe function that you used to print the register. These statements are no longer necessary and will only clutter your screen.</li>
+<li>Write two new functions called zPressed() and cPressed() above your probe function. Both of these functions should take in a pointer to a character array, char *buf (this should be the data you read from the nunchuk) and return a boolean, (true when either the z or c button is pressed, false otherwise). These functions should be implemented with boolean operators.</li>
+<li>Place a call to both the cPressed() and zPressed() functions inside of your probe function. Create if statements that will print ‘The C button is pressed!’ or ‘The Z button is pressed!’ if the functions ever return true.</li>
+<li>Compile and load your module. If it is working correctly, when you load your module while holding either the c or z buttons down, a message will appear in the console.
+<dl><dd><b>git add nunchuk.c</b></dd><b>
+</b><dd><b>git commit -m "Button notifier"</b></dd></dl></li>
+<li>The solutions to all sections of lab 5 can be found in the repository you cloned during lab 2 under Module_Training/Solutions/Lab5. Compare your module to the solution module to ensure that you understood the lab correctly.</li></ol>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Lab_6:_Polling_and_Device_Registration">Lab 6: Polling and Device Registration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=52" title="Edit section: Lab 6: Polling and Device Registration">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Description_6">Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=53" title="Edit section: Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you recall from the previous lab, you had to load and remove the module each time you wanted to see the updated nunchuk state. During this lab, you will create an interface that will continually look for updates in the nunchuk state. The nunchuk does not have interrupts to notify the I2C master that its state has changed. Therefore, the only way to access device data and detect changes is to regularly poll its registers.
+</p>
+<h2><span class="mw-headline" id="Lab_Steps_6">Lab Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=54" title="Edit section: Lab Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Recompile_the_Kernel_to_Support_Polling">Recompile the Kernel to Support Polling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=55" title="Edit section: Recompile the Kernel to Support Polling">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Rebuild your kernel with the options CONFIG_INPUT_POLLDEV=y, or static support for polled input devices. If you do not include this configuration, you will receive the error could not insert module example.ko: Unknown symbol in module when you attempt to allocate or register the polling device. This option can be enabled in menuconfig which can be accessed with the command make menuconfig from the root of your Linux kernel sources. Enable the option Polled input device skeleton under the sections Device Drivers -&gt; Input device support -&gt; Generic input layer.
+<dl><dd><a href="File_Menuconfig_polledinputdevice.html" class="image"><img alt="Menuconfig polledinputdevice.png" src="https://processors.wiki.ti.com/images/2/28/Menuconfig_polledinputdevice.png" width="800" height="473" /></a></dd></dl></li></ol>
+<h3><span class="mw-headline" id="Create_Logical_Device_Structure">Create Logical Device Structure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=56" title="Edit section: Create Logical Device Structure">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Comment out both calls to nunchuk_read_registers() and the calls to cPressed() and zPressed() and the if/printk-statements just below them in your probe functions. Also comment out any variables no longer in use.</li>
+<li>Above your nunchuk probe routine, create a new structure called nunchuk_dev. It should contain one field right now, struct i2c_client *12c_client.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+struct nunchuk_dev
+{
+</p>
+<pre>   struct i2c_client *i2c_client;
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Create a pointer to an instance of this structure in your probe routine called nunchuk. You will need to allocate memory for it using the function devm_kzalloc(). You should also add an if-statement to check that the allocation succeeds and to end the function if it does not.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+nunchuk = devm_kzalloc(&amp;client-&gt;dev, sizeof(struct nunchuk_dev), GFP_KERNEL);
+if (!nunchuk) {
+dev_err(&amp;client-&gt;dev, "Failed to allocate memory for logical device\n");
+	return -ENOMEM;
+}
+&lt;/syntaxhighlight&gt;
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />With devm_ functions, each allocation or registration is attached to a device structure. When a device or module is removed, all such allocations or registrations are automatically undone, which allows us to greatly simplify driver code.</div>
+</ol>
+<h3><span class="mw-headline" id="Follow_Device_Model_Conventions">Follow Device Model Conventions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=57" title="Edit section: Follow Device Model Conventions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+In order for the device model to function properly, our logical and physical device structures need to be linked together. This can be achieved by placing pointers to one another inside of the structures. Since there are no global variables involved in this method of linking the devices, this convention allow the driver to support multiple nunchuk devices.<br /><br />
+<li>In your probe function, link the logical and physical device structures with pointers.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+nunchuk-&gt;i2c_client = client;
+i2c_set_clientdata(client, nunchuk);
+&lt;/syntaxhighlight&gt;<br />
+</p>
+<dl><dd>Your structures should now contain pointers to one another as shown below.
+<dl><dd><a href="File_Nunchuk_ex_struct1.html" class="image"><img alt="Nunchuk ex struct1.png" src="https://processors.wiki.ti.com/images/c/c1/Nunchuk_ex_struct1.png" width="536" height="364" /></a></dd></dl></dd></dl>
+</ol>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Create_Polling_Device">Create Polling Device</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=58" title="Edit section: Create Polling Device">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Declare a pointer to an input_polled_dev structure in your probe routine called polled_input. You will need to allocate memory for it using the input_allocate_polled_device() function. You should also add an if-statement to return an error if the allocation fails. Search the <a rel="nofollow" class="external text" href="http://lxr.free-electrons.com/">Linux Cross Reference</a> for the necessary include statement.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+polled_input = input_allocate_polled_device();
+if (!polled_input) {
+</p>
+<pre>  pr_err("Failed to allocate memory for polling device\n");
+</pre>
+<p>	return -ENOMEM;
+}
+&lt;/syntaxhighlight&gt;
+</p>
+<li>You should set the poll interval to 50ms. You should also set the polling routine to a function called nunchuk_poll, which we will implement at a later section of this lab.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+polled_input-&gt;poll_interval=50;
+polled_input-&gt;poll=nunchuk_poll;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Create a pointer named input and point it to the struct input_dev field of your input_polled_dev structure. This will make it easier to reference the input device associated with your input_polled_dev structure as we configure it.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+struct input_dev *input = polled_input-&gt;input;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>In order to configure the input device, you need to set the name, bustype, evbit, and keybit of the structure, as shown below:</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+input-&gt;name = "Wii Nunchuk";
+input-&gt;id.bustype = BUS_I2C;
+set_bit(EV_KEY, input-&gt;evbit);
+set_bit(BTN_C, input-&gt;keybit);
+set_bit(BTN_Z, input-&gt;keybit);
+&lt;/syntaxhighlight&gt;
+</p>
+</ol>
+<h4><span class="mw-headline" id="Follow_Device_Model_Conventions_2">Follow Device Model Conventions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=59" title="Edit section: Follow Device Model Conventions">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol>
+<li>Create a new field in your nunchuk_dev structure to connect the logical device to the input device.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+struct input_polled_dev *polled_input;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>In your probe function, point the polled_input field of nunchuk to the polled_input structure your created. Then connect the polled input device to the logical device by setting the private field of polled_input to point to nunchuk.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+nunchuk-&gt;polled_input = polled_input;
+polled_input-&gt;private = nunchuk;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Finally, connect the polled input device to the physical device by setting the parent field of the dev structure in input (which is contained within polled_input).</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+input-&gt;dev.parent = &amp;client-&gt;dev;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Your structures should now contain pointers to one another as shown below.</li>
+<dl><dd><a href="File_Nunchuk_ex_struct2.html" class="image"><img alt="Nunchuk ex struct2.png" src="https://processors.wiki.ti.com/images/4/4d/Nunchuk_ex_struct2.png" width="911" height="549" /></a></dd></dl>
+</ol>
+<h4><span class="mw-headline" id="Register_Polling_Device">Register Polling Device</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=60" title="Edit section: Register Polling Device">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol>
+<li>You should register the polling device in your probe function with the function input_register_polled_device(). You should also add an if-statement that will free the allocated memory of polled_input and return an error if the registration fails. If you do not free the memory before returning an error, you will create memory leaks in the kernel. Be sure to declare the int result.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+if(result&lt;0) {
+	input_free_polled_device(polled_input);
+	pr_err("Failed to register polled device\n");
+	return -ENOMEM;
+}
+&lt;/syntaxhighlight&gt;
+</p>
+</ol>
+<h4><span class="mw-headline" id="Implement_the_Polling_Routine">Implement the Polling Routine</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=61" title="Edit section: Implement the Polling Routine">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol>
+<li>Above your probe routine, create a function called nunchuk_poll (the same name you used earlier in the lab). If you look at the definition of the input_polled_dev structure, you will see that the function needs to return void and take in an input_polled_dev structure as a parameter.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+void nunchuk_poll(struct input_polled_dev *polled_input)
+&lt;/syntaxhighlight&gt;
+</p>
+<li>By following device model conventions earlier in the lab, you can use the nunchuk_dev structure to retrieve a pointer to the physical device (i2c_client) from the private field of the parameter polled_input.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+struct nunchuk_dev *nunchuk = polled_input-&gt;private;
+struct i2c_client *client = nunchuk-&gt;i2c_client;
+&lt;/syntaxhighlight&gt;
+</p>
+<li>Declare a 6 character char array called buf and call your nunchuk_read_registers() function (which you created during the last lab) to read from the physical device (in this example, client) and store any data in buf.</li>
+<li>Use the zPressed() and cPressed() functions you wrote during the last lab to determine if the z or c buttons are currently pressed. Store the output of these functions in two boolean  variables called zPress and cPress. If either of them is pressed, use the input_event() function as shown below to notify the input subsystem. You will then need to call input_sync() as there could be two input events at once. Search the <a rel="nofollow" class="external text" href="http://lxr.free-electrons.com/">Linux Cross Reference</a> for the necessary include.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+input_event(polled_input-&gt;input, EV_KEY, BTN_Z, zPress);
+input_event(polled_input-&gt;input, EV_KEY, BTN_C, cPress);
+input_sync(polled_input-&gt;input);
+&lt;/syntaxhighlight&gt;
+</p>
+</ol>
+<h3><span class="mw-headline" id="Implement_the_Remove_Routine">Implement the Remove Routine</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=62" title="Edit section: Implement the Remove Routine">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li>Finally, your remove routine needs to undo anything done in your probe function. Retrieve the logical device (struct nunchuk_dev *nunchuk) from the i2c_client structure with the i2c_get_clientdata() function. Then retrieve the input_polled_dev structure from the polled_input field of nunchuk.
+</li><li>Unregister the polled device and free its allocated memory.</li>
+<p>&lt;syntaxhighlight lang="c"&gt;
+input_unregister_polled_device(polled_input);
+input_free_polled_device(polled_input);
+&lt;/syntaxhighlight&gt;
+</p>
+</ol>
+<h3><span class="mw-headline" id="Test_Your_Module">Test Your Module</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;section=63" title="Edit section: Test Your Module">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol><li>Compile your module. If there are any errors or warning, address them before proceeding.</li>
+<li>Next ensure that your module loads and removes correctly. Currently when loaded, your module should only be printing a ‘Hello Nunchuk’ line and a line that says ‘input: Wii Nunchuk as /devices/platform/ocp/4802a000.i2c/i2c-1/1-0052/input/input0’.</li>
+<li>On your host machine, look for a file called evtest in the nunchuk folder of the Module_Training directory. Copy the file into your trainingNFS directory. To run the tester from the same directory as your nunchuk module, you may copy it into your lib/modules/&lt;version&gt;/extra folder. Otherwise, you will have to navigate in your minicom window to the directory where you copied the file.</li>
+<li>If you recall from the lectures, when you registered the device, a node to export information to user space was created. The node created for the nunchuk should be called event0 and is located under /dev/input. evtest requires the location of the node as a parameter, as shown below. evtest is an event tester that will read from this node and print a notification each time there is an event detected from the nunchuk. When you run evtest, you should see notifications each time you press or release a button on the nunchuk.
+<dl><dd><b>./evtest /dev/input/event0</b></dd></dl></li>
+<li>When your module is functioning properly, commit your changes to git.
+<dl><dd><b>git add nunchuk.c</b></dd><b>
+</b><dd><b>git commit -m "Nunchuk User Interface"</b></dd></dl></li>
+<li>The solutions to all sections of lab 6 can be found in the repository you cloned during lab 2 under Module_Training/Solutions/Lab6. Compare your module to the solution module to ensure that you understood the lab correctly.</li></ol>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201053648
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.177 seconds
+Real time usage: 0.195 seconds
+Preprocessor visited node count: 393/1000000
+Preprocessor generated node count: 656/1000000
+Post‐expand include size: 5043/2097152 bytes
+Template argument size: 2862/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 88/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.345      1 -total
+ 43.31%    2.748     16 Template:SpNote
+ 22.33%    1.417      1 Template:SpImportant
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:39793-0!canonical and timestamp 20201201053648 and revision id 209656
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Processor SDK Linux Training: Introduction to Device Driver Development</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;oldid=209656">https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;oldid=209656</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Sitara_Linux_SDK.html" title="Category:Sitara Linux SDK">Sitara Linux SDK</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Processor+SDK+Linux+Training%3A+Introduction+to+Device+Driver+Development" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Processor_SDK_Linux_Training__Introduction_to_Device_Driver_Development.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Processor_SDK_Linux_Training__Introduction_to_Device_Driver_Development.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Processor_SDK_Linux_Training__Introduction_to_Device_Driver_Development.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Processor_SDK_Linux_Training__Introduction_to_Device_Driver_Development.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;oldid=209656" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 12 November 2015, at 14:23.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.177","walltime":"0.195","ppvisitednodes":{"value":393,"limit":1000000},"ppgeneratednodes":{"value":656,"limit":1000000},"postexpandincludesize":{"value":5043,"limit":2097152},"templateargumentsize":{"value":2862,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":88,"limit":5000000},"timingprofile":["100.00%    6.345      1 -total"," 43.31%    2.748     16 Template:SpNote"," 22.33%    1.417      1 Template:SpImportant"]},"cachereport":{"timestamp":"20201201053648","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":227});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Processor_SDK_Linux_Training:_Introduction_to_Device_Driver_Development by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:19:42 GMT -->
+</html>

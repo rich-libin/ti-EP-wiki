@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSP/BIOS_on_Multi-Core_singleimage by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:05:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>DSP/BIOS on Multi-Core singleimage - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"DSP/BIOS_on_Multi-Core_singleimage","wgTitle":"DSP/BIOS on Multi-Core singleimage","wgCurRevisionId":78018,"wgRevisionId":78018,"wgArticleId":6878,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"DSP/BIOS_on_Multi-Core_singleimage","wgRelevantArticleId":6878,"wgRequestId":"e65f15898e5956ffe2a7cba5","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-DSP_BIOS_on_Multi-Core_singleimage rootpage-DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">DSP/BIOS on Multi-Core singleimage</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Single_Application_on_Multiple_Cores"><span class="tocnumber">1</span> <span class="toctext">Single Application on Multiple Cores</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Singleimage_Example_Application"><span class="tocnumber">1.1</span> <span class="toctext">Singleimage Example Application</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Code_and_Data_Placement"><span class="tocnumber">1.2</span> <span class="toctext">Code and Data Placement</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#Code_Placement"><span class="tocnumber">1.2.1</span> <span class="toctext">Code Placement</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Data_Placement"><span class="tocnumber">1.2.2</span> <span class="toctext">Data Placement</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Configuration_File_Updates_for_Code_and_Data_Placement"><span class="tocnumber">1.2.3</span> <span class="toctext">Configuration File Updates for Code and Data Placement</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-7"><a href="#Installing_the_Application"><span class="tocnumber">1.3</span> <span class="toctext">Installing the Application</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Building_the_Applications"><span class="tocnumber">1.4</span> <span class="toctext">Building the Applications</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Loading_and_Running_the_Application"><span class="tocnumber">1.5</span> <span class="toctext">Loading and Running the Application</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Problems_with_Alternative_Methods_for_a_Single_Image"><span class="tocnumber">1.6</span> <span class="toctext">Problems with Alternative Methods for a Single Image</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#Shared_L2_.28SL2RAM.29"><span class="tocnumber">1.6.1</span> <span class="toctext">Shared L2 (SL2RAM)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-12"><a href="#Read.2Fwrite_data_corruption_between_the_cores"><span class="tocnumber">1.6.1.1</span> <span class="toctext">Read/write data corruption between the cores</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-13"><a href="#Move_read.2Fwrite_data_to_LL2RAM"><span class="tocnumber">1.6.2</span> <span class="toctext">Move read/write data to LL2RAM</span></a>
+<ul>
+<li class="toclevel-4 tocsection-14"><a href="#Breakpoint_corruption_between_the_cores"><span class="tocnumber">1.6.2.1</span> <span class="toctext">Breakpoint corruption between the cores</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-15"><a href="#Disable_Auto_Run_Option_to_main.28.29"><span class="tocnumber">1.6.3</span> <span class="toctext">Disable Auto Run Option to main()</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Load_the_program_image_one-at-a-time"><span class="tocnumber">1.6.4</span> <span class="toctext">Load the program image one-at-a-time</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Only_use_Hardware_Breakpoints"><span class="tocnumber">1.6.5</span> <span class="toctext">Only use Hardware Breakpoints</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Move_.text_application_code_to_LL2RAM"><span class="tocnumber">1.6.6</span> <span class="toctext">Move .text application code to LL2RAM</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-19"><a href="#Creating_the_singleimage_Project_from_an_Empty_DSP.2FBIOS_v5_Project"><span class="tocnumber">1.7</span> <span class="toctext">Creating the singleimage Project from an Empty DSP/BIOS v5 Project</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Summary"><span class="tocnumber">1.8</span> <span class="toctext">Summary</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Single_Application_on_Multiple_Cores">Single Application on Multiple Cores</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=1" title="Edit section: Single Application on Multiple Cores">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The singleImage example shows how a single application can run on all the device cores. The cores run the same application independently of each other. 
+</p><p><a href="../File_Randyp_BIOS_Multicore_si_memory.html" class="image" title="Figure 1. Single Application on Each Core of C6472 Device"><img alt="Figure 1. Single Application on Each Core of C6472 Device" src="https://processors.wiki.ti.com/images/e/e5/Randyp_BIOS_Multicore_si_memory.png" width="900" height="676" class="thumbborder" /></a> <br /><b>Figure 1.</b> Single Application on Each Core of C6472 Device 
+</p>
+<h2><span class="mw-headline" id="Singleimage_Example_Application">Singleimage Example Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=2" title="Edit section: Singleimage Example Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The example for this scenario is in the singleimage project folder. The example uses a QUE (queue) and SEM (DSP/BIOS&#160;semaphore) to send messages and synchronize between multiple writer() tasks to a single reader() task. The reader task, the three writer tasks, and the semaphore are statically created in the DSP/BIOS configuration file. 
+</p><p>Each of three identical writer tasks will load and send a message through the DSP/BIOS QUE mechanism, then will post a SEM to tell the reader task that a message is ready. The reader task will respond to the SEM by pulling a message off the QUE object and reporting the results using a LOG_printf message.<br /> 
+</p><p>You will be able to observe the results of the execution by each core by using the RTA-&gt;Printf Logs window.<br /> 
+</p><p>The application should be built using DSP/BIOS 5.41.07 or greater and CCS4.2.0.09 or greater. Earlier releases will not support the Printf Logs as well or at all. 
+</p><p>The DSP/BIOS memory configuration for the C6472 for this application allows the single application image to be loaded and executed on all cores by placing all program and data in the local L2 SRAM. 
+</p>
+<h2><span class="mw-headline" id="Code_and_Data_Placement">Code and Data Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=3" title="Edit section: Code and Data Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This example is based on a C6472 device (6 independent cores w/ both local and shared memory). See Figure 1 for details. 
+</p><p>One way to build and run a single application is to place all program and data in local L2 (LL2RAM) so that each core is completely independent of the other cores and each core accesses its own complete copy of the application image. 
+</p><p>Since there are portions of the application that are common between all the core, such as the user-developed program code and the DSP/BIOS program code, this LL2RAM-only scenario may seem inefficient because it duplicates these portions that could be shared. The [[#Problems with Alternative Methods for a Single Image|Problems with Alternative Methods for a Single Image] section below examines other methods and some of the problems with those alternative methods. The third scenario of this app note, sharedImage, discusses ways to share portions of the DSP/BIOS library. 
+</p><p>The singleImage application uses the exact same program image for all six cores of the C6472, so none of the cores will physically share any of their program and data memory with the other cores. This technique allows you to load and run the exact same application on all cores while running each core completely independent from the other cores. 
+</p><p>The singleImage method is very easy to implement. All program and data will be mapped to LL2RAM. This works because the address for Local L2 is 0x00800000 for each of the cores. When Core0 accesses the address 0x00800000 it accesses the Core0 L2 memory which is mirrored at 0x10800000; when Core1 accesses the address 0x00800000 it accesses the Core1 L2 memory which is mirrored at 0x11800000 and is a physically different memory than Core0's L2 memory. The default DSP/BIOS&#160;configuration platform file for the C6472 is setup with all of the initialized sections (program code and constant data) in the Shared L2 space and all of the uninitialized and unique (data and interrupt vectors) sections in the Local L2 space. So some of the sections need to be relocated to LL2RAM. 
+</p>
+<h3><span class="mw-headline" id="Code_Placement">Code Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=4" title="Edit section: Code Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Since all cores on the C6472 have access to a private Local L2 memory region (Local L2 or LL2RAM) that can be addressed by the same Local L2 address starting at 0x00800000, all code can be placed in LL2 from a single application image. In a DSP/BIOS-based application, the .text and .bios sections contain most of the code needed for the application. 
+</p><p>The following program and read-only memory sections will be defined in the tcf file to be placed in the Local LL2RAM memory:<br /> 
+</p>
+<ul><li>BIOS&#160;Data:&#160;.gblinit<br /></li>
+<li>BIOS&#160;Code:&#160;.bios, .sysinit, .hwi, .rtdx_text<br /></li>
+<li>Compiler Sections:&#160;.text, .switch, .cinit, .pinit, .const/.printf, .data<br /></li></ul>
+<h3><span class="mw-headline" id="Data_Placement">Data Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=5" title="Edit section: Data Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Since all cores on the C6472 have access to a private Local L2 memory region (Local L2 or LL2RAM) that can be addressed by the same Local L2 address starting at 0x00800000, all data can also be placed in LL2 from a single application image. 
+</p><p>The following memory sections will be defined in the tcf file to be placed in the local LL2RAM memory:<br /> 
+</p>
+<ul><li>Segment For DSP/BIOS&#160;Objects</li>
+<li>Segment For malloc() / free()</li>
+<li>BIOS&#160;Data:&#160;.args, .stack, .trcdata, .sysdata, DSP/BIOS&#160;Conf Sections<br /></li>
+<li>BIOS&#160;Code:&#160;.hwi_vec<br /></li>
+<li>Compiler Sections:&#160;.bss, .far, .cio<br /></li></ul>
+<h3><span class="mw-headline" id="Configuration_File_Updates_for_Code_and_Data_Placement">Configuration File Updates for Code and Data Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=6" title="Edit section: Configuration File Updates for Code and Data Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following lines were added at the end of the singleimage.tcf file to place all of the code and data sections into LL2RAM: 
+</p>
+<pre>/* allocate memory segments */
+bios.MEM.BIOSOBJSEG = prog.get("LL2RAM");
+bios.MEM.MALLOCSEG = prog.get("LL2RAM");
+bios.MEM.ARGSSEG     = prog.get("LL2RAM");  /* BIOS Uninit .args          def: LL2 */
+bios.MEM.STACKSEG    = prog.get("LL2RAM");  /* BIOS Uninit .stack         def: LL2 */
+bios.MEM.TRCDATASEG  = prog.get("LL2RAM");  /* BIOS Uninit .trcdata       def: LL2 */
+bios.MEM.SYSDATASEG  = prog.get("LL2RAM");  /* BIOS Uninit .sysdata       def: LL2 */
+bios.MEM.OBJSEG      = prog.get("LL2RAM");  /* BIOS Uninit .*obj?         def: LL2 */
+bios.MEM.HWIVECSEG   = prog.get("LL2RAM");  /* BIOS Init'd .hwi_vec       def: LL2 */
+bios.MEM.GBLINITSEG  = prog.get("LL2RAM");  /* BIOS Init'd .gblinit       def: SL2 */
+bios.MEM.BIOSSEG     = prog.get("LL2RAM");  /* BIOS Init'd .bios          def: SL2 */
+bios.MEM.SYSINITSEG  = prog.get("LL2RAM");  /* BIOS Init'd .sysinit       def: SL2 */
+bios.MEM.HWISEG      = prog.get("LL2RAM");  /* BIOS Init'd .hwi           def: SL2 */
+bios.MEM.RTDXTEXTSEG = prog.get("LL2RAM");  /* BIOS Init'd .rtdx_text     def: SL2 */
+bios.MEM.BSSSEG      = prog.get("LL2RAM");  /* Cmpl Uninit .bss           def: LL2 */
+bios.MEM.FARSEG      = prog.get("LL2RAM");  /* Cmpl Uninit .far           def: LL2 */
+bios.MEM.CIOSEG      = prog.get("LL2RAM");  /* Cmpl Uninit .cio           def: LL2 */
+bios.MEM.TEXTSEG     = prog.get("LL2RAM");  /* Cmpl Init'd .text          def: SL2 */
+bios.MEM.SWITCHSEG   = prog.get("LL2RAM");  /* Cmpl Init'd .switch        def: SL2 */
+bios.MEM.CINITSEG    = prog.get("LL2RAM");  /* Cmpl Init'd .cinit         def: SL2 */
+bios.MEM.PINITSEG    = prog.get("LL2RAM");  /* Cmpl Init'd .pinit         def: SL2 */
+bios.MEM.CONSTSEG    = prog.get("LL2RAM");  /* Cmpl Init'd .const/.printf def: SL2 */
+bios.MEM.DATASEG     = prog.get("LL2RAM");  /* Cmpl Init'd .data          def: LL2 */
+</pre>
+<h2><span class="mw-headline" id="Installing_the_Application">Installing the Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=7" title="Edit section: Installing the Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Download the Randyp_singleimage.zip file from <a href="../Using_DSP/BIOS_on_Multi-Core_DSP_Devices.html#Example_files_referenced_in_this_Wiki_topic" title="Using DSP/BIOS on Multi-Core DSP Devices">here</a> to a temporary location on your computer. Use the CCSv4 File-&gt;Import command to import the singleimage project into your workspace using these steps: 
+</p>
+<ol><li>From the CCSv4 main menu, select the File-&gt;Import command</li>
+<li>Select as source type CCS:Existing CCS/CCE Eclipse Projects</li>
+<li>Select an archive file</li>
+<li>Browse to the Randyp_singleimage.zip file or enter the path to it</li>
+<li>Select the singleimage project</li>
+<li>Click Finish</li></ol>
+<p>Since this example was built and archived from a workspace using CCSv4.2.4.00033, DSP/BIOS 5.41.10.36, Code Generation Tools 7.0.5, and the on-board XDS100USB emulator, there may be some "housekeeping" needed to make your build and debug experience run smoothly. Please follow these steps for each project to make sure the right tools are selected: 
+</p>
+<ol><li>In the C/C++ Projects window, right-click on the project folder name and select Build Properties..., select CCS Build in the left pane then the General tab</li>
+<li>Click the drop-down arrow for Code Generation tools and select the latest version of CGT 7.0.x that you have. Earlier versions like 6.0.x may work but have not been tested (please comment here if you test them). If your latest version is not yet in the list, click More then Select tool from file-system and browse to the folder, such as C:\Program Files\Texas Instruments\C6000 Code Generation Tools 6.1.17, then click OK and OK.</li>
+<li>Click the drop-down arrow for DSP/BIOS version and select the latest version of BIOS 5.xx that you have. Earlier versions like 5.33 may work but have not been tested, and they will not display the RTA Printf Logs correctly. SYS/BIOS 6.x is not supported for this application note. If your latest version is not in the list, click More then Select tool from file-system and browse to the folder, such as C:\Program Files\Texas Instruments\bios_5_41_10_36, then click OK and OK.</li>
+<li>Click OK to save these changes and select Apply changes to existing build configuration in the Save Build Configuration Settings window if it comes up.</li>
+<li>Repeat the steps above for the Release configuration when you want to build your final application with optimization. Use the Debug configuration for evaluation and functional debug.</li></ol>
+<h2><span class="mw-headline" id="Building_the_Applications">Building the Applications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=8" title="Edit section: Building the Applications">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Follow the steps below to get a successful build of the project.<br /> 
+</p>
+<ol><li>Select the singleimage project, right-click and Set as Active Project.<br /></li>
+<li>On the main icon row click the Build Active Project icon.<br /></li></ol>
+<p><a href="../File_Randyp_BIOS_Multicore_si_build.html" class="image"><img alt="Randyp BIOS Multicore si build.png" src="https://processors.wiki.ti.com/images/c/c6/Randyp_BIOS_Multicore_si_build.png" width="340" height="217" /></a> 
+</p>
+<h2><span class="mw-headline" id="Loading_and_Running_the_Application">Loading and Running the Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=9" title="Edit section: Loading and Running the Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Each core has the same memory range; therefore you can use Code Composer Studio (CCS) to individually load the same application on each core. You can also take advantage of the CCSv4 Debugger's Synchronous Mode to load and run the same application on all cores at one time. 
+</p><p>To run the application, you may either start each core individually or use the&#160;Synchronous Mode to start all cores in parallel. 
+</p><p>After a successful build has been completed, follow these steps in the Debug View to load and run the singleimage application:<br /> 
+</p><p><a href="../File_Randyp_BIOS_Multicore_si_Debug.html" class="image"><img alt="Randyp BIOS Multicore si Debug.png" src="https://processors.wiki.ti.com/images/a/a0/Randyp_BIOS_Multicore_si_Debug.png" width="684" height="358" /></a> 
+</p>
+<ol><li>Launch TI Debugger to load the Target Configuration<br /></li>
+<li>On the Debug window icon row, click Enable Synchronous Mode<br /></li>
+<li>On the main icon row, click Connect Target to connect to all the cores<br /></li>
+<li>On the main icon row, click Load Program and find the singleimage.out to load to all the cores<br /></li>
+<li>On the CCS menu bar, go to Tools-&gt;RTA-&gt;Printf Logs</li>
+<li>(This step may not be required with all releases) On the Debug icon row click Collapse All (for ease), then select each core one-at-a-time and make sure in the Printf Logs window that the "Stream RTA&#160;data" icon is selected and highlighted.</li>
+<li>On the Debug window icon row, click Run, wait 5 seconds and click Halt.</li>
+<li>Observe the Printf Logs window for each of the cores. Use Collapse All if it makes it easier to go through the list of cores. When Core5 is selected in the Debug window, the display will be as shown here. Note the Core N number on some lines.</li></ol>
+<p><a href="../File_Randyp_BIOS_Multicore_si_printf.html" class="image" title="Printf Logs for Core5"><img alt="Printf Logs for Core5" src="https://processors.wiki.ti.com/images/0/0f/Randyp_BIOS_Multicore_si_printf.png" width="483" height="593" /></a> 
+</p><p>Some points to know:
+</p>
+<ul><li>Once you have loaded all the cores, when you later make changes and do a Rebuild, CCSv4 will let you select the option to Reload the program automatically when it detects that a loaded .out file has changed. Checking Remember my decision will save having to answer this every time.</li>
+<li>After the load or reload, the processor will automatically run to main() and halt. If it is stuck running, click Halt and then Restart (or Reload Program, or CPU&#160;Reset and then Reload Program).</li></ul>
+<h2><span class="mw-headline" id="Problems_with_Alternative_Methods_for_a_Single_Image">Problems with Alternative Methods for a Single Image</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=10" title="Edit section: Problems with Alternative Methods for a Single Image">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Other methods could be considered for building and running the same program on all six cores. We will briefly discuss some of these and the issues that you would have with those alternatives. 
+</p>
+<h3><span id="Shared_L2_(SL2RAM)"></span><span class="mw-headline" id="Shared_L2_.28SL2RAM.29">Shared L2 (SL2RAM)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=11" title="Edit section: Shared L2 (SL2RAM)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>One attractive alternative would be to place all code and data in the Shared L2 (SL2RAM). The same thing could be done with any shared memory location, including external DDR memory or using a single core's global L2 address space such as DSP3 L2 SRAM at 0x13800000. Using any of these locations would allow each core to run from the exact same memory. This would save duplication by using only one image loaded into one location, instead of six different copies of the same image, one for each core.
+</p><p>The following lines could be added to the end of the singleimage.tcf file to place all memory sections in SL2RAM:
+</p>
+<pre>/* allocate memory segments */
+bios.MEM.BIOSOBJSEG = prog.get("SL2RAM");
+bios.MEM.MALLOCSEG = prog.get("SL2RAM");
+bios.MEM.ARGSSEG     = prog.get("SL2RAM");  /* BIOS Uninit .args          def: LL2 */
+bios.MEM.STACKSEG    = prog.get("SL2RAM");  /* BIOS Uninit .stack         def: LL2 */
+bios.MEM.TRCDATASEG  = prog.get("SL2RAM");  /* BIOS Uninit .trcdata       def: LL2 */
+bios.MEM.SYSDATASEG  = prog.get("SL2RAM");  /* BIOS Uninit .sysdata       def: LL2 */
+bios.MEM.OBJSEG      = prog.get("SL2RAM");  /* BIOS Uninit .*obj?         def: LL2 */
+bios.MEM.HWIVECSEG   = prog.get("SL2RAM");  /* BIOS Init'd .hwi_vec       def: LL2 */
+bios.MEM.GBLINITSEG  = prog.get("SL2RAM");  /* BIOS Init'd .gblinit       def: SL2 */
+bios.MEM.BIOSSEG     = prog.get("SL2RAM");  /* BIOS Init'd .bios          def: SL2 */
+bios.MEM.SYSINITSEG  = prog.get("SL2RAM");  /* BIOS Init'd .sysinit       def: SL2 */
+bios.MEM.HWISEG      = prog.get("SL2RAM");  /* BIOS Init'd .hwi           def: SL2 */
+bios.MEM.RTDXTEXTSEG = prog.get("SL2RAM");  /* BIOS Init'd .rtdx_text     def: SL2 */
+bios.MEM.BSSSEG      = prog.get("SL2RAM");  /* Cmpl Uninit .bss           def: LL2 */
+bios.MEM.FARSEG      = prog.get("SL2RAM");  /* Cmpl Uninit .far           def: LL2 */
+bios.MEM.CIOSEG      = prog.get("SL2RAM");  /* Cmpl Uninit .cio           def: LL2 */
+bios.MEM.TEXTSEG     = prog.get("SL2RAM");  /* Cmpl Init'd .text          def: SL2 */
+bios.MEM.SWITCHSEG   = prog.get("SL2RAM");  /* Cmpl Init'd .switch        def: SL2 */
+bios.MEM.CINITSEG    = prog.get("SL2RAM");  /* Cmpl Init'd .cinit         def: SL2 */
+bios.MEM.PINITSEG    = prog.get("SL2RAM");  /* Cmpl Init'd .pinit         def: SL2 */
+bios.MEM.CONSTSEG    = prog.get("SL2RAM");  /* Cmpl Init'd .const/.printf def: SL2 */
+bios.MEM.DATASEG     = prog.get("SL2RAM");  /* Cmpl Init'd .data          def: LL2 */
+</pre>
+<p>Unfortunately, there are several problems with all cores running from a single image loaded into one location. 
+</p>
+<h4><span id="Read/write_data_corruption_between_the_cores"></span><span class="mw-headline" id="Read.2Fwrite_data_corruption_between_the_cores">Read/write data corruption between the cores</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=12" title="Edit section: Read/write data corruption between the cores">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The first problem is that read/write data will be corrupted by the other cores. Any global variable that Core0 writes to, for example to save its core number or ID, would be the same memory location that Core1 would write its core number or ID to. Whichever core writes first will lose that data when the other core writes to the same location.
+</p>
+<h3><span id="Move_read/write_data_to_LL2RAM"></span><span class="mw-headline" id="Move_read.2Fwrite_data_to_LL2RAM">Move read/write data to LL2RAM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=13" title="Edit section: Move read/write data to LL2RAM">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A solution to the read/write data corruption problem is to move all read/write data to the Local L2 memory space for each core using the Local L2 (LL2RAM) address starting at 0x00800000. Since every core would use the same LL2 address to access its own unique LL2 location, there would be no corruption of Core0's data at Core0's 0x00800000 address when Core1 writes to Core1's data at Core1's 0x00800000 address. 
+</p><p>The read/write sections that would need to be relocated are
+</p>
+<ul><li>Segment For DSP/BIOS&#160;Objects</li>
+<li>Segment For malloc() / free()</li>
+<li>BIOS&#160;Data:&#160;.args, .stack, .trcdata, .sysdata, DSP/BIOS&#160;Conf Sections<br /></li>
+<li>BIOS&#160;Code:&#160;.hwi_vec<br /></li>
+<li>Compiler Sections:&#160;.bss, .far, .cio<br /></li></ul>
+<p>The following lines could be updated or added to the end of the singleimage.tcf file to place these memory sections in LL2RAM:
+</p>
+<pre>bios.MEM.BIOSOBJSEG = prog.get("LL2RAM");
+bios.MEM.MALLOCSEG = prog.get("LL2RAM");
+bios.MEM.ARGSSEG     = prog.get("LL2RAM");  /* BIOS Uninit .args          def: LL2 */
+bios.MEM.STACKSEG    = prog.get("LL2RAM");  /* BIOS Uninit .stack         def: LL2 */
+bios.MEM.TRCDATASEG  = prog.get("LL2RAM");  /* BIOS Uninit .trcdata       def: LL2 */
+bios.MEM.SYSDATASEG  = prog.get("LL2RAM");  /* BIOS Uninit .sysdata       def: LL2 */
+bios.MEM.OBJSEG      = prog.get("LL2RAM");  /* BIOS Uninit .*obj?         def: LL2 */
+bios.MEM.HWIVECSEG   = prog.get("LL2RAM");  /* BIOS Init'd .hwi_vec       def: LL2 */
+bios.MEM.BSSSEG      = prog.get("LL2RAM");  /* Cmpl Uninit .bss           def: LL2 */
+bios.MEM.FARSEG      = prog.get("LL2RAM");  /* Cmpl Uninit .far           def: LL2 */
+bios.MEM.CIOSEG      = prog.get("LL2RAM");  /* Cmpl Uninit .cio           def: LL2 */
+</pre>
+<p>The .hwi_vec section is not a data section, but it has to be moved to a unique area. This is recommended in the original app note, although I cannot offer an explanation here. It may have something to do with details in BIOS and how BIOS handles this section.
+</p><p>The changes described above will avoid the problems with inter-core data corruption by making the read/write data sections unique for each core. Putting these sections into Local L2 space in one way to make these sections unique, and it allows the same application image to be loaded for each core and still run successfully for each core.
+</p><p>With this change moving read/write data to LL2RAM, the program can run successfully with the unique data locations and the shared program locations. If all you want to do is run your application and never worry about debugging, this will be fine. But that is usually impractical.
+</p><p>Unfortunately, there are still problems with all cores running from a single code image loaded into one location, even with the read/write data moved into Local L2.
+</p>
+<h4><span class="mw-headline" id="Breakpoint_corruption_between_the_cores">Breakpoint corruption between the cores</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=14" title="Edit section: Breakpoint corruption between the cores">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The next problem has to do with program breakpoints being set in a common program memory location. If you use the Debug Window's Synchronous Mode and load this single image into all six cores at once, each core will normally automatically run to the beginning of the main() function for convenience. This is the default setting and usually saves a step in the debug process.
+</p><p>Once Core0 has finished loading from singleimage.out, the CCS debugger will save the instruction at _main, set a breakpoint instruction at _main and then start the processor running. When Core0 stops at that breakpoint, CCS will replace the breakpoint instruction with the original instruction at that location. Everything looks fine in the source window and in the Disassembly window.
+</p><p>Core1 will also load from singleimage.out, writing to the exact same memory locations as Core0 used for the .text section, which is still in SL2RAM. CCS will then write a breakpoint instruction at the same _main address as Core0 did, after saving the contents to be restored later. 
+</p><p>One race condition occurs between CCS writing a breakpoint instruction at _main for Core0 (after Core0 loads and before Core0 runs) and CCS writing the original instruction at _main for Core1 (during Core1's load process). If the Core1 write happens between the Core0 breakpoint write but before Core0 reaches that breakpoint, then Core0 might continue running and might never reach a breakpoint.
+</p><p>Another race condition occurs between CCS writing a breakpoint instruction at _main for Core0 (after Core0 loads and before Core0 stops at that breakpoint) and CCS writing a breakpoint instruction at _main for Core1 (after Core1 loads and before Core1 runs). If the Core1 breakpoint is set while Core0 is running to that breakpoint, then CCS for Core1 may have read the Core0 breakpoint instead of the original _main instruction. If this happens, then when Core1 runs and reaches the breakpoint it will restore the Core0 breakpoint instead of the correct instruction. In this case, Core1 might never see the correct instruction that should be at _main and might never execute the correct code.
+</p><p>The use of program cache makes these situations more difficult to debug and discover because the same memory location for _main may appear to be a different instruction when viewed through the cache of the different cores.
+</p>
+<h3><span id="Disable_Auto_Run_Option_to_main()"></span><span class="mw-headline" id="Disable_Auto_Run_Option_to_main.28.29">Disable Auto Run Option to main()</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=15" title="Edit section: Disable Auto Run Option to main()">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>One solution to the breakpoint corruption problem at _main is to disable the Auto Run Option in the Generic Debugger Options menu. The steps to do this are:
+</p>
+<ol><li>Tools-&gt;Debugger Options-&gt;Generic Debugger Options</li>
+<li>Select Core0/C64XP_A, under Auto Run Option uncheck "On a program load or restart", click OK</li>
+<li>Repeat 2 for all cores</li></ol>
+<ul><li>Note: Remember My Settings would have to be clicked for each core, if desired.</li></ul>
+<p>This will avoid the first breakpoint corruption problem, and this will work as long as all you want to do is load and run the application without ever setting any breakpoints. Since one of the primary values of Code Composer Studio is the capability to do source-level debugging of your program, this is not a very effective solution. Also, there are other breakpoints that may be set automatically, for C I/O and program exit, for example. Any of these can cause a problem.
+</p>
+<h3><span class="mw-headline" id="Load_the_program_image_one-at-a-time">Load the program image one-at-a-time</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=16" title="Edit section: Load the program image one-at-a-time">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Another solution would be to load all six cores' programs one-at-a-time instead of using the Synchronous Mode to load them all at once. This way, each core will have time to load and run to main() before the next core starts to do the same.
+</p><p>This solves the breakpoint corruption problem at _main. But the problem still remains that you cannot set any other breakpoints in the program while any other core is running. That would make multi-core debug difficult.
+</p>
+<h3><span class="mw-headline" id="Only_use_Hardware_Breakpoints">Only use Hardware Breakpoints</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=17" title="Edit section: Only use Hardware Breakpoints">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Another solution would be to turn off all of the automatic breakpoints and only use hardware breakpoints. Since these are handled individually by each core, they are unique between the cores.
+</p><p>But this would be inconvenient, both by requiring a few more steps to set hardware breakpoints and by the limited number of hardware breakpoints available.
+</p>
+<h3><span class="mw-headline" id="Move_.text_application_code_to_LL2RAM">Move .text application code to LL2RAM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=18" title="Edit section: Move .text application code to LL2RAM">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A more debugger-friendly solution to the breakpoint corruption problem is to move the .text section to the Local L2 memory space for each core. This would allow software breakpoints to be set anywhere within the application code, which is where almost all of the code debug would occur. 
+</p><p>The following line could be updated or added to the end of the singleimage.tcf file to place the .text memory section in LL2RAM:
+</p>
+<pre>bios.MEM.TEXTSEG     = prog.get("LL2RAM");  /* Cmpl Init'd .text          def: SL2 */
+</pre>
+<p>Unfortunately, this defeats most of the purpose of putting the image in shared memory in the first place, which was to save space in memory. 
+</p>
+<h2><span id="Creating_the_singleimage_Project_from_an_Empty_DSP/BIOS_v5_Project"></span><span class="mw-headline" id="Creating_the_singleimage_Project_from_an_Empty_DSP.2FBIOS_v5_Project">Creating the singleimage Project from an Empty DSP/BIOS v5 Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=19" title="Edit section: Creating the singleimage Project from an Empty DSP/BIOS v5 Project">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To create a new project like singleimage from the beginning, follow these steps:
+</p>
+<ol><li>File-&gt;New-&gt;CCS Project</li>
+<li>Project name: singleimage (or any name that does not yet exist), click Next</li>
+<li>Project Type: C6000, click Next</li>
+<li>Additional Project Settings, click Next</li>
+<li>Project Settings: Output type: Executable, Device Variant: Generic C64x+ Device, click Next</li>
+<li>Project Templates: DSP/BIOS v5.xx Examples, Empty Example, click Finish</li>
+<li>Copy singleimage.c and GetDnum.asm into the new Project folder, and they are automatically included in builds</li></ol>
+<p>To create a new singleimage.tcf file from the beginning, follow these steps:
+</p>
+<ol><li>Right-click on the Project name and select New-&gt;DSP/BIOS v5.x Configuration File</li>
+<li>The default name will be Project.tcf, click Next</li>
+<li>Choose a platform from the list (for C6472, type 647 in the Filter Platforms box to shorten the list), select the evm6472 line, click Next</li>
+<li>Keep the default features until you know which ones you do not need, since you may not need to remove any, click Finish</li>
+<li>Wait a short time, and if the Configuration Tool does not open, double-click on the new .tcf file in your project file list.</li>
+<li>Enable heap: click the + by System, the + by MEM, right-click Properties on MEM, uncheck "No Dynamic Memory Heaps", click OK on the Config message box if it pops up, click OK on MEM</li>
+<li>Create heap: right-click Properties on LL2RAM, check "create a heap in this memory", set size to 0x800, check "enter a user...label", set the heap label to _HEAP, click OK</li>
+<li>Assign heap: right-click Properties on MEM, change both Segment dropboxes to LL2RAM, increase Stack Size to 0x1000, click Apply</li>
+<li>Memory section change: still in MEM, go to Compiler Sections tab, change "Data Section (.data)" to SL2RAM, click OK</li>
+<li>LOG: click the + by Instrumentation, the + by LOG, right-click Properties on LOG_system, change buflen to 512, click OK</li>
+<li>LOG: right-click on LOG to select Insert LOG, change name to "trace", click OK</li>
+<li>LOG: right-click Properties on "trace", change buflen to 256, click OK</li>
+<li>SEM: click the + by Synchronization, right-click on SEM to select Insert SEM, change name to "sem", click OK</li>
+<li>TSK: click the + by Scheduling, the + by TSK, right-click on TSK to select Insert TSK, change name to "reader0", click OK</li>
+<li>TSK: right-click Properties on "reader0", change Priority to 2, go to Function tab, change Task function to _reader, click OK</li>
+<li>TSK: right-click on TSK to select Insert TSK, change name to writer0, click OK</li>
+<li>TSK: right-click Properties on writer0, go to Function tab, change Task function to _writer, click OK</li>
+<li>TSK: right-click on TSK to select Insert TSK, change name to writer1, click OK</li>
+<li>TSK: right-click Properties on writer1, go to Function tab, change Task function to _writer, change Task function argument 0 to 1, click OK</li>
+<li>TSK: right-click on TSK to select Insert TSK, change name to writer2, click OK</li>
+<li>TSK: right-click Properties on writer2, go to Function tab, change Task function to _writer, change Task function argument 0 to 2, click OK</li>
+<li>IDL: right-click on IDL to select Insert IDL, change name to IDL_cnt, click OK</li>
+<li>IDL: right-click Properties on IDL_cnt, change function to _IDL_testfunc, click OK</li></ol>
+<h2><span class="mw-headline" id="Summary">Summary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;section=20" title="Edit section: Summary">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The easiest way to build and run an application on a C6472 multicore device is to take advantage of the local addressing for the LL2 RAM. The same address range can be used for every core, because each core's C64x+ MegaModule can access its local L2 memory using the address 0x00800000. One program can be written, compiled and linked to load and run from this local LL2 address range, loading six copies into the LL2 address range of all six cores. The same application image, singleimage.out, can be loaded onto each core and run independently on each core.
+</p><p>The CCSv4 debugger supports multicore loading and debugging in a variety of ways. This application note has shown the steps to build, load, and run the same singleimage project on all of the cores. 
+</p><p>There are many other scenarios that can be used for multi-core devices. The <a href="BIOS_on_Multi-Core_multipleimage.html" title="DSP/BIOS on Multi-Core multipleimage">DSP/BIOS on Multi-Core multipleimage</a> scenario uses multiple independent program images by allocating separate partitions of the shared memory regions for each core, and using those to keep the multiple programs independent from each other. The <a href="BIOS_on_Multi-Core_sharedimage.html" title="DSP/BIOS on Multi-Core sharedimage">DSP/BIOS on Multi-Core sharedimage</a> scenario builds on the multipleimage partitioning by showing a way to build a partial image from the DSP/BIOS library such that all of the cores can link to and run with a single shared image of that part of DSP/BIOS from a common region of shared memory.
+</p><p>Return to <a href="../Using_DSP/BIOS_on_Multi-Core_DSP_Devices.html" title="Using DSP/BIOS on Multi-Core DSP Devices">Using DSP/BIOS on Multi-Core DSP Devices</a>.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201041053
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.067 seconds
+Real time usage: 0.070 seconds
+Preprocessor visited node count: 105/1000000
+Preprocessor generated node count: 144/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4522/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:6878-0!canonical and timestamp 20201201041053 and revision id 78018
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSP/BIOS on Multi-Core singleimage</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSP/BIOS on Multi-Core singleimage</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core singleimage</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core singleimage</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core singleimage</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core singleimage</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core singleimage</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core singleimage</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>DSP/BIOS on Multi-Core singleimage</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;oldid=78018">https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;oldid=78018</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=DSP%2FBIOS+on+Multi-Core+singleimage" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="BIOS_on_Multi-Core_singleimage.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="BIOS_on_Multi-Core_singleimage.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/DSP/BIOS_on_Multi-Core_singleimage.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/DSP/BIOS_on_Multi-Core_singleimage.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;oldid=78018" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=DSP/BIOS_on_Multi-Core_singleimage&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 16 September 2011, at 18:11.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.067","walltime":"0.070","ppvisitednodes":{"value":105,"limit":1000000},"ppgeneratednodes":{"value":144,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":4522,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201041053","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":299});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSP/BIOS_on_Multi-Core_singleimage by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:05:15 GMT -->
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSP_BIOS_Debugging_Tips by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:09:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>DSP BIOS Debugging Tips - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"DSP_BIOS_Debugging_Tips","wgTitle":"DSP BIOS Debugging Tips","wgCurRevisionId":181302,"wgRevisionId":181302,"wgArticleId":743,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["DSPBIOS","Debug","DaVinci Debugging"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"DSP_BIOS_Debugging_Tips","wgRelevantArticleId":743,"wgRequestId":"5e1ca006762f8e3d36d38462","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-DSP_BIOS_Debugging_Tips rootpage-DSP_BIOS_Debugging_Tips skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">DSP BIOS Debugging Tips</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This topic describes a list of scenarios/samples of common mistakes/problems that users run into when using DSP/BIOS.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Problem:_Software_instability.2C_i.e._code_jumps_to_random_location.2C_crashes.2C_behaves_erratically"><span class="tocnumber">1</span> <span class="toctext">Problem:  Software instability, i.e. code jumps to random location, crashes, behaves erratically</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Cause:_Stack_overflow"><span class="tocnumber">1.1</span> <span class="toctext">Cause:  Stack overflow</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Cause:_Improper_use_of_the_interrupt_keyword"><span class="tocnumber">1.2</span> <span class="toctext">Cause:  Improper use of the interrupt keyword</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Cause:_Invoking_BIOS_APIs_from_the_wrong_context"><span class="tocnumber">1.3</span> <span class="toctext">Cause:  Invoking BIOS APIs from the wrong context</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Cause:_Uninitialized_global_variables"><span class="tocnumber">1.4</span> <span class="toctext">Cause: Uninitialized global variables</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Cause:_MBX_message_size_does_not_correspond_to_size_of_message_buffer"><span class="tocnumber">1.5</span> <span class="toctext">Cause: MBX message size does not correspond to size of message buffer</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Cause:_Non-reentrant_RTS_functions_only_callable_from_TSK"><span class="tocnumber">1.6</span> <span class="toctext">Cause: Non-reentrant RTS functions only callable from TSK</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Cause:_Improper_register.2Fstack_handling_in_hand-written_assembly"><span class="tocnumber">1.7</span> <span class="toctext">Cause: Improper register/stack handling in hand-written assembly</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Problem:_The_Real_Time_Analysis_Tools_Aren.27t_Working.21"><span class="tocnumber">2</span> <span class="toctext">Problem: The Real Time Analysis Tools Aren't Working!</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Cause:_Improper_setup_of_BIOS_configuration_file"><span class="tocnumber">2.1</span> <span class="toctext">Cause: Improper setup of BIOS configuration file</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Cause:_Necessary_interrupts_for_RTDX_not_enabled"><span class="tocnumber">2.2</span> <span class="toctext">Cause: Necessary interrupts for RTDX not enabled</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Problem:_Program_hits_a_SYS_call.2C_but_I_can.27t_see_any_output.2Ferror_message."><span class="tocnumber">3</span> <span class="toctext">Problem: Program hits a SYS call, but I can't see any output/error message.</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Problem:_Performance_is_really_bad"><span class="tocnumber">4</span> <span class="toctext">Problem:  Performance is really bad</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Problem:_My_code_isn.27t_behaving_the_way_I_think_it_should."><span class="tocnumber">5</span> <span class="toctext">Problem:  My code isn't behaving the way I think it should.</span></a></li>
+</ul>
+</div>
+
+<h1><span id="Problem:_Software_instability,_i.e._code_jumps_to_random_location,_crashes,_behaves_erratically"></span><span class="mw-headline" id="Problem:_Software_instability.2C_i.e._code_jumps_to_random_location.2C_crashes.2C_behaves_erratically">Problem:  Software instability, i.e. code jumps to random location, crashes, behaves erratically</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=1" title="Edit section: Problem: Software instability, i.e. code jumps to random location, crashes, behaves erratically">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>BIOS itself is extremely stable software.  However, there are several common mistakes that can cause instability.  Luckily, most of these mistakes can be avoided or else detected/corrected.
+</p>
+<h2><span class="mw-headline" id="Cause:_Stack_overflow">Cause:  Stack overflow</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=2" title="Edit section: Cause: Stack overflow">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Description:</b> From a software perspective, stack problems are the most common cause of stability issues. These issues can result from a stack overflow, a stack corruption or a stack-pointer (SP) corruption.  This could be related to the system stack used by HWIs and SWIs as well as the individual task stats.<br />
+<b>How to diagnose (Method 1):</b> <br />
+</p>
+<ul><li>After code has gotten into a bad state, halt the processor and open the DSP/BIOS Kernel Object Viewer (KOV). In CCS 3.3 go to DSP/BIOS -&gt; Kernel Object View.  In CCS 4.x go to Tools -&gt; ROV. Note that this does <b>not</b> require any kind of special instrumentation to be built into BIOS such as RTA or RTDX. Furthermore absolutely <b>no</b> code changes are required to use this feature.</li>
+<li>The Kernel Object Viewer will inspect all of the BIOS stacks (i.e. task stacks and system stack) to ensure that the watermarks are still present. If one of the stacks has overflowed, indicated by an exclamation point on the corresponding task/KNL in KOV.</li>
+<li>Here are some screenshots demonstrating a normal scenario as well as an overflow:<br /></li></ul>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Bios_debugging_tips_kov1.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/d/d1/Bios_debugging_tips_kov1.jpg" width="300" height="194" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Bios_debugging_tips_kov1.html" class="internal" title="Enlarge"></a></div>KOV - no overflow</div></div></div>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Bios_debugging_tips_kov2.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/d/d5/Bios_debugging_tips_kov2.jpg" width="300" height="194" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Bios_debugging_tips_kov2.html" class="internal" title="Enlarge"></a></div>KOV - stack overflow</div></div></div>
+<ul><li>In certain cases you may need to try and "catch" the issue sooner.  For example, if the run away code corrupts the emulation you may experience a CCS disconnect after the issue happens.  In this scenario you might use hardware such as <a href="Advanced_Event_Triggering.html" title="Advanced Event Triggering">Advanced Event Triggering (AET)</a> to set a watchpoint on the end of the stack in order to catch the problem while the CPU is still in a good state.  This method is described in the article <a href="Checking_for_Stack_Overflow_using_Unified_Breakpoint_Manager.html" class="mw-redirect" title="Checking for Stack Overflow using Unified Breakpoint Manager">Checking for Stack Overflow using Unified Breakpoint Manager</a>. You might also try "method 2" or "method 3" as follows.</li></ul>
+<p><br />
+<b>How to diagnose (Method 2):</b>
+</p>
+<ul><li>Update your BIOS configuration to check the stacks on every context switch.</li>
+<li>BIOS fills the stack with a known value (0xBE on the 6x).  The TSK_checkstacks() function will check the top of stack for the "from" and "to" task to make sure the top element matches this cookie.  Not that it is possible for the stack to overflow without overwriting the top element (i.e., a local variable or struct in a function that is not modified by the function could overlay the top of stack and never change -- and never corrupt the cookie), but this check will catch most stack overflows. The overhead is very small since we doing a couple of quick compares.</li></ul>
+<p>&lt;syntaxhighlight lang="javascript"&gt;
+bios.TSK.CALLSWITCHFXN = 1;
+bios.TSK.SWITCHFXN = prog.extern("TSK_checkstacks");
+&lt;/syntaxhighlight&gt;
+</p><p><b>How to diagnose (Method 3):</b>
+</p>
+<ul><li>Extract <a href="https://processors.wiki.ti.com/images/4/4f/Tsk_switch_dbg.tar.gz" class="internal" title="Tsk switch dbg.tar.gz">Tsk_switch_dbg.tar.gz</a> at your location of choice.</li>
+<li>Add the attached C to your project, i.e. Project -&gt; Add Files to Project.</li>
+<li>The C file is calling LOG_printf and storing to a LOG called "trace" so you need to have defined a LOG object called trace for everything to build/run.</li>
+<li>To add the TCI just add the following to your TCF config file</li></ul>
+<p>&lt;syntaxhighlight lang="javascript"&gt;
+/* Import BIOS TSK switch hook fxn so we can e.g. debug stack-pointer */
+utils.importFile("tsk_switch_dbg.tci");
+&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>this will show the currTask and nextTask Stack pointers at each TSK switch.</li>
+<li>tsk_switch_dbg.c: TSK switch hook function useful for Stack Ptr debug</li>
+<li>tsk_switch_dbg.tci: TSK switch hook function config file for Stack Ptr debug</li></ul>
+<p><br />
+<br />
+<b>How to resolve:</b>
+</p>
+<ul><li>Go back to your BIOS configuration file and increase the size of the overflowing stack.</li>
+<li>System stack usage can be reduced by preventing SWI and HWI threads from nesting:
+<ul><li>Making SWI threads the same priority prevents them from preempting one another.</li>
+<li>The default mask for HWIs in BIOS is "self" meaning "can`t preempt/interrupt myself but can be interrupted by other ISRs".  If you want to prevent nesting of interrupts you should set the mask to "all" in the interrupt configuration as follows:<br /></li></ul></li></ul>
+<p><a href="File_Bios_debugging_tips_interrupts3.html" class="image"><img alt="Bios debugging tips interrupts3.JPG" src="https://processors.wiki.ti.com/images/1/1e/Bios_debugging_tips_interrupts3.JPG" width="300" height="249" /></a><br />
+</p>
+<ul><li>This FAQ gives more detail on the BIOS interrupt masks: <a rel="nofollow" class="external text" href="http://www-k.ext.ti.com/SRVS/CGI-BIN/WEBCGI.EXE/,/?St=21,E=0000000000007921289,K=4772,Sxi=4,Case=obj(31530)">Kbase FAQ 31530</a></li></ul>
+<h2><span class="mw-headline" id="Cause:_Improper_use_of_the_interrupt_keyword">Cause:  Improper use of the interrupt keyword</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=3" title="Edit section: Cause: Improper use of the interrupt keyword">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Description:</b> CLK functions and ISRs that use the interrupt dispatcher should not use the interrupt keyword.<br />
+</p>
+<div class="floatnone"><a href="File_Bios_debugging_tips_interrupts1.html" class="image"><img alt="Bios debugging tips interrupts1.JPG" src="https://processors.wiki.ti.com/images/2/2b/Bios_debugging_tips_interrupts1.JPG" width="500" height="389" /></a></div><p><br />
+</p><p><b>How to diagnose:</b>
+</p>
+<ul><li>Extract <a href="https://processors.wiki.ti.com/images/d/d8/List_interrupt.tar.gz" class="internal" title="List interrupt.tar.gz">List_interrupt.tar.gz </a> at a location of your choice.</li>
+<li>Run perl script on list_interrupt.pl on an executable (.out) to find out if there are any functions that were declared with the interrupt keyword. Works only for codegen tools &gt;= v5.1.6 for c6000, v3.2.3 for C55, v4.1.1 for C54, v4.1.2 for C2000. You will need to install the cg_xml package(available at <a rel="nofollow" class="external free" href="https://www-a.ti.com/downloads/sds_support/applications_packages/cg_xml/index.htm">https://www-a.ti.com/downloads/sds_support/applications_packages/cg_xml/index.htm</a> my.ti.com free account registration required) for this to work. Requires ActiveState Perl 5.8.3 or above. Type perldoc list_interrupt.pl at the command prompt for more help on how to run.</li></ul>
+<p><b>Additional data:</b>
+</p>
+<ul><li>One should use EITHER the HWI_dispatcher OR the interrupt keyword, but <b>never both</b>.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Cause:_Invoking_BIOS_APIs_from_the_wrong_context">Cause:  Invoking BIOS APIs from the wrong context</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=4" title="Edit section: Cause: Invoking BIOS APIs from the wrong context">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Description:</b> The BIOS API Guide has an appendix called "Function Callability Table".  The table lists all BIOS APIs and specifies from what thread context it is legal to call them.  Calling an API from the wrong context can cause stability issues.<br />
+</p><p><b>Common mistakes:</b><br />
+</p>
+<ul><li>If you choose NOT to use the dispatcher then you are not allowed to call certain BIOS APIs from the ISR (i.e. cannot call SWI_post, SEM_pend, etc.).</li></ul>
+<p><a href="File_Bios_debugging_tips_interrupts2.html" class="image"><img alt="Bios debugging tips interrupts2.JPG" src="https://processors.wiki.ti.com/images/0/0d/Bios_debugging_tips_interrupts2.JPG" width="500" height="382" /></a>
+</p>
+<ul><li>SEM_pend should not be called from a HWI or SWI except with a timeout of 0.</li>
+<li>LCK_* functions should not be called from a HWI/SWI</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Cause:_Uninitialized_global_variables">Cause: Uninitialized global variables</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=5" title="Edit section: Cause: Uninitialized global variables">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Description:</b> By default global variables are not automatically initialized. This could be a problem because the user may assume an initialization of zero of these global variables. <br />
+<b>Avoiding the issue:</b> <br />
+</p>
+<ol><li>In your code make sure you always assign an initial value to variables before using them.</li>
+<li>Have startup code zero out the sections where global variables are allocated.
+<ul><li>Extract <a href="https://processors.wiki.ti.com/images/5/5d/Init_utility.tar.gz" class="internal" title="Init utility.tar.gz">Init_utility.tar.gz</a> at your location of choice.</li>
+<li>Load zeroInitSectionsCmdFile.tci and call the function zeroInitSectionsCmdFile in your .tcf file.</li></ul></li></ol>
+<p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Cause:_MBX_message_size_does_not_correspond_to_size_of_message_buffer">Cause: MBX message size does not correspond to size of message buffer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=6" title="Edit section: Cause: MBX message size does not correspond to size of message buffer">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Related Symptoms/Problems:</b> data missing in message buffer received<br />
+<b>Description:</b> All MBX objects have a message size property that is either set statically via BIOS configuration or passed dynamically through MBX_create. It is important for this size to match the size of the buffer that is passed in through MBX_pend and MBX_post, since these APIs do a memcpy internally to copy the message to and from the mailbox's own internal buffers. If there is a size mismatch, problems could occur in the following two scenarios: <br />
+</p>
+<ul><li>mbx message size &gt; buffer size: MBX_pend would copy more data than there is space available in the buffer, corrupting memory immediately following the buffer. Since message buffers are often allocated on the stack, this could cause stack corruption.</li>
+<li>mbx message size &lt; buffer size: MBX_post would copy only part of the data in the buffer into the mailboxes internal buffer, causing truncation of the message.</li></ul>
+<p><b>How to diagnose:</b> <br />
+</p>
+<ul><li>Use MBX_validate()
+<ul><li>Extract <a href="https://processors.wiki.ti.com/images/c/c7/Mbx_validate.tar.gz" class="internal" title="Mbx validate.tar.gz">Mbx_validate.tar.gz </a> at a location of your choice</li>
+<li>Call MBX_validate before each call to MBX_pend and MBX_post. If an assertion is hit inside the MBX_validate function, then we know there is a mismatch. Follow the instructions in MBX_validate.h.</li></ul></li></ul>
+<p><b>Additional Data:</b> <br />
+</p>
+<ul><li>It is recommended to set the mbx message size = buffer size at all times.</li></ul>
+<p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Cause:_Non-reentrant_RTS_functions_only_callable_from_TSK">Cause: Non-reentrant RTS functions only callable from TSK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=7" title="Edit section: Cause: Non-reentrant RTS functions only callable from TSK">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Description:</b> Some RTS functions are not <a href="Reentrant.html" title="Reentrant">reentrant</a>.  The bulk of these functions are the file I/O functions (printf, fprintf, scanf, etc.). These RTS functions call lock(), which in a BIOS application gets linked to LCK_pend and LCK_post, and can not be called in the context of a SWI or HWI thread. For a complete list of RTS functions callable from TSK threads only you can search the rts sources for "lock". <br />
+<b>How to diagnose:</b>
+</p>
+<ul><li>Extract <a href="https://processors.wiki.ti.com/images/d/d1/Lck.tar.gz" class="internal" title="Lck.tar.gz">Lck.tar.gz</a> at your location of choice.</li>
+<li>A special version of lck_pend and lck_post has been provided that asserts stop-word opcodes if they are called from HWI &amp; SWIs. Add this file to your build. See DSP/BIOS API guide for API calling convention.</li></ul>
+<p><br />
+</p><p><b>Other note on C I/O functions</b>:  Regardless of whether or not BIOS is being used, the C I/O functions from the RTS library make use of the heap.  If you have not defined a heap or have defined too small of a heap the C I/O functions will not operate correctly.
+</p>
+<h2><span id="Cause:_Improper_register/stack_handling_in_hand-written_assembly"></span><span class="mw-headline" id="Cause:_Improper_register.2Fstack_handling_in_hand-written_assembly">Cause: Improper register/stack handling in hand-written assembly</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=8" title="Edit section: Cause: Improper register/stack handling in hand-written assembly">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Description:</b> Hand-written assembly often is developed/tested in isolation and therefore issues related to handling of stack/registers go undetected until the algorithm gets integrated.
+<b>Detection:</b> One method of detecting these issues is simply bracketing the algorithm process call with <tt>_disable_interrupts()</tt> and <tt>_restore_interrupts()</tt>.
+</p>
+<ul><li>Bracketing your algorithms with the disable/enable interrupts functions is intended to help you track down the issue.</li>
+<li>Once you determine the cause and make the appropriate correction then you can remove the bracketing.</li></ul>
+<p><br />
+</p>
+<h1><span id="Problem:_The_Real_Time_Analysis_Tools_Aren't_Working!"></span><span class="mw-headline" id="Problem:_The_Real_Time_Analysis_Tools_Aren.27t_Working.21">Problem: The Real Time Analysis Tools Aren't Working!</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=9" title="Edit section: Problem: The Real Time Analysis Tools Aren&#039;t Working!">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h5><span class="mw-headline" id="Cause:_Improper_setup_of_BIOS_configuration_file">Cause: Improper setup of BIOS configuration file</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=10" title="Edit section: Cause: Improper setup of BIOS configuration file">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<h5><span class="mw-headline" id="Cause:_Necessary_interrupts_for_RTDX_not_enabled">Cause: Necessary interrupts for RTDX not enabled</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=11" title="Edit section: Cause: Necessary interrupts for RTDX not enabled">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>For a deep dive into this topic please see the <a href="DSP/BIOS_Real-time_Analysis_(RTA)_troubleshooting.html" title="DSP/BIOS Real-time Analysis (RTA) troubleshooting">RTA troubleshooting</a> wiki page.
+</p><p><br />
+</p>
+<h1><span id="Problem:_Program_hits_a_SYS_call,_but_I_can't_see_any_output/error_message."></span><span class="mw-headline" id="Problem:_Program_hits_a_SYS_call.2C_but_I_can.27t_see_any_output.2Ferror_message.">Problem: Program hits a SYS call, but I can't see any output/error message.</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=12" title="Edit section: Problem: Program hits a SYS call, but I can&#039;t see any output/error message.">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><b>Common Symptoms:</b> Program gets stuck spinning in UTL_halt, can't see output message from SYS_printf <br />
+<b>Description:</b> When SYS_abort, SYS_error is called, the error/system message is added to the system log. Other SYS functions such as SYS_printf, SYS_vprintf will output to the memory area labeled _SYS_PUTCBEG. <br />
+<b>How to diagnose:</b> <br />
+</p>
+<ul><li>You can view the system messages by selecting "Execution Graph Details" in the drop box of the message log window</li>
+<li>Any related messages outputted as a result using SYS_printf, SYS_putchar, etc. will appear under a memory area labeled _SYS_PUTCBEG. You can view this using the Memory Window in CCS by setting it to display in Character mode.</li></ul>
+<h1><span class="mw-headline" id="Problem:_Performance_is_really_bad">Problem:  Performance is really bad</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=13" title="Edit section: Problem: Performance is really bad">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><b>Description:</b>  Performance is much worse than you think it should be (orders of magnitude).<br />
+<br />
+<b>Cause 1:</b>  Improper cache configuration can cause serious performance degradation.<br />
+<b>Solution 1:</b> Follow the directions in the article <a href="Enabling_64x%2b_Cache.html" title="Enabling 64x+ Cache">Enabling 64x+ Cache</a>.  Also, make sure the cache coherency is being maintained (see <a rel="nofollow" class="external text" href="http://www-k.ext.ti.com/srvs/cgi-bin/webcgi.exe?Company={5761bcd8-11f5-4e08-84e0-8167176a4ed9},kb=dsp,case=29108,new">this page</a>). Newer C6000 processors have device drivers that already take this effect into account.<br />
+<br />
+<b>Cause 2:</b> Suboptimal code/data placement in the internal/external memory.<br />
+<b>Solution 2:</b> See <a href="DSP_BIOS_FAQ.html#Q:_Which_BIOS.C2.A0memory_sections_do_you_recommend_to_place_in_internal_memory.3F_this_page" title="DSP BIOS FAQ">this FAQ</a> for tips on which sections to place in internal memory.<br />
+<br />
+</p>
+<h1><span id="Problem:_My_code_isn't_behaving_the_way_I_think_it_should."></span><span class="mw-headline" id="Problem:_My_code_isn.27t_behaving_the_way_I_think_it_should.">Problem:  My code isn't behaving the way I think it should.</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit&amp;section=14" title="Edit section: Problem: My code isn&#039;t behaving the way I think it should.">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>If something strange happens, such as the program unexpectedly exits then you should look at the kernel's message log.  In CCS 3.3 you go to DSP/BIOS -&gt; Message Log -&gt; Execution Graph Details.  If, for example, a hardware exception occurred (e.g. illegal opcode, etc.) then it would be logged here.</li></ul>
+<ul><li>When using Code Composer Studio, keep in mind that DSP/BIOS is command-line in nature (apart from the Graphical Configuration Tool). Therefore <b>carefully check the <i>Build</i> window in Code Composer Studio for different or strange paths used by the tools</b> - this can potentially indicate errors in include paths, especially after installing a new tool release.
+<ul><li><b>Make sure the environment variable <tt>BIOS_INSTALL_DIR</tt> points to the correct directory</b>. CCS usually spawns a warning if the project explicitly uses this variable, however no warning is generated if this variable is used inside a specific source file or the code is being built using the command line tools.</li></ul></li></ul>
+<p>&lt;TODO&gt;  Add usage of LOG_printf, execution graph, message log to see what's happening.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130051227
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.064 seconds
+Real time usage: 0.072 seconds
+Preprocessor visited node count: 55/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:743-0!canonical and timestamp 20201130051227 and revision id 181302
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSP BIOS Debugging Tips</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSP BIOS Debugging Tips</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>DSP BIOS Debugging Tips</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>DSP BIOS Debugging Tips</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>DSP BIOS Debugging Tips</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSP BIOS Debugging Tips</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSP BIOS Debugging Tips</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>DSP BIOS Debugging Tips</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>DSP BIOS Debugging Tips</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;oldid=181302">https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;oldid=181302</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_DSPBIOS.html" title="Category:DSPBIOS">DSPBIOS</a></li><li><a href="Category_Debug.html" title="Category:Debug">Debug</a></li><li><a href="Category_DaVinci_Debugging.html" title="Category:DaVinci Debugging">DaVinci Debugging</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=DSP+BIOS+Debugging+Tips" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="DSP_BIOS_Debugging_Tips.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:DSP_BIOS_Debugging_Tips&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="DSP_BIOS_Debugging_Tips.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/DSP_BIOS_Debugging_Tips.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/DSP_BIOS_Debugging_Tips.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;oldid=181302" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=DSP_BIOS_Debugging_Tips&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 July 2014, at 19:22.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.064","walltime":"0.072","ppvisitednodes":{"value":55,"limit":1000000},"ppgeneratednodes":{"value":60,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130051227","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSP_BIOS_Debugging_Tips by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:09:43 GMT -->
+</html>

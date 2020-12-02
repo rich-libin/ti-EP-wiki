@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:23:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Guidelines for Porting CE6 based DVSDK release to WEC7 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7","wgTitle":"Guidelines for Porting CE6 based DVSDK release to WEC7","wgCurRevisionId":117640,"wgRevisionId":117640,"wgArticleId":12355,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7","wgRelevantArticleId":12355,"wgRequestId":"808ded4fda9b93e3feb4a04f","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7 rootpage-Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Guidelines for Porting CE6 based DVSDK release to WEC7</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Limitations"><span class="tocnumber">2</span> <span class="toctext">Limitations</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Changes_required"><span class="tocnumber">3</span> <span class="toctext">Changes required</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#DVSDK_Catalog_files_.28Catalog.5C.2A.pbcxml.29"><span class="tocnumber">3.1</span> <span class="toctext">DVSDK Catalog files (Catalog\*.pbcxml)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Prelink.bat"><span class="tocnumber">3.2</span> <span class="toctext">Prelink.bat</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#SetBuild.bat"><span class="tocnumber">3.3</span> <span class="toctext">SetBuild.bat</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#SOURCES"><span class="tocnumber">3.4</span> <span class="toctext">SOURCES</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#SRC_Folder_.28DVSDK_components.29"><span class="tocnumber">3.5</span> <span class="toctext">SRC&#160;Folder (DVSDK&#160;components)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#BIOSUTILS"><span class="tocnumber">3.5.1</span> <span class="toctext">BIOSUTILS</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#C6ACCEL"><span class="tocnumber">3.5.2</span> <span class="toctext">C6ACCEL</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Codec_Engine"><span class="tocnumber">3.5.3</span> <span class="toctext">Codec Engine</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#DMAI"><span class="tocnumber">3.5.4</span> <span class="toctext">DMAI</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#DSHOW"><span class="tocnumber">3.5.5</span> <span class="toctext">DSHOW</span></a>
+<ul>
+<li class="toclevel-4 tocsection-14"><a href="#common.5Cmmf_mediaguids.h"><span class="tocnumber">3.5.5.1</span> <span class="toctext">common\mmf_mediaguids.h</span></a></li>
+<li class="toclevel-4 tocsection-15"><a href="#filters.5C.2A.5Csources"><span class="tocnumber">3.5.5.2</span> <span class="toctext">filters\*\sources</span></a></li>
+<li class="toclevel-4 tocsection-16"><a href="#filters.5C.2Adecoder.5C.2ADecoder.cpp"><span class="tocnumber">3.5.5.3</span> <span class="toctext">filters\*decoder\*Decoder.cpp</span></a></li>
+<li class="toclevel-4 tocsection-17"><a href="#project.5Cprelink.bat"><span class="tocnumber">3.5.5.4</span> <span class="toctext">project\prelink.bat</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-18"><a href="#DSPLINK"><span class="tocnumber">3.5.6</span> <span class="toctext">DSPLINK</span></a>
+<ul>
+<li class="toclevel-4 tocsection-19"><a href="#config.5Cbin.5Cdsplinkcfg.pl"><span class="tocnumber">3.5.6.1</span> <span class="toctext">config\bin\dsplinkcfg.pl</span></a></li>
+<li class="toclevel-4 tocsection-20"><a href="#etc.5Chost.5Cprojects.5CWinCE.5CCATALOG.5Cdsplink.PbcXml"><span class="tocnumber">3.5.6.2</span> <span class="toctext">etc\host\projects\WinCE\CATALOG\dsplink.PbcXml</span></a></li>
+<li class="toclevel-4 tocsection-21"><a href="#etc.5Chost.5Cprojects.5CWinCE.5CDSPLink.5Cprelink.bat"><span class="tocnumber">3.5.6.3</span> <span class="toctext">etc\host\projects\WinCE\DSPLink\prelink.bat</span></a></li>
+<li class="toclevel-4 tocsection-22"><a href="#etc.5Chost.5Cprojects.5CWinCE.5CDSPLink.5Csources"><span class="tocnumber">3.5.6.4</span> <span class="toctext">etc\host\projects\WinCE\DSPLink\sources</span></a></li>
+<li class="toclevel-4 tocsection-23"><a href="#gpp.5Csrc.5Carch.5COMAP3530.5Cshmem.5CWinCE.5Comap3530_phy_shmem.c_and_gpp.5Csrc.5Cpmgr.5CWinCE.5Cdrv_pmgr.c"><span class="tocnumber">3.5.6.5</span> <span class="toctext">gpp\src\arch\OMAP3530\shmem\WinCE\omap3530_phy_shmem.c and gpp\src\pmgr\WinCE\drv_pmgr.c</span></a></li>
+<li class="toclevel-4 tocsection-24"><a href="#dsplink.5Cmake.5CWinCE.5COMAP3530.5Clink.mk"><span class="tocnumber">3.5.6.6</span> <span class="toctext">dsplink\make\WinCE\OMAP3530\link.mk</span></a></li>
+<li class="toclevel-4 tocsection-25"><a href="#make.5CWinCE.5Comap3530_wince7.0.mk"><span class="tocnumber">3.5.6.7</span> <span class="toctext">make\WinCE\omap3530_wince7.0.mk</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-26"><a href="#EDMA3"><span class="tocnumber">3.5.7</span> <span class="toctext">EDMA3</span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Framework_Components"><span class="tocnumber">3.5.8</span> <span class="toctext">Framework Components</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Local_Power_Manager_.28LPM.29"><span class="tocnumber">3.5.9</span> <span class="toctext">Local Power Manager (LPM)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-29"><a href="#packages.5Cti.5Cbios.5Cpower.5Cdrivers.5Cwince.5Comap3530.5Clpm.5CSOURCES"><span class="tocnumber">3.5.9.1</span> <span class="toctext">packages\ti\bios\power\drivers\wince\omap3530\lpm\SOURCES</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-30"><a href="#MISC"><span class="tocnumber">3.5.10</span> <span class="toctext">MISC</span></a>
+<ul>
+<li class="toclevel-4 tocsection-31"><a href="#backbuffers.reg"><span class="tocnumber">3.5.10.1</span> <span class="toctext">backbuffers.reg</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-32"><a href="#WinceUtils"><span class="tocnumber">3.5.11</span> <span class="toctext">WinceUtils</span></a></li>
+<li class="toclevel-3 tocsection-33"><a href="#XDIAS"><span class="tocnumber">3.5.12</span> <span class="toctext">XDIAS</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This page provides general guidelines that one can follow to port the DVSDK package running on CE6 to WEC7. Note that the changes specified here are not exhaustive and depending on your custom changes to DVSDK package, porting effort may vary. The changes listed below were used to port TI&#160;provided DVSDK&#160;1.11.00.03 patch 01 release for WEC7 and the binaries generated are shipped as a part of BSP WINCE ARM A8 2.0 release.
+</p><p><br />
+</p><p>Users should first build the required DVSDK package with the right codecserver and tools on a CE6 build machine. Then copy this built package to WEC7 build machine, apply the WEC7 changes as highlighted in this document and re-build the necessary components (LPM, DSPLINK, CMEM, DSHOW). This logic applies for 720p build option as well. To build a DVSDK package in WEC7 with 720p support, they should build the CE6 DVSDK package on a CE6 build machine with TI_ENABLE_720P_SUPPORT enabled. Then copy this built package to WEC7 build machine, apply the WEC7 changes as highlighted in this document and re-build the necessary components (LPM, DSPLINK, CMEM, DSHOW).<br />
+</p><p>DVSDK 1.11 Download Link: <a rel="nofollow" class="external free" href="http://software-dl.ti.com/sdoemb/sdoemb_public_sw/wince_sdk/latest_1_x/index_FDS.html">http://software-dl.ti.com/sdoemb/sdoemb_public_sw/wince_sdk/latest_1_x/index_FDS.html</a>
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Limitations">Limitations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=2" title="Edit section: Limitations">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>1. Ony DSHOW video decoders (H264, MPEG4, MPEG2) have been ported for WEC7 BSP WINCE ARM A8 02.00.00 release. Porting encoders is an exercise left for the reader 
+</p><p>2. DMAI apps have not been ported. 
+</p><p>3. C6Accel has not been ported. 
+</p><p>4. Only the ARM side components have been re-built where necessary. Components that just produce libs (and not exe or dlls) have been left untouched and ARMV4I&#160;libs have been used. 
+</p><p>5. VRFB needs to be disabled if you want to play video file based on DSP codec using Silverlight Video Player. The reasoning behind this is as follows: Silverlight based Video Player needs compositor to be enabled. When compositor is enabled, then the system requests a number of distinct hardware surfaces even for small icons. When VRFB is also enabled, the number of hardware surfaces available at a time is limited to 12 (VRFB spec). So with compositor and VRFB enabled, the hardware surfaces are soon depleted and there are none left for the video surfaces. Now, the DSP based codec are optimized assuming that the video buffers would be hardware buffers and not system buffers, hence VRFB needs to be disabled. 
+</p><p>&#160;&#160;&#160;&#160; <u>Workaround</u>: If VRFB&#160;feature is desired, use Microsoft provided Dshow player (<a href="WinCE-BSP_ARM-A8_User_Guide.html#Sample_DShow_Player_Application_.28ceplayit.29_.28WEC7_only.29" title="WinCE-BSP ARM-A8 User Guide">ceplayit</a>) which is not silverlight based. Disable Silverlight and compositor in catalog and enable VRFB.<br /> 
+</p><p>6. Video playback fails on LCD and display goes blank (SDOCM00081313). This is due to the fact:<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; a. Display on LCD is in portrait mode by default.<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; b. VRFB is disabled in the default OS-design due to above limitation#2 <br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; c. Silverlight based video player plays video file only in landscape mode and hence needs rotation.<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; d. DMA based rotation is not sufficient enough for this purpose.<br />&#160;&#160;&#160;&#160;&#160; <u>Workaround</u>: Use Microsoft provided Dshow player (<a href="WinCE-BSP_ARM-A8_User_Guide.html#Sample_DShow_Player_Application_.28ceplayit.29_.28WEC7_only.29" title="WinCE-BSP ARM-A8 User Guide">ceplayit</a>) which is not silverlight based for LCD based demos. See C:\WINCE700\public\directx\sdk\samples\dshow\Players\ceplayit\readme.txt for more details on this player.<br /> 
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Changes_required">Changes required</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=3" title="Edit section: Changes required">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span id="DVSDK_Catalog_files_(Catalog\*.pbcxml)"></span><span class="mw-headline" id="DVSDK_Catalog_files_.28Catalog.5C.2A.pbcxml.29">DVSDK Catalog files (Catalog\*.pbcxml)<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=4" title="Edit section: DVSDK Catalog files (Catalog\*.pbcxml)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>No major change except change the &lt;SupportedCpuId&gt; from AMRV4I to ARMV7. <br /> 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Prelink.bat">Prelink.bat<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=5" title="Edit section: Prelink.bat">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>LPM</b><br /> 
+</p><p>CE6 version of DVSDK package uses prebuilt version of LPM. Since LPM&#160;is an ARM driver, we need to rebuild it for WEC7 release. To enable prelink.bat to build LPM&#160;driver, add the following changes:<br /> 
+</p>
+<pre>:lpm
+
+@set LPM_PROJDIR=%LPM_INSTALL_DIR%\packages\ti\bios\power\drivers\wince\%MY_PLATFORM%\lpm\
+@set LPM_DRV=%LPM_PROJDIR%\obj\%_TGTCPU%\%WINCEDEBUG%\lpmdrv
+@set LPM_REG=%LPM_PROJDIR%\lpmdrv.reg
+
+
+'''@if [%BUILD_LPM%]==[1] (
+@echo Building LPM...
+@pushd&#160;%LPM_PROJDIR%
+@build&#160;%DVSDK_BUILDOPT% -j&#160;%DVSDK_LOGDIR%\lpm
+@popd
+) else (
+@echo Bypassing LPM build...
+)
+'''
+
+@echo == Copying LPM driver...
+%COPYCMD%&#160;%LPM_DRV%.dll&#160;%DVSDK_OBJDIR%
+%COPYCMD%&#160;%LPM_DRV%.map&#160;%DVSDK_OBJDIR%
+%COPYCMD%&#160;%LPM_DRV%.pdb&#160;%DVSDK_OBJDIR%
+
+@REM copy bib entries
+@echo MODULES &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.bib
+@echo IF SYSGEN_DSPLINK &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.bib
+@echo lpmdrv.dll $(_FLATRELEASEDIR)\lpmdrv.dll NK SHK &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.bib
+@echo ENDIF SYSGEN_DSPLINK &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.bib
+
+@type&#160;%LPM_REG% &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.reg</pre> 
+<p><b>CODECSERVER</b><br /> 
+</p><p>CodecServer runs on DSP&#160;and hence doesnt need any porting effort. If you are not planning to upgrade the XDC toolchain that supports WEC7 release, I would highly recommend that you do not rebuild codecserver here and use the codecserver as is from CE6 release. Please comment out the lines that set the BUILD_CODECSERVER variable in prelink.bat. Similar line will have to be commented out in setbuild.bat<br /> 
+</p>
+<pre>:codecserver
+@set CS_X64P=%CODEC_INSTALL_DIR%\packages\ti\sdo\server\cs\bin\cs.x64P
+@set CS_BIB=%DVSDK_INSTALL_DIR%\src\misc\CodecServer.bib
+@set CS_LOGFILE=%DVSDK_INSTALL_DIR%\logs\codecserver.log
+
+@rem **** Force Codec Server build if DSP Link was built ****
+@rem **** even if /nocs was specified ****
+'''REM @if [%BUILD_DSPLINK%]==[1] (
+REM set BUILD_CODECSERVER=1
+REM )'''
+@if [%BUILD_CODECSERVER%]==[1] (
+echo Building Codec Server...
+@call&#160;%XDC_INSTALL_DIR%\gmake -C&#160;%CODEC_INSTALL_DIR% clean &gt;&#160;%CS_LOGFILE% 2&gt;&amp;1
+@call&#160;%XDC_INSTALL_DIR%\gmake -C&#160;%CODEC_INSTALL_DIR% &gt;&gt;&#160;%CS_LOGFILE% 2&gt;&amp;1
+popd
+) else (
+@echo Bypassing Codec Server build...
+)
+
+@echo == Copying Codec Server...
+%COPYCMD%&#160;%CS_X64P%&#160;%DVSDK_OBJDIR%
+@type&#160;%CS_BIB% &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.bib</pre> 
+<p><b>DSHOW</b><br /> 
+</p><p>The Timm layer (part of TI decode/encode filters) is built in 2 parts - first xdc toolchain gathers relevant information from CodecServer and generates intermediate C files. Then using WinCE 6.0 or WEC 7 toolchain, we build the timm driver along with the intermediate C files. Since we are not changing and rebuilding CodecServer, we dont need to do the first step here. We can use the intermediate files as is from CE6 release. <br /> 
+</p><p><u><b>Note</b></u>: If you plan to change the codecserver for WEC7 release, then either you will need to get the xdc toolchain that supports WEC7 (steps for which are out-of-scope for this document) or build the new codecserver and dshow in CE6 and then use this document to port it for WEC7.<br /> 
+</p>
+<pre>:dshow
+set DSHOW_PROJDIR=%DSHOW_INSTALL_DIR%\project
+set DSHOW_TIMM_DIR=%DSHOW_INSTALL_DIR%\timm
+set DSHOW_FILTER_DIR=%DSHOW_INSTALL_DIR%\filters
+set DSHOW_DEMUXER_SRCDIR=%DSHOW_INSTALL_DIR%\demuxers
+set DSHOW_DEMUXER_DLLDIR=%DSHOW_INSTALL_DIR%\parser_dlls
+set DSHOW_LOGFILE=%DVSDK_LOGDIR%\dshow.log
+
+set DSHOW_BIB=%DSHOW_PROJDIR%\dshow.bib
+set DSHOW_REG=%DSHOW_PROJDIR%\dshow.reg
+
+set BACKBUFFERS_REG=%DVSDK_INSTALL_DIR%\src\misc\backbuffers.reg
+
+set DSHOW_FILTERS=
+set DSHOW_FILTERS=%DSHOW_FILTERS% MPEG4VideoDecoder H264VideoDecoder
+set DSHOW_FILTERS=%DSHOW_FILTERS% MPEG2VideoDecoder AACAudioDecoder
+set DSHOW_FILTERS=%DSHOW_FILTERS% H264VideoEncoder MPEG4VideoEncoder
+
+set DSHOW_DEMUXERS=dshow_aacsrc dshow_3gpp_demux
+
+set DSHOW_TIMM=%DSHOW_INSTALL_DIR%\timm\obj\%_TGTCPU%\%WINCEDEBUG%\timm
+
+@type nul &gt;&#160;%DSHOW_LOGFILE%
+
+if [%CLEAN_DSHOW%]==[1] (
+echo == Cleaning DirectShow filters... &gt;&gt;&#160;%DSHOW_LOGFILE% 2&gt;&amp;1
+@pushd&#160;%DSHOW_FILTER_DIR%
+@build -clean &gt;&gt;&#160;%DSHOW_LOGFILE% 2&gt;&amp;1
+@popd
+if exist [%DSHOW_DEMUXER_SRCDIR%] (
+echo == Cleaning DirectShow demuxers... &gt;&gt;&#160;%DSHOW_LOGFILE% 2&gt;&amp;1
+@pushd&#160;%DSHOW_DEMUXER_SRCDIR%
+@build -clean &gt;&gt;&#160;%DSHOW_LOGFILE% 2&gt;&amp;1
+@popd
+)
+'''REM echo == Cleaning TIMM... &gt;&gt;&#160;%DSHOW_LOGFILE% 2&gt;&amp;1
+REM @%XDC_INSTALL_DIR%\gmake -C&#160;%DSHOW_TIMM_DIR% -f cemake clean &gt;&gt;&#160;%DSHOW_LOGFILE% 2&gt;&amp;1
+''')
+
+if [%BUILD_DSHOW%]==[1] (
+echo == Building DirectShow filters...
+pushd&#160;%DSHOW_INSTALL_DIR%\project
+build&#160;%BUILDOPT% -j&#160;%DVSDK_LOGDIR%\dshow
+popd
+
+) else (
+echo == Bypassing DirectShow filters build...
+)
+
+echo == updating DVSDK.bib and DVSDK.reg...
+type&#160;%DSHOW_BIB% &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.bib
+type&#160;%DSHOW_REG% &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.reg
+type&#160;%BACKBUFFERS_REG% &gt;&gt;&#160;%DVSDK_INSTALL_DIR%\DVSDK.reg
+
+
+</pre> 
+<p><br />
+</p>
+<h2><span class="mw-headline" id="SetBuild.bat">SetBuild.bat<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=6" title="Edit section: SetBuild.bat">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Set BUILD_LPM, BUILD_CMEM, BUILD_DSPLINK, BUILD_DSHOW.<br /> 
+</p><p>Unset BUILD_CODECSERVER, BUILD_DMAI, CLEAN_DSHOW, CLEAN_C6ACCEL, BUILD_C6ACCEL<br /> 
+</p>
+<pre>'''set BUILD_CMEM=1
+set BUILD_DSPLINK=1
+set BUILD_LPM=1
+'''set BUILD_DSHOW=1
+'''''set CLEAN_C6ACCEL=
+set BUILD_C6ACCEL=
+''
+</pre> 
+<p><br /> 
+</p>
+<h2><span class="mw-headline" id="SOURCES">SOURCES<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=7" title="Edit section: SOURCES">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Use $(SG_OUTPUT_ROOT) instead of $(_PROJECTROOT)\cesysgen for path to coredll.lib<br /> 
+</p>
+<pre>'''TARGETLIBS= \
+$(SG_OUTPUT_ROOT)\sdk\lib\$(_CPUINDPATH)\coredll.lib \'''
+
+</pre> 
+<p><br /> 
+</p>
+<h2><span id="SRC_Folder_(DVSDK_components)"></span><span class="mw-headline" id="SRC_Folder_.28DVSDK_components.29">SRC&#160;Folder (DVSDK&#160;components)<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=8" title="Edit section: SRC Folder (DVSDK components)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="BIOSUTILS">BIOSUTILS<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=9" title="Edit section: BIOSUTILS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No changes.<br /> 
+</p>
+<h3><span class="mw-headline" id="C6ACCEL">C6ACCEL<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=10" title="Edit section: C6ACCEL">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Not ported for WEC7 and out-of-scope for this document<br /> 
+</p>
+<h3><span class="mw-headline" id="Codec_Engine">Codec Engine<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=11" title="Edit section: Codec Engine">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No changes. We will re-use the CE6 libs as ARMV7 is backward compatible with ARMV4I.<br /> 
+</p><p>CodecServer (cs1omap3530 and cs1dm3730)<br /> 
+</p><p>No changes<br /> 
+</p>
+<h3><span class="mw-headline" id="DMAI">DMAI<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=12" title="Edit section: DMAI">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No changes. We will re-use the CE6 libs as ARMV7 is backward compatible with ARMV4I. 
+</p>
+<h3><span class="mw-headline" id="DSHOW">DSHOW<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=13" title="Edit section: DSHOW">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This document only covers porting TI DSHOW Decoder filters H264, MPEG4 and MPEG2. Porting other Decoder and Encoder filters is an exercise left for the reader.<br /> 
+</p>
+<h4><span id="common\mmf_mediaguids.h"></span><span class="mw-headline" id="common.5Cmmf_mediaguids.h">common\mmf_mediaguids.h<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=14" title="Edit section: common\mmf mediaguids.h">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Remove duplicate definitions for MediaSubType of MP2V, MP4V and H264 as WEC7 kernel/Dshow framework now provide definitions for these media subtypes.<br /> 
+</p>
+<pre>&lt;strike&gt;'''/** The media GUID for MP2V content */'''&lt;/strike&gt;
+&lt;strike&gt;'''/*static const GUID MEDIASUBTYPE_MP2V =
+{0xb6df1a86, 0xd295, 0x4a99, {0x84, 0x37, 0x2d, 0x51, 0x2d, 0x17, 0xe2, 0xe6}};
+*/
+/** The media GUID for MP4V content */
+/*static const GUID MEDIASUBTYPE_MP4V =
+{0x5634504D, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}};
+*/'''&lt;/strike&gt;
+/** The media GUID for H263 content */
+static const GUID MEDIASUBTYPE_H263 =
+{0x33363248, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}};
+
+&lt;strike&gt;'''/** The media GUID for H264 content */
+/*static const GUID MEDIASUBTYPE_H264 =
+{0x34363248, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}};
+*/'''&lt;/strike&gt;
+
+</pre> 
+<h4><span id="filters\*\sources"></span><span class="mw-headline" id="filters.5C.2A.5Csources">filters\*\sources<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=15" title="Edit section: filters\*\sources">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Use $(SG_OUTPUT_ROOT) instead of $(_PROJECTROOT)\cesysgen. <br /> 
+</p>
+<h4><span id="filters\*decoder\*Decoder.cpp"></span><span class="mw-headline" id="filters.5C.2Adecoder.5C.2ADecoder.cpp">filters\*decoder\*Decoder.cpp<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=16" title="Edit section: filters\*decoder\*Decoder.cpp">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>This applies to H264VideoDecoder\H264VideoDecoder.cpp, MPEG2VideoDecoder\MPEG2VideoDecoder.cpp and MPEG4VideoDecoder\MPEG4VideoDecoder.cpp.<br /> 
+</p><p>1. Video Renderer Name has changed from "Video Renderer" to "VideoMixingRenderer"<br /> 
+</p>
+<pre>#define VIDEO_RENDERER_NAME     TEXT("VideoMixingRenderer")
+
+</pre> 
+<p>2. GetMediaType() - BITMAPINFOHEADER requires Piture Aspect Ratio fields to be filled with valid values in GetMediaType().<br /> 
+</p>
+<pre>//Prepare videoinfo2 for output pin
+CMediaType mediaType;
+mediaType = m_pInput-&gt;CurrentMediaType();
+VIDEOINFOHEADER * vihInput = (VIDEOINFOHEADER *) mediaType.Format();
+BITMAPINFOHEADER * bmihInput;
+bmihInput = &amp;(vihInput-&gt;bmiHeader);
+
+//fill BITMAPINFOHEADER
+pvi-&gt;bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+pvi-&gt;bmiHeader.biWidth = bmihInput-&gt;biWidth;
+pvi-&gt;bmiHeader.biHeight = bmihInput-&gt;biHeight;
+pvi-&gt;bmiHeader.biPlanes = 1;
+pvi-&gt;bmiHeader.biClrImportant = 0;
+pvi-&gt;bmiHeader.biClrUsed = 0;
+pvi-&gt;bmiHeader.biXPelsPerMeter = vihInput-&gt;bmiHeader.biXPelsPerMeter;
+pvi-&gt;bmiHeader.biYPelsPerMeter = vihInput-&gt;bmiHeader.biYPelsPerMeter;
+pvi-&gt;dwBitRate = vihInput-&gt;dwBitRate;
+pvi-&gt;dwBitErrorRate = vihInput-&gt;dwBitErrorRate;
+pvi-&gt;AvgTimePerFrame = vihInput-&gt;AvgTimePerFrame;
+
+'''pvi-&gt;dwPictAspectRatioX = (DWORD)pvi-&gt;bmiHeader.biWidth;
+pvi-&gt;dwPictAspectRatioY = (DWORD)pvi-&gt;bmiHeader.biHeight;
+'''
+SetRectEmpty(&amp;(pvi-&gt;rcSource)); // we want the whole image area rendered.
+SetRectEmpty(&amp;(pvi-&gt;rcTarget)); // no particular destination rectangle
+</pre> 
+<p>3. Deliveroutput() - The returned code from GetOutputSample should be checked using FAILED() macro and not just compared against S_OK. Since the ddraw surface can no longer be accessed directly by the application, m_renderBufferStride and m_renderBufferWidth needs to be derived from the BITMAPINFOHEADER of the output sample.<br /> 
+</p>
+<pre>hr = GetOutputSample(&amp;pOutSample);
+'''if (FAILED(hr)) {
+'''RETAILMSG(DBGZONE_INFO, (TEXT("MPEG4: Failed to get output")
+TEXT(" sample. Filter may be being stopped.")));
+
+/* Return entry back to free queue */
+if (TIMM_putIntoFifo(m_hFreeQ, (Ptr)pEntry) == FALSE) {
+RETAILMSG(DBGZONE_ERROR, (TEXT("MPEG4: Failed to return meta entry")
+TEXT("to free queue.")));
+return E_FAIL;
+}
+
+if (!TIMM_discardBufViddec2(m_videoDecoderHandle)) {
+RETAILMSG(DBGZONE_ERROR, (TEXT("MPEG4: Failed to discard display")
+TEXT("buffer")));
+return E_FAIL;
+}
+
+return S_FALSE;  //this error may occur when renderer is not yet ready
+}
+
+/* Check for media type change */
+hr = pOutSample-&gt;GetMediaType((AM_MEDIA_TYPE**)&amp;pMT);
+if (hr == S_OK) {
+'''VIDEOINFOHEADER2 *pVih = (VIDEOINFOHEADER2*) pMT-&gt;Format();
+BITMAPINFOHEADER * bmih;
+bmih = &amp;(pVih-&gt;bmiHeader);
+m_renderBufferStride = bmih-&gt;biWidth*2;
+m_renderBufferHeight = abs(bmih-&gt;biHeight);
+'''
+hr = m_pOutput-&gt;CheckMediaType(pMT);
+
+</pre> 
+<h4><span id="project\prelink.bat"></span><span class="mw-headline" id="project.5Cprelink.bat">project\prelink.bat<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=17" title="Edit section: project\prelink.bat">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>As mentioned in earlier section, we do not need to rebuild the xdc portion of TIMM&#160;component.<br /> 
+</p>
+<pre>@REM Add pre-link commands below.
+echo == Building the timm directory
+
+pushd ..
+call setpaths.bat
+set
+popd
+
+pushd ..\timm
+'''REM "%XDC_INSTALL_DIR%\gmake" -f cemake clean
+REM "%XDC_INSTALL_DIR%\gmake" -f cemake
+''''''build
+'''popd
+
+echo == Building the filters directory
+pushd ..\filters
+'''build
+'''popd
+
+</pre> 
+<p>timm\sources<br /> 
+</p><p>In CE6 DVSDK release, this file is an auto-generated file. Since we are not building the XDC porting of timm component, this file will be not be re-generated in this porting exercise and hence may need some manual changes for WEC7.<br /> 
+</p><p>1. Use $(SG_OUTPUT_ROOT) instead of $(_PROJECTROOT)\cesysgen. <br /> 
+</p><p>2. Use path for WINCEROOT appropriately. Ex: change C:\WINCE600 to C:\WINCE700<br /> 
+</p><p>3. Need some additional include path.<br /> 
+</p>
+<pre># --COPYRIGHT--
+# Copyright (C) 2010 Texas Instruments Incorporated - http://www.ti.com/
+# =============================================================================
+# Copyright 2006 Mistral Software Pvt Ltd.
+#
+# Use of this software is controlled by the terms and conditions found
+# in the license agreement under which this software has been supplied.
+# =============================================================================
+# --/COPYRIGHT--*/
+
+!IF "$(SYSGEN_TIMM)"&#160;!= "1"
+SKIPBUILD=1
+!ENDIF
+
+TARGETNAME=timm
+TARGETTYPE=DYNLINK
+TARGETDEFNAME=$(TARGETNAME)
+DEFFILE=timm.def
+DLLENTRY=DllEntry
+RELEASETYPE=LOCAL
+WINCEOEM=1
+
+PRECOMPILED_CXX=1
+
+CDEFINES=$(CDEFINES) @timm\compiler.opt
+
+LDEFINES=$(LDEFINES)
+
+INCLUDES=\
+$(_PUBLICROOT)\common\oak\inc; \
+$(_PUBLICROOT)\common\ddk\inc; \
+$(_PUBLICROOT)\common\sdk\inc; \
+$(_TARGETPLATROOT)\SRC\INC; \
+$(XDC_INSTALL_DIR)\packages; \
+'''$(CE_INSTALL_DIR)\packages; \
+$(DMAI_INSTALL_DIR)\packages; \
+$(XDAIS_INSTALL_DIR)\packages; \
+$(FC_INSTALL_DIR)\packages; \
+
+'''SOURCES= \
+timm.c \
+timm_viddec2.c \
+timm_auddec1.c \
+timm_videnc1.c \
+fifo.c \
+
+# NOTE: This file must end with one empty line, so that output from configuro
+# can be correctly appended.
+TARGETLIBS= \
+yuv_armv7.o \
+'''$(SG_OUTPUT_ROOT)\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+$(SG_OUTPUT_ROOT)\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\dshow_1_20_02_00\timm\timm\package\cfg\timm_exe.ov4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\universal\lib\release\universal.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\dmai_1_27_00_06\packages\ti\sdo\dmai\lib\dmai_wince_omap3530.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\image1\lib\release\imgdec1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\image1\lib\release\imgenc1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\image\lib\release\image.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\video2\lib\release\viddec2.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\video1\lib\release\viddec1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\video1\lib\release\videnc1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\video\lib\release\video.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\audio1\lib\release\auddec1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\audio1\lib\release\audenc1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\audio\lib\release\audio.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\speech1\lib\release\sphdec1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\speech1\lib\release\sphenc1.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\speech\lib\release\speech.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\lib\release\ce.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\alg\lib\release\Algorithm_noOS.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\alg\lib\release\alg.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\ipc\dsplink\lib\release\ipc_dsplink_3530.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\osal\wince\lib\release\osal_wince.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\framework_components_2_26_00_01\packages\ti\sdo\fc\acpy3\lib\release\acpy3.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\framework_components_2_26_00_01\packages\ti\sdo\fc\memutils\lib\release\memutils.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\framework_components_2_26_00_01\packages\ti\sdo\fc\dman3\lib\release\dman3Cfg.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\node\lib\release\node.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\codec_engine_2_26_01_09\packages\ti\sdo\ce\utils\xdm\lib\release\XdmUtils.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\framework_components_2_26_00_01\packages\ti\sdo\utils\trace\lib\release\gt.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\local_power_manager_1_24_02_09\packages\ti\bios\power\lib\debug\lpm.av4TCE \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\dsplink_1_65_00_03\dsplink\gpp\export\BIN\WinCE\OMAP3530\RELEASE\dsplinkapi.lib \
+C:\WINCE700\3rdParty\dvsdk_wince_01_11_00_02\src\winceutils_1_01_00_01\packages\ti\sdo\winceutils\cmem\user\obj\ARMV7\retail\cmem.lib \
+
+'''</pre> 
+<h3><span class="mw-headline" id="DSPLINK">DSPLINK<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=18" title="Edit section: DSPLINK">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span id="config\bin\dsplinkcfg.pl"></span><span class="mw-headline" id="config.5Cbin.5Cdsplinkcfg.pl">config\bin\dsplinkcfg.pl<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=19" title="Edit section: config\bin\dsplinkcfg.pl">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Change WinCE&#160;6.0 to 7.0 in CFG_GPPOS_WINCE<br /> 
+</p>
+<pre>my&#160;%CFG_GPPOS_WINCE =
+(
+'NAME' =&gt; 'WINCE',
+''''PREFIX' =&gt; 'wince7.0',
+''''ID' =&gt; 'WINCE',
+''''DESC' =&gt; 'WinCE OS 7.0',
+'VER' =&gt; '7.0',
+''''TYPE' =&gt; 'WinCE',
+'LOADERS'=&gt; [\%CFG_LOADER_COFF, ],
+'COMPS' =&gt; 'ponslrmc',
+)&#160;;
+
+</pre> 
+<h4><span id="etc\host\projects\WinCE\CATALOG\dsplink.PbcXml"></span><span class="mw-headline" id="etc.5Chost.5Cprojects.5CWinCE.5CCATALOG.5Cdsplink.PbcXml">etc\host\projects\WinCE\CATALOG\dsplink.PbcXml<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=20" title="Edit section: etc\host\projects\WinCE\CATALOG\dsplink.PbcXml">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Change OSVersion and SupportedCpuId fields<br /> 
+</p>
+<pre>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!--
+Copyright (c) Texas Instruments Incorporated 2002-2008
+Use of this software is controlled by the terms and conditions found in the
+license agreement under which this software has been supplied or provided.
+--&gt;
+
+&lt;CatalogFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" RequiredVersion="6.00" xsi:schemaLocation="urn:Microsoft.PlatformBuilder/Catalog PbcXml600.xsd" xmlns="urn:Microsoft.PlatformBuilder/Catalog"&gt;
+&lt;FileInformation Id="FileInformation:DefaultCatalogFile"&gt;
+&lt;Title&gt;Default Catalog File&lt;/Title&gt;
+&lt;Vendor&gt;Default Vendor&lt;/Vendor&gt;
+&lt;OSVersion&gt;7.00&lt;/OSVersion&gt;
+&lt;FileVersion&gt;1.0.0.0&lt;/FileVersion&gt;
+&lt;/FileInformation&gt;
+&lt;Item Id="MMF:TI:DSPLINK"&gt;
+&lt;Title&gt;MMF:TI:DSPLINK&lt;/Title&gt;
+&lt;SysgenVariable&gt;SYSGEN_DSPLINK&lt;/SysgenVariable&gt;
+&lt;SupportedCpuId&gt;Cpu:ARMV7&lt;/SupportedCpuId&gt;
+&lt;Module&gt;dsplinkk.dll&lt;/Module&gt;
+&lt;Location /&gt;
+&lt;/Item&gt;
+&lt;/CatalogFile&gt;
+
+</pre> 
+<h4><span id="etc\host\projects\WinCE\DSPLink\prelink.bat"></span><span class="mw-headline" id="etc.5Chost.5Cprojects.5CWinCE.5CDSPLink.5Cprelink.bat">etc\host\projects\WinCE\DSPLink\prelink.bat<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=21" title="Edit section: etc\host\projects\WinCE\DSPLink\prelink.bat">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>No need to build messagegpp example and dsp side libraries/examples.<br /> 
+</p>
+<pre>echo ===========================================================
+echo Starting ARM build
+echo ===========================================================
+%XDC_INSTALL_DIR%/gmake -C gpp/src -f Makefile -s release
+echo ===========================================================
+echo Starting ARM sample application build
+echo ===========================================================
+'''REM&#160;%XDC_INSTALL_DIR%/gmake -C gpp/src/samples/message -f Makefile -s release
+'''echo ===========================================================
+echo Starting DSP build
+echo ===========================================================
+'''REM&#160;%XDC_INSTALL_DIR%/gmake -C dsp/src -f Makefile -s release
+'''echo ===========================================================
+echo Starting DSP sample application build
+echo ===========================================================
+'''REM&#160;%XDC_INSTALL_DIR%/gmake -C dsp/src/samples/message -f Makefile -s release
+
+'''cd&#160;%DSPLINK%/gpp
+%XDC_INSTALL_DIR%/xdc clean
+%XDC_INSTALL_DIR%/xdc .interfaces
+
+'''REM cd&#160;%DSPLINK%/dsp
+REM&#160;%XDC_INSTALL_DIR%/xdc clean
+REM&#160;%XDC_INSTALL_DIR%/xdc .interfaces
+
+'''
+</pre> 
+<h4><span id="etc\host\projects\WinCE\DSPLink\sources"></span><span class="mw-headline" id="etc.5Chost.5Cprojects.5CWinCE.5CDSPLink.5Csources">etc\host\projects\WinCE\DSPLink\sources<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=22" title="Edit section: etc\host\projects\WinCE\DSPLink\sources">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Use $(SG_OUTPUT_ROOT) instead of $(_PROJECTROOT)\cesysgen<br /> 
+</p>
+<pre>'''_COMMONPUBROOT=$(SG_OUTPUT_ROOT)
+__PROJROOT=$(SG_OUTPUT_ROOT)
+'''RELEASETYPE=LOCAL
+_ISVINCPATH=$(_WINCEROOT)\public\common\sdk\inc;
+_OEMINCPATH=$(_WINCEROOT)\public\common\oak\inc;$(_WINCEROOT)\public\common\sdk\inc;
+TARGETNAME=DSPLink
+FILE_VIEW_ROOT_FOLDER= \
+prelink.bat \
+
+FILE_VIEW_RESOURCE_FOLDER= \
+
+FILE_VIEW_INCLUDES_FOLDER= \
+
+SOURCES= \
+
+CDEFINES=$(CDEFINES) -DDSPLink_EXPORTS
+TARGETLIBS= \
+'''$(SG_OUTPUT_ROOT)\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+
+'''</pre> 
+<h4><span id="gpp\src\arch\OMAP3530\shmem\WinCE\omap3530_phy_shmem.c_and_gpp\src\pmgr\WinCE\drv_pmgr.c"></span><span class="mw-headline" id="gpp.5Csrc.5Carch.5COMAP3530.5Cshmem.5CWinCE.5Comap3530_phy_shmem.c_and_gpp.5Csrc.5Cpmgr.5CWinCE.5Cdrv_pmgr.c">gpp\src\arch\OMAP3530\shmem\WinCE\omap3530_phy_shmem.c and gpp\src\pmgr\WinCE\drv_pmgr.c<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=23" title="Edit section: gpp\src\arch\OMAP3530\shmem\WinCE\omap3530 phy shmem.c and gpp\src\pmgr\WinCE\drv pmgr.c">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Include header file pkfuncs.h<br /> 
+</p>
+<pre>/* ----------------------------------- OS Headers */
+#include &lt;windows.h&gt;
+#include &lt;ceddk.h&gt;
+'''#include &lt;pkfuncs.h&gt;
+
+'''/* ----------------------------------- DSP/BIOS Link */
+
+</pre> 
+<h4><span id="dsplink\make\WinCE\OMAP3530\link.mk"></span><span class="mw-headline" id="dsplink.5Cmake.5CWinCE.5COMAP3530.5Clink.mk">dsplink\make\WinCE\OMAP3530\link.mk<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=24" title="Edit section: dsplink\make\WinCE\OMAP3530\link.mk">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Update library paths accordingly for WEC7.<br /> 
+</p>
+<pre># ============================================================================
+# Search path for standard libraries
+# ============================================================================
+
+'''TARGETLIBS_REL&#160;:= $(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)coredll.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)corelibc.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)OAK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)ceddk.lib
+
+SOURCELIBS_REL&#160;:= $(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)corelibc.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)coredll.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)OAK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)ceddk.lib
+
+TARGETLIBS_DEB&#160;:= $(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)coredll.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)corelibc.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)OAK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)ceddk.lib
+
+SOURCELIBS_DEB&#160;:= $(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)corelibc.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)SDK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)coredll.lib \
+$(SG_OUTPUT_ROOT)$(DIRSEP)OAK$(DIRSEP)lib$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)$(DIRSEP)ceddk.lib
+
+PROJ_RELEASE_DIR&#160;:= $(SG_OUTPUT_ROOT)$(DIRSEP)platform$(DIRSEP)$(_TGTPLAT)$(DIRSEP)target$(DIRSEP)$(_TGTCPU)$(DIRSEP)$(WINCEDEBUG)
+
+'''LINKER_SUBSYSTEM&#160;:=
+
+'''LINKER_SUBSYSTEM +=/SUBSYSTEM:WINDOWSCE,7.00'''</pre> 
+<h4><span id="make\WinCE\omap3530_wince7.0.mk"></span><span class="mw-headline" id="make.5CWinCE.5Comap3530_wince7.0.mk">make\WinCE\omap3530_wince7.0.mk<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=25" title="Edit section: make\WinCE\omap3530 wince7.0.mk">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Copy omap3530_wince6.0.mk and rename it as omap3530_wince7.0.mk and do the necessary changes to the path for libraries and binaries and compiler/linker flags. <br /> 
+</p>
+<pre>...
+
+...
+
+'''BASE_OSINC&#160;:= $(SG_OUTPUT_ROOT)\sdk\inc
+BASE_OAKINC&#160;:= $(SG_OUTPUT_ROOT)\oak\inc
+BASE_DDKINC&#160;:= $(SG_OUTPUT_ROOT)\ddk\inc
+'''...
+
+...
+
+'''BASE_OSLIB&#160;:= $(SG_OUTPUT_ROOT)\platform\$(_TGTPLAT)\LIB\$(_TGTCPU)\$(WINCEDEBUG)
+
+'''...
+
+...
+
+'''STD_KRNL_FLAGS&#160;:= -nologo -WX -Zc:wchar_t- -Zc:forScope- -MT -GF -GR- -D_ARM_ -DARM -DARMV7 -DUNDER_CE=700 -D_WIN32_WCE=0x700 -DSTRICT -DWIN32 -QRarch7 -DTHUMBSUPPORT -QRinterwork-return -QRimplicit-import- -DUNICODE -D_UNICODE -DWINCEMACRO /Gy /Uinterface -GS
+
+STD_USER_FLAGS&#160;:= -nologo -WX -Zc:wchar_t- -Zc:forScope- -MT -GF -GR- -D_ARM_ -DARM -DARMV7 -DUNDER_CE=700 -D_WIN32_WCE=0x700 -DSTRICT -DWIN32 -QRarch7 -DTHUMBSUPPORT -QRinterwork-return -QRimplicit-import- -DUNICODE -D_UNICODE -DL0409 -DINTLSG_CODEPAGE=1252 -DWINCEOEM -DWINCEINTERNAL /Uinterface -GS
+'''....
+
+....
+
+# ----------------------------------------------------------------------------
+# Standard flags for the archiver
+# ----------------------------------------------------------------------------
+'''STD_AR_FLAGS&#160;:= -lib /MACHINE:ARM /SUBSYSTEM:WINDOWSCE,7.00 -nodefaultlib -ignore:4001 /nologo
+'''....
+
+....
+
+# ----------------------------------------------------------------------------
+# Flags for the linker when building a driver
+# ----------------------------------------------------------------------------
+'''DRV_LD_FLAGS&#160;:= -entry:DllEntry /base:0x10000000 /STACK:65536,4096 -align:4096 -ignore:4001,4070,4078,4086,4089,4096,4099,4108,4229 /SUBSYSTEM:WINDOWSCE,7.00
+'''....
+
+....
+
+
+</pre> 
+<h3><span class="mw-headline" id="EDMA3">EDMA3<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=26" title="Edit section: EDMA3">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No changes<br /> 
+</p>
+<h3><span class="mw-headline" id="Framework_Components">Framework Components<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=27" title="Edit section: Framework Components">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No changes<br /> 
+</p>
+<h3><span id="Local_Power_Manager_(LPM)"></span><span class="mw-headline" id="Local_Power_Manager_.28LPM.29">Local Power Manager (LPM)<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=28" title="Edit section: Local Power Manager (LPM)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span id="packages\ti\bios\power\drivers\wince\omap3530\lpm\SOURCES"></span><span class="mw-headline" id="packages.5Cti.5Cbios.5Cpower.5Cdrivers.5Cwince.5Comap3530.5Clpm.5CSOURCES">packages\ti\bios\power\drivers\wince\omap3530\lpm\SOURCES<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=29" title="Edit section: packages\ti\bios\power\drivers\wince\omap3530\lpm\SOURCES">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Use $(SG_OUTPUT_ROOT)\sdk instead of $(_SYSGENSDKROOT).<br /> 
+</p>
+<pre>TARGETLIBS= \
+$(SG_OUTPUT_ROOT)\sdk\lib\$(_CPUINDPATH)\coredll.lib \
+$(SG_OUTPUT_ROOT)\sdk\lib\$(_CPUINDPATH)\ceddk.lib \
+</pre> 
+<h3><span class="mw-headline" id="MISC">MISC<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=30" title="Edit section: MISC">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="backbuffers.reg">backbuffers.reg<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=31" title="Edit section: backbuffers.reg">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>IF TI_ENABLE_720P_SUPPORT
+; Override default MaxBackBuffers setting
+[HKEY_LOCAL_MACHINE\Software\Microsoft\DirectX\DirectShow\Video Renderer]
+"MaxBackBuffers"=dword:4
+'''[HKEY_LOCAL_MACHINE\Software\Microsoft\DirectX\DirectShow\VMR]
+"MaxBackBuffers"=dword:4
+'''ELSE
+; Override default MaxBackBuffers setting
+[HKEY_LOCAL_MACHINE\Software\Microsoft\DirectX\DirectShow\Video Renderer]
+"MaxBackBuffers"=dword:2
+'''[HKEY_LOCAL_MACHINE\Software\Microsoft\DirectX\DirectShow\VMR]
+"MaxBackBuffers"=dword:2
+'''ENDIF
+
+</pre> 
+<h3><span class="mw-headline" id="WinceUtils">WinceUtils</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=32" title="Edit section: WinceUtils">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No changes. 
+</p>
+<h3><span class="mw-headline" id="XDIAS">XDIAS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;section=33" title="Edit section: XDIAS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>No changes.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130065741
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.046 seconds
+Real time usage: 0.047 seconds
+Preprocessor visited node count: 310/1000000
+Preprocessor generated node count: 536/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 19655/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:12355-0!canonical and timestamp 20201130065741 and revision id 117640
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Guidelines for Porting CE6 based DVSDK release to WEC7</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;oldid=117640">https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;oldid=117640</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Guidelines+for+Porting+CE6+based+DVSDK+release+to+WEC7" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;oldid=117640" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 20 August 2012, at 13:36.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.046","walltime":"0.047","ppvisitednodes":{"value":310,"limit":1000000},"ppgeneratednodes":{"value":536,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":19655,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130065741","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":232});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Guidelines_for_Porting_CE6_based_DVSDK_release_to_WEC7 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:23:32 GMT -->
+</html>

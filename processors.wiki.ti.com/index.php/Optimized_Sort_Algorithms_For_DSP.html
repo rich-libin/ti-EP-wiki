@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Optimized_Sort_Algorithms_For_DSP by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:03 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Optimized Sort Algorithms For DSP - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Optimized_Sort_Algorithms_For_DSP","wgTitle":"Optimized Sort Algorithms For DSP","wgCurRevisionId":181983,"wgRevisionId":181983,"wgArticleId":4570,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Optimized_Sort_Algorithms_For_DSP","wgRelevantArticleId":4570,"wgRequestId":"3a81734c19ffc120a92bbd8f","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Optimized_Sort_Algorithms_For_DSP rootpage-Optimized_Sort_Algorithms_For_DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Optimized Sort Algorithms For DSP</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>Implementing an optimized sort algorithm on a DSP requires giving some thought to the algorithm used, just like on any CPU architecture, but it also requires paying careful attention to how it is possible to leverage some advantages of the Texas Instruments c64x+ DSP architecture such as:
+</p>
+<ul><li>the ability to execute of up to 8 instructions in parallel per CPU cycle,</li>
+<li>the ability to specify a condition for individual instructions,</li>
+<li>the SPLOOP mechanism for the optimization of loop execution,</li>
+<li>the ability of the Texas Instruments compiler to "software pipeline" loops to leverage the DSP pipelined architecture,</li></ul>
+<p>The result of this study is a set of data points that will hopefully guide you in making an informed decision when picking and/or implementing your algorithm, and give you an order of magnitude of the performance you can expect to see in your real-time application, as well as code-size and memory requirements.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Sort_Algorithms"><span class="tocnumber">1</span> <span class="toctext">Sort Algorithms</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Quick_Sort_Algorithm"><span class="tocnumber">1.1</span> <span class="toctext">Quick Sort Algorithm</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Merge_Sort_Algorithm"><span class="tocnumber">1.2</span> <span class="toctext">Merge Sort Algorithm</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Variations_on_a_Theme"><span class="tocnumber">2</span> <span class="toctext">Variations on a Theme</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Index_Ordering"><span class="tocnumber">2.1</span> <span class="toctext">Index Ordering</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Finding_the_Top_K_entries_from_an_array"><span class="tocnumber">2.2</span> <span class="toctext">Finding the Top K entries from an array</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Keeping_a_list_always_sorted"><span class="tocnumber">2.3</span> <span class="toctext">Keeping a list always sorted</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Benchmark_Results"><span class="tocnumber">3</span> <span class="toctext">Benchmark Results</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#CPU_Cyles"><span class="tocnumber">3.1</span> <span class="toctext">CPU Cyles</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Code_Size"><span class="tocnumber">3.2</span> <span class="toctext">Code Size</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Memory_Requirements"><span class="tocnumber">3.3</span> <span class="toctext">Memory Requirements</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Implementations"><span class="tocnumber">4</span> <span class="toctext">Implementations</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Quicksort_from_.3Cstdlib.h.3E"><span class="tocnumber">4.1</span> <span class="toctext">Quicksort from &lt;stdlib.h&gt;</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#Standard_Quicksort_Implementation"><span class="tocnumber">4.1.1</span> <span class="toctext">Standard Quicksort Implementation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-15"><a href="#Quicksort"><span class="tocnumber">4.2</span> <span class="toctext">Quicksort</span></a>
+<ul>
+<li class="toclevel-3 tocsection-16"><a href="#Quicksort_Implementation"><span class="tocnumber">4.2.1</span> <span class="toctext">Quicksort Implementation</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Quicksort_Implementation_with_Index_Ordering"><span class="tocnumber">4.2.2</span> <span class="toctext">Quicksort Implementation with Index Ordering</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-18"><a href="#Optimized_Quicksort"><span class="tocnumber">4.3</span> <span class="toctext">Optimized Quicksort</span></a>
+<ul>
+<li class="toclevel-3 tocsection-19"><a href="#Optimized_Quicksort_Implementation"><span class="tocnumber">4.3.1</span> <span class="toctext">Optimized Quicksort Implementation</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#Optimized_Quicksort_Implementation_with_Index_Ordering"><span class="tocnumber">4.3.2</span> <span class="toctext">Optimized Quicksort Implementation with Index Ordering</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-21"><a href="#Merge_Sort"><span class="tocnumber">4.4</span> <span class="toctext">Merge Sort</span></a>
+<ul>
+<li class="toclevel-3 tocsection-22"><a href="#Merge_Sort_Implementation"><span class="tocnumber">4.4.1</span> <span class="toctext">Merge Sort Implementation</span></a>
+<ul>
+<li class="toclevel-4 tocsection-23"><a href="#Merge_Sort_Function"><span class="tocnumber">4.4.1.1</span> <span class="toctext">Merge Sort Function</span></a></li>
+<li class="toclevel-4 tocsection-24"><a href="#Two-Ways_Merge"><span class="tocnumber">4.4.1.2</span> <span class="toctext">Two-Ways Merge</span></a></li>
+<li class="toclevel-4 tocsection-25"><a href="#Three-Ways_Merge"><span class="tocnumber">4.4.1.3</span> <span class="toctext">Three-Ways Merge</span></a></li>
+<li class="toclevel-4 tocsection-26"><a href="#Four-Ways_Merge"><span class="tocnumber">4.4.1.4</span> <span class="toctext">Four-Ways Merge</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-27"><a href="#Merge_Sort_Implementation_with_Index_Ordering"><span class="tocnumber">4.4.2</span> <span class="toctext">Merge Sort Implementation with Index Ordering</span></a>
+<ul>
+<li class="toclevel-4 tocsection-28"><a href="#Merge_Sort_Function_with_Index_Ordering"><span class="tocnumber">4.4.2.1</span> <span class="toctext">Merge Sort Function with Index Ordering</span></a></li>
+<li class="toclevel-4 tocsection-29"><a href="#Two-Ways_Merge_With_Index_Ordering"><span class="tocnumber">4.4.2.2</span> <span class="toctext">Two-Ways Merge With Index Ordering</span></a></li>
+<li class="toclevel-4 tocsection-30"><a href="#Three-Ways_Merge_With_Index_Ordering"><span class="tocnumber">4.4.2.3</span> <span class="toctext">Three-Ways Merge With Index Ordering</span></a></li>
+<li class="toclevel-4 tocsection-31"><a href="#Four-Ways_Merge_With_Index_Ordering"><span class="tocnumber">4.4.2.4</span> <span class="toctext">Four-Ways Merge With Index Ordering</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-32"><a href="#Top_K_Elements_from_an_Array_of_N_Elements"><span class="tocnumber">4.5</span> <span class="toctext">Top K Elements from an Array of N Elements</span></a>
+<ul>
+<li class="toclevel-3 tocsection-33"><a href="#Software_Implementation"><span class="tocnumber">4.5.1</span> <span class="toctext">Software Implementation</span></a></li>
+<li class="toclevel-3 tocsection-34"><a href="#Benchmark_Results_2"><span class="tocnumber">4.5.2</span> <span class="toctext">Benchmark Results</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-35"><a href="#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Sort_Algorithms">Sort Algorithms</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=1" title="Edit section: Sort Algorithms">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>In the scope of this algorithm and implementation review we have considered the <b>Quicksort</b> and <b>Merge Sort</b> algorithms, and we are only considering the problem of sorting unsigned 32-bits integers.
+</p><p>Much of these results do apply if we were to sort signed integers, but would likely vary if we were sorting 16-bits or 8-bits values as the optimization techniques used would likely vary.
+</p>
+<h2><span class="mw-headline" id="Quick_Sort_Algorithm">Quick Sort Algorithm</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=2" title="Edit section: Quick Sort Algorithm">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Quicksort algorithm has the following performance caracteristics:
+</p>
+<ul><li>best-case performance is <i>0(n.log(n))</i></li>
+<li>worst-case performance is <i>O(n^2)</i></li>
+<li>average performance is <i>O(n.log(n))</i></li></ul>
+<p>For a good discussion on this algorithm please refer to description of the <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Quicksort">Quick Sort algorithm</a> on Wikipedia, or to the book <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/The_Art_of_Computer_Programming">The Art of Computer Programming</a> by Donald Knuth which is an excellent reference on the subject.
+</p>
+<h2><span class="mw-headline" id="Merge_Sort_Algorithm">Merge Sort Algorithm</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=3" title="Edit section: Merge Sort Algorithm">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Merge Sort algorithm has the following performance caracteristics:
+</p>
+<ul><li>best-case performance is <i>0(n.log(n))</i></li>
+<li>worst-case performance is <i>O(n.log(n))</i></li>
+<li>average performance is <i>O(n.log(n))</i></li></ul>
+<p>A typical implementation of the Merge Sort algorithm involves:
+</p>
+<ul><li>Division of the elements to be sorted into subsets.</li>
+<li>Sorting of each of the subset.
+<ul><li>The same process (Merge Sort) can be applied recursively on each of these subsets to sort them.</li></ul></li>
+<li>Merge the resulting sorted lists of elements together.
+<ul><li>Merging sorted lists is a process that is loop-friendly (and will leverage some of the DSP features), and the way memory is accessed by the program during the merge makes it quite cache-friendly as well.</li></ul></li></ul>
+<p>When implementing this algorithm you need to choose at what level the division into subsets will stop.
+</p><p>For a good discussion on this algorithm please refer to description of the <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Merge_sort">Merge Sort algorithm</a> on Wikipedia, or to the book <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/The_Art_of_Computer_Programming">The Art of Computer Programming</a> by Donald Knuth which is an excellent reference on the subject.
+</p>
+<h1><span class="mw-headline" id="Variations_on_a_Theme">Variations on a Theme</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=4" title="Edit section: Variations on a Theme">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>When considering the uses a DSP application might do of a sort function it quickly becomes obvious that sorting alone will often not be the complete solution to the problem the application is trying to solve.
+</p>
+<h2><span class="mw-headline" id="Index_Ordering">Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=5" title="Edit section: Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>For quite a few applications it will be interesting for the application to not only get as a result a sorted list, but also get an array that will give the original position of each item in the sorted list.
+</p><p>This is what is called here "Index Ordering", and as part of this study implementations with and without "Index Ordering" have been created.
+</p>
+<h2><span class="mw-headline" id="Finding_the_Top_K_entries_from_an_array">Finding the Top K entries from an array</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=6" title="Edit section: Finding the Top K entries from an array">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In some cases the real problem to be solved requires only finding the top K entries from an array of N values, rather than sorting the whole array.
+</p><p>If that is the case of your application then this opens the door for some additional optimizations, as quite some CPU cycles can be saved by only partially sorting the content of the array.
+</p><p>A good starting point to learn more about this type of algorithms is the Wikipedia page on <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Selection_algorithm">Selection Algorithm</a>.
+</p><p>We have decided in this article to implement an optimized version of the Quickselect algorithm described on Wikipedia.  It is basically a modified version of the Quicksort algorithm.
+</p>
+<h2><span class="mw-headline" id="Keeping_a_list_always_sorted">Keeping a list always sorted</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=7" title="Edit section: Keeping a list always sorted">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>Will be documented later.</b>
+</p><p>Rather than sorting an array of values at periodic intervals or even just when needed it might be interesting to keep the list of sorted at all times.
+</p><p>This means that the list has to be re-ordered every time a value is updated.
+</p>
+<h1><span class="mw-headline" id="Benchmark_Results">Benchmark Results</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=8" title="Edit section: Benchmark Results">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Here are benchmark results of the run of three implementations of sort. These benchmarks were run in the following configuration:
+</p>
+<ul><li>using a TCI6488 DSP,</li>
+<li>code placed in L2 memory,</li>
+<li>data placed in L2 memory,</li>
+<li>L1 memory entirely configured as cache,</li>
+<li>the cache was warm.</li></ul>
+<h2><span class="mw-headline" id="CPU_Cyles">CPU Cyles</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=9" title="Edit section: CPU Cyles">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The results are CPU cycles for the execution of the sort algorithm, <u>with index ordering enabled</u>.
+</p>
+<ul><li>The horizontal scale is the size of the array being sorted (32 bits unsigned int). It goes from 1 to 256 elements to be sorted.</li>
+<li>The vertical scale is the number cycles it takes to sort the array.</li>
+<li>There are several measures displayed in these results:
+<ul><li><b>Merge Sort</b> is the worst case performance of the Merge sort implementation.</li>
+<li><b>Qsort</b> is almost a worst case performance of the unoptimized Quicksort implementation.</li>
+<li><b>Qsort Best</b> is the best case performance of the unoptimized Quicksort implementation.</li>
+<li><b>Qsort Opt</b> is almost a worst case performance of the optimized Quicksort implementation.</li>
+<li><b>Qsort Opt Best</b> is the best case performance of the optimized Quicksort implementation.</li></ul></li></ul>
+<p>Please note that in our benchmarking the index ordering does not noticeably degrades the performance of algorithm. This can be explained by the fact that Texas Instruments DSPs have the ability to execute up to 8 instructions in parallel, and that the cost of index ordering is absorbed or hidden that way.
+</p><p><a href="File_Merge_sort_vs_qsort_1_to_256.html" class="image"><img alt="Merge sort vs qsort 1 to 256.png" src="https://processors.wiki.ti.com/images/c/cf/Merge_sort_vs_qsort_1_to_256.png" width="800" height="600" /></a>
+</p><p>From this graph we can draw the following conclusions on our implementations:
+</p>
+<ul><li>The fastest sort algorithm we have studied here is the Merge Sort, with a performance in CPU cycles of about 50 cycles per unsigned 32-bit word to be sorted (estimate for a number of elements to be sorted between 1 and 256).</li>
+<li>The performance of the Merge Sort is varies only a little between best cases and worst cases scenarios.</li>
+<li>The optimized Quicksort variant is coming in second at about twice the number of cycles.</li>
+<li>The Quicksort is ranke third at about 3 times the number of cycles.</li>
+<li>Both Quicksort implementation are prone to significant performance degradation (<i>O(n^2)</i> trend clearly visible on the graph) in worst case scenarios.</li></ul>
+<h2><span class="mw-headline" id="Code_Size">Code Size</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=10" title="Edit section: Code Size">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>To be documented later</b>
+</p>
+<h2><span class="mw-headline" id="Memory_Requirements">Memory Requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=11" title="Edit section: Memory Requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Here is a summary of the extra memory these various algorithms require to work. We call here N the number of 32 bit unsigned words to be sorted:
+</p>
+<ul><li><b>Quicksort</b>: No extra memory is required as all sorting is done in place.</li>
+<li><b>Optimized Quicksort</b>: N 32 bits words of extra memory are required by this implementation.</li>
+<li><b>Merge Sort</b>: N+log(N) 32 bits words of extra memory are required by this implementation.</li>
+<li><b>Quicksort with Index Ordering</b>: No extra memory is required as all sorting and index ordering is done in place.</li>
+<li><b>Optimized Quicksort with Index Ordering</b>: 2*N 32 bits words of extra memory are required by this implementation.</li>
+<li><b>Merge Sort with Index Ordering</b>: 2*(N+log(N) 32 bits words of extra memory are required by this implementation.</li></ul>
+<h1><span class="mw-headline" id="Implementations">Implementations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=12" title="Edit section: Implementations">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>We are providing here the software implementations of the algorithms we have evaluated in this study. Feel free to use these functions as a starting point for your own implementation.
+</p>
+<h2><span id="Quicksort_from_&lt;stdlib.h&gt;"></span><span class="mw-headline" id="Quicksort_from_.3Cstdlib.h.3E">Quicksort from &lt;stdlib.h&gt;</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=13" title="Edit section: Quicksort from &lt;stdlib.h&gt;">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The qsort() function provided with the Texas Instruments runtime support library (interface defined in &lt;stdlib.h&gt;) gives you the ability to sort an array of elements of any type and size. However the genericity of this quicksort implementation has an impact on its performance which is clearly demonstrated by the results of our benchmarks.
+</p><p>If the performance of your sort function is likely to be on the critical path of your real-time application using the qsort() function is probably a good first step to get a functional application, but implementing your own sort function might be required at some point.
+</p><p>In the benchmark results our custom implementation Quick Sort algorithm is consistently outperforming the &lt;stdlib.h&gt; qsort() implementation. The reasons for that are simple:
+</p>
+<ul><li>The &lt;stdlib.h&gt; implementation supports sorting data types of any size which means that the code generated cannot leverage the fact that we are interested in sorting 'unsigned int's.</li>
+<li>The comparison is implemented in the form of a function, which means additional overhead for each comparison done, a function call being made instead of just a simple comparison.</li>
+<li>The way the pivot point selection is done in our implementation apparently differs from the RTS implementation which leads to differing performance on our sample test vectors.</li></ul>
+<h3><span class="mw-headline" id="Standard_Quicksort_Implementation">Standard Quicksort Implementation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=14" title="Edit section: Standard Quicksort Implementation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>include &lt;stdlib.h&gt;</li></ol>
+<p>int qsort_cmp(const void *e1, const void *e2) {
+</p>
+<pre> unsigned int v1 = *(unsigned int *)e1;
+ unsigned int v2 = *(unsigned int *)e2;
+</pre>
+<pre> if (v1 &lt; v2) return -1;
+ else if (v1 &gt; v2) return 1;
+ else return 0;
+</pre>
+<p>}
+void Sort_stdlib32(unsigned int * restrict array, int size) {
+</p>
+<pre> /* This is a simple implementation of the QuickSort algorithm.  */
+ qsort((void *)array, size, 4, &amp;qsort_cmp);
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Quicksort">Quicksort</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=15" title="Edit section: Quicksort">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Quicksort_Implementation">Quicksort Implementation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=16" title="Edit section: Quicksort Implementation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following Quicksort implementation is very heavily based on the <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Quicksort">pseudo code</a> found the Wikipedia entry for the Quicksort Algorithm.
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+inline int partition(unsigned int * restrict array, int left, int right, int pivotIndex) {
+</p>
+<pre> int pivotValue = array[pivotIndex];
+ int storeIndex, i;
+ unsigned int temp;
+</pre>
+<pre> temp = array[pivotIndex];
+ array[pivotIndex] = array[right]; // Move pivot to end
+ array[right] = temp;
+ storeIndex = left;
+ for (i=left; i&lt;right; i++) { // left &lt;= i &lt; right
+   if (array[i] &lt;= pivotValue) {
+     temp = array[i];
+     array[i] = array[storeIndex];
+     array[storeIndex++] = temp;
+   }
+ }
+ temp = array[right];
+ array[right] = array[storeIndex]; // Move pivot to its final place
+ array[storeIndex] = temp;
+ return storeIndex;
+</pre>
+<p>}
+</p><p>static void quicksort(unsigned int * restrict array, int left, int right) {
+</p>
+<pre> int pivotIndex, pivotNewIndex;
+</pre>
+<pre> if (right &gt; left) {
+   /* select a pivot index (e.g. pivotIndex&#160;:= (left+right)/2) */
+   pivotIndex = (left+right)/2;
+   pivotNewIndex = partition(array, left, right, pivotIndex);
+   quicksort(array, left, pivotNewIndex - 1);
+   quicksort(array, pivotNewIndex + 1, right);
+ }
+</pre>
+<p>}
+</p><p>void Sort_qsort32(unsigned int * restrict array, int size) {
+</p>
+<pre> /* This is simple implementation of the QuickSort algorithm.  */
+ quicksort(array, 0, size-1);
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h3><span class="mw-headline" id="Quicksort_Implementation_with_Index_Ordering">Quicksort Implementation with Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=17" title="Edit section: Quicksort Implementation with Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The index ordering requires that the index be updated as the array is sorted. Because the Texas Instruments DSPs are able to execute multiple instructions in parallel the overhead introduced by the maintenance of the index is very limited.
+</p>
+<pre>static int ipartition(unsigned int * restrict array, unsigned int * restrict order, int left, int right, int pivotIndex) {
+  int pivotValue = array[pivotIndex];
+  int storeIndex, i;
+  unsigned int temp;
+  unsigned int itemp;
+
+  temp = array[pivotIndex]; itemp = order[pivotIndex];
+  array[pivotIndex] = array[right]; // Move pivot to end
+  order[pivotIndex] = order[right];
+  array[right] = temp;
+  order[right] = itemp;
+  storeIndex = left;
+  for (i=left; i&lt;right; i++) { // left &lt;= i &lt; right
+    if (array[i] &lt;= pivotValue) {
+      temp = array[i];
+      itemp = order[i];
+      array[i] = array[storeIndex];
+      order[i] = order[storeIndex];
+      order[storeIndex] = itemp;
+      array[storeIndex++] = temp;
+    }
+  }
+  temp = array[right];
+  itemp = order[right];
+  array[right] = array[storeIndex]; // Move pivot to its final place
+  order[right] = order[storeIndex];
+  array[storeIndex] = temp;
+  order[storeIndex] = itemp;
+  return storeIndex;
+}
+
+static void quicksort(unsigned int * restrict array, unsigned int * restrict order, int left, int right) {
+  int pivotIndex, pivotNewIndex;
+
+  if (right &gt; left) {
+    /* select a pivot index (e.g. pivotIndex&#160;:= (left+right)/2) */
+    pivotIndex = (left+right)/2;
+    pivotNewIndex = partition(array, order, left, right, pivotIndex);
+    quicksort(array, order, left, pivotNewIndex - 1);
+    quicksort(array, order, pivotNewIndex + 1, right);
+  }
+}
+
+void SortIndex_qsort32(unsigned int * restrict array, int size, unsigned int * restrict index) {
+
+	quicksort(array, index, 0, size-1);
+}
+</pre>
+<h2><span class="mw-headline" id="Optimized_Quicksort">Optimized Quicksort</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=18" title="Edit section: Optimized Quicksort">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>It is possible to make a quite simple optimization of our base Quicksort implementation by using some scratch memory and a slight rewrite of the inner-loop of the Quicksort algorithm (found in the <code>partition()</code> function).
+</p><p>This change allows the compiler to generate code that is much more efficient and leverage the Texas Instruments C64x+ DSP features for the optimization of loops.
+</p>
+<h3><span class="mw-headline" id="Optimized_Quicksort_Implementation">Optimized Quicksort Implementation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=19" title="Edit section: Optimized Quicksort Implementation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>static int partition(unsigned int * restrict ping, unsigned int * restrict pong, int left, int right, int pivotIndex) {
+  int pivotValue = ping[pivotIndex];
+  int storeIndex, i, rightIndex;
+  unsigned int temp;
+
+  temp = ping[pivotIndex];
+  ping[pivotIndex] = ping[right]; // Move pivot to end
+  ping[right] = temp;
+  storeIndex = left;
+  rightIndex = right;
+  /* This loop is optimized by the Texas Instruments compiler.  */
+  for(i=left;i&lt;right;i++) {
+    if (ping[i] &lt;= pivotValue) {
+      pong[storeIndex++] = ping[i];
+    } else {
+      pong[rightIndex--] = ping[i];
+    }
+  }
+  pong[storeIndex] = ping[right];
+  /* Copy pivotValue back into the ping buffer.  */
+  ping[storeIndex] = pong[storeIndex];
+  return storeIndex;
+}
+
+static void quicksort(unsigned int * restrict ping, unsigned int * restrict pong, int left, int right, int depth, int idx) {
+  int pivotIndex, pivotNewIndex;
+
+  if (right &lt;= left &amp;&amp; (depth &amp; 1)) {
+    /* Copy array value back into the pong buffer.  */
+    pong[idx] = ping[idx];
+  }
+  if (right &gt; left) {
+    /* select a pivot index (e.g. pivotIndex&#160;:= (left+right)/2) */
+    pivotIndex = (left+right)/2;
+    pivotNewIndex = partition(ping, pong, left, right, pivotIndex);
+    quicksort(pong, ping, left, pivotNewIndex - 1, depth+1, left);
+    quicksort(pong, ping, pivotNewIndex + 1, right, depth+1, right);
+  }
+}
+
+void Sort_qsort32(unsigned int * restrict array, int size, unsigned int * restrict scratch) {
+
+  /* This implementation is using scratch memory to enable an optimization
+     of the inner loop of the quicksort algorithm.  */
+  quicksort(array, scratch, 0, size-1, 0, 0);
+}
+</pre>
+<h3><span class="mw-headline" id="Optimized_Quicksort_Implementation_with_Index_Ordering">Optimized Quicksort Implementation with Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=20" title="Edit section: Optimized Quicksort Implementation with Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>One interesting thing to note is that the implementation with Index Ordering is only introducing a <b>very small</b> degradation in performance (we have observed it to be consistently under <b>XXX&#160;%</b>).
+</p>
+<pre>static int partition(unsigned int * restrict ping, unsigned int * restrict pong,
+                     unsigned int * restrict iping, unsigned int * restrict ipong,
+                     int left, int right, int pivotIndex) {
+  int pivotValue = ping[pivotIndex];
+  int storeIndex, i, rightIndex;
+  unsigned int temp, itemp;
+
+  temp = ping[pivotIndex]; itemp = iping[pivotIndex];
+  ping[pivotIndex] = ping[right]; // Move pivot to end
+  iping[pivotIndex] = iping[right]; // Move pivot to end
+  ping[right] = temp; iping[right] = itemp;
+  storeIndex = left;
+  rightIndex = right;
+  /* This loop is optimized by the Texas Instruments compiler.  */
+  for(i=left;i&lt;right;i++) {
+    if (ping[i] &lt;= pivotValue) {
+      pong[storeIndex] = ping[i];
+      ipong[storeIndex++] = iping[i];
+    } else {
+      pong[rightIndex] = ping[i];
+      ipong[rightIndex--] = iping[i];
+    }
+  }
+  pong[storeIndex] = ping[right];
+  ipong[storeIndex] = iping[right];
+  /* Copy pivotValue back into the ping buffer.  */
+  ping[storeIndex] = pong[storeIndex];
+  iping[storeIndex] = ipong[storeIndex];
+  return storeIndex;
+}
+
+static void quicksort(unsigned int * restrict ping, unsigned int * restrict pong,
+                      unsigned int * restrict iping, unsigned int * restrict ipong,
+                      int left, int right, int depth, int idx) {
+  int pivotIndex, pivotNewIndex;
+
+  if (right &lt;= left &amp;&amp; (depth &amp; 1)) {
+    /* Copy array value back into the pong buffer.  */
+    pong[idx] = ping[idx];
+    ipong[idx] = iping[idx];
+  }
+  if (right &gt; left) {
+    /* select a pivot index (e.g. pivotIndex&#160;:= (left+right)/2) */
+    pivotIndex = (left+right)/2;
+    pivotNewIndex = partition(ping, pong, iping, ipong, left, right, pivotIndex);
+    quicksort(pong, ping, ipong, iping, left, pivotNewIndex - 1, depth+1, left);
+    quicksort(pong, ping, ipong, iping, pivotNewIndex + 1, right, depth+1, right);
+  }
+}
+
+void SortIndex_qsort32(unsigned int * restrict array, int size, unsigned int * restrict index, unsigned int * restrict scratch) {
+
+  /* This is simple implementation of the QuickSort algorithm.  */
+  quicksort(array, scratch, index, scratch+size, 0, size-1, 0, 0);
+}
+</pre>
+<h2><span class="mw-headline" id="Merge_Sort">Merge Sort</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=21" title="Edit section: Merge Sort">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Merge Sort implementation presented here works as follows:
+</p>
+<ul><li><u>First Pass</u>: the content of the array is sorted by small groups of four elements.
+<ul><li>If the total number of elements in the array is not a multiple of four, then the last 1, 2 or 3 elements are sorted as well.</li>
+<li>Sorting groups of 4 elements is done using the basic insertion algorithm. However this implementation of the insertion algorithm is written in such a way that the compiler is able to optimize the loop over all the array elements.</li>
+<li><b>Index Ordering Note</b>: the index is updated as the elements are sorted.</li></ul></li>
+<li><u>Second Pass</u>: the small sorted list of 4 elements are merged together to form large sorted lists. This larger sorted lists are in turn merged, etc... until this all results in one sorted list.
+<ul><li>This implementation is using functions to perform <b>two-way</b>, <b>three-way</b> and <b>four-way</b> merges (i.e. merge two lists, three lists or four lists into one).</li>
+<li><b>Index Ordering Note</b>: the indexes are merged as the elements are merged.</li></ul></li></ul>
+<p>As you can see we have decided to opt for an implementation that is using an iterative approach rather than a recursive approach. This iterative approach in our experiments has proven to be much more <i>optimization-friendly</i>.
+</p>
+<h3><span class="mw-headline" id="Merge_Sort_Implementation">Merge Sort Implementation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=22" title="Edit section: Merge Sort Implementation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The full implementation of our <a href="Optimized_Merge_Sort_For_DSP.html" title="Optimized Merge Sort For DSP">Optimized Merge Sort For DSP</a> is documented separately.
+</p>
+<h4><span class="mw-headline" id="Merge_Sort_Function">Merge Sort Function</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=23" title="Edit section: Merge Sort Function">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void Sort_merge32(unsigned int * restrict array, int size, unsigned int * restrict output, unsigned int * restrict scratch);
+</pre>
+<h4><span class="mw-headline" id="Two-Ways_Merge">Two-Ways Merge</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=24" title="Edit section: Two-Ways Merge">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void Merge_twoWays32 (unsigned int **inputs, int *sizes,
+		      unsigned int * restrict out, unsigned int * restrict scratch);
+</pre>
+<h4><span class="mw-headline" id="Three-Ways_Merge">Three-Ways Merge</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=25" title="Edit section: Three-Ways Merge">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void Merge_threeWays32(unsigned int **inputs, int *sizes, unsigned int * restrict out, unsigned int * restrict scratch);
+</pre>
+<h4><span class="mw-headline" id="Four-Ways_Merge">Four-Ways Merge</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=26" title="Edit section: Four-Ways Merge">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void Merge_fourWays32(unsigned int **inputs, int *sizes, unsigned int * restrict out, unsigned int * restrict scratch);
+</pre>
+<h3><span class="mw-headline" id="Merge_Sort_Implementation_with_Index_Ordering">Merge Sort Implementation with Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=27" title="Edit section: Merge Sort Implementation with Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The full implementation of our <a href="Optimized_Merge_Sort_For_DSP_With_Index_Ordering.html" title="Optimized Merge Sort For DSP With Index Ordering">Optimized Merge Sort For DSP With Index Ordering</a> is documented separately.
+</p>
+<h4><span class="mw-headline" id="Merge_Sort_Function_with_Index_Ordering">Merge Sort Function with Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=28" title="Edit section: Merge Sort Function with Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void SortIndex_merge32(unsigned int * restrict array, int size, unsigned int * restrict index,
+                       unsigned int * restrict output, unsigned int * restrict order, unsigned int * restrict scratch);
+</pre>
+<h4><span class="mw-headline" id="Two-Ways_Merge_With_Index_Ordering">Two-Ways Merge With Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=29" title="Edit section: Two-Ways Merge With Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void MergeIndex_twoWays32 (unsigned int **inputs, int *sizes,
+		      unsigned int * restrict out, unsigned int * restrict scratch);
+</pre>
+<h4><span class="mw-headline" id="Three-Ways_Merge_With_Index_Ordering">Three-Ways Merge With Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=30" title="Edit section: Three-Ways Merge With Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void MergeIndex_threeWays32(unsigned int **inputs, int *sizes, unsigned int * restrict out, unsigned int * restrict scratch);
+</pre>
+<h4><span class="mw-headline" id="Four-Ways_Merge_With_Index_Ordering">Four-Ways Merge With Index Ordering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=31" title="Edit section: Four-Ways Merge With Index Ordering">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void MergeIndex_fourWays32(unsigned int **inputs, int *sizes, unsigned int * restrict out, unsigned int * restrict scratch);
+</pre>
+<h2><span class="mw-headline" id="Top_K_Elements_from_an_Array_of_N_Elements">Top K Elements from an Array of N Elements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=32" title="Edit section: Top K Elements from an Array of N Elements">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Based on the Quickselect algorithm described in the Selection Algorithm page from Wikipedia we have made an implementation optimized for Texas Instruments c64x+ DSPs. This implementation does perform <a href="#Index_Ordering">#Index_Ordering</a> as described in the
+</p><p>A number of optimizations have been built in the implementation of this algorithm among which:
+</p>
+<ul><li>Detection of worst-case performance and application of <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Selection_algorithm#Linear_general_selection_algorithm_-_Median_of_Medians_algorithm">Median of Medians Algorithm</a>, this prevents the algorithm from experiencing O(N^2) performance.</li>
+<li>No recursion of the algorithm for 4 elements or less. Instead a fully unrolled implementation of a sort for 2, 3 and 4 elements is used.</li>
+<li>Use of scratch memory to enable the acceleration of the partition algorithm.</li></ul>
+<h3><span class="mw-headline" id="Software_Implementation">Software Implementation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=33" title="Edit section: Software Implementation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The software implementation of this algorithm can be found here: <a href="Top_K_Elements_Sort_For_DSP_With_Index_Ordering.html" title="Top K Elements Sort For DSP With Index Ordering">Top K Elements Sort For DSP With Index Ordering</a>.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Benchmark_Results_2">Benchmark Results</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=34" title="Edit section: Benchmark Results">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Here is a visualization of the results of a benchmark of the function in a case where we sort the top 20 elements of an array of up 600 elements.
+</p><p>Our Quickselect algorithm is compared to repeating 20 times the search for the maximum in the array. The maximum search function is an optimized one and is also provided with our example code.
+</p><p><a href="File_Quick_select_vs_max.html" class="image"><img alt="Quick select vs max.png" src="https://processors.wiki.ti.com/images/f/f8/Quick_select_vs_max.png" width="800" height="600" /></a>
+</p>
+<h1><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit&amp;section=35" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130213618
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.074 seconds
+Real time usage: 0.077 seconds
+Preprocessor visited node count: 238/1000000
+Preprocessor generated node count: 364/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6584/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4570-0!canonical and timestamp 20201130213618 and revision id 181983
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Optimized Sort Algorithms For DSP</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Optimized Sort Algorithms For DSP</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Optimized Sort Algorithms For DSP</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Optimized Sort Algorithms For DSP</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Optimized Sort Algorithms For DSP</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Optimized Sort Algorithms For DSP</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Optimized Sort Algorithms For DSP</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Optimized Sort Algorithms For DSP</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Optimized Sort Algorithms For DSP</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;oldid=181983">https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;oldid=181983</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Optimized+Sort+Algorithms+For+DSP" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Optimized_Sort_Algorithms_For_DSP.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Optimized_Sort_Algorithms_For_DSP.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Optimized_Sort_Algorithms_For_DSP.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Optimized_Sort_Algorithms_For_DSP.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Optimized_Sort_Algorithms_For_DSP.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;oldid=181983" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Sort_Algorithms_For_DSP&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 21 July 2014, at 05:39.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.074","walltime":"0.077","ppvisitednodes":{"value":238,"limit":1000000},"ppgeneratednodes":{"value":364,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":6584,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130213618","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":238});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Optimized_Sort_Algorithms_For_DSP by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:08 GMT -->
+</html>

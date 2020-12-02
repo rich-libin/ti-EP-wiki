@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Programming_EDMA_without_EDMA3LLD_package by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:10:22 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Programming EDMA without EDMA3LLD package - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Programming_EDMA_without_EDMA3LLD_package","wgTitle":"Programming EDMA without EDMA3LLD package","wgCurRevisionId":181457,"wgRevisionId":181457,"wgArticleId":822,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["PSP","DSPBIOS","DM644x","DM6467","DM355","DM648","DM6437","C645x","DMA","DaVinci Training"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Programming_EDMA_without_EDMA3LLD_package","wgRelevantArticleId":822,"wgRequestId":"c59ba4d78a3223c79ea736f9","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Programming_EDMA_without_EDMA3LLD_package rootpage-Programming_EDMA_without_EDMA3LLD_package skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Programming EDMA without EDMA3LLD package</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>There have been many queries in trying to understand how to program EDMA3 hardware - a basic knowledge of the hardware peripheral and some basic instructions below should do the trick, and as you will see the task is pretty simple&#160;:)
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Some_assumptions_made_while_writing_these_steps:"><span class="tocnumber">1</span> <span class="toctext">Some assumptions made while writing these steps:</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Steps:"><span class="tocnumber">2</span> <span class="toctext">Steps:</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#1._EDMA3_Initialization:"><span class="tocnumber">2.1</span> <span class="toctext">1. EDMA3 Initialization:</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#2._Programming_DMA_Channel:"><span class="tocnumber">2.2</span> <span class="toctext">2. Programming DMA Channel:</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#3._Triggering_the_Transfer_and_Waiting_for_Transfer_Completion:"><span class="tocnumber">2.3</span> <span class="toctext">3. Triggering the Transfer and Waiting for Transfer Completion:</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Sample_C_code_for_demo_.28for_DM648_platform.29"><span class="tocnumber">3</span> <span class="toctext">Sample C code for demo (for DM648 platform)</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Some_assumptions_made_while_writing_these_steps:">Some assumptions made while writing these steps:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=edit&amp;section=1" title="Edit section: Some assumptions made while writing these steps:">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>User knows which resources he wants to use and program them accordingly. There could be a resource conflict if resources not handled properly,</li>
+<li>Only DMA channel programming is shown below (QDMA channel can be programmed similarly),</li>
+<li>Linking and chaining are not shown in these steps, and error conditions are not handled properly, and,</li>
+<li>User is operating on the global channel specific registers instead of going by the shadow region ones. The shadow region method is recommended in case of a multi-master system.</li></ul>
+<h3><span class="mw-headline" id="Steps:">Steps:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=edit&amp;section=2" title="Edit section: Steps:">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="1._EDMA3_Initialization:">1. EDMA3 Initialization:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=edit&amp;section=3" title="Edit section: 1. EDMA3 Initialization:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Initialization of Global registers: Event Queue Priority (QUEPRI), Queue Watermark Threshold Level (QWMTHRA)</li>
+<li>Clear error registers: Event miss clear registers (EMCR, EMCRH, QEMCR), CC Error register (CCERRCLR). This step makes sure there is no spurious error bit set.</li>
+<li>For more details refer to the functions: <code>EDMA3_DRV_create()</code> &amp; <code>EDMA3_DRV_open()</code> in EDMA3 LLD</li></ul>
+<h4><span class="mw-headline" id="2._Programming_DMA_Channel:">2. Programming DMA Channel:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=edit&amp;section=4" title="Edit section: 2. Programming DMA Channel:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Map the DMA Channel to the PaRAM Set by writing to the DCHMAP register, if it is available.</li>
+<li>Associate Channel to Event Queue by writing to the DMAQNUM register.</li>
+<li>Initialize the PaRAM Set with all the required values (like counts, addresses etc). Make sure that the transfer completion interrupt bit is SET in the PaRAM Set OPT field. Without that, user will not be able to check the transfer status.</li>
+<li>For more details refer to the functions: <code>EDMA3_DRV_requestChannel()</code> &amp; <code>EDMA3_DRV_setPaRAM()</code></li></ul>
+<h4><span class="mw-headline" id="3._Triggering_the_Transfer_and_Waiting_for_Transfer_Completion:">3. Triggering the Transfer and Waiting for Transfer Completion:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=edit&amp;section=5" title="Edit section: 3. Triggering the Transfer and Waiting for Transfer Completion:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Trigger the transfer manually by writing to the Event Set Register (ESR); transfer will start immediately.</li>
+<li>Poll the IPR register to check the transfer status. If the bit is SET, clear it by writing to the ICR register.</li>
+<li>For more details refer to the functions: <code>EDMA3_DRV_enableTransfer()</code> and <code>EDMA3_DRV_waitAndClearTcc()</code></li></ul>
+<p>Note: In case of error, the corresponding bit will be SET in the EMR register.
+</p>
+<h3><span id="Sample_C_code_for_demo_(for_DM648_platform)"></span><span class="mw-headline" id="Sample_C_code_for_demo_.28for_DM648_platform.29">Sample C code for demo (for DM648 platform)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=edit&amp;section=6" title="Edit section: Sample C code for demo (for DM648 platform)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;syntaxhighlight lang='c'&gt;
+/* EDMA register address and definitions */
+</p>
+<ol><li>define EDMA_CC_BASE  	(0x02A00000) /* DM648. Check address for other devices. */</li>
+<li>define DCHMAP0     *((volatile unsigned int *)(EDMA_CC_BASE + 0x0100))</li>
+<li>define DMAQNUM0    *((volatile unsigned int *)(EDMA_CC_BASE + 0x0240))</li>
+<li>define QUEPRI      *((volatile unsigned int *)(EDMA_CC_BASE + 0x0284))</li>
+<li>define EMCR        *((volatile unsigned int *)(EDMA_CC_BASE + 0x0308))</li>
+<li>define EMCRH       *((volatile unsigned int *)(EDMA_CC_BASE + 0x030C))</li>
+<li>define QEMCR       *((volatile unsigned int *)(EDMA_CC_BASE + 0x0314))</li>
+<li>define CCERRCLR    *((volatile unsigned int *)(EDMA_CC_BASE + 0x031C))</li>
+<li>define QWMTHRA     *((volatile unsigned int *)(EDMA_CC_BASE + 0x0620))</li>
+<li>define ESR         *((volatile unsigned int *)(EDMA_CC_BASE + 0x1010))</li>
+<li>define IPR         *((volatile unsigned int *)(EDMA_CC_BASE + 0x1068))</li>
+<li>define ICR         *((volatile unsigned int *)(EDMA_CC_BASE + 0x1070))</li></ol>
+<ol><li>define PARAMENTRY0     (0x02A04000) /* DM648. Check address for other devices. */</li>
+<li>define OPT             *((volatile unsigned int *)(PARAMENTRY0 + 0x00))</li>
+<li>define SRC             *((volatile unsigned int *)(PARAMENTRY0 + 0x04))</li>
+<li>define A_B_CNT         *((volatile unsigned int *)(PARAMENTRY0 + 0x08))</li>
+<li>define DST             *((volatile unsigned int *)(PARAMENTRY0 + 0x0C))</li>
+<li>define SRC_DST_BIDX    *((volatile unsigned int *)(PARAMENTRY0 + 0x10))</li>
+<li>define LINK_BCNTRLD    *((volatile unsigned int *)(PARAMENTRY0 + 0x14))</li>
+<li>define SRC_DST_CIDX    *((volatile unsigned int *)(PARAMENTRY0 + 0x18))</li>
+<li>define CCNT            *((volatile unsigned int *)(PARAMENTRY0 + 0x1C))</li></ol>
+<p>/* Allocate srcBuff and dstBuff. Do a cache flush and cache invalidate,if required. */
+static signed char srcBuff[512];
+static signed char dstBuff[512];
+</p><p>/* Step 1: EDMA initialization */
+QUEPRI=0x10;
+QWMTHRA =(16&lt;&lt;8u)|(16 &amp; 0xFF);
+EMCR =  0xFFFFFFFF;
+CCERRCLR = 0xFFFFFFFF;
+</p><p>/* Step 2: Programming DMA Channel (and Param set) */
+DCHMAP0=0x0;
+DMAQNUM0=0x0;
+OPT = 0x00100000;  /* only TCINTEN is set */
+SRC = (unsigned int)srcBuff;
+A_B_CNT = ((1 &lt;&lt; 16u) | (512 &amp; 0xFFFFu));    /* ACNT = 512, BCNT = 1 */
+DST = (unsigned int)dstBuff;
+SRC_DST_BIDX = (512 &lt;&lt; 16u) | (512 &amp; 0xFFFFu);    /* SRC_BIDX = 512, DST_BIDX = 512 */
+LINK_BCNTRLD = (1 &lt;&lt; 16u) | 0xFFFFu;    /* LINK = 0xFFFF, BCNTRLD = 1 */
+SRC_DST_CIDX = 0;
+CCNT = 1;
+</p><p>/* Step 3: Triggering the Transfer and Waiting for Transfer Completion */
+ESR = 0x1;
+while(((IPR) &amp; 0x1) == 0);
+</p><p>/* Transfer has completed, clear the status register. */
+ICR=0x01;
+</p><p>/* Transfer is complete. Compare the srcBuff and dstBuff */
+&lt;/syntaxhighlight&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201024507
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.022 seconds
+Real time usage: 0.023 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 28/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:822-0!canonical and timestamp 20201201024507 and revision id 181457
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Programming EDMA without EDMA3LLD package</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Programming EDMA without EDMA3LLD package</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Programming EDMA without EDMA3LLD package</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Programming EDMA without EDMA3LLD package</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Programming EDMA without EDMA3LLD package</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Programming EDMA without EDMA3LLD package</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Programming EDMA without EDMA3LLD package</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Programming EDMA without EDMA3LLD package</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Programming EDMA without EDMA3LLD package</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;oldid=181457">https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;oldid=181457</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_PSP.html" title="Category:PSP">PSP</a></li><li><a href="Category_DSPBIOS.html" title="Category:DSPBIOS">DSPBIOS</a></li><li><a href="Category_DM644x.html" title="Category:DM644x">DM644x</a></li><li><a href="Category_DM6467.html" title="Category:DM6467">DM6467</a></li><li><a href="Category_DM355.html" title="Category:DM355">DM355</a></li><li><a href="Category_DM648.html" title="Category:DM648">DM648</a></li><li><a href="Category_DM6437.html" title="Category:DM6437">DM6437</a></li><li><a href="Category_C645x.html" title="Category:C645x">C645x</a></li><li><a href="Category_DMA.html" title="Category:DMA">DMA</a></li><li><a href="Category_DaVinci_Training.html" title="Category:DaVinci Training">DaVinci Training</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Programming+EDMA+without+EDMA3LLD+package" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Programming_EDMA_without_EDMA3LLD_package.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Programming_EDMA_without_EDMA3LLD_package&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Programming_EDMA_without_EDMA3LLD_package.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Programming_EDMA_without_EDMA3LLD_package.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Programming_EDMA_without_EDMA3LLD_package.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;oldid=181457" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Programming_EDMA_without_EDMA3LLD_package&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 July 2014, at 08:40.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.022","walltime":"0.023","ppvisitednodes":{"value":23,"limit":1000000},"ppgeneratednodes":{"value":28,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201024507","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":254});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Programming_EDMA_without_EDMA3LLD_package by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:10:25 GMT -->
+</html>

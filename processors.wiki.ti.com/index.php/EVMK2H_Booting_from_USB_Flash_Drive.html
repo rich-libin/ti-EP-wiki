@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/EVMK2H_Booting_from_USB_Flash_Drive by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:16:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>EVMK2H Booting from USB Flash Drive - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"EVMK2H_Booting_from_USB_Flash_Drive","wgTitle":"EVMK2H Booting from USB Flash Drive","wgCurRevisionId":198483,"wgRevisionId":198483,"wgArticleId":36188,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Keystone II"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"EVMK2H_Booting_from_USB_Flash_Drive","wgRelevantArticleId":36188,"wgRequestId":"e33e55428e314bdf6fc0bc07","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-EVMK2H_Booting_from_USB_Flash_Drive rootpage-EVMK2H_Booting_from_USB_Flash_Drive skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">EVMK2H Booting from USB Flash Drive</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This wiki page describes how to use a USB flash drive to boot the Linux kernel on a K2H EVM and host the root file system. This is an alternate to using a tftpserver for the kernel and an NFS server for the file system outlined in the <a rel="nofollow" class="external text" href="MCSDK_HPC_3-3.html">MCSDK HPC Getting Started Guide</a>.
+</p><p><b>Benefits</b>
+</p>
+<ul><li>Quicker to get up and running - all tools required to build &amp; run the OpenCL and OpenMP Accelerator model examples are available on the root file system (gcc, make, TI OpenCL, TI OpenMP Accelerator Model tooling etc.)</li>
+<li>"Self contained" - no need for an additional server to host the kernel/file system</li>
+<li>With the tftpserver/NFS Server approach, the Ubuntu PC hosting the servers must have a static IP address</li></ul>
+<p><b>Downsides</b>
+</p>
+<ul><li>The Linux distribution is an embedded distribution and is not meant to be used as a development host.
+<ul><li>For example, the only editor available is vi and there are no version control systems such as git</li></ul></li></ul>
+<p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Prerequisites"><span class="tocnumber">1</span> <span class="toctext">Prerequisites</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Preparing_the_USB_flash_drive"><span class="tocnumber">2</span> <span class="toctext">Preparing the USB flash drive</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Create_2_partitions_on_the_USB_flash_drive"><span class="tocnumber">2.1</span> <span class="toctext">Create 2 partitions on the USB flash drive</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Copy_files_to_the_partitions"><span class="tocnumber">2.2</span> <span class="toctext">Copy files to the partitions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Preparing_the_EVM"><span class="tocnumber">3</span> <span class="toctext">Preparing the EVM</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Connecting_to_the_EVM"><span class="tocnumber">3.1</span> <span class="toctext">Connecting to the EVM</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Updating_U-Boot"><span class="tocnumber">3.1.1</span> <span class="toctext">Updating U-Boot</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Update_U-Boot_Environment_variables"><span class="tocnumber">3.2</span> <span class="toctext">Update U-Boot Environment variables</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#For_USB_boot.2Ffile_system"><span class="tocnumber">3.2.1</span> <span class="toctext">For USB boot/file system</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Additional_variables"><span class="tocnumber">3.2.2</span> <span class="toctext">Additional variables</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Boot_Log"><span class="tocnumber">4</span> <span class="toctext">Boot Log</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Reading_kernel_image.2C_device_tree_and_boot_monitor_from_FAT32_partition"><span class="tocnumber">4.1</span> <span class="toctext">Reading kernel image, device tree and boot monitor from FAT32 partition</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#USB_related_snippets_from_kernel_boot_log"><span class="tocnumber">4.2</span> <span class="toctext">USB related snippets from kernel boot log</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Installing_the_HPC_tools"><span class="tocnumber">5</span> <span class="toctext">Installing the HPC tools</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Install_the_packages"><span class="tocnumber">5.1</span> <span class="toctext">Install the packages</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Running_the_Examples"><span class="tocnumber">6</span> <span class="toctext">Running the Examples</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#OpenCL_Example"><span class="tocnumber">6.1</span> <span class="toctext">OpenCL Example</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#OpenMP_Accelerator_Model_Example"><span class="tocnumber">6.2</span> <span class="toctext">OpenMP Accelerator Model Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#Mounting_the_EVM_filesystem"><span class="tocnumber">7</span> <span class="toctext">Mounting the EVM filesystem</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Prerequisites">Prerequisites</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=1" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/tool/EVMK2H">EVMK2H</a>, Revision v3.0 or newer</li>
+<li>USB 3.0 Flash Drive 16GB or larger (USB 3.0 is noticeably faster)</li>
+<li>PC running Ubuntu 12.04 LTS to prepare the EVM &amp; USB flash drive</li>
+<li>MCSDK 3.0.4.18 (for Linux kernel, root files system images, Linux DevKit)</li>
+<li>MCSDK HPC 3.0.1.8 (for OpenCL/OpenMP/OpenMPI packages)</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Preparing_the_USB_flash_drive">Preparing the USB flash drive</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=2" title="Edit section: Preparing the USB flash drive">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Install MCSDK, MCSDK HPC and the Linux Development Kit
+</p>
+<ul><li><a rel="nofollow" class="external text" href="MCSDK_HPC_3-3.html#Install_MCSDK">Steps to install MCSDK</a></li>
+<li><a rel="nofollow" class="external text" href="MCSDK_HPC_3-3.html#Install_MCSDK-HPC">Steps to install MCSDK HPC</a></li>
+<li><a rel="nofollow" class="external text" href="MCSDK_HPC_3-3.html#Install_the_Linux_DevKit">Steps to install the Dev Kit</a></li></ul>
+<h3><span class="mw-headline" id="Create_2_partitions_on_the_USB_flash_drive">Create 2 partitions on the USB flash drive</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=3" title="Edit section: Create 2 partitions on the USB flash drive">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Install gparted on the host
+&lt;source lang="bash"&gt;
+sudo apt-get install gparted
+&lt;/source&gt;
+</p><p><b>Create Partitions</b>
+Insert the USB flash drive into a USB slot. 
+</p><p><span style="position: relative; top: -2px;"><img alt="Warning" src="https://processors.wiki.ti.com/images/c/cb/Warning.png" title="Warning" width="18" height="15" /></span> <b>Warning</b>:  The USB flash drive will be reformatted and all existing content will be erased!
+</p><p>&lt;source lang="bash"&gt;
+sudo gparted
+&lt;/source&gt;
+Choose correct device (/dev/sdX) at the top right corner.   
+</p>
+<div class="block-note"><span class="block-contents"><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> You can use size of the USB drive to ensure you are picking the correct. partition. This example and the commands illustrated use /dev/sdb1 for partition 1 and /dev/sdb2 for partition 2. Replace with the device that corresponds to your USB flash drive.</span></div>
+<p><span style="position: relative; top: -2px;"><img alt="Warning" src="https://processors.wiki.ti.com/images/c/cb/Warning.png" title="Warning" width="18" height="15" /></span> <b>Warning</b>:  Before you proceed, make sure you selected the correct device, otherwise it may format the active hard disk partition of your PC.
+</p><p>Got to top level "Partition" pulldown menu and select Unmount to unmount the device. If there is existing partition, delete the same (Partition -&gt; delete)
+Now Partition and filesystem status shows as unallocated1. 
+</p><p><b>Create partition 1 (fat32) for boot images</b>
+</p>
+<pre>Partition -&gt; new
+New size = 32MiB
+File system = fat32
+label = boot
+click add to add partition
+select the created partition #1 and format it (Partition -&gt; format to).
+select fat32 format2.</pre> 
+<p><b>Create partition 2 (ext4) for file system</b>
+</p>
+<pre>select the unallocated partition
+Partition -&gt; new
+File system = ext4
+label = rootfs
+Keep rest of the fields default
+click add to add partition
+select the created partition #2 and format it (Partition -&gt; format to).
+select ext4 format</pre>
+<p><b>Apply the changes and Quit</b>
+</p>
+<pre>Edit -&gt; Apply All Operations
+GParted -&gt; Quit</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Copy_files_to_the_partitions">Copy files to the partitions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=4" title="Edit section: Copy files to the partitions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Unmount if the devices are automounted
+&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+sudo umount  /dev/sdb1
+sudo umount  /dev/sdb2
+&lt;/source&gt;
+</p><p><br />
+1. Create the mount points if they don't exist:
+&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+sudo mkdir -p /mnt/usb/fat32
+sudo mkdir -p /mnt/usb/ext4
+&lt;/source&gt;
+</p><p><br />
+2. Copy boot monitor, device tree file and kernel to partition #1 (boot). 
+</p><p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+cd [mcsdk_install_dir]/mcsdk_linux_3_00_0x_xx/images
+</p><p>sudo mount -t vfat /dev/sdb1 /mnt/usb/fat32
+sudo cp skern-keystone-evm.bin /mnt/usb/fat32
+sudo cp uImage-k2hk-evm.dtb /mnt/usb/fat32
+sudo cp uImage-keystone-evm.bin /mnt/usb/fat32
+</p><p>ls /mnt/usb/fat32
+skern-keystone-evm.bin  uImage-k2hk-evm.dtb  uImage-keystone-evm.bin
+</p><p>sudo umount /dev/sdb1
+&lt;/source&gt;
+</p><p><br />
+3. Copy root file system to partition #2 (rootfs)
+</p>
+<ul><li>Create a directory to hold the root file system and unpack the root file system</li></ul>
+<p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+mkdir rootfs
+cd rootfs
+tar xvf tisdk-rootfs.tar.gz
+&lt;/source&gt;
+</p><p><br />
+</p>
+<ul><li>Copy the Linux DevKit files into the rootfs. The DevKit provides files required by native compilation on the EVM.</li></ul>
+<p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+cp -r [mcsdk_install_dir]/mcsdk_linux_3_00_0x_xx/linux-devkit/arago-2013.12/sysroots/cortexa15hf-vfp-neon-3.8-oe-linux-gnueabi/* .
+&lt;/source&gt;
+</p><p><br />
+</p>
+<ul><li>Copy the HPC image directory into the root user's home directory. The images will be installed later.</li></ul>
+<p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+cp - r [mcsdk_hpc_install_dir]/mcsdk-hpc_03_00_01_xx/images ./home/root
+&lt;/source&gt;
+</p><p><br />
+</p>
+<ul><li>Copy the rootfs onto the USB flash drive</li></ul>
+<p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+sudo mount -t ext4 /dev/sdb2 /mnt/usb/ext4
+sudo cp -r * /mnt/usb/ext4
+ls /mnt/usb/ext4
+bin  boot  dev  etc  home  init  lib  lost+found  media  mnt  proc  sbin  srv  sys  tmp  usr  var
+$sudo umount /dev/sdb2
+&lt;/source&gt;
+<br />
+</p><p><br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Preparing_the_EVM">Preparing the EVM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=5" title="Edit section: Preparing the EVM">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Connecting_to_the_EVM">Connecting to the EVM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=6" title="Edit section: Connecting to the EVM">edit</a><span class="mw-editsection-bracket">]</span></span></h2><p>
+Follow the instructions outlined in the <a rel="nofollow" class="external text" href="MCSDK_HPC_3-3.html#Install_Terminal_Software_on_PC_for_Serial_Port_Connection">MCSDK HPC Getting Started Guide</a> to connect to the serial port on the EVM. </p><div class="block-note"><span class="block-contents"><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> There are 2 serial ports, one for the SoC and one for the Board Management Controller (BMC) on the EVM. Follow the steps to connect to the SoC.</span></div>
+<p>Once you connect to the SoC, the following prompt is displayed:
+</p><p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+U-Boot 2013.01 (Apr 24 2014 - 02:06:05)
+</p><p>I2C:   ready
+Detected SO-DIMM [18KSF1G72HZ-1G6E2 ]
+DRAM:  Capacity 8 GiB (includes reported below)
+DRAM:  2 GiB
+NAND:  512 MiB
+Net:   TCI6638_EMAC, TCI6638_EMAC1, K2HK_EMAC2, K2HK_EMAC3
+Hit any key to stop autoboot:  0
+TCI6638 EVM #
+&lt;/source&gt;
+</p><p>If the U-Boot version displayed is older than shown below, update U-Boot following the steps in section <a href="#Updating_U-Boot">#Updating U-Boot</a>. 
+&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+U-Boot 2013.01 (Apr 24 2014 - 02:06:05)
+&lt;/source&gt;
+</p>
+<table cellspacing="0" cellpadding="0" border="0" style="background: transparent;"><tbody><tr><td nowrap="nowrap" valign="top"><span style="position: relative; top: -2px;"><img alt="Warning" src="https://processors.wiki.ti.com/images/c/cb/Warning.png" title="Warning" width="18" height="15" /></span> <b>Warning</b>: </td><td valign="top" style="padding-left:0.5em;"> Older versions of U-Boot sometimes fail to detect the USB flash drive after it has been plugged into the USB 3.0 port on the EVM.</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Updating_U-Boot">Updating U-Boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=7" title="Edit section: Updating U-Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Update U-Boot if required by performing the following steps:
+</p>
+<ul><li>Set up a tftp server <a rel="nofollow" class="external text" href="MCSDK_HPC_3-3.html#Install_TFTP_server">following the instructions outlined here</a></li>
+<li>Copy the U-Boot image "u-boot-spi-keystone-evm.gph" located in [mcsdk_install_dir]/mcsdk_linux_3_00_0x_xx/images to the tftp server root directory</li></ul>
+<p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+setenv serverip &lt;ip address of tftp server&gt;
+setenv tftp_root &lt;tftp root directory&gt;
+setenv name_uboot u-boot-spi-keystone-evm.gph
+run get_uboot_net
+run burn_uboot
+&lt;/source&gt;
+</p>
+<div class="block-note"><span class="block-contents"><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> Power cycle the EVM after the U-Boot update</span></div><p>.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Update_U-Boot_Environment_variables">Update U-Boot Environment variables</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=8" title="Edit section: Update U-Boot Environment variables">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="For_USB_boot/file_system"></span><span class="mw-headline" id="For_USB_boot.2Ffile_system">For USB boot/file system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=9" title="Edit section: For USB boot/file system">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Set and save the following U-Boot environment variables to enable boot from USB:
+&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+setenv boot usb
+setenv args_all 'setenv bootargs console=ttyS0,115200n8 rootwait"
+setenv args_usb 'setenv bootargs ${bootargs} rootfstype=ext4 root=/dev/sda2 rw ip=dhcp'
+setenv init_usb 'usb start; run set_fs_none args_all args_usb'
+setenv get_fdt_usb 'fatload usb 0:1 ${addr_fdt} ${name_fdt}'
+setenv get_kern_usb 'fatload usb 0:1 ${addr_kern} ${name_kern}'
+setenv get_mon_usb 'fatload usb 0:1 ${addr_mon} ${name_mon}'
+saveenv
+&lt;/source&gt;
+</p>
+<h3><span class="mw-headline" id="Additional_variables">Additional variables</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=10" title="Edit section: Additional variables">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+setenv mem_reserve 1536M [A larger size can be used when using more than 2GB DIMM]
+saveenv
+&lt;/source&gt;
+</p><p>Typing boot at the U-Boot prompt will boot the EVM from the USB flash drive.
+<br />
+</p><p><br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Boot_Log">Boot Log</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=11" title="Edit section: Boot Log">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span id="Reading_kernel_image,_device_tree_and_boot_monitor_from_FAT32_partition"></span><span class="mw-headline" id="Reading_kernel_image.2C_device_tree_and_boot_monitor_from_FAT32_partition">Reading kernel image, device tree and boot monitor from FAT32 partition</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=12" title="Edit section: Reading kernel image, device tree and boot monitor from FAT32 partition">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>&lt;source lang="bash" enclose="div" header="" footer=""&gt;
+(Re)start USB...
+USB0:   No power optimization available
+Register 2001040 NbrPorts 2
+Starting the controller
+USB XHCI 1.00
+scanning bus 0 for devices... 2 USB Device(s) found
+</p>
+<pre>      scanning usb for storage devices... 1 Storage Device(s) found
+</pre>
+<p>reading uImage-k2hk-evm.dtb
+48300 bytes read in 49 ms (961.9 KiB/s)
+reading skern-keystone-evm.bin
+45056 bytes read in 44 ms (1000 KiB/s)
+reading uImage-keystone-evm.bin
+3818936 bytes read in 1983 ms (1.8 MiB/s)
+</p>
+<ol><li><ol><li>installed monitor, freq [204800000], status 0</li></ol></li></ol>
+<p>&lt;/source&gt;
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="USB_related_snippets_from_kernel_boot_log">USB related snippets from kernel boot log</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=13" title="Edit section: USB related snippets from kernel boot log">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>&lt;source lang="bash" enclose="div" header="" footer=""&gt;
+[   17.195664] xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+[   17.200165] xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+[   17.206877] xhci-hcd xhci-hcd.0.auto: irq 608, io mem 0x02690000
+[   17.211847] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+[   17.217402] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[   17.223305] usb usb1: Product: xHCI Host Controller
+[   17.227294] usb usb1: Manufacturer: Linux 3.10.10 xhci-hcd
+[   17.231781] usb usb1: SerialNumber: xhci-hcd.0.auto
+[   17.236085] hub 1-0:1.0: USB hub found
+[   17.239152] hub 1-0:1.0: 1 port detected
+[   17.242509] xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+[   17.246996] xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+[   17.253316] usb usb2: New USB device found, idVendor=1d6b, idProduct=0003
+[   17.258872] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[   17.264780] usb usb2: Product: xHCI Host Controller
+[   17.268764] usb usb2: Manufacturer: Linux 3.10.10 xhci-hcd
+[   17.273251] usb usb2: SerialNumber: xhci-hcd.0.auto
+[   17.277545] hub 2-0:1.0: USB hub found
+[   17.280612] hub 2-0:1.0: 1 port detected
+[   17.284090] usbcore: registered new interface driver usb-storage
+[   17.289215] mousedev: PS/2 mouse device common for all mice
+[   17.293920] i2c /dev entries driver
+[   17.297246] watchdog 22f0080.wdt: heartbeat 60 sec
+[   17.302598] keystone-crypto 20c0000.crypto: crypto accelerator enabled
+[   17.308191] usbcore: registered new interface driver usbhid
+[   17.312743] usbhid: USB HID core driver
+&lt;/source&gt;
+</p><p><br />
+&lt;source lang="bash" enclose="div" header="" footer=""&gt;
+[   18.108263] usb 2-1: new SuperSpeed USB device number 2 using xhci-hcd
+[   18.124743] usb 2-1: Parent hub missing LPM exit latency info.  Power management will be impacted.
+[   18.132308] usb 2-1: New USB device found, idVendor=154b, idProduct=00b2
+[   18.137794] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[   18.143633] usb 2-1: Product: USB 3.0 FD
+[   18.146837] usb 2-1: Manufacturer: PNY Technologies
+[   18.150831] usb 2-1: SerialNumber: AA1CEE60DC4D40E5BBB6E6E495F073
+[   18.156277] usb-storage 2-1:1.0: USB Mass Storage device detected
+[   18.161378] scsi0&#160;: usb-storage 2-1:1.0
+&lt;/source&gt;
+</p><p><br />
+&lt;source lang="bash" enclose="div" header="" footer=""&gt;
+[   20.110703] scsi 0:0:0:0: Direct-Access     PNY      USB 3.0 FD            PQ: 0 ANSI: 6
+[   20.117900] sd 0:0:0:0: [sda] 245235199 512-byte logical blocks: (125 GB/116 GiB)
+[   20.124060] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[   20.128614] sd 0:0:0:0: [sda] Write Protect is off
+[   20.132769] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[   20.143070]  sda: sda1 sda2
+[   20.146461] sd 0:0:0:0: [sda] Attached SCSI removable disk
+&lt;/source&gt;
+</p><p><br />
+&lt;source lang="bash" enclose="div" header="Mounting root ext4 filesystem from sda2" footer=""&gt;
+[   27.399160] EXT4-fs (sda2): recovery complete
+[   27.404117] EXT4-fs (sda2): mounted filesystem with ordered data mode. Opts: (null)
+[   27.410401] VFS: Mounted root (ext4 filesystem) on device 8:2.
+&lt;/source&gt;
+<br />
+</p>
+<h1><span class="mw-headline" id="Installing_the_HPC_tools">Installing the HPC tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=14" title="Edit section: Installing the HPC tools">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Boot Linux on the EVM and log on as user 'root'. Install the packages in the images directory created earlier.
+</p>
+<h3><span class="mw-headline" id="Install_the_packages">Install the packages</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=15" title="Edit section: Install the packages">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Note: The install_hpc_packages_evm.sh installs packages in an order that satisfies dependencies between packages.
+</p><p>&lt;source lang="bash" enclose="div" &gt;
+cd images
+./install_hpc_packages_evm.sh
+&lt;/source&gt;
+</p><p>After installing the packages reboot the system.
+</p><p>&lt;source lang="bash" enclose="div"  footer=""&gt;
+reboot
+&lt;/source&gt;
+<br />
+</p>
+<h1><span class="mw-headline" id="Running_the_Examples">Running the Examples</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=16" title="Edit section: Running the Examples">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="OpenCL_Example">OpenCL Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=17" title="Edit section: OpenCL Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>&lt;source lang="bash" enclose="div" header="" footer=""&gt;
+cp -r /usr/share/ti/examples/opencl .
+cd opencl/vecadd
+make 
+Compiling main.cpp
+./vecadd 
+DEVICE: TI K2H DSP (8x C66)
+</p><p>Write BufA &#160;: Queue  to Submit: 3 us
+Write BufA &#160;: Submit to Start&#160;: 60 us
+Write BufA &#160;: Start  to End  &#160;: 56 us
+</p><p>Write BufB &#160;: Queue  to Submit: 108 us
+Write BufB &#160;: Submit to Start&#160;: 113 us
+Write BufB &#160;: Start  to End  &#160;: 40 us
+</p><p>Kernel Exec&#160;: Queue  to Submit: 2 us
+Kernel Exec&#160;: Submit to Start&#160;: 5 us
+Kernel Exec&#160;: Start  to End  &#160;: 344 us
+</p><p>Read BufDst&#160;: Queue  to Submit: 341 us
+Read BufDst&#160;: Submit to Start&#160;: 11 us
+Read BufDst&#160;: Start  to End  &#160;: 57 us
+</p><p>Success!
+&lt;/source&gt;
+<br />
+</p>
+<h2><span class="mw-headline" id="OpenMP_Accelerator_Model_Example">OpenMP Accelerator Model Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=18" title="Edit section: OpenMP Accelerator Model Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Due to a defect in the MCSDK HPC 3.0.1.4 ti-openmpacc ipk, the OpenMP Accelerator Model examples are not installed when the ipk is installed. You can scp the examples from [mcsdk_hpc_install_dir]/ti-openmpacc_&lt;version&gt;/openmpacc-examples.
+</p><p>&lt;source lang="bash" enclose="div" header="" footer=""&gt;
+cd openmpacc-examples/vecadd
+make
+arm-linux-gnueabihf-g++ -O3 -c vecadd_main.cpp
+clacc -v -k --hc="-O3 -Wall -Wextra -fopenmp" --tc="-O3" vecadd_main.o vecadd_target.c -o vecadd
+cl6x --openmp:host -pds=1173 -I/usr/lib/gcc/arm-oe-linux-gnueabi/4.7.2/include -I/usr/lib/gcc/arm-oe-linux-gnueabi/4.7.2/include-fixed -I/usr/include vecadd_target.c 
+cl6x --openmp:device -mv6600 -I/usr/share/ti/cgt-c6x/include -I/usr/share/ti/openmpacc/dsp/include -O3 vecadd_target.c 
+clocl -t -v __TI_CLACC_KERNEL.cl vecadd_target.obj 
+arm-linux-gnueabihf-g++ -O3 -Wall -Wextra -fopenmp -c __TI_CLACC_KERNEL.c 
+arm-linux-gnueabihf-gcc -O3 -Wall -Wextra -fopenmp -c vecadd_target.int.c 
+arm-linux-gnueabihf-g++ -O3 -Wall -Wextra -fopenmp vecadd_main.o __TI_CLACC_KERNEL.o vecadd_target.int.o -L/usr/lib -lOpenMPAcc -lOpenCL -locl_util -Wl,-rpath-link,/usr/lib -o vecadd
+./vecadd 
+PASS!
+&lt;/source&gt;
+<br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Mounting_the_EVM_filesystem">Mounting the EVM filesystem</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;section=19" title="Edit section: Mounting the EVM filesystem">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>To easily access the EVM file system, its possible to use <a rel="nofollow" class="external text" href="https://help.ubuntu.com/community/SSHFS">sshfs</a> to mount it on an Ubuntu PC
+&lt;source lang="bash" strict enclose="div" header="" footer=""&gt;
+sudo apt-get install sshfs
+sshfs &lt;evm ip&gt;:&lt;directory to mount&gt; &lt;mount point&gt;
+&lt;/source&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201092207
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.069 seconds
+Real time usage: 0.072 seconds
+Preprocessor visited node count: 173/1000000
+Preprocessor generated node count: 353/1000000
+Post‐expand include size: 2397/2097152 bytes
+Template argument size: 1713/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 515/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    5.786      1 -total
+ 35.28%    2.041      3 Template:Warning
+ 33.29%    1.926      3 Template:Note
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:36188-0!canonical and timestamp 20201201092207 and revision id 198483
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>EVMK2H Booting from USB Flash Drive</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>EVMK2H Booting from USB Flash Drive</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>EVMK2H Booting from USB Flash Drive</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>EVMK2H Booting from USB Flash Drive</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>EVMK2H Booting from USB Flash Drive</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>EVMK2H Booting from USB Flash Drive</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>EVMK2H Booting from USB Flash Drive</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>EVMK2H Booting from USB Flash Drive</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>EVMK2H Booting from USB Flash Drive</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;oldid=198483">https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;oldid=198483</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Keystone_II.html" title="Category:Keystone II">Keystone II</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=EVMK2H+Booting+from+USB+Flash+Drive" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="EVMK2H_Booting_from_USB_Flash_Drive.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="EVMK2H_Booting_from_USB_Flash_Drive.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/EVMK2H_Booting_from_USB_Flash_Drive.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/EVMK2H_Booting_from_USB_Flash_Drive.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;oldid=198483" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=EVMK2H_Booting_from_USB_Flash_Drive&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 23 April 2015, at 14:49.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.069","walltime":"0.072","ppvisitednodes":{"value":173,"limit":1000000},"ppgeneratednodes":{"value":353,"limit":1000000},"postexpandincludesize":{"value":2397,"limit":2097152},"templateargumentsize":{"value":1713,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":515,"limit":5000000},"timingprofile":["100.00%    5.786      1 -total"," 35.28%    2.041      3 Template:Warning"," 33.29%    1.926      3 Template:Note"]},"cachereport":{"timestamp":"20201201092207","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":296});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/EVMK2H_Booting_from_USB_Flash_Drive by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:16:56 GMT -->
+</html>

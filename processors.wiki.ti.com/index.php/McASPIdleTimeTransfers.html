@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/McASPIdleTimeTransfers by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:10:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>McASPIdleTimeTransfers - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"McASPIdleTimeTransfers","wgTitle":"McASPIdleTimeTransfers","wgCurRevisionId":4880,"wgRevisionId":4880,"wgArticleId":926,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["PSP","DM6437","DM648","DSPBIOS"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"McASPIdleTimeTransfers","wgRelevantArticleId":926,"wgRequestId":"fca793ef4edc6e9c16ac9efd","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-McASPIdleTimeTransfers rootpage-McASPIdleTimeTransfers skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">McASPIdleTimeTransfers</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This writeup discusses the behavior of PSPs McASP driver (based on DSP/BIOSTM) when applications cannot meet real-time needs of audio. This writeup also discusses configuration of McASP driver in these circumstances to avoid un-desired side effects. 
+</p><p>The notes below is applicable for (DSP/BIOSTM) PSP provide on following SoC 
+</p>
+<ul><li>DRA44X</li>
+<li>DRA41X</li>
+<li>DM6437</li>
+<li>DM648</li></ul>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#What_is_IDLE_time_and_IDLE_time_transfers"><span class="tocnumber">1</span> <span class="toctext"><b>What is IDLE time and IDLE time transfers</b></span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Configuring_loopJobBuffer_and_loopJobLength"><span class="tocnumber">2</span> <span class="toctext"><b>Configuring loopJobBuffer and loopJobLength</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Time_Lines.2C_Configurability_and_Need"><span class="tocnumber">2.1</span> <span class="toctext">Time Lines, Configurability and Need</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#Channel_create_time"><span class="tocnumber">2.1.1</span> <span class="toctext">Channel create time</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Run_Time"><span class="tocnumber">2.1.2</span> <span class="toctext">Run Time</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Need"><span class="tocnumber">2.1.3</span> <span class="toctext">Need</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Configurability"><span class="tocnumber">2.1.4</span> <span class="toctext">Configurability</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Side_Effects"><span class="tocnumber">2.2</span> <span class="toctext">Side Effects</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Swapped_Channels_.E2.80.93_Static_.28Swapped_once_and_stay_that_way.29"><span class="tocnumber">2.2.1</span> <span class="toctext">Swapped Channels &#8211; Static (Swapped once and stay that way)</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Swapped_Channels_.E2.80.93_Run_Time_.28Swaps_occasionally_or_after_some_time.29"><span class="tocnumber">2.2.2</span> <span class="toctext">Swapped Channels &#8211; Run Time (Swaps occasionally or after some time)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Computing_Length_.28loopJobLength.29"><span class="tocnumber">2.3</span> <span class="toctext">Computing Length (loopJobLength)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-12"><a href="#Single_serializer_with_single_slot"><span class="tocnumber">2.3.1</span> <span class="toctext">Single serializer with single slot</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Multi_serializers_1_slot_each"><span class="tocnumber">2.3.2</span> <span class="toctext">Multi serializers 1 slot each</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Single_serializer_with_multiple_slots"><span class="tocnumber">2.3.3</span> <span class="toctext">Single serializer with multiple slots</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Multiple_serializers_with_multiple_slots_in_each"><span class="tocnumber">2.3.4</span> <span class="toctext">Multiple serializers with multiple slots in each</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="What_is_IDLE_time_and_IDLE_time_transfers"><b>What is IDLE time and IDLE time transfers</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=1" title="Edit section: What is IDLE time and IDLE time transfers">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>McASP primarily interfaces to a DAC / ADC, these DAC/ADC would require continuous streams of clock (fixed period) and data. In order to maintain this constant stream, applications will have to provide data to be transmitted (or buffers to store the received data, in case of a receiver) in an un-interrupted context. 
+</p><p>Typically an application would require to process audio data (raw data) before data can be sent out to a DAC. This processing of data or system loads could limit applications from meeting the real time needs of McASP. (Example If DAC &amp; McASP is configured to operate Bit Clock at 3MHz, McASP would require 2929.6875 Kilobits per second. (~366 Kilobytes). ) 
+</p><p>This could result in glitches/noise/re-programming of DAC/ADC, etc&#8230;, in this writeup these breaks in audio stream are referred as <b>IDLE time</b>. 
+</p><p>In these conditions, McASP driver would send out know pattern of data. (could be NULL tone), referred as <b>IDLE time transfer</b> in this writeup . (In case of a receiver, the received data would be stored in buffers) 
+</p><p>The data to be transmitted is referred as <b>loopJobBuffer</b> and its length is referred as <b>loopJobLength</b>. In case of a receiver, the buffer that would used to hold the received data is referred as <b>loopJobBuffer</b> and its length as <b>loopJobLength</b>. 
+</p>
+<h2><span class="mw-headline" id="Configuring_loopJobBuffer_and_loopJobLength"><b>Configuring loopJobBuffer and loopJobLength</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=2" title="Edit section: Configuring loopJobBuffer and loopJobLength">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>McASP would use driver internal buffer as loopJobBuffer and its length as 4 bytes in case TDM/DSP and 8 in case of DIT mode of operation. 
+</p><p>Application could configure the loopJobBuffer and its length, during creation of McASP driver. McASP would use the specified buffer and its length for IDLE time transfers. 
+</p><p>The minimum number of bytes used for IDLE Time transfer is defined by loopJobLength. 
+</p><p>Assume that specified length is 4 bytes and application could not supply data for 40 bytes time, the EDMA would be programmed to move 4 bytes (to or from loopJobBuffer) and repeat this for 10 times. 
+</p>
+<h3><span id="Time_Lines,_Configurability_and_Need"></span><span class="mw-headline" id="Time_Lines.2C_Configurability_and_Need">Time Lines, Configurability and Need</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=3" title="Edit section: Time Lines, Configurability and Need">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<blockquote style="MARGIN-RIGHT: 0px" dir="ltr">
+<h4><span class="mw-headline" id="Channel_create_time">Channel create time</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=4" title="Edit section: Channel create time">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<blockquote style="MARGIN-RIGHT: 0px" dir="ltr">
+<p>On creation of McASP device driver, the High Clock, Bit Clock and Frame Sync signals are configured. On edge of the Frame Sync the EDMA events are generated. With every Frame Sync either data is to be written/read from, failing which under run/overrun error conditions are reported. The only way to recover from this error condition would be to re-set the peripheral. 
+</p><p>The McASP driver configures the EDMA to service the events raised by McASP before configuring the peripheral. The data is moved from/into the loopJobBuffer. 
+</p><p><strong><font color="#ff0000">On channel creation the IDLE transfer is started, which uses loopJobBuffer</font></strong>. 
+</p><p>
+(In transmit IO Channel the contents of loopJobBuffer is transmitted and in receive channel the read contents are stored in loopJobBuffer) </p></blockquote>
+<h4><span class="mw-headline" id="Run_Time">Run Time</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=5" title="Edit section: Run Time">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<blockquote style="MARGIN-RIGHT: 0px" dir="ltr"><p>
+In scenarios where the applications have queued up enough data/buffer to be transmitted / received into, the loopJobBuffer would not be employed. McASP would transmit / receive into application supplied buffer, <strong><font color="#ff0000">on completion of last byte of data, if there are no more IO requests from the applications, the loopJobBuffer would be employed</font></strong>. </p></blockquote>
+<h4><span class="mw-headline" id="Need">Need</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=6" title="Edit section: Need">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<blockquote style="MARGIN-RIGHT: 0px" dir="ltr">
+<p>McASP driver allocates loopJobBuffer for scenario where 1 serializer with one slot is used and wordwidth is assumed to be 32 bit. Depending on the DAC/ADC employed, application might require to specify loopJobBuffer of different length. The sections below discuss in detail the procedure to calculate length of loopJobBuffer and side effects of wrong configuration. 
+</p><p>
+McASP transmits 0x00000000 as idle time data (in case of reception the data is received into loopJobBuffer), application that would require to send different data during idle time would configure McASP to use application specific data patterns. </p></blockquote>
+<p><br />
+</p>
+<h4><span class="mw-headline" id="Configurability">Configurability</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=7" title="Edit section: Configurability">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<blockquote style="MARGIN-RIGHT: 0px" dir="ltr">
+<p>The applications could choose to specify the buffer to be used as loopJobBuffer. This could be configured during creation of IO channel. Use channel creation parameter <font color="#0000ff"> <i><b>PSP_mcaspChanParams.userLoopJobBuffer</b></i> <font color="#000000">and </font> <i><b>PSP_mcaspChanParams.userLoopJobLength</b></i> </font>. Please refer McASP device driver user guide for details (mcasp_bios_driver_users_guide.doc would be delivered as part of PSP package). 
+</p><p><b>Configurable parameters</b> 
+</p>
+<ul><li>Buffer that should be used as loopJobBuffer&#160;</li>
+<li>Length of loopJobBuffer&#160;</li>
+<li>Separate loopJobBuffer, length for receive section and transmit section.&#160;</li>
+<li>In case of transmitters, the pattern to be sent out during IDLE Time</li></ul>
+</blockquote></blockquote>
+<h3><span class="mw-headline" id="Side_Effects">Side Effects</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=8" title="Edit section: Side Effects">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Incorrect configurations of loopJobBuffer could lead undesired results, the sections below capture the mis-configurations that resulted different behavior. Please note that following points assume that all other configurations were correct and this list of undesired results is not comprehensive. 
+</p>
+<blockquote style="MARGIN-RIGHT: 0px" dir="ltr">
+<h4><span id="Swapped_Channels_–_Static_(Swapped_once_and_stay_that_way)"></span><span class="mw-headline" id="Swapped_Channels_.E2.80.93_Static_.28Swapped_once_and_stay_that_way.29">Swapped Channels &#8211; Static (Swapped once and stay that way)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=9" title="Edit section: Swapped Channels – Static (Swapped once and stay that way)">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Assume McASP is configured to use one serializer with two slots and wordwidth is 32 bits. Assuming this serializer is interfaced with a DAC which interprets first slot as Left Channel &amp; Second Slot as Right Channels further application supplied data would contain data for left channel followed by data for right channel. 
+</p><p>If the applications were use McASP default loopJobBuffer, on creation the loopJobBuffer is deployed and on a transmit request from the application, McASP would program the EDMA to move the application supplied data to serializer. 
+</p><p>McASP driver can switch to application supplied buffer only on completion of length of loopJobBuffer (4 bytes in this case). Since the length of the slot is 4 bytes 
+</p><p>Channels would not be swapped when the loopJobBuffer is used even times and swapped when loopJobBuffer is used odd times. 
+</p><p>If loopJobBuffer is used ODD number of times and applications could provide sufficient data, the loopJobBuffer would never be scheduled. This way the channels are swapped once and remain swapped. 
+</p><p><b>If the loopJobBuffer was configured as 8 bytes, this scenario would never occur.</b>
+</p>
+<h4><span id="Swapped_Channels_–_Run_Time_(Swaps_occasionally_or_after_some_time)"></span><span class="mw-headline" id="Swapped_Channels_.E2.80.93_Run_Time_.28Swaps_occasionally_or_after_some_time.29">Swapped Channels &#8211; Run Time (Swaps occasionally or after some time)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=10" title="Edit section: Swapped Channels – Run Time (Swaps occasionally or after some time)">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In the above example, if applications could not meet the real-time needs of McASP loopJobBuffer is scheduled. In a situation where application would randomly / periodically miss the real time needs, there is possibility of channels being swapped. 
+</p><p><b>If the loopJobBuffer was configured as 8 bytes, this scenario would never occur.</b> 
+</p>
+</blockquote>
+<h3><span id="Computing_Length_(loopJobLength)"></span><span class="mw-headline" id="Computing_Length_.28loopJobLength.29">Computing Length (loopJobLength)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=11" title="Edit section: Computing Length (loopJobLength)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In general the loopJobBuffer length should be long enough to satisfy all enabled slots in a serializer and all serializers. Computing the length is described under following sections. 
+</p>
+<blockquote style="MARGIN-RIGHT: 0px" dir="ltr">
+<h4><span class="mw-headline" id="Single_serializer_with_single_slot">Single serializer with single slot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=12" title="Edit section: Single serializer with single slot">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Consider a scenario where the word length is 3 byte and default loopJobLength is used (i.e. 4 bytes). When application fails to meet the needs of McASP, loopJobBuffer is used. This would transmit data for 1 slot and 1st byte of 2nd slot. The net effect could be corrupted audio (or noise). By specifying loopJobBuffer length as 3 bytes, we ensure that loopJobBuffer completes on word boundary. 
+</p><p><b>Recommended loopJobBuffer length is Configured Word Width</b> 
+</p>
+<h4><span class="mw-headline" id="Multi_serializers_1_slot_each">Multi serializers 1 slot each</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=13" title="Edit section: Multi serializers 1 slot each">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Consider a scenario where word width is 4 bytes and 3 serializers are used. When application fails to meet the needs of McASP, loopJobBuffer is used. This would transmit data for first two serializers. At this point, if applications was to request transmit, the data of serializer 1 would be sent out on serializer 3, resulting in swapped channels. 
+</p><p>By specifying loopJobBuffer length as 12 bytes, we ensure that we always begin with first serializer. 
+</p><p><b>Recommended loopJobBuffer length is Product of (Configured Word Width * Number of Serializers Used)</b> 
+</p><p><br />
+</p>
+<h4><span class="mw-headline" id="Single_serializer_with_multiple_slots">Single serializer with multiple slots</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=14" title="Edit section: Single serializer with multiple slots">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Consider a scenario where word width is 4 bytes and 3 slots are used. When application fails to meet the needs of McASP, loopJobBuffer is used. This would transmit data for first two slots. At this point if applications was to requests transmit, the data of slot1 would be sent out on slot 3, resulting in swapped channels. By specifying loopJobBuffer length as 12 bytes, we ensure that we always begin with first slot 1. 
+</p><p><b>Recommended loopJobBuffer length is Product of (Configured Word Width * Number of Slots Used)</b> 
+</p>
+<h4><span class="mw-headline" id="Multiple_serializers_with_multiple_slots_in_each">Multiple serializers with multiple slots in each</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit&amp;section=15" title="Edit section: Multiple serializers with multiple slots in each">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Consider a scenario where word width is 4 bytes, 2 slots and 2 serializers are used. When application fails to meet the needs of McASP, loopJobBuffer is used. This would transmit data for first slot of first serializer. At this point if applications was to request transmit, the data of slot1-serializer1 would be sent out on slot 1 - serializer2, resulting in swapped channels. 
+</p><p>By specifying loopJobBuffer length as 16 (4*2*2) bytes, we ensure that we always begin with first slot 1 of first serializer. 
+</p>
+<p><b>Recommended loopJobBuffer length is Product of (Configured Word Width * Number of Slots Used * Number of Serializers Used)</b> </p></blockquote>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130051522
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.029 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 70/1000000
+Preprocessor generated node count: 86/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:926-0!canonical and timestamp 20201130051522 and revision id 4880
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>McASPIdleTimeTransfers</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>McASPIdleTimeTransfers</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>McASPIdleTimeTransfers</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>McASPIdleTimeTransfers</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>McASPIdleTimeTransfers</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>McASPIdleTimeTransfers</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>McASPIdleTimeTransfers</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>McASPIdleTimeTransfers</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>McASPIdleTimeTransfers</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;oldid=4880">https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;oldid=4880</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_PSP.html" title="Category:PSP">PSP</a></li><li><a href="Category_DM6437.html" title="Category:DM6437">DM6437</a></li><li><a href="Category_DM648.html" title="Category:DM648">DM648</a></li><li><a href="Category_DSPBIOS.html" title="Category:DSPBIOS">DSPBIOS</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=McASPIdleTimeTransfers" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="McASPIdleTimeTransfers.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:McASPIdleTimeTransfers&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="McASPIdleTimeTransfers.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/McASPIdleTimeTransfers.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/McASPIdleTimeTransfers.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;oldid=4880" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=McASPIdleTimeTransfers&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 14 August 2008, at 04:31.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.029","walltime":"0.030","ppvisitednodes":{"value":70,"limit":1000000},"ppgeneratednodes":{"value":86,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130051522","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":225});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/McASPIdleTimeTransfers by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:10:16 GMT -->
+</html>

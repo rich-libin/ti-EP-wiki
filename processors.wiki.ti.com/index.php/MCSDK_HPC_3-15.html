@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/MCSDK_HPC_3.x_MPI_over_SRIO by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:42:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>MCSDK HPC 3.x MPI over SRIO - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"MCSDK_HPC_3.x_MPI_over_SRIO","wgTitle":"MCSDK HPC 3.x MPI over SRIO","wgCurRevisionId":206746,"wgRevisionId":206746,"wgArticleId":33775,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"MCSDK_HPC_3.x_MPI_over_SRIO","wgRelevantArticleId":33775,"wgRequestId":"a30f4f9cc465646d9ef87b95","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","jquery.makeCollapsible","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-MCSDK_HPC_3_x_MPI_over_SRIO rootpage-MCSDK_HPC_3_x_MPI_over_SRIO skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">MCSDK HPC 3.x MPI over SRIO</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a>
+</p><p><br /><font size="5"><b>Open MPI over SRIO</b><br /></font><br /><font size="5"><b>Version 1.0.0.21</b> <br /></font><br /><font size="5"><b>User Guide</b></font> <br /><br />
+</p><p><i>Last updated: 09/18/2015</i>
+</p>
+<hr />
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Terminology"><span class="tocnumber">1.1</span> <span class="toctext">Terminology</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Topology"><span class="tocnumber">1.2</span> <span class="toctext">Topology</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Open_MPI_over_SRIO"><span class="tocnumber">2</span> <span class="toctext">Open MPI over SRIO</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Setup"><span class="tocnumber">2.1</span> <span class="toctext">Setup</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#Boot_time"><span class="tocnumber">2.1.1</span> <span class="toctext">Boot time</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Before_running_MPI_.28one_time.29"><span class="tocnumber">2.1.2</span> <span class="toctext">Before running MPI (one time)</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#In_MPI_run-time"><span class="tocnumber">2.1.3</span> <span class="toctext">In MPI run-time</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#Testing_MPI_over_SRIO"><span class="tocnumber">2.2</span> <span class="toctext">Testing MPI over SRIO</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Checklist_before_Test"><span class="tocnumber">2.2.1</span> <span class="toctext">Checklist before Test</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Build_the_Nbody_example"><span class="tocnumber">2.2.2</span> <span class="toctext">Build the Nbody example</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Run_the_test"><span class="tocnumber">2.2.3</span> <span class="toctext">Run the test</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Some_MPI_SRIO_BTL_internal_details_.28ti_Open_MPI_1.0.0.21.29"><span class="tocnumber">3</span> <span class="toctext">Some MPI SRIO BTL internal details (ti_Open MPI_1.0.0.21)</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Additional_utilities"><span class="tocnumber">4</span> <span class="toctext">Additional utilities</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Establishing_any_to_any_connectivity_with_SRIO_fabric_using_packet_forwarding"><span class="tocnumber">5</span> <span class="toctext">Establishing any to any connectivity with SRIO fabric using packet forwarding</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="#Type_11_Message_Routing"><span class="tocnumber">5.1</span> <span class="toctext">Type 11 Message Routing</span></a>
+<ul>
+<li class="toclevel-3 tocsection-17"><a href="#Topology_Creation"><span class="tocnumber">5.1.1</span> <span class="toctext">Topology Creation</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Routing_Table_Generation"><span class="tocnumber">5.1.2</span> <span class="toctext">Routing Table Generation</span></a>
+<ul>
+<li class="toclevel-4 tocsection-19"><a href="#Define_Cluster"><span class="tocnumber">5.1.2.1</span> <span class="toctext">Define Cluster</span></a></li>
+<li class="toclevel-4 tocsection-20"><a href="#Routing_Table_Algorithm"><span class="tocnumber">5.1.2.2</span> <span class="toctext">Routing Table Algorithm</span></a>
+<ul>
+<li class="toclevel-5 tocsection-21"><a href="#Finding_Distances_between_any_two_cartridges"><span class="tocnumber">5.1.2.2.1</span> <span class="toctext">Finding Distances between any two cartridges</span></a></li>
+<li class="toclevel-5 tocsection-22"><a href="#Generate_Routing_Table_entries"><span class="tocnumber">5.1.2.2.2</span> <span class="toctext">Generate Routing Table entries</span></a></li>
+<li class="toclevel-5 tocsection-23"><a href="#Return_value"><span class="tocnumber">5.1.2.2.3</span> <span class="toctext">Return value</span></a></li>
+</ul>
+</li>
+<li class="toclevel-4 tocsection-24"><a href="#Current_Routing_Algorithm_Characteristics"><span class="tocnumber">5.1.2.3</span> <span class="toctext">Current Routing Algorithm Characteristics</span></a></li>
+<li class="toclevel-4 tocsection-25"><a href="#Alternate_Routing_Algorithms"><span class="tocnumber">5.1.2.4</span> <span class="toctext">Alternate Routing Algorithms</span></a>
+<ul>
+<li class="toclevel-5 tocsection-26"><a href="#Optimized_for_Entries"><span class="tocnumber">5.1.2.4.1</span> <span class="toctext">Optimized for Entries</span></a></li>
+<li class="toclevel-5 tocsection-27"><a href="#X-Y_Algorithm"><span class="tocnumber">5.1.2.4.2</span> <span class="toctext">X-Y Algorithm</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-28"><a href="#Configuring_nodes"><span class="tocnumber">5.1.3</span> <span class="toctext">Configuring nodes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-29"><a href="#Routing_Tables_in_Action"><span class="tocnumber">5.2</span> <span class="toctext">Routing Tables in Action</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-30"><a href="#Useful_SRIO_utilities"><span class="tocnumber">6</span> <span class="toctext">Useful SRIO utilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-31"><a href="#Building_the_utilities"><span class="tocnumber">6.1</span> <span class="toctext">Building the utilities</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Topology_Json_to_Bin_file_creation"><span class="tocnumber">6.2</span> <span class="toctext">Topology Json to Bin file creation</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Routing_Table_Generation_Testing"><span class="tocnumber">6.3</span> <span class="toctext">Routing Table Generation Testing</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Packet_Forwarding_Configuration"><span class="tocnumber">6.4</span> <span class="toctext">Packet Forwarding Configuration</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-35"><a href="#Linux_Kernel.2C_U-boot_and_DTS_changes"><span class="tocnumber">7</span> <span class="toctext">Linux Kernel, U-boot  and DTS changes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-36"><a href="#Building_the_kernel_for_SRIO"><span class="tocnumber">7.1</span> <span class="toctext">Building the kernel for SRIO</span></a>
+<ul>
+<li class="toclevel-3 tocsection-37"><a href="#Clone_Linux_Kernel"><span class="tocnumber">7.1.1</span> <span class="toctext">Clone Linux Kernel</span></a></li>
+<li class="toclevel-3 tocsection-38"><a href="#Build_Linux_Kernel"><span class="tocnumber">7.1.2</span> <span class="toctext">Build Linux Kernel</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-39"><a href="#Device_Tree_Modifications_for_SRIO"><span class="tocnumber">7.2</span> <span class="toctext">Device Tree Modifications for SRIO</span></a>
+<ul>
+<li class="toclevel-3 tocsection-40"><a href="#Enable_SRIO_at_bootup"><span class="tocnumber">7.2.1</span> <span class="toctext">Enable SRIO at bootup</span></a>
+<ul>
+<li class="toclevel-4 tocsection-41"><a href="#Configuring_SRIO_ports"><span class="tocnumber">7.2.1.1</span> <span class="toctext">Configuring SRIO ports</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-42"><a href="#For_enabling_UIO"><span class="tocnumber">7.2.2</span> <span class="toctext">For enabling UIO</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-43"><a href="#Uboot_Configuration_required_for_SRIO"><span class="tocnumber">7.3</span> <span class="toctext">Uboot Configuration required for SRIO</span></a>
+<ul>
+<li class="toclevel-3 tocsection-44"><a href="#Set_SRIO_specific_uboot_args_for_every_node"><span class="tocnumber">7.3.1</span> <span class="toctext">Set SRIO specific uboot args for every node</span></a></li>
+<li class="toclevel-3 tocsection-45"><a href="#Point_to_the_newly_built_SRIO_kernel_and_device_tree_file"><span class="tocnumber">7.3.2</span> <span class="toctext">Point to the newly built SRIO kernel and device tree file</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-46"><a href="#Known_Issues_.26_Limitations"><span class="tocnumber">8</span> <span class="toctext">Known Issues &amp; Limitations</span></a></li>
+<li class="toclevel-1 tocsection-47"><a href="#FAQ"><span class="tocnumber">9</span> <span class="toctext">FAQ</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The RapidIO architecture is a high-performance packet-switched, interconnect technology. RapidIO supports both messaging and read/write semantics. RapidIO fabrics guarantee in-order packet delivery, enabling power- and area- efficient protocol implementation in hardware. Please refer to: <a rel="nofollow" class="external autonumber" href="http://en.wikipedia.org/wiki/RapidIO">[1]</a>
+</p>
+<h2><span class="mw-headline" id="Terminology">Terminology</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=2" title="Edit section: Terminology">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following terminology is being used in this page
+</p>
+<ul><li><b>Link Partner</b>: One end of a RapidIO link.</li>
+<li><b>Endpoint</b>: A device that can originate and/or terminate RapidIO packets.</li>
+<li><b>Processing Element</b>: A device which has at least one RapidIO port</li>
+<li><b>Switch</b>: A device that can route RapidIO packets.</li>
+<li><b>Node</b>: A K2H device.</li>
+<li><b>Cartridge</b>: A group of interconnected nodes.</li>
+<li><b>Topology</b>: A group of nodes/cartridges connected via SRIO in a particular fashion.</li>
+<li><b>Cluster</b>: A subset of nodes within the topology between which SRIO communication takes place</li></ul>
+<h2><span class="mw-headline" id="Topology">Topology</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=3" title="Edit section: Topology">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br />
+A Topology is a set of nodes connected via SRIO in a particular manner.
+In some cases, all the nodes in a topology could be connected to a switch. In some other cases there may be no switch at all. In the latter, the nodes may be connected to each other through their SRIO ports in some fashion which. It could take up the form of a ring, 1-D torus, 2-D torus etc.
+</p><p>Below are a few examples of some topologies.
+</p><p><br />
+<a href="File_All_Topologies.html" class="image" title="All Topologies.png"><img alt="All Topologies.png" src="https://processors.wiki.ti.com/images/d/df/All_Topologies.png" width="1262" height="812" /></a>
+<br />
+</p><p><br />
+In non-switch topologies, where there may not be a direct SRIO link between two nodes in the topology, SRIO communication is possible if the intermediate nodes in the path (between source &amp; destination node) does forwarding of the packets bound to to the source and destination nodes back and forth. This feature is called 'packet forwarding' and is detailed in another section <a rel="nofollow" class="external autonumber" href="MCSDK_HPC_3-15.html#Packet_Forwarding">[2]</a>
+</p><p>A topology could be represented in a readable JSON file format which details the cartridges , nodes and the SRIO connections between them. Representing a topology in this manner would help generate routing algorithms to facilitate SRIO communication between nodes. More details with an example can be found in section <a rel="nofollow" class="external autonumber" href="http://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO#Topology_Creation">[3]</a>
+</p>
+<h1><span class="mw-headline" id="Open_MPI_over_SRIO">Open MPI over SRIO</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=4" title="Edit section: Open MPI over SRIO">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Texas Instruments ti-Open MPI (based on Open MPI 1.7.1) includes SRIO BTL based on SRIO DIO transport, using Linux rio_mport device driver.
+</p><p>Here are the steps to install and test the same.
+</p>
+<h2><span class="mw-headline" id="Setup">Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=5" title="Edit section: Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br />
+The setup can be divided in to two parts.
+<br />
+</p>
+<h3><span class="mw-headline" id="Boot_time">Boot time</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=6" title="Edit section: Boot time">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Boot all nodes in the cluster simultaneously or in quick succession(a few seconds in apart). Please make sure all the relevant mports have come up after Kernel is b.i.e please check if /dev/rio_mport&lt;n&gt; where n=0,1,2,3, depending on what SRIO ports are actually connected to the adjacent node. To ensure successful registration of mports, please make sure to boot all the cluster nodes in succession.(a few seconds apart). Please note that large delays between boot up of nodes could lead to ports not being registered at boot up and srio initialization might fail. If all the rio_mports have not appeared (for every SRIO port physically connected to the adjacent node), some error happened at the booting, whose clues may lie in the boot log (use dmesg command to analyze). MPI cannot run if all mports have not appeared correctly.
+</p>
+<h3><span id="Before_running_MPI_(one_time)"></span><span class="mw-headline" id="Before_running_MPI_.28one_time.29">Before running MPI (one time)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=7" title="Edit section: Before running MPI (one time)">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Open MPI <b>specific</b> for TI K2H chips can be obtained from PPA using following command (please note that same package is obtained and installed as part of keystone-hpc package installation):
+</p>
+<pre> sudo apt-get install ti-Open MPI
+</pre>
+<p>After this step, one additional, manual step is required (should be performed ONE time by HW vendor).
+Hardware defined connectivity need to be described by special JSON file (as defined in below sections) and compiled (ONE time) to <b>srio_topology.bin</b>.A sample json file is presented here <a href="File_SRIO_evm.json.html" title="File:SRIO evm.json.zip">File:SRIO evm.json.zip</a>
+This is a netlist of SRIO links, used by routing algorithm to program K2H fabric. It needs to be compiled into binary form using topologyJson2bin utility(installed as a part of keystone-hpc in to /usr/bin/) . More details on this step could be found at the section <a rel="nofollow" class="external autonumber" href="MCSDK_HPC_3-15.html#Topology_Creation">[4]</a>.
+</p>
+<pre> topologyJson2bin &lt;topology-json-file&gt;  srio_topology.bin
+</pre>
+<p>MPI run-time is using K2H hostname (standard Linux hostname) to indicate processing node, so translation between hostname and physical location in SRIO network is required.
+At the moment, this is done using static translation table: srio_hosts file is a text file which maps the node IDs to host names in the system. Every node in the topology is represented as
+</p>
+<pre>&lt;cartridge-id&gt; &lt;node-number&gt; &lt;hostname&gt;
+</pre>
+<p>The known hosts file needs to be named <b>srio_hosts</b>.
+It is common across all nodes and need to be created only once by the user.
+First number in row indicates cartridge number, second number indicates node on that cartridge, third string indicates hostname. Cartridge number and node number correspond to the nomenclature used in topology file (JSON file).
+For example, for 8 nodes, the entries in the srio_hosts file will look like below.<br />
+</p>
+<pre> 1 1 c1n1
+ 1 2 c1n2
+ 1 3 c1n3
+ 1 4 c1n4
+ 4 1 c4n1
+ 4 2 c4n2
+ 4 3 c4n3
+ 4 4 c4n4
+</pre>
+<p>A sample srio_hosts file can be found at <a href="File_Srio_hosts.html" title="File:Srio hosts.zip">File:Srio hosts.zip</a>
+After creating the above two files, move them to the <b>/etc/cluster</b> folder of the K2H Linux, for use by MPI.
+</p>
+<pre> cp srio_hosts /etc/cluster
+ cp srio_topology.bin /etc/cluster
+</pre>
+<h3><span class="mw-headline" id="In_MPI_run-time">In MPI run-time</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=8" title="Edit section: In MPI run-time">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>MPI is using common framework (transport independent) to fork processes on all nodes. It is based on SSH (over GigE network).
+Information with all run-time parameters are exchanged (from master node) with participating nodes - they include number of processes and list of hosts involved.
+This is actually list of host names matching entries in /etc/hosts (or their IP addresses). In order to translate this to SRIO ID, we need information about physical location.
+Entries in file /etc/cluster/srio_hosts are used for this purpose (as mentioned earlier).
+Packet forwarding tables are initialized at this point - please note that <b>only packet forwarding tables in MPI communication world nodes are programmed!!!</b>
+This means that it is not possible to use disjoined nodes (graph has to be connected) in MPI communication world - since routing between these nodes is not guaranteed (may depend on previous state).
+</p>
+<h2><span class="mw-headline" id="Testing_MPI_over_SRIO">Testing MPI over SRIO</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=9" title="Edit section: Testing MPI over SRIO">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To test the MPI, run the <b>nbody</b> example which comes along with the HPC release.
+</p>
+<h3><span class="mw-headline" id="Checklist_before_Test">Checklist before Test</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=10" title="Edit section: Checklist before Test">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Please ensure the following before running MPI tests
+</p>
+<ul><li><b>Well Connected Nodes</b>: Nodes participating in the test need to be connected, i.e. disconnected islands of nodes are not allowed (otherwise programming of packet forwarding tables is not possible).</li>
+<li><b>Mports</b>: Please make sure all the relevant mports have come up.i.e please check if /dev/rio_mport&lt;n&gt; where n=0,1,2,3, depending on what SRIO ports are actually connected to the adjacent node. To ensure successful registration of mports, please make sure to boot all the cluster nodes in succession.(a few seconds apart). Please note that large delays between boot up of nodes could lead to ports not being registered at boot up and srio initialization might fail. If all the rio_mports have not appeared (for every SRIO port physically connected to the adjacent node), some error happened at the booting, whose clues may lie in the boot log (use dmesg command to analyze)</li>
+<li><b>srio_hosts &amp; srio_topology.bin</b>: As explained in the setup section<a rel="nofollow" class="external autonumber" href="MCSDK_HPC_3-15.html#Setup">[5]</a>, please ensure these files are present in /etc/cluster directory of ALL the participating nodes.</li></ul>
+<p>A few steps such as the extraction of list of participating cartridges (from hostnames), SRIO ID assignment and programming of K2H packet forwarding tables are incorporated into MPI run-time so that no manual steps are required by the user.
+</p>
+<h3><span class="mw-headline" id="Build_the_Nbody_example">Build the Nbody example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=11" title="Edit section: Build the Nbody example">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The nbody example's source code is available as a part of MPI installation. The source code is present in /usr/share/ti/examples/Open MPI/nbody.
+On one of the nodes, copy this source code in to the home directory and compile it
+</p>
+<pre>cd ~
+cp -r /usr/share/ti/examples/Open MPI/nbody .
+cd ~/nbody
+make
+</pre>
+<p>Copy this nbody executable in to all the nodes participating in the test
+</p>
+<pre> scp -r ~/nbody $2@$1:~/
+</pre>
+<p>Change directory to the location of the nbody executable
+</p>
+<pre> cd ~/nbody/
+</pre>
+<p>NOTE: For convenience, the above steps have been put in to a script <a href="File_Prep_mpi_nbody.html" title="File:Prep mpi nbody.zip">File:Prep mpi nbody.zip</a> which could be run from one of the nodes. The usage is
+</p>
+<pre>./prep_mpi_nbody.sh &lt;remote_node_ip_addr&gt; &lt;user name&gt;
+</pre>
+<p>Run this script on one of the nodes, for all remote nodes.
+</p><p>for example, from node 1,
+</p>
+<pre> ./prep_mpi_nbody 10.218.109.131 mpiuser
+ ./prep_mpi_nbody 10.218.109.132 mpiuser
+ ./prep_mpi_nbody 10.218.109.133 mpiuser
+</pre>
+<p>where 10.218.109.131 132,133 are the ip addresses of the nodes participating in the test.
+This script builds the nbody example on a node and copies the same to the remote node. This script also copies the srio_hosts and srio_topology.bin created earlier as well.
+</p>
+<h3><span class="mw-headline" id="Run_the_test">Run the test</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=12" title="Edit section: Run the test">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><br />
+<b>Testing on 4 nodes (c1n1,c1n2,c1n3,c1n4)</b>
+</p><p>On one of the nodes, issue the following command:
+</p><p><br />
+</p>
+<pre> /opt/ti-Open MPI/bin/mpirun --mca btl self,srio -np 4 -host c1n1,c1n2,c1n3,c1n4 ./nbody 1000
+</pre>
+<p><br />
+If successful, the mpirun exits with an output similar to below
+</p>
+<pre> Simulation of 2.000000 seconds done in 0.745069 seconds
+</pre>
+<p><br />
+Make sure that c1n1, c1n2 etc are the host names present in the srio_hosts file.
+<br />
+<b>Testing on 12 nodes (c1n1,c1n2,..,c4n1,...,c4n4,c7n1,...,c7n4)</b>
+<br />
+</p>
+<pre> /opt/ti-Open MPI/bin/mpirun --mca btl self,srio -np 12 -host c1n1,c1n2,c1n3,c1n4,c4n1,c4n2,c4n3,c4n4,c7n1,c7n2,c7n3,c7n4 ./nbody 1000
+</pre>
+<p>Make sure that all the hostnames mentioned here (c1n1, c1n2...c7n4) are the host names present in the srio_hosts file.
+</p><p><b>SRIO BTL, performance tests (between two nodes)</b>
+</p><p>To do SRIO BTL performance tests, run the following
+</p>
+<pre> /opt/ti-Open MPI/bin/mpirun --mca btl self,srio -np 2 -host c1n1,c1n2 ./mpptest -sync logscale
+</pre>
+<p><br />
+Please note that optional MCA parameters "--mca orte_base_help_aggregate N1 --mca  btl_base_verbose N2" could be appended to the mpirun command above and can be used to tune the verbosity.
+</p><p><br />
+This effectively tests basic MPI operation.
+</p>
+<h1><span id="Some_MPI_SRIO_BTL_internal_details_(ti_Open_MPI_1.0.0.21)"></span><span class="mw-headline" id="Some_MPI_SRIO_BTL_internal_details_.28ti_Open_MPI_1.0.0.21.29">Some MPI SRIO BTL internal details (ti_Open MPI_1.0.0.21)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=13" title="Edit section: Some MPI SRIO BTL internal details (ti Open MPI 1.0.0.21)">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><br />
+</p><p>Here is a glimpse of how MPI works over SRIO internally
+</p>
+<ul><li>MPI BTL relies on Keystone2 Navigator HW capabilities. It is built on top of custom PDSP firmware, custom SRIO user-space driver (part of MPI distribution) and MCSDK standard QMSS LLD. SERDES initialization is done by rio_mportX kernel driver at boot time.<br /></li>
+<li>All SRIO traffic is performed via Type 11 (SRIO terminology) messages that are up to 2KB big.</li>
+<li>Neighboring K2H nodes communicate directly over SRIO. Nodes that are not directly connected exchange messages with the help of PDSP RISC processors in transfer nodes (no A15 action needed).</li>
+<li>Major role in SRIO packet routing (w/o A15 intervention) is performed by single dedicated PDSP RISC processor (in each K2H node).</li>
+<li>In BTL function mca_btl_srio_add_procs, list of cartridges is created based on hostnames received from pml/bml layer. *Information from file /etc/cluster/srio_hosts is used to identify physical location of participating nodes. This list is used to create cluster routing table, which in turn is used by each node to set its own SRIO ID and packet forwarding table.<br /></li>
+<li>MPI BTL keeps track for each endpoint in communication world about its SRIO destination ID and local outgoing port (pls note that packet forwarding tables on each node are set to guarantee path between each participating node). Offline verification of path existence (with routing details) can be done using tool routingTableGenTest (deployed in /usr/bin).</li>
+<li>MPI BTL SRIO has optional MCA parameter "--mca btl_srio_pdsp_credit_period &lt;1|2|3|4&gt;" (default is 1) that can be used to tune multi-hop BW with some constraints. Higher performance is achieved with credit period of 4, which means that credit packet is sent one per four message packets. In this case size of non-blocking messages should be limited to 1-2MB (due to limited size of internal SRIO dedicated buffers).</li></ul>
+<p>For more details, please refer to the Design section <a rel="nofollow" class="external autonumber" href="MCSDK_HPC_3-15.html#Design_.26_Workflow">[6]</a>
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Additional_utilities">Additional utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=14" title="Edit section: Additional utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>During configuration and installation phase, three additional utilities are compiled and deployed in /usr/bin:<br />
+</p>
+<ul><li><b>pktfwdConfig</b> used to manually configure packet forwarding table on same K2H.<br /></li>
+<li><b>topologyJson2bin</b> used to convert (human readable) JSON topology file to binary format used by routing algorithm.<br /></li>
+<li><b>routingTableGenTest</b> is a tool to check path existence for group of cartridges and routing table. This tools also perform s a SRIO walk from every node to every other node, listing the nodal path taken(including max number of hops).</li></ul>
+<p>These utilities are more explained here <a rel="nofollow" class="external autonumber" href="MCSDK_HPC_3-15.html#Useful_SRIO_utilities">[7]</a>
+</p>
+<h1><span class="mw-headline" id="Establishing_any_to_any_connectivity_with_SRIO_fabric_using_packet_forwarding">Establishing any to any connectivity with SRIO fabric using packet forwarding</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=15" title="Edit section: Establishing any to any connectivity with SRIO fabric using packet forwarding">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><br />
+Communicating from any node to any node via SRIO involves PDSP doing routing on all the intermediate SRIO nodes.
+</p>
+<h2><span class="mw-headline" id="Type_11_Message_Routing">Type 11 Message Routing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=16" title="Edit section: Type 11 Message Routing">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There are several types of SRIO data traffic that is supported by K2H device: DIO, Type 9 and Type 11. <br />
+In this version of MPI, Type 11 traffic is used. MPI fragments (64KB for BTL SRIO) are chunked into Type 11 messages up to 2KB big.
+Traffic between neighboring nodes is directed through QMSS/SRIO HW blocks, both on TX and RX side.
+But for complex topologies, like 2D torus, multiple hopes need to be made by a message before reaching the destination.<br />
+Routing of the messages is performed by grid of PDSPs (dedicated RISC processors in each K2H node), which are looking into first 32-bit word of each message to find destination and source SRIO IDs (8-bit each).<br />
+<a href="File_Mpi-type11-msg.html" class="image"><img alt="Mpi-type11-msg.png" src="https://processors.wiki.ti.com/images/7/78/Mpi-type11-msg.png" width="600" height="262" /></a><br />
+PDSP is using static pre-computed (by A15 and downloaded to PDSP memory in the configuration stage) routing look-up tables to find outgoing SRIO port (4 per K2H node). PDSP is also checking if a neighboring node is destination node. In that case, we use different mailbox to send Type 11 message directly to destination/neighboring node.
+</p>
+<h3><span class="mw-headline" id="Topology_Creation">Topology Creation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=17" title="Edit section: Topology Creation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><br />
+This step analyzes the SRIO topology (SRIO hardware layout), assigns unique SRIO IDs to all the nodes and stores the information binary file format. This topology binary file will be used by the routing table generation algorithm in the next step. This step involves 3 steps
+<br />
+1) JSON file representation: The SRIO hardware layout, detailing the nodes and their SRIO connections need to be represented in a readable .json file format. This file lists all cartridges, and all nodes within those cartridges, along with their connection details. A sample .json file entry would look like this
+</p>
+<pre>cartridges"&#160;: [
+{ "name": "c1", "nodes":
+ [{"name": "c1n1", "connections": [{ "port0": "c1n2"},{ "port1": "c1n4"},{ "port2": "none"},{ "port3": "none"}]},
+  {“name": "c1n2", "connections": [{ "port0": "c1n1"},{ "port1": "c1n3"},{ "port2": “c2n2"},{ "port3": "none"}]},
+  {"name": "c1n3", "connections": [{ "port0": "c1n2"},{ "port1": "c1n4"},{ "port2": “none"},{ "port3": "none"}]},
+  {"name": "c1n4", "connections": [{ "port0": "c1n1"},{ "port1": "c1n3"},{ "port2": "none"},{ "port3": "none"}]},
+ ]
+},
+{ "name": "c2", "nodes":[
+{"name": "c2n1", "connections": [{ "port0": "c2n2"},{ "port1": "c2n4"},{ "port2": "none"},{"port3":"none"}]},
+{"name": "c2n2", "connections": [{ "port0": "c2n1"},{ "port1": "c2n3"},{ "port2": "c1n2"},{ "port3": “none"}]},
+{"name": "c2n3", "connections": [{ "port0": "c2n2"},{ "port1": "c2n4"},{ "port2": "none"},{ "port3": “c1n2"}]},
+{"name": "c2n4", "connections": [{ "port0": "c2n1"},{ "port1": "c2n3"},{ "port2": "none"},{ "port3": "none"}]},
+]},
+</pre>
+<p>2) Run the topology definition utility which will
+- Parse the .json file for topology representation errors if any.
+- Assign X-Y coordinates for all the cartridges in the topology
+- Assign unique SRIO IDs for all nodes as fn(X,Y,Node-id)
+- Store the above information in a .bin file (eg: srio_topology.bin)
+</p><p>The above topology.bin file will be used for routing table generation algorithm at run-time
+</p><p><a href="File_TopologyCreationOverview.html" class="image" title="TopologyCreationOverview.png"><img alt="TopologyCreationOverview.png" src="https://processors.wiki.ti.com/images/8/86/TopologyCreationOverview.png" width="773" height="129" /></a>
+</p>
+<h3><span class="mw-headline" id="Routing_Table_Generation">Routing Table Generation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=18" title="Edit section: Routing Table Generation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><br />
+Once the topology is created, a routing table algorithm is run on a cluster to generate routing table entries for all the nodes in the cluster. The following steps need to be followed,
+</p>
+<h4><span class="mw-headline" id="Define_Cluster">Define Cluster</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=19" title="Edit section: Define Cluster">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><br />
+A cluster comprises of a set of nodes/cartridges between which SRIO communication will take place. For example, lets assume a topology contains about 50 cartridges, each with say 4 nodes. Of those 50 cartridges, we pick a subset of cartridges, say {c1,c3,c5,c8} and choose to communicate using SRIO amongst each other. i.e SRIO communication is possible between any two nodes in this cluster.
+Once we define a cluster like that above, a routing table algorithm needs to be run on it to generate routing tables for all the nodes in the cluster.
+<br />
+</p>
+<h4><span class="mw-headline" id="Routing_Table_Algorithm">Routing Table Algorithm</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=20" title="Edit section: Routing Table Algorithm">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><br />
+The routing algorithm tries to find a way between any two nodes in the system,and tries to come up with a routing table for each node in the cluster, such that every node is reachable to every another node in the cluster.
+<br />
+<a href="File_RoutingAlgorithmOverview.html" class="image" title="RoutingAlgorithmOverview.png"><img alt="RoutingAlgorithmOverview.png" src="https://processors.wiki.ti.com/images/a/a9/RoutingAlgorithmOverview.png" width="639" height="163" /></a>
+<br />
+</p><p>The routing algorithm happens in two steps.
+</p>
+<h5><span class="mw-headline" id="Finding_Distances_between_any_two_cartridges">Finding Distances between any two cartridges</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=21" title="Edit section: Finding Distances between any two cartridges">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>A recursive distance finder is run between all two cartridges to find the distance to another cartridge in all directions.
+Please note that, after the topology parsing step, X-Y values were assigned to all cartridges in the topology. The distance finder tries to find the distance between the distance between two cartridges, in all directions (Left/Right/Up/Down) in the X-Y coordinate system. To do this, a recursive process is initiated such as
+1) Start with one cartridge
+2) Find the lowest distance path to all destination cartridge in the cluster, in all directions (left,Right,Up,Down) and note down the outgoing port.  i.e distance(src,dest) = MIN( distance(up(src), dest), distance(down(src), dest), distance(left(src), dest),    distance(right(src),dest) where up/down/right/left(cartridge) is the adjacent cartridge located up/down/right/left in the cluster
+3) This process is continued until all the distances from any cartridge to any cartridge is populated.
+</p><p>Here is a pictorial illustration of how the recursive depth finder works
+</p><p><a href="File_RecursiveDepthFinder.html" class="image" title="RecursiveDepthFinder.png"><img alt="RecursiveDepthFinder.png" src="https://processors.wiki.ti.com/images/a/ad/RecursiveDepthFinder.png" width="929" height="559" /></a>
+</p><p>In this above picture, the goal was to find the distance from C6 (src) to C16(dest). The distance finder search expands first to its neighboring nodes C2,C5,C7,C10 who in turn expands the search recursively to their neighboring nodes and so on, until the destination is reached. As far as the source,i.e C6 is concerned, the distance to C16, if branched out in all four directions, is calculated and stored. Also the minimum depth amongst them is found and will be used to reach the destination.
+This process is done for all starting cartridge to all other cartridge in the cluster.
+</p><p>Please note that, the above recursive search stops at an inactive cartridge, i.e a cartridge which is not a part of the cluster.
+Also, special care is taken so that there are no loops ( repetition of cartridges) in a path from one cartridge to the another.
+</p>
+<h5><span class="mw-headline" id="Generate_Routing_Table_entries">Generate Routing Table entries</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=22" title="Edit section: Generate Routing Table entries">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Once the minimum distance from every cartridge to every other cartridge in the cluster is found, routing table for every node can be populated the following way
+</p>
+<pre>1) Start with a node ID #1, (C1)
+2) For every destination nodeID in the cluster,
+    2.1) Find the min distance path (calculated earlier using recursive distance finder) and the outgoing SRIO port.
+    2.2) Append the {nodeID, port} to the existing router Table Entries. If it cant be added to the current range, add a new   range.
+    2.3) The nodeID is incremented sequentially so that it could be added to routing table easier
+    2.4) Do the above steps until the routing tables for all the nodes are populated
+</pre>
+<h5><span class="mw-headline" id="Return_value">Return value</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=23" title="Edit section: Return value">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p><br />
+The algorithm is successful if it can generate routing tables (&lt;=8 per node) which would enable every node to every other node communication within the cluster. If so, it returns 0 signalling success. The routing algorithm fails if
+<br />
+</p>
+<ol><li>Some nodes are not reachable by others (if there are no connection to other nodes, typical of a 'cartridge island' in the cluster)</li></ol>
+<p><br />
+In both the cases above, error codes are returned, receiving upon which the user can either change the cluster, or fall back to non SRIO modes of communication in that cluster.
+</p><p><br />
+</p>
+<h4><span class="mw-headline" id="Current_Routing_Algorithm_Characteristics">Current Routing Algorithm Characteristics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=24" title="Edit section: Current Routing Algorithm Characteristics">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><br />
+<b>Optimized for Distance</b>
+Of  the four paths from a node to another node(via all four ports), the one with least distance is chosen and added to the routing table. This results in minimum node-hops between every node to the other.
+<br />
+<b>Tradeoffs</b>
+</p><p>Distance optimized routing increases number of routing Table entries (Note: max entries allowed is 8)
+The more discontinuous the cartridges in the cluster are, the higher number of entries which could lead to algorithm failure in some clusters.
+</p>
+<h4><span class="mw-headline" id="Alternate_Routing_Algorithms">Alternate Routing Algorithms</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=25" title="Edit section: Alternate Routing Algorithms">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h5><span class="mw-headline" id="Optimized_for_Entries">Optimized for Entries</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=26" title="Edit section: Optimized for Entries">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Instead of choosing the minimum distance path from one node to the another, of the four ports from a node to another node, the one with easily adds to the current range in the table is chosen, avoiding a new entry.
+<br />
+<b>Tradeoffs</b>
+<br />
+Could add extra node-hops which may affect performance
+</p>
+<h5><span class="mw-headline" id="X-Y_Algorithm">X-Y Algorithm</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=27" title="Edit section: X-Y Algorithm">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Another approach is to use the X-Y positions of nodes/cartridges in the X-Y grid and come with a fixed procedure to reach one node to the another. For example, from a cartridge (x1,y1) to another cartridge (x2,y2), move to the right/left to match X i.e x2, then move up/down to match Y,i.e y2. The advantage of this algorithm is that it is less complex.
+<b>Tradeoffs</b>
+This algorithm assumes that all the cartridges in the X-Y matrix are enabled in the cluster. Hence, this algorithm cannot scale to discontinuous cartridges
+<br />
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Configuring_nodes">Configuring nodes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=28" title="Edit section: Configuring nodes">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Once the Routing table is generated from running the routing algorithm, each node within the cluster is programmed with its routing table entries, generated by the routing algorithm at the above step. The routing table entries are written to PDSP memory (routing look-up table: number of entries equal to number of destination nodes).
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Routing_Tables_in_Action">Routing Tables in Action</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=29" title="Edit section: Routing Tables in Action">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Here is an example which shows routing tables in action once the nodes are programmed with their routing tables
+</p><p><a href="File_RoutingTablesInAction.html" class="image" title="RoutingTablesInAction.png"><img alt="RoutingTablesInAction.png" src="https://processors.wiki.ti.com/images/c/cc/RoutingTablesInAction.png" width="958" height="629" /></a>
+</p>
+<h1><span class="mw-headline" id="Useful_SRIO_utilities">Useful SRIO utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=30" title="Edit section: Useful SRIO utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A few useful utilities for topology creation, and routing Table generation testing are detailed here. These executables for these utilities come along with the installation of ti-Open MPI and kept in /usr/bin directory.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Building_the_utilities">Building the utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=31" title="Edit section: Building the utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The utilities are already built during the ti-Open MPI installation and kept at <b>/usr/bin</b> directory.
+</p><p>However, these utilities could be built from source as well.
+The source files for these utilities could be obtained with the source installation of ti-Open MPI using the below command
+</p>
+<pre>   apt-get source ti-Open MPI
+</pre>
+<p>The source files for these utilities are kept at
+</p>
+<pre> ~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/
+</pre>
+<p>The utilities can be built by issuing the make command inside this directory.
+</p>
+<pre>cd ~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/
+make all
+</pre>
+<p>The executables topologyJson2bin, routingTableGenTest, pktfwdConfig can be found in this directory.
+</p>
+<h3><span class="mw-headline" id="Topology_Json_to_Bin_file_creation">Topology Json to Bin file creation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=32" title="Edit section: Topology Json to Bin file creation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><br />
+This utility is used to parse the .json file and create a .bin file to be used by MPI.
+The usage is as below
+</p>
+<pre>./topologyJson2bin  &lt;topology json file&gt; &lt;topology output bin file&gt;
+</pre>
+<p>For example,
+</p>
+<pre>./topologyJson2bin  &lt;SRIO_Evm.json&gt; srio_topology.bin
+</pre>
+<p><br />
+</p><p>A sample output would look like this
+</p>
+<pre>  .....
+  .....
+  c1n2:  Port[3] --&gt; NONE
+Find node connections by coordinates ..
+  c1n2:  Port No 0 connected to c1n1
+  c1n2:  Port No 0 connected to NONE
+  c1n2:  Port No 0 connected to NONE
+  c1n2:  Port No 0 connected to NONE
+Cartridge Connections
+ c1 Connected on Left  to c1 ( 0,0,0), through port 0, via node c1n1
+ c1 Connected on Right  to c1 ( 0,0,0), through port 0, via node c1n1
+ c1 Connected on Up  to c1 ( 0,0,0), through port 0, via node c1n1
+ c1 Connected on Down  to c1 ( 0,0,0), through port 0, via node c1n1
+ Writing topology to the bin file srio_evm.bin ...
+</pre>
+<pre>This utility is used to create the topology bin file in the section <a rel="nofollow" class="external autonumber" href="http://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=5">[8]</a>
+</pre>
+<p>The source files for this utility are kept as
+</p>
+<pre>~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/utils/topologyJson2bin.c
+~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/utils/topologyJson2binMain.c
+~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/CJSON/cJSON.c
+~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/CJSON/cJSON.h
+</pre>
+<h3><span class="mw-headline" id="Routing_Table_Generation_Testing">Routing Table Generation Testing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=33" title="Edit section: Routing Table Generation Testing">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><br />
+This utility is used to run the routing table generation algorithm over a cluster.
+The cluster is a list of cartridges(mentioned in the .json file) as arguments to this utility.
+This utility will generate the routing table, performs an exhaustive walk from all nodes to all nodes in this cluster and
+displays if the routing table algorithm is successful, and if so, the paths taken in the exhaustive walk and the max hop count.
+</p><p>The usage is as below
+</p>
+<pre> ./routingTableGenTest  &lt;srio_topology.bin&gt; cluster &lt;list of cartridge ids&gt;  [OPTIONAL] nodes &lt;node1&gt; &lt;node2&gt; ...
+</pre>
+<p>For example,
+</p>
+<pre> ./routingTableGenTest  /etc/cluster/srio_topology.bin c1 c4 c7 c8
+</pre>
+<p>The above will test the routing table generation for all the nodes in the cluster defined by cartridges 1 4 7 8 ,  mentioned in the topology file.
+A sample output of the above would look like this below,
+</p>
+<pre> Walker Simulation: c8n4 to c1n4 SUCCESS: 7 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n1 --&gt; c4n1 --&gt; c1n1 --&gt; c1n4
+ Walker Simulation: c8n4 to c4n1 SUCCESS: 5 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n1 --&gt; c4n1
+ Walker Simulation: c8n4 to c4n2 SUCCESS: 6 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n1 --&gt; c4n1 --&gt; c4n2
+ Walker Simulation: c8n4 to c4n3 SUCCESS: 7 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n1 --&gt; c4n1 --&gt; c4n2 --&gt; c4n3
+ Walker Simulation: c8n4 to c4n4 SUCCESS: 6 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n1 --&gt; c4n1 --&gt; c4n4
+ Walker Simulation: c8n4 to c7n1 SUCCESS: 4 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n1
+ Walker Simulation: c8n4 to c7n2 SUCCESS: 3 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2
+ Walker Simulation: c8n4 to c7n3 SUCCESS: 4 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n3
+ Walker Simulation: c8n4 to c7n4 SUCCESS: 5 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2 --&gt; c7n2 --&gt; c7n3 --&gt; c7n4
+ Walker Simulation: c8n4 to c8n1 SUCCESS: 1 hops --&gt; c8n4 --&gt; c8n1
+ Walker Simulation: c8n4 to c8n2 SUCCESS: 2 hops --&gt; c8n4 --&gt; c8n3 --&gt; c8n2
+ Walker Simulation: c8n4 to c8n3 SUCCESS: 1 hops --&gt; c8n4 --&gt; c8n3
+ Walker Simulation: c8n4 to c8n4 SUCCESS: 0 hops --&gt; c8n4
+ ************************* WALKER SIMULATION RESULTS *********************************
+ Max Hop count=8, from node c1n3 to node c8n4
+ Performed walks = 256
+ Failed Walks = 0
+ ***************************************************************************************
+</pre>
+<p>Alternatively, if the test needs to be performed only on a set of nodes within the cluster, the optional paramter 'nodes' needs to be specified , followed by the list of nodes.
+i.e
+</p>
+<pre> ./routingTableGenTest  &lt;srio_topology.bin&gt; cluster &lt;list of cartridge ids&gt;  nodes &lt;node1&gt; &lt;node2&gt; ...
+</pre>
+<p>For example,
+</p>
+<pre>./routingTableGenTest  /etc/cluster/srio_topology.bin cluster c1 c4 c7 c8 nodes c1n1 c8n1 c4n2
+</pre>
+<p>This will list the simulation between only those three nodes mentioned above.
+</p><p><br />
+The source files for this utility are kept as
+</p>
+<pre>~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/routingTableGen.c
+~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/utils/routingTableGenTest.c
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Packet_Forwarding_Configuration">Packet Forwarding Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=34" title="Edit section: Packet Forwarding Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><br />
+This utility is run on a K2H node to configure the packet forwarding registers, view the packet forwarding registers or reset them.
+</p><p>For viewing the current packet forwarding registers of a node, run the below command
+</p>
+<pre> ./pktfwdConfig display
+</pre>
+<p>For resetting the current packet forwarding registers of a node, run the below command
+</p>
+<pre> ./pktfwdConfig reset
+</pre>
+<p>For setting custom values the packet forwarding registers of a node as per the , run the below command
+</p>
+<pre> ./pktfwdConfig custom   &lt;entry1-lo&gt; &lt;entry1-hi&gt; &lt;entry1-routing port&gt;   &lt;entry2-lo&gt; &lt;entry2-hi&gt; &lt;entry2-routing port&gt; ..
+</pre>
+<p>where entry1, entry2 etc are the packet forwarding entries, and entry#-lo, entry#-hi, and entry#-routing port are the SRIO ID's lower bound value, upper bound value and the SRIO port to route the packet whose ID lies between the entry#-lo and entry2#-hi
+For example,
+</p>
+<pre>   ./pktfwdConfig custom   10 20 1   21 30 3   31 40 2
+</pre>
+<p>The source files for this utility are kept as
+</p>
+<pre>~/ti-Open MPI-1.0.0.21/ompi/mca/btl/srio/pktfwdK2H/utils/pktFwdConfig.c
+</pre>
+<h1><span id="Linux_Kernel,_U-boot_and_DTS_changes"></span><span class="mw-headline" id="Linux_Kernel.2C_U-boot_and_DTS_changes">Linux Kernel, U-boot  and DTS changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=35" title="Edit section: Linux Kernel, U-boot and DTS changes">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<div class="mw-collapsible mw-collapsed" style="width:900px">
+<ul><li>This section details how to build the linux kernel, device tree file, uboot etc. This steps are not mandatory and provided here for informative purposes.</li></ul>
+<div class="mw-collapsible-content">
+<p><br />
+</p><p><b>Following steps are provided to show component details only. If ti-Open MPI package is obtained from PPA, they are not necessary.</b>
+</p>
+<h2><span class="mw-headline" id="Building_the_kernel_for_SRIO">Building the kernel for SRIO</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=36" title="Edit section: Building the kernel for SRIO">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Clone_Linux_Kernel">Clone Linux Kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=37" title="Edit section: Clone Linux Kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The SRIO enabled Kernel could be obtained from  <a rel="nofollow" class="external free" href="http://git.ti.com/keystone-linux/linux/commits/v3.8/rio-dev-dio">http://git.ti.com/keystone-linux/linux/commits/v3.8/rio-dev-dio</a>
+<br />
+&lt;syntaxhighlight lang="bash"&gt;
+</p>
+<pre>$ git clone <a rel="nofollow" class="external free" href="git://git.ti.com/keystone-linux/linux.git">git://git.ti.com/keystone-linux/linux.git</a>
+$ cd linux
+$ git checkout v3.8/rio-dev-dio
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h3><span class="mw-headline" id="Build_Linux_Kernel">Build Linux Kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=38" title="Edit section: Build Linux Kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>&lt;syntaxhighlight lang="bash"&gt;
+</p>
+<pre>$ export CROSS_COMPILE=arm-linux-gnueabihf-
+$ export ARCH=arm
+$ export PATH=&lt;path to installed toolchain&gt;/bin:$PATH
+$ make keystone2_defconfig
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+<br />
+Make the below modifications in the .config file.
+</p>
+<pre>CONFIG_HAS_RAPIDIO=y
+CONFIG_RAPIDIO=y
+# CONFIG_RAPIDIO_TSI721 is not set
+CONFIG_TI_KEYSTONE_RAPIDIO=y
+CONFIG_RAPIDIO_DISC_TIMEOUT=200
+CONFIG_RAPIDIO_ENABLE_RX_TX_PORTS=y
+CONFIG_RAPIDIO_DMA_ENGINE=y
+CONFIG_RAPIDIO_DEV=y
+CONFIG_RAPIDIO_DEBUG=y
+CONFIG_RAPIDIO_ENUM_BASIC=y
+CONFIG_RAPIDIO_CHMAN=y
+CONFIG_RAPIDIO_DEV_MPORT=y
+</pre>
+<p><br />
+Also, make the RIONET loadable as a module, by making the below modifications
+</p>
+<pre>CONFIG_RIONET=m
+CONFIG_RIONET_TX_SIZE=128
+CONFIG_RIONET_RX_SIZE=128
+</pre>
+<p><br />
+Now build the kernel with the below commands
+</p><p>&lt;syntaxhighlight lang="bash"&gt;
+</p>
+<pre>$ make oldconfig
+$ make uImage
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>Copy the kernel (uImage) to a tftp repository, which the node can download from during boot.
+</p>
+<h2><span class="mw-headline" id="Device_Tree_Modifications_for_SRIO">Device Tree Modifications for SRIO</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=39" title="Edit section: Device Tree Modifications for SRIO">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Device tree changes are required to
+</p>
+<ul><li>Enable SRIO at bootup</li>
+<li>Enable UIO access for SRIO (for use with user space LLD in future)</li></ul>
+<h4><span class="mw-headline" id="Enable_SRIO_at_bootup">Enable SRIO at bootup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=40" title="Edit section: Enable SRIO at bootup">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A few definitions (below)  need to be added to the arch/arm/boot/dts/k2hk-evm.dts file to enable SRIO.
+<br />
+</p>
+<pre> rapidio: rapidio@2900000 {
+                      #address-cells = &lt;1&gt;;
+                      #size-cells = &lt;1&gt;;
+                      reg = &lt;0x2900000 0x40000  /* rio regs */
+                             0x2620000 0x1000   /* boot config regs */
+                             0x232c000 0x2000&gt;;	/* serdes config regs */
+                      clocks = &lt;&amp;clksrio&gt;;
+                      clock-names = "clk_srio";
+                      compatible = "ti,keystone-rapidio";
+                      dma-coherent;
+
+                      keystone2-serdes;
+                      baudrate  = &lt;3&gt;; /* 5 Gbps */
+                      path_mode = &lt;0xf&gt;; /* 4 port in 1x */
+                      lsu       = &lt;0 0&gt;; /* DIO and maintenance LSUs */
+
+                      tx_channel = "riotx";
+                      tx_queue_depth = &lt;256&gt;;
+
+                      ports = &lt;0x1&gt;;      /* bitfield of port(s) to probe.  Port 0 is enabled here */
+                      dev-id-size = &lt;0&gt;;  /* RapidIO common transport system
+                                             * size.
+                                             * 0 - Small size. 8-bit deviceID
+                                             *     fields. 256 devices.
+                                             * 1 - Large size, 16-bit deviceID
+                                             *     fields. 65536 devices.
+                                             */
+                      interrupts = &lt;0 152 0xf01 0 153 0xf01&gt;; /* RIO and LSU IRQs */
+                      port-register-timeout = &lt;90&gt;;
+
+                     pkt-forward = &lt;0xffff 0xffff 0
+                                   0xffff 0xffff 0
+                                   0xffff 0xffff 0
+                                   0xffff 0xffff 0
+                                   0xffff 0xffff 0
+                                   0xffff 0xffff 0
+                                   0xffff 0xffff 0
+                                   0xffff 0xffff 0&gt;;
+                      num-mboxes = &lt;2&gt;;
+
+                     mbox-0 {
+                                rx_channel = "riorx0";
+                                rx_queue_depth	= &lt;256 0 0 0&gt;;
+                                rx_buffer_size	= &lt;4096 0 0 0&gt;;
+                                /*stream_id = &lt;0&gt;;*/
+                     };
+
+                     mbox-1 {
+                                rx_channel = "riorx1";
+                                rx_queue_depth	= &lt;256 0 0 0&gt;;
+                                rx_buffer_size	= &lt;4096 0 0 0&gt;;
+                                /*stream_id = &lt;1&gt;;*/
+                      };
+
+           };
+</pre>
+<p><br />
+</p>
+<h5><span class="mw-headline" id="Configuring_SRIO_ports">Configuring SRIO ports</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=41" title="Edit section: Configuring SRIO ports">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p><br />
+In the above dts entries for SRIO, please note that the entry below configures the SRIO port(s) used by the node.
+</p>
+<pre>ports = &lt;0xf&gt;;      /* bitfield of port(s) to probe.  Ports 0,1,2,3 are enabled here */
+</pre>
+<h4><span class="mw-headline" id="For_enabling_UIO">For enabling UIO</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=42" title="Edit section: For enabling UIO">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><br />
+Insert the below in the k2hk-evm.dts file, along with the other uio- sections, add the below to enable uio for SRIO.
+<br />
+</p>
+<pre>    uio_srio: srio {
+               compatible = "ti,uio-module-drv";
+               mem  = &lt;0x232C000 0x00002000
+    		                0x2900000 0x30000
+               	        0x0231a000 0x00002000&gt;;
+               clocks=&lt;&amp;clksrio&gt;;
+               interrupts = &lt;0 154 0xf01&gt;;
+               label = "srio";
+          };
+</pre>
+<p>Note: To use UIO, After booting is done, UIO module needs to be loaded using the below command
+&lt;syntaxhighlight lang="bash"&gt;
+</p>
+<pre>&gt; insmod uio_module_drv.ko
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+<br />
+With the above two additions to the arch/arm/boot/dts/k2hk-evm.dts file, make the device tree file.
+<br />
+&lt;syntaxhighlight lang="bash"&gt;
+</p>
+<pre>&gt; make k2hk-evm.dtb
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+<br />
+In the uboot parameters, we will use the above built  k2hk-evm.dtb  on N1 &amp; N2, to enable SRIO
+</p>
+<h2><span class="mw-headline" id="Uboot_Configuration_required_for_SRIO">Uboot Configuration required for SRIO</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=43" title="Edit section: Uboot Configuration required for SRIO">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br />
+The SRIO kernel requires RIO specific uboot variables to be set such as srio variables, device tree and kernel. The following steps need to be followed
+<br />
+</p>
+<h3><span class="mw-headline" id="Set_SRIO_specific_uboot_args_for_every_node">Set SRIO specific uboot args for every node</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=44" title="Edit section: Set SRIO specific uboot args for every node">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The 'args_all' should contain the following two additions for enabling SRIO
+</p>
+<pre>rio-scan.static_enum=1 rio-scan.scan=0
+</pre>
+<p>for example,  at the Uboot prompt,
+</p>
+<pre>setenv args_all 'setenv bootargs console=ttyS0,115200n8 rootwait=1 rio-scan.static_enum=1 rio-scan.scan=0'
+</pre>
+<h3><span class="mw-headline" id="Point_to_the_newly_built_SRIO_kernel_and_device_tree_file">Point to the newly built SRIO kernel and device tree file</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=45" title="Edit section: Point to the newly built SRIO kernel and device tree file">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>At the uboot prompt, set the below to point to the SRIO enabled kernel and device tree file.
+</p>
+<pre>setenv name_kern uImage
+setenv name_fdt 'k2hk-evm.dtb'
+</pre>
+<p>Here is an example which uses NFS boot:
+</p>
+<pre>setenv serverip 10.218.109.20
+setenv gatewayip 10.218.109.1
+setenv tftp_root 'mcsdk3_0_2_14'
+setenv name_initfs
+setenv name_mon 'skern-keystone-evm.bin'
+setenv addr_fdt 0x87000000
+setenv addr_fs 0x90000000
+setenv addr_kern 0x88000000
+setenv addr_mon 0x0c5f0000
+setenv addr_uinitrd '-'
+setenv args_net 'setenv bootargs ${bootargs} rootfstype=nfs root=/dev/nfs rw nfsroot=${serverip}:${nfs_root},${nfs_options}'
+setenv boot net
+setenv bootargs 'console=ttyS0,115200n8 rootwait=1 rootfstype=nfs root=/dev/nfs rw'
+setenv get_mon_net 'dhcp ${addr_mon} ${tftp_root}/${name_mon}'
+setenv get_kern_net 'dhcp ${addr_kern} ${tftp_root}/${name_kern}'
+setenv init_net 'run args_all args_net'
+setenv netmask '255.255.255.0'
+setenv nfs_options 'v3,tcp rw ip=dhcp'
+setenv nfs_root '/evmk2h_nfs_3_0_0_15'
+setenv run_kern 'bootm ${addr_kern} ${addr_uinitrd} ${addr_fdt}'
+setenv bootcmd 'run init_${boot} get_fdt_${boot} get_mon_${boot} get_kern_${boot} run_mon run_kern'
+setenv get_fdt_net 'dhcp ${addr_fdt} ${tftp_root}/${name_fdt}'
+setenv name_kern uImage
+setenv args_all 'setenv bootargs console=ttyS0,115200n8 rootwait=1 rio-scan.static_enum=1 rio-scan.scan=0'
+setenv name_fdt 'k2hk-evm.dtb'
+</pre>
+<p><br />
+Also note that, the kernel (uImage) above is the SRIO specific kernel built via step 1.
+If using NFS as above, make sure to change the NFS and tftp folders accordingly.
+</p>
+</div>
+</div>
+<p><br />
+</p>
+<h1><span id="Known_Issues_&amp;_Limitations"></span><span class="mw-headline" id="Known_Issues_.26_Limitations">Known Issues &amp; Limitations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=46" title="Edit section: Known Issues &amp; Limitations">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>These are the known (temporary) limitations in current release (ti_Open MPI_1.0.0.21)
+</p>
+<ul><li><b>Maximum of 180 nodes</b>: Maximum number of participating (K2H) nodes (per communication world) is 180.<br /></li>
+<li><b>Multiple ranks per SoC are not allowed</b>: Currently only one MPI rank is allowed per SoC.<br /></li>
+<li><b>SRIO interfaces currently run at 3.125gbps</b>: MPI is not expected to change for higher speed (@5Gbps)<br /></li>
+<li><b>RDMA operations</b>: MPI RDMA APIs are not natively supported in this release. Please use "--mca osc pt2pt" option.<br /></li></ul>
+<h1><span class="mw-headline" id="FAQ">FAQ</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit&amp;section=47" title="Edit section: FAQ">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201095243
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.099 seconds
+Real time usage: 0.108 seconds
+Preprocessor visited node count: 210/1000000
+Preprocessor generated node count: 246/1000000
+Post‐expand include size: 8/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2718/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:33775-0!canonical and timestamp 20201201095243 and revision id 206746
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>MCSDK HPC 3.x MPI over SRIO</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;oldid=206746">https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;oldid=206746</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=MCSDK+HPC+3.x+MPI+over+SRIO" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="MCSDK_HPC_3-15.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_MCSDK_HPC_3.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="MCSDK_HPC_3-15.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/MCSDK_HPC_3-13.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/MCSDK_HPC_3-13.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;oldid=206746" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=MCSDK_HPC_3.x_MPI_over_SRIO&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 18 September 2015, at 19:16.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.099","walltime":"0.108","ppvisitednodes":{"value":210,"limit":1000000},"ppgeneratednodes":{"value":246,"limit":1000000},"postexpandincludesize":{"value":8,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2718,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201095243","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":323});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/MCSDK_HPC_3.x_MPI_over_SRIO by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:43:02 GMT -->
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C++_Template_Instantiation_Issues by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:08 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C++ Template Instantiation Issues - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C++_Template_Instantiation_Issues","wgTitle":"C++ Template Instantiation Issues","wgCurRevisionId":182848,"wgRevisionId":182848,"wgArticleId":911,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler","Cplusplus"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C++_Template_Instantiation_Issues","wgRelevantArticleId":911,"wgRequestId":"001dc78f0cbed27043e51861","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C_Template_Instantiation_Issues rootpage-C_Template_Instantiation_Issues skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C++ Template Instantiation Issues</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Typical_Template_Source_Code_Organization"><span class="tocnumber">2</span> <span class="toctext">Typical Template Source Code Organization</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Compiler_Version"><span class="tocnumber">3</span> <span class="toctext">Compiler Version</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Basic_Example"><span class="tocnumber">4</span> <span class="toctext">Basic Example</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Late_Template_Instantiation"><span class="tocnumber">5</span> <span class="toctext">Late Template Instantiation</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Cannot_Instantiate_Templates_for_Library_Members"><span class="tocnumber">6</span> <span class="toctext">Cannot Instantiate Templates for Library Members</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#First_Workaround:_Inline_the_Function_Definitions"><span class="tocnumber">7</span> <span class="toctext">First Workaround: Inline the Function Definitions</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Recast_The_Example"><span class="tocnumber">8</span> <span class="toctext">Recast The Example</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Second_Workaround:_Include_Template_Definition_Headers_in_User_Code"><span class="tocnumber">9</span> <span class="toctext">Second Workaround: Include Template Definition Headers in User Code</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Third_Workaround:_Use_a_Template_in_a_Non-Template_Class_Declaration"><span class="tocnumber">10</span> <span class="toctext">Third Workaround: Use a Template in a Non-Template Class Declaration</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Fourth_Workaround:_Explicit_Instantiation"><span class="tocnumber">11</span> <span class="toctext">Fourth Workaround: Explicit Instantiation</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#About_Inlining"><span class="tocnumber">12</span> <span class="toctext">About Inlining</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Early_Template_Instantiation"><span class="tocnumber">13</span> <span class="toctext">Early Template Instantiation</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you don't know what C++ template instantiation is, then this page is not for you.  If you are experiencing linker diagnostics like this one ...
+</p>
+<pre> undefined                                                          first referenced
+  symbol                                                                in file
+ ---------                                                          ----------------
+ Stack&lt;T1, N2&gt;::Stack&lt;char, (int)100&gt;() [with T1=char, N2=(int)100] mylib.lib&lt;lib1.obj&gt;
+ T1 Stack&lt;T1, N2&gt;::pop() [with T1=char, N2=(int)100]                mylib.lib&lt;lib1.obj&gt;
+ void Stack&lt;T1, N2&gt;::push(T1) [with T1=char, N2=(int)100]           mylib.lib&lt;lib1.obj&gt;
+
+error: unresolved symbols remain
+error: errors encountered during linking; "test.out" not built
+
+&gt;&gt; Compilation failure
+</pre>
+<p>then this page is for you.
+</p>
+<h2><span class="mw-headline" id="Typical_Template_Source_Code_Organization">Typical Template Source Code Organization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=2" title="Edit section: Typical Template Source Code Organization">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>TI C++ compilers do not support the export keyword.  This means an appropriate template definition must be visible at the point of instantiation, i.e. the spot where the actual template-related class object or function is defined.  In practical terms, this means the entire template definition must be placed in header file that is included by all the files that refer to the template.  All the examples in this article are organized this way.  Organizing template definitions in this manner is not a violation of the one-definition rule.  See <u>The C++ Programming Language</u>, 3rd Ed., the last part of section 9.2.3.
+</p>
+<h2><span class="mw-headline" id="Compiler_Version">Compiler Version</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=3" title="Edit section: Compiler Version">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>All the examples in this article were built with C6000 Code Generation Tools Version 6.1.0.
+</p>
+<h2><span class="mw-headline" id="Basic_Example">Basic Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=4" title="Edit section: Basic Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Let's start by explaining how a simple example works, then make changes to it that demonstrate the issues.
+</p><p>&lt;syntaxhighlight lang=cpp&gt;
+// stack.hpp
+template&lt;typename T, int size&gt; class Stack
+{
+private:
+</p>
+<pre>  T stack_[size];
+  int top_;
+</pre>
+<p>public:
+</p>
+<pre>  Stack();
+  void push(T);
+  T pop();
+</pre>
+<p>};
+</p><p>template&lt;typename T, int size&gt;
+Stack&lt;T, size&gt;::Stack()
+{
+</p>
+<pre>  top_ = 0;
+</pre>
+<p>}
+</p><p>template&lt;typename T, int size&gt;
+void Stack&lt;T, size&gt;::push(T item)
+{
+</p>
+<pre>  if (top_ == size)
+     { /* overflow */ }
+  stack_[top_++] = item;
+</pre>
+<p>}
+</p><p>template&lt;typename T, int size&gt;
+T Stack&lt;T, size&gt;::pop()
+{
+</p>
+<pre>  if (top_ == 0)
+     { /* underflow */ }
+  return stack_[--top_];
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>&lt;syntaxhighlight lang=cpp&gt;
+// main.cpp
+</p>
+<ol><li>include "stack.hpp"</li></ol>
+<p>Stack&lt;int, 100&gt; main_int_stack;
+int int_val;
+</p><p>void lib_fxn();
+</p><p>int main()
+{
+</p>
+<pre>  main_int_stack.push(100);
+  int_val = main_int_stack.pop();
+  lib_fxn();
+  return 0;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>&lt;syntaxhighlight lang=cpp&gt;
+// lib1.cpp
+</p>
+<ol><li>include "stack.hpp"</li></ol>
+<p>Stack&lt;char, 100&gt; lib_char_stack;
+char char_val;
+</p><p>void lib_fxn()
+{
+</p>
+<pre>  lib_char_stack.push('c');
+  char_val = lib_char_stack.pop();
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Do <b>not</b> adopt that stack template code in your system.  Use the &lt;stack&gt; implementation that comes with the compiler RTS.
+</p><p>Perform a simple build of these two .cpp files.
+</p>
+<pre>% del *.obj
+% cl6x -as main.cpp lib1.cpp
+[main.cpp]
+[lib1.cpp]
+</pre>
+<p>The option -as is used so that static symbols (which show up later) can be seen.  This technique is described in the article <a href="Find_Static_Functions_and_Variables.html" title="Find Static Functions and Variables">Find Static Functions and Variables</a>.  Removing the object files is explained later.
+</p><p>So which, if any, of those stack template functions were instantiated?  Here is how to tell:
+</p>
+<pre>% nm6x main.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+00000060 T ___sti___8_main_cpp_916bf417
+00000000 T _main
+</pre>
+<p>The answer is "none" for main.cpp. What about lib1.cpp?
+</p>
+<pre>% nm6x lib1.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+0000004c T ___sti___8_lib1_cpp_1155a7bd
+00000000 T lib_fxn()
+</pre>
+<p>Also, "none".
+</p><p>What does that command line do?  The nm6x name utility dumps out all the symbols defined in the object file.  The dem6x utility demangles the C++ function names.  The find command is a DOS utility similar to Unix grep.  Used with /i " t ", it filters through lines with an isolated " t " or " T ".  In nm6x output, symbols marked with T are global functions, and symbols marked with t are static functions.  (The T stands for ".text", the section in which code symbols are normally defined.)  When find is used with /v "$", it filters out the lines about the local branch destinations.  Compiler generated branch destination labels always have "$" in the name.  The name utility is documented in the Assembly Language Tools User's Guide, and the demangler is documented in the Compiler User's Guide.  Ignore the ".text" symbol.  That marks the start of the code section.  Also ignore the ___sti symbols.  Explaining those is beyond the scope of this article, and not related to templates.
+</p><p>Now, link it.
+</p>
+<pre>% cl6x -z -c main.obj lib1.obj -z -o test.out
+&lt;Linking&gt;
+</pre>
+<p>When linking code that involves templates, you must invoke the linker through the shell utility cl6x.  Invoking the linker directly doesn't work.
+</p><p>Now, which stack template functions are instantiated?
+</p>
+<pre>% nm6x main.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+00000060 T Stack&lt;T1, N2&gt;::Stack&lt;int, (int)100&gt;() [with T1=int, N2=(int)100]
+0000015c T ___sti___8_main_cpp_916bf417
+00000000 T _main
+00000124 T T1 Stack&lt;T1, N2&gt;::pop() [with T1=int, N2=(int)100]
+000000e8 T void Stack&lt;T1, N2&gt;::push(T1) [with T1=int, N2=(int)100]
+</pre>
+<pre>% nm6x lib1.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+0000004c T Stack&lt;T1, N2&gt;::Stack&lt;char, (int)100&gt;() [with T1=char, N2=(int)100]
+00000154 T ___sti___8_lib1_cpp_1155a7bd
+00000000 T lib_fxn()
+00000120 T T1 Stack&lt;T1, N2&gt;::pop() [with T1=char, N2=(int)100]
+000000e8 T void Stack&lt;T1, N2&gt;::push(T1) [with T1=char, N2=(int)100]
+</pre>
+<p>Hey!  What happened?
+</p>
+<h2><span class="mw-headline" id="Late_Template_Instantiation">Late Template Instantiation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=5" title="Edit section: Late Template Instantiation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>When the linker discovers an entity (data object or function) needs to be instantiated, it invokes the compiler to re-compile the appropriate source file(s), using extra undocumented options that indicate which template entities to instantiate with what types.  In this case, main.cpp is recompiled to instantiate the Stack functions with type "int", and lib1.cpp is recompiled to instantiate the Stack functions with type "char".  This "late template instantiation" method avoids two problems.  Templates are not instantiated until it is known they are needed, thus saving compile time.  And, it avoids the problem of duplicate entities that would arise should the same template be instantiated with the same type in multiple files.
+</p><p>This linker driven re-compile is not all of the behind the scenes action.  Recall the directions in the first build to delete all the .obj files.  When the compiler is first compiling a file and comes across a potential template instantiation, it looks to see if the object file already exists.  It if does, it opens it to determine which templates actually were instantiated the last time the file was built, and during the current compile, instantiates those templates again.  In most cases in practice, this scheme reduces the linker driven re-compiles down to almost zero.  If you rebuild those .cpp files again, without deleting the post-link .obj files, then those template function will be instantiated on the first compile, and thus the linker doesn't need to re-compile anything.
+</p><p>Normally, you don't need to worry about any of this.  It just works.  Unfortunately, there are a few issues.
+</p>
+<h2><span class="mw-headline" id="Cannot_Instantiate_Templates_for_Library_Members">Cannot Instantiate Templates for Library Members</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=6" title="Edit section: Cannot Instantiate Templates for Library Members">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To set this issue up, rebuild the source files down to the initial object file state where nothing is instantiated.
+</p>
+<pre>% del *.obj
+% cl6x -as main.cpp lib1.cpp
+[main.cpp]
+[lib1.cpp]
+% nm6x main.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+00000060 T ___sti___8_main_cpp_916bf417
+00000000 T _main
+% nm6x lib1.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+0000004c T ___sti___8_lib1_cpp_1155a7bd
+00000000 T lib_fxn()
+</pre>
+<p>Now, put lib1.obj in a library, then link.
+</p>
+<pre>% ar6x -r mylib.lib lib1.obj
+  ==&gt;  new archive 'mylib.lib'
+  ==&gt;  building archive 'mylib.lib'
+% cl6x -z -c main.obj -o test.out mylib.lib
+&lt;Linking&gt;
+
+ undefined                                                          first referenced
+  symbol                                                                in file
+ ---------                                                          ----------------
+ Stack&lt;T1, N2&gt;::Stack&lt;char, (int)100&gt;() [with T1=char, N2=(int)100] mylib.lib&lt;lib1.obj&gt;
+ T1 Stack&lt;T1, N2&gt;::pop() [with T1=char, N2=(int)100]                mylib.lib&lt;lib1.obj&gt;
+ void Stack&lt;T1, N2&gt;::push(T1) [with T1=char, N2=(int)100]           mylib.lib&lt;lib1.obj&gt;
+
+error: unresolved symbols remain
+error: errors encountered during linking; "test.out" not built
+
+&gt;&gt; Compilation failure
+</pre>
+<p>What happened?  The linker needs to re-compile lib1.cpp to instantiate the Stack template functions with type "char".  But lib1.obj is not an ordinary object file, but a member of a library.  And there is no general mechanism by which the linker can find the source code of a library member.  In many cases of libraries purchased from vendors, the library source code is not available.  Thus, the link fails.
+</p>
+<h2><span class="mw-headline" id="First_Workaround:_Inline_the_Function_Definitions">First Workaround: Inline the Function Definitions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=7" title="Edit section: First Workaround: Inline the Function Definitions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>One workaround is to write the stack template functions as inline.
+</p><p>&lt;syntaxhighlight lang="cpp"&gt;
+// stack.hpp - inline version
+template&lt;typename T, int size&gt; class Stack
+{
+private:
+</p>
+<pre>  T stack_[size];
+  int top_;
+</pre>
+<p>public:
+</p>
+<pre>  Stack()
+  {
+     top_ = 0;
+  }
+</pre>
+<pre>  void push(T item)
+  {
+     if (top_ == size)
+        { /* overflow */ }
+     stack_[top_++] = item;
+  }
+</pre>
+<pre>  T pop()
+  {
+     if (top_ == 0)
+        { /* underflow */ }
+     return stack_[--top_];
+  }
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p><p>This second Stack example is much more typical of how template classes are written in practice.  The initial stack.hpp example, while useful here, is less typical in form.
+</p><p>So, what does this do?
+</p>
+<pre>% del *.obj
+% cl6x -as lib1.cpp
+% nm6x lib1.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+00000000 t Stack&lt;T1, N2&gt;::Stack&lt;char, (int)100&gt;() [with T1=char, N2=(int)100]
+00000134 T ___sti___8_lib1_cpp_1155a7bd
+000000f4 T lib_fxn()
+000000c0 t T1 Stack&lt;T1, N2&gt;::pop() [with T1=char, N2=(int)100]
+00000088 t void Stack&lt;T1, N2&gt;::push(T1) [with T1=char, N2=(int)100]
+</pre>
+<p>Notice two things that are different about this pre-link build of lib1.obj.  One, the Stack functions have been instantiated.  Two, those instantiations are static.  Notice the "t" next to the Stack function names.  Recall the "t" means static.  Compare against the post-link build of lib1.obj above, where the same functions are marked with "T" for global.
+</p><p>Why are the Stack functions static?  When the first phase of compilation, called the parser, sees an inline function in a template, it instantiates any entities that use the template.  This is done to allow later phases of compilation, i.e. the optimizer, to see the inline function and thus actually perform the inlining.  In this particular case, the optimizer phase is not run, the inline functions are not actually inlined, and the only correct thing left to do is create a static copy of the function.
+</p><p>For this example, if optimization is used, the functions actually are inlined.  Here is one way to see that.
+</p>
+<pre>% del *.obj
+% cl6x -as -o lib1.cpp
+% nm6x lib1.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+00000048 T ___sti___8_lib1_cpp_1155a7bd
+00000000 T lib_fxn()
+% ar6x -r mylib.lib lib1.obj
+  ==&gt;  new archive 'mylib.lib'
+  ==&gt;  building archive 'mylib.lib'
+% cl6x -as -o main.cpp
+% nm6x main.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+0000006c T ___sti___8_main_cpp_916bf417
+00000000 T _main
+% cl6x -z -c main.obj -o test.out mylib.lib
+&lt;Linking&gt;
+% nm6x main.obj | dem6x -q | find /i " t " | find /v "$"
+00000000 t .text
+0000006c T ___sti___8_main_cpp_916bf417
+00000000 T _main
+</pre>
+<p>The library and main.obj are built as before, except with -o to enable optimization.  Then it links successfully.  Inspection of the object files for template instantiation is carried out at various points.  As can be seen by their absence, no template functions are ever instantiated.
+</p><p>Well, that settles everything for this simple example.  But some questions remain:
+</p>
+<ul><li>What if inlining every member function is not practical?</li>
+<li>What happens when a function fails to inline?</li>
+<li>Can other things go wrong?</li></ul>
+<p>To address these issues we need a more in-depth example.
+</p>
+<h2><span class="mw-headline" id="Recast_The_Example">Recast The Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=8" title="Edit section: Recast The Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>&lt;syntaxhighlight lang=cpp&gt;
+// main2.cpp
+</p><p>void lib_fxn();
+int main() { lib_fxn(); return 0; }
+&lt;/syntaxhighlight&gt;
+</p><p>&lt;syntaxhighlight lang=cpp&gt;
+// lib2.cpp
+</p>
+<ol><li>include &lt;string&gt;</li></ol>
+<p>std::string l1, l2;
+</p><p>void lib_fxn()
+{
+</p>
+<pre>  l1 = "lib string";
+  l1 = l2;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>The main code merely calls the library function.  The library code includes the standard header &lt;string&gt; and does some standard things with strings.  Does this build?
+</p>
+<pre>% del *.obj
+% cl6x -as lib2.cpp
+% ar6x -r mylib.lib lib2.obj
+  ==&gt;  new archive 'mylib.lib'
+  ==&gt;  building archive 'mylib.lib'
+% cl6x -as main2.cpp
+% cl6x -z -c main2.obj -o test.out mylib.lib
+&lt;Linking&gt;
+
+ undefined                                                                                              first referenced
+  symbol                                                                                                    in file
+ ---------                                                                                              ----------------
+ std::basic_string&lt;T1, T2, T3&gt;::npos [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;] mylib.lib&lt;lib2.obj&gt;
+
+error: unresolved symbols remain
+error: errors encountered during linking; "test.out" not built
+
+&gt;&gt; Compilation failure
+</pre>
+<p>Surprisingly, no.  What just happened?
+</p><p>Well, for starters, if you are going to use &lt;string&gt;, you need to get used to seeing "std::basic_string&lt;T1, T2, T3&gt;::<i>something</i> [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;]" in your diagnostics.  All that stuff is the fully expanded representation of the string type.  Think of it as "std::string::<i>something</i>".
+</p><p>So, what is "npos"?  So far, we only know it is a undefined symbol.  An undefined symbol for what?  There is no way to figure it out from what we have here.  Build a simple, self-contained, example of code that uses &lt;string&gt;.  That's a nice exercise for the reader.  Then run nm6x on the final .out file:
+</p>
+<pre>% nm6x test.out | dem6x -q | find "npos"
+00000008 B std::basic_string&lt;T1, T2, T3&gt;::npos [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;]
+</pre>
+<p>Notice this symbol is marked with "B".  This means it is a global variable from an uninitialized data section such as .bss.  Recall that function symbols are marked with "T" or "t".  So, this is a data symbol, not a function symbol.  It is also a member of the string class.  Thus, this has to be static data member.  (Never heard of that?  See <u>The C++ Programming Language</u>, 3rd Ed., section 10.2.4.)
+</p><p>So, this problem is similar to the one in the simpler example in that something needs to be instantiated by rebuilding lib2.obj, but because lib2.obj comes from a library, the linker cannot re-compile it.  In the simpler example, an instantiation of the Stack&lt;char&gt; member functions is needed.  In this example, it is more subtle.  The instantiation of the basic_string&lt;char&gt; member functions comes on the first compile due to inlining.  But the instantiation of the static data member npos is also needed, and inlining doesn't provide it.
+</p>
+<h2><span class="mw-headline" id="Second_Workaround:_Include_Template_Definition_Headers_in_User_Code">Second Workaround: Include Template Definition Headers in User Code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=9" title="Edit section: Second Workaround: Include Template Definition Headers in User Code">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>One workaround is to include &lt;string&gt; in the user code, in this case, in main2.cpp.
+</p><p>&lt;syntaxhighlight lang=cpp&gt;
+// main2.cpp
+</p>
+<ol><li>include &lt;string&gt;        // addition</li></ol>
+<p>void lib_fxn();
+int main() { lib_fxn(); return 0; }
+&lt;/syntaxhighlight&gt;
+</p><p>Here is the build, including two looks at what is being instantiated in main2.obj.
+</p>
+<pre>% del *.obj *.lib
+% cl6x -as lib2.cpp
+% ar6x -r mylib.lib lib2.obj
+  ==&gt;  new archive 'mylib.lib'
+  ==&gt;  building archive 'mylib.lib'
+% cl6x -as main2.cpp
+% nm6x main2.obj | dem6x -q | perl -ne "print if (m/ [tb] [^\$]*$/i);"
+00000000 b .bss
+00000000 t .text
+00000000 T _main
+% cl6x -z -c main2.obj -o test.out mylib.lib
+&lt;Linking&gt;
+% nm6x main2.obj | dem6x -q | perl -ne "print if (m/ [tb] [^\$]*$/i);"
+00000000 b .bss
+00000000 t .text
+00000000 T _main
+00000000 B std::basic_string&lt;T1, T2, T3&gt;::npos [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;]
+</pre>
+<p>It is interesting that including &lt;string&gt; in a file that does not itself use the string type fixes the problem.  What is going on?  The first time main2.cpp is compiled, nothing gets instantiated.  But, because main2.cpp includes &lt;string&gt; and other non-template classes declared in &lt;string&gt; use the string template class, the compiler builds up the information that tells the linker, in effect, main2.cpp could instantiate the string template on a rebuild.  And, indeed, the linker does exactly that, rebuilding main2.cpp to instantiate npos.
+</p><p>Why does the nm6x command line now use Perl instead of find?  The find command, which can only search for fixed strings and not regular expressions, cannot perform the task needed.  That Perl command passes through all the symbols which are marked with t or b, regardless of case, and the symbol name does not contain a $.
+</p>
+<h2><span class="mw-headline" id="Third_Workaround:_Use_a_Template_in_a_Non-Template_Class_Declaration">Third Workaround: Use a Template in a Non-Template Class Declaration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=10" title="Edit section: Third Workaround: Use a Template in a Non-Template Class Declaration">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Sometimes the second workaround fails.  This section explains why, and shows one way to address it.  To focus on the issues at hand requires another example.
+</p><p>&lt;syntaxhighlight lang="cpp"&gt;
+// simple.hpp
+</p><p>template&lt;typename T&gt; class Simple {
+public:
+</p>
+<pre>  static T s_mem_;                  // declare static data member
+</pre>
+<p>};
+</p><p>template&lt;typename T&gt;
+T Simple&lt;T&gt;::s_mem_;                 // define it
+&lt;/syntaxhighlight&gt;
+</p><p>&lt;syntaxhighlight lang="cpp"&gt;
+// main3.cpp
+</p><p>void lib_fxn();
+int main() { lib_fxn(); return 0; }
+&lt;/syntaxhighlight&gt;
+</p><p>&lt;syntaxhighlight lang="cpp"&gt;
+// lib3.cpp
+</p>
+<ol><li>include "simple.hpp"</li></ol>
+<p>Simple&lt;int&gt; int_simple;         // need instantiation here
+</p><p>void lib_fxn()
+{
+</p>
+<pre>  Simple&lt;int&gt;::s_mem_ = 10;    // use static member
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>This example shows a simple template class that only contains a static data member.  Recall that npos is a static data member of the string template class.  Building this example ...
+</p>
+<pre>% del *.obj
+% cl6x -as lib3.cpp
+% ar6x -r mylib.lib lib3.obj
+  ==&gt;  new archive 'mylib.lib'
+  ==&gt;  building archive 'mylib.lib'
+% cl6x -as main3.cpp
+% cl6x -z -c main3.obj -o test.out mylib.lib
+&lt;Linking&gt;
+
+ undefined                        first referenced
+  symbol                              in file
+ ---------                        ----------------
+ Simple&lt;T1&gt;::s_mem_ [with T1=int] mylib.lib&lt;lib3.obj&gt;
+
+error: unresolved symbols remain
+error: errors encountered during linking; "test.out" not built
+
+&gt;&gt; Compilation failure
+</pre>
+<p>... fails as expected.  So, using the second workaround will fix it, right?  Let's see.  Add the header to main3.cpp and build again ...
+</p><p>&lt;syntaxhighlight lang="cpp"&gt;
+// main3.cpp
+</p>
+<ol><li>include "simple.hpp"      // addition</li></ol>
+<p>void lib_fxn();
+int main() { lib_fxn(); return 0; }
+&lt;/syntaxhighlight&gt;
+</p>
+<pre>% del *.obj
+% cl6x -as lib3.cpp
+% ar6x -r mylib.lib lib3.obj
+  ==&gt;  new archive 'mylib.lib'
+  ==&gt;  building archive 'mylib.lib'
+% cl6x -as main3.cpp
+% cl6x -z -c main3.obj -o test.out mylib.lib
+&lt;Linking&gt;
+
+ undefined                        first referenced
+  symbol                              in file
+ ---------                        ----------------
+ Simple&lt;T1&gt;::s_mem_ [with T1=int] mylib.lib&lt;lib3.obj&gt;
+
+error: unresolved symbols remain
+error: errors encountered during linking; "test.out" not built
+
+&gt;&gt; Compilation failure
+</pre>
+<p>No luck.  What's going on?  Merely defining a template, as is done in simple.hpp, does not cause the compiler to record that it can, on a later re-compile, instantiate that template.  It turns out using the template, with non-template types, causes the compiler to record that it can instantiate the template later.  One of the easiest things to do is declare an instance of the template class object in a non-template class that is never used.
+</p><p>&lt;syntaxhighlight lang="cpp"&gt;
+// main3.cpp
+</p>
+<ol><li>include "simple.hpp"      // addition</li></ol>
+<p>class never_used {         // non-template class that is never used
+</p>
+<pre>  Simple&lt;int&gt; m_;
+</pre>
+<p>};
+</p><p>void lib_fxn();
+int main() { lib_fxn(); return 0; }
+&lt;/syntaxhighlight&gt;
+</p>
+<pre>% del *.obj
+% cl6x -as lib3.cpp
+% ar6x -r mylib.lib lib3.obj
+  ==&gt;  new archive 'mylib.lib'
+  ==&gt;  building archive 'mylib.lib'
+% cl6x -as main3.cpp
+% cl6x -z -c main3.obj -o test.out mylib.lib
+&lt;Linking&gt;
+</pre>
+<p>Success!  How do you know what to declare in the never used class?  Look again at the error message issued by the linker.  It tells you exactly which template class and type (int) to use.
+</p><p>The string example works because, within the scope of &lt;string&gt;, the following things (conceptually speaking) occur:
+</p><p>&lt;syntaxhighlight lang="cpp"&gt;
+// define the string template
+</p><p>class you_never_use {                // not a template!
+</p>
+<pre>  std::string some_member;          // defines a string
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Fourth_Workaround:_Explicit_Instantiation">Fourth Workaround: Explicit Instantiation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=11" title="Edit section: Fourth Workaround: Explicit Instantiation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you are a library vendor, and your library has a template instantiation problem similar to the one in mylib.lib, there is something you can do to avoid it.  You can, in effect, tell the compiler to instantiate a template with a given type on the first compile.
+</p><p>The mechanism is called explicit instantiation, and it is described in <u>The C++ Programming Language</u>, 3rd Ed., section C.13.10.
+</p><p>&lt;syntaxhighlight lang=cpp&gt;
+// lib2.cpp
+</p>
+<ol><li>include &lt;string&gt;</li></ol>
+<p>template class std::basic_string&lt;char&gt;;   // addition
+</p><p>std::string l1, l2;
+</p><p>void lib_fxn()
+{
+</p>
+<pre>  l1 = "lib string";
+  l1 = l2;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Unfortunately, you do have to know that "std::string" is a typedef for "std::basic_string&lt;char&gt;".  The explicit instantiation line must refer to the actual template, and not the typedef.  An explicit instantiation means the compiler must instantiate everything in the template.  What does that look like?
+</p>
+<pre>% del *.obj
+% cl6x -as lib2.cpp
+% nm6x lib2.obj | dem6x -q | perl -ne "print if (m/ [tb] [^\$]*$/i);"
+00000000 b .bss
+00000000 b .far
+00000000 t .text
+00000df4 t T1 *std::_Allocate&lt;T1&gt;(unsigned int, T1 *) [with T1=char]
+00000878 t void std::basic_string&lt;T1, T2, T3&gt;::_Copy(std::_String_val&lt;T1, T3&gt;::_Alty::size_type, std::_String_val&lt;T1, T3&gt;::_Alty::size_type) [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;]
+00000a44 t void std::basic_string&lt;T1, T2, T3&gt;::_Eos(std::_String_val&lt;T1, T3&gt;::_Alty::size_type) [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;]
+00000a9c t bool std::basic_string&lt;T1, T2, T3&gt;::_Grow(std::_String_val&lt;T1, T3&gt;::_Alty::size_type, bool) [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;]
+00000bec t bool std::basic_string&lt;T1, T2, T3&gt;::_Inside(const T1 *) [with T1=char, T2=std::char_traits&lt;char&gt;, T3=std::allocator&lt;char&gt;]
+
+... snip! ...
+</pre>
+<p>Many static functions get instantiated.  The best way to handle that is to build with optimization (-o) and the switch for putting each function in its own subsection (-mo for C6000, -ms for ARM).  Those build options reduce the number of functions instantiated in the first place, and, on the final link, give the same result as the second workaround.
+</p><p>One valid concern with this workaround is the possiblity of multiple definition errors.  What if multiple libraries contain the same explicit instantiation?  The answer is to place each explicit instantiation in a file of its own.  The linker brings in a member (AKA a file) from a library only when it is needed to satisfy a reference from elsewhere.  If two libraries contain the same explicit instantiation, and they both contain that explicit instantiation in a file of its own, only one of those library members is brought in.  No multiple definition error occurs.
+</p>
+<h2><span class="mw-headline" id="About_Inlining">About Inlining</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=12" title="Edit section: About Inlining">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Templates involve lots of inlining.  And there are some issues with inlining.  But it is important to understand that template induced inlining does not introduce extra issues over those associated with inlining in the first place.  Therefore, <a href="C%2b%2b_Inlining_Issues.html" title="C++ Inlining Issues">C++ Inlining Issues</a> are addressed in a separate article.
+</p>
+<h2><span class="mw-headline" id="Early_Template_Instantiation">Early Template Instantiation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;section=13" title="Edit section: Early Template Instantiation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There is a long term solution to all of this.  TI compilers for ARM, MSP430, and C6000 devices all support EABI.  Template instantiation methods are part of the ABI, and EABI requires a different method called early template instantiation.  The details are not worth considering here.  The main point is all these template instantiation issues go away.  It just works.  The same is true of the inlining issues.
+</p><p>As of this writing, TI compilers for C2000, C5500, and C5400 do not support EABI.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130083349
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.041 seconds
+Real time usage: 0.042 seconds
+Preprocessor visited node count: 212/1000000
+Preprocessor generated node count: 416/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8173/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:911-0!canonical and timestamp 20201130083349 and revision id 182848
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C++ Template Instantiation Issues</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C++ Template Instantiation Issues</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C++ Template Instantiation Issues</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C++ Template Instantiation Issues</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C++ Template Instantiation Issues</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C++ Template Instantiation Issues</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C++ Template Instantiation Issues</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C++ Template Instantiation Issues</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C++ Template Instantiation Issues</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;oldid=182848">https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;oldid=182848</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li><li><a href="Category_Cplusplus.html" title="Category:Cplusplus">Cplusplus</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C%2B%2B+Template+Instantiation+Issues" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C%2b%2b_Template_Instantiation_Issues.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:C%2B%2B_Template_Instantiation_Issues&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C%2b%2b_Template_Instantiation_Issues.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C%2b%2b_Template_Instantiation_Issues.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C%2b%2b_Template_Instantiation_Issues.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;oldid=182848" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C%2B%2B_Template_Instantiation_Issues&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 30 July 2014, at 16:11.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.041","walltime":"0.042","ppvisitednodes":{"value":212,"limit":1000000},"ppgeneratednodes":{"value":416,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":8173,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130083349","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":240});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C++_Template_Instantiation_Issues by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:10 GMT -->
+</html>

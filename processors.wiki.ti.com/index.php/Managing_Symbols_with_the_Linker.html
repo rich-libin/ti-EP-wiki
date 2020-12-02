@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Managing_Symbols_with_the_Linker by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:30:31 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Managing Symbols with the Linker - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Managing_Symbols_with_the_Linker","wgTitle":"Managing Symbols with the Linker","wgCurRevisionId":233331,"wgRevisionId":233331,"wgArticleId":1085,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler","XDAIS"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Managing_Symbols_with_the_Linker","wgRelevantArticleId":1085,"wgRequestId":"e1643c7ca2a9af08fbcebcca","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Managing_Symbols_with_the_Linker rootpage-Managing_Symbols_with_the_Linker skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Managing Symbols with the Linker</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#No_Longer_Up-To-Date"><span class="tocnumber">1</span> <span class="toctext">No Longer Up-To-Date</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Introduction"><span class="tocnumber">2</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Version_Information"><span class="tocnumber">2.1</span> <span class="toctext">Version Information</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Symbol_Scoping_vs._Symbol_Hiding"><span class="tocnumber">3</span> <span class="toctext">Symbol Scoping vs. Symbol Hiding</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#When_the_Symbols_Change_Properties"><span class="tocnumber">4</span> <span class="toctext">When the Symbols Change Properties</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#-h_and_-g"><span class="tocnumber">5</span> <span class="toctext">-h and -g</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Example"><span class="tocnumber">5.1</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#--localize_and_--globalize"><span class="tocnumber">6</span> <span class="toctext">--localize and --globalize</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#--hide_and_--unhide"><span class="tocnumber">7</span> <span class="toctext">--hide and --unhide</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Example_2"><span class="tocnumber">7.1</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Use-cases"><span class="tocnumber">8</span> <span class="toctext">Use-cases</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Creating_XDAIS-compliant_libraries_with_localize_and_globalize"><span class="tocnumber">8.1</span> <span class="toctext">Creating XDAIS-compliant libraries with localize and globalize</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#IP-Protection_-_using_hide_and_unhide_to_remove_symbols_from_codec_libraries"><span class="tocnumber">8.2</span> <span class="toctext">IP-Protection - using hide and unhide to remove symbols from codec libraries</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Reducing_load-time_and_object-file_size"><span class="tocnumber">8.3</span> <span class="toctext">Reducing load-time and object-file size</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="No_Longer_Up-To-Date">No Longer Up-To-Date</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=1" title="Edit section: No Longer Up-To-Date">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The techniques in this article presume that partial linking is a practical alternative to a library.  That is the case with COFF object file format.  COFF was dominant at the time this article was written.  But as of when this update is written (February 2018), COFF has been replaced by ELF, except for C2000.  For ELF, partial linking is <b>not</b> a practical alternative to a library.  
+</p>
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=2" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This article discusses techniques for managing symbols that can be performed when linking.  You can control whether symbols are global or static, and you can hide symbols.
+</p>
+<h3><span class="mw-headline" id="Version_Information">Version Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=3" title="Edit section: Version Information">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The options discussed here are available in the linkers contained in these versions of the code generation tools.
+</p>
+<table border="2" cellspacing="0" cellpadding="4" width="25%">
+<tbody><tr>
+<td><b>Target</b>
+</td>
+<td><b>Version</b>
+</td></tr>
+<tr>
+<td>C6000
+</td>
+<td>v6.1.0
+</td></tr>
+<tr>
+<td>ARM
+</td>
+<td>v4.5.0
+</td></tr>
+<tr>
+<td>C5500
+</td>
+<td>v4.2.0
+</td></tr>
+<tr>
+<td>MSP430
+</td>
+<td>v3.0.0
+</td></tr>
+<tr>
+<td>C2000
+</td>
+<td>v5.1.0
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Symbol_Scoping_vs._Symbol_Hiding">Symbol Scoping vs. Symbol Hiding</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=4" title="Edit section: Symbol Scoping vs. Symbol Hiding">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>First, a few concepts.  The scope of a symbol refers to where in the system the symbol can be used.  Hiding a symbol, on the other hand, refers to causing a symbol to disappear permanently.  Scoping is a <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Scope_(programming)">well known concept in computer programming</a>.  Hiding a symbol, as described in this article, is not so widely known.  It is likely other toolsets supply features similar to this hiding, but describe it differently.
+</p><p>It is easy to confuse scoping and hiding.  That is because scoping can cause a symbol to be hidden temporarily.  Observe this C code example:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+int data_sym;          // global scope
+</p><p>void fxn()
+{
+</p>
+<pre>  int data_sym;       // fxn scope
+  ...
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>During execution of fxn(), references to data_sym refer to the one defined in the scope of fxn(), and not the one defined in the global scope.  It is natural to think of local data_sym as hiding global data_sym.  Nonetheless, hiding a symbol, as described in this article, is different.  As you will see, it is possible to make the global data_sym permanently hidden.
+</p>
+<h2><span class="mw-headline" id="When_the_Symbols_Change_Properties">When the Symbols Change Properties</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=5" title="Edit section: When the Symbols Change Properties">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>All of the linker options described in this article change properties of symbols.  One thing in common among all the options is when the change occurs.  None of these options affect symbols that are input to the linker.  They only affect symbols created by the linker for the final linked output file.
+</p>
+<h2><span class="mw-headline" id="-h_and_-g">-h and -g</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=6" title="Edit section: -h and -g">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The options -h and -g are <b>not</b> new with these versions of the tools.  They are mentioned here because they are used to manage symbols in the linker.
+</p><p>These options affect the scoping of the symbols.  As typically used, these options change the scope of symbols from global to static, and then back to global.  If you never link against the output file again, this distinction in scope makes no difference.  But if you do link again, then the global symbols in the output file can be referenced from yet other code, i.e. its global functions can be called.  The static symbols, however, cannot be referenced from other code, i.e. its static functions cannot be called.
+</p><p>The -h option (also documented as --make_static) makes all the global symbols static.  If you plan to link again, that is not very useful.  So the -h option is normally accompanied by one or more instances of -g <i>symbol</i> (also documented as --make_global).  That causes the named symbol to change from static to global.
+</p>
+<h3><span class="mw-headline" id="Example">Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=7" title="Edit section: Example">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For this simple assembly language code:
+</p><p>&lt;syntaxhighlight lang="asm"&gt;
+</p>
+<dl><dt>sym_ex.asm</dt></dl>
+<pre>       .global api_fxn_sym, api_data_sym
+</pre>
+<pre>       .bss    api_data_sym, 1
+</pre>
+<pre>       .text
+</pre>
+<p>api_fxn_sym:
+</p>
+<pre>       nop
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p><p>Here are some commands that build it, link it, and inspect the resulting symbols.
+</p>
+<pre>% cl6x sym_ex.asm
+% lnk6x sym_ex.obj -o sym_ex.out
+warning: no suitable entry-point found; setting to 0
+% nm6x -l sym_ex.out | find "sym"
+[index]  value      sclass   section name        symbol name
+[33]    |0x00000008|C_EXT   |.bss               |api_data_sym
+[32]    |0x00000020|C_EXT   |.text              |api_fxn_sym
+</pre>
+<p>The first two commands build and link the example.  Ignore the linker warning; of course this code doesn't run.  The last command invokes the name utility nm6x.  You can read about that utility in the Assembly Language Tools book for your toolset.  It displays information about the symbols in the file.  The -l option says to show that information in a long format.  The DOS command find "sym" filters out all the lines that do not have "sym" on them, thus showing only the lines relevant to the example.  If you are on a Unix-like system, use grep instead.  The column titled sclass shows the storage class for the symbol.  A C_EXT symbol is global.  As expected, api_data_sym and api_fxn_sym are global symbols.
+</p><p>What if you add -h?
+</p>
+<pre>% cl6x sym_ex.asm
+% lnk6x -h sym_ex.obj -o sym_ex.out
+warning: no suitable entry-point found; setting to 0
+% nm6x -l sym_ex.out | find "sym"
+[index]  value      sclass   section name        symbol name
+[33]    |0x00000008|C_STAT  |.bss               |api_data_sym
+[32]    |0x00000020|C_STAT  |.text              |api_fxn_sym
+</pre>
+<p>Now they're static (C_STAT).  Add -g for api_data_sym.
+</p>
+<pre>% cl6x sym_ex.asm
+% lnk6x -h -g api_data_sym sym_ex.obj -o sym_ex.out
+warning: no suitable entry-point found; setting to 0
+% nm6x -l sym_ex.out | find "sym"
+[index]  value      sclass   section name        symbol name
+[33]    |0x00000008|C_EXT   |.bss               |api_data_sym
+[32]    |0x00000020|C_STAT  |.text              |api_fxn_sym
+</pre>
+<p>Now api_data_sym is global again.
+</p>
+<h2><span class="mw-headline" id="--localize_and_--globalize">--localize and --globalize</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=8" title="Edit section: --localize and --globalize">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These options affect the scoping of symbols just like -h and -g.  The difference is in how you name the symbols so affected.  Each option accepts a limited regular expression, and changes the scope of all the symbols which match the pattern.  To do the same thing as the last example above:
+</p>
+<pre>% lnk6x --localize=* --globalize=api_data_sym sym_ex.obj -o sym_ex.out
+</pre>
+<p>In typical usage, however, you make everything static, except for the symbols in your API you want to expose:
+</p>
+<pre>% lnk6x --localize=* --globalize=api_* sym_ex.obj -o sym_ex.out
+</pre>
+<p>All the symbols are made static, except for those that begin "api_".
+</p><p>Do not use these options in combination with -h and -g.  Use one technique or the other.
+</p><p>There are yet other details about the regular expression matches.  See the last slide of the presentation in the article <a href="C6x_Code_Generation_Tools_v6.html" title="C6x Code Generation Tools v6.1">C6x Code Generation Tools v6.1</a>.
+</p>
+<h2><span class="mw-headline" id="--hide_and_--unhide">--hide and --unhide</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=9" title="Edit section: --hide and --unhide">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These options also accept a limited regular expression.  However, it does not affect the scope of the symbols.  Instead, --hide causes those symbols to disappear and --unhide prevents a symbol from disappearing.
+</p>
+<h3><span class="mw-headline" id="Example_2">Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=10" title="Edit section: Example">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Here is how to hide everything except api_data_sym.
+</p>
+<pre>% cl6x sym_ex.asm
+% lnk6x --hide=* --unhide=api_data_sym sym_ex.obj -o sym_ex.out
+warning: no suitable entry-point found; setting to 0
+% nm6x -l sym_ex.out | find "sym"
+[index]  value      sclass   section name        symbol name
+[33]    |0x00000008|C_EXT   |.bss               |api_data_sym
+</pre>
+<p>Poof!  They're gone!  Well, not really.  Don't filter the name utility output.
+</p>
+<pre>% nm6x -l sym_ex.out
+
+[index]  value      sclass   section name        symbol name
+
+[0]     |0xffffffff|C_STAT  |ABSOLUTE           |
+[1]     |0xffffffff|C_STAT  |ABSOLUTE           |
+[2]     |0xffffffff|C_STAT  |ABSOLUTE           |
+[3]     |0xffffffff|C_STAT  |ABSOLUTE           |
+[4]     |0xffffffff|C_STAT  |ABSOLUTE           |
+[5]     |0xffffffff|C_STAT  |ABSOLUTE           |
+[6]     |0xffffffff|C_STAT  |ABSOLUTE           |
+[7]     |0x00000020|C_STAT  |.text              |
+[8]     |0x00000020|C_STAT  |.text              |
+[9]     |0x00000040|C_STAT  |.text              |
+[10]    |0x00000040|C_STAT  |.text              |
+[11]    |0x00000008|C_STAT  |.data              |
+[12]    |0x00000008|C_STAT  |.data              |
+[13]    |0x00000008|C_STAT  |.data              |
+[14]    |0x00000008|C_STAT  |.data              |
+[15]    |0x00000008|C_STAT  |.bss               |
+[16]    |0x00000008|C_STAT  |.bss               |
+[17]    |0x00000009|C_STAT  |.bss               |
+[18]    |0x00000009|C_STAT  |.bss               |
+[19]    |0xffffffff|C_STAT  |ABSOLUTE           |
+[20]    |0xffffffff|C_STAT  |ABSOLUTE           |
+[21]    |0xffffffff|C_STAT  |ABSOLUTE           |
+[22]    |0x00000008|C_STAT  |.bss               |
+[23]    |0x00000000|C_STAT  |SYMBOLIC DEBUG     |
+[24]    |0x00000020|C_STAT  |.text              |
+[26]    |0x00000008|C_STAT  |.bss               |
+[28]    |0x00000000|C_STAT  |.debug_line        |
+[30]    |0x00000020|C_STAT  |.text              |
+[31]    |0x0000009d|C_STAT  |.debug_info        |
+[33]    |0x00000008|C_EXT   |.bss               |api_data_sym
+</pre>
+<p>Actually, the symbols are still present in the file.  But the name field is changed to all zeros.
+</p><p>Again, in typical usage, you hide everything except the API related symbols.
+</p>
+<pre>% lnk6x --hide=* --unhide=api_* sym_ex.obj -o sym_ex.out
+</pre>
+<p>Note that if you combine the old -h with the new --hide the linker will produce an error (recall as per above that --make_static is the long-form equivalent of -h): -
+</p>
+<pre>error: --hide option conflicts with previous option --make_static
+</pre>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Use-cases">Use-cases</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=11" title="Edit section: Use-cases">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Creating_XDAIS-compliant_libraries_with_localize_and_globalize">Creating XDAIS-compliant libraries with localize and globalize</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=12" title="Edit section: Creating XDAIS-compliant libraries with localize and globalize">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This <a href="CCStudio_FAQ.html#Q:_How_do_I_add_custom_build_steps_.28eg_partial_link.29_to_CCStudio_library_pjt.27s.3F" title="CCStudio FAQ">FAQ</a> shows how to create <a href="QualiTI_XDAIS_Compliance_Tool.html" class="mw-redirect" title="QualiTI XDAIS Compliance Tool">XDAIS-compliant</a> libraries (from the namespace rule perspective) in a CCS environment using -h and -g to expose the key algorithm entry points.
+</p><p>Note that it may seem strange to discuss linking and symbol localizing or hiding in the context of a library. In reality it's not strange at all. Many codec libraries are built via the above partial linking technique since it creates an opportunity to group code together for cache conflict optimization purposes.
+</p><p>Naturally you can continue to use -h and -g. Alternatively you can achieve the same thing via: -
+</p>
+<pre>--localize=*
+--globalize=_FIR_TI_*
+</pre>
+<p>Running <i>nm6x -lg</i> on the library then yields: -
+</p>
+<pre>[index]  value      sclass   section name        symbol name
+
+[92]    |0x00000450|C_EXT   |.far               |_FIR_TI_IALG
+[93]    |0x00000450|C_EXT   |.far               |_FIR_TI_IFIR
+[85]    |0x00000360|C_EXT   |.text:algActivate  |_FIR_TI_activate
+[90]    |0x000001e0|C_EXT   |.text:algAlloc     |_FIR_TI_alloc
+[84]    |0x000003a0|C_EXT   |.text:algControl   |_FIR_TI_control
+[86]    |0x000003e0|C_EXT   |.text:algDeactivate|_FIR_TI_deactivate
+[81]    |0x000004c0|C_EXT   |.text:exit         |_FIR_TI_exit
+[83]    |0x00000144|C_EXT   |.text:filter       |_FIR_TI_filter
+[88]    |0x00000280|C_EXT   |.text:algFree      |_FIR_TI_free
+[82]    |0x000004e0|C_EXT   |.text:init         |_FIR_TI_init
+[91]    |0x00000300|C_EXT   |.text:algInit      |_FIR_TI_initObj
+[87]    |0x00000480|C_EXT   |.text:algMoved     |_FIR_TI_moved
+[89]    |0x000004a0|C_EXT   |.text:algNumAlloc  |_FIR_TI_numAlloc
+[95]    |0x00000000|C_EXT   |UNDEFINED EXTERNAL |_IFIR_PARAMS
+[94]    |0x00000000|C_EXT   |UNDEFINED EXTERNAL |_memcpy
+</pre>
+<p>Observe that all FIR_TI_* symbols are now global scope (C_EXT). There was no need to list out each symbol separately via -g _FIR_TI_symName because we leveraged the wildcard '*' specifier.
+</p><p>All FIR_TI_* symbols are XDAIS-compliant by virtue of their &lt;MODULE&gt;_&lt;VENDOR&gt;_ prefix.
+</p>
+<h3><span class="mw-headline" id="IP-Protection_-_using_hide_and_unhide_to_remove_symbols_from_codec_libraries">IP-Protection - using hide and unhide to remove symbols from codec libraries</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=13" title="Edit section: IP-Protection - using hide and unhide to remove symbols from codec libraries">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>NOTE - this is NOT intended to be a full-proof, legal guarantee that the techniques below protect IP - instead it simply highlights techniques to improve IP protection.</b>
+</p><p>Codec vendor 3rd parties desire the ability to ship libraries without compromising their IP or details of their implementation. There is a theory that if all the symbol names are exposed then hackers could attempt to reverse engineer the code from its object files.
+</p><p>In XDAIS algorithms the key entry point is the <i>_MODULE_VENDOR_IMODULE</i> symbol. This is essential. It cannot be hidden (nor localized). For the FIR_TI algorithm we could therefore do: -
+</p>
+<pre>--hide=*
+--unhide=_FIR_TI_IFIR
+</pre>
+<p>Running <i>nm6x -lg</i> on the library then yields just: -
+</p>
+<pre>[index]  value      sclass   section name        symbol name
+
+[92]    |0x00000450|C_EXT   |.far               |_FIR_TI_IFIR
+[95]    |0x00000000|C_EXT   |UNDEFINED EXTERNAL |_IFIR_PARAMS
+[94]    |0x00000000|C_EXT   |UNDEFINED EXTERNAL |_memcpy
+</pre>
+<p>We have now hidden all other global symbols in the codec library, thus making it much more difficult to reverse engineer.
+</p>
+<h3><span class="mw-headline" id="Reducing_load-time_and_object-file_size">Reducing load-time and object-file size</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit&amp;section=14" title="Edit section: Reducing load-time and object-file size">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This use-case is a little different. Some customers need to reduce load-time. For example if a DSP executable is being loaded by <a href="Category_DSPLink.html" title="Category:DSPLink">DSPLink</a> then, if the executable is huge, it may take some time to kick-start the end-product from a user-perspective.
+</p><p>There are also (occasionally) reasons to keep the object file sizes smaller, even if the actual footprint loaded on the target stays the same.
+</p><p>Using --localize does nothing to help with the above problems. However --hide does help a little. It removes the string table entries for the hidden symbols thus making the object file smaller.
+</p><p>A better technique for reducing load-time is to leverage the <a rel="nofollow" class="external text" href="http://www-k.ext.ti.com/srvs/cgi-bin/webcgi.exe?Company={5761bcd8-11f5-4e08-84e0-8167176a4ed9},kb=dsp,case=51227,new">strip6x</a> utility. This should typically be used on executables instead of libraries. Note however that strip6x does not have the wildcard / selective-removal options that --hide offers.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201023643
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.035 seconds
+Real time usage: 0.036 seconds
+Preprocessor visited node count: 171/1000000
+Preprocessor generated node count: 320/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4610/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:1085-0!canonical and timestamp 20201201023643 and revision id 233331
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Managing Symbols with the Linker</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Managing Symbols with the Linker</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Managing Symbols with the Linker</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Managing Symbols with the Linker</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Managing Symbols with the Linker</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Managing Symbols with the Linker</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Managing Symbols with the Linker</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Managing Symbols with the Linker</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Managing Symbols with the Linker</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;oldid=233331">https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;oldid=233331</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li><li><a href="Category_XDAIS.html" title="Category:XDAIS">XDAIS</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Managing+Symbols+with+the+Linker" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Managing_Symbols_with_the_Linker.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Managing_Symbols_with_the_Linker&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Managing_Symbols_with_the_Linker.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Managing_Symbols_with_the_Linker.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Managing_Symbols_with_the_Linker.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;oldid=233331" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Managing_Symbols_with_the_Linker&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 19 February 2018, at 11:41.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.035","walltime":"0.036","ppvisitednodes":{"value":171,"limit":1000000},"ppgeneratednodes":{"value":320,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":4610,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201023643","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":285});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Managing_Symbols_with_the_Linker by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:30:33 GMT -->
+</html>

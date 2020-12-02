@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Linux_Debug_in_CCSv5 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:04:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Linux Debug in CCSv5 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Linux_Debug_in_CCSv5","wgTitle":"Linux Debug in CCSv5","wgCurRevisionId":198394,"wgRevisionId":198394,"wgArticleId":5553,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM437x","AM335x","AM35x","AM37x","AM1x","AM18x","Code Composer Studio v5","Linux","OMAP35x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Linux_Debug_in_CCSv5","wgRelevantArticleId":5553,"wgRequestId":"c5eb5cd3dc94ba0bb8a70f77","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Linux_Debug_in_CCSv5 rootpage-Linux_Debug_in_CCSv5 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Linux Debug in CCSv5</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>&#160; 
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Updated_Toolchain"><span class="tocnumber">1</span> <span class="toctext">Updated Toolchain</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Background"><span class="tocnumber">2</span> <span class="toctext">Background</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Linux_Debug_Overview"><span class="tocnumber">2.1</span> <span class="toctext">Linux Debug Overview</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Run_Mode_Debug"><span class="tocnumber">3</span> <span class="toctext">Run Mode Debug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Dependencies"><span class="tocnumber">3.1</span> <span class="toctext">Dependencies</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Procedure"><span class="tocnumber">3.2</span> <span class="toctext">Procedure</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Stop_Mode_Debug"><span class="tocnumber">4</span> <span class="toctext">Stop Mode Debug</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Dependencies_2"><span class="tocnumber">4.1</span> <span class="toctext">Dependencies</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Procedure_2"><span class="tocnumber">4.2</span> <span class="toctext">Procedure</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Compiling_the_Linux_kernel_with_debug_information"><span class="tocnumber">4.2.1</span> <span class="toctext">Compiling the Linux kernel with debug information</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Creating_a_source_code_project_for_the_kernel"><span class="tocnumber">4.2.2</span> <span class="toctext">Creating a source code project for the kernel</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Associating_the_Kernel_Project_with_the_Target"><span class="tocnumber">4.2.3</span> <span class="toctext">Associating the Kernel Project with the Target</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Mixed_Mode_Debug"><span class="tocnumber">5</span> <span class="toctext">Mixed Mode Debug</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Linux_Aware_Debug"><span class="tocnumber">6</span> <span class="toctext">Linux Aware Debug</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Limitations_and_Known_Issues"><span class="tocnumber">7</span> <span class="toctext">Limitations and Known Issues</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Archived"><span class="tocnumber">8</span> <span class="toctext">Archived</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Updated_Toolchain">Updated Toolchain</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=1" title="Edit section: Updated Toolchain">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Starting with Sitara Linux SDK 6.0 the location of the toolchain has changed and for non ARM 9 devices a new Linaro based toolchain will be used. Details about the change in toolchain location can be found <a rel="nofollow" class="external text" href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/Overview_Getting_Started_Guide.html#gcc-toolchain#Updated.C2.A0Linux-Devkit_Structure">here</a>. Also details about the switch to Linaro can be found <a rel="nofollow" class="external text" href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/Overview_Getting_Started_Guide.html#gcc-toolchain#Switch_to_Linaro">here</a>. 
+</p><p>AM18x users are not affected by the switch to Linaro. Therefore, any references to the Linaro toolchain prefix "<b>arm-linux-gnueabihf</b>-" should be replaced with "<b>arm-arago-linux-gnueabi-</b>".
+</p>
+<h2><span class="mw-headline" id="Background">Background</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=2" title="Edit section: Background">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Linux_Debug_Overview">Linux Debug Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=3" title="Edit section: Linux Debug Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>CCSv5 supports run mode debug (a.k.a. remote GDB debug, agent-based debug, application debug)and stop mode debug (a.k.a. JTAG debug, low-level debug). For Linux aware debug support (an extension of the stop mode debug), please read the section <a href="Linux_Debug_in_CCSv5.html#Linux_Aware_Debug" title="Linux Debug in CCSv5">Linux Aware Debug</a> below. <br /> 
+</p>
+<ul><li>In run mode debug, the user can debug one or more Linux processes. On the host side, CCSv5 launches a cross platform GDB debugger to control the target side agent (a GDB server process). The GDB server launches or attaches to the process to be debugged and accepts instructions from the host side over a serial or TCP/IP connection. The Linux kernel remains active during the debug session. The user can only examine the state of the processes being debugged.</li>
+<li>In the stop mode debug, CCSv5 halts the target using a <a href="Category_Emulation.html" class="mw-redirect" title="Emulation">JTAG emulator</a>. The Linux kernel and all processes are suspended completely. The user can examine the state of the target and the execution state of the current process.</li></ul>
+<p><font color="#ff0000"><b>IMPORTANT!</b></font> This page refers to CCS version 5.3.0 and newer. For CCSv5.0.x check <a href="Linux_Debug_in_CCSv5_0.html" title="Linux Debug in CCSv5 0">this page</a>. <br />
+</p><p><iframe width="720" height="355" src="https://www.youtube.com/embed/ejrIKtk7lA4" frameborder="0" allowfullscreen></iframe>
+</p>
+<h2><span class="mw-headline" id="Run_Mode_Debug">Run Mode Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=4" title="Edit section: Run Mode Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Dependencies">Dependencies</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=5" title="Edit section: Dependencies">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following dependencies apply to Run Mode Debug: 
+</p>
+<ul><li>CCS versions: CCSv5.3 or greater</li>
+<li>Devices: any core that is capable of running Linux: Cortex-A, ARM9, C66x.</li>
+<li>Host requirement: a cross platform GDB debugger (typically part of a GCC package like CodeSourcery or Arago)</li>
+<li>Target requirement: a GDB server that is compatible with the GDB debugger located on the host (typically part of a SDK package like EZSDK, DVSDK, etc.)</li>
+<li>A GCC project (see <a href="How_to_create_GCC_projects_in_CCSv5.html" title="How to create GCC projects in CCSv5">How to create GCC projects in CCSv5</a>).</li></ul>
+<p><br />The run mode debug requires two connections to the target system: <br /><br /><font color="#f000f0"><b>1.</b></font> One connection to the target console is used to execute Linux commands. 
+</p>
+<ul><li>If using a serial port (common in all TI's EVMs and low-cost boards like Beagleboard and Pandaboard), this connection can be done using a simple terminal program like Hyperterminal, Putty, TeraTerm or even a <a href="How_to_install_the_terminal_plugin_in_CCSv5.html" title="How to install the terminal plugin in CCSv5">CCSv5 terminal plug-in</a>.</li>
+<li>If using Ethernet, this connection must be done using one of the programs above and configuring it for telnet or SSH. Keep in mind that the linux running on the target board requires a telnet or SSH server running on it.</li></ul>
+<p><br /><font color="#f000f0"><b>2.</b></font> The other connection is used by the gdb debugger to communicate with the gdb server running on the target. 
+</p>
+<ul><li>This connection can be done either via Ethernet or serial port. Keep in mind the speed of a serial connection can be a lot slower and timeouts may occur.</li></ul>
+<p><br /> 
+</p>
+<h3><span class="mw-headline" id="Procedure">Procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=6" title="Edit section: Procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><font color="#ff0000"><b>IMPORTANT!</b></font> In certain versions CCSv5 does not enable "CDT GDB Debugging" configurations. You need to enable them from the Capabilities tab in the Preference dialog (select <i>Window</i> --&gt; <i>Preferences</i> --&gt; <i>General</i> --&gt; <i>Capabilities</i>). <br /><br /><font color="#f000f0"><b>1.</b></font> Bring up the Debug Configurations dialog by selecting menu <i>Run</i> --&gt; <i>Debug Configurations</i> <br /><br /><font color="#f000f0"><b>2.</b></font> Select <i>C/C++ Remote Application</i> <br /><br /><font color="#f000f0"><b>3.</b></font> Click on the icon <i>New launch configuration</i> (Top left of the pane) <br /><br /><font color="#f000f0"><b>4.</b></font> Set the fields&#160; <i>C/C++ Application: </i>and<i>Project:</i> respectively to the existing project in the workspace and the binary executable file 
+</p>
+<dl><dd><b>Note:</b> If the project is already in focus (Active or highlighted) in the <i>Project Explorer</i> view, these fields will be already populated.</dd></dl>
+<p><br /><font color="#f000f0"><b>5.</b></font> In tab <i>Main</i>, click on the link <i>Select Other</i> at the bottom where it says <b>Using GDB (ASF) Automatic Remote Debugging Launcher</b>. Check <i>Use configuration specific settings</i> and select <b>GDB (DSF) Manual Remote Degugging Launcher</b>. Click <b>OK</b>. </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_GDB_config.html" class="image"><img alt="Linux debug v5 GDB config.png" src="https://processors.wiki.ti.com/images/7/77/Linux_debug_v5_GDB_config.png" width="300" height="299" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_GDB_config.html" class="internal" title="Enlarge"></a></div></div></div></div> 
+<dl><dd><b>Note:</b> It is possible to set up CCSv5 to automatically connect and launch the debugger in the target by leaving the settings above untouched. Check section 8 of the <a rel="nofollow" class="external text" href="http://wiki.eclipse.org/index.php/CDT/User/FAQ">Eclipse CDT FAQ</a>.</dd>
+<dd><b>Note:</b> Other options like <i>Enable auto build</i>, <i>arguments</i> and others can be modified at this time.</dd></dl>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_tab_main.html" class="image"><img alt="Linux debug v5 tab main.png" src="https://processors.wiki.ti.com/images/f/ff/Linux_debug_v5_tab_main.png" width="300" height="168" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_tab_main.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>6.</b></font> Select the <b>Debugger</b> tab and specify the GDB debugger as well as the GDB command file. In this case the GDB debugger from Arago is being used, but it is possible to use also CodeSourcery or other toolchain. 
+</p><p><br /> 
+</p><p>&#160;&#160;&#160;Click browse next to "GDB command file" and browse&#160;to the .gdbinit file in the SDK install directory.&#160;&#160;When you try to browse to the .gdbinit&#160;file, you will need 
+</p><p>&#160;&#160; to R-Click -&gt; Show Hidden Files to see the file.&#160;&#160; Click the Close button and you are now ready to debug the application! 
+</p>
+<ul><li>In this example of the 06.00.00.00 SDK, the path is: /home/user/AM335X/SDK/ti-sdk-am335x-evm-06.00.00.00/linux-devkit/sysroot/i686-arago-linux/usr/bin/arm-linux-gnueabihf-gdb</li>
+<li>The GDB init file is located: /home/user/AM335X/SDK/ti-sdk-am335x-evm-06.00.00.00/.gdbinit</li></ul>
+<p><br /> </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_tab_dbg_main.html" class="image"><img alt="Linux debug v5 tab dbg main.png" src="https://processors.wiki.ti.com/images/2/23/Linux_debug_v5_tab_dbg_main.png" width="300" height="155" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_tab_dbg_main.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>7.</b></font> On the Debugger <b>Connection</b> tab, specify the IP address and port of the GDB server running on the target. 
+</p><dl><dd><b>Note:</b> the port number is arbitrary and is specified when the gdbserver is launched - unless you have a strong reason to change it, the value of 10000 is just fine.</dd>
+<dd><b>Note:</b> the IP address of the target can be determined from the target linux console.</dd>
+<dd><font color="#ff0000"><b>IMPORTANT!</b></font> Some SDKs do not have gdbserver installed by default in the supplied filesystem. Check the SDK documentation for details on how to install it.</dd></dl>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_ifconfig.html" class="image"><img alt="Linux debug v5 ifconfig.png" src="https://processors.wiki.ti.com/images/3/30/Linux_debug_v5_ifconfig.png" width="300" height="203" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_ifconfig.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /></p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_tab_dbg_connection.html" class="image"><img alt="Linux debug v5 tab dbg connection.png" src="https://processors.wiki.ti.com/images/d/db/Linux_debug_v5_tab_dbg_connection.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_tab_dbg_connection.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>8.</b></font> On the target console, start the GDB server specifying the application file and the port number. 
+</p><dl><dd><b>Note:</b> make sure the port number matches the one specified in the Debugger Connection tab (10000 by default).</dd>
+<dd><b>Note:</b> the application under debug must be located on the target filesystem. This can be done in multiple ways: either copying it to the shared NFS directory, to the SD card being used to boot linux, etc.</dd></dl>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_gdbserver.html" class="image"><img alt="Linux debug v5 gdbserver.png" src="https://processors.wiki.ti.com/images/0/0d/Linux_debug_v5_gdbserver.png" width="300" height="202" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_gdbserver.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>9.</b></font> Launch the debug configuration by clicking the Debug button. 
+</p><ul><li>CCSv5 will launch the GDB debugger to connect to the GDB server.</li>
+<li>After the connection is established, you can step, set breakpoints and view the memory, registers and variables of the application process running on the target.</li></ul>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_debugger.html" class="image"><img alt="Linux debug v5 debugger.png" src="https://processors.wiki.ti.com/images/a/ac/Linux_debug_v5_debugger.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_debugger.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>10.</b></font> You may need to set the shared library (object) search path in a cross compile debug enviroment. 
+</p><ul><li>Under <i>Debug Configuration</i> -&gt; <i>Debugger</i> tab -&gt; <i>Shared Libraries</i> tab enter the path to the target filesystem lib directory</li>
+<li>You may need a copy of the target filesystem on the local debug host</li></ul>
+<h2><span class="mw-headline" id="Stop_Mode_Debug">Stop Mode Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=7" title="Edit section: Stop Mode Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Dependencies_2">Dependencies</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=8" title="Edit section: Dependencies">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following dependencies apply to Stop Mode Debug: <br /> 
+</p>
+<ul><li>CCS version 5.3.0 or greater. This facilitates working on either a Windows host, or a Linux host.</li></ul>
+<dl><dd>In addition to the procedure below, a short video clip is located <a rel="nofollow" class="external text" href="http://software-dl.ti.com/sdo/sdo_apps_public_sw/CCSv5/Demos/Linux_kernel_debugging/Linux_kernel_debugging.html">here</a>.</dd></dl>
+<ul><li>Devices: any core that is capable of running Linux: Cortex-A, ARM9, C66x.</li>
+<li>Host system requirements:</li>
+<li>Target system requirements: a Linux distribution running on the target. Kernel releases 2.6.x and 3.1.x were tested.</li></ul>
+<p><br />The stop mode debug requires a JTAG connection to the target system. It supports either a standalone JTAG emulator (XDS100, XDS510, XDS560) or an embedded emulator on the development board (OMAPL137EVM, Beaglebone, etc.) <br />An additional connection to the target console is helpful to monitor the Linux boot procedure and the integrity during the debug session. <br /> 
+</p>
+<h3><span class="mw-headline" id="Procedure_2">Procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=9" title="Edit section: Procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Although it is possible to connect to the device using the JTAG emulator without any reference to the source code, this makes the debugging process very difficult as the information in the debugger will consist in pure assembly code. In order to perform low-level debugging with complete visibility of the Linux kernel source code, a few steps are necessary: <br /><font color="#f000f0"><b>1.</b></font> Compile the kernel with the appropriate debug symbols (EABI executable file <tt>vmlinux</tt>). <br /><font color="#f000f0"><b>2.</b></font> Create a project in the CCS workspace that contains all Linux kernel source code. <br /><font color="#f000f0"><b>3.</b></font> Create a debug configuration that loads the debug symbols to the debugger and references the source code in the Linux kernel tree. <br /> 
+</p>
+<h4><span class="mw-headline" id="Compiling_the_Linux_kernel_with_debug_information">Compiling the Linux kernel with debug information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=10" title="Edit section: Compiling the Linux kernel with debug information">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The Linux kernel <u>must</u> be built with debugging information, otherwise no source code correlation can be made by the debugger. <br />In order to add or verify if the debug symbols are properly added to the configuration, the step <i>make menuconfig</i> must be performed before the kernel is built, and the options below must be enabled: 
+</p>
+<dl><dd><ul><li>Enable <i>Kernel hacking</i> --&gt; <i>Compile the kernel with debug info</i></li></ul></dd>
+<dd>Also, if the kernel is in experimental mode, you should enable the option below:
+<ul><li><i>Kernel hacking</i> ---&gt; <i>Enable stack unwinding support</i></li></ul></dd>
+<dd>To check if the kernel is in this mode, check if the option below is enabled.
+<ul><li><i>General Setup</i> ---&gt; <i>Prompt for development and/or incomplete code/drivers</i></li></ul></dd></dl>
+<p><b>Note:</b> for kernel 3.1.0 and above, there is an additional option that must be set: 
+</p>
+<dl><dd><ul><li><i>Kernel Hacking</i> ---&gt; <i>Enable JTAG clock for debugger connectivity</i></li></ul></dd></dl>
+<p><b>Note:</b> for kernel 3.2.0, the option <i>Enable stack unwinding support</i> shown above is only available if the kernel is built with ARM EABI support. To enable it, go to: 
+</p>
+<dl><dd><ul><li><i>Kernel Features</i> ---&gt; <i>Use the ARM EABI to compile the kernel</i></li></ul></dd></dl>
+<p><b>Note:</b> for kernel 3.2.0, the option <i>Compile the kernel with debug info</i> shown above is only available if the option <i>Kernel Debugging</i> is enabled. To do it, go to: 
+</p>
+<dl><dd><ul><li><i>Kernel hacking</i> ---&gt; <i>Kernel Debugging</i></li></ul></dd></dl>
+<p><b>Note:</b> the building process depends on the Linux distribution being used, therefore it is recommended to read the SDK documentation regarding this step. <br /> 
+</p>
+<h4><span class="mw-headline" id="Creating_a_source_code_project_for_the_kernel">Creating a source code project for the kernel</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=11" title="Edit section: Creating a source code project for the kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><font color="#f000f0"><b>1.</b></font> Create a new C/C++ project by selecting <i>File</i> --&gt; <i>New</i> --&gt; <i>Project</i> and select <i>Makefile Project with Existing Code</i>. Click <i>Next</i>. </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_kernel_pjt_wizard.html" class="image"><img alt="Linux debug v5 kernel pjt wizard.png" src="https://processors.wiki.ti.com/images/b/b6/Linux_debug_v5_kernel_pjt_wizard.png" width="300" height="245" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_kernel_pjt_wizard.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>2.</b></font> In the section <i>Existing Code Location</i>, click on <i>Browse...</i> and point to the root directory of the Linux kernel source tree. Leave the toolchain as <i>&lt;none&gt;</i> and click <i>Finish</i>. </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_kernel_pjt_new.html" class="image"><img alt="Linux debug v5 kernel pjt new.png" src="https://processors.wiki.ti.com/images/4/4c/Linux_debug_v5_kernel_pjt_new.png" width="300" height="333" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_kernel_pjt_new.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /></p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_kernel_pjt_tree.html" class="image"><img alt="Linux debug v5 kernel pjt tree.png" src="https://processors.wiki.ti.com/images/b/bc/Linux_debug_v5_kernel_pjt_tree.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_kernel_pjt_tree.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>3.</b></font> To prevent CCS from building the Linux kernel automatically before launching the debugger, this option must be disabled. Highlight the Linux kernel project in the <i>Project Explorer</i> view, right click and select <i>Build Options...</i>, then select <i>C/C++ Build</i> in the left tree and the tab <i>Behaviour</i>. Uncheck all the build rules boxes and click <i>OK</i>. </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_kernel_build_set.html" class="image"><img alt="Linux debug v5 kernel build set.png" src="https://processors.wiki.ti.com/images/b/bd/Linux_debug_v5_kernel_build_set.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_kernel_build_set.html" class="internal" title="Enlarge"></a></div></div></div></div> 
+<dl><dd><b>Note:</b> it is possible the C-syntax error checker built into Eclipse is also activated, which may throw errors while launching the debugger. It can be configured by right-clicking on the project --&gt; <i>Build Options...</i> --&gt; click on <i>Show Advanced Settings</i> --&gt; <i>C/C++ General</i> --&gt; <i>Code Analysis</i>. It can also be completely disabled by going to the submenu Launching and then unchecking the box <i>Run as you type (selected checkers)</i>.</dd></dl>
+<p><br /> 
+</p>
+<h4><span class="mw-headline" id="Associating_the_Kernel_Project_with_the_Target">Associating the Kernel Project with the Target</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=12" title="Edit section: Associating the Kernel Project with the Target">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>At this point, a target configuration file (.ccxml) that corresponds to your emulator and board must be ready. 
+</p>
+<dl><dd>In this example a Beaglebone (AM3359) was used, together with the Sitara support package available at the <a href="http://software-dl.ti.com/ccs/esd/documents/ccs_downloads.html" title="Download CCS">CCS download page</a>.</dd>
+<dd><b>Note:</b> check the <a href="GSG_Debugging_projects_v5.html#Creating_a_Target_Configuration_File" title="GSG:Debugging projects v5">Getting Started Guide</a> to learn how to create one.</dd>
+<dd><b>Important!</b> When debugging a target running any High-level OS (Linux, WinCE, Android, etc.) or its support/initialization routines (u-boot, WinCE bootloader, etc.) you should not rely on GEL files in the target configuration (.ccxml) for device and peripheral initializations that will disrupt your environment. Details on how to add/remove GEL files are shown in the section <i>Advanced target configurations</i> --&gt; <i>Adding GEL files to a target configuration</i> of the <a href="CCSv5_Getting_Started_Guide.html" title="CCSv5 Getting Started Guide">CCSv5 Getting Started Guide</a>. <br /></dd></dl>
+<p><br /><font color="#f000f0"><b>1.</b></font> Select menu <i>Run</i> --&gt; <i>Debug Configurations</i> <br /><br /><font color="#f000f0"><b>2.</b></font> Select <i>Code Composer Studio - Device Debugging</i> and click on the button <i>New Launch configuration</i> at the top left. </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_jtag_tab_main.html" class="image"><img alt="Linux debug v5 jtag tab main.png" src="https://processors.wiki.ti.com/images/6/63/Linux_debug_v5_jtag_tab_main.png" width="300" height="230" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_jtag_tab_main.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>3.</b></font> Click on the button <i>File System...</i> near the box <i>Target Configuration</i> to select the target configuration file (.ccxml) for your hardware. 
+</p><dl><dd><b>Optional:</b> give a meaningful name for the Debug Configuration at the box <i>Name:</i></dd>
+<dd><b>Optional:</b> depending on the target configuration, at this point a list of cores will be shown and can be disabled to improve the debugger performance.</dd></dl>
+<div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_jtag_target_assign.html" class="image"><img alt="Linux debug v5 jtag target assign.png" src="https://processors.wiki.ti.com/images/9/91/Linux_debug_v5_jtag_target_assign.png" width="300" height="230" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_jtag_target_assign.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>4.</b></font> Select the tab <i>Program</i> to assign the Linux kernel source code to the Debug configuration. <br /><br /><font color="#f000f0"><b>5.</b></font> On the drop-down menu <i>Device</i> select the core where the Linux is running. 
+</p><dl><dd>In this example the core <b>Texas Instruments XDS100v2 USB Emulator_0/CortxA8</b> was selected</dd></dl>
+<p><br /><font color="#f000f0"><b>6.</b></font> Click on the button <i>Workspace...</i> near the box <i>Project</i> to select the Linux kernel project 
+</p>
+<ul><li>In this example it was used the project <tt>linux-3.1.0-psp04.06.00.03.sdk</tt></li>
+<li>For the latest version, use <tt>/home/user/AM335X/SDK/ti-sdk-am335x-evm-06.00.00.00/board-support/linux-3.2.0-psp04.06.00.11</tt></li></ul>
+<p><br /> 
+</p><p><br /><font color="#f000f0"><b>7.</b></font> Click on the button <i>File System...</i> near the box <i>Program</i> to select the EABI executable <tt>vmlinux</tt> that contains the debug symbols 
+</p>
+<dl><dd><b>Note:</b>If the Linux kernel was rebuilt, the location of this file is usually in the main directory of the Linux kernel source tree.</dd>
+<dd>/home/nick/AM335X/SDK/ti-sdk-am335x-evm-06.00.00.00/board-support/linux-3.2.0-<i>psp04.06.00.11</i></dd></dl>
+<p><br /> 
+</p>
+<dl><dd><b>Important!</b> It is common that a file <tt>vmlinux</tt> is also provided in the boot partition of the SD card shipped with the development board (where the file <tt>uImage</tt> is also located). However, check its size; if it is relatively small when compared to uImage (3, 4 times larger) it is possible it does not carry debug information. A typical size for the <tt>vmlinux</tt> file usually starts at 30~40MB.</dd></dl>
+<p><br /><font color="#f000f0"><b>8.</b></font> At last, check the box <i>Load symbols only</i>. Click <i>Apply</i>. <br /></p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_jtag_vmlinux.html" class="image"><img alt="Linux debug v5 jtag vmlinux.png" src="https://processors.wiki.ti.com/images/f/fc/Linux_debug_v5_jtag_vmlinux.png" width="300" height="208" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_jtag_vmlinux.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><font color="#f000f0"><b>9.</b></font> Now the debug session is ready to be launched. At this point, the emulator must be connected, the target board powered up and Linux running (typically in the command prompt). Click on the <i>Debug</i> button. </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_jtag_debugger_launching.html" class="image"><img alt="Linux debug v5 jtag debugger launching.png" src="https://processors.wiki.ti.com/images/d/da/Linux_debug_v5_jtag_debugger_launching.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_jtag_debugger_launching.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /></p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_jtag_debugger.html" class="image"><img alt="Linux debug v5 jtag debugger.png" src="https://processors.wiki.ti.com/images/8/8f/Linux_debug_v5_jtag_debugger.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_jtag_debugger.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /> 
+</p><h2><span class="mw-headline" id="Mixed_Mode_Debug">Mixed Mode Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=13" title="Edit section: Mixed Mode Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h2><p>
+The stop mode debug can be used concurrently with the run mode debug. <br />The user can set breakpoints in the user process using the run mode debug and breakpoints in the kernel using the stop mode debug. <br />To demonstrate this, a call to the function <tt>sleep()</tt> is added to the Linux application used earlier in the Run mode debug and a breakpoint is added to the function <tt>sys_nanosleep()</tt> (file &lt;kernel/hrtimer.c&gt;). This will provoke a halt on the breakpoint set in the Stop Mode debug caused by a function call from the Linux application in the Run mode. <br /><br /><font color="#f000f0"><b>1.</b></font> Search for the function call <tt>hrtimer_nanosleep()</tt> on the file &lt;kernel/hrtimer.c&gt; that belongs to the Linux kernel project. <br /><br /><font color="#f000f0"><b>2.</b></font> With the Stop mode debug session still running, halt the target. Right-click on the line of the call, select <i>Breakpoint (Code Composer Studio)</i> then <i>Hardware Breakpoint</i>. Resume the target execution. <br /><br /><font color="#f000f0"><b>3.</b></font> Start a Run mode debug session with the application that has the <tt>sleep()</tt> function call. After launching, the <i>Debug</i> view should show two debug sessions as in the screen below: </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_mixed_app_startup.html" class="image"><img alt="Linux debug v5 mixed app startup.png" src="https://processors.wiki.ti.com/images/5/53/Linux_debug_v5_mixed_app_startup.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_mixed_app_startup.html" class="internal" title="Enlarge"></a></div></div></div></div> <p><br /><br /><font color="#f000f0"><b>4.</b></font> Put the target to run. When the application calls <tt>sleep()</tt> the Stop mode debug session should halt at the breakpoint, as shown in the screen below: </p><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a href="File_Linux_debug_v5_mixed_kernel_halted.html" class="image"><img alt="Linux debug v5 mixed kernel halted.png" src="https://processors.wiki.ti.com/images/6/6b/Linux_debug_v5_mixed_kernel_halted.png" width="300" height="224" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Linux_debug_v5_mixed_kernel_halted.html" class="internal" title="Enlarge"></a></div></div></div></div> 
+<dl><dd><b>Important!</b> Keep in mind that halting the Linux kernel while GDB/GDBserver are running may cause communication timeouts, clock skews or other glitches inherent from the fact that the host system and other peripherals are still running.</dd></dl>
+<p><br /> 
+</p>
+<h2><span class="mw-headline" id="Linux_Aware_Debug">Linux Aware Debug</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=14" title="Edit section: Linux Aware Debug">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This feature was not ported to CCSv5.1 due to compatibility break with the standard Eclipse (required significant changes that would penalize other debug features), lack of popularity and overall performance (speed and memory usage to refresh and store all processes at every breakpoint). <br />To date there is not estimate to implement an "add-on" tool to CCSv5.1. Please check back regularly for updates. <br /> 
+</p>
+<h2><span class="mw-headline" id="Limitations_and_Known_Issues">Limitations and Known Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=15" title="Edit section: Limitations and Known Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><b>1.</b> When performing Run Mode debug, by default Eclipse looks in the host PC root directory for runtime shared libraries, thus failing to load these when debugging the application in the target hardware. The error messages are something like: <font color="#ff0000"></font> 
+</p><p><font color="#ff0000"></font> 
+</p>
+<dl><dd>warning: .dynamic section for "/usr/lib/libstdc++.so.6" is not at the expected address (wrong library or version mismatch?)</dd>
+<dd>warning: .dynamic section for "/lib/libm.so.6" is not at the expected address (wrong library or version mismatch?)</dd>
+<dd>warning: .dynamic section for "/lib/libgcc_s.so.1" is not at the expected address (wrong library or version mismatch?)</dd>
+<dd>warning: .dynamic section for "/lib/libc.so.6" is not at the expected address (wrong library or version mismatch?) <font color="#ff0000"></font></dd>
+<dd><br /></dd></dl>
+<p>When SDKs setup.sh script, it should automatically generate a .gdbinit file for you in the base directory of the SDK.&#160; 
+</p><p>The file will contain the line:&#160;set sysroot &lt;SDK-PATH&gt;/targetNFS. 
+</p><p>An example would be 
+</p><p><i>set sysroot /home/user/AM335X/SDK/ti-sdk-am335x-evm-06.00.00.00/targetNFS</i><br /> 
+</p><p>I 
+</p><p>Close any GDB debugging sessions. Open the <i>Debug Configurations</i> as shown in the Run Time debugging and then browse to this file in the <i>Debugger</i> tab --&gt; box <i>GDB command file</i>.<br /><br /> 
+</p>
+<h2><span class="mw-headline" id="Archived">Archived</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit&amp;section=16" title="Edit section: Archived">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a rel="nofollow" class="external text" href="indexb84b.html?title=Linux_Debug_in_CCSv5&amp;oldid=198392"><i> Sitara Linux SDK 06.00</i></a><i><br /></i>
+</p><p><a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;oldid=127228">Sitara Linux SDK 05.07</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130095534
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.124 seconds
+Real time usage: 0.137 seconds
+Preprocessor visited node count: 822/1000000
+Preprocessor generated node count: 5816/1000000
+Post‐expand include size: 1025/2097152 bytes
+Template argument size: 3504/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 207/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   25.379      1 -total
+ 80.13%   20.336      1 Template:ArchiveLinks-AMSDKv08.00
+  4.99%    1.267      1 Template:Sitara_Devices
+  4.73%    1.200      1 Template:Sitara_SDK_Linaro_Switch_Template
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:5553-0!canonical and timestamp 20201130095534 and revision id 198394
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Linux Debug in CCSv5</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Linux Debug in CCSv5</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Linux Debug in CCSv5</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Linux Debug in CCSv5</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Linux Debug in CCSv5</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Linux Debug in CCSv5</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Linux Debug in CCSv5</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Linux Debug in CCSv5</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Linux Debug in CCSv5</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;oldid=198394">https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;oldid=198394</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM437x.html" title="Category:AM437x">AM437x</a></li><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li><li><a href="Category_AM35x.html" title="Category:AM35x">AM35x</a></li><li><a href="Category_AM37x.html" title="Category:AM37x">AM37x</a></li><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_AM18x.html" title="Category:AM18x">AM18x</a></li><li><a href="Category_Code_Composer_Studio_v5.html" title="Category:Code Composer Studio v5">Code Composer Studio v5</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Linux+Debug+in+CCSv5" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Linux_Debug_in_CCSv5.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Linux_Debug_in_CCSv5.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Linux_Debug_in_CCSv5.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Linux_Debug_in_CCSv5.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Linux_Debug_in_CCSv5.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;oldid=198394" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Linux_Debug_in_CCSv5&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 22 April 2015, at 12:51.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.124","walltime":"0.137","ppvisitednodes":{"value":822,"limit":1000000},"ppgeneratednodes":{"value":5816,"limit":1000000},"postexpandincludesize":{"value":1025,"limit":2097152},"templateargumentsize":{"value":3504,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":207,"limit":5000000},"timingprofile":["100.00%   25.379      1 -total"," 80.13%   20.336      1 Template:ArchiveLinks-AMSDKv08.00","  4.99%    1.267      1 Template:Sitara_Devices","  4.73%    1.200      1 Template:Sitara_SDK_Linaro_Switch_Template"]},"cachereport":{"timestamp":"20201130095534","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":224});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Linux_Debug_in_CCSv5 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:04:25 GMT -->
+</html>

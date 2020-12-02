@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C2000_Performance_Tips_and_Tricks by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C2000 Performance Tips and Tricks - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C2000_Performance_Tips_and_Tricks","wgTitle":"C2000 Performance Tips and Tricks","wgCurRevisionId":211798,"wgRevisionId":211798,"wgArticleId":38758,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler","Pages with broken file links"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C2000_Performance_Tips_and_Tricks","wgRelevantArticleId":38758,"wgRequestId":"17273135508ee9b84ad3ed66","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C2000_Performance_Tips_and_Tricks rootpage-C2000_Performance_Tips_and_Tricks skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C2000 Performance Tips and Tricks</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This article describes how to enable the compiler to generate code that takes advantage of the C2000 architecture’s powerful performance features.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Auto-increment.2Fdecrement_Addressing_Modes"><span class="tocnumber">1</span> <span class="toctext">Auto-increment/decrement Addressing Modes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Indexed_array_accesses_in_loops"><span class="tocnumber">1.1</span> <span class="toctext">Indexed array accesses in loops</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Signed_Array_Index_Variables"><span class="tocnumber">1.2</span> <span class="toctext">Signed Array Index Variables</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Address_strictly_increasing_or_decreasing_by_1"><span class="tocnumber">1.3</span> <span class="toctext">Address strictly increasing or decreasing by 1</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Single_Repeatable_Instructions"><span class="tocnumber">2</span> <span class="toctext">Single Repeatable Instructions</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Memory_Operands"><span class="tocnumber">3</span> <span class="toctext">Memory Operands</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Data_allocation_for_instructions_with_two_memory_operands"><span class="tocnumber">3.1</span> <span class="toctext">Data allocation for instructions with two memory operands</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#MAC-Style_Instructions"><span class="tocnumber">4</span> <span class="toctext">MAC-Style Instructions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Note_on_generating_16_x_16-.3E32_MAC"><span class="tocnumber">4.1</span> <span class="toctext">Note on generating 16 x 16-&gt;32 MAC</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#MACF32"><span class="tocnumber">4.2</span> <span class="toctext">MACF32</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#DMAC_w.2FRPT"><span class="tocnumber">5</span> <span class="toctext">DMAC w/RPT</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Almost_fully_automatic"><span class="tocnumber">5.1</span> <span class="toctext">Almost fully automatic</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Assertions_for_data_address_alignment"><span class="tocnumber">5.2</span> <span class="toctext">Assertions for data address alignment</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#DMAC_Intrinsic"><span class="tocnumber">5.3</span> <span class="toctext">DMAC Intrinsic</span></a>
+<ul>
+<li class="toclevel-3 tocsection-15"><a href="#Example_1"><span class="tocnumber">5.3.1</span> <span class="toctext">Example 1</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Example_2"><span class="tocnumber">5.3.2</span> <span class="toctext">Example 2</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#RPTB_.28FPU_Only.29"><span class="tocnumber">6</span> <span class="toctext">RPTB (FPU Only)</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Unrolling"><span class="tocnumber">7</span> <span class="toctext">Unrolling</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#Restrict_Keyword"><span class="tocnumber">8</span> <span class="toctext">Restrict Keyword</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="#TMU"><span class="tocnumber">9</span> <span class="toctext">TMU</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#Appendices"><span class="tocnumber">10</span> <span class="toctext">Appendices</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#Source_code_examples_of_single_repeatable_instructions"><span class="tocnumber">10.1</span> <span class="toctext">Source code examples of single repeatable instructions</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#List_of_MAC-style_instructions"><span class="tocnumber">10.2</span> <span class="toctext">List of MAC-style instructions</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Instructions_with_two_memory_operands"><span class="tocnumber">10.3</span> <span class="toctext">Instructions with two  memory operands</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span id="Auto-increment/decrement_Addressing_Modes"></span><span class="mw-headline" id="Auto-increment.2Fdecrement_Addressing_Modes">Auto-increment/decrement Addressing Modes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=1" title="Edit section: Auto-increment/decrement Addressing Modes">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The C2000 hardware has several addressing modes, including auto-increment/decrement address registers (*XARn++/--).  These operands eliminate the need for explicit address calculation when striding through data arrays in loops.  At optimization level 2 and above, the optimizer will transform array accesses to enable this addressing mode when possible.  This provides a powerful performance boost not only from eliminating non-essential address arithmetic in loops, but also, as we will see in the topics to follow, by enabling the use of other powerful architectural features.
+</p>
+<h3><span class="mw-headline" id="Indexed_array_accesses_in_loops">Indexed array accesses in loops</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=2" title="Edit section: Indexed array accesses in loops">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Source code written in a natural C language style, at Optimization level 2+:
+</p>
+<pre>int i;
+for  (i=0; i &lt; upper_bound;  i++) 
+     array[i] = …
+</pre>
+<p>will generate:
+</p>
+<ul><li>load base address of array into XARn</li>
+<li>access *XARn++ for each iteration</li></ul>
+<h3><span class="mw-headline" id="Signed_Array_Index_Variables">Signed Array Index Variables</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=3" title="Edit section: Signed Array Index Variables">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The array index variable (i in the example above) should be a signed integer— not an unsigned integer— whenever possible.
+</p><p>To the programmer, using an unsigned integer might be logical—after all, the programmer assumes the array index variable will never have a negative value.  However, the semantics of unsigned integers mean that unless the optimizer can prove the lower and upper bounds of the value, it must not assume the value won’t wrap around.  In order to translate array[i] to *XARn++, the compiler must prove that the value of i, and hence the address, is strictly increasing.  In the absence of a known upper bound, the compiler can’t rule out wrap around of the index variable and thus can’t perform the transformation.
+</p><p>The C language semantics of signed integers mean that wrap-around is undefined behavior.  Therefore, the compiler is not bound to support wrap-around for signed integers and can do the transformation without needing to prove an upper bound.  
+</p><p>If the programmer specifically wishes to use an unsigned integer for greater range of values, the optimizer can still perform the transformation if an upper bound is statically knowable—  such as through the use of a macro, constant (if the definition can be seen in the scope of optimization), or <tt>#pragma MUST_ITERATE</tt>.  
+</p>
+<h3><span class="mw-headline" id="Address_strictly_increasing_or_decreasing_by_1">Address strictly increasing or decreasing by 1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=4" title="Edit section: Address strictly increasing or decreasing by 1">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Additionally, the array accesses must be determined to be strictly increasing (or decreasing) by increments of 1.  The Optimizer can transform array accesses to this addressing mode when it can detect that the addresses computed per iteration only vary with respect to the incremented loop index value.
+For example:
+</p>
+<pre>int i, j;
+float sum;
+for (i = 0; i &lt; N; i++)
+     for (j=0; j &lt; M; j++)
+          sum += array[j] * array[j - i];
+</pre>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Single_Repeatable_Instructions">Single Repeatable Instructions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=5" title="Edit section: Single Repeatable Instructions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The C2000 architecture has numerous instructions that can be issued as single repeatable instructions (<tt>RPT || </tt>).  This construct eliminates all branching overhead and only adds a total of 1 or 4 cycles depending on whether the repeat count is used as an immediate value or register, respectively.  When possible, the C2000 compiler will transform loops containing supported operations into single repeatable instructions.  Supported operations include various types of multiply-accumulate instructions, memory initialization with 0, 32-bit memory add, unsigned subtraction used in integer divide, and block copies.  (See <a href="C2000_Performance_Tips_and_Tricks.html#Source_code_examples_of_single_repeatable_instructions" title="C2000 Performance Tips and Tricks">Appendix 1</a> for source code examples.)
+</p><p>In order to transform an operation in a loop into a single repeatable instruction, the operation must be the only operation in the loop.  This means the operation’s operands can’t be replaced inside the loop body.  Thus, generating auto-incremented/decremented address operands is essential for generating single repeatable instructions if the operation is not performing on the same data on different loop iterations (which is typically not the case). 
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Memory_Operands">Memory Operands</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=6" title="Edit section: Memory Operands">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Many instructions on the C2000 ALU take memory operands, meaning they can operate directly on data in memory without having to load to and store back from registers. 
+</p>
+<h3><span class="mw-headline" id="Data_allocation_for_instructions_with_two_memory_operands">Data allocation for instructions with two memory operands</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=7" title="Edit section: Data allocation for instructions with two memory operands">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For those instructions taking 2 memory operands (see <a href="C2000_Performance_Tips_and_Tricks.html#Instructions_with_two_memory_operands" title="C2000 Performance Tips and Tricks">Appendix 3</a>), the second memory operand (*XAR7) uses the program memory bus.  The C2000 RAM blocks are single-access (SRAM) and only support one access to the same memory block in a single pipeline cycle.  To avoid a pipeline stall, the data arrays should be allocated to different physical RAM blocks.  The physical RAM blocks can be found in the memory map of the device in its data manual.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="MAC-Style_Instructions">MAC-Style Instructions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=8" title="Edit section: MAC-Style Instructions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Another high-performance feature of the C2000 architecture is the multiply-accumulate instructions (see <a href="C2000_Performance_Tips_and_Tricks.html#List_of_MAC-style_instructions" title="C2000 Performance Tips and Tricks">Appendix 2</a> for the list of MAC-style instructions.)  These instructions combine multiply and add operations, with an optional shift of the accumulated value, into a single instruction.  They also have forms taking direct memory operands and are available as single repeatable instructions.  Thus performing a multiply-accumulate on a data array can be performed as a single repeatable instruction using auto-incremented memory operands.  (For instructions operating on two memory operands, see the note in section C on data allocation.)
+</p><p>A complication in generating these instructions is that the hardware instruction does not correlate to the natural C-language construct.   In C, a typical multiply-accumulate operation performs a multiply and then adds the product to an existing accumulation:  <tt>a = b * c</tt>.  However, the C2000 MAC-style instructions (with the exception of DMAC) operate by adding a previously-computed product in the same cycle as performing the subsequent multiply:   <tt>a +=  p; p’ = b * c</tt>.  Therefore, the compiler must recognize the source-language construct and translate the code to the proper form to generate the hardware instructions.
+</p>
+<h4><span id="Note_on_generating_16_x_16-&gt;32_MAC"></span><span class="mw-headline" id="Note_on_generating_16_x_16-.3E32_MAC">Note on generating 16 x 16-&gt;32 MAC</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=9" title="Edit section: Note on generating 16 x 16-&gt;32 MAC">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The C language semantics for 16 * 16 -&gt; 32-bit multiplication (such as the MAC instruction) require casting the multiply operands to 32-bits.  
+See <a rel="nofollow" class="external free" href="http://www.ti.com/lit/an/spra683/spra683.pdf">http://www.ti.com/lit/an/spra683/spra683.pdf</a>
+</p>
+<h3><span class="mw-headline" id="MACF32">MACF32</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=10" title="Edit section: MACF32">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The MACF32 is the only single-repeatable instruction on the FPU.  Additionally, it has a form taking two memory operands, and is the only FPU arithmetic instruction that takes memory operands.  However, this instruction performs two separate multiply-accumulates and adds the results back together at the end, essentially reassociating the adds.  Since floating point addition is not naturally associative, the compiler only generates this instruction when the --fp_reassoc flag is set to “on” (which is the default setting).  There can be a large difference in precision between using the RPT || MACF32 and performing a serial multiply-accumulate loop; if this variance is not acceptable, the <tt>--fp_reassoc</tt> flag should be set to “off”.
+</p><p><br />
+<b>Figure 1</b> shows how auto-incremented addressing mode, single repeatable instructions, and MACF32 work together to provide a 71% performance improvement in a small computational kernel.  This benchmark was an example of compiler performance improvements implemented in the C2000 CGT v.6.2 compiler.  The performance was measured as cycles on a cycle-accurate simulator.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:674px;"><a href="File_C28xperffigure1.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/0/0e/C28xperffigure1.jpg" width="672" height="504" class="thumbimage" /></a>  <div class="thumbcaption">Figure 1</div></div></div></div>
+<p><br />
+</p>
+<h2><span id="DMAC_w/RPT"></span><span class="mw-headline" id="DMAC_w.2FRPT">DMAC w/RPT</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=11" title="Edit section: DMAC w/RPT">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The DMAC instruction performs multiply-accumulates on 2 adjacent signed integers at the same time.
+The data addresses must be 32-bit aligned.
+There are 3 levels of compiler support ranging from almost fully automatic to intrinsics.  The DMAC is a single repeatable operation with memory operands: when there is nothing else in the loop, the compiler can generate a RPT || DMAC.  It is the most powerful computational instruction on the C2000 core.
+</p>
+<h3><span class="mw-headline" id="Almost_fully_automatic">Almost fully automatic</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=12" title="Edit section: Almost fully automatic">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The most fully automatic level of support requires that:
+</p>
+<ul><li>the source arrays are known to be 32-bit aligned and the arrays are accessed via array indices</li>
+<li>the loop trip count is known to be even, either from a known trip count or use of <tt>#pragma MUST_ITERATE</tt></li></ul>
+<pre>int&#160;src1[N], src2[N];                          // int arrays must be 32-bit aligned
+#pragma DATA_ALIGN(src1,2); &#160; &#160;
+#pragma DATA_ALIGN(src2,2);
+&#160;
+{...}
+int&#160;i;
+long&#160;res&#160;=&#160;0;
+#pragma MUST_ITERATE(,,2)	              // Can specify loop trip count multiple
+for&#160;(i&#160;=&#160;0;&#160;i&#160;&lt; N;&#160;i++)&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160;      &#160;  // Loop trip count N must be even
+&#160; &#160; res&#160;+=&#160;(long)src1[i]&#160;*&#160;src2[i];&#160;&#160; &#160;       // Arrays must be accessed via array indices
+</pre>
+<h3><span class="mw-headline" id="Assertions_for_data_address_alignment">Assertions for data address alignment</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=13" title="Edit section: Assertions for data address alignment">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The _nassert intrinsic can be used to assert that the data addresses are aligned to 32-bits.  It is up to the programmer to ensure that only properly aligned data addresses are used by the operation. The source data must still be accessed as indexed arrays and the loop trip count must be known to be even, either from a known trip count or use of <tt>#pragma MUST_ITERATE</tt>.
+</p>
+<pre>int&#160;*src1,&#160;*src2;&#160;&#160; &#160;&#160;// src1 and src2 are pointers to int arrays of at least size N. 
+                      // User must ensure that both are 32-bit aligned addresses.
+{...}
+int&#160;i;
+long&#160;res&#160;=&#160;0;
+&#160;
+_nassert((long)src1&#160;%&#160;2&#160;==&#160;0);
+_nassert((long)src2&#160;%&#160;2&#160;==&#160;0);
+&#160;                                            // Can use #pragma MUST_ITERATE(,,2)
+for&#160;(i&#160;=&#160;0;&#160;i&#160;&lt;&#160;N;&#160;i++)&#160;&#160; &#160; &#160; &#160; &#160; &#160;       &#160;  // Loop trip count N must be even
+&#160; &#160;  res&#160;+=&#160;(long)src1[i]&#160;*&#160;src2[i];&#160;&#160;&#160;      // src1 and src2 must be accessed via array indices
+</pre>
+<h3><span class="mw-headline" id="DMAC_Intrinsic">DMAC Intrinsic</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=14" title="Edit section: DMAC Intrinsic">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The DMAC instruction can also be generated from a source-level intrinsic:
+</p>
+<pre>    void __dmac( long *src1, long *src2, long &amp;accum1, long &amp;accum2, int shift); 
+</pre>
+<p>See the following two examples for using the intrinsic.  Note that the user is responsible for ensuring correct data alignment and loop count, and the two partial accumulations must be added into a final result after the loop.
+</p>
+<h4><span class="mw-headline" id="Example_1">Example 1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=15" title="Edit section: Example 1">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>int&#160;src1[2N], src2[2N];             // src1 and src2 are int arrays of at least size 2N
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;            &#160;// User must ensure that both start on 32-bit
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;            &#160;// aligned boundaries.
+{...}
+int&#160;i;
+long&#160;res&#160;=&#160;0;
+long&#160;temp&#160;=&#160;0;
+&#160;
+for&#160;(i=0;&#160;i&#160;&lt;&#160;N;&#160;i++)&#160;&#160; &#160; &#160; &#160; &#160; &#160;
+&#160; &#160;  __dmac(((long&#160;*)src1)[i],&#160;((long&#160;*)src2)[i], res, temp,&#160;0);
+&#160;
+res&#160;+=&#160;temp;
+</pre>
+<h4><span class="mw-headline" id="Example_2">Example 2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=16" title="Edit section: Example 2">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>int&#160;*src1,&#160;*src2;&#160;&#160;       // src1 and src2 are pointers to int arrays of at
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;   &#160;&#160;// least size 2N. User must ensure that both are &#160;
+&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;  &#160;// 32-bit aligned addresses.
+{...}
+int&#160;i;
+long&#160;res&#160;=&#160;0;
+long&#160;temp&#160;=&#160;0;
+&#160;
+long&#160;*ls1&#160;=&#160;(long&#160;*)src1;
+long&#160;*ls2&#160;=&#160;(long&#160;*)src2;
+&#160;
+for&#160;(i=0;&#160;i&#160;&lt;&#160;N;&#160;i++)&#160;&#160; &#160; &#160; &#160; &#160; &#160;
+&#160;   &#160;__dmac(*ls1++,&#160;*ls2++, res, temp,&#160;0);
+&#160;
+res&#160;+=&#160;temp;
+</pre>
+<h2><span id="RPTB_(FPU_Only)"></span><span class="mw-headline" id="RPTB_.28FPU_Only.29">RPTB (FPU Only)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=17" title="Edit section: RPTB (FPU Only)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>On devices with a floating point unit (FPU), the repeat block (RPTB) instruction can eliminate all branching overhead for a loop.  This is useful for any loop that meets the requirements, not just floating point computations.  It can drastically improve performance for smaller loops in which the branching overhead contributes an even larger percentage of loop runtime.  The RPTB instruction adds only 1 or 4 cycles overhead (depending on whether an immediate value or a register is used for the repeat count), regardless of the number of loop iterations.  
+</p><p>The two requirements for generating a RPTB are that the loop must have no internal control flow (no nested loops or conditional statements), and that it must fall between a minimum and maximum instruction word count (9 and 127).  Additionally, code must be compiled with --float_support=fpu32 and may require an optimization setting of 2 or higher.
+</p><p>For small loops that don’t meet the minimum size threshold, the compiler will insert NOPs if it is still profitable to do so at --opt_for_speed levels of 1 and 2, and at levels of 3 and above the compiler will attempt to perform loop unrolling.  The UNROLL pragma is also available to allow developers to specify that specific loops should be unrolled.  Loop unrolling is discussed further in section G.  
+</p>
+<div id="fig2"></div><p><b>Figure 2</b> shows a small computational kernel for which loop unrolling enables RPTB generation, improving performance by 52%.
+</p><div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:674px;"><a href="File_C28xperffigure2.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/d/d5/C28xperffigure2.jpg" width="672" height="504" class="thumbimage" /></a>  <div class="thumbcaption">Figure 2</div></div></div></div>
+<h2><span class="mw-headline" id="Unrolling">Unrolling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=18" title="Edit section: Unrolling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Loop unrolling is a compiler transformation in which the code in the loop body is replicated some number of times and the loop iteration count is decreased accordingly.  The primary advantage of loop unrolling is reducing loop branch overhead, which is now amortized across the number of loop code replications.  See <b>Figure 3</b> for an example. 
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:674px;"><a href="File_C28xperffigure3.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/f/f4/C28xperffigure3.jpg" width="672" height="504" class="thumbimage" /></a>  <div class="thumbcaption">Figure 3</div></div></div></div>
+<p>As discussed in the previous section, on C2000 devices with FPU, the branch overhead can be eliminated entirely in the case of enabling RPTB generation (see <a href="C2000_Performance_Tips_and_Tricks.html#fig2" title="C2000 Performance Tips and Tricks">Figure 2</a>.)  Loop unrolling can also enable other optimizations by providing increased code context.  For example, unrolling may enable the compiler to fill delay slots or form parallel instructions by exposing independent computations from multiple loop iterations in the same loop body.
+</p><p>However, loop unrolling can also negatively impact performance.  Loop unrolling increases code size.  Additionally, it may increase register pressure, resulting in costly register spilling inside the loop.  On devices with FPU, for a loop already meeting the RPTB requirements, loop unrolling would not be likely to improve performance and could result in surpassing the maximum size threshold for a RPTB.  To complicate matters, loop unrolling is performed early on in the Optimizer, while machine code is not generated until later.  Therefore, at the time of unrolling, the compiler doesn’t know the loop size and cannot directly determine whether a RPTB can be generated.
+</p><p>Due to the increase in code size, the compiler turns on loop unrolling at --opt_for_speed levels of 3 or greater, when performance has been prioritized over code size.  Because the compiler doesn’t know which loops are most important for overall application performance, users may instead choose to use the UNROLL pragma to specify specific loops that should be unrolled.  The syntax is #pragma UNROLL(n), where n is the number of copies of the original loop body inside the transformed loop.  See the compiler guide for more information.
+</p>
+<h2><span class="mw-headline" id="Restrict_Keyword">Restrict Keyword</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=19" title="Edit section: Restrict Keyword">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The restrict keyword is a source-level construct that the application developer can use to convey significant information to the compiler, enabling transformations that might otherwise constitute a safety risk. 
+</p>
+<pre>    Usage:    float *restrict ptr;
+</pre>
+<p>In the above usage example, the restrict keyword is used to tell the compiler that for its lifetime, the pointer ptr points to data not referred to by any other name.  Therefore, in the following declaration:
+</p>
+<pre>    float *restrict ptr;
+    float f;
+    float *ptr2;
+</pre>
+<p><tt>ptr</tt> can be known NOT to point to <tt>f</tt> or to the same data to which <tt>ptr2</tt> points; however, <tt>ptr2</tt> might point to f.
+</p><p>Knowing that memory is not aliased enables the compiler to perform certain optimizations such as instruction reordering and eliminating unnecessary memory accesses.  In the following computational kernel, the use of the restrict keyword enables the C2000 compiler to generate much better code, resulting in a performance improvement of 58%.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:674px;"><a href="File_Restrict1.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/8/87/Restrict1.jpg" width="672" height="504" class="thumbimage" /></a>  <div class="thumbcaption">Restrict Example Slide 1</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:674px;"><a href="File_Restrict2.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/b/b2/Restrict2.jpg" width="672" height="504" class="thumbimage" /></a>  <div class="thumbcaption">Restrict Example Slide 2</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:674px;"><a href="File_Restrict3.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/1/15/Restrict3.jpg" width="672" height="504" class="thumbimage" /></a>  <div class="thumbcaption">Restrict Example Slide 3</div></div></div></div>
+<h2><span class="mw-headline" id="TMU">TMU</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=20" title="Edit section: TMU">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Trigonometric Math Unit (TMU) provides hardware support for floating point division, sqrt, sin, cos, atan, and atan2.  The hardware support delivers superior performance; however, as the results may vary from the standard library implementations of these operations due to algorithmic differences, the library calls are not replaced by default. 
+</p><p>When TMU support is enabled and the <tt>--fp_mode=relaxed</tt> option is selected, the compiler will automatically replace library calls to these operations with hardware instructions.  If the floating point mode is strict (the default setting, <tt>--fp_mode=strict</tt>), the compiler will issue performance advice if it encounters any opportunities for replacing library calls with TMU instructions.  Advice will be issued once per operation type per file.
+</p><p>Alternatively, intrinsics are available for the TMU operations listed above.  See the intrinsics table in the compiler guide.
+</p><p>[Coming soon: performance comparison of hardware implementations to library calls.]
+</p>
+<h2><span class="mw-headline" id="Appendices">Appendices</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=21" title="Edit section: Appendices">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Source_code_examples_of_single_repeatable_instructions">Source code examples of single repeatable instructions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=22" title="Edit section: Source code examples of single repeatable instructions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre>/*****************************************************/
+/* Examples of C2000 RPT SINGLE INSTRUCTIONS         */
+/* REQUIRES --opt_level=2 [or greater]               */
+/*****************************************************/
+float fresult;
+long result;
+int N, M;
+int array[100];
+float farray[100];
+
+// Generates RPT || MAC (requires --unified_memory)
+void foo()
+{
+int i, j;
+long sum = 0;
+
+for (i = 0; i &lt; N; i++)
+     for (j=0; j &lt; M; j++)
+           sum += (long)array[j] * (long)array[j - i];
+
+ result = sum;
+}
+
+// Generates RPT || MACF32 (requires --float_support=fpu32 --unified_memory)
+void foo2()
+{
+int i, j;
+float sum = 0;
+
+for (i = 0; i &lt; N; i++)
+     for (j=0; j &lt; M; j++)
+          sum += farray[j] * farray[j-i];
+
+ fresult = sum;
+}
+
+// Generates RPT || MOV #0
+void foo3()
+{
+ int i;
+  
+ for (i = 0; i &lt; N; i++)
+       array[i] = 0;
+}
+
+// Generates RPT || ADDL
+void foo4(long *x)
+{
+  int i;
+  long sum = 0;
+
+  for (i = 0; i &lt; N; i++)
+       sum += x[i];
+
+  result = sum;
+}
+
+// Generates RPT || SUBCUL
+void foo5(unsigned long n, int b)
+{
+ n /= b;
+ result = n;
+}
+
+// Generates RPT || PREAD (requires --unified_memory)
+void foo6(int *x)
+{
+ int i = 0;
+ for (i = 0; i &lt; N; i ++)
+     array[i] = x[i];
+}
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="List_of_MAC-style_instructions">List of MAC-style instructions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=23" title="Edit section: List of MAC-style instructions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>MAC</li>
+<li>MPYA</li>
+<li>MPYS</li>
+<li>SQRA</li>
+<li>SQRS</li>
+<li>IMACL</li>
+<li>IMPYAL</li>
+<li>IMPYSL</li>
+<li>QMACL</li>
+<li>QMPYAL</li>
+<li>QMPYSL</li>
+<li>DMAC</li>
+<li>MACF32 (FPU only)</li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Instructions_with_two_memory_operands">Instructions with two  memory operands</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;section=24" title="Edit section: Instructions with two memory operands">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following instructions use the program memory bus for a second memory access via *XAR7:
+</p>
+<ul><li>MAC</li>
+<li>IMACL</li>
+<li>QMACL</li>
+<li>DMAC</li>
+<li>MACF32 (FPU only)</li>
+<li>PREAD</li>
+<li>PWRITE (not currently generated by the compiler)</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130184826
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.082 seconds
+Real time usage: 0.091 seconds
+Preprocessor visited node count: 159/1000000
+Preprocessor generated node count: 242/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3434/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:38758-0!canonical and timestamp 20201130184826 and revision id 211798
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C2000 Performance Tips and Tricks</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C2000 Performance Tips and Tricks</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C2000 Performance Tips and Tricks</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C2000 Performance Tips and Tricks</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C2000 Performance Tips and Tricks</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C2000 Performance Tips and Tricks</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C2000 Performance Tips and Tricks</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C2000 Performance Tips and Tricks</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C2000 Performance Tips and Tricks</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;oldid=211798">https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;oldid=211798</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li><li><a href="https://processors.wiki.ti.com/index.php?title=Category:Pages_with_broken_file_links&amp;action=edit&amp;redlink=1" class="new" title="Category:Pages with broken file links (page does not exist)">Pages with broken file links</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C2000+Performance+Tips+and+Tricks" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C2000_Performance_Tips_and_Tricks.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:C2000_Performance_Tips_and_Tricks&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C2000_Performance_Tips_and_Tricks.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C2000_Performance_Tips_and_Tricks.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C2000_Performance_Tips_and_Tricks.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;oldid=211798" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C2000_Performance_Tips_and_Tricks&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 12 January 2016, at 09:55.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.082","walltime":"0.091","ppvisitednodes":{"value":159,"limit":1000000},"ppgeneratednodes":{"value":242,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":3434,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130184826","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C2000_Performance_Tips_and_Tricks by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:18 GMT -->
+</html>

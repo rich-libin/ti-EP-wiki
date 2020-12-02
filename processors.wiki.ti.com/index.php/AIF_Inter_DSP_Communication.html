@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AIF_Inter_DSP_Communication by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:40:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>AIF Inter DSP Communication - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"AIF_Inter_DSP_Communication","wgTitle":"AIF Inter DSP Communication","wgCurRevisionId":181681,"wgRevisionId":181681,"wgArticleId":3113,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"AIF_Inter_DSP_Communication","wgRelevantArticleId":3113,"wgRequestId":"6b23bbb04aa2bd159e9c5766","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AIF_Inter_DSP_Communication rootpage-AIF_Inter_DSP_Communication skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">AIF Inter DSP Communication</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><b>Using C6474 Antenna Interface for Inter-DSP Communication</b>
+</p><p><br />
+<b>ABSTRACT</b>
+</p><p>The TMS320C6474  Antenna Interface (AIF) is a CPRI and  OBSAI-compliant
+peripheral whose primary purpose is to transfer baseband antenna samples, via a high-
+speed SerDes interface, between a radio sub-system and a baseband sub-system in
+cellular infrastructure applications.
+In this document, we describe how the AIF peripheral can be used for generic inter-DSP
+communication. We start by introducing relevant concepts of the OBSAI protocol. Next,
+we define a software protocol, built on top of OBSAI, for transmission of variable size
+packets, at a variable (bursty) transfer rate, between two DSP devices connected via the
+AIF.
+This software protocol has been implemented and is available as IAClib (Inter-DSP AIF
+Communication Library), which can be considered a low-level driver for inter-DSP AIF
+communication. The driver, as well as a sample application demonstrating the use of the
+driver is explained in this document, and the corresponding source code is made available
+as a starting point for further development and customization.
+</p><p>Note: Example code for AIF Inter DSP Communication is available on TI's GForge: <a rel="nofollow" class="external free" href="https://gforge.ti.com/gf/project/aifinterdsp/">https://gforge.ti.com/gf/project/aifinterdsp/</a>
+</p><p><b>1. Introduction</b>
+</p><p>Consider the standard AIF operation. After all required components (AIF, FSYNC, EDMA and
+interrupts) have been configured at initialization time, the interface is continuously transmitting
+and receiving data and the timing is strictly controlled by hardware.
+The nature of inter-DSP data traffic, however, is often asynchronous and bursty, rather than
+continuous. This type of traffic is best suited for a packet interface like gigabit Ethernet or sRIO,
+but in some applications, these interfaces are already used for other purposes.
+Given the continuous nature of the typical AIF traffic, the easiest approach to implement bursty
+traffic would be to have the AIF transmitter continuously send dummy data, and insert useful
+data when there is actually something to send. The receiver would have to periodically check if
+there is any data available. Given the data rates involved, the polling at the receiver could
+represent a very high load on the DSP (both the CPU and the internal buses).
+In this document, we introduce a protocol designed to remove the above mentioned polling
+overhead at the receiver. Rather than having to poll periodically looking for useful data, the
+receiver is notified by the transmitter, via a special message (called a Start Packet), that a data
+burst is about to be sent, giving it information about its location (within the OBSAI frame) and
+size. The receiver then performs necessary setup to be able to extract the data burst from the
+incoming bit stream.
+</p><p><b>2. Some elements of the OBSAI protocol</b>
+</p><p><br />
+The Antenna Interface (AIF) peripheral provides an interface between a DSP and another device
+via multiple high-speed SerDes links running at up to 3.072Gbaud/sec. The peripheral was
+designed for communication between radio equipment and the DSP (which is found on the
+baseband module). There are two standardized communication protocols that can be used in
+this application – OBSAI and CPRI.
+In this section, we will focus on explaining the relevant aspects of OBSAI which are needed to
+understand the non-standard DSP-to-DSP protocol which will be described in subsequent
+sections. Detailed explanation of the operation of the AIF in the OBSAI mode is available in [1].
+</p><p><b>2.1 Overview</b>
+</p><p>Once the antenna interface is up and running, data samples are continuously transmitted and
+received. The AIF peripheral mainly provides buffering capabilities so that no data would be lost.
+These buffers need to be filled and emptied at a certain rate in order to prevent overflow (losing
+data) and underflow (reading stale data).
+The data (typically antenna samples) can consist of multiple streams (or channels, or antenna
+containers) which are combined on a single physical link in a TDM (time-division multiplexing)
+manner. In addition to antenna samples, control channels are also supported in the OBSAI
+interface and are time-division multiplexed with antenna streams in specific reserved locations.
+The OBSAI protocol defines important timing information which guarantees that the transmitter
+and the receiver are synchronized. Various timing events which are needed for the AIF are
+generated by the FSYNC module (see [2]) based on an external clock.
+</p><p><b>2.2 Frame structure</b>
+</p><p>OBSAI frame structure is described in detail in Section 3.1 in [1].  Our intent here is to highlight
+some of the relevant concepts.
+The frame structure in OBSAI is based on a 10 msec master frame which consists of nx768000
+bytes of payload, where n is the link rate with n=1,2 or 4. The master frame is split into message
+groups (where the number of message groups per master frame also depends on the physical
+link rate). Each message group consists of 21 messages, denoted M1, M2, …,  M21. Each
+message consists of 16 bytes of payload and 3 bytes of header. The message is constructed as
+an RP3 packet and its format is shown in Figure 1.
+<a href="File_OBSAI_RP3.html" class="image"><img alt="OBSAI RP3.JPG" src="https://processors.wiki.ti.com/images/e/e1/OBSAI_RP3.JPG" width="645" height="153" /></a>
+</p><p><b>2.2.1 Time Stamp</b>
+</p><p>The time stamp is embedded into each OBSAI message, as shown in Figure 1, and it is used to
+make sure that the transmitter and the receiver are synchronized. This is important for antenna
+data because each antenna sample needs to be traced back to a particular location in the UMTS
+frame hierarchy. We will take advantage of this feature in our application in an entirely different
+way, as will be described in Section 3.
+Time stamp is set to 0 at each frame boundary. In UMTS systems, the frame duration is
+10msec, and the smallest unit of time is 1 chip period, which is 1/3.84Mhz = 260.4nsec. The
+time stamp increments once every 4 chip periods, which translates to ~1.04usec. The
+incrementing is done based on counting external clock pulses.
+The time stamp is generated and inserted into the message header by AIF transmit hardware. It
+is also accessible to software via a read-only register.
+The time stamp is verified by AIF receive hardware. If the time stamp value contained in the
+message received from the SerDes link differs from the local time stamp (which is based on the
+local FSYNC counter), the message is discarded.  If the received and the local time stamp are
+equal, the AIF hardware places the message in the location in the AIF receive buffer (AIF RX
+RAM) which corresponds to the time stamp. The AIF buffer organization will be discussed in
+Section 2.3.2.
+</p><p><b>2.3  Packet Switched vs Circuit Switched Messages</b>
+</p><p>The AIF can transfer packet-switched (PS) messages typically used for control, or circuit
+switched (CS) messages typically used for antenna samples.
+</p><p>The OBSAI messages are organized into message groups of 21 times slots. 20 of those time
+slots are used for data messages, and one is used for a control message.
+Packet-switched messages can be sent both through data slots and control slots. This is
+configured by software via a look-up table. The two types of messages are therefore time-
+division multiplexed on the SerDes bus, and the above mentioned look up table is used by
+hardware to decide at which point in time it needs to insert a packet switched message from the
+packet buffer, vs. a circuit-switched message which comes from the data buffer (AIF TX RAM).
+</p><p><b>2.3.1 PS FIFOs</b>
+</p><p>There are multiple FIFOs which are used for buffering of packet-switched messages: 3 inbound
+FIFOs for incoming messages, and 30 outbound FIFOs for outgoing messages. The FIFOs can
+be programmed to generate an event (CPU or EDMA sync) when a certain number of packets
+has left/entered the FIFO.
+On transmit, the EDMA or CPU places the control message in the transmit FIFO. It is sent out
+on the next opportunity (i.e. the next  slot configured for a PS message).
+On receive, message (payload and header) are placed into RX FIFO and after a
+(programmable) number of messages have been received, an event is generated which can
+interrupt the CPU or trigger an EDMA transfer.
+</p><p><b>2.3.2  CS RAM</b>
+</p><p>AIF TX and RX RAM are used for circuit switched messages. The size of the RAM is 2Kbytes
+per link. Typically, these memories are accessed via EDMA. On transmit, the AIF takes data
+from the TX RAM, inserts header (including the time stamp) and transmits it over the SerDes.
+On the receive, the AIF checks the received time stamp and then places the message at the
+appropriate place in the AIF RX RAM. Therefore, the location of data in the AIF RAMs is closely
+related to the timestamp at which the data is to be sent or has been received.
+From the point of view of AIF and the SerDes link, the AIF RAMs operate like circular buffers.
+On the receive side, the data is continuously being written into the RX RAM based on the time
+stamp, and on the transmit side, it is continuously being pulled out of TX RAM based on the time
+stamp. This is shown in Figure 2. Therefore, the DSP side needs to be able to stay synchronized
+with the SerDes operation, i.e. the data needs to be written to the TX RAM at the same rate at
+which it is pulled out for SerDes transmission, and it needs to be pulled out of the RX RAM at
+the same rate at which it is being written to by SerDes. This is accomplished via synchronized
+EDMA transfers. For each synchronization event, 1 time stamp worth of data (16 AxC
+containers, 16 bytes each) is transferred. Therefore, a synchronization event is used which is
+generated once per TS increment, or once every 4 chips. The role of the CPU is merely to setup
+the FSYNC and EDMA prior to activating the AIF link, and (optionally) to respond to EDMA
+transfer completion interrupts.
+</p><p><a href="File_AIF_TXRX_RAM.html" class="image"><img alt="AIF TXRX RAM.JPG" src="https://processors.wiki.ti.com/images/3/32/AIF_TXRX_RAM.JPG" width="747" height="408" /></a>
+</p><p><b>2.4 Synchronization (FSYNC)</b>
+</p><p>The synchronization events used by EDMA to synchronize accesses to the AIF RAMs between
+the DSP/EDMA side and AIF/SerDes side are generated by the FSYNC module (see [2]).
+In simplified terms, the FSYNC generates its events based on counting the FSYNC clock input
+pulses. The smallest transmission interval in the UMTS systems is one chip period, or
+1/3.84MHz. To allow for timing alignment and offset compensation between the transmitter and
+th
+the receiver, the FSYNC module actually counts sub-chips (1/8
+of chip duration).
+Due to the relationship between the time stamps and AIF RAM storage described in previous
+sections, the FSYNC event which is of interest to our application is the 4-chip event (generated
+once every time stamp increment, or approximately once every 1usec).
+</p><p><b>3 Inter-DSP AIF Communication (IAC) Protocol</b>
+</p><p><b>3.1  Concept&#160;: Hybrid PS/CS mode</b>
+</p><p>As seen in the previous section, OBSAI PS mode would be the natural candidate for inter-DSP
+communication, due to the availability of FIFO receive interrupts, but the bandwidth limitation to about
+1-2Gbps means that the AIF can only be utilized at a fraction of its capabilities. On the other hand,
+OBSAI CS mode is exactly the opposite of “bursty” and “asynchronous” communication that we are
+looking for: it is running continuously, and inserting bursty data into a continuously running stream of
+dummy data can potentially present high overhead: (1) The EDMA needs to be emptying receive
+buffers (AIF RX RAM) continuously, and (2) the CPU needs to be checking the contents of received
+buffers continuously, and potentially discarding them most of the time.
+</p><p>The solution which we describe in this document is to use a “hybrid PS/CS” mode, in which the
+transmitter first sends a special message which we call the Start Packet (transmitted as a PS
+message) with the information about the location of the upcoming data burst, followed by the actual
+data burst (transmitted as a contiguous block of CS messages).
+The advantage of sending the Start Packet as a PS message in this context is that, on the receiving
+side, an event can be generated as soon as the packet arrives in the receive FIFO, which can interrupt
+the CPU. This is one of the few asynchronous mechanisms provided by the AIF.
+</p><p><b>3.2  Message Slot Assignments</b>
+</p><p>The location of PS messages within a message group for our application is shown in Figure 3. It is the
+first message slot in a message group. This slot is configured as a control slot.
+Each of these control slots represents an opportunity for sending the Start Packet, and each of the CS
+slots at which the time stamp increments, denoted “CS+ in Figure 3, represents an opportunity for
+starting the transmission of the data burst.
+</p><p><a href="File_Message_Slot_Assignment.html" class="image"><img alt="Message Slot Assignment.JPG" src="https://processors.wiki.ti.com/images/a/a9/Message_Slot_Assignment.JPG" width="784" height="226" /></a>
+</p><p>While Figure 3 graphically represents the configuration of the AIF lookup tables and the packet types
+assigned to each slot, Figure 4 shows an example of a data burst transmission.   The Start Packet is
+sent in the first slot of Message Group (m+1), and the data burst transmission starts in slot 14 of
+Message Group (m+1), which is when the time stamp increments. The data transmission finishes in
+message group (m+i), where i is a function of the burst length and can be variable.
+</p><p><a href="File_Burst_Transmission.html" class="image"><img alt="Burst Transmission.JPG" src="https://processors.wiki.ti.com/images/9/9b/Burst_Transmission.JPG" width="649" height="210" /></a>
+</p><p>In practice, it is also possible that the transmission of the data burst starts before the Start
+Packet is transmitted, depending on when the next configured control slot falls relative to the
+time stamp increment slot. This will not prevent the data to be received correctly because the
+AIF RX RAM stores 8 time stamps worth of information and the EDMA should have enough time
+to pull the data out of the AIF RX RAM prior to it being overwritten by new data, 8 time stamps
+later.
+</p><p><b>3.3  Start Packet Message Format</b>
+</p><p>The Start Packet contains, at a minimum, information about where in the continuous stream the
+data burst transmission starts, as well as the length of the data burst. This information is used at
+the receiver to program EDMA transfer parameters to transfer the data burst from AIF RX RAM
+to DSP memory (internal or external).
+Since the Start Packet is simply a message sent in a control slot, its size is 16 bytes. Therefore,
+additional information can also be sent, such as control data and CRC. A possible Start Packet
+format is shown in Figure 5. See Section 5 for details of the current implementation and
+customization suggestions.
+</p><p><a href="File_Start_Packet.html" class="image"><img alt="Start Packet.JPG" src="https://processors.wiki.ti.com/images/2/29/Start_Packet.JPG" width="818" height="120" /></a>
+</p><p>The fields in the Start Packet are:
+Magic Word
+(1 byte): Denotes the start of a valid start packet (value: 0x5A)
+TS_start
+(1 byte) and
+Links
+(1 byte): Specifies the location of the start of the data burst
+in AIF RAM (see Figure 2).
+Size
+(2 bytes): number of 16-byte blocks. If the size is 0, then this could be just a control
+message (no data).
+Destination
+(4 bytes): This value can be either a DSP memory address (similar to
+directIO mode in sRIO), or a mailbox ID (similar to message passing in sRIO).
+Control
+</p>
+<dl><dd>This field can be used by the application to send ACK/NACK or other control</dd></dl>
+<p>messages with or without sending the data.
+CRC
+(1 byte) – A CRC can be implemented for protection against SerDes transmission
+errors. A higher-level ACK/NACK protocol can be initiated in case of a failed CRC check.
+</p><p><b>3.4 Transmitter operation</b>
+</p><p>Once the application makes a request for sending a block of data, the following sequence of
+events takes place at the transmitter:
+</p><p>The CPU determines when data transmission needs to start, based on the current value
+of the time stamp (contained in a counter which increments once every 4 chips).
+Assume the current time stamp is TS_current. The actual burst transmission is
+configured to start at the next time stamp, i.e. TS_start = TS_current + 1, to allow time for
+the CPU to configure the EDMA. The TS_start value is transmitted to the receiver via the
+Start Packet.
+The CPU constructs the Stack Packet and sets up a non-synchronized, one-shot EDMA
+transfer of the Start Packet to the TX FIFO.  The Start Packet is transmitted at the next
+opportunity (see Figure 3).
+The transmitter configures the EDMA to copy the data to be transmitted from DSP
+memory to AIF TX RAM, starting at the location corresponding to timestamp TS_start.
+The EDMA channel is synchronized to the 4-chip FSYNC event, transferring one time
+stamp worth of data (256bytes) for each sync event.. The 4-chip event is enabled as
+soon as the transfer is configured. Because the AIF is taking data from the TX RAM
+location corresponding to the current time stamp to place it on the SerDes bus, and
+because 8 time stamps worth of data are stored in the AIF RAM it is important that the
+EDMA transfer into location corresponding to TS_start completes before the local time
+stamp reaches TS_start.
+</p><p><b>3.5 Receiver operation</b>
+</p><p>A priori, the receiver has set up the AIF link to be up and running, and dummy data is
+continuously being received from the physical link but not consuming any resources outside of
+AIF. When the start packet arrives in one of the AIF RX FIFOs, the following sequence of events
+takes place:
+An event is generated by hardware which is used to trigger an EDMA transfer from the
+RX FIFO to DSP memory. The completion of this EDMA transfer in turns interrupts the
+CPU.
+The CPU parses the Start Packet to determine the location of the data burst in the AIF
+RX RAM (based on TS_start and Links), size and the desired destination address. The
+CPU reads the local time stamp to make sure that it does not exceed TS_start+7, i.e.
+that it is not too late to receive the data.  The CPU then configures the EDMA.
+The CPU waits for the appropriate time to enable the 4-chip EDMA synchronization
+event. Because the AIF RX RAM is being written to as the data is received over the
+SerDes bus, it is important that the EDMA does not start reading too soon from the AIF
+RX RAM location corresponding to TS_start, otherwise old data will be read, and it
+should not start reading too late, otherwise data will be lost. The EDMA should start no
+sooner than when local time stamp reaches TS_start+1, and no later than the time when
+the local time stamp reaches TS_start+7.
+</p><p><b>3.6 Topologies</b>
+</p><p>The AIF interface consists of 6 independent links. For the purpose of the application described in
+this document, each of these links is to be treated as a different point-to-point connection and to
+be initialized and used in its own context.
+</p><p><b>4 IAC Library APIs</b>
+</p><p>The driver consists of five basic APIs: _Open, _Close, _Read,  _Write and _Control. The APIs
+are explained in this section and the source code is provided in the associated code download.
+</p><p>IACLIB_Open
+IACLIB_Handle
+(GLOBAL_StateData *stateDataPIn,Uint32
+</p>
+<ul><li>InboundPSbufferP,Uint32 *OutboundPSbufferP);</li></ul>
+<p>IACLIB module initialization function. This function must be called before any other function in
+the library. It performs initialization of AIF, FSYNC and EDMA modules.
+AIF Link speed is fixed to 4x (3 Gbps data rate). Links can be enabled or disabled individually,
+as explained in Section 5.1.
+GLOBAL_StateData structure must be declared before it is used by IACLIB_Open. It is
+initialized by IACLIB_Open().InboundPSbuffer and OutboundPS buffer should be allocated by
+application software prior to calling IACLIB_Open() since its addresses will be used for EDMA
+setup.
+IACLIB_Close
+IACLIB_Status
+(IACLIB_Handle hAif);
+IACLIB module close function. This function should be called when stopping or restarting the
+AIF interface. It performs de-initialization of each module.
+IACLIB_Read
+IACLIB_Status
+(IACLIB_Handle hAif, Uint32 *size, Uint32
+</p>
+<ul><li>InboundCSbufferP, Uint32 *InboundPSbufferP,Uint32 *linkNum);</li></ul>
+<p>IACLIB burst data read function. This function should be called after the Start Packet has
+been received. Its job is to configure the EDMA for receiving the data burst. After the function
+returns, the application should wait for the EDMA completion interrupt before it accesses the
+data burst.
+IACLIB_Write
+IACLIB_Status
+(IACLIB_Handle hAif, Uint32 size, Uint32
+</p>
+<ul><li>OutboundCSbufferP, Uint32 *OutboundPSbufferP,Uint32 linkNum);</li></ul>
+<p>IACLIB burst data write function. This function configures the EDMA for transmitting the Start
+Packet from DSP memory to TX FIFO, as well as the data burst from DSP memory to AIF TX
+buffer.
+IACLIB_Control
+IACLIB_Status
+(IACLIB_Handle hAif, Uint32 cmd);
+IACLIB hardware control function. It only supports command 0 for now to disable Outbound
+PS EDMA channel. It could be used for debug.
+</p><p><b>5 Customizing IACLIB</b>
+</p><p>This section describes the default configuration of AIF, EDMA and FSYNC provided with the
+default IACLIB in the associated code download, and explains how to customize some of the
+configuration parameters to suit the specific application needs.
+</p><p><b>5.1 AIF links</b>
+</p><p>The default IACLIB supports 4 links (Link0 ~ Link3).
+</p><p>Links are chosen via the GLOBAL_StateData.LinkStatus[4] array:
+GLOBAL_StateData
+GDataStruct; //declare structure
+GDataStruct.LinkStatus[0] = 0; //Disable link0
+GDataStruct.LinkStatus[1] = 1; // Enable link1
+GDataStruct.LinkStatus[2] = 1; // Enable link2
+GDataStruct.LinkStatus[3] = 0; //Disable link3
+</p><p>In this code, Link1 and Link2 are enabled while Link0 and Link3 are disabled.
+It is possible to extend the driver to support more than 4 links, with careful considerations of the
+frequency of AIF-related interrupts and associated CPU loading.
+</p><p><b>5.2  EDMA channels and PS FIFOs</b>
+</p><p>The default IACLIB uses 11 EDMA channels:
+EDMA channels 16 to 19 (synchronized to FSevent4 ~FSevent7) are used to transfer the
+data burst from AIF RX RAM to DSP memory (L2/DDR), with one channel per link. This
+is called Inbound CS EDMA transfer.
+EDMA channels 20 to 23 (synchronized to FSevent8 ~ FSevent11) are used to transfer
+the data burst from DSP memory (L2/DDR) to AIF TX RAM. This is called Outbound CS
+EDMA transfer.
+EDMA channels 40 and 42 (synchronized to PS events 1 and 3, respectively) are used
+for receiving the Start Packet from FIFO0 and FIFO1, respectively. This is called Inbound
+PS EDMA transfer.
+EDMA channel 12 is used for sending the Start Packet. This is called Outbound PS
+transfer.
+The packet-switched FIFO usage is as follows:
+For receiving the Start Packet message
+Link0, Link1 use Inbound FIFO0
+Link2, Link3 use Inbound FIFO1
+For transmitting the Start Packet message, each link uses its own Outbound FIFO:
+Link0 uses FIFO0
+Link1 uses FIFO5
+Link2 uses FIFO10
+Link3 uses FIFO15
+The user can change the assigned EDMA channels for CS Inbound or Outbound EDMA. If the
+user wants to change the channel number or assigned FS event, LOCAL_edmaConfig in
+IAClib_config.c and definitions in IAClib_config.h should be modified.
+</p><p><b>5.3 FS events</b>
+</p><p>This library uses a total of 16 events to trigger CS EDMA data transfers.
+FS events 4 ~ 7 are mask based trigger events used for CS inbound EDMA transfer.
+FS events 8 ~ 11 are used to trigger EDMA for CS outbound data transfer.  FS events 8
+and 9 are mask based trigger events and FS events 10 and 11 are counter based trigger
+events because FS event 10 ~ 17 must use counter based trigger event but trigger
+duration is same (4chip time).
+FS event 18~21 are used for 4chip done strobe for PE
+FS events 24~27 are used for PE preparation triggers.
+Before changing the default FS Event configuration, the user needs to consult the “FSYNC
+Event connection” table in the C6474 Datasheet (see [3]) to check if a particular event can
+be used to trigger EDMA (i.e. if there is a connection from the particular event to the TPCC or
+CIC3).
+Note that FSEVT18 ~ 29 are reserved for 4chip done strobe for PE and PE preparation trigger,
+and FSEVT0, 1 are reserved for Frame sync trigger. Other FS events can be used for other
+purposes.
+</p><p><b>5.4  FSYNC module inputs</b>
+</p><p>The default IACLIB uses RP3 timer instead of System timer. If the user wants to use System
+timer, every
+configMasktrigger
+or
+configCountertrigger
+should be changed from:
+ConfigMaskTrigger[0].timerUsed =
+CSL_FSYNC_RP3_TIMER
+</p>
+<dl><dt></dt></dl>
+<p>to:
+ConfigMaskTrigger[0].timerUsed =
+CSL_FSYNC_SYSTEM_TIMER
+</p>
+<dl><dt></dt></dl>
+<p>By default, system timer uses TRT and TRT_CLK and RP3 timer uses UMTS_SYNC and
+Frame_Sync_CLK. This can be modified to use a different clock and sync source as shown in
+the code snippet below:
+myFsyncCfg.
+syncRP3Timer
+= CSL_FSYNC_UMTS_SYNC;//CSL_FSYNC_FRAME_BURST;
+myFsyncCfg.
+syncSystemTimer
+= CSL_FSYNC_TRT;
+myFsyncCfg.
+clkRP3Timer
+= CSL_FSYNC_FRAME_SYNC_CLK;//CSL_FSYNC_UMTS_CLK;
+myFsyncCfg.
+clkSystemTimer
+= CSL_FSYNC_TRT_CLK;//CSL_FSYNC_UMTS_CLK;
+Please refer to table “Frame Sync Module Input Options” in [1] for options for clock/sync inputs.
+</p><p><b>5.5  Loopback mode vs. non-loopback mode</b>
+</p><p>The driver can be compiled for loopback or for non-loopback mode. The loopback mode is used
+for testing using a single DSP device. For non-loopback mode, two DSP devices connected via
+AIF are needed (available, for example, on the C6474 EVM).
+To choose the desired configuration, select IAClib_aif.pjt as the active project in the CCS project
+window, select the desired configuration (“Debug” or “Debug_loopback”) and rebuild. For each
+configuration, the resulting library file will be stored in a different location (as specified under
+Project -&gt; Build Options -&gt; Archiver).
+</p><p><b>5.6  Start Packet CRC</b>
+</p><p>The Start Packet format shown in Figure 5 features a CRC field as the last byte. The default
+IACLIB does not use this field but it could be used for verifying the validity of the Start Packet
+contents.
+On the transmitter, the CRC is calculated over 15 bytes and inserted into the CRC field. The
+receiver recomputes the CRC and compares it with the received CRC. Below is an example
+CRC routine for 8bit CRC. This code can be added to IACLIB_Read() and IACLIB_Write() APIs.
+</p>
+<table>
+<tbody><tr>
+<td>&lt;syntaxhighlight lang='c'&gt;
+<p>Int8
+generate_8bit_crc
+(char* data, int16 length, int8 pattern)
+{
+int8  *current_data;
+int8   crc_byte;
+int16 byte_counter;
+int8   bit_counter;
+current_data = data;
+crc_byte = *current_data++;
+for(byte_counter=0; byte_counter &lt; (length-1); byte_counter++)
+{
+for(bit_counter=0; bit_counter &lt; 8; bit_counter++)
+{
+if(!bit_test(crc_byte,7))
+{
+crc_byte &lt;&lt;= 1;
+bit_test(*current_data, 7 - bit_counter)&#160;?
+bit_set(crc_byte,0)&#160;: bit_clear(crc_byte,0);
+continue;
+}
+crc_byte &lt;&lt;= 1;
+bit_test(*current_data, 7 - bit_counter)&#160;?
+bit_set(crc_byte,0)&#160;: bit_clear(crc_byte,0);
+crc_byte ^= pattern;
+}
+current_data++;
+}
+for(bit_counter=0; bit_counter &lt; 8; bit_counter++)
+{
+if(!bit_test(crc_byte,7))
+{
+crc_byte &lt;&lt;= 1;
+continue;
+}
+crc_byte &lt;&lt;= 1;
+crc_byte ^= pattern;
+}
+return crc_byte;
+}
+&lt;/syntaxhighlight&gt;
+</p>
+</td></tr></tbody></table>
+<p><br />
+<b>6 Application Example</b>
+</p><p>A demo application is provided along with the IAC library to demonstrate its usage.  The
+application is developed for and tested on the C6474 EVM. The associated CCS project
+consists of two configurations
+1.Loopback
+– Includes IAClib_aif_loopback.lib. Runs on core 0 of a single Faraday device (Faraday 1). The
+receiver and the transmitter reside on the same device and the loopback is performed at the SerDes
+level.
+2.Non-Loopback
+– Includes IAClib.lib. Runs on both Faraday devices. Faraday 2 needs to run first.
+Faraday 1 runs second and provides the initial pulse which starts the FSYNC_CLK. This initiates full-
+duplex communication between the two devices.
+</p><p><b>6.1  How to run the example on Faraday EVM</b>
+</p><p>The procedure for running the application is as follows:
+1.  Configure CCS Setup for the Faraday EVM (via USB), save and run CCS
+2.
+Loopback
+</p>
+<dl><dd>Open C64PLUS_F1A.</dd></dl>
+<p>Non-Loopback
+</p>
+<dl><dd>also open C64PLUS_F2A.</dd></dl>
+<p>3.  Connect all open cores. Open project interDSPAIF.pjt and choose the desired configuration (Loopback or
+Non_Loopback).
+4.  Build and Load Program on all open cores.
+5.  Open DSP/BIOS -&gt; Message Log.
+6.  Debug-&gt; Go Main on all cores (this step seems necessary for the Message Log display to work)
+7.
+Non-Loopback
+only: Run C64PLUS_F2A
+8. Run C64PLUS_F1A.
+9.  The message log display should look as follows (after about a minute):
+</p><p><a href="File_AIF_Message_Log.html" class="image"><img alt="AIF Message Log.JPG" src="https://processors.wiki.ti.com/images/9/9a/AIF_Message_Log.JPG" width="362" height="251" /></a>
+</p><p>Note: When restarting the program, it is necessary to Disconnect, hit POR button (SW2), reconnect and reload
+the program.
+</p><p><b>6.2 Example Overview</b>
+</p><p>The application consists of two statically created tasks, TSK_RX and TSK_TX with associated
+functions _taskRX and _taskTX, respectively.
+TSK_TX is the transmit task. It pends on SEM_TX. When the semaphore is posted, the task initializes
+the data packet to be transferred and calls IACLIB_Write().
+TSK_RX is the receive task. Initially, it pends on SEM_RX_PS. When the semaphore is posted
+(meaning that the Start Packet has been received), it calls IACLIB_Read(), which configures the AIF to
+receive the data burst, and pends on SEM_RX_CS. Once the semaphore is posted (meaning the
+EDMA has completed transferring the data from AIF RX RAM to DSP memory), it verifies its contents
+and reports the result via a LOG_printf().
+The following interrupts are used:
+1.  EDMA ISR (HWI_4): This ISR runs upon completion of one of the following EDMA transfers:
+a.  A PS message transfer from the AIF FIFO to DSP memory. In this case, the SEM_RX_PS
+semaphore is posted.
+b.  Data packet transfer from AIF CS RAM to DSP memory. In this cas e, SEM_RX_CS is
+posted.
+2.  FS_EVT1 ISR (HWI_INT5): This ISR runs once every 10msec. In our application, it is used to initiate the
+transfer of a data packet, i.e. it posts SEM_TX.
+The default size of the data packet is 64Kbytes, defined via TOTAL_DATA_SIZE.
+</p><p><b>7 References</b>
+</p><p>1.TMS320C6474 Antenna Interface User's Guide
+(SPRUG12)
+</p><p>2.TMS320C6474 Frame Synchronization User's Guide
+(SPRUG13)
+</p><p>3.TMS320C6474 datasheet (SPRS552A)
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130075229
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.060 seconds
+Real time usage: 0.064 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 4/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:3113-0!canonical and timestamp 20201130075229 and revision id 181681
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AIF Inter DSP Communication</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AIF Inter DSP Communication</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>AIF Inter DSP Communication</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>AIF Inter DSP Communication</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>AIF Inter DSP Communication</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AIF Inter DSP Communication</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AIF Inter DSP Communication</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>AIF Inter DSP Communication</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>AIF Inter DSP Communication</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=AIF_Inter_DSP_Communication&amp;oldid=181681">https://processors.wiki.ti.com/index.php?title=AIF_Inter_DSP_Communication&amp;oldid=181681</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=AIF+Inter+DSP+Communication" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="AIF_Inter_DSP_Communication.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:AIF_Inter_DSP_Communication&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="AIF_Inter_DSP_Communication.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AIF_Inter_DSP_Communication&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AIF_Inter_DSP_Communication&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/AIF_Inter_DSP_Communication.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/AIF_Inter_DSP_Communication.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=AIF_Inter_DSP_Communication&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=AIF_Inter_DSP_Communication&amp;oldid=181681" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=AIF_Inter_DSP_Communication&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 19:09.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.060","walltime":"0.064","ppvisitednodes":{"value":1,"limit":1000000},"ppgeneratednodes":{"value":4,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":1,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130075229","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":242});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AIF_Inter_DSP_Communication by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:40:55 GMT -->
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AM335x_EMIF_Configuration_tips by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:17:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>AM335x EMIF Configuration tips - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"AM335x_EMIF_Configuration_tips","wgTitle":"AM335x EMIF Configuration tips","wgCurRevisionId":236896,"wgRevisionId":236896,"wgArticleId":15365,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM335x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"AM335x_EMIF_Configuration_tips","wgRelevantArticleId":15365,"wgRequestId":"de278deb988ac1a622c584cf","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AM335x_EMIF_Configuration_tips rootpage-AM335x_EMIF_Configuration_tips skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">AM335x EMIF Configuration tips</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#EMIF_General_Configuration_Registers"><span class="tocnumber">2</span> <span class="toctext">EMIF General Configuration Registers</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#DDR_PHY_Control_Register"><span class="tocnumber">3</span> <span class="toctext">DDR PHY Control Register</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#DDR_PHY_Registers"><span class="tocnumber">4</span> <span class="toctext">DDR PHY Registers</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#DDR_PHY_Registers_for_DDR3"><span class="tocnumber">4.1</span> <span class="toctext">DDR PHY Registers for DDR3</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#DDR_PHY_Registers_for_DDR2_and_LPDDR_.28mDDR.29"><span class="tocnumber">4.2</span> <span class="toctext">DDR PHY Registers for DDR2 and LPDDR (mDDR)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Using_the_Ratio_Seed_spreadsheet_for_DDR2_and_LPDDR"><span class="tocnumber">4.2.1</span> <span class="toctext">Using the Ratio Seed spreadsheet for DDR2 and LPDDR</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Control_Module_Registers"><span class="tocnumber">5</span> <span class="toctext">Control Module Registers</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#AC_timing_registers"><span class="tocnumber">6</span> <span class="toctext">AC timing registers</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Setting_Refresh_rate"><span class="tocnumber">7</span> <span class="toctext">Setting Refresh rate</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Power_Management_Control_Register"><span class="tocnumber">8</span> <span class="toctext">Power Management Control Register</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Shadow_Registers"><span class="tocnumber">9</span> <span class="toctext">Shadow Registers</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Initialization_Sequence"><span class="tocnumber">10</span> <span class="toctext">Initialization Sequence</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#On_Die_Termination_.28ODT.29_control_of_the_DDR_Device"><span class="tocnumber">11</span> <span class="toctext">On Die Termination (ODT) control of the DDR Device</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The following information describes how to set the EMIF registers in the AM335x EMIF module depending on the DDR memory that you are using (LPDDR, DDR2, or DDR3). <br /><br />
+</p>
+<div class="block-note"><span class="block-contents"><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> If you are using DDR3 please refer to the <a href="http://www.ti.com/lit/pdf/sprack4" class="extiw" title="tidoc:sprack4">AM335x EMIF Tools App Note</a> and its associated <a href="http://www.ti.com/lit/zip/sprack4" class="extiw" title="tizip:sprack4">spreadsheet</a>.</span></div>
+<h1><span class="mw-headline" id="EMIF_General_Configuration_Registers"><u></u>EMIF General Configuration Registers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=2" title="Edit section: EMIF General Configuration Registers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li><b>SDRAM_CONFIG (@0x4C000008)- </b>The values in this register will depend a lot on your memory configuration, and are used to configure the memory during initialization.  They are eventually written to the mode registers of the memory device. Here are some tips to configure each value:<br />
+<ul><li><i>REG_SDRAM_TYPE - </i>LPDDR1 (mDDR) = 1, DDR2 = 2, DDR3 = 3</li>
+<li><i>REG_IBANK_POS </i>- This register sets up the internal bank position. Please see "Address Mapping" section of the TRM for more information.  This is typically left at 0 to allow for maximum number of banks to be open and to allow interleaving between them.</li>
+<li><i>REG_DDR_TERM - </i>DDR2 and DDR3 termination resistor value. Refer to the TRM for proper values. This sets the termination on the memory side for ODT (On Die Termaination). Refer to the <a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_configuration_tips&amp;action=edit&amp;redlink=1" class="new" title="AM335x EMIF configuration tips (page does not exist)"><u>ODT section</u></a> below for more information.</li>
+<li><i>REG_DDR2_DDQS -</i> DDR2 differential DQS enable. Set to 0 when using LPDDR (mDDR) for single ended DQS. Set to 1 when using DDR2/DDR3 for differential DQS.</li>
+<li><i>REG_DYN_ODT - </i> These bits are only used in DDR3 mode.  These bits enable/disable the dynamic ODT feature of the DDR3 memory, which allows the memory to apply a different ODT termination value during write cycles (nominal ODT value is determined by REG_DDR_TERM) .  Please refer to the DDR3 memory datasheet for more information about this operation.</li>
+<li><i>REG_DDR_DISABLE_DLL - </i>Set to 0 for normal operation</li>
+<li><i>REG_SDRAM_DRIVE -</i> SDRAM drive strength. For LPDDR1, typically you would set this to 1 for half drive strength. Some boards with LPDDR may require full drive strength depending on board size and trace impedances. For DDR2, set to 0 for full drive strength.</li>
+<li><i>REG_CWL - </i>CAS Write Latency. These bits are only used in DDR3 mode (For other device types, this can be set to 0).  The value of this field defines the CAS write latency to be used when accessing connected DDR3 devices. Use the lowest supported value for the best performance.  This value should come directly from the DDR3 datasheet.  Typically there are speed bin tables in the datasheet depending on the device you have selected.  Each table will have several different CWL values based on tCK.  For AM335x, choose 3.3ns max (for 303MHz), and select the CWL associated with this frequency.  Note the value mappings in the TRM:
+<ul><li>CAS Write Latency of 5:  Set REG_CWL = 0</li>
+<li>CAS Write Latency of 6:  Set REG_CWL = 1</li>
+<li>CAS Write Latency of 7:  Set REG_CWL = 2</li>
+<li>CAS Write Latency of 8:  Set REG_CWL = 3</li></ul></li>
+<li><i>REG_NARROW_MODE - </i> AM335x only supports 16-bit data bus, so this must always be set to 1 for 16-bit mode.<br /></li>
+<li><i>REG_CL - </i>CAS Latency. The value of this field defines the CAS latency to be used when accessing connected SDRAM devices. This value should come directly from the DDR datasheet.  Be sure to use the CAS latency defined for the frequency you are clocking the DDR. Refer to the TRM for proper values.</li>
+<li><i>REG_ROWSIZE -</i> This field is only used when reg_ibank_pos field in SDRAM Configuration register is set to 1, 2, or 3, OR when reg_ebank_pos=1. Should be set to the number of row address bits defined in the DDR datasheet.</li></ul></li></ul>
+<table width="300" cellspacing="1" cellpadding="1" border="1" style="margin: 1em auto 1em auto;">
+
+<tbody><tr>
+<td># of row bits
+</td>
+<td>REG_ROWSIZE Value
+</td></tr>
+<tr>
+<td>9
+</td>
+<td>0
+</td></tr>
+<tr>
+<td>10
+</td>
+<td>1
+</td></tr>
+<tr>
+<td>11
+</td>
+<td>2
+</td></tr>
+<tr>
+<td>12
+</td>
+<td>3
+</td></tr>
+<tr>
+<td>13
+</td>
+<td>4
+</td></tr>
+<tr>
+<td>14
+</td>
+<td>5
+</td></tr>
+<tr>
+<td>15
+</td>
+<td>6
+</td></tr>
+<tr>
+<td>16
+</td>
+<td>7
+</td></tr></tbody></table>
+<ul><li><ul><li><i>REG_IBANK - </i>Internal Bank setup. Defines number of banks inside connected SDRAM devices. Set to 0 for 1 bank, set to 1 for 2 banks, set to 2 for 4 banks, and set to 3 for 8 banks. All other values are reserved.  Refer to the memory datasheet for number of banks.  Most memories will use 8 banks</li>
+<li><i>REG_EBANK - </i>External chip select setup. Defines whether SDRAM accesses will use 1 or 2 chip select lines. Since AM335x only has one CS, always set this bit to 0.</li>
+<li><i>REG_PAGESIZE - </i>Page Size. Defines the internal page size of connected SDRAM devices. Should be set to the number of column address bits defined in the DDR datasheet.</li></ul></li></ul>
+<table width="300" cellspacing="1" cellpadding="1" border="1" style="margin: 1em auto 1em auto;">
+
+<tbody><tr>
+<td># of column address bits
+</td>
+<td>REG_PAGESIZE Value
+</td></tr>
+<tr>
+<td>8 (256-word page)
+</td>
+<td>0
+</td></tr>
+<tr>
+<td>9 (512-word page)
+</td>
+<td>1
+</td></tr>
+<tr>
+<td>10 (1024-word page)
+</td>
+<td>2
+</td></tr>
+<tr>
+<td>11 (2048-word page)
+</td>
+<td>3
+</td></tr></tbody></table>
+<p><br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="DDR_PHY_Control_Register">DDR PHY Control Register</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=3" title="Edit section: DDR PHY Control Register">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li><b>DDR_PHY_CTRL_1 (@0x4C0000E4)</b>
+<ul><li><i>REG_PHY_ENABLE_DYNAMIC_PWRDN</i> - Recommended as 1 for power savings.</li>
+<li><i>REG_PHY_RST_N</i> - Set to 0 for normal operation.</li>
+<li><i>REG_PHY_IDLE_LOCAL_ODT</i> - This value defines the AM335x side termination during idle mode (ie, when REG_PHY_ENABLE_DYNAMIC_PWRDN is asserted). Typically you would set this to 00 to save power during idle.</li>
+<li><i>REG_PHY_WR_LOCAL_ODT</i> - This value defines the AM335x side termination during writes. Termination is typically not needed for writes, so this value should be set to 0.</li>
+<li><i>REG_PHY_RD_LOCAL_ODT</i> - This value defines the AM335x side termination during reads. Use the values below:
+<ul><li>00: ODT off</li>
+<li>01: ODT off</li>
+<li>10: Full thevenin load</li>
+<li>11: Half thevenin load</li></ul></li>
+<li><i>REG_READ_LATENCY</i> - This value accounts for the round trip delays in the device and circuit board. At a minimum, the latency must be CAS Latency plus two (CL+2). Note that this is a "minus 1" register, so the actual value written to the register should correspodingly be a minimum of CL+1.  Furthermore, if PHY_INVERT_CLKOUT=1 you should add one additional cycle to this value, i.e. program it with a minimum value equal to CL+2.
+<ul><li>For example: Let's take a case latency of 6.  In this case you would program SDRAM_CONFIG.REG_CL = 4. then set REG_READ_LATENCY = 5, which corresponds to a read latency of 6 (CAS latency plus 2).
+<ul><li>For PHY_INVERT_CLKOUT=0 -&gt; PHY_INVERT_CLKOUT = CL+1 = 7</li>
+<li>For PHY_INVERT_CLKOUT=1 -&gt; PHY_INVERT_CLKOUT = CL+2 = 8</li></ul></li></ul></li></ul></li></ul>
+<p><br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="DDR_PHY_Registers">DDR PHY Registers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=4" title="Edit section: DDR PHY Registers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><b>(@0x44E12000 - 0x44E123FF)</b>
+</p><p>There are many DDR PHY registers which allows for maximum flexibility in configuring the PHY for many different modes and timing scenarios.  Each DDR type has a different procedure for determining these values.  Please refer to the section below for your DDR type.  Refer to the TRM for an explanation of these registers.  <b>Note:  due to a bug in the device, these registers are not readable.  They are write only registers.</b>
+</p>
+<h2><span class="mw-headline" id="DDR_PHY_Registers_for_DDR3">DDR PHY Registers for DDR3</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=5" title="Edit section: DDR PHY Registers for DDR3">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div class="block-note"><span class="block-contents"><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> If you are using DDR3 please refer to the <a href="http://www.ti.com/lit/pdf/sprack4" class="extiw" title="tidoc:sprack4">AM335x EMIF Tools App Note</a> and its associated <a href="http://www.ti.com/lit/zip/sprack4" class="extiw" title="tizip:sprack4">spreadsheet</a>.</span></div>
+<h2><span id="DDR_PHY_Registers_for_DDR2_and_LPDDR_(mDDR)"></span><span class="mw-headline" id="DDR_PHY_Registers_for_DDR2_and_LPDDR_.28mDDR.29">DDR PHY Registers for DDR2 and LPDDR (mDDR)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=6" title="Edit section: DDR PHY Registers for DDR2 and LPDDR (mDDR)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A summary of the DDR PHY registers that need to be configured is listed below.  All other DDR PHY registers that are not listed can be left in their default state.  For CMDx, x is 0,1,2 as described above. For DATAx, x is 0 or 1 as described above.  In all cases, program the same value for each iteration of the macro.  
+</p>
+<ul><li>CMDx_PHY_INVERT_CLKOUT - In addition to programming these registers with 0 or 1 as defined below, plug this value into the spreadsheet to get the proper values for other registers
+<ul><li>If (DDR_CK length) &lt; (DDR_DQS length), program these registers to 1</li>
+<li>If (DDR_CK length) &gt; (DDR_DQS length), program these registers to 0</li></ul></li></ul>
+<ul><li>DATAx_PHY_RD_DQS_SLAVE_RATIO  - use the Ratio Seed spreadsheet to determine the value for these registers</li>
+<li>DATAx_PHY_FIFO_WE_SLAVE_RATIO - use the Ratio Seed spreadsheet to determine the value for these registers</li>
+<li>DATAx_PHY_WR_DQS_SLAVE_RATIO  - use the Ratio Seed spreadsheet to determine the value for these registers</li>
+<li>DATAx_PHY_WR_DATA_SLAVE_RATIO - use the Ratio Seed spreadsheet to determine the value for these registers</li>
+<li>CMDx_PHY_CTRL_SLAVE_RATIO     - use the Ratio Seed spreadsheet to determine the value for these registers</li></ul>
+<p><br />
+</p>
+<h4><span class="mw-headline" id="Using_the_Ratio_Seed_spreadsheet_for_DDR2_and_LPDDR">Using the Ratio Seed spreadsheet for DDR2 and LPDDR</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=7" title="Edit section: Using the Ratio Seed spreadsheet for DDR2 and LPDDR">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><a href="https://processors.wiki.ti.com/images/e/e6/RatioSeed_AM335x_boards.zip" class="internal" title="RatioSeed AM335x boards.zip"><b>Ratio Seed Spreadsheet</b></a><br />
+To use the Ratio Seed spreadsheet for DDR2 and LPDDR, choose the 'DDR2' or 'mDDR' tab at the bottom of the spreadsheet.  Input the maximum DDR frequency that will be used, enter 0 or 1 for PHY_INVERT_CLKOUT as described above, and then enter the trace length (in inches) of each trace.  For DDR_CLK, this trace is typically in a 'T' configuration for designs with two x8 memories.  Ensure that you input the trace length from AM335x to each memory.  These lengths should be close to equal if correct design guidelines were met.  After inputting the correct information, the values for the registers will be automatically calculated in the spreadsheet.
+</p>
+<h1><span class="mw-headline" id="Control_Module_Registers">Control Module Registers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=8" title="Edit section: Control Module Registers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Some DDR configuration involves Control Module registers which are outside of the DDR controller and DDR PHY modules.  Here is a summary of their configuration.
+</p>
+<ul><li><b>DDR_IO_CTRL (@0x44E10E04)</b> - Controls the I/O mode for the DDR I/Os.
+<ul><li><i>MDDR_SEL</i> - this puts the I/Os in CMOS mode (for LPDDR operation, set to 1) or STL mode (for DDR2/DDR3 operation, set to 0)</li></ul></li>
+<li><b>VTP_CTRL (@0x44E10E0C)</b> - controls the VTP (Voltage-Temperature-Process) compensation for the DDR I/Os.  VTP calibration should occur after the DDR PLL is setup, but before any other DDR controller or DDR PHY configuration is performed.  VTP calibration should be performed at power up and each time the DDR controller is re-initialized.  Here are the steps to perform VTP Calibration:
+<ul><li>Set ENABLE to 1 to enable VTP</li>
+<li>Clear CLRZ to 0 to clear out flops and start count again</li>
+<li>Set CLRZ  to 1 to complete the toggle of CLRZ</li>
+<li>Check for VTP ready bit.  If 1, the training sequence is complete</li></ul></li></ul>
+<ul><li><b>VREF_CTRL (@0x44E10E14)</b> - controls various parameters for VREF
+<ul><li>Normally this would remain at its reset value 0x00000000.  This assumes the reference is being supplied externally through the DDR_VREF pin using a resistor divider as shown in the data manual.</li></ul></li></ul>
+<ul><li><b>DDR_CKE_CTRL (@0x44E1131C)</b>
+<ul><li><i>DDR_CKE_CTRL</i> - for normal operation, set this bit to 1 to allow the CKE signals to be controlled from the PHY.</li></ul></li></ul>
+<p><br />
+</p><p>These registers control the parameters of the I/O buffers for the command and data macros.  Refer to the TRM to determine which group of signals are affected by each register.  For programming purposes, each of these registers should be set to the same value.<br />
+</p>
+<ul><li><b>DDR_CMD0_IOCTRL (@0x44E11404)</b> - set to 0x18B</li>
+<li><b>DDR_CMD1_IOCTRL (@0x44E11408)</b> - set to 0x18B</li>
+<li><b>DDR_CMD2_IOCTRL (@0x44E1140C)</b> - set to 0x18B</li>
+<li><b>DDR_DATA0_IOCTRL (@0x44E11440)</b> - set to 0x18B</li>
+<li><b>DDR_DATA1_IOCTRL (@0x44E11444)</b> - set to 0x18B</li></ul>
+<h1><span class="mw-headline" id="AC_timing_registers">AC timing registers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=9" title="Edit section: AC timing registers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li><b>SDRAM_TIM_1, SDRAM_TIM_2, and SDRAM_TIM_3</b></li></ul>
+<p>This spreadsheet will help you determine the optimal values for the AC timing registers.<br />  <b>Be sure you select the correct tab in the spreadsheet based on the memory you are using (mDDR, DDR2, DDR3)</b>:
+</p><p><br />
+<a href="https://processors.wiki.ti.com/images/a/a4/AM335x_DDR_register_calc_tool.zip" class="internal" title="AM335x DDR register calc tool.zip"> <b>AM335x DDR Calculation tool (.zip)</b></a>
+</p><p>The values in yellow need to be changed based on the datasheet values for your memory. Ensure that you enter the correct values for the speed grade of your device. The tCK value should represent the speed at which you will be running the device (not necessarily the minimum value in the datasheet). The register values for the AM335x AC timing registers will be calculated based on these inputs. For more conservative values, you can use the +1 non-optimal values in case you suspect a timing issue (You can unhide the rows to see these).  Ultimately, the optimal values should work.<br />
+</p>
+<h1><span class="mw-headline" id="Setting_Refresh_rate">Setting Refresh rate</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=10" title="Edit section: Setting Refresh rate">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li><b>SDRAM_REF_CTRL (@0x4C000010)</b> - To set the refresh rate, get the Periodic Refresh interval tREFI from the memory datasheet.  Note that this value is typcially in the us range.  Some datasheets may refer to a "Refresh Interval time" in the millisecond range (64ms, for example), however, this value needs to be divided by the number of refresh cycles needed (typically 8000).<br />
+<ul><li><i>REG_REFRESH_RATE - </i>the number of clock cycles required to cause a refresh interval of 7.8 us or 15.7 us for the appropriate SDRAM used. This field is not byte writable, i.e., all 16 bits of this field need to be written simultaneously. Here are some examples:
+<ul><li>For 400 MHz memory system with 7.8us refresh rate:  400 * 7.8us = 3120.0 or 0xC30</li>
+<li>For 303 MHz memory system with 7.8us refresh rate:  303 * 7.8us = 2363.4 or 0x93B</li>
+<li>For 266 MHz memory system with 7.8us refresh rate:  266 * 7.8us = 2074.8 or 0x81A</li></ul></li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Power_Management_Control_Register">Power Management Control Register</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=11" title="Edit section: Power Management Control Register">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>If you are not implementing any power management, set this register to 0x00000000.  There are 3 levels of power management that you can set with this register:  clock stop, self-refresh, and power-down.  The register also gives you the flexibility to set timers that monitor EMIF idle time.  When they expire, then the EMIF will put the external memory in the mode that is designated.  Some power modes are only supported by certain memories.
+</p><p>For more details on these registers, please refer to the AM335x TRM. 
+</p>
+<ul><li><b>PWR_MGMT_CTRL (@0x4C000038)</b>
+<ul><li><i>REG_PD_TIM - </i>Power Management Timer.&#160; Number of clock cycles to wait after EMIF is idle before going into power saving mode.  Valid when REG_LP_MODE = 4.</li>
+<li><i>REG_DPD_EN - </i> This bit simply enables deep power down mode available in LPDDR devices.</li>
+<li><i>REG_LP_MODE - </i>Auto Power management enable. 0 = disable auto pwr mgmt; 1 = clock stop; 2 = Self Refresh; 4 = Power-Down</li>
+<li><i>REG_SR_TIM - </i>Power Management Timer for Self-Refresh mode.  This is the number of clock cycles to wait after EMIF is idle before going into self-refresh mode.  Valid when REG_LP_MODE = 2.</li>
+<li><i>REG_CS_TIM - </i>Power Management Timer for Clock Stop mode.  This is the number of clock cycles to wait after EMIF is idle before going into clock stop mode.  Valid when REG_LP_MODE = 1.</li></ul></li></ul>
+<h1><span class="mw-headline" id="Shadow_Registers">Shadow Registers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=12" title="Edit section: Shadow Registers">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The AM335x devices support smart idle mode for power conservation.  Upon returning from smart idle mode, the shadow registers are loaded into the EMIF registers. 
+</p>
+<ul><li><i>SDRAM_REF_CTRL_SHDW - </i>Refresh Control Shadow Register.  Ensure that this register is written with the same value as SDRAM_REF_CTRL register.</li>
+<li><i>SDRAM_TIM_1_SHDW - </i>SDRAM Timing 1 Shadow Register.  Ensure that this register is written with the same value as SDRAM_TIM_1 register.</li>
+<li><i>SDRAM_TIM_2_SHDW </i>- SDRAM Timing 2 Shadow Register. Ensure that this register is written with the same value as SDRAM_TIM_2 register.</li>
+<li><i>SDRAM_TIM_3_SHDW</i> - SDRAM Timing 3 Shadow Register.  Ensure that this register is written with the same value as SDRAM_TIM_3 register.</li>
+<li><i>PWR_MGMT_CTRL_SHDW - </i>Power Management Control Shadow Register.  Ensure that this register is written with the same value as PWR_MGMT_CTRL register.</li>
+<li><i>DDR_PHY_CTRL_1_SHDW</i> - DDR PHY Control 1 Shadow Register.  Ensure that this register is written with the same value as DDR_PHY_CTRL_1.</li></ul>
+<h1><span class="mw-headline" id="Initialization_Sequence">Initialization Sequence</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=13" title="Edit section: Initialization Sequence">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>The best source for proper initialization sequence is the SPL source code, which can be found from <a rel="nofollow" class="external text" href="http://software-dl.ti.com/processor-sdk-linux/esd/AM335X/latest/index_FDS.html">TI's Linux Processor SDK for AM335x</a>.</li></ul>
+<p><br />
+</p>
+<h1><span id="On_Die_Termination_(ODT)_control_of_the_DDR_Device"></span><span class="mw-headline" id="On_Die_Termination_.28ODT.29_control_of_the_DDR_Device">On Die Termination (ODT) control of the DDR Device</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit&amp;section=14" title="Edit section: On Die Termination (ODT) control of the DDR Device">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>AM335x configures On Die Termination of the DDR device through its SDRAM_CONFIG register. DDR memories typically have configurable On Die Termination internally which helps improve signal integrity.  REG_DDR_TERM is used to configure the nominal ODT on the memory (The value from these register bits get written to the memory's MR1 register during AM335x DDR initialization).  These bits determine the ODT value applied on the memory side.  The AM335x ODT output signal is then used by the memory to turn on/off the ODT termination (this signal is controlled by the AM335x EMIF controller).  Typically ODT is turned off during reads and self refresh states, and turned on during writes.</li>
+<li>DDR3 memories have an additional feature called dynamic ODT.  This allows the memory to apply a different ODT value from the nominal value described above.  This ODT value is only applied by the memory during write cycles.</li>
+<li>When to use nominal vs. dynamic ODT on DDR3?  Typically, only dynamic ODT should be enabled for DDR3.  This will apply ODT during writes and turn off ODT for all other states, which will optimize power consumption.  Only a subset of termination values are available for dynamic ODT (RZQ/2 and RZQ/4), so if a different value is required, you will need to use nominal ODT.  Another scenario might be if you require a different ODT termination value for writes vs. non-write states, then you can enable both and configure different termination values.</li>
+<li>ODT is supported for DDR2 and DDR3.  DDR2 does not support dynamic ODT.  mDDR does not support any ODT.</li>
+<li>External signal (DDR_ODT) is driven from AM335x and controls the parallel termination implemented in the DDR2/DDR3 memory. The termination value is defined in SDRAM_CONFIG.REG_DDR_TERM.</li>
+<li>ODT (registered HIGH) turns on the termination resistance internal to the DDR2/DDR3 memory. When enabled, ODT is applied to each DQ, DQS, DQSn, DM signals.</li>
+<li>SDRAM_TIM_2 [27-25]: Minimum number of m_clk cycles from ODT enable to write data driven for DDR2/DDR3. (see TRM)</li>
+<li>The DDR2 EMRS (MR1 for DDR3) register is programmed via the value in SDRAM_CONFIG.REG_DDR_TERM.  DDR3 MR2 register is programmed via the value in the SDRAM_CONFIG.REG_DYN_ODT</li>
+<li>SDRAM_CONFIG.REG_DDR_TERM (these values should correspond to DDR datasheet)
+<ul><li>Set to 0 to disable nominal ODT.</li>
+<li>For DDR2
+<ul><li>1 = 75 ohm</li>
+<li>2 = 150 ohm</li>
+<li>3 = 50 ohm</li></ul></li>
+<li>For DDR3
+<ul><li>1 = RZQ/4  (60ohm)</li>
+<li>2 = RZQ/2  (120ohm)</li>
+<li>3 = RZQ/6  (40ohm)</li>
+<li>4 = RZQ/12 (20ohm)</li>
+<li>5 = RZQ/8  (30ohm)</li></ul></li></ul></li>
+<li>SDRAM_CONFIG.REG_DYN_ODT (applicable for DDR3 only)
+<ul><li>Set to 0 to disable dynamic ODT</li>
+<li>1 = RZQ/4 (60ohm)</li>
+<li>2 = RZQ/2 (120ohm)</li></ul></li></ul>
+<ul><li>Note: lower termination resistance may provide better signal integrity but at the cost of higher power consumption when ODT is turned on.</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130200227
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.074 seconds
+Real time usage: 0.077 seconds
+Preprocessor visited node count: 82/1000000
+Preprocessor generated node count: 154/1000000
+Post‐expand include size: 920/2097152 bytes
+Template argument size: 816/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.034      1 -total
+ 92.98%    1.891      2 Template:Note
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:15365-0!canonical and timestamp 20201130200227 and revision id 236896
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AM335x EMIF Configuration tips</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AM335x EMIF Configuration tips</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>AM335x EMIF Configuration tips</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>AM335x EMIF Configuration tips</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>AM335x EMIF Configuration tips</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AM335x EMIF Configuration tips</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AM335x EMIF Configuration tips</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>AM335x EMIF Configuration tips</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>AM335x EMIF Configuration tips</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;oldid=236896">https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;oldid=236896</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=AM335x+EMIF+Configuration+tips" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="AM335x_EMIF_Configuration_tips.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:AM335x_EMIF_Configuration_tips&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="AM335x_EMIF_Configuration_tips.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/AM335x_EMIF_Configuration_tips.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/AM335x_EMIF_Configuration_tips.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;oldid=236896" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=AM335x_EMIF_Configuration_tips&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 26 November 2019, at 17:47.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.074","walltime":"0.077","ppvisitednodes":{"value":82,"limit":1000000},"ppgeneratednodes":{"value":154,"limit":1000000},"postexpandincludesize":{"value":920,"limit":2097152},"templateargumentsize":{"value":816,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    2.034      1 -total"," 92.98%    1.891      2 Template:Note"]},"cachereport":{"timestamp":"20201130200227","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":227});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AM335x_EMIF_Configuration_tips by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:17:13 GMT -->
+</html>

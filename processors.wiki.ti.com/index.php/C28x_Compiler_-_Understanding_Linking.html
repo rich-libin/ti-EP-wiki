@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C28x_Compiler_-_Understanding_Linking by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:00:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C28x Compiler - Understanding Linking - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C28x_Compiler_-_Understanding_Linking","wgTitle":"C28x Compiler - Understanding Linking","wgCurRevisionId":221676,"wgRevisionId":221676,"wgArticleId":4920,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["C2000","Compiler","Development Tools for C2000"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C28x_Compiler_-_Understanding_Linking","wgRelevantArticleId":4920,"wgRequestId":"75a4bdbe9efee874a4ebecdf","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C28x_Compiler_-_Understanding_Linking rootpage-C28x_Compiler_-_Understanding_Linking skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C28x Compiler - Understanding Linking</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Other_Resources"><span class="tocnumber">2</span> <span class="toctext">Other Resources</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Understanding_Compiler_Sections"><span class="tocnumber">3</span> <span class="toctext">Understanding Compiler Sections</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Types_of_Compiler_Sections"><span class="tocnumber">3.1</span> <span class="toctext">Types of Compiler Sections</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#The_.reset_section"><span class="tocnumber">3.2</span> <span class="toctext">The .reset section</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Controlling_the_Linking_Process"><span class="tocnumber">4</span> <span class="toctext">Controlling the Linking Process</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Memory_Map_Description"><span class="tocnumber">4.1</span> <span class="toctext">Memory Map Description</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#PAGE_0_or_PAGE_1"><span class="tocnumber">4.1.1</span> <span class="toctext">PAGE 0 or PAGE 1</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#A_Note_About_Unified_Memory"><span class="tocnumber">4.1.2</span> <span class="toctext">A Note About Unified Memory</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Important_Notes_When_Defining_the_MEMORY_Section"><span class="tocnumber">4.1.3</span> <span class="toctext">Important Notes When Defining the MEMORY Section</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Sections_Description"><span class="tocnumber">4.2</span> <span class="toctext">Sections Description</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Frequently_Asked_Questions"><span class="tocnumber">5</span> <span class="toctext">Frequently Asked Questions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Q:_Why_do_I_need_a_linker_command_file.3F_Why_doesn.27t_the_compiler_take_care_of_memory_management.3F"><span class="tocnumber">5.1</span> <span class="toctext">Q: Why do I need a linker command file?  Why doesn't the compiler take care of memory management?</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Q:_The_linker_says_.22placement_fails_for_object.22_but_the_available_memory_is_larger_than_the_section"><span class="tocnumber">5.2</span> <span class="toctext">Q: The linker says "placement fails for object" but the available memory is larger than the section</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Q:_The_linker_says_.22placement_fails_for_object_.27.text.27_.22._How_can_I_make_more_memory_available_for_.text.3F"><span class="tocnumber">5.3</span> <span class="toctext">Q: The linker says "placement fails for object '.text' ". How can I make more memory available for .text?</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Q:_In_the_linker_command_file.2C_can_I_combine_continuous_flash_blocks_into_one_section.3F"><span class="tocnumber">5.4</span> <span class="toctext">Q: In the linker command file, can I combine continuous flash blocks into one section?</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Q:_In_the_linker_command_file.2C_I_combine_contiguous_SARAM_blocks_into_one_section.3F"><span class="tocnumber">5.5</span> <span class="toctext">Q: In the linker command file, I combine contiguous SARAM blocks into one section?</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Q:_My_project_is_linking_successfully._How_do_I_find_details_about_my_project.27s_memory_utilization.3F"><span class="tocnumber">5.6</span> <span class="toctext">Q: My project is linking successfully.  How do I find details about my project's memory utilization?</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Q:_I_have_a_DSP.2FBIOS_project._What_should_I_know_about_linking.3F"><span class="tocnumber">5.7</span> <span class="toctext">Q: I have a DSP/BIOS project.  What should I know about linking?</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This page describes the compiler section names and how to link them in your project. This article has been written with the C28x flash device in mind.
+</p>
+<h1><span class="mw-headline" id="Other_Resources">Other Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=2" title="Edit section: Other Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd><ul><li>TMS320C28x Optimizing C/C++ Compiler User's Guide <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">(spru514)</a></li>
+<li>TMS320C28x Assembly Language Tools User's Guide <a href="http://www.ti.com/lit/pdf/spru513" class="extiw" title="tidoc:spru513">(spru513)</a></li></ul></dd></dl>
+<p>The following application note describes in detail how to link code when running in RAM or Flash.  It also includes information on including DSP/BIOS.
+</p>
+<dl><dd><ul><li>Running an Application from Internal Flash Memory on the TMS320F28xx DSP  <a href="http://www.ti.com/lit/pdf/spra958" class="extiw" title="tidoc:spra958">(spra958)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/spra958">Associated code</a></li></ul></dd></dl>
+<p>The following is great general Code Generation Tools Information. Much of it applies to 28x:
+</p>
+<dl><dd><ul><li><a href="Compiler.html" class="mw-redirect" title="Compiler">Compiler Wiki Area</a></li>
+<li>Code Gen Tools Tips and Tricks for Beginners <a href="https://processors.wiki.ti.com/index.php?title=CGT_Tips_%26_Tricks_for_Beginners&amp;action=edit&amp;redlink=1" class="new" title="CGT Tips &amp; Tricks for Beginners (page does not exist)">Wiki article</a></li>
+<li>Code Generation Tools FAQ <a href="Code_Generation_Tools_FAQ.html" title="Code Generation Tools FAQ">Wiki article</a></li></ul></dd></dl>
+<h1><span class="mw-headline" id="Understanding_Compiler_Sections">Understanding Compiler Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=3" title="Edit section: Understanding Compiler Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Every C program consists of different parts called sections. All default sections begin with a leading dot (.text, .ebss, etc). The compiler has section names for initalized as well as unitialized variables. The section names that will be generated by the following code are indicated in the comments:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+</p><p>//
+// Global variables x &amp; y ==&gt; .ebss
+// Initial values   2 &amp; 7 ==&gt; .cinit
+//
+</p><p>int x = 2;
+int y = 7;
+</p><p>void main()
+{
+</p>
+<pre> long z;     // Local variable =&gt; .stack
+ z = x + y;  // Code =&gt; .text
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>The Compiler sections are documented in the TMS320C28x Optimizing C/C++ Compiler User's Guide <a href="http://www.ti.com/lit/pdf/spru514" class="extiw" title="tidoc:spru514">(spru514)</a>.
+</p>
+<h2><span class="mw-headline" id="Types_of_Compiler_Sections">Types of Compiler Sections</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=4" title="Edit section: Types of Compiler Sections">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>During development both initalized sections and uninitalized sections should be linked to SARAM. This makes debug faster since the flash will not need to be erased and programmed after each minor change.
+</p><p>Once the initial debug is complete and the code works, initialized sections can be moved to FLASH. Once this is done the code should be tested again.
+</p>
+<table cellspacing="2" cellpadding="2" border="1" width="100%">
+<caption><b>Linking C28x Compiler Sections</b>
+</caption>
+<tbody><tr style="background: none repeat scroll 0% 0% rgb(221, 255, 221);">
+<th>Section Name
+</th>
+<th>Description
+</th>
+<th>Section Type
+</th>
+<th>Link Location
+</th></tr>
+<tr>
+<td>.text
+</td>
+<td>Executable code and constants
+</td>
+<td>Initalized
+</td>
+<td>Load into non-volatile memory: Flash<br />Run time critical code in SARAM<br />Note (1)
+</td></tr>
+<tr>
+<td>.cinit
+</td>
+<td>Initalized global and static variables
+</td>
+<td>Initalized
+</td>
+<td>Non volatile memory: Flash
+</td></tr>
+<tr>
+<td>.econst
+</td>
+<td>Constant data (e.g. const int k = 3;)
+</td>
+<td>Initalized
+</td>
+<td>Non volatile memory: Flash
+</td></tr>
+<tr>
+<td>.switch
+</td>
+<td>Tables for switch statements
+</td>
+<td>Initalized
+</td>
+<td>Non volatile memory: Flash
+</td></tr>
+<tr>
+<td>.ebss
+</td>
+<td>Global and static variables
+</td>
+<td>Uninitalized
+</td>
+<td>Volatile memory: SARAM
+</td></tr>
+<tr>
+<td>.stack
+</td>
+<td>Stack space
+</td>
+<td>Uninitalized
+</td>
+<td>Volatile memory: SARAM<br />The 28x Stack Pointer (SP) is 16-bits<br />.stack must be in the low 64k words
+</td></tr>
+<tr>
+<td>.esysmem
+</td>
+<td>Memory for malloc type functions
+</td>
+<td>Uninitalized
+</td>
+<td>Volatile memory: SARAM
+</td></tr>
+<tr>
+<td>.reset
+</td>
+<td>Reset vector
+</td>
+<td>Initalized
+</td>
+<td>This section is not typically used by C28x devices and should be set to type=DSECT
+</td></tr></tbody></table>
+<p><br /> Notes: (1) Time critical code will typically be linked with a load address in flash, and a run address in SARAM. The application will then copy it from flash to SARAM.
+</p>
+<h2><span class="mw-headline" id="The_.reset_section">The .reset section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=5" title="Edit section: The .reset section">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The compiler generates a section called .reset that holds nothing more than the address of the _c_init00 routine (the c-initilization routine).  The purpose of this section is to provide a reset vector.  For most 28x devices, however, the reset vector will be in the boot ROM of the device.  For this reason, the .reset section can be set to "TYPE = DSECT" in the linker command file as described later in this article.
+</p><p>The exception to this rule is a 281x device with external interface.  On this device zone 7 can be mapped such that the reset vector is in external memory.  In this case the .reset section might be useful.
+</p>
+<h1><span class="mw-headline" id="Controlling_the_Linking_Process">Controlling the Linking Process</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=6" title="Edit section: Controlling the Linking Process">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The linking step uses the memory description from the linker command file (.cmd).  This file tells the linker how to place the software into the hardware.  The format of the linker command file is described in the TMS320C28x Assembly Language Tools User's Guide <a href="http://www.ti.com/lit/pdf/spru513" class="extiw" title="tidoc:spru513">(spru513)</a>.
+</p><p>It's suggested that you start with a linker file from a working example and then modify it for your needs.  The linker command file has two basic parts.
+</p>
+<h2><span class="mw-headline" id="Memory_Map_Description">Memory Map Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=7" title="Edit section: Memory Map Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This part of the .cmd file tells the linker what memory blocks are available.
+</p>
+<dl><dd><ul><li>Memory block name</li>
+<li>The memory block location</li>
+<li>Size of the memory block</li></ul></dd></dl>
+<p>An example of the memory map description is shown below:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+/* Memory Map Description
+</p>
+<pre>  Describe the memory blocks on the device */
+</pre>
+<p>MEMORY
+{
+</p>
+<pre>  PAGE 0:      /* Program Space */
+  H0SARAM:     org = 0x00A000,  len = 0x2000
+</pre>
+<pre>  PAGE 1:       /* Data Space */
+  M0SARAM:     org = 0x000000,  len = 0x400
+  M1SARAM:     org = 0x000400,  len = 0x400
+  L0SARAM:     org = 0x008000,  len = 0x1000
+  L1SARAM:     org = 0x009000,  len = 0x1000
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h4><span class="mw-headline" id="PAGE_0_or_PAGE_1">PAGE 0 or PAGE 1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=8" title="Edit section: PAGE 0 or PAGE 1">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>PAGE 0 is typically used for program sections.  For example .text or other named sections that contain code.
+</p><p>PAGE 1 is used for data sections.  For example .stack.
+</p><p>In some legacy Flash programming tools, such as SDFlash, only sections on "PAGE 0" would be programmed into the flash.  Consider the .const section which is data.  If .const was allocated to PAGE 1, the SDFlash flash programmer will ignore it and not program the data into flash.  Since this is initialized data that is constant you really want it programmed into flash.  In some of our examples you will find .const allocated to PAGE 0 for this reason.  Memory blocks on C28x are unified so it does not cause an issue.
+</p>
+<h4><span class="mw-headline" id="A_Note_About_Unified_Memory">A Note About Unified Memory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=9" title="Edit section: A Note About Unified Memory">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Memory blocks on 28x devices are typically unified. That means they can be accessed both in program space and data space. Refer to the data manual for your device. There will be a memory map that shows the physical memory blocks and where they are defined - program, data or both.
+</p><p>In the MEMORY description, these unified blocks can be placed either in page 0 (i.e. program) or page 1 (i.e. data). It is also possible to split a physical memory block so part of the block is used by page 0 and another part used by page 1.
+</p>
+<h4><span class="mw-headline" id="Important_Notes_When_Defining_the_MEMORY_Section">Important Notes When Defining the MEMORY Section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=10" title="Edit section: Important Notes When Defining the MEMORY Section">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd><ul><li>If code accesses data within the same physical memory, then performance will degrade due to resource conflicts. It is better to place code and the data it accesses separate blocks.</li>
+<li>Take care to not define the same memory address range in both program and data space! Doing so may cause your data to corrupt program or vice versa.</li>
+<li>Wait states will degrade performance. Most SARAM is zero-wait on 28x devices. There are some blocks, however, that are not on 2833x devices. Always check the data manual to find the wait states for each physical block and whether it applies to program or data accesses.</li>
+<li>Flash sectors can be combined to form larger memory segments. The thing to keep in mind is the smallest amount that can be erased is a physical sector. This may affect how code is partitioned for field upgrades.</li>
+<li>Continuous SARAM blocks can be combined to form a larger memory segment.</li>
+<li>Devices with DMA: only some blocks will be accessible by the DMA. Refer to the data manual.</li>
+<li>Devices with CLA: only some blocks will be accessible by the CLA. Refer to the data manual.</li></ul></dd></dl>
+<h2><span class="mw-headline" id="Sections_Description">Sections Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=11" title="Edit section: Sections Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This part of the linker command file tells the linker:
+</p>
+<dl><dd><ul><li>Which software sections should be allocated to which memory regions</li>
+<li>Allows you to allocate to memory on a per-file basis</li>
+<li>Allows for separate load and run locations</li></ul></dd></dl>
+<p>An example sections description is shown below:
+</p><p>&lt;syntaxhighlight lang=c&gt;
+</p><p>/* Sections Description
+</p>
+<pre>  Tell the linker where to allocate sections */
+</pre>
+<p>SECTIONS
+{
+</p>
+<pre>  .text:      &gt;  H0SARAM      PAGE 0
+  .ebss:      &gt;  M0SARAM      PAGE 1
+  .cinit:     &gt;  H0SARAM      PAGE 0
+  .stack:     &gt;  M1SARAM      PAGE 1
+  .reset:     &gt;  H0SARAM      PAGE 0, TYPE = DSECT
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>If you do not specify a generated section then the liker will try to place it for you.  This may result in it being placed somewhere you don't want it to be.  For example, the .ebss section may end up in flash which will not work!  To receive a warning message when the linker assigns unspecified sections use the -w linker switch.
+</p>
+<h1><span class="mw-headline" id="Frequently_Asked_Questions">Frequently Asked Questions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=12" title="Edit section: Frequently Asked Questions">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h4><span id="Q:_Why_do_I_need_a_linker_command_file?_Why_doesn't_the_compiler_take_care_of_memory_management?"></span><span class="mw-headline" id="Q:_Why_do_I_need_a_linker_command_file.3F_Why_doesn.27t_the_compiler_take_care_of_memory_management.3F">Q: Why do I need a linker command file?  Why doesn't the compiler take care of memory management?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=13" title="Edit section: Q: Why do I need a linker command file? Why doesn&#039;t the compiler take care of memory management?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>For simple examples it may not matter much what memory is used.  But in embedded processing it quickly does become important.</dd></dl>
+<dl><dd>Here is a list of some things to consider when placing code/data:</dd></dl>
+<dl><dd><ul><li>Speed: RAM is faster than Flash.  Flash is faster than XINTF.</li>
+<li>Does it need to be stored in non-volatile memory like Flash?</li>
+<li>Is it time critical? Example: a time critical ISR stored in flash and copied to RAM.</li>
+<li>Some RAM may be accessible by a DMA module while other RAM is not.</li>
+<li>Use separate physical RAM blocks to avoid resource conflicts. On C2000 RAM blocks are single access (SARAM).</li>
+<li>Is a resource on external memory?</li>
+<li>Should it be in memory with a cache or prefetch to improve performance?</li>
+<li>Does the memory have wait states in program space, data space, or both?</li>
+<li>Is it something that needs to be protected by the Code Security Module?  Not all memory is CSM protected.</li></ul></dd></dl>
+<dl><dd>The linker command file is how you describe your device to the tools and tell it where you want different sections to go.</dd></dl>
+<dl><dd>If you don't assign a particular section to a memory region then the tools will indeed try to place it in any available memory.  This may not be desired for the above reasons.  Because of this I suggest always linking with the -w flag so the tools will tell you it is assigning a section to memory without your influence.</dd></dl>
+<h4><span id="Q:_The_linker_says_&quot;placement_fails_for_object&quot;_but_the_available_memory_is_larger_than_the_section"></span><span class="mw-headline" id="Q:_The_linker_says_.22placement_fails_for_object.22_but_the_available_memory_is_larger_than_the_section">Q: The linker says "placement fails for object" but the available memory is larger than the section</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=14" title="Edit section: Q: The linker says &quot;placement fails for object&quot; but the available memory is larger than the section">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>This is most likely happening because the section is "blocked" by the compiler.  This means it needs to either fit completely within a page or begin at a page boundary. Meeting that requirement does not allow it to fit within the space available in the memory block. The compiler does this to optimize the data page (DP) register load. For example, the compiler can safely load DP for an array once and access all its elements (or the first 64-words) without having to reload DP. If blocking is not enabled the compiler has to load DP for accessing each element leading to much more inefficiencies in terms of code size and performance.</dd></dl>
+<dl><dd>The alternative would be to generate a DP load before every direct memory access.  Obviously this could have a serious negative impact on code size.  There is an option though that will cause DP loads on every access, and disable blocking.  If you add the -md switch to your project it will disable blocking but impact code size and performance - this is not recommended.</dd></dl>
+<dl><dd>You can confirm that a particular section is "blocked" by looking at the .bss and .usect directives in the assembly listing file and checking that the blocking flag is set. The blocking flag is documented in the <a href="http://www.ti.com/lit/pdf/spru513" class="extiw" title="tidoc:spru513">C28x Assembly Language Tools Users Guide</a> under "Uninitialized Sections".</dd></dl>
+<h4><span id="Q:_The_linker_says_&quot;placement_fails_for_object_'.text'_&quot;._How_can_I_make_more_memory_available_for_.text?"></span><span class="mw-headline" id="Q:_The_linker_says_.22placement_fails_for_object_.27.text.27_.22._How_can_I_make_more_memory_available_for_.text.3F">Q: The linker says "placement fails for object '.text' ". How can I make more memory available for .text?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=15" title="Edit section: Q: The linker says &quot;placement fails for object &#039;.text&#039; &quot;. How can I make more memory available for .text?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>There are a few options - here are three:</dd></dl>
+<dl><dd><dl><dt>Option 1</dt>
+<dd>The linker command file (.cmd) specifies how memory will be allocated for the project. You can try modifying the .cmd file to allow for a larger .text section. For example, you can try combining contiguous RAM blocks or flash sectors to make a larger block for code.</dd></dl></dd></dl>
+<dl><dd><dl><dt>Option 2</dt>
+<dd>You can "split" the .text section among multiple memory regions using the following syntax:</dd></dl></dd></dl>
+<p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<pre>  .text            &#160;: &gt;&gt; FLASHA | FLASHC | FLASHD,     PAGE = 0
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<dl><dd><dl><dt>Option 3</dt>
+<dd>You can tell the linker to allocate as a whole into the first memory range in which it fits completely, by doing this:</dd></dl></dd></dl>
+<p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<pre> .text            &#160;: &gt; FLASHA | FLASHC | FLASHD,     PAGE = 0
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<dl><dd>For any of these options, keep in mind that all blocks may not be equal in functionality - For example:</dd></dl>
+<dl><dd><ul><li>On the Piccolo devices with Control Law Accelerator only some memory blocks can be used by the CLA.</li>
+<li>On devices with the DMA not all memory can be accessed by the DMA.</li>
+<li>Most SARAM blocks are single access (zero wait state) but on some devices there is a wait state in program memory. For example on 2833x the memories that the DMA can use are zero wait in data space, but 1 wait in program space. This makes them more suited towards pure data accesses.</li></ul></dd></dl>
+<h4><span id="Q:_In_the_linker_command_file,_can_I_combine_continuous_flash_blocks_into_one_section?"></span><span class="mw-headline" id="Q:_In_the_linker_command_file.2C_can_I_combine_continuous_flash_blocks_into_one_section.3F">Q: In the linker command file, can I combine continuous flash blocks into one section?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=16" title="Edit section: Q: In the linker command file, can I combine continuous flash blocks into one section?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Yes - Flash sectors can be combined in the MEMORY section.</dd></dl>
+<dl><dd>On the flash side, the thing to keep in mind is a <b>sector is the smallest amount of flash that can be erased at a time.</b>  Thus you may want to partition your code such that code you upgrade (or don't upgrade) aligns to a sector.</dd></dl>
+<dl><dd><dl><dt>Option 1</dt>
+<dd>Combine two memory regions, in this case two sectors, into one:</dd></dl></dd></dl>
+<p>Two sectors:
+&lt;syntaxhighlight lang="c"&gt;
+</p><p>MEMORY
+{
+</p>
+<pre>  //
+  // Individual sectors E and F called out in the MEMORY description
+  //
+  ...
+  FLASHF     &#160;: origin = 0x310000, length = 0x008000     /* on-chip FLASH */
+  FLASHE     &#160;: origin = 0x318000, length = 0x008000     /* on-chip FLASH */
+  ...
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>One combined memory region made of two sectors:
+</p><p><br />
+&lt;syntaxhighlight lang="c"&gt;
+</p><p>MEMORY
+{
+</p>
+<pre>  //
+  // Sectors E and F merged into one in the MEMORY description
+  //
+  ...
+  FLASHF_E      &#160;: origin = 0x310000, length = 0x010000     /* on-chip FLASH F &amp; FLASH E */
+  ...
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<dl><dd><dl><dt>Option 2</dt>
+<dd>Another option is to split the sections across multiple memory segments.   This is described in the TMS320C28x Assembly Language Tools User's Guide <a href="http://www.ti.com/lit/pdf/spru513" class="extiw" title="tidoc:spru513">(spru513)</a>.</dd></dl></dd></dl>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p><p>SECTIONS
+{
+</p>
+<pre>  .text: { *(.text) } &gt;&gt; FLASHE| FLASHH
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h4><span id="Q:_In_the_linker_command_file,_I_combine_contiguous_SARAM_blocks_into_one_section?"></span><span class="mw-headline" id="Q:_In_the_linker_command_file.2C_I_combine_contiguous_SARAM_blocks_into_one_section.3F">Q: In the linker command file, I combine contiguous SARAM blocks into one section?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=17" title="Edit section: Q: In the linker command file, I combine contiguous SARAM blocks into one section?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>Yes, you can do this by combining memory blocks or splitting the section across memory blocks (described above for flash).</dd></dl>
+<dl><dd>The thing to remember is the SARAM blocks are single access.  So it is best to partition code into a different physical SARAM block than data that code is accessing.  Keeping this partition will will improve performance.</dd></dl>
+<h4><span id="Q:_My_project_is_linking_successfully._How_do_I_find_details_about_my_project's_memory_utilization?"></span><span class="mw-headline" id="Q:_My_project_is_linking_successfully._How_do_I_find_details_about_my_project.27s_memory_utilization.3F">Q: My project is linking successfully.  How do I find details about my project's memory utilization?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=18" title="Edit section: Q: My project is linking successfully. How do I find details about my project&#039;s memory utilization?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<dl><dd>After a project links successfully, a .map file can be generated which provides information about memory utilization and symbol placement. Please see the TMS320C28x Assembly Language Tools User's Guide for more information.</dd></dl>
+<h4><span id="Q:_I_have_a_DSP/BIOS_project._What_should_I_know_about_linking?"></span><span class="mw-headline" id="Q:_I_have_a_DSP.2FBIOS_project._What_should_I_know_about_linking.3F">Q: I have a DSP/BIOS project.  What should I know about linking?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;section=19" title="Edit section: Q: I have a DSP/BIOS project. What should I know about linking?">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Please refer to this application note:
+</p>
+<dl><dd><ul><li>Running an Application from Internal Flash Memory on the TMS320F28xx DSP  <a href="http://www.ti.com/lit/pdf/spra958" class="extiw" title="tidoc:spra958">(spra958)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/spra958">Associated code</a></li></ul></dd></dl>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130162656
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.044 seconds
+Real time usage: 0.046 seconds
+Preprocessor visited node count: 74/1000000
+Preprocessor generated node count: 80/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4920-0!canonical and timestamp 20201130162656 and revision id 221676
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C28x Compiler - Understanding Linking</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C28x Compiler - Understanding Linking</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C28x Compiler - Understanding Linking</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C28x Compiler - Understanding Linking</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C28x Compiler - Understanding Linking</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C28x Compiler - Understanding Linking</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C28x Compiler - Understanding Linking</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C28x Compiler - Understanding Linking</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C28x Compiler - Understanding Linking</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;oldid=221676">https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;oldid=221676</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_C2000.html" title="Category:C2000">C2000</a></li><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li><li><a href="Category_Development_Tools_for_C2000.html" title="Category:Development Tools for C2000">Development Tools for C2000</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C28x+Compiler+-+Understanding+Linking" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C28x_Compiler_-_Understanding_Linking.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:C28x_Compiler_-_Understanding_Linking&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C28x_Compiler_-_Understanding_Linking.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C28x_Compiler_-_Understanding_Linking.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C28x_Compiler_-_Understanding_Linking.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;oldid=221676" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C28x_Compiler_-_Understanding_Linking&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 4 October 2016, at 09:19.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.044","walltime":"0.046","ppvisitednodes":{"value":74,"limit":1000000},"ppgeneratednodes":{"value":80,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130162656","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":226});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C28x_Compiler_-_Understanding_Linking by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:00:35 GMT -->
+</html>

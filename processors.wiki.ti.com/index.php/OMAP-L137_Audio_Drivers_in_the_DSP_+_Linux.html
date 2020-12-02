@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L137_Audio_Drivers_in_the_DSP_+_Linux by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:29:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OMAP-L137 Audio Drivers in the DSP + Linux - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OMAP-L137_Audio_Drivers_in_the_DSP_+_Linux","wgTitle":"OMAP-L137 Audio Drivers in the DSP + Linux","wgCurRevisionId":182024,"wgRevisionId":182024,"wgArticleId":6289,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","OMAPL1","C674x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OMAP-L137_Audio_Drivers_in_the_DSP_+_Linux","wgRelevantArticleId":6289,"wgRequestId":"6c93ff7d22abb40ac9d87c15","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OMAP-L137_Audio_Drivers_in_the_DSP_Linux rootpage-OMAP-L137_Audio_Drivers_in_the_DSP_Linux skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OMAP-L137 Audio Drivers in the DSP + Linux</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext"><b>Introduction</b></span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Overview_of_the_Application"><span class="tocnumber">2</span> <span class="toctext"><b>Overview of the Application</b></span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Prerequisites"><span class="tocnumber">3</span> <span class="toctext"><b>Prerequisites</b></span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Adapting_your_Linux_Kernel_to_avoid_conflicts"><span class="tocnumber">4</span> <span class="toctext"><b>Adapting your Linux Kernel to avoid conflicts </b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Resources_used_by_the_DSP"><span class="tocnumber">4.1</span> <span class="toctext"><b>Resources used by the DSP</b></span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Resources_used_by_the_ARM"><span class="tocnumber">4.2</span> <span class="toctext"><b>Resources used by the ARM</b></span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Disabling_resources_in_the_ARM"><span class="tocnumber">4.3</span> <span class="toctext"><b>Disabling resources in the ARM</b></span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#Necessary_changes_in_the_Linux_kernel"><span class="tocnumber">4.3.1</span> <span class="toctext"><b>Necessary changes in the Linux kernel</b></span></a>
+<ul>
+<li class="toclevel-4 tocsection-9"><a href="#Disabling_Audio_Driver"><span class="tocnumber">4.3.1.1</span> <span class="toctext">Disabling Audio Driver</span></a></li>
+<li class="toclevel-4 tocsection-10"><a href="#Disabling_I2C_Driver"><span class="tocnumber">4.3.1.2</span> <span class="toctext">Disabling I2C Driver</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-11"><a href="#Optional_changes_in_the_Linux_kernel"><span class="tocnumber">4.3.2</span> <span class="toctext"><b>Optional changes in the Linux kernel</b></span></a>
+<ul>
+<li class="toclevel-4 tocsection-12"><a href="#Disabling_Timer1"><span class="tocnumber">4.3.2.1</span> <span class="toctext">Disabling Timer1</span></a></li>
+<li class="toclevel-4 tocsection-13"><a href="#Disabling_SPI_Driver"><span class="tocnumber">4.3.2.2</span> <span class="toctext">Disabling SPI Driver</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Rebuilding_DSPLink"><span class="tocnumber">5</span> <span class="toctext"><b>Rebuilding DSPLink</b></span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Installing_the_Software"><span class="tocnumber">6</span> <span class="toctext"><b>Installing the Software</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="#Linux_only_build_installation"><span class="tocnumber">6.1</span> <span class="toctext">Linux only build installation</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#About_the_software"><span class="tocnumber">6.2</span> <span class="toctext">About the software</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Building_the_application"><span class="tocnumber">7</span> <span class="toctext"><b>Building the application</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#ARM_side"><span class="tocnumber">7.1</span> <span class="toctext">ARM side</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#Adapt_AudioDSP.2FRules.make"><span class="tocnumber">7.1.1</span> <span class="toctext">Adapt <b>AudioDSP/Rules.make</b></span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Build_ARM_side"><span class="tocnumber">7.1.2</span> <span class="toctext">Build ARM side</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-22"><a href="#DSP_side"><span class="tocnumber">7.2</span> <span class="toctext">DSP side</span></a>
+<ul>
+<li class="toclevel-3 tocsection-23"><a href="#Copy_PSP"><span class="tocnumber">7.2.1</span> <span class="toctext">Copy PSP</span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#Adapt_AudioDSP.2FRules.make_2"><span class="tocnumber">7.2.2</span> <span class="toctext">Adapt <b>AudioDSP/Rules.make</b></span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#Build_DSP_side_in_Linux"><span class="tocnumber">7.2.3</span> <span class="toctext">Build DSP side in Linux</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-26"><a href="#Calling_the_application"><span class="tocnumber">8</span> <span class="toctext"><b>Calling the application</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-27"><a href="#Copy_the_files_to_the_target_filesystem"><span class="tocnumber">8.1</span> <span class="toctext"><b>Copy the files to the target filesystem</b></span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Running_the_application"><span class="tocnumber">8.2</span> <span class="toctext"><b>Running the application</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-29"><a href="#Debugging_tips"><span class="tocnumber">9</span> <span class="toctext"><b>Debugging tips</b></span></a>
+<ul>
+<li class="toclevel-2 tocsection-30"><a href="#tips_for_.22Build_DSP_side_in_Linux.22"><span class="tocnumber">9.1</span> <span class="toctext">tips for "Build DSP side in Linux"</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction"><b>Introduction</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This article discusses implementing communication between the ARM and DSP processors within a highly integrated SoC device, using <a href="DSPLink_Overview.html" title="DSPLink Overview"> DSPLink</a>. A demo is provided for the <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/prod/folders/print/omap-l137.html">OMAP-L137</a> DSP + ARM processor. For more information, about this processor please see <a href="C674x/OMAPL1x_Introductory_Information.html" title="C674x/OMAPL1x Introductory Information"> C674x/OMAPL1x Introductory Information</a>.
+</p><p>In the traditional use for the multicore DSP + ARM devices with <a rel="nofollow" class="external text" href="Category_Codec_Engine.html">Codec Engine</a>, the DSP works as a hardware accelerator to run algorithms that are 'too heavy' for the ARM to run by itself. So, in this case, the ARM has device drivers that control the peripherals (McASP, SPI, UART, etc), and the DSP acts as little more than an 'accelerator' peripheral to the ARM as seen in the figure below.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a href="File_OMAPL1codeengine.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/1/13/OMAPL1codeengine.JPG" width="671" height="294" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_OMAPL1codeengine.html" class="internal" title="Enlarge"></a></div>Codec Engine Application Block Diagram</div></div></div>
+<p>If you are not using the Drivers on the DSP side, only using the DSP as a hardware accelerator to run algorithms, particularly if you want to work with multiple <a rel="nofollow" class="external text" href="Category_XDAIS.html">XDAIS</a> compliant algorithms, please see:
+</p><p><a href="Getting_started_with_IUNIVERSAL.html" title="Getting started with IUNIVERSAL"> Getting started with IUNIVERSAL</a>
+</p><p><a href="OMAP-L137_iUniversal_%2b_ALSA_driver.html" title="OMAP-L137 iUniversal + ALSA driver"> OMAP-L137 iUniversal + ALSA driver</a>
+</p><p>Some developers might want more flexibility for specific applications where the DSP would be able to talk to the peripherals as well as shown in the figure below.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a href="File_OMAPL1dsplink.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/9/95/OMAPL1dsplink.JPG" width="671" height="294" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_OMAPL1dsplink.html" class="internal" title="Enlarge"></a></div>DSPLink Application Block Diagram</div></div></div>
+<p>The demo provided in this article is an example application where this is implemented. The audio interface is controlled by the DSP, and a simple command line GUI is implemented by the ARM. The ARM and DSP communicate using <a href="DSPLink_Overview.html" title="DSPLink Overview"> DSPLink</a>.
+</p><p>This application is a basic example provided "as is" to help developers get started.
+</p>
+<h2><span class="mw-headline" id="Overview_of_the_Application"><b>Overview of the Application</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=2" title="Edit section: Overview of the Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Here is the diagram of how this example project operates:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a href="File_OMAPL1audioapp.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/6/63/OMAPL1audioapp.JPG" width="671" height="294" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_OMAPL1audioapp.html" class="internal" title="Enlarge"></a></div>DSPLink Audio Example Application Block Diagram</div></div></div>
+<p><br />
+The ARM side of this application:
+</p>
+<ul><li>Loads the DSP execultable and runs it.</li>
+<li>Sends messages to the DSP application to control the audio volume.</li>
+<li>When user chooses the quit command ("q") or crtl + C, the ARM sends a message to the DSP side to finalize the application (turn off the audio, close the audio drivers, and free the resources allocated during the application's initialization), kills the DSP application, and after that it exits the ARM application.</li></ul>
+<p><br />
+The DSP side of this application:
+</p>
+<ul><li>Gets the audio from the input channel (it is necessary to feed the application audio in the "Line IN" conector in the board), applies a volume gain, and sends the audio to the output channel (it is necessary to plug speakers or a headset to the "Line OUT" audio connector on the board).</li>
+<li>Receives messages from the ARM side to adjust volume.</li>
+<li>Receives message from the ARM side to turn off the audio, close the audio drivers, and free the resources allocated during the application's initialization.</li></ul>
+<h2><span class="mw-headline" id="Prerequisites"><font color="#FF0000"><b>Prerequisites</b></font></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=3" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div class="thumb tnone"><div class="thumbinner" style="width:202px;"><a href="File_Stop_sign.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/5/5e/Stop_sign.JPG" width="200" height="200" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Stop_sign.html" class="internal" title="Enlarge"></a></div>Stop and make sure you have the prerequisites installed</div></div></div>
+<p>Before you get started with this application:
+</p>
+<ul><li>Go through the <a href="Getting_Started_Guide_for_OMAP-L137.html" title="Getting Started Guide for OMAP-L137"> Getting Started Guide for OMAP-L137</a> to install the MontaVista Linux software.</li>
+<li>Go through the <a href="Getting_Started_Guide_for_C6747.html" title="Getting Started Guide for C6747"> Getting Started Guide for C6747</a> to install the DSP/BIOS PSP software.</li></ul>
+<p><br />
+After installing the software, <b>make sure you are using a consistent version combination</b>. Here are the combinations tested and approved:
+</p><p><b>1)</b> For the versions below, use the installation part of the Getting Started Guides above:
+</p>
+<ul><li>bios_5_33_05</li>
+<li>dsplink-1_61_03-prebuilt</li>
+<li>cg6x_6_1_9</li>
+<li>pspdrivers_01_20_00</li>
+<li>xdctools_3_10_05_61</li>
+<li>edma3_lld_01_07_00_01</li></ul>
+<p><b>2)</b>
+</p>
+<ul><li>dsplink-1_61_03-prebuilt (rebuild with these versions and check)</li></ul>
+<dl><dd><ul><li>use the installation part of <a href="Getting_Started_Guide_for_OMAP-L137.html" title="Getting Started Guide for OMAP-L137"> Getting Started Guide for OMAP-L137</a></li></ul></dd></dl>
+<ul><li>bios_5_41_02_14</li></ul>
+<dl><dd><ul><li>Available <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/bios/dspbios/5_41_02_14/index_FDS.html">here</a></li></ul></dd></dl>
+<ul><li>cg6x_6_1_9</li></ul>
+<dl><dd><ul><li>Available (requires my.ti.com account) <a rel="nofollow" class="external text" href="https://www-a.ti.com/downloads/sds_support/CodeGenerationTools.htm">here</a></li></ul></dd></dl>
+<ul><li>pspdrivers_01_30_00</li></ul>
+<dl><dd><ul><li>Available <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/bios_psp/BIOSPSP/01_30/index_FDS.html">here</a></li></ul></dd></dl>
+<ul><li>xdctools_3_16_01_27</li></ul>
+<dl><dd><ul><li>Available <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/rtsc/3_16_01_27/index_FDS.html">here</a></li></ul></dd></dl>
+<ul><li>edma3_lld_01_10_00_01</li></ul>
+<dl><dd><ul><li>Available <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/edma3_lld/edma3-lld-bios5/01_10_00_01/index_FDS.html">here</a></li></ul></dd></dl>
+<h2><span class="mw-headline" id="Adapting_your_Linux_Kernel_to_avoid_conflicts"><b>Adapting your Linux Kernel to avoid conflicts </b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=4" title="Edit section: Adapting your Linux Kernel to avoid conflicts">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In this application, the DSP and the ARM access peripherals using device drivers. In this case, it is necessary to make sure that only one of the cores has control of a given peripheral to avoid access conflicts.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a href="File_Boxing-gloves.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/e/e6/Boxing-gloves.jpg" width="400" height="186" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Boxing-gloves.html" class="internal" title="Enlarge"></a></div>Resource conflict between ARM and DSP</div></div></div>
+<p>For example, if the DSP is controlling the McASP port, than the ARM should not try to access it in order to avoid conflicts. So the first step in this case would be to identify all of the resources that are used in the DSP and disable it's use in the ARM side. It is possible to achieve that by disabling this resources in the Linux kernel.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a href="File_Handshake.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/7/70/Handshake.gif" width="400" height="165" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Handshake.html" class="internal" title="Enlarge"></a></div>Resource agreement between ARM and DSP</div></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Resources_used_by_the_DSP"><b>Resources used by the DSP</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=5" title="Edit section: Resources used by the DSP">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Here is the list of the peripherals that the DSP side uses:
+</p>
+<ul><li>Audio port (McASP1).</li>
+<li>I2C0 (used to talk to the audio codec).</li>
+<li>Timer1 (for DSP/BIOS scheduler clock)</li></ul>
+<h3><span class="mw-headline" id="Resources_used_by_the_ARM"><b>Resources used by the ARM</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=6" title="Edit section: Resources used by the ARM">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This Linux side application does not <b>directly</b> touch any peripherals that could cause conflicts with the DSP side. If this example is used as a starting point to more complex applications, make sure to avoid conflitcs with the resources used by the DSP.
+</p>
+<h3><span class="mw-headline" id="Disabling_resources_in_the_ARM"><b>Disabling resources in the ARM</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=7" title="Edit section: Disabling resources in the ARM">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To change the Linux Driver configuration, please follow the steps in the page: <a href="Building_the_OMAP-L137_Linux_Kernel.html" title="Building the OMAP-L137 Linux Kernel"> Building the OMAP-L137 Linux Kernel</a>. In the menuconfig step (<i>host $ make ARCH=arm CROSS_COMPILE=arm_v5t_le- menuconfig</i>), please make the changes below.
+</p>
+<h4><span class="mw-headline" id="Necessary_changes_in_the_Linux_kernel"><b>Necessary changes in the Linux kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=8" title="Edit section: Necessary changes in the Linux kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h5><span class="mw-headline" id="Disabling_Audio_Driver">Disabling Audio Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=9" title="Edit section: Disabling Audio Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p><font color="#FF0000" style="background:#736F6E;"><b>Necessary</b></font>: If the Sound Card Support is not disabled, the DSP side can not access it's audio driver, so application does not work.
+</p><p>To change the Linux Driver configuration, please follow the steps in the page: <a href="Building_the_OMAP-L137_Linux_Kernel.html" title="Building the OMAP-L137 Linux Kernel"> Building the OMAP-L137 Linux Kernel</a>
+</p><p>In menuconfig (see <b>Configuring Linux Kernel</b> in the page above) , disable Device Drivers -&gt; Sound ---&gt; Sound Card support:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:702px;"><a href="File_Menuconfnosound.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/3/31/Menuconfnosound.JPG" width="700" height="485" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Menuconfnosound.html" class="internal" title="Enlarge"></a></div>Removing Sound Card support from the Linux kernel</div></div></div>
+<h5><span class="mw-headline" id="Disabling_I2C_Driver">Disabling I2C Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=10" title="Edit section: Disabling I2C Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p><font color="#FF0000" style="background:#736F6E;"><b>Necessary</b></font>: If the I2C Support is not disabled, the DSP side I2C driver conflicts with the I2C Linux driver, so application does not work around 30% of the time it is called.
+</p><p><br />
+In menuconfig, disable CONFIG_I2C at Device Device Drivers -&gt; I2C Support -&gt; I2C support:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:666px;"><a href="File_Menuconfnoi2c.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/f/fb/Menuconfnoi2c.JPG" width="664" height="440" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Menuconfnoi2c.html" class="internal" title="Enlarge"></a></div>Removing I2C support from the Linux kernel</div></div></div>
+<h4><span class="mw-headline" id="Optional_changes_in_the_Linux_kernel"><b>Optional changes in the Linux kernel</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=11" title="Edit section: Optional changes in the Linux kernel">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h5><span class="mw-headline" id="Disabling_Timer1">Disabling Timer1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=12" title="Edit section: Disabling Timer1">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p><font color="#FFFF00" style="background:#736F6E;"><b>Optional</b></font>: Chaging the code and removing the watchdog timer from the Linux kernel configuration is <b>optional</b>. This Linux application did not present any conflicts.
+</p><p><br />
+The DSP side will have to use the Timer1 for the DSP/BIOS clock. To avoid possible conflicts, follow the steps bellow:
+</p><p><b>1)</b> In the file /home/user/workdir/lsp/ti-davinci/linux-2.6.18_pro500/arch/arm/mach-da8xx/time.c, comment the usage of timer1 as the DSP is going to use this:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+static  int da8xx_timer_irqs[NUM_TIMERS] = {
+IRQ_DA8XX_TINT12_0,
+IRQ_DA8XX_TINT34_0,
+</p>
+<ol><li>if 0</li></ol>
+<p>IRQ_DA8XX_TINT12_1,
+IRQ_DA8XX_TINT34_1
+</p>
+<ol><li>endif</li></ol>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p><p><b>2)</b> In the file /home/user/workdir/lsp/ti-davinci/linux-2.6.18_pro500/arch/arm/mach-da8xx/reset.c, comment the watchdog reset:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+void arch_reset(char mode)
+{
+//      davinci_watchdog_reset(DA8XX_WDOG_BASE);
+}
+&lt;/syntaxhighlight&gt;
+</p><p><b>3)</b> In the file /home/user/workdir/lsp/ti-davinci/linux-2.6.18_pro500/include/asm-arm/arch-davinci/time.h, comment the TI_BOT and TI_TOP:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+enum {
+T0_BOT,
+T0_TOP,
+/*        T1_BOT, */
+/*        T1_TOP, */
+NUM_TIMERS
+};
+&lt;/syntaxhighlight&gt;
+</p><p><br />
+<b>4)</b> Remove the support for watchdog in the Linux kernel. To change the Linux Driver configuration, please follow the steps in the page: <a href="Building_the_OMAP-L137_Linux_Kernel.html" title="Building the OMAP-L137 Linux Kernel"> Building the OMAP-L137 Linux Kernel</a>.
+</p><p>In menuconfig (see <b>Configuring Linux Kernel</b> in the page above), disable CONFIG_WATCHDOG at Device Drivers-&gt; Character devices-&gt; Watchdog Cards-&gt; Watchdog Timer Support:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:667px;"><a href="File_Menuconfnowatch.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/4/4b/Menuconfnowatch.JPG" width="665" height="442" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Menuconfnowatch.html" class="internal" title="Enlarge"></a></div>Removing Watchdog Timer Support from the Linux kernel</div></div></div>
+<h5><span class="mw-headline" id="Disabling_SPI_Driver">Disabling SPI Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=13" title="Edit section: Disabling SPI Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p><font color="#FFFF00" style="background:#736F6E;"><b>Optional</b></font>: Removing SPI support from the Linux kernel configuration is <b>optional</b>. This Linux application did not present any conflicts.
+</p><p>As the SPI and the I2C pins are <a href="http://www.ti.com/lit/pdf/sprab06" class="extiw" title="tidoc:sprab06">muxed</a>, it is prudent (but not necessary) to disable SPI support in the Linux kernel.
+</p><p>In menuconfig, disable CONFIG_SPI at Device Device Drivers -&gt; SPI Support -&gt; SPI support:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:669px;"><a href="File_Menuconfnospi.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/d/da/Menuconfnospi.JPG" width="667" height="441" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Menuconfnospi.html" class="internal" title="Enlarge"></a></div>Removing SPI support from the Linux kernel</div></div></div>
+<h2><span class="mw-headline" id="Rebuilding_DSPLink"><b>Rebuilding DSPLink</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=14" title="Edit section: Rebuilding DSPLink">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Because changes were made in the kernel, it is necessary to rebuild DSPLink. Follow the procedure at (just build DSPLINK, you are not going to use Codec engine for this application):
+</p><p><a href="Building_The_OMAP-L137_SDK.html#DSPLink" class="mw-redirect" title="Building The OMAP-L137 SDK"> Manually building the SDK - DSPLink</a>
+</p>
+<h2><span class="mw-headline" id="Installing_the_Software"><b>Installing the Software</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=15" title="Edit section: Installing the Software">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Linux_only_build_installation">Linux only build installation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=16" title="Edit section: Linux only build installation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If you are going to use Linux to build both DSP and ARM sides, than you do not need to download the<b> AudioLink.zip</b>.
+</p>
+<ol><li>The software can be downloaded from the <a rel="nofollow" class="external text" href="http://e2e.ti.com/members/1602108/files/AudioLinkLinux.tar.gz.aspx">TI forum</a></li>
+<li>Extract the <b>AudioDSPgpp.tgz</b> to the desired working directory on the host Linux PC:
+<dl><dd><b>host $</b> tar -xvzf AudioLinkLinux.tar.gz</dd></dl></li></ol>
+<h3><span class="mw-headline" id="About_the_software">About the software</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=17" title="Edit section: About the software">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This example has 2 parts: code for the DSP and code for the ARM.
+</p><p>The code provided for the ARM is inside the directory <b>AudioDSP/AudioDSPgpp</b>. This uses a Makefile in Linux to build the ARM side.
+</p><p>The code provided by the DSP in inside the directory <b>AudioDSP/AudioDSPdsp</b>. This uses Makefile in Linux to build the DSP side as well.
+</p>
+<h2><span class="mw-headline" id="Building_the_application"><b>Building the application</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=18" title="Edit section: Building the application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="ARM_side">ARM side</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=19" title="Edit section: ARM side">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span id="Adapt_AudioDSP/Rules.make"></span><span class="mw-headline" id="Adapt_AudioDSP.2FRules.make">Adapt <b>AudioDSP/Rules.make</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=20" title="Edit section: Adapt AudioDSP/Rules.make">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Before moving on to the build process make sure the <b>AudioDSP/Rules.make</b> file contains the correct installation directories.
+</p><p>This release already uses the standard installation directory structure used in the Getting Started Guide for OMAP-L137, therefore changes to the Rules.Make should be minor.
+</p><p>For reference, the places to change directories are shown below.
+</p><p>In the <b>Rules.make</b>, changes should be needed at the following places:
+</p>
+<ul><li>Linux toolchain</li></ul>
+<pre>#   ----------------------------------------------------------------------------
+#   Base for toolchain
+#   This may change depending if you are using Montavista or Codesourcery
+#   ----------------------------------------------------------------------------
+BASE_TOOLCHAIN&#160;:= /opt/mv_pro_5.0/montavista/pro/devkit/arm/v5t_le
+#BASE_TOOLCHAIN&#160;:= /opt/arm/arm-2007q3       # Codesourcery tools
+
+#   ----------------------------------------------------------------------------
+#   Name of the Linux compiler
+#   This may change depending if you are using Montavista or Codesourcery
+#   ----------------------------------------------------------------------------
+CC_GPP&#160;:= arm_v5t_le-gcc
+#CC_GPP&#160;:= arm-none-linux-gnueabi-gcc
+</pre>
+<ul><li>SDK installation directory</li></ul>
+<pre>#   ----------------------------------------------------------------------------
+#   Base for SDK
+#   This may have to be changed depending on your installation paths and SDK
+#   version
+#   ----------------------------------------------------------------------------
+SDK_INSTALL_DIR = /home/user/OMAPL137_arm_1_00_00_10
+</pre>
+<ul><li>DSP/Link installation directory</li></ul>
+<pre>#   ----------------------------------------------------------------------------
+#   Base for DSPLink
+#   This may have to be changed depending on your installation paths
+#   and DSPLink version
+#   ----------------------------------------------------------------------------
+DSPLINK = $(SDK_INSTALL_DIR)/dsplink-1_61_03-prebuilt/packages/dsplink
+</pre>
+<ul><li>Make sure that the APP_INSTALL_DIR variable has the diredtory where you want to install the application in the target file system:</li></ul>
+<pre># Path to copy the executable on the target file system
+APP_INSTALL_DIR = /home/user/workdir/filesys/opt/AudioDSPlink
+</pre>
+<ul><li>If you did not rebuild DSPLink according to the page <a href="Building_The_OMAP-L137_SDK.html#DSPLink" class="mw-redirect" title="Building The OMAP-L137 SDK"> Building The OMAP-L1 SDK</a>. Simply remove <b>-ldsplinkdata.lib</b> from the <b>LIBS</b> variable in the <b>AudioDSP/Rules.make</b> file.</li></ul>
+<h4><span class="mw-headline" id="Build_ARM_side">Build ARM side</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=21" title="Edit section: Build ARM side">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>To build the ARM side of the application, please use the commands:
+</p>
+<dl><dd><b>host $</b> cd AudioDSPgpp</dd>
+<dd><b>host $</b> make clean</dd>
+<dd><b>host $</b> make all</dd></dl>
+<p>After the build is complete, the ARM executable will be at:
+</p>
+<dl><dd>AudioDSPgpp/Debug</dd>
+<dd><b>OR</b></dd>
+<dd>AudioDSPgpp/Release</dd></dl>
+<h3><span class="mw-headline" id="DSP_side">DSP side</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=22" title="Edit section: DSP side">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h5><span class="mw-headline" id="Copy_PSP">Copy PSP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=23" title="Edit section: Copy PSP">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Because you are buillding the application in Linux and the PSP comes with a Windows installer (that was installed in the <a href="Getting_Started_Guide_for_C6747.html" title="Getting Started Guide for C6747"> Getting Started Guide for C6747</a>), you need to copy the files from your Windows machine to your Linux machine.
+</p><p>So choose your favorite method to tranfer the directory below from your Windows machine:
+</p>
+<ul><li>C:\Program Files\Texas Instruments\pspdrivers_01_xx_xx</li></ul>
+<p>To the directory below in your Linux machine:
+</p>
+<ul><li>/home/&lt;user&gt;/OMAPL137_arm_1_00_00_xx/pspdrivers_01_xx_xx</li></ul>
+<h5><span id="Adapt_AudioDSP/Rules.make_2"></span><span class="mw-headline" id="Adapt_AudioDSP.2FRules.make_2">Adapt <b>AudioDSP/Rules.make</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=24" title="Edit section: Adapt AudioDSP/Rules.make">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Before moving on to the build process make sure the <b>AudioDSP/Rules.make</b> file contains the correct installation directories.
+</p><p>This release already uses the standard installation directory structure used in the Getting Started Guide for OMAP-L137, therefore changes to the Rules.Make should be minor.
+</p><p>For reference, the places to change directories are shown below.
+</p><p>In the <b>Rules.make</b>, changes should be needed at the following places:
+</p>
+<ul><li>Make sure that the TI toolchain directories are correct:</li></ul>
+<pre>#   ----------------------------------------------------------------------------
+#   Base for TI toolchain
+#   This may change depending if you are using other versions of the compiler
+#   ----------------------------------------------------------------------------
+BASE_COMPILER = $(SDK_INSTALL_DIR)/cg6x_6_1_9
+BASE_SABIOS = $(SDK_INSTALL_DIR)/bios_5_33_05
+
+# Path to XDC Tools root dir
+XDC_INSTALL_DIR = $(SDK_INSTALL_DIR)/xdctools_3_16_01_27
+
+# Path the DSP-side EDMA3 Low Level Driver root dir
+EDMA3LLD_INSTALL_DIR = $(SDK_INSTALL_DIR)/edma3_lld_01_10_00_01
+</pre>
+<ul><li>Make the BIOSPSP_INSTALL_DIR variable point to the directory that you copied the PSP:</li></ul>
+<pre># Path to the DSP-side Platform Support Package driver root dir
+BIOSPSP_INSTALL_DIR = $(SDK_INSTALL_DIR)/pspdrivers_01_20_00
+</pre>
+<ul><li>This example application comes with Rules.make for the case that DSPLink was rebuilt according to the page <a href="Building_The_OMAP-L137_SDK.html#DSPLink" class="mw-redirect" title="Building The OMAP-L137 SDK"> Building The OMAP-L1 SDK</a>.</li></ul>
+<p>If you did not rebuild DSPLink it is necessary to adapt the variables <b>LDINCLUDES_D</b> and <b>LDINCLUDES_R</b> in the <b>AudioDSP/Rules.make</b> file:
+</p>
+<pre>#   ----------------------------------------------------------------------------
+#   Linker library search path for Debug
+#   ----------------------------------------------------------------------------
+LDINCLUDES_D = $(LDINCLUDES) -i$(DSPLINK)/dsp/export/BIN/DspBios/OMAPL1XX/OMAPL1XXGEM_0/DEBUG/
+# If the DSP/Link was rebuilt by the user, replace the line above
+# with the one below to use the updated libraries
+#LDINCLUDES_D = $(LDINCLUDES) -i$(DSPLINK)/dsp/BUILD/OMAPL1XXGEM_0/EXPORT/DEBUG/
+
+#   ----------------------------------------------------------------------------
+#   Linker library search path for Release
+#   ----------------------------------------------------------------------------
+LDINCLUDES_R = $(LDINCLUDES) -i$(DSPLINK)/dsp/export/BIN/DspBios/OMAPL1XX/OMAPL1XXGEM_0/RELEASE/
+# If the DSP/Link was rebuilt by the user, replace the line above
+# with the one below to use the updated libraries
+#LDINCLUDES_R = $(LDINCLUDES) -i$(DSPLINK)/dsp/BUILD/OMAPL1XXGEM_0/EXPORT/RELEASE/
+</pre>
+<h5><span class="mw-headline" id="Build_DSP_side_in_Linux">Build DSP side in Linux</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=25" title="Edit section: Build DSP side in Linux">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ol>
+<li>
+To build the DSP side of the application, please use the commands:
+<dl><dd><b>host $</b> cd AudioDSPdsp</dd>
+<dd><b>host $</b> make clean</dd>
+<dd><b>host $</b> make all</dd></dl>
+
+</li><li>
+If you have any problems, please see secion <a href="OMAP-L137_Audio_Drivers_in_the_DSP_%2b_Linux.html#tips_for_.22Build_DSP_side_in_Linux.22" title="OMAP-L137 Audio Drivers in the DSP + Linux"> tips for "Build DSP side in Linux"</a>
+
+</li><li>
+After the build is complete, the DSP executable will be at:
+<dl><dd>AudioDSPdsp/Debug</dd>
+<dd><b>OR</b></dd>
+<dd>AudioDSPdsp/Release</dd></dl>
+</li></ol>
+<h2><span class="mw-headline" id="Calling_the_application"><b>Calling the application</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=26" title="Edit section: Calling the application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In this guide, commands are preceded by prompts that indicate the environment where the command is to be typed. For example:
+</p>
+<ul><li><b>host $</b></li></ul>
+<dl><dd>Indicates command to be typed into the shell window of the host Linux workstation.</dd></dl>
+<ul><li><b>target $</b></li></ul>
+<dl><dd>Indicates commands to be typed into the Linux shell in the terminal window connected to the EVM board's serial port.</dd></dl>
+<h3><span class="mw-headline" id="Copy_the_files_to_the_target_filesystem"><b>Copy the files to the target filesystem</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=27" title="Edit section: Copy the files to the target filesystem">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+<li> Make the directory:
+<dl><dd><ul><li><b>host $</b> mkdir /home/user/workdir/filesys/opt/AudioDSPlink</li>
+<li><b>host $</b> cd home/user/workdir/filesys/opt/AudioDSPlink</li></ul>
+<dl><dd><b>NOTE:</b> the directory above has to be compatible with the <b>APP_INSTALL_DIR</b> variablen in the Rules.make file.</dd></dl></dd></dl>
+</li><li> Copy the file AudioDSPgpp from the installation directory AudioDSPgpp/Debug or AudioDSPgpp/Release to the /home/user/workdir/filesys/opt/AudioDSPlink, you can do that by using the "make installD" or make "InstallR" option:
+<dl><dd><ul><li>cd to the AudioDSPgpp directory</li>
+<li>To copy the Debug version (after version is built):</li></ul>
+<dl><dd><ul><li><b>host $</b> make installD</li></ul></dd></dl>
+<ul><li>To copy the Release version (after version is built):</li></ul>
+<dl><dd><ul><li><b>host $</b> make installR</li></ul></dd></dl></dd>
+<dd><b>NOTE</b>: this will copy the the files to the install directory (APP_INSTALL_DIR) specified at the Rules.make file.</dd></dl>
+</li><li> Copy the file AudioLink.out to the /home/user/workdir/filesys/opt/AudioDSPlink directory in your Linux Machine:
+<dl><dd><ul><li>If you chose to build the DSP side in Linux:</li></ul>
+<dl><dd><ul><li>cd to the AudioDSPdsp directory</li>
+<li>To copy the Debug version (after version is built):</li></ul>
+<dl><dd><ul><li><b>host $</b> make installD</li></ul></dd></dl>
+<ul><li>To copy the Release version (after version is built):</li></ul>
+<dl><dd><ul><li><b>host $</b> make installR</li></ul></dd></dl></dd>
+<dd><b>NOTE</b>: this will copy the the files to the install directory (APP_INSTALL_DIR) specified at the Rules.make file.</dd></dl></dd></dl>
+</li><li> Copy the file loadmodules.sh from the installation application's installation directory to the /home/user/workdir/filesys/opt/AudioDSPlink
+</li><li> Copy the dsplink module:
+<dl><dd>Get the one you rebuilt according to page <a href="Building_The_OMAP-L137_SDK.html#DSPLink" class="mw-redirect" title="Building The OMAP-L137 SDK"> Building The OMAP-L1 SDK</a>:
+<dl><dd><ul><li><b>host $</b> cp /home/&lt;useracct&gt;/OMAPL137_arm_1_##_##_##/DSPLINK_DIR/packages/dsplink/gpp/export/BIN/Linux/OMAPL1XX/RELEASE/dsplinkk.ko .</li></ul></dd></dl></dd></dl>
+</li></ol>
+<h3><span class="mw-headline" id="Running_the_application"><b>Running the application</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=28" title="Edit section: Running the application">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>From the target board command prompt, the application can be executed as follows:
+</p>
+<ul><li>Go to the applications directory:</li></ul>
+<dl><dd><b>target $</b> cd /opt/AudioDSPlink</dd></dl>
+<ul><li>Load the DSP/Link module first.</li></ul>
+<dl><dd><b>target $</b> ./loadmodules.sh
+<dl><dd>OR</dd></dl></dd>
+<dd><b>target $</b> insmod dsplinkk.ko</dd>
+<dd><b>target $</b> rm -f /dev/dsplink</dd>
+<dd><b>target $</b> mknod /dev/dsplink c 230 0</dd></dl>
+<ul><li>At last, execute the application:</li></ul>
+<dl><dd><b>target $</b> ./AudioDSPgpp AudioLink.out</dd></dl>
+<p>The screen would show something similar to:
+<font color="#0000FF">
+</font></p><font color="#0000FF"><pre>root@xx.xx.xx.xx:/opt/AudioDSPlink# ./AudioDSPgpp AudioLink.out
+========== Sample Application&#160;: AudioDSP ==========
+Entered AudioDSP_Create ()
+Leaving AudioDSP_Create ()
+Entered AudioDSP_Execute ()
+
+Commands:
+Change volume      - v &lt;volume 0-256&gt;  e.g. 'v 100'
+Quit               - q
+
+&gt;
+</pre></font><font color="#0000FF"></font><p><font color="#0000FF"></font>
+</p>
+<ul><li>If you want to change the volume, type for example:</li></ul>
+<dl><dd><tt>v 100</tt></dd></dl>
+<ul><li>If you want to exit, type <b>q</b> OR <b>&lt;CRTL + C&gt;</b></li></ul>
+<h2><span class="mw-headline" id="Debugging_tips"><b>Debugging tips</b></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=29" title="Edit section: Debugging tips">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="tips_for_&quot;Build_DSP_side_in_Linux&quot;"></span><span class="mw-headline" id="tips_for_.22Build_DSP_side_in_Linux.22">tips for "Build DSP side in Linux"</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;section=30" title="Edit section: tips for &quot;Build DSP side in Linux&quot;">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ol>
+
+<li>
+If you get the error below when building the application:
+<pre> &lt;Linking&gt;
+ error: cannot find file "dsplinkdata.lib"
+</pre>
+<dl><dd>It means that you did not rebuild DSPLink according to the page <a href="Building_The_OMAP-L137_SDK.html#DSPLink" class="mw-redirect" title="Building The OMAP-L137 SDK"> Building The OMAP-L1 SDK</a>. Simply remove <b>-ldsplinkdata.lib</b> to the <b>LIBS</b> variable in the <b>AudioDSP/Rules.make</b> file.</dd></dl>
+</li><li>
+If you get the error below when building the application:
+
+<pre>
+
+ ERROR:
+
+ undefined           first referenced
+
+  symbol                  in file
+
+ ---------         ----------------
+
+ _DSPLINKDATA_init /home/user/OMAPL137_arm_1_00_00_10/dsplink-1_61_03-prebuilt/packages/dsplink/dsp/BUILD/OMAPL1XXGEM_0/EXPORT/DEBUG/dsplink.lib&lt;dsplink.obj&gt;
+</pre>
+<dl><dd>It means that you rebuilt DSPLink according to the page <a href="Building_The_OMAP-L137_SDK.html#DSPLink" class="mw-redirect" title="Building The OMAP-L137 SDK"> Building The OMAP-L1 SDK</a>. Simply add <b>-ldsplinkdata.lib</b> to the <b>LIBS</b> variable in the <b>AudioDSP/Rules.make</b> file.</dd></dl>
+<p><br />
+</p>
+</li><li>
+If you get the error below when building the application:
+
+<pre> /home/&lt;useract&gt;/OMAPL137_arm_1_00_00_11/bios_5_33_05/xdctools/tconf: Permission denied
+ *** [AudioLinkcfg.s62] Error 126
+ Leaving directory `/home/&lt;useract&gt;/workdir/omaplaudio/AudioDSP/AudioDSPdsp/build'
+ make: *** [build/AudioLinkcfg.cmd] Error 2
+</pre>
+<p>You probably have DSP/BIOS version 5.33.05. Due to a bug in DSP/BIOS 5.33.05 for Linux, you will have to add executable permissions to the &lt;tconf&gt; and &lt;tconf.x86U&gt; files in the bios directory. For example:
+</p>
+<dl><dd><b>host</b> $ cd /home/user/OMAPL137_arm_1_00_00_xx/bios_5_33_05/xdctools</dd>
+<dd><b>host</b> $ chmod +x tconf</dd>
+<dd><b>host</b> $ chmod +x tconf.x86U</dd></dl>
+</li><li>
+If you get the error below when building the application:
+<pre> &lt;Linking&gt;
+ undefined                        first referenced
+  symbol                              in file
+ ---------                        ----------------
+_EDMA3_DRV_disableLogicalChannel  /home/a0193480/OMAPL137_arm_1_00_00_11/pspdrivers_01_30_01/packages/ti/pspiom/i2c/lib/OMAPL137/Debug/ti.pspiom.i2c.a674&lt;I2c.obj&gt;
+ error: unresolved symbols remain
+ errors encountered during linking; "Debug/AudioLink.out" not built
+ Compilation failure
+ make: *** [Debug/AudioLink.out] Error 1
+</pre>
+<dl><dd>Your EDMA version maybe old comared with your PSP version. Please get the latest EDMA version at this <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/edma3_lld/edma3-lld-bios5/01_11_00_03/index_FDS.html">link</a>.</dd></dl>
+</li><li>
+If you get the error below when building the application:
+<pre>&lt;Linking&gt;
+error: cannot find file "dsplink.lib"
+error: cannot find file "dsplinkpool.lib"
+error: cannot find file "dsplinkmpcs.lib"
+error: cannot find file "dsplinkmplist.lib"
+error: cannot find file "dsplinkmsg.lib"
+error: cannot find file "dsplinknotify.lib"
+error: cannot find file "dsplinkringio.lib"
+  undefined     first referenced
+ symbol           in file
+ ---------     ----------------
+_DSPLINK_init Release/AudioLink_main.obj
+_SMAPOOL_FXNS Release/AudioDSP_config.obj
+_SMAPOOL_init Release/AudioDSP_config.obj
+_ZCPYMQT_FXNS Release/AudioDSP_config.obj
+_ZCPYMQT_init Release/AudioDSP_config.obj
+error: unresolved symbols remain
+error: errors encountered during linking; "Release/AudioLink.out" not built
+&gt;&gt; Compilation failure
+make: *** [Release/AudioLink.out] Error 1
+</pre>
+<dl><dd>It means that you did not rebuild DSPLink according to the page [[Building_The_OMAP-L137_SDK#DSPLink | Building The OMAP-L1 SDK]. Please see <a href="OMAP-L137_Audio_Drivers_in_the_DSP_%2b_Linux.html#Adapt_AudioDSP.2FAudioDSPdsp.2FRules.make" title="OMAP-L137 Audio Drivers in the DSP + Linux"> Adapt AudioDSP/AudioDSPdsp/Rules.make</a></dd></dl>
+</li></ol>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201011839
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.094 seconds
+Real time usage: 0.102 seconds
+Preprocessor visited node count: 211/1000000
+Preprocessor generated node count: 396/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5540/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:6289-0!canonical and timestamp 20201201011839 and revision id 182024
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OMAP-L137 Audio Drivers in the DSP + Linux</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;oldid=182024">https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;oldid=182024</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="Category_C674x.html" title="Category:C674x">C674x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OMAP-L137+Audio+Drivers+in+the+DSP+%2B+Linux" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="OMAP-L137_Audio_Drivers_in_the_DSP_%2b_Linux.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="OMAP-L137_Audio_Drivers_in_the_DSP_%2b_Linux.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/OMAP-L137_Audio_Drivers_in_the_DSP_%2b_Linux.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/OMAP-L137_Audio_Drivers_in_the_DSP_%2b_Linux.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;oldid=182024" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L137_Audio_Drivers_in_the_DSP_%2B_Linux&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 21 July 2014, at 07:38.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.094","walltime":"0.102","ppvisitednodes":{"value":211,"limit":1000000},"ppgeneratednodes":{"value":396,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":5540,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201011839","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":232});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L137_Audio_Drivers_in_the_DSP_+_Linux by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:29:59 GMT -->
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_a_PSP_Driver_in_DSP/BIOS by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:10:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Using a PSP Driver in DSP/BIOS - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Using_a_PSP_Driver_in_DSP/BIOS","wgTitle":"Using a PSP Driver in DSP/BIOS","wgCurRevisionId":181202,"wgRevisionId":181202,"wgArticleId":157,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["PSP","DSPBIOS"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Using_a_PSP_Driver_in_DSP/BIOS","wgRelevantArticleId":157,"wgRequestId":"2e552ecdd042d94b36136fce","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Using_a_PSP_Driver_in_DSP_BIOS rootpage-Using_a_PSP_Driver_in_DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Using a PSP Driver in DSP/BIOS</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Initializing_the_Peripheral_Device"><span class="tocnumber">1</span> <span class="toctext">Initializing the Peripheral Device</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Summary"><span class="tocnumber">1.1</span> <span class="toctext">Summary</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Linking_the_Driver_Library"><span class="tocnumber">2</span> <span class="toctext">Linking the Driver Library</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Linking_PSP_1.10.xx.xx_Drivers_with_XDCTOOLS"><span class="tocnumber">2.1</span> <span class="toctext">Linking PSP 1.10.xx.xx Drivers with XDCTOOLS</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Summary_2"><span class="tocnumber">2.1.1</span> <span class="toctext">Summary</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="#Linking_PSP_1.00.xx.xx_Drivers_without_XDCTOOLS"><span class="tocnumber">2.2</span> <span class="toctext">Linking PSP 1.00.xx.xx Drivers without XDCTOOLS</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#Summary_3"><span class="tocnumber">2.2.1</span> <span class="toctext">Summary</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Linking_PSP_1.10.xx.xx_Drivers_without_XDCTOOLS"><span class="tocnumber">2.3</span> <span class="toctext">Linking PSP 1.10.xx.xx Drivers without XDCTOOLS</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Creating_and_Using_a_Driver_Handle"><span class="tocnumber">3</span> <span class="toctext">Creating and Using a Driver Handle</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Summary_4"><span class="tocnumber">3.1</span> <span class="toctext">Summary</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Advanced:_Beyond_PSP"><span class="tocnumber">4</span> <span class="toctext">Advanced: Beyond PSP</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Advanced:_Decoupling_from_DSP.2FBIOS"><span class="tocnumber">5</span> <span class="toctext">Advanced: Decoupling from DSP/BIOS</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Miscellaneous_Tips"><span class="tocnumber">6</span> <span class="toctext">Miscellaneous Tips</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#See_Also"><span class="tocnumber">7</span> <span class="toctext">See Also</span></a></li>
+</ul>
+</div>
+
+<p>This topic details the steps necessary to initialize and use a <a href="../PSP_Overview.html" title="PSP Overview">Platform Support Package (PSP)</a> driver on a DSP-only device.  The PSP is included with a standard DVSDK installation, and it allows high-level operation of peripheral devices such as I2C, UART, or video ports using the standard DSP/BIOS GIO or SIO APIs.  The PSP for each device provides a full set of IOM-compliant minidrivers for this purpose.
+</p><p>Please note that PSP only exists on recent chips such as the DM6437 or DM648.  Older devices, such as the DM642, rely upon functional CSL and/or custom minidrivers (created via DDK) to operate peripheral devices.
+</p>
+<h2><span class="mw-headline" id="Initializing_the_Peripheral_Device">Initializing the Peripheral Device</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=1" title="Edit section: Initializing the Peripheral Device">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The heart of each PSP driver is an IOM-compliant minidriver.  IOM requires that the peripheral device be declared and initialized in the project's textual configuration file (TCF).  The following code initializes an I2C device on the DM6437.
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+bios.UDEV.create("I2C0");
+bios.UDEV.instance("I2C0").fxnTableType = "IOM_Fxns";
+bios.UDEV.instance("I2C0").initFxn = prog.extern("I2C_INIT");
+bios.UDEV.instance("I2C0").params = prog.extern("I2C_devParams");
+bios.UDEV.instance("I2C0").fxnTable = prog.extern("I2CMD_FXNS");
+&lt;/syntaxhighlight&gt;
+</p><p>Place the above code in a file with a TCI (textual configuration include) extension, such as i2c0.tci.  Then add the following line to your project's main TCF:
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+utils.importFile("i2c0.tci");
+&lt;/syntaxhighlight&gt;
+</p><p>The TCI contents may also be placed directly in the TCF, but using TCI files allows many projects to share a single configuration.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:302px;"><a href="../File_Tcf_screenshot.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/9/9a/Tcf_screenshot.JPG" width="300" height="161" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="../File_Tcf_screenshot.html" class="internal" title="Enlarge"></a></div>Adding a device to TCF using the graphical editor</div></div></div>
+<p>Alternatively, the TCF graphical configuration tool in Code Composer Studio can be used to automatically generate the above lines in the project’s TCF file.  Simply insert a new "User-Defined Device" in the Input/Output category.  This will not neatly encapsulate each device in a reusable TCI file, but it allows the user to perform all configuration in the CCS GUI.  Note that, in the GUI, references to C objects must be prefixed with the underscore symbol "_" to avoid errors.
+</p><p>The parameters set in the TCI above are, in order, the function table type, initialization function, device parameters data structure, and the function table.  If the DSP had more than one I2C peripheral, the TCF would also require a device ID parameter to choose which would be serviced by the PSP driver.  Some of the parameters may be included in the driver library (above: fxnTable), while others are furnished in your own source code (above: initFxn, params).  The specifics vary with individual drivers; refer to a driver's sample application and user's guide to determine the appropriate TCF entries.  If you’re new to DSP/BIOS 5 and/or TCF, these sample TCF files may also help with general system setup: memory segment usage, TSK scheduling, interrupt routines, ECM, and more.
+</p>
+<h4><span class="mw-headline" id="Summary">Summary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=2" title="Edit section: Summary">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Declare and initialize peripheral device in project's TCF.</li>
+<li>Device parameters include function tables in the driver library.</li>
+<li>Device parameters select between peripheral instances if necessary (i.e. UART0, UART1).</li>
+<li>Device parameters may reference functions or structs furnished in your C source code.</li>
+<li>Refer to individual driver's sample application and user's guide for details.</li></ul>
+<h2><span class="mw-headline" id="Linking_the_Driver_Library">Linking the Driver Library</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=3" title="Edit section: Linking the Driver Library">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Some PSP deliverables (specifically, releases with version 1.10.xx.xx) are packaged according to the RTSC package standard. Others (version 1.00.xx.xx) are not. This section describes how to integrate either flavor of PSP driver into a project.
+</p>
+<h3><span class="mw-headline" id="Linking_PSP_1.10.xx.xx_Drivers_with_XDCTOOLS">Linking PSP 1.10.xx.xx Drivers with XDCTOOLS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=4" title="Edit section: Linking PSP 1.10.xx.xx Drivers with XDCTOOLS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Newer PSP releases are packaged as RTSC packages to speed integration.  To add a driver library to your project, simply add a single line to XDC configuration script (*.cfg):
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+xdc.loadPackage('ti.sdo.pspdrivers.drivers.i2c');
+&lt;/syntaxhighlight&gt;
+</p><p>Individual drivers may also require additional inclusions: PAL libraries, the EDMA3 LLD, etc.  Check the driver's sample application and see which packages are included in its XDC configuration script.  If your project doesn’t already contain an XDC configuration script, the sample project’s script is a good starting point.  You will also need to properly configure the XDC tab in the project's build options.  Fully explaining the XDC build tools falls outside the scope of this document, but some key steps are listed below.
+</p>
+<ol><li>Settings for XDC tab in project build options:
+<ul><li>Set target: ti.targets.C64P</li>
+<li>Set platform (ex. ti.platforms.evmDM648)</li>
+<li>Check box to include TCF in build (or add --tcf)</li>
+<li>Set XDC search path.  One way to do this is simply include the DVSDK’s top-level XDC paths file: <code>--xdcpathsfile="%BIOSDVSDK_INSTALL_DIR%/xdcpaths_evmDM648.dat"</code></li></ul></li>
+<li>Settings for compiler tab in project build options:
+<ul><li>Include the automatically generated compiler directives (default: xdcconfig/compiler.opt), which tell CCS where to look for the PSP driver header files. <code>-@"=$(Proj_dir)/xdcconfig/compiler.opt"</code></li></ul></li>
+<li>Exclude TCF from normal (non-XDC) build.
+<ul><li>Right click TCF in project view and select "File Specific Options..."  In the General tab, check the box marked "Exclude file from build."</li></ul></li></ol>
+<p>Linking the driver library is only half of the story. Any C source file that uses the PSP driver's data types or macros will need the appropriate header file. Under RTSC-packaged PSP, the header file is listed relative to the packages folder of the PSP directory.  (The compiler.opt file, generated at build time by XDC, tells CCS to look for header files in all folders defined in your XDC paths file.) For the I2C driver, the relevant include line may look like this:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+</p>
+<ol><li>include &lt;ti/sdo/pspdrivers/drivers/i2c/psp_i2c.h&gt;</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h4><span class="mw-headline" id="Summary_2">Summary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=5" title="Edit section: Summary">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Add package to the project's XDC configuration script.</li>
+<li>If creating a new XDC config script (*.cfg): add script to project and configure XDC using project build options.</li>
+<li>Include header file with path relative to XDCTOOLS search path.</li></ul>
+<h3><span class="mw-headline" id="Linking_PSP_1.00.xx.xx_Drivers_without_XDCTOOLS">Linking PSP 1.00.xx.xx Drivers without XDCTOOLS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=6" title="Edit section: Linking PSP 1.00.xx.xx Drivers without XDCTOOLS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Integrating an older, non-RTSC packaged PSP driver is straightforward if less automated. The following instructions refer to menus in Code Composer Studio (CCS), but the process should be virtually identical in other development environments.
+</p><p>Like any other library, the PSP driver may be linked into the project in two different ways.  First, it can simply be added to the project as a library file by right clicking on the project's "Libraries" folder and selecting "Add files to project...".  Alternatively, the following items can be added on the project's Build Options window, under the Linker tab:
+</p><p><code>
+-i"%PSP_INSTALL_DIR%\pspdrivers\lib\" -l"DM6437\Debug\i2c_bios_drv.lib"
+</code>
+</p><p>In the above, PSP_INSTALL_DIR is a windows environment variable that points to the base PSP directory.  The details in the second command (-l"...") depend on the device and the project configuration (debug vs. release; instrumented vs. non-instrumented).
+</p><p>The driver's header file may be referenced directly, but the common PSP include folder must be "included" in the Compiler tab of the Build Options window:
+</p><p>&lt;syntaxhighlightlang='c'&gt;#include &lt;psp_i2c.h&gt;&lt;/syntaxhighlight&gt;
+<code>-i"%PSP_INSTALL_DIR%\pspdrivers\inc"</code>
+</p>
+<h4><span class="mw-headline" id="Summary_3">Summary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=7" title="Edit section: Summary">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Link in appropriate library file from&#160;%PSP_INSTALL_DIR%\pspdrivers\lib\... Navigate further subfolders by device name and project configuration.</li>
+<li>Include header file in C source with no path.</li>
+<li>Add PSP include folder to build search path (Build Options, Compiler Tab).</li></ul>
+<h3><span class="mw-headline" id="Linking_PSP_1.10.xx.xx_Drivers_without_XDCTOOLS">Linking PSP 1.10.xx.xx Drivers without XDCTOOLS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=8" title="Edit section: Linking PSP 1.10.xx.xx Drivers without XDCTOOLS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Even with RTSC-packaged PSP, it is possible to bypass XDCTOOLS and integrate drivers directly. To avoid editing PSP header files, simply include the PSP packages subfolder in the compiler's search path.
+</p><p><code>-i"%PSP_INSTALL_DIR%\packages"</code>
+</p><p>You will need to include the path to each header file relative to this folder in your C source:
+</p><p>&lt;syntaxhighlightlang='c'&gt;#include &lt;ti/sdo/pspdrivers/drivers/i2c/psp_i2c.h&gt;&lt;/syntaxhighlight&gt;
+</p><p>Library files may be referenced in a similar way.  In the Linker tab, "include" the packages folder of the PSP installation, then link libraries relative to that folder:
+</p><p><code>-i"%PSP_INSTALL_DIR%\packages" -l"ti\sdo\pspdrivers\drivers\i2c\lib\dm6437\Debug\i2c_bios_drv.lib"</code>
+</p>
+<h2><span class="mw-headline" id="Creating_and_Using_a_Driver_Handle">Creating and Using a Driver Handle</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=9" title="Edit section: Creating and Using a Driver Handle">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>PSP drivers are typically accessed at runtime via calls to the GIO API (some drivers also implement SIO).  A driver handle is created by a call to GIO_create/SIO_create, and the peripheral device is ready for I/O transactions immediately afterward.  The parameters required by these functions vary for each driver.  Refer to a driver's sample application or user's guide to determine its requirements.  The following code block demonstrates the use of GIO_create with an I2C device.  GIO_create/SIO_create typically must be called from the TSK context, but PSP 1.10.00.09 or greater allows these functions to be called from main().  (Note: if using EDMA, the EDMA LLD must be version 1.05.xx or greater.)
+</p><p>&lt;syntaxhighlight lang='c'&gt;GIO_Attrs gioAttrs = GIO_ATTRS;
+GIO_Handle i2cHandle;
+</p><p>i2cHandle = GIO_create("/I2C0", IOM_INOUT, NULL, NULL, &amp;gioAttrs);&lt;/syntaxhighlight&gt;
+</p><p>Calling GIO_submit with the driver handle and an appropriate command (i.e. read, write) initiates an I/O transaction through the peripheral device.  (SIO_issue and SIO_reclaim replace this function when working with the SIO API.)  A call to GIO_submit also requires transfer parameters, which vary per driver.  Common parameters include a data buffer address, the size of the transaction in bytes, timeout, and a callback function for asynchronous operation.  Refer to a driver's sample application and user's guide to determine what parameters it expects in a call to GIO_submit.
+</p><p>The GIO API allows high-level operation of the peripheral device.  The PSP driver handles low-level tasks such as timing, start and stop conditions, and byte-by-byte data handling.  The user simply provides a buffer and certain transfer parameters, and control passes to the driver.  For synchronous operation, GIO_submit does not return until the transaction is complete (or a critical error is encountered).  Asynchronous operation requires an application-layer callback function that the driver may call when the transaction is complete.  Individual drivers may support synchronous operation, asynchronous operation, or both; refer to a driver's datasheet for details.  The following code block uses GIO_read, a standard macro from gio.h that wraps GIO_submit, to read one byte through the I2C handle initialized in the previous code block.
+</p><p>&lt;syntaxhighlight lang='c'&gt;PSP_I2cRequest  readBuf;
+size_t          size;
+char		buffer;
+int		status;
+</p><p>readBuf.i2cTrans.buffer		= (Uint8 *)&amp;buffer;
+readBuf.i2cTrans.bufLen    	= 1;
+readBuf.i2cTrans.flags     	= PSP_I2C_DEFAULT_READ;
+readBuf.i2cTrans.param     	= NULL;
+readBuf.i2cTrans.slaveAddr 	= 0x50;
+readBuf.timeout			= SYS_FOREVER;
+size				= 1;
+</p><p>status = GIO_read(i2cHandle, &amp;readBuf, &amp;size);&lt;/syntaxhighlight&gt;
+</p><p>Device parameters are initialized during system startup according to the data structure referenced by the TCF, but certain parameters may be modified at run-time through GIO_control.  For instance, UART baud may be changed from 256 kbps to 512 kbps.  GIO_control can also issue commands to the driver, such as flushing all pending I/O or retrieving parameters without changing them.  Naturally, the functionality of GIO_control varies widely per driver.  Refer to a driver's user's guide to find a list of all commands (or IO_CTLs) that it services and what parameters are required for each.  The following code block configures an I2C handle to use a bus frequency of 200 kHz.
+</p><p>&lt;syntaxhighlight lang='c'&gt;int i2cBitRate = 200000;
+int status = GIO_control(i2cHandle, PSP_I2C_IOCTL_SET_BIT_RATE, &amp;i2cBitRate);&lt;/syntaxhighlight&gt;
+</p><p>While using a PSP driver, you should avoid modifying the peripheral device's behavior via direct access to its registers.  Changes made in this way will not propagate into the PSP driver's internal data structures, which can cause your application to fail.
+</p>
+<h4><span class="mw-headline" id="Summary_4">Summary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=10" title="Edit section: Summary">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Create driver handle in C program using GIO_create or SIO_create.</li>
+<li>Device is ready for high-level operation immediately.</li>
+<li>Initiate transactions using GIO_submit (GIO_read, GIO_write wrap this function) or SIO_submit/SIO_reclaim.
+<ul><li>Driver may offer synchronous and/or asynchronous operation.</li></ul></li>
+<li>Modify device status and parameters using GIO_control.
+<ul><li>Submit device handle, driver-specific IO_CTL, and any additional parameters.</li>
+<li>Avoid modifying device registers directly: these changes may not propagate properly into the driver’s data structures</li></ul></li></ol>
+<h2><span class="mw-headline" id="Advanced:_Beyond_PSP">Advanced: Beyond PSP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=11" title="Edit section: Advanced: Beyond PSP">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>You may find that a PSP driver is not well suited for your application.  For instance, the McBSP driver included with the DM6437 PSP is intended solely for audio applications, and it cannot be used for McBSP-as-SPI even though the McBSP peripheral supports this mode of operation.  In this situation, there are two options:
+</p>
+<ol><li>Write a low-level program using register-layer CSL (RCSL).
+<ul><li>RCSL consists of header files containing macros that allow register-level control of the DSP.</li>
+<li>RCSL is included with the PSP in the soc folder.</li></ul></li>
+<li>Modify the PSP driver.
+<ul><li>Full source code for all drivers is included with the PSP.</li>
+<li>TI may provide limited support in the form of tips and/or advice on where to begin and what to change.</li>
+<li>Typically, a good starting point is the driver's DDC (device driver core) source file.</li>
+<li>While using the debug driver library, it is possible to set break points in the driver source while running your application.  This is a helpful way to observe the driver's behavior.</li></ul></li></ol>
+<p>The first option can be thought of as replacing PSP, while the second modifies or extends it.  Be sure to save the original driver library and source code before you begin; you may wish to revert to the original driver functionality without reinstalling the PSP.  Refer to <a href="../PSP_Overview.html" title="PSP Overview">PSP Overview</a> to learn more about the structure of a PSP driver and its source code.
+</p>
+<h2><span id="Advanced:_Decoupling_from_DSP/BIOS"></span><span class="mw-headline" id="Advanced:_Decoupling_from_DSP.2FBIOS">Advanced: Decoupling from DSP/BIOS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=12" title="Edit section: Advanced: Decoupling from DSP/BIOS">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>You may wish to use a PSP driver, or at least some part of it, in an application that does not use DSP/BIOS.  This is a tough proposition since most PSP drivers rely on basic OS functions, such as semaphores and registered interrupts, at all layers to function.  Other PSP drivers may use the EDMA3 low-level driver (LLD), which is itself coupled to DSP/BIOS.  Decoupling a PSP driver from DSP/BIOS requires extensive modification to the driver source code, and will almost certainly result in some loss of functionality.
+</p><p>It's important to understand the structure of a PSP driver before attempting to modify its source code.  Refer to <a href="../PSP_Overview.html" title="PSP Overview">PSP Overview</a> for a more complete description of a PSP driver's layers: DDA, DDC, and LLC.  The high-level DDA layer, which implements the DSP/BIOS-specific IOM standard, will need to be removed or replaced entirely.  The DDC layer will likely require extensive modification to remove or replace OS dependencies: semaphore pends, interrupt registering, calls to the EDMA3 LLD, etc.  OS functions in this layer are typically abstracted by calls to the PAL_OS API; calls to this library will need to be removed or replaced.  The low-level LLC layer, which is not formally separate from DDC in every PSP driver, should require no modification.
+</p><p>Decoupling a PSP driver from DSP/BIOS is a complicated task that does not lend itself to a simple, step-by-step summary.  You should be certain that removing DSP/BIOS from your application is absolutely necessary before attempting this modification.
+</p>
+<h2><span class="mw-headline" id="Miscellaneous_Tips">Miscellaneous Tips</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=13" title="Edit section: Miscellaneous Tips">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Some PSP drivers require the use of PAL_sys and/or PAL_os libraries, which are included with the PSP installation.  These must be linked into the project.</li>
+<li>Similarly, some PSP drivers require the use of an EDMA library (either from PSP or the stand-alone EDMA3 LLD).  The appropriate libraries must be linked into the project.</li>
+<li>Some PSP drivers require a DSP/BIOS LOG object named "trace".  Create this in the project's TCF.  Refer to the driver's sample application for help.</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit&amp;section=14" title="Edit section: See Also">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a href="../PSP_Overview.html" title="PSP Overview">PSP Overview</a>
+</p><p><a href="../Software_Migration__DM642_to_DM648/DM6437.html" title="Software Migration: DM642 to DM648/DM6437">Software Migration: DM642 to DM648/DM6437</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130124127
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.055 seconds
+Real time usage: 0.057 seconds
+Preprocessor visited node count: 55/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:157-0!canonical and timestamp 20201130124127 and revision id 181202
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using a PSP Driver in DSP/BIOS</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using a PSP Driver in DSP/BIOS</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Using a PSP Driver in DSP/BIOS</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Using a PSP Driver in DSP/BIOS</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Using a PSP Driver in DSP/BIOS</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using a PSP Driver in DSP/BIOS</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using a PSP Driver in DSP/BIOS</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Using a PSP Driver in DSP/BIOS</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Using a PSP Driver in DSP/BIOS</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;oldid=181202">https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;oldid=181202</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../Category_PSP.html" title="Category:PSP">PSP</a></li><li><a href="../Category_DSPBIOS.html" title="Category:DSPBIOS">DSPBIOS</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Using+a+PSP+Driver+in+DSP%2FBIOS" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="BIOS.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="../Talk_Using_a_PSP_Driver_in_DSP/BIOS.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="BIOS.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/Using_a_PSP_Driver_in_DSP/BIOS.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/Using_a_PSP_Driver_in_DSP/BIOS.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;oldid=181202" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Using_a_PSP_Driver_in_DSP/BIOS&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 July 2014, at 13:07.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.055","walltime":"0.057","ppvisitednodes":{"value":55,"limit":1000000},"ppgeneratednodes":{"value":60,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130124127","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":229});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_a_PSP_Driver_in_DSP/BIOS by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:10:53 GMT -->
+</html>

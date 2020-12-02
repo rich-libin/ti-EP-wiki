@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:15:37 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques","wgTitle":"OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques","wgCurRevisionId":36303,"wgRevisionId":36303,"wgArticleId":4242,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["OMAPL1","C674x","AM1x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques","wgRelevantArticleId":4242,"wgRequestId":"ac0ebf4c3818c59094ada1b0","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OMAP-L1x_C674x_AM1x_UART_Throughput_and_Optimization_Techniques rootpage-OMAP-L1x skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><a href="AM1x_SOC_Architecture_and_Throughput_Overview.html" title="OMAP-L1x/C674x/AM1x SOC Architecture and Throughput Overview"><b><big><big>^</big></big></b> Up to main <b>OMAP-L1x/C674x/AM1x SOC Architecture and Throughput Overview</b> Table of Contents</a> 
+</p><p>This article was created to present throughput measurements conducted on the&#160;Universal Async Receiver/Transmitter (UART) of OMAP-L1x/C674x/AM1xx devices. Different variables were explored to assess their impact on UART performance. 
+</p><p>The information in this article deals mainly with OMAP-L1x8/C674m/AM18xx devices (where m is an even number), however it can also be generally applied to OMAP-L1x7/C674n/AM17xx devices (where n is an odd number) since both family of devices use a similar architecture.<br /> 
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#UART_Overview"><span class="tocnumber">1</span> <span class="toctext">UART Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#UART_Clocking"><span class="tocnumber">2</span> <span class="toctext">UART Clocking</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameter_Definitions"><span class="tocnumber">3</span> <span class="toctext">Parameter Definitions</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Test_Environment"><span class="tocnumber">4</span> <span class="toctext">Test Environment</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Standalone_Mode"><span class="tocnumber">4.1</span> <span class="toctext">Standalone Mode</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Background_Task_Mode"><span class="tocnumber">4.2</span> <span class="toctext">Background Task Mode</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Factors_Affecting_UART_Throughput"><span class="tocnumber">5</span> <span class="toctext">Factors Affecting UART Throughput</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Standalone_Mode_2"><span class="tocnumber">5.1</span> <span class="toctext">Standalone Mode</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Baud_Rate"><span class="tocnumber">5.1.1</span> <span class="toctext">Baud Rate</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Character_Length"><span class="tocnumber">5.1.2</span> <span class="toctext">Character Length</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Memory_Source.2FDestination"><span class="tocnumber">5.1.3</span> <span class="toctext">Memory Source/Destination</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Receive_FIFO_Trigger_Level"><span class="tocnumber">5.1.4</span> <span class="toctext">Receive FIFO Trigger Level</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Transfer_Size"><span class="tocnumber">5.1.5</span> <span class="toctext">Transfer Size</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-14"><a href="#Background_Task_Mode_2"><span class="tocnumber">5.2</span> <span class="toctext">Background Task Mode</span></a>
+<ul>
+<li class="toclevel-3 tocsection-15"><a href="#Background_DDR2_PBBRP"><span class="tocnumber">5.2.1</span> <span class="toctext">Background DDR2 PBBRP</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#Background_EDMA_Read_Rate"><span class="tocnumber">5.2.2</span> <span class="toctext">Background EDMA Read Rate</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#EDMA_Burst_Size"><span class="tocnumber">5.2.3</span> <span class="toctext">EDMA Burst Size</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#UART_Summary_Slides"><span class="tocnumber">6</span> <span class="toctext">UART Summary Slides</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="UART_Overview">UART Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=1" title="Edit section: UART Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The UART peripheral provides an asynchronous communications interface for data transfers. Data is serialized in the transmitter, asynchronously sent to the receiver, and deserialized by the receiver. Handshaking is done through start and stop bits appended to the beginning and end of the data byte, and no clock signal needs to be transmitted. 
+</p><p>Data on the device peripheral bus enters the UART peripheral and is stored either in a one-byte holding register or in a configurable FIFO. A transmitter shift register serializes the data and sends it out one byte at a time over the dedicated transmit pin (UART_TXD). 
+</p><p>Similarly, external data arrives on the dedicated receive pin (UART_RXD) and is shifted into a receive shift register. The data bits are then either stored in the holding register or the receive FIFO, which can then be read by the device peripheral bus.<br /> 
+</p>
+<h2><span class="mw-headline" id="UART_Clocking">UART Clocking</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=2" title="Edit section: UART Clocking">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The UART peripheral in OMAP-L1x/C674x is sourced by SYSCLK2, which is half the input clock. The programmable baud generator takes the input clock and divides it by a divisor in the range between 1 and 65,565 to produce a baud clock (BCLK). The frequency of BCLK is either 16x or 13x the UART baud rate, depending on which over-sampling mode is chosen. The following equations show the relationship between the divisor, clock frequency, baud rate, and over-sampling mode: 
+</p><p><a href="../../File_Divisor_equation.html" class="image"><img alt="Divisor equation.PNG" src="https://processors.wiki.ti.com/images/9/97/Divisor_equation.PNG" width="448" height="97" /></a> 
+</p><p>Since UART is an asynchronous interface, both transmitter and receiver must be configured to use the same baud rate in order for the data to be sampled correctly at the receiver. 
+</p>
+<h2><span class="mw-headline" id="Parameter_Definitions">Parameter Definitions <br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=3" title="Edit section: Parameter Definitions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following parameters were fixed or varied when measuring the UART throughput: 
+</p>
+<ul><li><b>UART Input Clock:</b> Frequency of input clock of UART peripheral, equal to SYSCLK1/2.</li>
+<li><b>Divisor:</b> Divisor used by the UART baud generator to produce the desired baud rate, set by DLH and DLL registers.</li>
+<li><b>Sample Mode:</b> Number of times each bit was sampled, either 13x or 16x, set by the MDR register.</li>
+<li><b>RX FIFO Trigger Level:</b> Number of bytes in the RX FIFO before EDMA interrupt was generated.</li>
+<li><b>Transfer Size:</b> Size of buffer being transmitted.</li>
+<li><b>Memory Source/Destination:</b> Memory location where data was stored and read from. For all tests, the destination memory was the same as the source memory.</li>
+<li><b>Character Length:</b> Number of data bits sent per UART transfer.</li>
+<li><b>Buffer Size:</b> Total size of the transmit and receive buffers.</li>
+<li><b>Loopback Mode:</b> Controls whether UART_RX and UART_TX pins were internally connected ("internal") or connected outside the chip ("external").</li>
+<li><b>Parity Bit:</b> Whether or not parity bit was transmitted for detecting transmission errors.</li>
+<li><b>Stop Bit(s):</b> Number of STOP bit(s) transmitted during each transaction.</li>
+<li><b>Autoflow Control:</b> Whether or not autoflow control was enabled to prevent overrun errors.</li>
+<li><b>Background EDMA Queue Number:</b> Whether or not the background EDMA task used the same EDMA channel controller queue as the UART transactions.</li>
+<li><b>EDMA Burst Size:</b> Number of bytes transferred for each EDMA sync event received.</li>
+<li><b>Background EDMA Read Rate:</b> Number of cycles the EDMA waited before issuing subsequent reads to the target memory for the background task.</li>
+<li><b>Background DDR2 PBBRP:</b> DDR2 controller peripheral bus burst priority register, which sets the number of transfers before the controller elevates the priority of the oldest command in the command FIFO. A higher number means the background task has more frequent access to the DDR2 memory.</li></ul>
+<h2><span class="mw-headline" id="Test_Environment">Test Environment<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=4" title="Edit section: Test Environment">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Standalone_Mode">Standalone Mode</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=5" title="Edit section: Standalone Mode">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In this mode, no other background tasks were running when UART throughput data was taken. This provides data on what the theoretical maximum throughput would be in a standalone UART system and how the various parameters affect throughput. The following test environment applies: 
+</p>
+<ul><li><b>UART Input Clock:</b>: 150 MHz</li>
+<li><b>DDR2 Clock Frequency:</b> 150 MHz</li>
+<li><b>RX FIFO Trigger Level:</b> Always equal to <b>Transfer Size</b></li>
+<li><b>Loopback Mode:</b> Internal</li>
+<li><b>Parity Bit:</b> Disabled</li>
+<li><b>Stop Bit(s):</b> 1</li>
+<li><b>Autoflow Control</b> Disabled</li></ul>
+<h3><span class="mw-headline" id="Background_Task_Mode">Background Task Mode</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=6" title="Edit section: Background Task Mode">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In this mode, an EDMA background task continually wrote to and read from the target memory using EDMA transfers while the UART throughput data was taken. This provides a more realistic situation where the UART is competing for resources with higher priority tasks. The following test environment applies: 
+</p>
+<ul><li><b>UART Input Clock:</b>: 150 MHz</li>
+<li><b>DDR2 Clock Frequency:</b> 150 MHz</li>
+<li><b>RX FIFO Trigger Level:</b> Always equal to <b>Transfer Size</b></li>
+<li><b>Loopback Mode:</b> Internal</li>
+<li><b>Parity Bit:</b> Disabled</li>
+<li><b>Stop Bit(s):</b> 1</li>
+<li><b>Autoflow Control</b> Disabled</li>
+<li><b>Sample Mode:</b>: 13x</li>
+<li><b>Character Length:</b>: 8 bits</li></ul>
+<h2><span class="mw-headline" id="Factors_Affecting_UART_Throughput">Factors Affecting UART Throughput<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=7" title="Edit section: Factors Affecting UART Throughput">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Standalone_Mode_2">Standalone Mode</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=8" title="Edit section: Standalone Mode">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Baud_Rate">Baud Rate</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=9" title="Edit section: Baud Rate">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The primary factor affecting UART throughput is the baud rate. Table 1 shows the throughput achieved at various baud rates, set by the divisor and over-sampling mode. At 150 MHz, the maximum achievable throughput for the peripheral is 8.6 Mb/s. Figure 1 shows that the throughput scales linearly with baud rate. 
+</p>
+<div style="text-align: center;">
+<p><b>Table 1. Throughput Achieved for Different Baud Rates</b> 
+</p><p><a href="../../File_Throughput_chart.html" class="image"><img alt="Throughput chart.PNG" src="https://processors.wiki.ti.com/images/1/15/Throughput_chart.PNG" width="429" height="240" /></a> 
+</p><p><br /> <a href="../../File_Throughput_baud_graph.html" class="image" title="Figure 1: Throughput vs Baud Rate"><img alt="Figure 1: Throughput vs Baud Rate" src="https://processors.wiki.ti.com/images/0/0b/Throughput_baud_graph.PNG" width="684" height="180" /></a> <br /> <b>Figure 1: Throughput vs Baud Rate</b> 
+</p>
+</div> 
+<p>Additionally, Figure 2 shows that regardless of the baud rate, the throughput approaches 80% of the baud rate. Since there is one start bit, one stop bit, and 8 data bits, the utilization matches what would be expected (8 data bits per 10 total bits transferred). 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_utilization.html" class="image" title="Figure 1: Percent Utilization vs Baud Rate"><img alt="Figure 1: Percent Utilization vs Baud Rate" src="https://processors.wiki.ti.com/images/2/21/Throughput_utilization.PNG" width="568" height="272" /></a> <br /> <b>Figure 2: Percent Utilization vs Baud Rate</b> 
+</p>
+</div> 
+<hr />
+<h4><span class="mw-headline" id="Character_Length">Character Length</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=10" title="Edit section: Character Length">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The character length parameter sets how many bits make up each UART character, configurable from 5 to 8 bits. As character length decreases, start and stop bits are sent more often, increasing the overhead of each UART transaction. Figure 3 shows this relationship and the effect it has on throughput at different baud rates. 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_char_length.html" class="image" title="Figure 3: Throughput vs Character Length"><img alt="Figure 3: Throughput vs Character Length" src="https://processors.wiki.ti.com/images/4/42/Throughput_char_length.PNG" width="637" height="359" /></a> <br /> <b>Figure 3: Throughput vs Character Length</b> 
+</p>
+</div> 
+<hr />
+<h4><span id="Memory_Source/Destination"></span><span class="mw-headline" id="Memory_Source.2FDestination">Memory Source/Destination</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=11" title="Edit section: Memory Source/Destination">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>For this throughput analysis, data was transmitted from one memory location to another via internal UART loopback. The three memory types were L2 RAM, L3 RAM, and DDR2 RAM. As Figure 4 shows, the source/destination has no affect on the UART throughput, since the UART peripheral itself is the bottleneck. 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_mem.html" class="image" title="Figure 4: Throughput vs Memory Source/Destination"><img alt="Figure 4: Throughput vs Memory Source/Destination" src="https://processors.wiki.ti.com/images/f/f9/Throughput_mem.PNG" width="552" height="371" /></a> <br /> <b>Figure 4: Throughput vs Memory Source/Destination</b> 
+</p>
+</div> 
+<hr />
+<h4><span class="mw-headline" id="Receive_FIFO_Trigger_Level">Receive FIFO Trigger Level</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=12" title="Edit section: Receive FIFO Trigger Level">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>When the RX FIFO reaches a predefined level, an EDMA interrupt is generated to read the data. The more often this occurs, the more overhead is added. Figure 5 shows that despite the increased overhead, the FIFO trigger level has no effect on the overall throughput across different baud rates. 
+</p><p>Note that at the highest baud rates (Divider=1, Oversampling = 13x, 16x), there is no data. There is an issue that occurs when the baud clock and the module clock are the same frequency, causing two EDMA sync events to occur initially. The RX FIFO must be at least double the trigger level to hold the extra data. Therefore, the maximum FIFO trigger level for the 16-byte FIFO is 8 bytes when using a divider of 1. 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_fifo.html" class="image" title="Figure 5: Throughput vs RX FIFO Trigger Level"><img alt="Figure 5: Throughput vs RX FIFO Trigger Level" src="https://processors.wiki.ti.com/images/6/6b/Throughput_fifo.PNG" width="576" height="410" /></a> <br /> <b>Figure 5: Throughput vs RX FIFO Trigger Level</b> 
+</p>
+</div> 
+<hr />
+<h4><span class="mw-headline" id="Transfer_Size">Transfer Size</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=13" title="Edit section: Transfer Size">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The size of the buffer being transmitted has an effect on the throughput as well. The initial overhead time for starting the UART and EDMA transfers is constant regardless of the baud rate. At lower baud rates, even transmitting 32 bytes takes longer than the initialization time, so the transfer size has no effect on throughput. As the baud rate increases, however, the transfer time shrinks, so the initial setup time has a large effect on throughput. Figure 6 shows how for small transfers, the high baud rates do not increase throughput. 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_transfer_size.html" class="image" title="Figure 6: Throughput vs FIFO Trigger Level"><img alt="Figure 6: Throughput vs FIFO Trigger Level" src="https://processors.wiki.ti.com/images/3/33/Throughput_transfer_size.PNG" width="627" height="267" /></a> <br /> <b>Figure 6: Throughput vs Transfer Size</b> 
+</p>
+</div> 
+<hr />
+<h3><span class="mw-headline" id="Background_Task_Mode_2">Background Task Mode</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=14" title="Edit section: Background Task Mode">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Background_DDR2_PBBRP">Background DDR2 PBBRP</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=15" title="Edit section: Background DDR2 PBBRP">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In this case, the UART peripheral and the background task were both reading and writing to the DDR2 memory using separate EDMA queues. The PBBRP setting affects the UART throughput by preventing the background task from constantly accessing the DDR2 memory, allowing the UART more frequent access. 
+</p><p>Figure 7 shows that by setting the PBBRP to a low value, the UART throughput can still achieve 8.5 Mb/s with a background task accessing the same memory. If the PBBRP is increased, the UART throughput decreases significantly, since the background task can now access the memory more often. 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_pbbpr.html" class="image" title="Figure 7: Throughput vs DDR2 PBBPR"><img alt="Figure 7: Throughput vs DDR2 PBBPR" src="https://processors.wiki.ti.com/images/4/41/Throughput_pbbpr.PNG" width="627" height="264" /></a> <br /> <b>Figure 7: Throughput vs DDR2 PBBPR</b> 
+</p>
+</div> 
+<hr />
+<h4><span class="mw-headline" id="Background_EDMA_Read_Rate">Background EDMA Read Rate</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=16" title="Edit section: Background EDMA Read Rate">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The EDMA read rate parameter determines how many cycles the EDMA waits between each background task read. For example, at a baud rate of 3,846,153, Figure 8 shows that when the background task is on a different EDMA queue than the UART task, throughput is not affected. However, when they are on the same EDMA queue, UART throughput decreases as the number of wait cycles decreases, since the background task is executing more often. 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_read_rate.html" class="image" title="Figure 8: Throughput vs EDMA Read Rate"><img alt="Figure 8: Throughput vs EDMA Read Rate" src="https://processors.wiki.ti.com/images/4/49/Throughput_read_rate.PNG" width="654" height="340" /></a> <br /> <b>Figure 8: Throughput vs EDMA Read Rate</b> 
+</p>
+</div> 
+<hr />
+<h4><span class="mw-headline" id="EDMA_Burst_Size">EDMA Burst Size</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=17" title="Edit section: EDMA Burst Size">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The EDMA burst size sets how many bytes are transferred after each sync event from the UART peripheral or the background task. Figure 9 shows that at a baud rate of 2,884,615, the UART throughput decreases as the burst size increases, when both processes are on the same EDMA queue. This is due to the fact that with a 128 byte EDMA transfer controller FIFO, the background task takes longer to complete as the burst size increases, which reduces UART throughput. 
+</p>
+<div style="text-align: center;">
+<p><a href="../../File_Throughput_burst_size.html" class="image" title="Figure 9: Throughput vs EDMA Burst Size"><img alt="Figure 9: Throughput vs EDMA Burst Size" src="https://processors.wiki.ti.com/images/2/26/Throughput_burst_size.PNG" width="579" height="335" /></a> <br /> <b>Figure 9: Throughput vs EDMA Burst Size</b> 
+</p>
+</div> 
+<h2><span class="mw-headline" id="UART_Summary_Slides">UART Summary Slides</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;section=18" title="Edit section: UART Summary Slides">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A summary of the information found on this page, as well as the graphs and tables, are provided in presentation format <a href="../../File_Omapl1x_c674x_uartThroughput-v01.html" title="File:Omapl1x c674x uartThroughput-v01.zip">File:Omapl1x c674x uartThroughput-v01.zip</a>.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130063618
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.073 seconds
+Real time usage: 0.081 seconds
+Preprocessor visited node count: 80/1000000
+Preprocessor generated node count: 94/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4242-0!canonical and timestamp 20201130063618 and revision id 36303
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OMAP-L1x/C674x/AM1x UART Throughput and Optimization Techniques</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;oldid=36303">https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;oldid=36303</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../../Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="../../Category_C674x.html" title="Category:C674x">C674x</a></li><li><a href="../../Category_AM1x.html" title="Category:AM1x">AM1x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OMAP-L1x%2FC674x%2FAM1x+UART+Throughput+and+Optimization+Techniques" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="AM1x_UART_Throughput_and_Optimization_Techniques.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="AM1x_UART_Throughput_and_Optimization_Techniques.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../../Special_WhatLinksHere/OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../../Special_RecentChangesLinked/OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;oldid=36303" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 12 July 2010, at 11:59.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.073","walltime":"0.081","ppvisitednodes":{"value":80,"limit":1000000},"ppgeneratednodes":{"value":94,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130063618","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":231});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OMAP-L1x/C674x/AM1x_UART_Throughput_and_Optimization_Techniques by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:15:51 GMT -->
+</html>

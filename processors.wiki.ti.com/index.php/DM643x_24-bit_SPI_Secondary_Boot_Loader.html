@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DM643x_24-bit_SPI_Secondary_Boot_Loader by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:08:22 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>DM643x 24-bit SPI Secondary Boot Loader - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"DM643x_24-bit_SPI_Secondary_Boot_Loader","wgTitle":"DM643x 24-bit SPI Secondary Boot Loader","wgCurRevisionId":20254,"wgRevisionId":20254,"wgArticleId":3670,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Boot","DM6437"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"DM643x_24-bit_SPI_Secondary_Boot_Loader","wgRelevantArticleId":3670,"wgRequestId":"1abd1a8ac0bc1807b4aed1d5","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-DM643x_24-bit_SPI_Secondary_Boot_Loader rootpage-DM643x_24-bit_SPI_Secondary_Boot_Loader skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">DM643x 24-bit SPI Secondary Boot Loader</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><b>Example DM6437 24-bit secondary SPI boot</b> 
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Secondary_Boot_for_SPI_Storage_Devices"><span class="tocnumber">1</span> <span class="toctext">Secondary Boot for SPI Storage Devices</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Introduction"><span class="tocnumber">1.1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Secondary_Boot_Flow"><span class="tocnumber">1.2</span> <span class="toctext">Secondary Boot Flow</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Preparing_Images_Needed_for_Secondary_Boot"><span class="tocnumber">2</span> <span class="toctext">Preparing Images Needed for Secondary Boot</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Preparing_Application_Image_for_SPI_Flash"><span class="tocnumber">2.1</span> <span class="toctext">Preparing Application Image for SPI Flash</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Preparing_Secondary_Boot-loader_Image_for_SPI_Boot"><span class="tocnumber">2.2</span> <span class="toctext">Preparing Secondary Boot-loader Image for SPI Boot</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#The_combineAIS_Utility"><span class="tocnumber">2.3</span> <span class="toctext">The combineAIS Utility</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#SPI_24_Write_Utility"><span class="tocnumber">2.4</span> <span class="toctext">SPI 24 Write Utility</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#SPI_flash_Boot_Flow_with_Secondary_Boot-loader_Notes"><span class="tocnumber">3</span> <span class="toctext">SPI flash Boot Flow with Secondary Boot-loader Notes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Secondary_boot-loader_memory_usage."><span class="tocnumber">3.1</span> <span class="toctext">Secondary boot-loader memory usage.</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#CRC_Check"><span class="tocnumber">3.2</span> <span class="toctext">CRC Check</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Internal_memory_.2F_cache_requirements"><span class="tocnumber">3.3</span> <span class="toctext">Internal memory / cache requirements</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Profiling"><span class="tocnumber">3.4</span> <span class="toctext">Profiling</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#EVM_Surgery_to_enable_24-bit_SPI_boot"><span class="tocnumber">4</span> <span class="toctext">EVM Surgery to enable 24-bit SPI boot</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Usage_Notes"><span class="tocnumber">5</span> <span class="toctext">Usage Notes</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Vital_Stats"><span class="tocnumber">6</span> <span class="toctext">Vital Stats</span></a></li>
+</ul>
+</div>
+ 
+<h1><span class="mw-headline" id="Secondary_Boot_for_SPI_Storage_Devices">Secondary Boot for SPI Storage Devices</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=1" title="Edit section: Secondary Boot for SPI Storage Devices">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=2" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The ROMed SPI boot-loader for the DM643x does not utilize the full SPI band-width, resulting in slow boots. To workaround this issue a two stage boot process is proposed. At the first stage, a secondary boot code will be loaded via the ROMed SPI boot-loader. This code will then execute and download application code from the SPI storage device. 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Secondary_Boot_Flow">Secondary Boot Flow</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=3" title="Edit section: Secondary Boot Flow">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The process flow for the secondary boot involves Primary boot of the DM643x via SPI. The DM643x ROM boot-loader will load the secondary boot code thru the SPI device. This secondary boot-loader (BL) then loads the application code from the same device. Both the secondary boot-loader and the application code are assumed to be in Application Image Script (AIS) format. AIS is a Texas Instruments Incorporated proprietary image format and is described in the application note, <a rel="nofollow" class="external text" href="http://focus.ti.com/lit/an/spraag0d/spraag0d.pdf">"Using the DM643x Boot-loader" (SPRAAG0D)</a>. The secondary boot code provided with this article assumes that the application image conforms to the AIS format. The secondary boot-loader does not implement the full range of AIS commands, but implements only the minimal subset required to load code from the SPI device. Limiting the AIS instruction set to the minimum required, is done to reduce the code size of the secondary boot-loader. Source for the boot-loader has been provided to allow further customization of the code if required by an application. One example customization would be to reduce code size by hard coding the parameters describing the actual SPI device that will be used. An outline of the basic flow for secondary boot is shown below. 
+</p><p><br /> 
+</p>
+<dl><dd><dl><dd></dd></dl></dd></dl>
+<table>
+<caption>Secondary Boot Process Flow
+</caption>
+<tbody><tr>
+<th>Sr. No.
+</th>
+<th>Steps
+</th></tr>
+<tr>
+<td>1
+</td>
+<td>Compile secondary boot (customize if required)
+</td></tr>
+<tr>
+<td>2
+</td>
+<td>Use genAIS utility to create AIS bootable image for secondary boot code from SPI storage device.
+</td></tr>
+<tr>
+<td>3
+</td>
+<td>Compile application code.
+</td></tr>
+<tr>
+<td>4
+</td>
+<td>Use genAIS utility to create binary AIS bootable image of application code from SPI storage device.
+</td></tr>
+<tr>
+<td>5
+</td>
+<td>Use the “combineAIS” utility to combine the two images
+</td></tr>
+<tr>
+<td>6
+</td>
+<td>Use the flash writer utility to write the combined code to SPI flash.
+</td></tr>
+<tr>
+<td>7
+</td>
+<td>Set BOOTMODE [3:0] = 1111b to select boot from SPI
+</td></tr>
+<tr>
+<td>8
+</td>
+<td>Issue POR reset to DM643x device
+</td></tr></tbody></table>
+<h1><span class="mw-headline" id="Preparing_Images_Needed_for_Secondary_Boot">Preparing Images Needed for Secondary Boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=4" title="Edit section: Preparing Images Needed for Secondary Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Preparing_Application_Image_for_SPI_Flash">Preparing Application Image for SPI Flash</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=5" title="Edit section: Preparing Application Image for SPI Flash">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The secondary boot-loader expects code to be stored on SPI flash device to be an AIS bootable image. The genAIS utility should be used to create an AIS image suitable for flashing to the SPI device. After compiling and linking the application code, the resulting object should be converted to a bootable image using genAIS. An example invocation of genAIS for NAND would be: 
+</p><p>genAIS -otype bin –i myApp.out -o myAppAisImage.bin -bootmode raw 
+</p><p>The secondary boot-loader will not check for bad blocks. It will also not perform any PLL or other settings (as specified by the “Function Execute” command) and the genAIS should not be run on the application code in such a way as to generate such commands. CRC checking can be switched off in the above command. 
+</p><p>NOTE: The secondary boot-loader will work with images generated with the “raw” bootmode only. 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Preparing_Secondary_Boot-loader_Image_for_SPI_Boot">Preparing Secondary Boot-loader Image for SPI Boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=6" title="Edit section: Preparing Secondary Boot-loader Image for SPI Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Boot from SPI flash is accomplished by the ROMed boot-loader code. The ROM boot-loader expects the data in the SPI flash to be in AIS image format. The secondary boot code may be converted to an AIS image using the genAIS utility. Any PLL or other setting commands can be used here. 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="The_combineAIS_Utility">The combineAIS Utility</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=7" title="Edit section: The combineAIS Utility">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The combineAIS utility will accept the AIS images for the secondary boot-loader and the application code. It will combine the two images and produce a single output file which can be burned to the flash memory. The combineAIS utility will support AIS images in binary format only. Invocation without parameters prints a help message. An example invocation of the combineAIS utility is as below: 
+</p><p>$&gt; perl combineAIS.pl SPI_secondary_boot.bin GPIO_toggle_noCFG.bin test.bin 10 
+</p><p>Where: 
+</p>
+<dl><dd>SPI_secondary_boot.bin&#160;: Secondary boot-loader AIS image</dd>
+<dd>GPIO_toggle_noCFG.bin&#160;: Sample application AIS image</dd>
+<dd>test.bin&#160;: Combined AIS image</dd>
+<dd>10&#160;: Secondary boot-loader block size on the SPI flash in KB. i.e.: this much memory on the SPI flash is allocated to store the Secondary boot-loader image. This should be greater than the size of the secondary boot-loader AIS image and <i>should be consistent with</i> the value defined in SPI_2nd_boot.c</dd></dl>
+<p><br /> 
+</p>
+<h2><span class="mw-headline" id="SPI_24_Write_Utility">SPI 24 Write Utility</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=8" title="Edit section: SPI 24 Write Utility">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A sample SPI 24 write utility is provided that can be used to write the combined AIS boot image to a 24-bit SPI flash. The utility is provided in the form of a CCS project and source code. The corresponding “.out” can be loaded with the CCS after enabling the DM6437 EVM gel file settings. The input to the utility is the name of a binary AIS image file containing the secondary Boot-loader code/data to be written to SPI flash. The source and project files for the SPI write routine may be found in the SPI24Writer folder in the final release. 
+</p><p><br /> 
+</p>
+<h1><span class="mw-headline" id="SPI_flash_Boot_Flow_with_Secondary_Boot-loader_Notes">SPI flash Boot Flow with Secondary Boot-loader Notes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=9" title="Edit section: SPI flash Boot Flow with Secondary Boot-loader Notes">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Please note, that the secondary boot-loader code will only parse a subset of the AIS commands. If your application uses an AIS configuration file, this file should be included with the AIS build for the secondary boot-loader. Do not include an AIS configuration file with the AIS build of application code written to the flash device. 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Secondary_boot-loader_memory_usage.">Secondary boot-loader memory usage.</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=10" title="Edit section: Secondary boot-loader memory usage.">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The secondary boot-loader will use a small amount of DDR memory to execute. The higher region of DDR will be used for this purpose. The application developer should ensure that he does not use this memory in his application. Exact size will be known on full development. An example “.cmd” file, to be used for the development of the secondary boot-loader on the DM6437 EVM, is attached. This file should be modified before use with custom boards having different amount of DDR2. 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="CRC_Check">CRC Check</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=11" title="Edit section: CRC Check">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A proprietary 32-bit CRC check algorithm may be used as described in Sec 3.7 of spraag0d.pdf. Section wise CRC will be computed. In case of error, the section will be reloaded. 
+</p><p><br /> 
+</p>
+<h2><span id="Internal_memory_/_cache_requirements"></span><span class="mw-headline" id="Internal_memory_.2F_cache_requirements">Internal memory / cache requirements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=12" title="Edit section: Internal memory / cache requirements">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The boot-loader is required to perform CRC check on the read data. To achieve the desired performance cashes will be turned on as follows: L1P – 32KB used as cache L1D – 32KB used as cache L2 – 32KB used as cache 
+</p><p>As a result, the entire L1P, 32KB of L1D and 32KB of L2 will not be available for allocation of initialized sections of the application. The unavailable memory ranges for these memories can be seen in sprs345d.pdf (TMS320DM6437 Digital Media Processor) 
+</p><p>Consequently, the secondary boot-loader will not support loading code sections to the L1P. 
+</p><p>To match the behavior of the primary boot-loader, the caches are turned off when the secondary boot-loader exits. 
+</p>
+<h2><span class="mw-headline" id="Profiling">Profiling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=13" title="Edit section: Profiling">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Profiling for the complete secondary boot process (loading from SPI flash and CRC check) is enabled through GPIO pin no. 87. At the start of boot process, the GPIO 87 pin is set and at the end of boot the GPIO 87 pin is cleared. These two events can be observed and timed on the scope to compute the combined load and data verification performance of the secondary boot-loader. 
+</p><p>The GPIO signaling option <b>can be turned on</b> by defining the macro _GPIO_PROFILE_ in the file SPI_2nd_boot.c. By default, profiling is off.
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="EVM_Surgery_to_enable_24-bit_SPI_boot">EVM Surgery to enable 24-bit SPI boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=14" title="Edit section: EVM Surgery to enable 24-bit SPI boot">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>By default, the DM6437 EVM is configured for 16-bit SPI support over McBSP. To run the 24-bit SPI boot mode, a separate pin, "GP97" is used as chip select. This pin (GP97 from the DSP) needs to be connected to the Chip Select (CS) pint of the SPI flash (Instead of the default FSX pin). This connection can be done as follows:
+</p><p><br />
+</p>
+<ol><li>Remove R433 resistor (page 5 of the EVM schematics)- This would disconnect pin 1 of U65 socket  (SPI flash) from FSX0.</li>
+<li>Make the connection between GP97 and Pin1 of U65 socket via R436 (page 5 of the EVM schematics).</li></ol>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Usage_Notes">Usage Notes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=15" title="Edit section: Usage Notes">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>The sample application can be found <a href="https://processors.wiki.ti.com/images/d/d9/Sample_SPI_secondary_Boot.zip" class="internal" title="Sample SPI secondary Boot.zip">here</a>.</li></ul>
+<ul><li>A test application “GPIO_toggle” is provided for verifying the boot process. This application toggles the GPIO pin 87. The source and project files can be found in the GPIO_toggle folder.
+<ul><li>Use the script build/gen_app_img.sh to build an image for use with the primary bootloader</li>
+<li>Use the script build/gen_app_img_noCFG.sh to build an image for use with the secondary boot-loader.</li></ul></li></ul>
+<ul><li>The secondary boot-loader code can be found in the SPI_secondary_boot directory. Follow the steps below to use the secondary boot-loader.
+<ul><li>The boot-loader image size is about 5KB and requires about 11KB of RAM to load and execute. Modify the SPI_secondary_boot.cmd to match your board specifications. Note that the above figures will change if any changes are made to the project (including recompilation with different compiler version). See the map file for exact details.</li>
+<li>Generate the application AIS image. A sample script using spraag0d configuration is provided as “make_AIS.sh”. (Change paths to match your system)</li>
+<li>Use the combineAIS.pl to generate the final image “test.bin” which can be burned to the SPI flash.</li></ul></li></ul>
+<ul><li>The SPI read speed can be tested by running the SPI_read executable.</li></ul>
+<h1><span class="mw-headline" id="Vital_Stats">Vital Stats</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;section=16" title="Edit section: Vital Stats">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<dl><dd><dl><dd>Code size of secondary boot-loader&#160;: 4.5 KB</dd>
+<dd>Image size of secondary boot-loader: 11 KB in DDR</dd>
+<dd>Speed: depends on configuration (Memory, SPI clock). In excess of 700 KB/sec.</dd></dl></dd></dl>
+<p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130160418
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.044 seconds
+Real time usage: 0.045 seconds
+Preprocessor visited node count: 63/1000000
+Preprocessor generated node count: 68/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:3670-0!canonical and timestamp 20201130160418 and revision id 20254
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>DM643x 24-bit SPI Secondary Boot Loader</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;oldid=20254">https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;oldid=20254</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Boot.html" title="Category:Boot">Boot</a></li><li><a href="Category_DM6437.html" title="Category:DM6437">DM6437</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=DM643x+24-bit+SPI+Secondary+Boot+Loader" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="DM643x_24-bit_SPI_Secondary_Boot_Loader.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="DM643x_24-bit_SPI_Secondary_Boot_Loader.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/DM643x_24-bit_SPI_Secondary_Boot_Loader.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/DM643x_24-bit_SPI_Secondary_Boot_Loader.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;oldid=20254" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=DM643x_24-bit_SPI_Secondary_Boot_Loader&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 25 November 2009, at 01:29.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.044","walltime":"0.045","ppvisitednodes":{"value":63,"limit":1000000},"ppgeneratednodes":{"value":68,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130160418","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":251});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DM643x_24-bit_SPI_Secondary_Boot_Loader by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 08:08:24 GMT -->
+</html>

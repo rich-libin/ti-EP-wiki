@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/IPC_MMU_fault_debug by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:18 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>IPC MMU fault debug - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"IPC_MMU_fault_debug","wgTitle":"IPC MMU fault debug","wgCurRevisionId":187493,"wgRevisionId":187493,"wgArticleId":35936,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["IPC"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"IPC_MMU_fault_debug","wgRelevantArticleId":35936,"wgRequestId":"38a1e4563174a7ffb4186dc9","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-IPC_MMU_fault_debug rootpage-IPC_MMU_fault_debug skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">IPC MMU fault debug</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Debugging_MMU_faults_when_using_IPC_3.x"><span class="tocnumber">1</span> <span class="toctext">Debugging MMU faults when using IPC 3.x</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Problem_Description"><span class="tocnumber">1.1</span> <span class="toctext">Problem Description</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Prerequisites"><span class="tocnumber">1.2</span> <span class="toctext">Prerequisites</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Approach"><span class="tocnumber">1.3</span> <span class="toctext">Approach</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Identify_the_fault_address"><span class="tocnumber">1.3.1</span> <span class="toctext">Identify the fault address</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Halt_the_code_when_the_fault_happens"><span class="tocnumber">1.3.2</span> <span class="toctext">Halt the code when the fault happens</span></a>
+<ul>
+<li class="toclevel-4 tocsection-7"><a href="#If_the_fault_happens_on_a_data_access"><span class="tocnumber">1.3.2.1</span> <span class="toctext">If the fault happens on a data access</span></a></li>
+<li class="toclevel-4 tocsection-8"><a href="#If_the_fault_happens_on_an_instruction_fetch"><span class="tocnumber">1.3.2.2</span> <span class="toctext">If the fault happens on an instruction fetch</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-9"><a href="#.22Service.22_the_fault"><span class="tocnumber">1.3.3</span> <span class="toctext">"Service" the fault</span></a>
+<ul>
+<li class="toclevel-4 tocsection-10"><a href="#Disable_recovery"><span class="tocnumber">1.3.3.1</span> <span class="toctext">Disable recovery</span></a>
+<ul>
+<li class="toclevel-5 tocsection-11"><a href="#On_QNX"><span class="tocnumber">1.3.3.1.1</span> <span class="toctext">On QNX</span></a></li>
+<li class="toclevel-5 tocsection-12"><a href="#On_Linux"><span class="tocnumber">1.3.3.1.2</span> <span class="toctext">On Linux</span></a></li>
+</ul>
+</li>
+<li class="toclevel-4 tocsection-13"><a href="#If_the_fault_happens_on_an_instruction_fetch_2"><span class="tocnumber">1.3.3.2</span> <span class="toctext">If the fault happens on an instruction fetch</span></a></li>
+<li class="toclevel-4 tocsection-14"><a href="#If_the_fault_happens_on_a_data_access_2"><span class="tocnumber">1.3.3.3</span> <span class="toctext">If the fault happens on a data access</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Debugging_MMU_faults_when_using_IPC_3.x">Debugging MMU faults when using IPC 3.x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=1" title="Edit section: Debugging MMU faults when using IPC 3.x">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Problem_Description">Problem Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=2" title="Edit section: Problem Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>MMU faults may occur on a remote slave core during execution of an IPC-based program due to bugs that were inadvertently introduced. They are encountered on systems where an MMU is available on the slave to guard it from accessing invalid memory. On systems were the host is running a high-level OS such as QNX or Linux, when such an access occurs, an interrupt is sent to the host processor, which would perform recovery. As of IPC 3.21, the recovery process consists of resetting, reloading and restarting all slave cores. This fail-safe ensures that both host-to-slave and slave-to-slave communication, if any, can restart from a clean slate. This could be handy in a production system where the system can reboot itself when a bug is encountered.
+</p><p>However, even when recovery is successful, this is still a bug, and a program should not access invalid memory locations.
+</p><p>This topic describes techniques on how to debug such an MMU fault.
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Some CPUs include an additional MMU called the 'AMMU'. In this topic, we focus on faults at the level of the 'IOMMU', which is programmed externally by the host and would trigger an interrupt that initiates the recovery mechanism upon the occurrence of a fault.</div>
+<h2><span class="mw-headline" id="Prerequisites">Prerequisites</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=3" title="Edit section: Prerequisites">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Development board setup with JTAG access thru CCS 5.x or above</li>
+<li>Familiarity with connecting to slave cores on your device using CCS for debug purposes</li>
+<li>Familiarity with rebuilding IPC</li></ul>
+<h2><span class="mw-headline" id="Approach">Approach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=4" title="Edit section: Approach">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Identify_the_fault_address">Identify the fault address</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=5" title="Edit section: Identify the fault address">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When debugging an MMU fault, one should start by identifying the fault address. IPC facilitates this by printing out the address on the host during the recovery process. In some cases, this could be the only hint you would need to identify what is going wrong.
+</p><p>If you are running QNX, after an MMU fault occurs, run the 'sloginfo' utility in QNX to observe the output from the IPC resource manager:
+</p>
+<pre>****************** IPU-MMU Fault ******************
+
+Jan 01 00:02:57    4    42     0 ****    addr: 0x96000000
+
+Jan 01 00:02:57    4    42     0 ****    TRANSLATIONFAULT
+
+Jan 01 00:02:57    4    42     0 **************************************************
+
+Jan 01 00:02:57    4    42     0 syslink_error_cb: Received Error Callback for IPU1&#160;: MMU Fault
+
+Jan 01 00:02:57    4    42     0 syslink_error_cb: Scheduling recovery...
+</pre>
+<p>The address shown in the trace is the invalid virtual address accessed by the slave core.
+</p><p>On Linux, you should be able to obtain a similar message by running the 'dmesg' utility.
+</p>
+<h3><span class="mw-headline" id="Halt_the_code_when_the_fault_happens">Halt the code when the fault happens</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=6" title="Edit section: Halt the code when the fault happens">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If the fault address is always the same, you can pre-map the location with some unused physical memory and setup CCS to halt upon access of the given address location. This is helpful so that you can take a look at the call stack, register values and memory contents. The procedure below illustrates what can be done on DSP1 of a DRA7xx device, but similar steps can be performed on other cores and other devices as well.
+</p><p>First, identify a 4KB aligned, unused area in the physical memory map that you can use. For sake of illustration, let's assume the 4KB starting at address 0xBA300000 is available and not used by any core in your program.
+</p><p>Before the fault happens -- possibly right after loading the slave core with IPC -- connect to the Debug DAP in CCS (Right-click in the Debug Window, and select 'Show all cores' to make it visible if it is hidden). The Debug DAP gives access to the physical memory as a whole. Bring up the Memory Window to inspect the MMU registers at 0x40D01000. Program up the MMU to map some unused memory to the fault address location by modifying the MMU registers to their corresponding values:
+</p>
+<ul><li>MMU0 CAM  (0x40D01058): 0x9600000E (Change the most significant 20 bits here to match your fault address. So it'd be 96000 if your fault address is 0x96000010 for example)</li>
+<li>MMU0 RAM  (0x40D0105C): 0xBA300000 (Change the most significant 20 bits here to match an unused 4KB physical region in the memory map)</li>
+<li>MMU0 Lock (0x40D01050): 0x00000400</li>
+<li>MMU0 LD   (0x40D01054): 0x00000001</li></ul>
+<h4><span class="mw-headline" id="If_the_fault_happens_on_a_data_access">If the fault happens on a data access</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=7" title="Edit section: If the fault happens on a data access">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Connect to the DSP with CCS. Add a hardware watchpoint on the fault address:
+</p>
+<ul><li>Right-click the Breakpoints window, select Hardware Watchpoint in the Breakpoint menu.</li>
+<li>Fill in the fault address location and choose memory access type. If you need both read and write accesses you can create a watchpoint for each type.</li></ul>
+<p>Let the program (both on the slave(s) and the host) run until the watchpoint is hit. You should have full access to the call stack, memory, and registers at that point.
+</p>
+<h4><span class="mw-headline" id="If_the_fault_happens_on_an_instruction_fetch">If the fault happens on an instruction fetch</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=8" title="Edit section: If the fault happens on an instruction fetch">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Make sure that the unused area specified by the MMU RAM register is zero-ed out (instruction of 0 is a NOP on the DSP). You can do this through the Debug DAP. E.g. for a fault address of 0x96000010, set physical location 0xBA300010 to 0.
+</p><p>Connect to the DSP with CCS. Add a breakpoint at the fault address.
+</p><p>Let the program (both on the slave(s) and the host) run until the breakpoint is hit when the MMU fault occurs. You should have full access to the memory and registers at that point.
+</p>
+<h3><span id="&quot;Service&quot;_the_fault"></span><span class="mw-headline" id=".22Service.22_the_fault">"Service" the fault</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=9" title="Edit section: &quot;Service&quot; the fault">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If the fault is not always at the same location, it may be impossible to predict which memory location to pre-map and to set watchpoint/breakpoint on. In this case, you may want to let the fault happen, and then do some post-mortem analysis by connecting with CCS.
+</p>
+<h4><span class="mw-headline" id="Disable_recovery">Disable recovery</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=10" title="Edit section: Disable recovery">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In order to perform debugging after the MMU fault occurs, one needs to disable the automatic recovery mechanism, so that it does not wipe out the processor state immediately after the fault occurs.
+</p>
+<h5><span class="mw-headline" id="On_QNX">On QNX</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=11" title="Edit section: On QNX">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>On IPC version 3.22 and above, you can simply invoke the 'ipc' command with the '-d' flag to disable recovery.
+</p><p>On older versions of IPC, you would need to modify the IPC source code. Comment out the lines in the function Ipc_recover() in &lt;IPC_INSTALL_DIR&gt;/qnx/src/ipc3x_dev/ti/syslink/build/Qnx/resmgr/syslink_main.c
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+static void ipc_recover(Ptr args)
+{
+/*
+</p>
+<pre>   syslink_dev_t * dev = (syslink_dev_t *)args;
+</pre>
+<pre>   deinit_ipc(dev, TRUE);
+   init_ipc(dev, syslink_firmware, TRUE);
+   deinit_syslink_trace_device(dev);
+   init_syslink_trace_device(dev);
+</pre>
+<ul><li>/</li></ul>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Then rebuild IPC. Use this rebuilt version of the IPC resource manager for debugging purposes.
+</p>
+<h5><span class="mw-headline" id="On_Linux">On Linux</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=12" title="Edit section: On Linux">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>There is a way to disable the recovery mechanism by simply writing to the debug filesystem:
+</p>
+<pre>% echo disabled &gt; /debug/remoteproc/remoteproc&lt;n&gt;/recovery
+</pre>
+<p>where &lt;n&gt; is the core’s remoteproc instance number.  Echoing “enabled” will re-enable recovery.
+</p>
+<h4><span class="mw-headline" id="If_the_fault_happens_on_an_instruction_fetch_2">If the fault happens on an instruction fetch</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=13" title="Edit section: If the fault happens on an instruction fetch">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In this case, you can let the fault happen, map some memory to the fault location, set a software breakpoint at the fault address, clear the MMU fault, and let the slave halt on the breakpoint.
+</p><p>Let's again use DSP1 of a DRA7xx device as an example.
+</p><p>First, let the DSP run until it triggers the fault.
+</p><p>Connect to the Debug DAP in CCS (Right-click in the Debug Window, and select Show all cores to make it visible). Bring up the Memory Window to inspect the MMU registers at 0x40D01000. 
+</p><p>Take a look at the MMU0 MMU_FAULT_AD register (0x40D01048). It contains the fault location -- its virtual address on the DSP. Write it down.
+</p><p>Modify the following registers to their corresponding values
+</p>
+<ul><li>MMU0 CAM  (0x40D01058): 0x9600000E (Change the most significant 20 bits here to match your fault address. So it'd be 96000 if your fault addresss is 0x96000010)</li>
+<li>MMU0 RAM  (0x40D0105C): 0xBA300000 (Change the most significant 20 bits here to match an unused 4Kb physical region in the memory map)</li>
+<li>MMU0 Lock (0x40D01050): 0x00000400</li>
+<li>MMU0 LD   (0x40D01054): 0x00000001</li></ul>
+<p><br />
+If the fault is due to an instruction fetch, write the breakpoint opcode '0x1001E000' to the location in the unused memory that was newly mapped in that corresponds to the fault address. e.g. in our example, for a fault address of 0x96000010, write the value to 0xBA300010. 
+</p><p>This opcode corresponds to a software breakpoint instruction on a C674x DSP, and will serve to halt the program as soon as we clear the MMU fault. If you are on a core other than the DSP, you'll need to look up and use the opcode for the breakpoint instruction corresponding to its architecture. 
+</p><p>Finally, clear the MMU fault interrupt by writing to this register:
+</p>
+<ul><li>MMU0 IRQSTATUS (0x40D01018): 0x00000002 (Make sure you write to it, even if it shows the same value)</li></ul>
+<p>Writing to the MMU0 IRQSTATUS register clears the MMU fault interrupt and prompts the slave to continue on with execution.
+</p><p>Connect to the DSP in CCS and load the symbols for its executable. You should see the execution halted at the software breakpoint, and have full access to the memory and register contents. However, you will not have a call stack, since the fault location is not valid program memory based on the original program.
+</p>
+<h4><span class="mw-headline" id="If_the_fault_happens_on_a_data_access_2">If the fault happens on a data access</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit&amp;section=14" title="Edit section: If the fault happens on a data access">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In this case, you are somewhat out of luck. You can still follow the procedure for an invalid instruction fetch. However, instead of writing the breakpoint opcode to the fault location, you can try different values to see how the program behaves subsequently (0 would be an interesting value to try). Maybe it'd shed some light into which part of the code is making this illegal data access. 
+</p><p>On some architectures, the MMU register MMU_FAULT_PC may contain the value of the program counter when the fault occurred. If so, you can simply put the breakpoint opcode for that architecture at that location before clearing the MMU fault. Unfortunately on the DRA7XX DSP this functionality does not seem to be available.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130082620
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.029 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 70/1000000
+Preprocessor generated node count: 106/1000000
+Post‐expand include size: 389/2097152 bytes
+Template argument size: 261/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 439/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.595      1 Template:SpNote
+100.00%    1.595      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:35936-0!canonical and timestamp 20201130082620 and revision id 187493
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>IPC MMU fault debug</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>IPC MMU fault debug</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>IPC MMU fault debug</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>IPC MMU fault debug</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>IPC MMU fault debug</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>IPC MMU fault debug</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>IPC MMU fault debug</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>IPC MMU fault debug</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>IPC MMU fault debug</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;oldid=187493">https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;oldid=187493</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_IPC.html" title="Category:IPC">IPC</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=IPC+MMU+fault+debug" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="IPC_MMU_fault_debug.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:IPC_MMU_fault_debug&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="IPC_MMU_fault_debug.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/IPC_MMU_fault_debug.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/IPC_MMU_fault_debug.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;oldid=187493" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=IPC_MMU_fault_debug&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 18 November 2014, at 13:20.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.029","walltime":"0.030","ppvisitednodes":{"value":70,"limit":1000000},"ppgeneratednodes":{"value":106,"limit":1000000},"postexpandincludesize":{"value":389,"limit":2097152},"templateargumentsize":{"value":261,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":439,"limit":5000000},"timingprofile":["100.00%    1.595      1 Template:SpNote","100.00%    1.595      1 -total"]},"cachereport":{"timestamp":"20201130082620","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":228});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/IPC_MMU_fault_debug by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:20 GMT -->
+</html>

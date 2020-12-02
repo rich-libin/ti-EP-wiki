@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/IPC_Slave_Error_Recovery by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:22 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>IPC Slave Error Recovery - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"IPC_Slave_Error_Recovery","wgTitle":"IPC Slave Error Recovery","wgCurRevisionId":224839,"wgRevisionId":224839,"wgArticleId":36222,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["IPC"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"IPC_Slave_Error_Recovery","wgRelevantArticleId":36222,"wgRequestId":"b1014923bff858efe892cd0c","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-IPC_Slave_Error_Recovery rootpage-IPC_Slave_Error_Recovery skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">IPC Slave Error Recovery</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#MMU_Faults"><span class="tocnumber">1.1</span> <span class="toctext">MMU Faults</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Watchdog"><span class="tocnumber">1.2</span> <span class="toctext">Watchdog</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Remote_Processor_Exceptions"><span class="tocnumber">1.3</span> <span class="toctext">Remote Processor Exceptions</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Error_Recovery"><span class="tocnumber">1.4</span> <span class="toctext">Error Recovery</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Host_OS"><span class="tocnumber">2</span> <span class="toctext">Host OS</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Linux_Kernel_Config_for_Watchdog_support"><span class="tocnumber">2.1</span> <span class="toctext">Linux Kernel Config for Watchdog support</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Disabling_Recovery_on_Linux"><span class="tocnumber">2.2</span> <span class="toctext">Disabling Recovery on Linux</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Disabling_Recovery_on_QNX"><span class="tocnumber">2.3</span> <span class="toctext">Disabling Recovery on QNX</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Host_Application_Recovery"><span class="tocnumber">3</span> <span class="toctext">Host Application Recovery</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Device_Exception_Handler"><span class="tocnumber">4</span> <span class="toctext">Device Exception Handler</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Configuration"><span class="tocnumber">4.1</span> <span class="toctext">Configuration</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Remote_Core_Debugging"><span class="tocnumber">5</span> <span class="toctext">Remote Core Debugging</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Known_Issues"><span class="tocnumber">6</span> <span class="toctext">Known Issues</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Overview">Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=1" title="Edit section: Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The remote processors code, if not written properly, would cause a variety of exceptions or crashes like any other software. While the remote processor tracing can give diagnostic traces on the general code flow, it may not be enough to provide accurate information about crashes. Further, any active use-cases would experience a disruption in their execution. They should be able to gracefully errored out, and be able to reuse the remote processors. The remote core loader (remoteproc on Linux, ipc Resource Manager on QNX) provides the general infrastructure for different exception types and the ability to dump out useful information for debugging. On Linux, the recovery process is triggered by the remoteproc core, where the rpmsg virtio devices are destroyed and recreated. 
+</p><p>The crashes on remote processors can be classified into three main types:
+</p>
+<ul><li>MMU Faults - A remote processor MMU is unable to fetch an instruction or data address requested by the processor</li>
+<li>WatchDog Errors - The code on remote processor is stuck in a loop, and unable to perform any scheduling of other tasks</li>
+<li>Internal Exceptions - There can be some internal exceptions that are not exported outside of the remote processor subsystem</li></ul>
+<p>The following sections describe how the error notifications work along with the dump of the necessary exception information on DRA7XX devices.
+</p>
+<h3><span class="mw-headline" id="MMU_Faults">MMU Faults</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=2" title="Edit section: MMU Faults">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The remote processor MMUs have 32 TLBs, and can cover 4GB of address space. Hardware-assisted Table Walking Logic is also supported through L1 and L2 Page Table Entry (PTE) Tables. The L1 Table needs to be physically contiguous. These MMUs can generate an interrupt to the host processor on a variety of faults including a TLB Miss (useful only when Table Walking Logic is not enabled), or a Translation Fault (PTE not found).
+</p><p>On Linux, the remoteproc implementation manages the programming of these MMUs using the kernel's IOMMU framework. The generic remoteproc module programming of the IOMMU is done directly through the IOMMU domains. On QNX, this programming is automatically handled by the IPC resource manager based on the contents in the resource table.
+</p><p>The crash information is generated by the remote processors themselves. This generation is triggered slightly differently in the Cortex-M4 core and the DSP. For the DSP, there are special registers in the hardware to aid with MMU fault debugging.  For M4, an internal bus error response is sent upon an MMU Fault and this is possible only when the <i>MMU_GP_REG</i> register is programmed properly. This causes the MMU Fault to generate an internal exception to the M4 core. SYS/BIOS provides the necessary exception handler implementations and can dump the processor registers and other information such as the executing task handle, its stack pointer and stack size into a user-provided buffer. This exception buffer is published to the remoteproc (or IPC resource manager for QNX) through the Resource Table.
+</p><p>Please look through the <i>Memory Management Units</i> chapter in device TRMs for more details on the above registers.
+</p>
+<h3><span class="mw-headline" id="Watchdog">Watchdog</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=3" title="Edit section: Watchdog">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The remote processors are running SYS/BIOS, a RTOS that provides a simple scheduler based on hierarchical priorities. It is possible that a particular task may be running a busy loop and not yield the processor to execute other tasks. A Watchdog timer is used to detect this. There are no dedicated hardware watchdog timers for Cortex M4 cores, so two General Purpose Timers are used for detecting watchdog on each of the M4 cores. 
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The following General Purpose Timer are powered up on newer 3.14 based TI Linux kernels. GPT9 &amp; GPT4 for IPU2, GPT7 &amp; GPT8 for IPU1, and GPT10 for DSP1 on DRA7XX</div>
+<p>The Watchdog timer period is refreshed continuously on the remote processors by plugging in hooks into the SYS/BIOS scheduler. SYS/BIOS supports hook functions when switching Tasks or beginning a Swi. The SYS/BIOS has an Idle Task which is the lowest priority task, and is run when there are no active tasks. Both these hook functions and the Idle task would refresh the watchdog timer, postponing the interrupt/watchdog event as long as the scheduler is actively running and switching tasks.
+</p><p>The interrupt executes a Watchdog error handler function registered by the generic remote core loader through the platform-specific watchdog initialization hook. The handler function leverages the same remote core loader infrastructure as the MMU fault to dump out the relevant crash information. The remote core loader implementation manages these timers and an interrupt is generated to the host processor when the corresponding Watchdog timer expires.
+</p><p>In addition to the notification to and handling by remote core loader, the Watchdog expiration interrupt is also handled by SYS/BIOS. This interrupt is vectored to the <a href="#Device_Exception_Handler">#Device Exception Handler</a>(DEH) module's exception handler, which prints details of the exception to the SYS/BIOS trace buffer, as well as dumping register contents to the Deh.outbuf buffer which can be viewed in CCS with the ROV tool. This remote core handling shows more information than the remote core loader's handler.
+</p><p>This "double handling" would seem to be either a conflict or superfluous, but it can be useful.  Either "handler" can be used on its own since they're completely independent.  The remote core loader handler will, by default, ultimately reset the remote processor, thereby possibly preventing the SYS/BIOS handler from running to completion, or at all (we don't really know since it's a race), and even if it runs to completion, the trace buffer contents will be wiped out upon the subsequent reset/reload of the remote core. The remoteproc's recovery mechanism can be disabled, in which case the SYS/BIOS handler will run to completion and the resulting output can be examined.
+</p><p>On Linux, the trace output of the remote core with the expired watchdog timer is also viewable even *after* recovery since remoteproc makes a copy of the trace output before resetting/reloading the remote core.  This copy is present in a DEBUG_FS file named "<b>trace&lt;n&gt;_last</b>" in the corresponding remoteproc instance's DEBUG_FS directory. On QNX, the trace output can be optionally dumped into a file using the '-c' option of the IPC resource manager.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Remote_Processor_Exceptions">Remote Processor Exceptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=4" title="Edit section: Remote Processor Exceptions">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>All the exceptions on the remote processors do not trigger an event/interrupt on the host processor directly. There are a number of internal core exceptions that generate an interrupt only to the specific remote processor. The Cortex-M4 core has about 16 internal interrupt events including various exception events like Non-maskable interrupt (NMI), Bus Fault, Usage Fault (<a rel="nofollow" class="external text" href="http://infocenter.arm.com/help/topic/com.arm.doc.dui0553a/BABBGBEC.html">refer to <i>Exceptions</i> chapter in the Cortex-M4 TRM for further information</a>). All memory accessed by the remote processors have to be defined in an Attribute-MMU (AMMU), and the AMMU also generates a XLATE_MMU_FAULT interrupt to the core. The SYS/BIOS exception handler implementations are hooked to these exception interrupts and dump out the processor registers and other information such as the executing task handle, its stack pointer and stack size into a user-provided buffer.
+</p><p>On Linux, these exceptions are notified to the host processor by sending a special mailbox message to the rpmsg messaging bus layer. The rpmsg passes on this notification to the remoteproc, which then proceeds to perform a crash dump and recovery. On QNX, the host processor is similarly notified by this special mailbox message, and the IPC resource manager then proceeds to perform recovery.
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The AMMU is only relevant to the IPUs on DRA7xx.</div>
+<h3><span class="mw-headline" id="Error_Recovery">Error Recovery</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=5" title="Edit section: Error Recovery">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>On Linux, remoteproc is responsible for only the device management of the remote processors, and provides interfaces to init/deinit a core. rpmsg component is the first client user of remoteproc today, and is responsible for causing a remote processor to be started and stopped. The rpmsg layer then cleans up after itself and deletes any existing devices. This in turn calls the remove functions of the various drivers hanging on the rpmsg bus. Any userspace operations on these client rpmsg drivers are errored out with a specific error allowing the userspace applications to gracefully clean up after themselves. The rpmsg virtio devices are destroyed and recreated. The recreation of the rpmsg virtio devices will cause the remote processor to be rebooted and rpmsg client devices are republished from the firmware running on the remote processors. Any rpmsg client drivers are re-probed, allowing them to export the driver interface. Synchronization in the rpmsg and remoteproc layers restrict the userspace applications from using a remote processor while the recovery is in progress.
+</p><p>This RPMsg design utilizes the bus infrastructure and driver model in the Linux kernel for performing the error recovery, and keeps the design simple while avoiding race conditions between open applications and  drivers.
+</p><p>On QNX, the IPC resource manager, by itself, accomplishes the same combined role as remoteproc and the rpmsg component. All internal modules in the resource manager are torn down and recreated. One big difference between QNX and Linux is that on QNX all remote processors (not just the one with the error) that have been loaded are rebooted as all state information is wiped. This is an approach that guarantees that any existing communication between slave cores are reset and restarted.
+</p>
+<h2><span class="mw-headline" id="Host_OS">Host OS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=6" title="Edit section: Host OS">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Error recovery is a stock feature of the remoteproc framework and is enabled by default. The kernel, once enable with remoteproc, will automatically reload the remote core on which an MMU fault has been detected.
+</p><p>To detect and recover from Exceptions on the remote core, the remote core must be configured to use <a href="#Device_Exception_Handler">#Device Exception Handler</a> (DEH) module.  The DEH module also allows for WatchDog support but must be also be enabled in the Linux kernel. On QNX the Watchdog support is always active and will interact with the DEH module if the latter is configured in.
+</p>
+<h3><span class="mw-headline" id="Linux_Kernel_Config_for_Watchdog_support">Linux Kernel Config for Watchdog support</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=7" title="Edit section: Linux Kernel Config for Watchdog support">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To enable Watchdog support, you must enable the following config in the kernel.
+</p>
+<dl><dd><dl><dd>CONFIG_OMAP_REMOTEPROC_WATCHDOG=y</dd></dl></dd></dl>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />The newer 3.14 based TI Linux kernels support IPU1, IPU2 and DSP1.  Previous kernels only supported Watchdog on IPU2 on DRA7XX devices.</div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Disabling_Recovery_on_Linux">Disabling Recovery on Linux</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=8" title="Edit section: Disabling Recovery on Linux">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There may be instances when the remote core ends up in a loop between crashing and reloading. Error recovery can be controlled with remoteproc's DEBUG_FS support.  Each instance of remoteproc gets an associated DEBUG_FS file named "<b>recovery</b>" that can be written with either "<b>enabled</b>" or "<b>disabled</b>" as follows:
+</p>
+<pre><b>target#</b> echo "disabled" &gt; /debug/remoteproc/remoteproc0/recovery
+<b>target#</b> cat /debug/remoteproc/remoteproc0/recovery
+<b> </b> disabled
+</pre>
+<p>The remoteproc DEBUG_FS also supports an additional "<b>recover</b>" option useful to perform a one-time recovery if the current state is "<b>disabled</b>".
+</p>
+<h3><span class="mw-headline" id="Disabling_Recovery_on_QNX">Disabling Recovery on QNX</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=9" title="Edit section: Disabling Recovery on QNX">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>On IPC version 3.22 and above, you can simply invoke the 'ipc' command with the '-d' flag to disable recovery.
+</p><p>On older versions of IPC, you would need to modify the IPC source code. Comment out the lines in the function <code>Ipc_recover()</code> in &lt;IPC_INSTALL_DIR&gt;/qnx/src/ipc3x_dev/ti/syslink/build/Qnx/resmgr/syslink_main.c
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+static void ipc_recover(Ptr args)
+{
+/*
+</p>
+<pre>   syslink_dev_t * dev = (syslink_dev_t *)args;
+</pre>
+<pre>   deinit_ipc(dev, TRUE);
+   init_ipc(dev, syslink_firmware, TRUE);
+   deinit_syslink_trace_device(dev);
+   init_syslink_trace_device(dev);
+</pre>
+<ul><li>/</li></ul>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Then rebuild IPC. Use this rebuilt version of the IPC resource manager for debugging purposes.
+</p>
+<h2><span class="mw-headline" id="Host_Application_Recovery">Host Application Recovery</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=10" title="Edit section: Host Application Recovery">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Beginning with IPC v3.36 or greater on Linux.</div>
+<p>The transport Rpmsg layer for MessageQ properly detects and handles underlying socket failures.  A socket failure typically occurs due to a crashed and/or reloaded remote core. The transport will inform the MessageQ layer of the failure, allowing MessageQ APIs to return back to the application with a new <code>MessageQ_E_SHUTDOWN</code> error code. This will allow the user level application to properly clean up and reestablish an IPC communication with a reloaded remote core without having to exit the application or restart LAD.
+</p><p>Both <code>MessageQ_get()</code> and <code>MessageQ_put()</code> will return the new error code. When <code>MessageQ_put()</code> returns an error, the application still owns the message and thus needs to free (<code>MessageQ_free()</code>) the message and properly close the MessageQ (<code>MessageQ_close()</code>). When <code>MessageQ_get()</code> returns an error, the application simply needs to delete the MessageQ (<code>MessageQ_delete()</code>).
+</p><p>To reestablish a connection with a recovered and reloaded remote core, the user application can detach (<code>Ipc_detach()</code>) from the reloaded core and reestablish a connection (<code>Ipc_attach()</code>) to the core until successful (<code>IPC_S_SUCCESS</code>).  In some cases <code>Ipc_attach()</code> may require multiple attempts for success as the remote core completes its reload and restart process.
+</p><p>A test example illustrating this functionality can be found in the IPC product. For the host core, you can find it in <a rel="nofollow" class="external text" href="http://git.ti.com/cgit/cgit.cgi/ipc/ipcdev.git/tree/linux/src/tests/fault.c"><b>IPC_INSTALL_DIR/linux/src/tests/fault.c</b></a>.  The corresponding remote core application can be found in <a rel="nofollow" class="external text" href="http://git.ti.com/cgit/cgit.cgi/ipc/ipcdev.git/tree/packages/ti/ipc/tests/fault.c"><b>IPC_INSTALL_DIR/packages/ti/ipc/test/fault.c</b></a>.
+</p>
+<h2><span class="mw-headline" id="Device_Exception_Handler">Device Exception Handler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=11" title="Edit section: Device Exception Handler">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>DEH is a slave side module that handles exceptions and adds the necessary Watchdog timer support that must be configured on the host OS.  Exceptions that are unrecoverable need to be communicated to the host processor so that it can print debug information, do resource cleanup and ultimately reload a slave processor. The notification mechanism for sending events to the host processor has been consolidated in this module.
+</p><p>The DEH module is provided as part of the IPC 3.x distribution as it is typically used in conjunction with devices that leverage IPC and remote loading features.
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />Beginning with IPC v3.36 or greater, DEH has Watchdog timer configuration capabilities. By default DEH will use GPTimer 4 &amp; 9 on IPU2, GPTimer 7 &amp; 8 on IPU1, and GPTimer 10 on DSP1 for DRAA7XXX devices. In previous versions of DEH in IPC, only IPU2 (with GPTimer 4 &amp; GPTimer 9) on DRA7XX devices was supported</div>
+<h3><span class="mw-headline" id="Configuration">Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=12" title="Edit section: Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Below is a simple example to enable DEH (and default Watchdog timer) on a device's remote cores.
+</p><p>To enable DEH on the slave core, add the following to the remote core's configuration (*.cfg) file to handle exceptions.
+&lt;syntaxhighlight lang='javascript'&gt;
+var Deh = xdc.useModule('ti.deh.Deh');
+&lt;/syntaxhighlight&gt;
+</p><p>To add Watchdog detection on the DSP remote core, add the following to its configuration.
+&lt;syntaxhighlight lang='javascript'&gt;
+var Idle = xdc.useModule('ti.sysbios.knl.Idle');
+Idle.addCoreFunc('&amp;ti_deh_Deh_idleBegin');
+&lt;/syntaxhighlight&gt;
+</p><p>To add Watchdog detection on the M4 remote core in SMP mode, add the following to its configuration.  
+&lt;syntaxhighlight lang='javascript'&gt;
+var Idle = xdc.useModule('ti.sysbios.knl.Idle');
+Idle.addCoreFunc('&amp;ti_deh_Deh_idleBegin', 0);
+Idle.addCoreFunc('&amp;ti_deh_Deh_idleBegin', 1);
+&lt;/syntaxhighlight&gt;
+</p><p><b>Watchdog slave support.</b> If IPC power management is configured, make sure to place DEH Idle configuration functions before power management Idle functions.
+</p><p><br />
+If a different Watchdog is needed or desired (instead of the default) for a particular remote core, the following configuration lines can be added to the remote's configuration file.  In this example, GPTimer 7 &amp; 8 are being configured as Watchdodg timers and mapped to IRQs 60 &amp; 61.  There is also some Crossbar configuration being included to ensure the timers interrupts are properly routed to the appropriate core.
+</p><p>&lt;syntaxhighlight lang='javascript'&gt;
+var WD = xdc.useModule('ti.deh.Watchdog');
+WD.timerIds.length = 2;
+WD.timerSettings.length = 2;
+WD.timerIds[0] = "GPTimer7";
+WD.timerSettings[0].intNum = 60;
+WD.timerSettings[0].eventId = -1;
+WD.timerIds[1] = "GPTimer8";
+WD.timerSettings[1].intNum = 61;
+WD.timerSettings[1].eventId = -1;
+</p><p>var Xbar = xdc.useModule('ti.sysbios.family.shared.vayu.IntXbar');
+Xbar.connectIRQMeta(60, 38);
+Xbar.connectIRQMeta(61, 39);
+&lt;/syntaxhighlight&gt;
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Remote_Core_Debugging">Remote Core Debugging</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=13" title="Edit section: Remote Core Debugging">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following articles describe interesting debugging techniques for issues detected by this error recovery feature:
+</p>
+<ul><li><a href="IPC_MMU_fault_debug.html" title="IPC MMU fault debug">IPC MMU Fault Debugging</a></li>
+<li><a href="https://e2e.ti.com/support/processors/f/791/p/840835/3109064#3109064#4_Exception_Dump_Decoding_Using_the_CCS_Register_View" title="SYS/BIOS FAQs">Exception Dump Decoding</a></li></ul>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br />When an error is detected, typically you will want to disable error recovery to debug the issue. <a href="#Disabling_Recovery_on_Linux">#Disabling Recovery on Linux</a> or <a href="#Disabling_Recovery_on_QNX">#Disabling Recovery on QNX</a></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Known_Issues">Known Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit&amp;section=14" title="Edit section: Known Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Error recovery is supported for IPU slaves using the Early Boot feature in Android starting in 6AL.1.1. Details on Early Boot are here - <a href="Early_Boot_and_Late_Attach.html" title="Early Boot and Late Attach">Linux</a> | <a href="Early_Boot_and_Late_Attach_in_QNX.html" title="Early Boot and Late Attach in QNX">QNX</a>.</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130143000
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.041 seconds
+Real time usage: 0.042 seconds
+Preprocessor visited node count: 96/1000000
+Preprocessor generated node count: 186/1000000
+Post‐expand include size: 1629/2097152 bytes
+Template argument size: 861/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.468      1 -total
+ 75.77%    1.870      6 Template:SpNote
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:36222-0!canonical and timestamp 20201130143000 and revision id 224839
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>IPC Slave Error Recovery</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>IPC Slave Error Recovery</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>IPC Slave Error Recovery</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>IPC Slave Error Recovery</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>IPC Slave Error Recovery</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>IPC Slave Error Recovery</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>IPC Slave Error Recovery</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>IPC Slave Error Recovery</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>IPC Slave Error Recovery</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;oldid=224839">https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;oldid=224839</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_IPC.html" title="Category:IPC">IPC</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=IPC+Slave+Error+Recovery" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="IPC_Slave_Error_Recovery.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:IPC_Slave_Error_Recovery&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="IPC_Slave_Error_Recovery.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/IPC_Slave_Error_Recovery.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/IPC_Slave_Error_Recovery.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;oldid=224839" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=IPC_Slave_Error_Recovery&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 17 February 2017, at 12:46.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.041","walltime":"0.042","ppvisitednodes":{"value":96,"limit":1000000},"ppgeneratednodes":{"value":186,"limit":1000000},"postexpandincludesize":{"value":1629,"limit":2097152},"templateargumentsize":{"value":861,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    2.468      1 -total"," 75.77%    1.870      6 Template:SpNote"]},"cachereport":{"timestamp":"20201130143000","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":231});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/IPC_Slave_Error_Recovery by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:25 GMT -->
+</html>

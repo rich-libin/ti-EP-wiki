@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Debugging_on_DaVinci_using_BDI2000 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:54:43 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Debugging on DaVinci using BDI2000 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Debugging_on_DaVinci_using_BDI2000","wgTitle":"Debugging on DaVinci using BDI2000","wgCurRevisionId":216108,"wgRevisionId":216108,"wgArticleId":33316,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["DVEVM","DaVinci Debugging","Debug","Linux"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Debugging_on_DaVinci_using_BDI2000","wgRelevantArticleId":33316,"wgRequestId":"fe2bc96c6273802c626423e0","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":["sysop"],"wgRestrictionMove":["sysop"]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Debugging_on_DaVinci_using_BDI2000 rootpage-Debugging_on_DaVinci_using_BDI2000 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Debugging on DaVinci using BDI2000</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><b><big><big><big><span style="color:red">Content is no longer maintained and is being kept for reference only!</span></big></big></big></b>
+<br />
+<br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Debugging_the_Linux_kernel_using_the_BDI2000_JTAG_emulator_on_DM6446">Debugging the Linux kernel using the BDI2000 JTAG emulator on DM6446</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=edit&amp;section=1" title="Edit section: Debugging the Linux kernel using the BDI2000 JTAG emulator on DM6446">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This topic discusses how to debug the Linux kernel on Davinci using a BDI2000 JTAG emulator from Abatron (<a rel="nofollow" class="external free" href="http://www.abatron.ch/">http://www.abatron.ch</a>). It uses the command line client gdb as a front end, on top of which you can put a GUI like DDD if you like (<a rel="nofollow" class="external free" href="http://www.gnu.org/software/ddd">http://www.gnu.org/software/ddd</a>). This topic assumes a Linux host. You may or may not be successful on Windows using these instructions, but you will likely have to modify them slightly. This topic also assumes you are using TFTP to load your Linux kernel image and that you are mounting your Linux target root filesystem off of NFS.
+</p><p>BDI2000 can only be used to debug the Linux kernel and kernel modules as it doesn't know of different MMU contexts (much in the same way as CCS).
+</p><p><b>Note!</b> Do not configure KGDB support into the kernel. Using KGDB and the BDI2000 are mutually exclusive.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Debugging_the_Linux_kernel_using_the_BDI2000_JTAG_emulator_on_DM6446"><span class="tocnumber">1</span> <span class="toctext">Debugging the Linux kernel using the BDI2000 JTAG emulator on DM6446</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Setting_up_the_BDI2000_JTAG_emulator_for_DM6446"><span class="tocnumber">1.1</span> <span class="toctext">Setting up the BDI2000 JTAG emulator for DM6446</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Preparing_the_Linux_kernel_for_debugging"><span class="tocnumber">1.2</span> <span class="toctext">Preparing the Linux kernel for debugging</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Debugging_the_Linux_kernel_using_BDI2000"><span class="tocnumber">1.3</span> <span class="toctext">Debugging the Linux kernel using BDI2000</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Debugging_Linux_kernel_modules_using_BDI2000"><span class="tocnumber">1.4</span> <span class="toctext">Debugging Linux kernel modules using BDI2000</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Setting_up_the_BDI2000_JTAG_emulator_for_DM6446">Setting up the BDI2000 JTAG emulator for DM6446</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=edit&amp;section=2" title="Edit section: Setting up the BDI2000 JTAG emulator for DM6446">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>First make sure you have purchased a BDI2000 emulator for the <i>ARM7/9/9e</i> cores and with software for <i>bdiGdb</i>.
+</p><p>To connect the BDI2000 to the EVM board use the <i>ARM/XScale</i> cable that comes with the emulator. Connect the <i>ARM/XScale</i> end of the cable to the 20 pin ARM converter that came with the DVEVM (if you have a alpha, beta, gamma or delta board -- if you have a production board you have to build your own adapter using these schematics). Plug the ARM converter into the JTAG connector on the DVEVM board.
+</p><p>Follow the instructions that come with the BDI2000 for setting up the emulator to receive commands from ethernet. When it becomes time to give the BDI2000 a configuration file type the following into a text file named <i>davinci.cnf</i> and put it in your tftp root directory (along with the <i>reg926e.def</i> file):
+</p>
+<pre>[INIT]
+
+[TARGET]
+CPUTYPE         ARM926E
+CLOCK           4                  &#160;; JTAG clock&#160;: without adaptive clocking cable, 1 MHz
+;CLOCK           7                  &#160;; JTAG clock value required for BDI3000, 1MHz
+TRST            PUSHPULL           &#160;; TRST driver type (OPENDRAIN | PUSHPULL)
+RESET           HARD 500           &#160;; NONE | HARD &lt;n&gt; (ms)
+ENDIAN          LITTLE             &#160;; memory model (LITTLE | BIG)
+WAKEUP          100
+SCANPRED        1 6                &#160;; count for ICEPick TAP
+SCANSUCC        0 0                &#160;; no device after ARM926e
+BREAKMODE       SOFT               &#160;; HARD = hardware, SOFT = software, go figure
+VECTOR          CATCH 0x02         &#160;; catch undefined instructions
+
+; Configure ICEPick module to make ARM926 TAP visible
+SCANINIT        r1:w400000:r0      &#160;; toggle reset for 0.4 seconds
+SCANINIT        t1:w1000:t0:w1000: &#160;; toggle TRST
+SCANINIT        i6=07:d8=89:i6=02: &#160;; connect and select router
+SCANINIT        d32=81000082:      &#160;; set IP control
+SCANINIT        d32=a018206f:      &#160;; configure TAP0
+SCANINIT        d32=a018216f:cl5:  &#160;; enable TAP0, clock 5 times in RTI
+SCANINIT        d32=a018616f:cl5:  &#160;; enable TAP0, clock 5 times in RTI
+SCANINIT        i10=ffff           &#160;; scan bypass
+
+;STARTUP         RUN
+
+[HOST]
+IP              192.168.1.104
+PROMPT          DaVinci&gt;
+
+[FLASH]
+CHIPTYPE        MIRRORX16
+CHIPSIZE        0x02000000
+BUSWIDTH        16
+WORKSPACE       0x1000
+
+[REGS]
+FILE            $reg926e.def
+</pre>
+<ul><li>NOTICE: Note that you should replace the <tt>[HOST]:IP</tt> parameter (192.168.1.104) with your host ip (where gdb is running). If you don't want the target to halt immediately (to be explicitly released by gdb) then you can uncomment the <tt>STARTUP RUN</tt> line.</li>
+<li>NOTICE: The BDI3000 is providing a higher maximum clock rate and thus requires a different CLOCK value. the parameter 'CLOCK 4' has te beset to 'CLOCK 7' for the new BDI3000 to get the thje same JTag clock.</li>
+<li>NOTICE: This example also works for the DM6467</li></ul>
+<h3><span class="mw-headline" id="Preparing_the_Linux_kernel_for_debugging">Preparing the Linux kernel for debugging</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=edit&amp;section=3" title="Edit section: Preparing the Linux kernel for debugging">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>On your host machine, cd into the Linux kernel source top level directory and edit the Makefile. Find the place where <tt>C_FLAGS</tt> are assigned and add a -g at the end. This adds debugging information to the kernel image we are about to create.
+</p><p>Now make sure your <tt>montavista/pro/bin</tt> directory is in your path (where <i>mkimage</i> resides) as well as your <tt>montavista/pro/devkit/arm/v5t_le/bin</tt> directory (where <i>arm_v5t_le-gcc</i> resides).
+</p><p>To configure the DM6446 Linux kernel with the default options execute:
+</p><p><tt>make ARCH=arm CROSS_COMPILE=arm_v5t_le- davinci_dm644x_defconfig</tt><br />
+<tt>make ARCH=arm CROSS_COMPILE=arm_v5t_le- checksetconfig</tt>
+</p><p>To create the kernel image (with verbose output) execute:
+</p><p><tt>KBUILD_VERBOSE=1 make ARCH=arm CROSS_COMPILE=arm_v5t_le- uImage</tt>
+</p><p>Enabling the verbose mode of the build system allows you to verify that the -g you added above actually does get fed to the compiler. This will create a kernel image in <tt>arch/arm/boot/uImage</tt>. Copy this image to your tftp repository ( typically <tt>/tftpboot</tt>).
+</p><p>Also you might want to build your kernel modules using:
+</p><p><tt>KBUILD_VERBOSE=1 make ARCH=arm CROSS_COMPILE=arm_v5t_le- modules</tt>
+</p><p>Assuming your NFS target file system is located at <tt>/targetfs</tt> on your host file system, you can install the modules (with debugging information!) using:
+</p><p><tt>INSTALL_MOD_PATH=/targetfs make ARCH=arm CROSS_COMPILE=arm_v5t_le- modules_install</tt>
+</p>
+<h3><span class="mw-headline" id="Debugging_the_Linux_kernel_using_BDI2000">Debugging the Linux kernel using BDI2000</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=edit&amp;section=4" title="Edit section: Debugging the Linux kernel using BDI2000">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>First you of course need to make sure you are booting from the <i>uImage</i> you just created. I would suggest using TFTP to boot your uImage. This way you can pick up modifications quickly while developing. The DVEVM Getting Started Guide has information on how to boot a Linux kernel image from TFTP.
+</p><p>Telnet to your (configured as above) BDI2000 using <i>telnet</i> and execute the <i>reset</i> command at the prompt. You should see something like:
+</p>
+<pre>- TARGET: processing reset request
+- TARGET: BDI executes scan chain init string
+- TARGET: Bypass check 0x00000001 =&gt; 0x00000002
+- TARGET: JTAG exists check passed
+- Core#0: ID code is 0x07926001
+- TARGET: All ICEBreaker access checks passed
+- TARGET: BDI removes RESET
+- TARGET: BDI waits for RESET inactive
+- TARGET: resetting target passed
+- TARGET: processing target startup ....
+- TARGET: processing target startup passed
+- TARGET: core #0 has entered debug mode
+DaVinci&gt;
+</pre>
+<p>Note that the BDI2000 configuration will keep the ARM halted until you release it. At this <tt>DaVinci&gt;</tt> prompt you can access the BDI2000 directly. You normally don't want to do this as gdb provides a much more flexible and powerful interface, but the reset command does come in handy sometimes.
+</p><p>Now start the gdb debugger from the Montavista tool chain using <i>arm_v5t_le-gdb</i> (provided it's in your path) and execute the following commands from the gdb prompt:
+</p>
+<pre>symbol-file /path/to/linux/kernel/source/vmlinux
+target remote [bdi2000 ipaddress]:2001
+hbreak start_kernel
+cont
+</pre>
+<p>The first command will load the symbols of the Linux kernel from a non-stripped version of the <i>uImage</i> file. The second command will connect to your BDI2000 emulator over TCP/IP and the third command will set a <b>hardware</b> breakpoint at the first kernel C function. The reason why we use a hardware breakpoint is that if we use a software breakpoint, the <i>ESTOP</i> instruction is likely to be overwritten when the Linux kernel decompresses. The fourth command will continue execution until a breakpoint is hit.
+</p><p>If you want to debug the Linux kernel after it has booted you can put a software breakpoint on the <i>sys_sync()</i> function using <tt>b sys_sync</tt> (note that this has to be done after the kernel decompresses as it's a software breakpoint) and then execute the <i>sync</i> command at the target Linux bash prompt. This is also a good method of entering the debugger to add breakpoints, for instance when debugging kernel modules (see below).
+</p><p>Executing one or more of these commands every time can be tedious. Instead, put the commands you execute every time (one per line) in a file somewhere on your host file system and name it something like <i>gdbstart.txt</i>. To execute the commands when gdb is started execute <tt>arm_v5t_le-gdb -x gdbstart.txt</tt>. Alternatively if you are always working on one project you can put the commands in your <i>.gdbinit</i> file in your home directory (this way they will always be executed when you start gdb).
+</p>
+<h3><span class="mw-headline" id="Debugging_Linux_kernel_modules_using_BDI2000">Debugging Linux kernel modules using BDI2000</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=edit&amp;section=5" title="Edit section: Debugging Linux kernel modules using BDI2000">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Many device drivers, especially those in development (for easy testing without rebooting the system), will be kept as runtime loadable kernel modules. This section describes how to debug them using gdb and the BDI2000 JTAG emulator. I will use the <a href="http://tiexpressdsp.com/wiki/index.php?title=DSPLink_Overview" class="extiw" title="tiexpressdspwiki:DSPLink Overview">DSP Link</a> kernel module as an example.
+</p><p>On the target, first insert the modules as you normally do when running the DVEVM demos using <tt>./loadmodules</tt> in the <tt>/opt/dvevm</tt> directory. Then execute <tt>cat /proc/modules</tt> and you will see a line containing something like this:
+</p><p><tt>dsplinkk 68632 0 - Live 0xbf005000</tt>
+</p><p>The last number is the address to which the dynamic kernel module was loaded. Assuming you have added the breakpoint at <code>sys_sync()</code> as described above (in fact you might want to edit your startup script to set your hardware breakpoint on <code>sys_sync()</code> instead of <code>start_kernel()</code> if you are debugging kernel modules), now execute <tt>sync </tt> on the target command line. This will trigger a breakpoint and allow you to give commands to gdb (and after you are done giving gdb commands you can resume execution using the cont command).
+</p><p>Now we want to add the symbols of the <i>dsplinkk.ko</i> kernel module to gdb, and you have to use the <b>debug</b> version of <i>dsplinkk.ko</i> to be able to debug it, so execute the following in gdb (example path for DVEVM 1.10 and the example address from above):
+</p><p><tt>add-symbol-file /path/to/DVEVM/dsplink_1_30_08_02/packages/dsplink/gpp/export/BIN/Linux/Davinci/DEBUG/dsplinkk.ko 0xbf005000</tt>
+</p><p>Let's say we want to single step through the function <code>DRV_Ioctl()</code> in the DSP Link kernel module. This function is implemented in the file <i>drv_pmgr.c</i> in the <tt>gpp/src/pmgr/Linux/2.6</tt> directory. To add this source directory to gdb so that the debugger can find the source file execute the following in gdb:
+</p><p><tt>directory /path/to/DVEVM/dsplink_1_30_08_02/packages/dsplink/gpp/src/pmgr/Linux/2.6</tt>
+</p><p>Note that this step is <b>not</b> needed for kernel modules built inside the Linux kernel build system as the full source path is available in the debugging information.
+</p><p>Now set a breakpoint in GDB on the <code>DRV_Ioctl()</code> function using <tt>b DRV_Ioctl</tt> and resume execution using <tt>cont</tt>.
+</p><p>At the target prompt now execute one of the DM6446 DVEVM demos (which uses <a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a>, which in turn uses DSP Link), for instance using <tt>./decode -v data/videos/davincieffect_ntsc.m2v</tt>. Voila, the breakpoint will be hit inside DSP Link and you can now single step through the DSP Link kernel module.
+</p><p>If you want to find out at which address a certain symbol (like <i>DRV_Ioctl</i>) is loaded at in the kernel you can execute <tt>grep DRV_Ioctl /proc/kallsyms</tt> on the <b>target </b> (as <tt>/proc/kallsyms</tt> contain all symbols currently loaded in kernel space).
+</p><p><b>Note!</b> The location in memory of the kernel module is dynamically assigned by the kernel. However, while I've been debugging the modules they have always been in the same place (assuming you load them in the same order) so in practice most of this process can be automated.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201024101
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.029 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 86/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2111/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:33316-0!canonical and timestamp 20201201024101 and revision id 216108
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Debugging on DaVinci using BDI2000</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Debugging on DaVinci using BDI2000</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Debugging on DaVinci using BDI2000</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Debugging on DaVinci using BDI2000</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Debugging on DaVinci using BDI2000</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Debugging on DaVinci using BDI2000</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Debugging on DaVinci using BDI2000</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Debugging on DaVinci using BDI2000</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Debugging on DaVinci using BDI2000</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;oldid=216108">https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;oldid=216108</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_DVEVM.html" title="Category:DVEVM">DVEVM</a></li><li><a href="Category_DaVinci_Debugging.html" title="Category:DaVinci Debugging">DaVinci Debugging</a></li><li><a href="Category_Debug.html" title="Category:Debug">Debug</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Debugging+on+DaVinci+using+BDI2000" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Debugging_on_DaVinci_using_BDI2000.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Debugging_on_DaVinci_using_BDI2000&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Debugging_on_DaVinci_using_BDI2000.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Debugging_on_DaVinci_using_BDI2000.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Debugging_on_DaVinci_using_BDI2000.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;oldid=216108" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Debugging_on_DaVinci_using_BDI2000&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 8 May 2016, at 21:12.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.029","walltime":"0.030","ppvisitednodes":{"value":47,"limit":1000000},"ppgeneratednodes":{"value":86,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2111,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201024101","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":261});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Debugging_on_DaVinci_using_BDI2000 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:54:45 GMT -->
+</html>

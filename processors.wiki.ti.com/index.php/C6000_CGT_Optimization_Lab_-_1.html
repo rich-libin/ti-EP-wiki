@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_CGT_Optimization_Lab_-_1 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:18 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>C6000 CGT Optimization Lab - 1 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"C6000_CGT_Optimization_Lab_-_1","wgTitle":"C6000 CGT Optimization Lab - 1","wgCurRevisionId":181544,"wgRevisionId":181544,"wgArticleId":969,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"C6000_CGT_Optimization_Lab_-_1","wgRelevantArticleId":969,"wgRequestId":"880b9ec1593e7016c90c788e","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-C6000_CGT_Optimization_Lab_-_1 rootpage-C6000_CGT_Optimization_Lab_-_1 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">C6000 CGT Optimization Lab - 1</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Presumptions"><span class="tocnumber">2</span> <span class="toctext">Presumptions</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Add_v6.1.5_Compiler_Tools"><span class="tocnumber">3</span> <span class="toctext">Add v6.1.5 Compiler Tools</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Notes_on_the_Source"><span class="tocnumber">4</span> <span class="toctext">Notes on the Source</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Initial_Steps"><span class="tocnumber">5</span> <span class="toctext">Initial Steps</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Step_1:_Build_Options"><span class="tocnumber">6</span> <span class="toctext">Step 1: Build Options</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Step_2:_Change_Type_of_sum"><span class="tocnumber">7</span> <span class="toctext">Step 2: Change Type of sum</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Step_3:_Unroll_and_Jam"><span class="tocnumber">8</span> <span class="toctext">Step 3: Unroll and Jam</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Step_4:_SIMD_.28Single_Instruction_Multiple_Data.29_Operations"><span class="tocnumber">9</span> <span class="toctext">Step 4: SIMD (Single Instruction Multiple Data) Operations</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Caution.21"><span class="tocnumber">10</span> <span class="toctext">Caution!</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Summary"><span class="tocnumber">11</span> <span class="toctext">Summary</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This lab demonstrates some common techniques to use when optimizing C code for C6000.  It includes a description of the unroll and jam optimization.
+</p><p>The source files used are in <a href="https://processors.wiki.ti.com/images/d/de/Cgt_lab.zip" class="internal" title="Cgt lab.zip"> this .zip file</a>.
+</p>
+<h2><span class="mw-headline" id="Presumptions">Presumptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=2" title="Edit section: Presumptions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>You have CCS v3.3 installed</li>
+<li>You execute on a C64x</li></ul>
+<p>+ system
+</p>
+<ul><li>You are familiar with basic CCS operations like loading a project, building a project, changing compiler options, loading and running code.</li></ul>
+<h2><span class="mw-headline" id="Add_v6.1.5_Compiler_Tools">Add v6.1.5 Compiler Tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=3" title="Edit section: Add v6.1.5 Compiler Tools">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Start at <a href="Main_Page.html" title="Main Page">TI Express DSP Wiki</a> (bookmark it!)</li>
+<li>Click on "Code Generation Tools"</li>
+<li>Click on "Compiler Releases"</li>
+<li>Go to the link given there.  Requires a my.ti.com account.</li>
+<li>Download and install the package "C6000 Code Generation Tools v6.1.5 Windows"</li>
+<li>OK to download any later 6.1.X version, if available</li>
+<li>Tell CCS to use CGT v6.1.5 via Component Manager</li>
+<li>Component Manager documentation located in CCS.  Navigate to: Help</li></ul>
+<p>| Contents
+| Before Starting
+| Component Manager
+</p>
+<h2><span class="mw-headline" id="Notes_on_the_Source">Notes on the Source</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=4" title="Edit section: Notes on the Source">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The function optimized is named Xcorr.  It is in the lone C file tuning.c.  Three versions are supplied in the source: original, development, and final.  Make all of your changes to the development version, which is currently selected by setting the preprocessor symbol VERSION to DEVT_VERSION.  The other two versions are supplied to show you where you start, and where you end up.
+</p>
+<h2><span class="mw-headline" id="Initial_Steps">Initial Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=5" title="Edit section: Initial Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Open tuning.pjt</li>
+<li>Build</li>
+<li>Run simply to insure everything is working properly</li></ul>
+<p>If you execute on a simulator, be patient!  This first run could take 30-60 secs.  The next ones will be much faster.
+</p><p>This lab was developed using the DM6443 Cycle Accurate Simulator and C6000 Compiler version 6.1.5.  Cycle counts you see should be similar, though not exactly the same, to those shown here.
+</p><p>The initial results printed are: benchmark results&#160;: 15392593
+</p><p>After each of the steps given below, build and run to see the improvement.
+</p>
+<h2><span class="mw-headline" id="Step_1:_Build_Options">Step 1: Build Options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=6" title="Edit section: Step 1: Build Options">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Add these options:
+</p>
+<ul><li>-o2&#160;: Optimization level 2</li>
+<li>-s&#160;:  Place optimizer generated comments in the assembly output</li>
+<li>-mw&#160;: Place extra information about software pipeline loops in the assembly output</li>
+<li>-mo&#160;: Place each section in its own sub-section</li></ul>
+<p>Remove this option:
+</p>
+<ul><li>-g&#160;: Generate debug information</li></ul>
+<p>Motivation for these option changes is given in the application note <i>Hand-Tuning Loops and Control Code on the TMS320C6000</i> <a href="http://www.ti.com/lit/pdf/spra666" class="extiw" title="tidoc:spra666">spra666</a> section 3.1.
+</p><p>Cycle count improves to 2757296.
+</p>
+<h2><span class="mw-headline" id="Step_2:_Change_Type_of_sum">Step 2: Change Type of sum</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=7" title="Edit section: Step 2: Change Type of sum">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Make these source changes:
+</p>
+<ul><li>Insure</li></ul>
+<p>&lt; stdint.h
+&gt; is included
+</p>
+<ul><li>Change type of sum from long long to int40_t</li></ul>
+<p>When the type of sum is long long (64-bits), the compiler must allocate a sequential  register pair (like A5:A4) to contain it.  This increases the number of registers the compiler must manage overall.  In this case, it causes the compiler to make some poor register allocation decisions that lead to a loop carried dependency.  It is better to use a type that can be contained in a single register.   This becomes even more important when, in the next 2 steps, loop unrolling creates multiple copies of sum.
+</p><p>Use the int40_t type, defined in
+&lt; stdint.h
+&gt; , to indicate that a 40-bit wide type is needed.  Of course, insure none of your results exceed 40-bits.
+</p><p>If your results permit, you could also use int32_t, and see similar improvement.
+</p><p>Cycle count improves to 1973988.
+</p>
+<h2><span class="mw-headline" id="Step_3:_Unroll_and_Jam">Step 3: Unroll and Jam</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=8" title="Edit section: Step 3: Unroll and Jam">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Make these source changes:
+</p>
+<ul><li>Add restrict keyword to pointers pdFirst and pdSecond</li>
+<li>Add #pragma MUST_ITERATE(2,,2) to the outer loop</li>
+<li>Add #pragma MUST_ITERATE(1) to the inner loop</li></ul>
+<p>The point of these changes is to enable an optimization called unroll and jam.  This optimization exposes more parallelism in the inner loop.
+</p><p>Unroll and jam is best explained by example.  Note these code fragments illustrate what the compiler can do automatically.  Do <u>not</u> enter these changes in the source.  Start with this:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+for(i=0; i&lt;iFirstLen; i++)
+{
+</p>
+<pre>   sum = 0;
+   for(j=0; j&lt;iSecondLen; j++)
+   {
+       sum += pdFirst[i+j]*pdSecond[j];
+   }
+   pixCorrResult[i] = sum;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>The first step is to unroll the outer loop one time.  That gives this:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+for(i=0; i&lt;iFirstLen; i += 2)
+{
+</p>
+<pre>   sum = 0;
+   for(j=0; j&lt;iSecondLen; j++)
+   {
+       sum += pdFirst[i+j]*pdSecond[j];
+   }
+   pixCorrResult[i] = sum;                  // AAA
+</pre>
+<pre>   sum = 0;
+   for(j=0; j&lt;iSecondLen; j++)
+   {
+       sum += pdFirst[i+1+j]*pdSecond[j];   // BBB
+   }
+   pixCorrResult[i+1] = sum;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Then those two inner loops are "jammed" together:
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+for(i=0; i&lt;iFirstLen; i += 2)
+{
+</p>
+<pre>   sum0 = sum1 = 0;
+   for(j=0; j&lt;iSecondLen; j++)
+   {
+       sum0 += pdFirst[i+j]*pdSecond[j];
+       sum1 += pdFirst[i+1+j]*pdSecond[j];  // BBB
+   }
+   pixCorrResult[i] = sum0;                 // AAA
+   pixCorrResult[i+1] = sum1;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p><p>Notice the two independent computations in the inner loop.  Software pipelining can optimize such code with ease.
+</p><p>The compiler can perform the unroll and jam transformation automatically, if you give it a little bit of help.  And that help is in the form of the minimal source changes given in the bulleted list at the start of this step.
+</p><p>Why is restrict needed?  Notice how the first assignment to pixCorrResult
+[ i
+] (marked AAA) is moved after the second computation with pdFirst and pdSecond (marked BBB).  That reordering of memory references is safe only if the compiler knows that those pointers never refer to the same memory locations.  Applying restrict to pdFirst and pdSecond is the only way to inform the compiler the memory references are independent.  More information on the restrict keyword can be found in the Wiki article <a href="Restrict_Type_Qualifier.html" title="Restrict Type Qualifier">Restrict_Type_Qualifier</a>, as well as section 4.1.2 of <i>Hand-Tuning Loops and Control Code on the TMS320C6000</i> <a href="http://www.ti.com/lit/pdf/spra666" class="extiw" title="tidoc:spra666">tidoc:spra666</a>.
+</p><p>Why are the MUST_ITERATE pragmas needed?  To perform unroll and jam, the compiler must know that the outer loop executes a multiple of 2 times, and that the inner loop executes at least once.  These pragmas give the compiler exactly that information.  The MUST_ITERATE pragma is described on page 19 of <i>Hand-Tuning Loops and Control Code on the TMS320C6000</i> <a href="http://www.ti.com/lit/pdf/spra666" class="extiw" title="tidoc:spra666">tidoc:spra666</a> .
+</p><p>Cycle count improves to 1521192.
+</p>
+<h2><span id="Step_4:_SIMD_(Single_Instruction_Multiple_Data)_Operations"></span><span class="mw-headline" id="Step_4:_SIMD_.28Single_Instruction_Multiple_Data.29_Operations">Step 4: SIMD (Single Instruction Multiple Data) Operations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=9" title="Edit section: Step 4: SIMD (Single Instruction Multiple Data) Operations">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Make these source changes:
+</p>
+<ul><li>Add _nassert(((int)pdFirst&#160;% 8) == 0);</li>
+<li>Add _nassert(((int)pdSecond&#160;% 8) == 0);</li>
+<li>Change inner loop pragma to MUST_ITERATE(2,,2);</li>
+<li>Change outer loop pragma to MUST_ITERATE(8,,8);</li></ul>
+<p>The first three changes are about enabling SIMD operations in the inner loop.  The _nassert technique is discussed in section 4.1.4 of <i>Hand-Tuning Loops and Control Code on the TMS320C6000</i> <a href="http://www.ti.com/lit/pdf/spra666" class="extiw" title="tidoc:spra666">tidoc:spra666</a>.  The MUST_ITERATE on the inner loop indicates the loop always runs a multiple of 2 times.  Because the outer loop is unrolled by 2, unrolling this inner loop by 2 means, overall, the loop is unrolled 4 times.  What is so magic about the number 4?  Well, the goal is to enable use of the 64-bit wide LDDW (or LDNDW) instructions to access memory.  The pointers pdFirst and pdSecond point to 16-bit wide short values.  Thus, 64/16 equals 4.
+</p><p>The MUST_ITERATE on the outer loop must be any value divisible by 2 to enable unroll and jam.  Why 8?  With values less than 8, the compiler generates multiple copies of the loop, each tailored to work best for a range of loop iteration counts that is checked at runtime.  In this case, only the loop tailored for high loop iteration counts ever executes.  The other loops amount to wasted code space.  Feel free to experiment with higher and lower values on this MUST_ITERATE pragma to see the effects.
+</p><p>Cycle count improves to 682512.
+</p>
+<h2><span id="Caution!"></span><span class="mw-headline" id="Caution.21">Caution!</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=10" title="Edit section: Caution!">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>When you use mechanisms such as restrict, MUST_ITERATE, or _nassert, you are conveying extra information to the compiler.  Always verify all such information is correct for every call.  Suppose, for example, the outer loop really can execute less than 8 times.  The compiler cannot catch that error, and it will result in incorrect code execution that is very difficult to debug.
+</p>
+<h2><span class="mw-headline" id="Summary">Summary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;section=11" title="Edit section: Summary">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This table summarizes the improvements.
+</p>
+<table border="2" cellspacing="0" cellpadding="4" width="61%">
+<tbody><tr>
+<td><b>Improvement</b>
+</td>
+<td><b>Cycles</b>
+</td>
+<td><b>Overall</b>
+</td>
+<td><b>Delta</b>
+</td></tr>
+<tr>
+<td>Initial
+</td>
+<td align="right">15392593
+</td>
+<td>&#160;
+</td>
+<td>&#160;
+</td></tr>
+<tr>
+<td>Build Options
+</td>
+<td align="right">2757296
+</td>
+<td align="right">5.6
+</td>
+<td align="right">5.6
+</td></tr>
+<tr>
+<td>Change Type of Sum
+</td>
+<td align="right">1973988
+</td>
+<td align="right">7.8
+</td>
+<td align="right">1.4
+</td></tr>
+<tr>
+<td>Unroll and Jam
+</td>
+<td align="right">1521192
+</td>
+<td align="right">10.1
+</td>
+<td align="right">1.3
+</td></tr>
+<tr>
+<td>SIMD
+</td>
+<td align="right">682512
+</td>
+<td align="right">22.6
+</td>
+<td align="right">2.2
+</td></tr></tbody></table>
+<ul><li>Improvement – What improvement is performed</li>
+<li>Cycles – Number of cycles executed</li>
+<li>Overall – How much improvement versus Initial</li>
+<li>Delta – How much improvement versus the previous change</li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201023542
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.047 seconds
+Real time usage: 0.049 seconds
+Preprocessor visited node count: 132/1000000
+Preprocessor generated node count: 248/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 22/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:969-0!canonical and timestamp 20201201023542 and revision id 181544
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 CGT Optimization Lab - 1</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>C6000 CGT Optimization Lab - 1</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>C6000 CGT Optimization Lab - 1</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>C6000 CGT Optimization Lab - 1</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>C6000 CGT Optimization Lab - 1</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 CGT Optimization Lab - 1</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>C6000 CGT Optimization Lab - 1</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>C6000 CGT Optimization Lab - 1</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>C6000 CGT Optimization Lab - 1</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;oldid=181544">https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;oldid=181544</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=C6000+CGT+Optimization+Lab+-+1" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="C6000_CGT_Optimization_Lab_-_1.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:C6000_CGT_Optimization_Lab_-_1&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="C6000_CGT_Optimization_Lab_-_1.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/C6000_CGT_Optimization_Lab_-_1.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/C6000_CGT_Optimization_Lab_-_1.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;oldid=181544" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=C6000_CGT_Optimization_Lab_-_1&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 11:18.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.047","walltime":"0.049","ppvisitednodes":{"value":132,"limit":1000000},"ppgeneratednodes":{"value":248,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":22,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201023542","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":276});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/C6000_CGT_Optimization_Lab_-_1 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:27:20 GMT -->
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSPLink_Signal_Handling_in_Codec_Engine by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:30:09 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>DSPLink Signal Handling in Codec Engine - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"DSPLink_Signal_Handling_in_Codec_Engine","wgTitle":"DSPLink Signal Handling in Codec Engine","wgCurRevisionId":181975,"wgRevisionId":181975,"wgArticleId":4501,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["MFP","Codec Engine"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"DSPLink_Signal_Handling_in_Codec_Engine","wgRelevantArticleId":4501,"wgRequestId":"205feb43d6754f4047e857bb","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+
+                    <script>var w=window;if(w.performance||w.mozPerformance||w.msPerformance||w.webkitPerformance){var d=document;AKSB=w.AKSB||{},AKSB.q=AKSB.q||[],AKSB.mark=AKSB.mark||function(e,_){AKSB.q.push(["mark",e,_||(new Date).getTime()])},AKSB.measure=AKSB.measure||function(e,_,t){AKSB.q.push(["measure",e,_,t||(new Date).getTime()])},AKSB.done=AKSB.done||function(e){AKSB.q.push(["done",e])},AKSB.mark("firstbyte",(new Date).getTime()),AKSB.prof={custid:"295384",ustr:"",originlat:"0",clientrtt:"192",ghostip:"23.11.215.94",ipv6:false,pct:"10",clientip:"163.125.46.158",requestid:"171fb8b6",region:"26813",protocol:"",blver:14,akM:"g",akN:"ae",akTT:"O",akTX:"1",akTI:"171fb8b6",ai:"181835",ra:"false",pmgn:"",pmgi:"",pmp:"",qc:""},function(e){var _=d.createElement("script");_.async="async",_.src=e;var t=d.getElementsByTagName("script"),t=t[t.length-1];t.parentNode.insertBefore(_,t)}(("https:"===d.location.protocol?"https:":"http:")+"//ds-aksb-a.akamaihd.net/aksb.min.js")}</script>
+                    </head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-DSPLink_Signal_Handling_in_Codec_Engine rootpage-DSPLink_Signal_Handling_in_Codec_Engine skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">DSPLink Signal Handling in Codec Engine</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#DSPLink_Signal_Handling_in_Codec_Engine"><span class="tocnumber">1</span> <span class="toctext">DSPLink Signal Handling in Codec Engine</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#DSPLink_Signal_Handling"><span class="tocnumber">1.1</span> <span class="toctext">DSPLink Signal Handling</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Configuring_DSPLink"><span class="tocnumber">1.2</span> <span class="toctext">Configuring DSPLink</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Steps_to_override_Codec_Engine.27s_configuration"><span class="tocnumber">1.3</span> <span class="toctext">Steps to override Codec Engine's configuration</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Contents_of_modified_.3Ccodec_engine.3E.2Fpackages.2Fti.2Fsdo.2Fce.2Fipc.2Fdsplink.2FProcessor_dsplink_linkcfg_OS.c"><span class="tocnumber">1.4</span> <span class="toctext">Contents of modified &lt;codec_engine&gt;/packages/ti/sdo/ce/ipc/dsplink/Processor_dsplink_linkcfg_OS.c</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="DSPLink_Signal_Handling_in_Codec_Engine">DSPLink Signal Handling in Codec Engine</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=edit&amp;section=1" title="Edit section: DSPLink Signal Handling in Codec Engine">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a href="Category_DSPLink.html" title="Category:DSPLink">DSPLink</a> (on Linux) contains a "signal" handler that can be enabled/disabled by way of the DSPLink configuration mechanism.  When used in conjunction with <a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a>, DSPLink configuration is handled by Codec Engine's Processor module (located in ti.sdo.ce.ipc.dsplink).  While a few of the DSPLink configuration elements are exposed to the user through Codec Engine configuration, most aspects of configuration are hard-coded by the Processor module.  This article discusses one hard-coded element in particular: DSPLink signal handling.
+</p>
+<h3><span class="mw-headline" id="DSPLink_Signal_Handling">DSPLink Signal Handling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=edit&amp;section=2" title="Edit section: DSPLink Signal Handling">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Prior to support for access by multiple processes, DSPLink signal handling was sufficient for most all situations.  With the added support for multiple process access, DSPLink's signal handling became insufficient for the more complicated multiple-process or multiple-thread application.  It became clear that the only way to provide the correct signal handling was to have the application install its own signal handler, with its own custom needs based on the application architecture.  This article does not approach the subject of *what* to do in a DSPLink-under-Codec Engine signal handler, it just discusses *how* to override DSPLink's signal handler in favor of an application-defined one.
+</p><p><a href="DSPLink_FAQs.html#Why_does_signal_handler_registered_in_my_application_stop_working_when_I_integrate_DSPLink_.3F" title="DSPLink FAQs">There is a related DSPLink FAQ on the signal handler here.</a>
+</p>
+<h3><span class="mw-headline" id="Configuring_DSPLink">Configuring DSPLink</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=edit&amp;section=3" title="Edit section: Configuring DSPLink">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>DSPLink configuration involves defining a few C structures with initialization values.  When used outside of Codec Engine, DSPLink defines these C structures based on input to the DSPLink configuration tool (a PERL script in the latest DSPLink release).  When used underneath Codec Engine, Codec Engine overrides these generated C files with its own copies (and even dynamically defines part of the configuration during runtime).
+</p><p>One of the configuration structures relates to OS signal handling, defining a structure of type LINKCFG_GppOs.  For the Linux OS, Codec Engine defines this structure in a file named "Processor_dsplink_linkcfg_OS.c".  This defined structure is named "LINKCFG_gppOsObject", and it is referenced by another structure that is part of the DSPLink configuration, "LINKCFG_gppObject" of type LINKCFG_Gpp defined in the architecture-specific file "Processor_dsplink_linkcfg_&lt;arch&gt;.c", and that structure is referenced by the top-level DSPLink configuration structure,"LINKCFG_config" of type LINKCFG_Object.
+</p><p>The signal handling configuration in "LINKCFG_gppOsObject" specifies the group of signals to handle as well as a boolean value named "handleSignals".  Codec Engine sets "handleSignals" to TRUE, which causes DSPLink to install its signal handler.  In order to override this and allow the application to install its own signal handler, the application will need to define this structure itself with an identifier (i.e., name) identical to the one defined by Codec Engine - "LINKCFG_gppOsObject".  The application's build mechanism will need to ensure that this structure is encountered by the application's linking stage before the time when the Codec Engine libraries are consulted, so that there will be no need to satisfy the reference to "LINKCFG_gppOsObject" from the Codec Engine libraries.  The simplest way to ensure this is to define the structure in the application's "main()" C file (the one that defines the main() function).
+</p><p>The most fool-proof way of defining this structure is to cut-and-paste the contents of Codec Engine's definition and change the initialization of "handleSignals" from TRUE to FALSE.  When doing so, the other elements of the structure actually become unused and therefore no longer need to be defined at all, but leaving them as-is is harmless and merely consumes a few more bytes of memory (and, to be exact, the only savings would be the "LINKCFG_sigNumArray" definition since this array is not part of "LINKCFG_gppOsObject").
+</p>
+<h3><span id="Steps_to_override_Codec_Engine's_configuration"></span><span class="mw-headline" id="Steps_to_override_Codec_Engine.27s_configuration">Steps to override Codec Engine's configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=edit&amp;section=4" title="Edit section: Steps to override Codec Engine&#039;s configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following steps are the suggested method of overriding Codec Engine's configuration of DSPLink's signal handling:
+</p>
+<ul><li>copy the contents of the file &lt;codec_engine&gt;/packages/ti/sdo/ce/ipc/dsplink/Processor_dsplink_linkcfg_OS.c into your application's "main" C file.</li>
+<li>snip all the "header" and "footer" C comment clauses (Copyright, file description, etc.)</li>
+<li>change the "handleSignals" structure member of LINKCFG_gppOsObject from TRUE to FALSE.</li></ul>
+<p>Also, since a Codec Engine application typically doesn't make direct calls to DSPLink APIs or macros, an application's compile command won't already contain a reference to the DSPLink header file locations.  DSPLink header files are needed to build your new signal handling structures.  Be sure to add the DSPLink header file location to your compile command, using the "-I" option:
+</p>
+<pre>   gcc -I &lt;DSPLink_dir&gt;/packages/dsplink/gpp/inc/usr ...
+</pre>
+<h3><span id="Contents_of_modified_&lt;codec_engine&gt;/packages/ti/sdo/ce/ipc/dsplink/Processor_dsplink_linkcfg_OS.c"></span><span class="mw-headline" id="Contents_of_modified_.3Ccodec_engine.3E.2Fpackages.2Fti.2Fsdo.2Fce.2Fipc.2Fdsplink.2FProcessor_dsplink_linkcfg_OS.c">Contents of modified &lt;codec_engine&gt;/packages/ti/sdo/ce/ipc/dsplink/Processor_dsplink_linkcfg_OS.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=edit&amp;section=5" title="Edit section: Contents of modified &lt;codec engine&gt;/packages/ti/sdo/ce/ipc/dsplink/Processor dsplink linkcfg OS.c">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following code can be inserted directly into the application C file to disable DSPLink's signal handling:
+</p><p>&lt;syntaxhighlight lang='c'&gt;
+/*
+</p>
+<pre>* DSP LINK Headers
+*/
+</pre>
+<ol><li>include &lt;dsplink.h&gt;</li>
+<li>include &lt;procdefs.h&gt;</li></ol>
+<p>/*
+</p>
+<pre>* Table of signals we're not going to handle.
+*/
+</pre>
+<p>static Uint32 sigNumArray [] = {
+</p>
+<pre>   1u,                         /* SIGHUP   */
+   2u,                         /* SIGINT   */
+   4u,                         /* SIGILL   */
+   6u,                         /* SIGABRT  */
+   8u,                         /* SIGFPE   */
+   11u,                        /* SIGSEGV  */
+   14u,                        /* SIGALRM  */
+   15u                         /* SIGTERM  */
+</pre>
+<p>}&#160;;
+</p><p>/*
+</p>
+<pre>* Symbol/struct we're overriding (with HANDLESIGNALS = FALSE)
+*/
+</pre>
+<p>LINKCFG_GppOs ti_sdo_ce_ipc_Processor_linkcfg_OS = {
+</p>
+<pre>   FALSE,                  /* HANDLESIGNALS &#160;: Should signals be handled for cleanup */
+   8u,                     /* NUMSIGNALS    &#160;: Number of signals to be handled */
+   (Uint32 *)&amp;sigNumArray  /* SIGNUMARRAY   &#160;: Pointer to the array of signals to be handled */
+</pre>
+<p>};
+&lt;/syntaxhighlight&gt;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130074608
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.018 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 24/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4501-0!canonical and timestamp 20201130074608 and revision id 181975
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSPLink Signal Handling in Codec Engine</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>DSPLink Signal Handling in Codec Engine</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>DSPLink Signal Handling in Codec Engine</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>DSPLink Signal Handling in Codec Engine</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>DSPLink Signal Handling in Codec Engine</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSPLink Signal Handling in Codec Engine</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>DSPLink Signal Handling in Codec Engine</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>DSPLink Signal Handling in Codec Engine</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>DSPLink Signal Handling in Codec Engine</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;oldid=181975">https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;oldid=181975</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_MFP.html" title="Category:MFP">MFP</a></li><li><a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=DSPLink+Signal+Handling+in+Codec+Engine" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="DSPLink_Signal_Handling_in_Codec_Engine.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:DSPLink_Signal_Handling_in_Codec_Engine&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="DSPLink_Signal_Handling_in_Codec_Engine.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/DSPLink_Signal_Handling_in_Codec_Engine.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/DSPLink_Signal_Handling_in_Codec_Engine.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;oldid=181975" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=DSPLink_Signal_Handling_in_Codec_Engine&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 21 July 2014, at 05:34.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.018","walltime":"0.019","ppvisitednodes":{"value":18,"limit":1000000},"ppgeneratednodes":{"value":24,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130074608","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":295});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/DSPLink_Signal_Handling_in_Codec_Engine by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:30:11 GMT -->
+</html>

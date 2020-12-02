@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OpenMP_on_C6000 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:30:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>OpenMP on C6000 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"OpenMP_on_C6000","wgTitle":"OpenMP on C6000","wgCurRevisionId":235579,"wgRevisionId":235579,"wgArticleId":18400,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"OpenMP_on_C6000","wgRelevantArticleId":18400,"wgRequestId":"ba3ee700b5996d3ec9ca8476","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":["sysop"],"wgRestrictionMove":["sysop"]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-OpenMP_on_C6000 rootpage-OpenMP_on_C6000 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">OpenMP on C6000</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><b><big><big><span style="color:red"> Starting in v4.3, Processor SDK documentation is no longer hosted on processors wiki.</span></big></big></b> <br /><br />
+Please bookmark the new links:
+</p>
+<ul><li>Linux, RT-Linux: <a rel="nofollow" class="external free" href="http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/index.html">http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/index.html</a></li>
+<li>RTOS: <a rel="nofollow" class="external free" href="http://software-dl.ti.com/processor-sdk-rtos/esd/docs/latest/rtos/index.html">http://software-dl.ti.com/processor-sdk-rtos/esd/docs/latest/rtos/index.html</a></li>
+<li>Android: <a rel="nofollow" class="external free" href="http://software-dl.ti.com/processor-sdk-android/esd/docs/latest/android/index.html">http://software-dl.ti.com/processor-sdk-android/esd/docs/latest/android/index.html</a></li></ul>
+<p><br />
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Presumptions"><span class="tocnumber">2</span> <span class="toctext">Presumptions</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Acronyms_Used_in_This_Article"><span class="tocnumber">3</span> <span class="toctext">Acronyms Used in This Article</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Conceptual_Overview"><span class="tocnumber">4</span> <span class="toctext">Conceptual Overview</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Installation"><span class="tocnumber">5</span> <span class="toctext">Installation</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Confidence_Test"><span class="tocnumber">6</span> <span class="toctext">Confidence Test</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#First_OpenMP_Project"><span class="tocnumber">7</span> <span class="toctext">First OpenMP Project</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Version_and_HW_Information"><span class="tocnumber">7.1</span> <span class="toctext">Version and HW Information</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Project_Setup"><span class="tocnumber">7.2</span> <span class="toctext">Project Setup</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Project_Modifications"><span class="tocnumber">7.3</span> <span class="toctext">Project Modifications</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Build_and_Load"><span class="tocnumber">7.4</span> <span class="toctext">Build and Load</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Execute_and_See_Output"><span class="tocnumber">7.5</span> <span class="toctext">Execute and See Output</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Tips_on_System_Startup"><span class="tocnumber">7.6</span> <span class="toctext">Tips on System Startup</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Second_OpenMP_Project"><span class="tocnumber">8</span> <span class="toctext">Second OpenMP Project</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Project_Setup_2"><span class="tocnumber">8.1</span> <span class="toctext">Project Setup</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Build_and_Execute"><span class="tocnumber">8.2</span> <span class="toctext">Build and Execute</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="#Start_Your_OpenMP_Project"><span class="tocnumber">9</span> <span class="toctext">Start Your OpenMP Project</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Debugging_Tips"><span class="tocnumber">10</span> <span class="toctext">Debugging Tips</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#How_to_Obtain_Support"><span class="tocnumber">11</span> <span class="toctext">How to Obtain Support</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>As of April 2016, this article is out of date.  Please visit <a rel="nofollow" class="external text" href="http://downloads.ti.com/mctools/esd/docs/openmp-dsp/index.html">here</a>.
+</p><p>This page is intended to be the starting point for all information about OpenMP on C6000.  However, at this writing, that is not the case.  The information in this article is correct if you are using C667x devices which only contain C66x CorePac DSPs, and not any ARM cores.  If you are using a 66AK2H device, then please see <a href="MCSDK_HPC_3-2.html" title="MCSDK HPC 3.x OpenMP">MCSDK HPC 3.x OpenMP</a>.  OpenMP is not supported on any other C6000 devices.
+</p><p>Still here?  After reading this article, you will be able to execute your own OpenMP code on C6000 under control of Code Composer Studio.
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Presumptions">Presumptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=2" title="Edit section: Presumptions">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>You are experienced at programming OpenMP applications on hosted systems like Windows or Linux PC's.</li>
+<li>You have never programmed anything on an embedded system like those that use C6000 devices.</li>
+<li>You have never used any TI development tools such as Code Composer Studio (CCS).</li></ul>
+<h1><span class="mw-headline" id="Acronyms_Used_in_This_Article">Acronyms Used in This Article</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=3" title="Edit section: Acronyms Used in This Article">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ul><li>CCS - Code Composer Studio. Software development environment for creating code to execute on TI devices.</li>
+<li>SYS/BIOS - Or BIOS for short.  Scalable real-time kernel which runs on the DSP.</li>
+<li>MCSDK - Multicore Software Development Kit.  Bundles all the software supplied by TI which runs on the DSP.</li></ul>
+<h1><span class="mw-headline" id="Conceptual_Overview">Conceptual Overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=4" title="Edit section: Conceptual Overview">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This section discusses, at a high level, how different pieces of software from TI work together to form the OpenMP solution.
+</p><p>The OpenMP source code, at the level of OpenMP pragmas and function calls, is the same.  Your code must be organized into a <i>project</i>, as that term is defined by CCS.  A central element of this project is the SYS/BIOS configuration.  SYS/BIOS (or BIOS for short) is a scalable real-time kernel produced by TI.  BIOS implements the multi-threading features of OpenMP.  An initial BIOS configuration (*.cfg) is supplied.  Changing this BIOS configuration may never be required.  The build is done within CCS.  At the start, system execution is also done within CCS.  Besides BIOS, many other software components execute on the DSP to comprise the OpenMP solution.  All of these components are delivered together under the name Multicore Software Development Kit (MCSDK).
+</p>
+<h1><span class="mw-headline" id="Installation">Installation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=5" title="Edit section: Installation">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Getting the MCSDK installed calls for you to install and configure everything else, so this section focuses on the MCSDK.
+</p><p>Start with the <a rel="nofollow" class="external text" href="http://www.ti.com/tool/bioslinuxmcsdk">general download page</a> for all flavors of the MCSDK.  Follow the link for <i>SYS/BIOS MCSDK for C66x</i>.  Get MCSDK version 2.1 or later.  That page includes a link to a <i>Getting Started Guide</i>.  That is where you will find directions on hardware setup, installing CCS, and so on.  Follow all the steps in the Getting Started Guide, up to Running the Demonstration Application.  (Actually, go ahead and run the Demo if you want.  But it isn't required.)
+</p>
+<h1><span class="mw-headline" id="Confidence_Test">Confidence Test</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=6" title="Edit section: Confidence Test">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>If you are familiar with CCS, you may skip over this section.  But, installing and configuring all that software may leave you wondering if you did it all correctly.  In this section, simplify things by pretending your system only has one core.  This allows you to check whether you have installed most of the software correctly, while ignoring many of the complicated details.
+</p><p>Please check out <a rel="nofollow" class="external text" href="Category_Code_Composer_Studio_v5.html#Getting_Started">this set of Getting Started Guides</a> just for CCS.  You only need to go through one of them.  Choose the one that seems best for you.  These guides provide a gentle introduction to those who are new to CCS.
+</p><p>When you load and run your first program, CCS needs to know which core to run it on.  You see a dialog box similar this one:
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:670px;"><a href="File_Select_core.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/e/e8/Select_core.JPG" width="668" height="529" class="thumbimage" /></a>  <div class="thumbcaption">Select CPU core 0</div></div></div></div>
+<p>Check the box only for core 0.
+</p>
+<h1><span class="mw-headline" id="First_OpenMP_Project">First OpenMP Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=7" title="Edit section: First OpenMP Project">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This section walks through a simple hello world example project.  Four threads run concurrently.  Each thread prints hello world and the thread ID.
+</p>
+<h3><span class="mw-headline" id="Version_and_HW_Information">Version and HW Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=8" title="Edit section: Version and HW Information">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section was developed with CCS version 5.2.0.00069, MCSDK version 2.1.0.3, and executed on an C6678 EVM.  If your environment differs, you may have to make a few adjustments.
+</p>
+<h3><span class="mw-headline" id="Project_Setup">Project Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=9" title="Edit section: Project Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In this section you create a new CCS project.  This project is not written from scratch, but uses example source files that come with CCS.
+</p><p>Put CCS in the Edit Perspective.  Select: <b>Window | Open Perspective | Other | CCS Edit</b>.  To start this new project select: <b>Project | New CCS Project</b>.  Enter a <b>Project Name</b>.  For <b>Family</b> select <b>C6000</b>.  For <b>Variant</b>, ignore the first drop-down box, and in the second choose <b>Generic C66xx Device</b>.  In the box just under <b>Project templates and examples</b> type in <i>hello</i>.  Under <i>OMP Examples</i> you will see some <i>Hello world example</i> projects.  Select the best one for your HW platform.  In this screen shot, the selection is for C6678.  Select <b>Next</b>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:612px;"><a href="File_Omp_h1_project_setup.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/3/3d/Omp_h1_project_setup.jpg" width="610" height="776" class="thumbimage" /></a>  <div class="thumbcaption">Hello world Project Setup</div></div></div></div>
+<p>The next dialog shows the RTSC Configuration Settings.  If only one version of the MCSDK is installed, then nothing more is required.  If more than one version of the MCSDK is installed, review the version numbers of the selected packages and insure they are from the desired MCSDK.  Do not forget the drop-down box at the top for the version of the XDCtools.  
+</p><p>Click <b>Finish</b>.  CCS creates the project, complete with source code, and adds an entry to the <b>Project Explorer</b> window.
+</p>
+<h3><span class="mw-headline" id="Project_Modifications">Project Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=10" title="Edit section: Project Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>One modification to the example project is required.
+</p><p>In the <b>Project Explorer</b> window, expand the set of files available under the new project.  Open the file <i>omp_config.cfg</i> by double-clicking on it.  The edit window has two tabs on the bottom left.  Select the <b>Source</b> tab.  Find the source line which begins <i>var OpenMP ...</i>  Change the code as follows ...
+</p>
+<pre>var OpenMP = xdc.useModule('ti.omp.utils.OpenMP');    // no change
+OpenMP.setNumProcessors(4);                           // no change
+OpenMP.autoDnldCore = false;                          // add this line
+</pre>
+<p>The new line disables the feature called auto-download.  A side effect of auto-download is that printf works only on core 0.
+</p><p>Save the change to the configuration file by entering control+S or selecting <b>File | Save</b>.
+</p>
+<h3><span class="mw-headline" id="Build_and_Load">Build and Load</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=11" title="Edit section: Build and Load">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The target configuration that should launch when this OpenMP project is debugged is the same one used for previous single core projects.  To check on this detail, choose <b>View | Target Configurations</b>.  Find that target configuration and insure it is the default.
+</p><p>In the <b>Project Explorer</b> window, insure the new project is selected.
+</p><p>Select the Debug icon.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:288px;"><a href="File_Omp_h2_debug_icon.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/1/1a/Omp_h2_debug_icon.JPG" width="286" height="62" class="thumbimage" /></a>  <div class="thumbcaption">Debug icon</div></div></div></div>
+<p>Next a dialog will come up which asks which CPU cores to load the program on.  Select cores 0-3, then click <b>OK</b>.  It will appear similar to this ...
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a href="File_Omp_h3_select_cores.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/d/d6/Omp_h3_select_cores.JPG" width="725" height="530" class="thumbimage" /></a>  <div class="thumbcaption">Select cores 0-3</div></div></div></div>
+<p>The following actions take place automatically:
+</p>
+<ul><li>CCS changes to the Debug perspective</li>
+<li>The project is built</li>
+<li>The target configuration is launched</li>
+<li>The target connection is made</li>
+<li>The program is loaded on cores 0-3</li>
+<li>The system begins execution and runs to the start of main on core 0</li></ul>
+<h3><span class="mw-headline" id="Execute_and_See_Output">Execute and See Output</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=12" title="Edit section: Execute and See Output">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Now you are ready to execute.  In the Debug window, click the Resume execution icon.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:439px;"><a href="File_Omp_h4_resume_icon.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/a/ae/Omp_h4_resume_icon.JPG" width="437" height="30" class="thumbimage" /></a>  <div class="thumbcaption">Resume execution</div></div></div></div>
+<p>The console window will show output similar to, but not exactly the same as, the following ...
+</p>
+<pre>[C66xx_0] Hello World from thread = 0
+[C66xx_0] Number of threads = 4
+[C66xx_1] Hello World from thread = 1
+[C66xx_2] Hello World from thread = 2
+[C66xx_3] Hello World from thread = 3
+</pre>
+<p>Because the threads are executing on the cores concurrently, there is no control over the order in which the output appears.  But you should see all of these lines.
+</p>
+<h3><span class="mw-headline" id="Tips_on_System_Startup">Tips on System Startup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=13" title="Edit section: Tips on System Startup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If things do not go smoothly, please see the article <a href="SystemAnalyzerTutorial7.html" title="SystemAnalyzerTutorial7">SystemAnalyzerTutorial7</a>.  That article is about running a tutorial for a tool  named Unified Instrumentation Architecture (UIA).  UIA is for analyzing system performance and behavior.  This tutorial contains several tips on how to use CCS to run OpenMP programs.  It is relevant to the versions of the MCSDK components listed near the beginning.
+</p>
+<h1><span class="mw-headline" id="Second_OpenMP_Project">Second OpenMP Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=14" title="Edit section: Second OpenMP Project">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Now try another project like hello world, but a bit more complicated.  It will serve as the basis for your future OpenMP projects.
+</p>
+<h3><span class="mw-headline" id="Project_Setup_2">Project Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=15" title="Edit section: Project Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Start it the same way as the hello world project.  But give it a different name, look for <i>matrix</i> among the examples, and choose the <i>OpenMP matrix vector multiplication example</i> for your system.  
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:613px;"><a href="File_Omp_h5_matvec_setup.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/2/23/Omp_h5_matvec_setup.JPG" width="611" height="777" class="thumbimage" /></a>  <div class="thumbcaption">Matrix vector multiply Project Setup</div></div></div></div>
+<h3><span class="mw-headline" id="Build_and_Execute">Build and Execute</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=16" title="Edit section: Build and Execute">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>All the remaining steps are the same as with the hello world project.
+</p><p>Upon executing, output in the console window should appear similar to ...
+</p>
+<pre>[C66xx_0] 
+[C66xx_0] Starting values of matrix A and vector b:
+[C66xx_0]   A[0]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[0]= 1.0
+[C66xx_0]   A[1]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[1]= 2.0
+[C66xx_0]   A[2]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[2]= 3.0
+[C66xx_0]   A[3]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[3]= 4.0
+[C66xx_0]   A[4]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[4]= 5.0
+[C66xx_0]   A[5]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[5]= 6.0
+[C66xx_0]   A[6]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[6]= 7.0
+[C66xx_0]   A[7]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[7]= 8.0
+[C66xx_0]   A[8]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[8]= 9.0
+[C66xx_0]   A[9]= 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0   b[9]= 10.0
+[C66xx_0] 
+[C66xx_0] Results by thread/row:
+[C66xx_0]   thread 0 did row 0	 c[0]=55.00	Running total= 55.00
+[C66xx_3]   thread 3 did row 9	 c[9]=550.00	Running total= 605.00
+[C66xx_1]   thread 1 did row 3	 c[3]=220.00	Running total= 825.00
+[C66xx_0]   thread 0 did row 1	 c[1]=110.00	Running total= 935.00
+[C66xx_1]   thread 1 did row 4	 c[4]=275.00	Running total= 1210.00
+[C66xx_2]   thread 2 did row 6	 c[6]=385.00	Running total= 1595.00
+[C66xx_0]   thread 0 did row 2	 c[2]=165.00	Running total= 1760.00
+[C66xx_1]   thread 1 did row 5	 c[5]=330.00	Running total= 2090.00
+[C66xx_2]   thread 2 did row 7	 c[7]=440.00	Running total= 2530.00
+[C66xx_2]   thread 2 did row 8	 c[8]=495.00	Running total= 3025.00
+[C66xx_0] 
+[C66xx_0] Matrix-vector total - sum of all c[] = 3025.00
+[C66xx_0] 
+</pre>
+<p>The parts before and after <i>Results by thread/row</i> should match, particularly the final result of 3025.00.  The <i>thread N</i> lines will vary, but there should be one line for each row 0-9.
+</p>
+<h1><span class="mw-headline" id="Start_Your_OpenMP_Project">Start Your OpenMP Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=17" title="Edit section: Start Your OpenMP Project">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Build your OpenMP project out of the matrix multiply project.  In the <b>Project Explorer</b> window, select the matrix multiply project, right-click and choose <b>Copy</b>.  Right-click again and choose <b>Paste</b>.  Give the new project a name.  It starts as a copy of the matrix multiply project in every respect, except the name.  Remove files, add files, and make the project your own.  Modifications to the omp_config.cfg file are not required for base functionality.
+</p>
+<h1><span class="mw-headline" id="Debugging_Tips">Debugging Tips</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=18" title="Edit section: Debugging Tips">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Suppose you want to immediately execute one of those example projects again.  You need to reset the CPU cores, reload the program, and run again.  Here is a good way to do that.
+</p><p>In the <b>Debug</b> window, select cores 0-3, right-click and choose <b>Group Core(s)</b>.  
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:562px;"><a href="File_Omp_h6_group_cores.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/1/1b/Omp_h6_group_cores.JPG" width="560" height="493" class="thumbimage" /></a>  <div class="thumbcaption">Group Cores 0-3</div></div></div></div>
+<p>Now reset the cores in the newly formed group.  Select the group and click the <b>CPU Reset</b> icon near the top right of the <b>Debug</b> window.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:232px;"><a href="File_Omp_h7_cpu_reset.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/8/8b/Omp_h7_cpu_reset.JPG" width="230" height="65" class="thumbimage" /></a>  <div class="thumbcaption">CPU Reset icon</div></div></div></div>
+<p>Then reload the program with the menu selection <b>Run | Load | Reload Program</b>.  Now you are ready to resume execution as before.  Compare with the output you got last time, and see how some lines are in a different order.
+</p>
+<h1><span class="mw-headline" id="How_to_Obtain_Support">How to Obtain Support</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit&amp;section=19" title="Edit section: How to Obtain Support">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Post your questions and suspected bugs to the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/compiler/f/343.aspx">compiler forum</a> with the tag <tt>openmp</tt>.  Please use the tag.  Use of the tag triggers an e-mail to the current support team.  Without the tag, the issue may go unnoticed for some time.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130182117
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.065 seconds
+Real time usage: 0.070 seconds
+Preprocessor visited node count: 103/1000000
+Preprocessor generated node count: 142/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1986/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:18400-0!canonical and timestamp 20201130182116 and revision id 235579
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OpenMP on C6000</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>OpenMP on C6000</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>OpenMP on C6000</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>OpenMP on C6000</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>OpenMP on C6000</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OpenMP on C6000</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>OpenMP on C6000</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>OpenMP on C6000</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>OpenMP on C6000</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;oldid=235579">https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;oldid=235579</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=OpenMP+on+C6000" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="OpenMP_on_C6000.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:OpenMP_on_C6000&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="OpenMP_on_C6000.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/OpenMP_on_C6000.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/OpenMP_on_C6000.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;oldid=235579" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=OpenMP_on_C6000&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 September 2018, at 05:05.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.065","walltime":"0.070","ppvisitednodes":{"value":103,"limit":1000000},"ppgeneratednodes":{"value":142,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1986,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130182117","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":247});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/OpenMP_on_C6000 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:30:53 GMT -->
+</html>

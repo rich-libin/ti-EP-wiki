@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Filesystem_in_NOR_or_NAND by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:56:22 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Filesystem in NOR or NAND - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Filesystem_in_NOR_or_NAND","wgTitle":"Filesystem in NOR or NAND","wgCurRevisionId":15115,"wgRevisionId":15115,"wgArticleId":110,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","File system","Flash"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Filesystem_in_NOR_or_NAND","wgRelevantArticleId":110,"wgRequestId":"d3ccf32cd44ff2233a2d84b3","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Filesystem_in_NOR_or_NAND rootpage-Filesystem_in_NOR_or_NAND skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Filesystem in NOR or NAND</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>After <a href="Linux_Toolchain.html#KernelLinux" title="Linux Toolchain">kernel</a> booted, it tries to mount a file system. Using Linux on DaVinci, there are several options where this file system can come from. Options are
+</p>
+<ul><li>Harddisk (or CompactFlash card)</li>
+<li>MMC/SD card</li>
+<li><a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Network_file_system">NFS</a> (see <a rel="nofollow" class="external text" href="http://focus.ti.com/general/docs/techdocsabstract.tsp?abstractName=sprue66c">DVEVM Getting Started Guide, sprue66c.pdf, section 4.3.4</a>)</li>
+<li><a href="Initrd.html" title="Initrd">Ramdisk</a> (avoid this old model)</li>
+<li>Initramfs, usually a very small part of the kernel image</li>
+<li>(Flash) file system in NOR or NAND</li></ul>
+<p>During development and/or debugging phases, it is useful to have a temporary file system (e.g. initramfs, NFS, or removable media) not stored on the target itself.  For production ready devices or if file system doesn't change any more, the file system has to be persistent on the target. Besides file system on hard disk, (flash) file system in NOR flash or NAND flash are two options. This article is about how to put file systems in NOR and/or NAND and how to handle them with Linux.
+</p><p>We first assume that system is booted using one of the temporary (development) file systems (initramfs, NFS, or removable media) which kernel mounts as initial file system and which then can be used to create file system in NOR or NAND flash. Once this is done, in second step, support for this temporary (development) file system can be disabled (in bootloader and in kernel) and kernel directly can mount file system in NOR or NAND flash.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Bootloader"><span class="tocnumber">1</span> <span class="toctext">Bootloader</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#DM6446_DVEVM_configuration"><span class="tocnumber">1.1</span> <span class="toctext">DM6446 DVEVM configuration</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#Kernel_configuration"><span class="tocnumber">2</span> <span class="toctext">Kernel configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#IDE"><span class="tocnumber">2.1</span> <span class="toctext">IDE</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#NOR"><span class="tocnumber">2.2</span> <span class="toctext">NOR</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#NAND"><span class="tocnumber">2.3</span> <span class="toctext">NAND</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#File_systems"><span class="tocnumber">3</span> <span class="toctext">File systems</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#JFFS2"><span class="tocnumber">3.1</span> <span class="toctext">JFFS2</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#UBIFS"><span class="tocnumber">3.2</span> <span class="toctext">UBIFS</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#YAFFS2"><span class="tocnumber">3.3</span> <span class="toctext">YAFFS2</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#File_system_preparation"><span class="tocnumber">4</span> <span class="toctext">File system preparation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#MTD_handling"><span class="tocnumber">4.1</span> <span class="toctext">MTD handling</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Mount"><span class="tocnumber">4.2</span> <span class="toctext">Mount</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Inital_file_system"><span class="tocnumber">5</span> <span class="toctext">Inital file system</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Content_of_file_system"><span class="tocnumber">5.1</span> <span class="toctext">Content of file system</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Command_line_options"><span class="tocnumber">5.2</span> <span class="toctext">Command line options</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Bootloader">Bootloader</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=1" title="Edit section: Bootloader">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Using <a href="DVEVM_and_DVSDK_overview.html" title="DVEVM and DVSDK overview">DaVinci DM6446 DVEVM</a>, NOR or NAND can't be <a rel="nofollow" class="external text" href="http://linux.omap.com/pipermail/davinci-linux-open-source/2006-October/001151.html">accessed at the same time</a> (both connected to chip select CS2 selectable using J4). You have to configure if system should be able to access NOR <i>or</i> NAND flash. Seeing both at the same time isn't possible. Therefore, using DM6446 DVEVM, you have to configure the board to start from NOR to deal with NOR flash file system or from NAND to deal with NAND flash file system. This includes having a boot loader (e.g. U-Boot) in the flash you want to use.
+</p><p>The DM355 EVM normally uses NAND booting, so you don't need to configure it specially unless you want to get the boot loader from an SD card.
+</p>
+<h3><span class="mw-headline" id="DM6446_DVEVM_configuration">DM6446 DVEVM configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=2" title="Edit section: DM6446 DVEVM configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For <b>NOR</b>:
+</p>
+<ul><li>set jumper J4 to FLASH</li>
+<li>set S3-1 to ON and S3-2 to OFF (NOR boot)</li>
+<li>set S3-3 to ON (16-bit CS2 bus width)</li></ul>
+<p>For <b>NAND</b>:
+</p>
+<ul><li>set jumper J4 to NAND</li>
+<li>set S3-1 and S3-2 to OFF (NAND boot)</li>
+<li>set S3-3 to OFF (8-bit CS2 bus width)</li></ul>
+<p>Having set these configurations, make sure you can completely boot in this configuration. E.g. having a boot loader in NOR or NAND flash (e.g. U-Boot) <a href="RBL_UBL_and_host_program.html" title="RBL UBL and host program">[1]</a> <a href="Flashing_NAND_Flash.html" title="Flashing NAND Flash">[2]</a>, being able to start the kernel (e.g. using TFTP) and mounting a temporary file system (e.g. Ramdisk or via NFS).
+</p>
+<h2><span class="mw-headline" id="Kernel_configuration">Kernel configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=3" title="Edit section: Kernel configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Depending on NOR or NAND, you have to set different kernel configuration options.
+</p>
+<h3><span class="mw-headline" id="IDE">IDE</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=4" title="Edit section: IDE">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><i><b>Important:</b></i>  the dm6446 (and dm357) can't use the external memory interface (EMIF) for NOR/NAND and, at the same time, access the IDE disk (or CF storage).  One common configuration uses Flash (NOR or NAND) just to boot, and uses the IDE interface for everything else.  If you're not using Flash at run time, don't bother to configure it into your kernel.
+</p><p>To disable IDE, just make sure that configuration option
+</p>
+<pre>Device drivers -&gt; ATA/ATAPI/MFM/RLL support
+</pre>
+<p>is <i>disabled</i>.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="NOR">NOR</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=5" title="Edit section: NOR">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Make sure the following kernel options are set (via <i>make menuconfig</i>):
+</p>
+<pre>CONFIG_MTD=y
+CONFIG_MTD_PARTITIONS=y
+
+CONFIG_MTD_CHAR=y
+CONFIG_MTD_BLKDEVS=y
+CONFIG_MTD_BLOCK=y
+
+CONFIG_MTD_CFI=y
+CONFIG_MTD_GEN_PROBE=y
+CONFIG_MTD_MAP_BANK_WIDTH_1=y
+CONFIG_MTD_MAP_BANK_WIDTH_2=y
+CONFIG_MTD_MAP_BANK_WIDTH_4=y
+CONFIG_MTD_CFI_I1=y
+CONFIG_MTD_CFI_I2=y
+CONFIG_MTD_CFI_AMDSTD=y
+CONFIG_MTD_CFI_UTIL=y
+
+CONFIG_MTD_PHYSMAP=y
+CONFIG_MTD_PHYSMAP_START=0x8000000
+CONFIG_MTD_PHYSMAP_LEN=0
+CONFIG_MTD_PHYSMAP_BANKWIDTH=2
+</pre>
+<p>Note: DaVinci supports only <i>16MByte</i> NOR. So even if your NOR chip is physically larger (the original EVM boards used 32 MB parts, newer ones use 16 MB parts), you will only get 16MByte. While booting, this results in message
+</p>
+<pre>Reducing visibility of 32768KiB chip to 16384KiB
+</pre>
+<h3><span class="mw-headline" id="NAND">NAND</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=6" title="Edit section: NAND">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Make sure the following kernel options are set (via <i>make menuconfig</i>):
+</p>
+<pre>CONFIG_MTD=y
+CONFIG_MTD_PARTITIONS=y
+
+CONFIG_MTD_CHAR=y
+CONFIG_MTD_BLKDEVS=y
+CONFIG_MTD_BLOCK=y
+
+CONFIG_MTD_NAND=y
+CONFIG_MTD_NAND_VERIFY_WRITE=y
+CONFIG_MTD_NAND_IDS=y
+CONFIG_MTD_NAND_DAVINCI=y
+</pre>
+<p>Note: while the DaVinci NAND driver is now in mainline kernels, 4-bit ECC support (for DM355 and so on) is not merged yet.
+</p>
+<h2><span class="mw-headline" id="File_systems">File systems</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=7" title="Edit section: File systems">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Because of the special physical behavior of flash, special file systems for these devices are developed.  See the <a rel="nofollow" class="external text" href="http://www.linux-mtd.infradead.org/">Linux-MTD</a> website for the most current information about mainline filesystems like JFFS2 and UBIFS, and associated flash-related userspace tools.
+</p><p><a rel="nofollow" class="external text" href="http://sourceware.org/jffs2/">Journaling flash file system 2 (JFFS2)</a> is part of the standard kernel and mostly used for NOR devices.
+</p><p>While JFFS2 can be used for NAND devices as well, <a rel="nofollow" class="external text" href="http://www.yaffs.net/">Yet Another File System 2 (YAFFS2)</a> was specifically designed for NAND devices.  See <a rel="nofollow" class="external text" href="http://www.yaffs.net/comparison-yaffs-vs-jffs">jffs vs. yaffs comparison</a> for more infos.  YAFFS2 is currently not part of the standard kernel though. Using recent git kernel, you can easily patch it to use YAFFS2.
+</p><p>Recent mainline kernels (2.6.27+) add support for <a rel="nofollow" class="external text" href="http://www.linux-mtd.infradead.org/doc/ubifs.html">UBIFS</a>, which can be thought of as a JFFS2 successor with significant improvements in scalability and NAND support.  
+</p>
+<h3><span class="mw-headline" id="JFFS2">JFFS2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=8" title="Edit section: JFFS2">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As JFFS2 is part of the standard git kernel, only thing to configure kernel to be able to use JFFS2 is to enable in make menuconfig:
+</p>
+<pre>CONFIG_JFFS2_FS=y
+CONFIG_JFFS2_FS_DEBUG=0
+CONFIG_JFFS2_FS_WRITEBUFFER=y
+CONFIG_JFFS2_ZLIB=y
+CONFIG_JFFS2_RTIME=y
+</pre>
+<p>Note: Regarding JFFS2 see <a href="Create_a_JFFS2_Target_Image.html" title="Create a JFFS2 Target Image">Create a JFFS2 Target Image</a> and <a href="Put_JFFS2_Image_to_Flash.html" title="Put JFFS2 Image to Flash">Put JFFS2 Image to Flash</a> articles as well.
+</p>
+<h3><span class="mw-headline" id="UBIFS">UBIFS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=9" title="Edit section: UBIFS">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>UBIFS is also part of the standard GIT kernel.  To configure it, you need to support UBI (in the MTD section) as well as UBIFS (in the filesystem section):
+</p>
+<pre>CONFIG_MTD_UBI=y
+CONFIG_UBIFS_FS=y
+</pre>
+<p>You will also want the userspace tools for UBI and UBIFS.
+</p>
+<h3><span class="mw-headline" id="YAFFS2">YAFFS2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=10" title="Edit section: YAFFS2">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As mentioned above, YAFFS2 is not part of the (git) kernel. Follow the download instruction on <a rel="nofollow" class="external text" href="http://www.yaffs.net/node/346">YAFFS2 download page</a> how to use cvs do get recent YAFFS2 sources.
+</p><p>Once you downloaded the sources, patch the kernel with YAFFS2 easily using <i>patch-ker.sh</i> part of the downloaded YAFFS2 sources.
+</p><p>Note: The installation instructions for YAFFS2 on <a rel="nofollow" class="external text" href="http://www.yaffs.net/howto-incorporate-yaffs">YAFFS2 page</a> are <i>outdated</i>. Once downloaded the source using cvs, follow the instructions given in file <i>README-linux-patch</i> how to use patch script <i>patch-ker.sh</i>.
+</p><p>Then, configure your kernel:
+</p>
+<pre>CONFIG_YAFFS_FS=y
+CONFIG_YAFFS_YAFFS1=y
+CONFIG_YAFFS_YAFFS2=y
+CONFIG_YAFFS_AUTO_YAFFS2=y
+CONFIG_YAFFS_SHORT_NAMES_IN_RAM=y
+</pre>
+<h2><span class="mw-headline" id="File_system_preparation">File system preparation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=11" title="Edit section: File system preparation">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="MTD_handling">MTD handling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=12" title="Edit section: MTD handling">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Now, you should be able to boot a kernel with NAND or NOR and the file system you selected.
+</p><p>Then, to be able to use kernels <a rel="nofollow" class="external text" href="http://www.linux-mtd.infradead.org/">MTD (MemoryTechnologyDevices)</a> subsystem from user space, you need some device nodes in your file system:
+</p>
+<pre>crw-rw-rw- 1 root root 90,0 Jul 25 2002 /dev/mtd0
+brw-rw-rw- 1 root disk 31,0 Jul 25 2002 /dev/mtdblock0
+...
+crw-rw-rw- 1 root root 90,6 Jul 25 2002 /dev/mtd3
+brw-rw-rw- 1 root disk 31,3 Jul 25 2002 /dev/mtdblock3
+</pre>
+<p>If you don't have these yet, use <i><a rel="nofollow" class="external text" href="http://www.linuxcommand.org/man_pages/mknod1.html">mknod</a></i> command to create them. 
+</p><p>If you have more than one partition in your flash device (depends on NOR and NAND kernel configuration), you have to create additional device nodes mtd<b>x</b> and mtdblock<b>x</b> for each additional partition. Note that the minor for mtdx nodes has to be an even number.
+</p><p>Use /proc/mtd to get information on how many partitions are currently configured by the kernels flash driver. For NAND on DVEVM you might get e.g.:
+</p>
+<pre>&gt; cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 03b00000 00004000 "User Space"
+</pre>
+<p>This has only one partition and a mtd0/mtdblock0 device node pair is sufficient.
+</p><p>For NOR and NAND on DVEVM you will get e.g.:
+</p>
+<pre>&gt; cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00040000 00010000 "bootloader"
+mtd1: 00010000 00010000 "params"
+mtd2: 00200000 00010000 "kernel"
+mtd3: 00db0000 00010000 "filesystem"
+</pre>
+<p>This has four partitions, but you most probably don't want to touch bootloader, params and kernel using MTD subsystem (cause you handle it with U-Boot). Thus, a mtd3/mtdblock3 device node would be sufficient here.
+</p><p>Note: You always need a pair mtdx/mtdblockx of device nodes to access your flash file system. The mtdx is used to access the raw flash device, the mtdblockx is used to access the disk/block established in the raw flash.
+</p><p>Then, you need <a rel="nofollow" class="external text" href="http://www.linux-mtd.infradead.org/doc/general.html">MTD User modules</a> to erase and prepare your NOR or NAND file system. E.g. using NAND on DVEVM:
+</p>
+<pre>&gt; flash_eraseall -j /dev/mtd0
+Erasing 16 Kibyte @ 3afc000 -- 100&#160;% complete. Cleanmarker written at 3afc000. 
+</pre>
+<p>E.g. using NOR on DVEVM:
+</p>
+<pre>&gt; flash_eraseall -j /dev/mtd3
+Erasing 64 Kibyte @ da0000 -- 99&#160;% complete. Cleanmarker written at da0000.
+</pre>
+<p>Note: Repeat <i>flash_eraseall -j /dev/mtd<b>x</b></i> on all devices you want to use.
+</p><p>Note: The <i>flash_eraseall -j</i> is the same for NOR or NAND devices if you use <i>JFFS2</i>.
+</p><p>Note: Use the <i>-j</i> option only if you will use JFFS2 for this partition. For YAFFS2 omit the -j option and simply use <i>flash_eraseall /dev/mtd<b>x</b>.</i>
+</p><p>Note: To get MTD User modules, use git snapshot (<i>snapshot</i> link) at right side of <a rel="nofollow" class="external text" href="http://git.infradead.org/?p=mtd-utils.git;a=summary">MTD User modules git repository</a>.
+</p>
+<h3><span class="mw-headline" id="Mount">Mount</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=13" title="Edit section: Mount">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>After all this preparation, you should be able to mount your new created file system in flash. Assuming you have a directory /mnt/nand or /mnt/nor to mount the new (empty) file system to, do the following.
+</p><p>For NOR e.g.:
+</p>
+<pre>mount -t jffs2 /dev/mtdblock<b>3</b> /mnt/nor
+</pre>
+<p>For NAND e.g.:
+</p>
+<pre>mount -t yaffs2 /dev/mtdblock<b>0</b> /mnt/nand
+</pre>
+<p>Note: Replace <b>0</b> or <b>3</b> above with the block number you want to use.
+</p><p>Note: Above assumes that you want to use JFFS2 for NOR and YAFFS2 for NAND. You can use each file system for NAND <i>and</i> NOR as well, thus JFFS2 is recommended for NOR and YAFFS2 for NAND.
+</p>
+<h2><span class="mw-headline" id="Inital_file_system">Inital file system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=14" title="Edit section: Inital file system">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you don't want to boot from the file system established above in NOR or NAND, everything above is sufficient. Maybe you want to add the mount command to a startup script so it is done automatically at boot up.
+</p><p>But if you want to use NOR or NAND file system established above as an initial file system the kernel mounts at startup, you have to ensure some additional points.
+</p>
+<h3><span class="mw-headline" id="Content_of_file_system">Content of file system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=15" title="Edit section: Content of file system">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>You need a complete boot file system in NOR or NAND file system. This comprises e.g. device nodes, init program and scripts etc.
+</p><p>Easiest way is copy content of your development files system (Ramdisk, NFS) to flash file system. Cause you have to ensure that device nodes, hard and soft links etc are not destroyed while file system is copied, using tar is a good way. E.g. tar your target file system, make the tar file containing your file system available on the target (e.g. via NFS) and then mount flash file system:
+</p>
+<pre>&gt; mount -t jffs2 /dev/mtdblock3 /mnt/nor
+&gt; <i>nfs mount to e.g. /mnt/nfs</i>
+&gt; cd /mnt/nor
+&gt; tar -xvf /mnt/nfs/ramdisk_content.tar
+</pre>
+<h3><span class="mw-headline" id="Command_line_options">Command line options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit&amp;section=16" title="Edit section: Command line options">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Now that root file system is in flash, you can disable temporary development file system in kernel command line options:
+</p><p>For NOR use e.g.:
+</p>
+<pre>... root=/dev/mtdblock3 rootfstype=jffs2 ...
+</pre>
+<p>For NAND use e.g.:
+</p>
+<pre>... root=/dev/mtdblock0 rootfstype=yaffs2 ...
+</pre>
+<p>A complete command line option to set in the UBoot prompt would then be e.g.:
+</p>
+<pre>setenv bootargs console=ttyS0,115200n8 root=/dev/mtdblock0 rootfstype=yaffs2 rw mem=32M ip=off</pre>
+<p>Note: If you want to reduce kernel size, don't forget to remove options for temporary file systems (e.g. NFS or Ramdisk) from your kernel once mounting persistent file system in NOR or NAND.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130215403
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.037 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 66/1000000
+Preprocessor generated node count: 88/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 105/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:110-0!canonical and timestamp 20201130215403 and revision id 15115
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Filesystem in NOR or NAND</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Filesystem in NOR or NAND</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Filesystem in NOR or NAND</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Filesystem in NOR or NAND</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Filesystem in NOR or NAND</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Filesystem in NOR or NAND</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Filesystem in NOR or NAND</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Filesystem in NOR or NAND</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Filesystem in NOR or NAND</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;oldid=15115">https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;oldid=15115</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_File_system.html" title="Category:File system">File system</a></li><li><a href="Category_Flash.html" title="Category:Flash">Flash</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Filesystem+in+NOR+or+NAND" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Filesystem_in_NOR_or_NAND.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Filesystem_in_NOR_or_NAND&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Filesystem_in_NOR_or_NAND.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Filesystem_in_NOR_or_NAND.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Filesystem_in_NOR_or_NAND.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;oldid=15115" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Filesystem_in_NOR_or_NAND&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 23 August 2009, at 20:59.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.037","walltime":"0.038","ppvisitednodes":{"value":66,"limit":1000000},"ppgeneratednodes":{"value":88,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":105,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130215403","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":230});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Filesystem_in_NOR_or_NAND by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:56:24 GMT -->
+</html>

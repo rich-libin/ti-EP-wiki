@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Program_Cache_Layout by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:19 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Program Cache Layout - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Program_Cache_Layout","wgTitle":"Program Cache Layout","wgCurRevisionId":49072,"wgRevisionId":49072,"wgArticleId":2580,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Program_Cache_Layout","wgRelevantArticleId":2580,"wgRequestId":"123d0ce2f51e179ad00e8171","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Program_Cache_Layout rootpage-Program_Cache_Layout skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Program Cache Layout</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>The version 7.0.0 release of the C6000 Code Generation Tools includes new capability to help you develop better program cache efficiency into your applications.  Program cache layout is the process of placing code in memory to minimize the occurrence of conflict misses in the program cache.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Background_and_Motivation"><span class="tocnumber">1</span> <span class="toctext">Background and Motivation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Problem_Description"><span class="tocnumber">1.1</span> <span class="toctext">Problem Description</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Approach"><span class="tocnumber">1.2</span> <span class="toctext">Approach</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Goal"><span class="tocnumber">1.3</span> <span class="toctext">Goal</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#What_Level_of_Performance_Improvements_Can_You_Expect_to_See.3F"><span class="tocnumber">2</span> <span class="toctext">What Level of Performance Improvements Can You Expect to See?</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Evaluating_L1P_Cache_Usage"><span class="tocnumber">2.1</span> <span class="toctext">Evaluating L1P Cache Usage</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Further_Resources"><span class="tocnumber">2.2</span> <span class="toctext">Further Resources</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Program_Cache_Layout_Related_Features_and_Capabilities"><span class="tocnumber">3</span> <span class="toctext">Program Cache Layout Related Features and Capabilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Path_Profiler"><span class="tocnumber">3.1</span> <span class="toctext">Path Profiler</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#Analysis_Options"><span class="tocnumber">3.1.1</span> <span class="toctext">Analysis Options</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Environment_Variables"><span class="tocnumber">3.1.2</span> <span class="toctext">Environment Variables</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-12"><a href="#Cache_Layout_Tool.2C_clt6x"><span class="tocnumber">3.2</span> <span class="toctext">Cache Layout Tool, clt6x</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Linker"><span class="tocnumber">3.3</span> <span class="toctext">Linker</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#--preferred_order_Option"><span class="tocnumber">3.3.1</span> <span class="toctext">--preferred_order Option</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#unordered.28.29_Linker_Command_File_.28LCF.29_Operator"><span class="tocnumber">3.3.2</span> <span class="toctext">unordered() Linker Command File (LCF) Operator</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Program_Cache_Layout_Development_Flow"><span class="tocnumber">4</span> <span class="toctext">Program Cache Layout Development Flow</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#Gather_Dynamic_Profile_Information"><span class="tocnumber">4.1</span> <span class="toctext">Gather Dynamic Profile Information</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Generate_Preferred_Function_Order_from_Dynamic_Profile_Information"><span class="tocnumber">4.2</span> <span class="toctext">Generate Preferred Function Order from Dynamic Profile Information</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Utilize_Preferred_Function_Order_in_Re-Build_of_Application"><span class="tocnumber">4.3</span> <span class="toctext">Utilize Preferred Function Order in Re-Build of Application</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-20"><a href="#Comma-Separated_Values_.28CSV.29_Files_with_WCG_Information"><span class="tocnumber">5</span> <span class="toctext">Comma-Separated Values (CSV) Files with WCG Information</span></a></li>
+<li class="toclevel-1 tocsection-21"><a href="#Linker_Command_File_Operator_-_unordered.28.29"><span class="tocnumber">6</span> <span class="toctext">Linker Command File Operator - unordered()</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#Basics"><span class="tocnumber">6.1</span> <span class="toctext">Basics</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#About_DOT_Expressions_in_the_Presence_of_unordered.28.29"><span class="tocnumber">6.2</span> <span class="toctext">About DOT Expressions in the Presence of unordered()</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#GROUPs_and_UNIONs"><span class="tocnumber">6.3</span> <span class="toctext">GROUPs and UNIONs</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#Cache_Layout_Tool_Tutorial"><span class="tocnumber">7</span> <span class="toctext">Cache Layout Tool Tutorial</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#Things_To_Be_Aware_Of"><span class="tocnumber">8</span> <span class="toctext">Things To Be Aware Of</span></a></li>
+<li class="toclevel-1 tocsection-27"><a href="#Addendum:_Using_7.x.x_CLT_Capability_with_6.1.x_CGT"><span class="tocnumber">9</span> <span class="toctext">Addendum: Using 7.x.x CLT Capability with 6.1.x CGT</span></a>
+<ul>
+<li class="toclevel-2 tocsection-28"><a href="#General_Approach"><span class="tocnumber">9.1</span> <span class="toctext">General Approach</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Constraints_.2F_Assumptions"><span class="tocnumber">9.2</span> <span class="toctext">Constraints / Assumptions</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Development_Flow"><span class="tocnumber">9.3</span> <span class="toctext">Development Flow</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#An_Example"><span class="tocnumber">9.4</span> <span class="toctext">An Example</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Background_and_Motivation">Background and Motivation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=1" title="Edit section: Background and Motivation">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Problem_Description">Problem Description</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=2" title="Edit section: Problem Description">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>A program cache miss happens when an instruction fetch fails to read an instruction from the program cache and the processor is required to access the instruction from the next level of memory. A request to L2 or external memory has a much higher latency than an access from the first level instruction cache.
+</p>
+<ul><li>Effective utilization of the L1P instruction cache is an important part of getting the best performance from your processor.</li>
+<li>In the C6x family of processors, L1P instruction cache misses can cause significant overhead because the L1P cache is direct-mapped.</li>
+<li>Some applications (like h264, for example) can spend 30+% of the processor's time in L1P stall cycles due to L1P cache misses.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Approach">Approach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=3" title="Edit section: Approach">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Many L1P cache misses are conflict misses.</li>
+<li>Conflict misses occur when the cache has recently evicted a block of code that is now needed again.  In a program cache this often occurs when two frequently executed blocks of code (usually from different functions) interleave their execution and are mapped to the same  cache line.</li></ul>
+<dl><dd>For example, suppose there is a call to function B from inside a loop in function A.  Suppose also that the code for function A's loop is mapped to the same cache line as a block of code from function B that is executed every time that B is called.  Each time B is called from within this loop, the loop code in function A will be evicted from the cache by the code in B that is mapped to the same cache line.  Even worse, when B returns to A, the loop code in A will evict the code from function B that is mapped to the same cache line.</dd></dl>
+<p><a href="File_ConflictMissPic3.html" class="image"><img alt="ConflictMissPic3.jpg" src="https://processors.wiki.ti.com/images/1/1e/ConflictMissPic3.jpg" width="871" height="427" /></a>
+</p>
+<dl><dd>Every iteration through the loop will cause 2 program cache conflict misses.  If the loop is heavily traversed, then the number of processor cycles lost to program cache stalls can become quite large.</dd></dl>
+<ul><li>Many program cache conflict misses can be avoided with more intelligent placement of functions that are active at the same time.  Program cache efficiency can be significantly improved using code placement strategies that utilize dynamic profile information that is gathered during the run of an instrumented application.</li></ul>
+<dl><dd>Consider another example, where function A calls function B, and function B calls function C. If these functions are all placed on the same cache line, then B will evict A every time that A calls it, and C will evict B every time that B calls it.</dd>
+<dd></dd></dl>
+<p><a href="File_ConflictMissPic1.html" class="image"><img alt="ConflictMissPic1.jpg" src="https://processors.wiki.ti.com/images/d/df/ConflictMissPic1.jpg" width="873" height="383" /></a>
+</p>
+<dl><dd>With intelligent placement, placing A, B, and C next to each other, we can avoid the cache conflict misses between them.<a href="File_ConflictMissPic2.html" class="image"><img alt="ConflictMissPic2.jpg" src="https://processors.wiki.ti.com/images/5/58/ConflictMissPic2.jpg" width="449" height="416" /></a></dd></dl>
+<ul><li>In the version 7.0 release of the C6000 code generation tools, a new cache layout tool, clt6x, is included.  clt6x will take dynamic profile information in the form of a weighted call graph (WCG) and create a preferred function order command file that can be input into the linker to guide the placement of function subsections.</li></ul>
+<h2><span class="mw-headline" id="Goal">Goal</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=4" title="Edit section: Goal">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Use cache layout tool to help improve your program locality and reduce the number of L1P cache conflict misses that occur during the run of your application, thereby improving your application's performance.</li></ul>
+<h1><span id="What_Level_of_Performance_Improvements_Can_You_Expect_to_See?"></span><span class="mw-headline" id="What_Level_of_Performance_Improvements_Can_You_Expect_to_See.3F">What Level of Performance Improvements Can You Expect to See?</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=5" title="Edit section: What Level of Performance Improvements Can You Expect to See?">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>If your application does not suffer from inefficient usage of the L1P cache, then the new program cache layout capability will not have any affect on the performance of your application. Before you invest development time into applying the program cache layout tooling to your application, the usage of the L1P cache in your application should be analyzed.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Evaluating_L1P_Cache_Usage">Evaluating L1P Cache Usage</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=6" title="Edit section: Evaluating L1P Cache Usage">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Spending some time evaluating the L1P cache usage efficiency of your application will not only help you determine whether or not your application might benefit from using program cache layout, but it will also provide a rough estimate as to how much performance improvement you can reasonably expect from applying program cache layout.
+</p><p>There are several resources available to help you evaluate L1P cache usage in your application. One way of doing this is to use the Function Profiling capability in Code Composer Studio (available in CCS version 4 or later).
+</p><p>For example, if CCS is configured to use the "C64+ Megamodule Cycle Accurate Simulator" target configuration, you can set up the profiling capability to gather L1P cache information while your application is running. You can find the basic information about enabling the function profiling capability <a href="Profiler.html" title="Profiler"><i>here</i></a>. To turn on collection of L1P cache information on a function by function basis, you will want to expand the L1P button while you have the function profiling "Properties" window open:
+</p><p><a href="File_DevFlowPics4.html" class="image"><img alt="DevFlowPics4.jpg" src="https://processors.wiki.ti.com/images/3/3a/DevFlowPics4.jpg" width="349" height="717" /></a>
+</p><p>Then click on the buttons under the L1P expansion that you are interested in. In the above image, the profiler is set up to collect all of the available information about the L1P cache.
+</p><p>The number of CPU stall cycles that occur due to L1P cache misses gives you a reasonable upper bound estimate of the number of CPU cycles that you may be able to recover with the use of the program cache layout tooling in your application. Please be aware that the performance impact due to program cache layout will tend to vary for the different data sets that are run through your application.
+</p>
+<h2><span class="mw-headline" id="Further_Resources">Further Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=7" title="Edit section: Further Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Information about profiling with Debug Server Scripting (DSS) can be found <a href="Profiling_with_DSS.html" title="Profiling with DSS"><i>here</i></a>.</li>
+<li>Information about mining information from the XML output of the ofd6x utility can be found in the <a href="http://software-dl.ti.com/ccs/esd/documents/sdto_cgt_cg_xml_overview.html" title="Code Generation Tools XML Processing Scripts"><i>Code Generation Tools XML Processing Scripts</i></a> wiki article.</li>
+<li>This is a link to a presentation that was given at the 2008 TI Developer's Conference about C64+ cache visibility and application-level techniques to improve memory performance (<a rel="nofollow" class="external free" href="http://wiki.sanb.design.ti.com/twiki/pub/SDSApps/ConferenceCommitments/TIDC08_SystemLevelCacheVisibilityandOptimization.ppt">http://wiki.sanb.design.ti.com/twiki/pub/SDSApps/ConferenceCommitments/TIDC08_SystemLevelCacheVisibilityandOptimization.ppt</a>)</li></ul>
+<h1><span class="mw-headline" id="Program_Cache_Layout_Related_Features_and_Capabilities">Program Cache Layout Related Features and Capabilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=8" title="Edit section: Program Cache Layout Related Features and Capabilities">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The C6000 CGT v7.0 introduces some new features and capabilities that can be used in conjunction with the cache layout tool, clt6x.  The following is a summary:
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Path_Profiler">Path Profiler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=9" title="Edit section: Path Profiler">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The C6000 CGT includes a path profiling utility, pprof6x, that is run from the compiler, cl6x. The pprof6x utility is invoked by the compiler when the <b>--gen_profile</b> or the <b>--use_profile</b> command is used from the compiler command line:
+</p>
+<pre> cl6x <b>--gen_profile</b> ... file.c
+ cl6x <b>--use_profile</b> ... file.c
+</pre>
+<p>For further information about Profile Based Optimization and a more detailed description of the profiling infrastructure within the C6000 CGT, please see the latest <i>TMS320C6x Optimizaing C Compiler User's Guide</i>.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Analysis_Options">Analysis Options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=10" title="Edit section: Analysis Options">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre> "--analyze=callgraph" - Instructs the compiler to generate weighted call graph (WCG)
+                         analysis information.
+</pre>
+<pre> "--analyze=codecov"   - Instructs the compiler to generate code coverage analysis 
+                         information.  This option replaces the previous --codecov 
+                         option.
+</pre>
+<pre> "--analyze_only"      - Halt compilation after generation of analysis information is 
+                         completed.
+</pre>
+<ul><li>Behavior</li></ul>
+<dl><dd><ol><li>pprof6x will append code coverage/WCG analysis information to existing CSV files that contain the same type of analysis information.</li>
+<li>pprof6x will check to make sure that an existing CSV file contains analysis information that is consistent with the type of analysis information it is being asked to generate (whether it be code coverage or WCG analysis).  Attempts to mix code coverage and WCG analysis information in the same output CSV file will be detected and pprof6x will emit a fatal error and abort.</li></ol></dd></dl>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Environment_Variables">Environment Variables</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=11" title="Edit section: Environment Variables">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To assist with the management of output CSV analysis files, pprof6x supports two new environment variables:
+</p>
+<pre> <b>TI_WCGDATA</b>      - Allows user to specify single output CSV file for all WCG analysis
+                   information. New information will be appended to the CSV file 
+                   identified by this environment variable, if the file already exists.
+</pre>
+<pre> <b>TI_ANALYSIS_DIR</b> - Specifies the directory in which the output analysis file will be 
+                   generated. The same environment variable can be used for both code
+                   coverage information and weighted call graph information (all 
+                   analysis files generated by pprof6x will be written to the 
+                   directory specified by the TI_ANALYSIS_DIR environment variable).
+</pre>
+<ul><li>NOTE: The existing TI_COVDIR environment variable is still supported when generating code coverage analysis, but is overridden in the presence of a defined TI_ANALYSIS_DIR environment variable.</li></ul>
+<p><br />
+</p>
+<h2><span id="Cache_Layout_Tool,_clt6x"></span><span class="mw-headline" id="Cache_Layout_Tool.2C_clt6x">Cache Layout Tool, clt6x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=12" title="Edit section: Cache Layout Tool, clt6x">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<pre> usage: "clt6x &lt;CSV files with WCG info&gt; -o forder.cmd"
+</pre>
+<ul><li>Create a preferred function order command file from input WCG information.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Linker">Linker</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=13" title="Edit section: Linker">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="--preferred_order_Option">--preferred_order Option</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=14" title="Edit section: --preferred order Option">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre> "--preferred_order=&lt;function specification&gt;"
+</pre>
+<ul><li>Prioritize the placement of a function relative to others based on the order in which --preferred_order options are encountered during the linker invocation.</li></ul>
+<p><br />
+</p>
+<h3><span id="unordered()_Linker_Command_File_(LCF)_Operator"></span><span class="mw-headline" id="unordered.28.29_Linker_Command_File_.28LCF.29_Operator">unordered() Linker Command File (LCF) Operator</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=15" title="Edit section: unordered() Linker Command File (LCF) Operator">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<pre> "unordered()"
+</pre>
+<ul><li>This operator will relax placement constraints placed on an output section whose specification includes an explicit list of which input sections are contained in the output section.</li></ul>
+<h1><span class="mw-headline" id="Program_Cache_Layout_Development_Flow">Program Cache Layout Development Flow</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=16" title="Edit section: Program Cache Layout Development Flow">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Once you have determined that your application is experiencing some inefficiencies in its usage of the program cache, you may decide to include the program cache layout tooling in your development to attempt to recover some of the CPU cycles that are being lost to stalls due to program cache conflict misses. 
+</p><p>This section presents a development flow that incorporates the use of the program cache layout tooling. To get started using the program cache layout capability, it is recommended that you read this section and then proceed to the simple cache layout tool tutorial below.
+</p>
+<h2><span class="mw-headline" id="Gather_Dynamic_Profile_Information">Gather Dynamic Profile Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=17" title="Edit section: Gather Dynamic Profile Information">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The cache layout tool, clt6x, relies on the availability of dynamic profile information in the form of a weighted call graph (WCG) in order to produce a preferred function order command file that can be used to guide function placement at link-time when your application is re-built.
+</p><p>There are several ways in which this dynamic profile information can be collected.  For example, if you are running your application on hardware, you may have the capability to collect a PC discontinuity trace.  The discontinuity trace can then be post-processed to construct WCG input information for the clt6x.
+</p><p>The method for collecting dynamic profile information that is presented here relies on the path profiling capabilities in the C6000 code generation tools.  Here is how it works:
+</p>
+<dl><dd>1. Build an instrumented application
+<dl><dd>We are going to build an instrumented application using the <b>--gen_profile_info</b> option ...</dd></dl></dd></dl>
+<pre> <b>Compile:</b>
+&#160;%&gt; cl6x &lt;options&gt; <b>--gen_profile_info</b> &lt;src_file(s)&gt;
+</pre>
+<pre> <b>Compile and link:</b>
+&#160;%&gt; cl6x &lt;options&gt; <b>--gen_profile_info</b> &lt;src_file(s)&gt; -z -l&lt;lnk.cmd&gt;
+</pre>
+<dl><dd><dl><dd>Use of <b>--gen_profile_info</b> instructs the compiler to embed counters into the code along the execution paths of each function.</dd></dl></dd>
+<dd>2. Run instrumented application to generate .ppd file
+<dl><dd>When the application runs, the counters embedded into the application by --gen_profile_info keep track of how many times a particular execution path through a function is traversed.  The data collected in these counters is written out to a profile data file named pprofout.ppd.</dd>
+<dd></dd>
+<dd>The profile data file is automatically generated.  For example, if you are using the C64+ simulator under CCS, you can load and run your instrumented program, and you will see that a new pprofout.ppd file is created in your working directoy (where the instrumented application is loaded from).</dd></dl></dd>
+<dd>3. Decode profile data file
+<dl><dd>Once you have a profile data file, the file is decoded by the profile data decoder tool, pdd6x, as follows:</dd></dl></dd></dl>
+<pre>&#160;%&gt; pdd6x -e=&lt;instrumented app out file&gt; -o=pprofout.prf pprofout.ppd
+</pre>
+<dl><dd><dl><dd>pdd6x produces a .prf file is then fed into the re-compile of the application that uses the profile information to generate WCG input data.</dd></dl></dd>
+<dd>4. Use decoded profile information to generate WCG input
+<dl><dd>The compiler now supports a new option, <b>--analyze</b>, which is used to tell the compiler to generate WCG or code coverage analysis information. Its syntax is as follows:</dd></dl></dd></dl>
+<pre> <b>--analyze=callgraph</b> -- Instructs the compiler to generate WCG information.
+</pre>
+<pre> <b>--analyze=codecov</b>   -- Instructs the compiler to generate code coverage 
+                        information.  This option replaces the previous 
+                        --codecov option.
+</pre>
+<dl><dd><dl><dd>The compiler also supports a new <b>--analyze_only</b> option which instructs the compiler to halt compilation after the generation of analysis information has been completed.  This option replaces the previous --onlycodecov option.</dd>
+<dd>To make use of the dynamic profile information that you gathered, re-compile the source code for your application using the <b>--analyze=callgraph</b> option in combination with the <b>--use_profile_info</b> option:</dd></dl></dd></dl>
+<pre>&#160;%&gt; cl6x &lt;options&gt; <b>-mo</b> <b>--analyze=callgraph</b> <b>--use_profile_info=pprofout.prf</b> &lt;src_file(s)&gt;
+</pre>
+<dl><dd><dl><dd>Use of <b>-mo</b> instructs the compiler to generate code for each function into its own subsection.  This option provides the linker with the means to directly control the placement of the code for a given function.</dd>
+<dd>The compiler generates a CSV file containing WCG information for each source file that is specified on the command line.  If such a CSV file already exists, then new call graph analysis information will be appended to the existing CSV file.  These CSV files are then input to the cache layout tool (clt6x) to produce a preferred function order command file for your application.</dd>
+<dd>For more details on the content of the CSV files (containing WCG information) generated by the compiler, please see <i>Comma Separated Values (CSV) Files with WCG Information</i> section below.</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Generate_Preferred_Function_Order_from_Dynamic_Profile_Information">Generate Preferred Function Order from Dynamic Profile Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=18" title="Edit section: Generate Preferred Function Order from Dynamic Profile Information">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>At this point, the compiler has generated a CSV file for each C/C++ source file specified on the command line of the re-compile of the application.  Each CSV file contains weighted call graph information about all of the call sites in each function defined in the C/C++ source file.
+</p><p>The new cache layout tool, clt6x, collects all of the WCG information in these CSV files into a single, merged WCG.  The WCG is processed to produce a preferred function order command file that is fed into the linker to guide the placement of the functions defined in your application source files.  This is how to use clt6x:
+</p>
+<pre>&#160;%&gt; clt6x *.csv -o forder.cmd
+</pre>
+<p>The output of clt6x is a text file containing a sequence of <b>--preferred_order=&lt;function specification&gt;</b> options.  By default, the name of the output file is "forder.cmd", but you can specify your own file name with the -o option.  The order in which functions appear in this file is their preferred function order as determined by the clt6x.
+</p><p>In general, the proximity of one function to another in the preferred function order list is a reflection of how often the two functions call each other.  If two functions are very close to each other in the list, then the linker interprets this as a suggestion that the two functions should be placed very near to one another.  Functions that are placed close together are less likely to create a cache conflict miss at runtime when both functions are active at the same time.  The overall effect should be an improvement in program cache efficiency and performance.
+</p>
+<h2><span class="mw-headline" id="Utilize_Preferred_Function_Order_in_Re-Build_of_Application">Utilize Preferred Function Order in Re-Build of Application</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=19" title="Edit section: Utilize Preferred Function Order in Re-Build of Application">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Finally, the preferred function order command file that is produced by the clt6x is fed into the linker during the re-build of the application, as follows:
+</p>
+<pre>&#160;%&gt; cl6x &lt;options&gt; -z *.obj forder.cmd -l&lt;lnk.cmd&gt;
+</pre>
+<p>The preferred function order command file, forder.cmd, contains a list of <b>--preferred_order=&lt;function specification&gt;</b> options. The linker prioritizes the placement of functions relative to each other in the order that the <b>--preferred_order</b> options are encountered during the linker invocation.
+</p><p>Each <b>--preferred_order</b> option contains a function specification. A function specification can describe simply the name of the function for a global function, or it may provide the path name and source file name where the function is defined.  A function specification that contains path and file name information is used to distinguish one static function from another that has the same function name.
+</p><p>As mentioned earlier, the <b>--preferred_order</b> options are interpreted by the linker as suggestions to guide the placement of functions relative to each other.  They are <i>not</i> explicit placement instructions.  If an object file or input section is explicitly mentioned in a linker command file SECTIONS directive, then the placement instruction specified in the linker command file takes precedence over any suggestion from a <b>--preferred_order</b> option that is associated with a function that is defined in that object file or input section.
+</p><p>This precedence can be relaxed by applying the <b>unordered()</b> operator to an output specification as described in the <i>Linker Command File Operator - unordered()</i> section below.
+</p>
+<h1><span id="Comma-Separated_Values_(CSV)_Files_with_WCG_Information"></span><span class="mw-headline" id="Comma-Separated_Values_.28CSV.29_Files_with_WCG_Information">Comma-Separated Values (CSV) Files with WCG Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=20" title="Edit section: Comma-Separated Values (CSV) Files with WCG Information">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The format of the CSV files generated by the compiler under the "--analyze=callgraph --use_profile_info" option combination is as follows:
+</p>
+<pre> "caller","callee","weight" [CR][LF]
+ &lt;caller spec&gt;,&lt;callee spec&gt;,&lt;call frequency&gt; [CR][LF]
+ &lt;caller spec&gt;,&lt;callee spec&gt;,&lt;call frequency&gt; [CR][LF]
+ &lt;caller spec&gt;,&lt;callee spec&gt;,&lt;call frequency&gt; [CR][LF]
+ ...
+</pre>
+<ul><li>Line 1 of the CSV file is the header line.  It specifies the meaning of each field in each line of the remainder of the CSV file.  In the case of CSV files that contain weighted call graph information, each line will have a caller function specification, followed by a callee function specification, followed by an unsigned integer that provides the number of times a call was executed during run time at a given call site.</li>
+<li>There may be instances where the caller and callee function specifications are identical on multiple lines in the CSV file. This will happen when a caller function has multiple call sites to the callee function.  In the merged WCG that is created by the clt6x, the weights of each line that has the same caller and callee function specifications will be added together.</li>
+<li>The CSV file that is generated by the compiler using the path profiling instrumentation will not include information about indirect function calls or calls to runtime support helper functions (like _remi or _divi). However, you may be able to gather information about such calls with another method (like the PC discontinuity trace mentioned earlier).</li>
+<li>The format of these CSV files is in compliance with the RFC-4180 specification of Comma-Separated Values (CSV) files. For more details on this specification, please see the following URL:</li></ul>
+<pre> <a rel="nofollow" class="external free" href="http://tools.ietf.org/html/rfc4180">http://tools.ietf.org/html/rfc4180</a>
+</pre>
+<h1><span id="Linker_Command_File_Operator_-_unordered()"></span><span class="mw-headline" id="Linker_Command_File_Operator_-_unordered.28.29">Linker Command File Operator - unordered()</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=21" title="Edit section: Linker Command File Operator - unordered()">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A new <b>unordered()</b> operator is now available for use in a linker command file.  The effect of this operator is to relax the placement constraints placed on an output section specification in which the content of the output section is explicitly stated.
+</p>
+<h2><span class="mw-headline" id="Basics">Basics</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=22" title="Edit section: Basics">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Consider an example output section specification:
+</p>
+<pre> SECTIONS
+ {
+   .text:
+   {
+     file.obj(.text:func_a)
+     file.obj(.text:func_b)
+     file.obj(.text:func_c)
+     file.obj(.text:func_d)
+     file.obj(.text:func_e)
+     file.obj(.text:func_f)
+     file.obj(.text:func_g)
+     file.obj(.text:func_h)
+
+     *(.text)
+   } &gt; PMEM
+
+   ...
+ }
+</pre>
+<p>In the above SECTIONS directive, the specification of '.text' explicitly dictates the order in which functions are laid out in the output section.  That is, by default, the linker will layout func_a through func_h in exactly the order that they are specified, regardless of any other placement priority criteria (such as a preferred function order list that is enumerated by <b>--preferred_order</b> options).
+</p><p>The <b>unordered()</b> operator can be used to relax this constraint on the placement of the functions in the '.text' output section so that placement can be guided by other placement priority criteria.
+</p><p>The <b>unordered()</b> operator can be applied to an output section as follows:
+</p>
+<pre> SECTIONS
+ {
+   .text: <b>unordered()</b>
+   {
+     file.obj(.text:func_a)
+     file.obj(.text:func_b)
+     file.obj(.text:func_c)
+     file.obj(.text:func_d)
+     file.obj(.text:func_e)
+     file.obj(.text:func_f)
+     file.obj(.text:func_g)
+     file.obj(.text:func_h)
+
+     *(.text)
+   } &gt; PMEM
+
+   ...
+ }
+</pre>
+<p>So that, given a list of <b>--preferred_order</b> options as follows:
+</p>
+<pre> --preferred_order="func_g"
+ --preferred_order="func_b"
+ --preferred_order="func_d"
+ --preferred_order="func_a"
+ --preferred_order="func_c"
+ --preferred_order="func_f"
+ --preferred_order="func_h"
+ --preferred_order="func_e"
+</pre>
+<p>The placement of the functions in the '.text' output section will then be guided by this preferred function order list.  This placement will be reflected in a linker generated map file, as follows:
+</p>
+<pre>SECTION ALLOCATION MAP
+
+output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.text      0    00000020    00000120
+                  00000020    00000020     file.obj (.text:func_g:func_g)
+                  00000040    00000020     file.obj (.text:func_b:func_b)
+                  00000060    00000020     file.obj (.text:func_d:func_d)
+                  00000080    00000020     file.obj (.text:func_a:func_a)
+                  000000a0    00000020     file.obj (.text:func_c:func_c)
+                  000000c0    00000020     file.obj (.text:func_f:func_f)
+                  000000e0    00000020     file.obj (.text:func_h:func_h)
+                  00000100    00000020     file.obj (.text:func_e:func_e)
+                  ...
+</pre>
+<p><br />
+</p>
+<h2><span id="About_DOT_Expressions_in_the_Presence_of_unordered()"></span><span class="mw-headline" id="About_DOT_Expressions_in_the_Presence_of_unordered.28.29">About DOT Expressions in the Presence of unordered()</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=23" title="Edit section: About DOT Expressions in the Presence of unordered()">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Another aspect of the <b>unordered()</b> operator that should be taken into consideration is that even though the operator causes the linker to relax constraints imposed by the explicit specification of an output section's contents, the <b>unordered()</b> operator will still respect the position of a DOT expression within such a specification.
+</p><p>Consider the following output section specification:
+</p>
+<pre> SECTIONS
+ {
+   .text: <b>unordered()</b>
+   {
+     file.obj(.text:func_a)
+     file.obj(.text:func_b)
+     file.obj(.text:func_c)
+     file.obj(.text:func_d)
+
+     <b>. += 0x100;</b>
+
+     file.obj(.text:func_e)
+     file.obj(.text:func_f)
+     file.obj(.text:func_g)
+     file.obj(.text:func_h)
+
+     *(.text)
+
+   } &gt; PMEM
+   ...
+ }
+</pre>
+<p>In the above specification of '.text', a DOT expression, ". += 0x100;", separates the explicit specification of two groups of functions in the output section.  In this case, the linker will honor the specified position of the DOT expression with respect to the functions on either side of the expression.  That is, the <b>unordered()</b> operator will allow the preferred function order list to guide the placement of func_a through func_d relative to each other, but none of those functions will be placed after the hole that is created by the DOT expression. Likewise, the <b>unordered()</b> operator allows the preferred function order list to influence the placement of func_e through func_h relative to each other, but none of those functions will be placed before the hole that is created by the DOT expression.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="GROUPs_and_UNIONs">GROUPs and UNIONs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=24" title="Edit section: GROUPs and UNIONs">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The <b>unordered()</b> operator can only be applied to an output section. This includes members of a GROUP or UNION directive.  For example,
+</p>
+<pre> SECTIONS
+ {
+   GROUP
+   {
+     .grp1:
+     {
+       file.obj(.grp1:func_a)
+       file.obj(.grp1:func_b)
+       file.obj(.grp1:func_c)
+       file.obj(.grp1:func_d)
+     } <b>unordered()</b>
+
+     .grp2:
+     {
+       file.obj(.grp2:func_e)
+       file.obj(.grp2:func_f)
+       file.obj(.grp2:func_g)
+       file.obj(.grp2:func_h)
+     }
+
+     .text:  { *(.text) }
+
+   } &gt; PMEM
+
+   ...
+ }
+</pre>
+<p>The above SECTIONS directive applies the <b>unordered()</b> operator to the first member of the GROUP.  The '.grp1' output section layout can then be influenced by other placement priority criteria (like the preferred function order list), whereas the '.grp2' output section will be laid out as explicitly specified.
+</p><p>The <b>unordered()</b> operator cannot be applied to an entire GROUP or UNION. Attempts to do so will result in a linker command file syntax error and the link will be aborted.
+</p>
+<h1><span class="mw-headline" id="Cache_Layout_Tool_Tutorial">Cache Layout Tool Tutorial</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=25" title="Edit section: Cache Layout Tool Tutorial">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>As a means of familiarizing yourself with the cache layout tool development flow, you can walk through this guided tour of the development of a simple application.  Included in the release distribution, you will find a sub-directory, clt_tutorial.  This sub-directory contains the
+following files:
+</p>
+<pre> clt_tutor.txt
+ main.c
+ lots.c
+ rare.c
+</pre>
+<p><i>You can also get the C source files from <a href="Tech_CLT_Tutor_Sources.html" title="Tech:CLT Tutor Sources"><b>here</b></a>.</i>
+</p><p><br />
+To begin the tutorial, change your location to the clt_tutorial sub-directory or copy the source files to your own working directory. Then consider the following ...
+</p>
+<dl><dd>1. Introduction to the Source Files
+<dl><dd><ul><li>main.c:
+<ul><li>defines main()</li>
+<li>main() calls rare() once</li>
+<li>main() calls main.c:local() 4 times</li>
+<li>defines static local()</li>
+<li>main.c:local() calls lots() 80 times</li></ul></li>
+<li>lots.c:
+<ul><li>defines lots(); globally visible</li>
+<li>lots() calls lots.c:local() 100+ times</li>
+<li>defines lots.c:local()</li></ul></li>
+<li>rare.c:
+<ul><li>defines rare(); globally visible</li></ul></li></ul></dd></dl></dd>
+<dd>2. Build an Instrumented Application
+<dl><dd>%&gt; rm -f *.ppd</dd>
+<dd>%&gt; cl6x -mv64+ --gen_profile_info main.c lots.c rare.c -z -llnk.cmd -o app.out -m app.map</dd></dl></dd>
+<dd>3. Gather Dynamic Profile Information
+<dl><dd><ul><li>Load and run app.out with CCS C64+ Simulator</li>
+<li>You should have a pprofout.ppd file in your working directory after completing this step.</li></ul></dd></dl></dd>
+<dd>4. Decode Profile Data File
+<dl><dd>%&gt; rm -f *.prf</dd>
+<dd>%&gt; pdd6x pprofout.ppd -eapp.out -o=pprofout.prf
+<ul><li>You should have a pprofout.prf file in your working directory after completing this step.</li></ul></dd></dl></dd>
+<dd>5. Use Profile Information in Re-Compile of Application
+<dl><dd>%&gt; cl6x -mv64+ --use_profile_info=pprofout.prf --analyze=callgraph -mo main.c lots.c rare.c
+<ul><li>You should have 3 CSV files in your working directory after completing this step: main.csv, lots.csv, rare.csv.  Their contents should be as follows:</li></ul></dd></dl></dd></dl>
+<pre> <b>main.csv:</b>
+ "caller","callee","weight"
+ main,rare,1
+ main,main.c:local,4
+ main,printf,1
+ main,fflush,1
+ main.c:local,printf,4
+ main.c:local,lots,80
+</pre>
+<pre> <b>lots.csv:</b>
+ "caller","callee","weight"
+ lots,lots.c:local,80
+ lots,lots.c:local,28
+ lots.c:local,printf,108
+</pre>
+<pre> <b>rare.csv:</b>
+ "caller","callee","weight"
+</pre>
+<dl><dd>6. Generate Preferred Function Order Command File
+<dl><dd>%&gt; rm app_pfo.cmd</dd>
+<dd>%&gt; clt6x main.csv lots.csv rare.csv -o app_pfo.cmd
+<ul><li>You should have an app_pfo.cmd in your working directory containing:</li></ul></dd></dl></dd></dl>
+<pre> --preferred_order="printf"
+ --preferred_order="lots.c:local"
+ --preferred_order="lots"
+ --preferred_order="main.c:local"
+ --preferred_order="main"
+ --preferred_order="rare"
+ --preferred_order="fflush"
+</pre>
+<dl><dd><dl><dd><ul><li>This is the preferred function order list.  Note that the two versions of local() are distinguished by their source file names:</li></ul></dd></dl></dd></dl>
+<pre> "main.c:local"
+ "lots.c:local"
+</pre>
+<dl><dd>7. Re-Link Application Incorporating Preferred Function Order
+<dl><dd>%&gt; cl6x -mv64+ -z main.obj lots.obj rare.obj app_pfo.cmd -llnk.cmd -o app_opt.out -o app_opt.map
+<ul><li>You should have an app_opt.map file in your working directory.  If you open it and look at the contents of the .text output section, you should see that the placement of the functions specified in the app_pfo.cmd file should match their actual order in that file.</li></ul></dd></dl></dd></dl>
+<h1><span class="mw-headline" id="Things_To_Be_Aware_Of">Things To Be Aware Of</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=26" title="Edit section: Things To Be Aware Of">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>There are some behavioral characteristics and limitations of the program cache layout development flow that you should bear in mind:
+</p>
+<ul><li>Generation of Path Profiling Data File (.ppd)</li></ul>
+<dl><dd>When running an application that has been instrumented to collect path-profiling data (using <b>--gen_profile_info</b> compiler option during build), the application will use functions in the runtime support library to write out information to the path profiling data file (pprofout.ppd in the above tutorial).  If there is a path profiling data file already in existence when the application starts to run, then any new path profiling data generated will be appended to the existing file.</dd>
+<dd></dd>
+<dd>To prevent combining path profiling data from separate runs of an application, you will need to either rename the path profiling data file from the previous run of the application or remove it before running the application again.</dd></dl>
+<ul><li>Indirect Calls Not Recognized by Path Profiling Mechanisms</li></ul>
+<dl><dd>When using available path profiling mechanisms to collect weighted call graph information from the path profiling data, pprof6x does not recognize indirect calls.  An indirect call site will not be represented in the CSV output file that is generated by pprof6x.</dd>
+<dd></dd>
+<dd>You can workaround this limitation by introducing your own information about indirect call sites into the relevant CSV file(s). If you take this approach, please be sure to follow the format of the callgraph analysis CSV file ("caller", "callee","call frequency").</dd>
+<dd></dd>
+<dd>If you are able to get weighted call graph information from a PC trace into a callgraph analysis CSV, this limitation will no longer apply (as the PC trace can always identify the callee of an indirect call).</dd></dl>
+<ul><li>Multiple <b>--preferred_order</b> Options Associated with Single Function</li></ul>
+<dl><dd>There may be cases in which you might want to input more than one preferred function order command file to the linker during the link of an application.  For example, you may have developed or received a separate preferred function order command file for one or more of the object libraries that are used by your application.</dd>
+<dd></dd>
+<dd>In such cases, it is possible that one function may be specified in multiple preferred function order command files.  If this happens, the linker will honor only the first instance of the <b>--preferred_order</b> option in which that function is specified.</dd></dl>
+<h1><span class="mw-headline" id="Addendum:_Using_7.x.x_CLT_Capability_with_6.1.x_CGT">Addendum: Using 7.x.x CLT Capability with 6.1.x CGT</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=27" title="Edit section: Addendum: Using 7.x.x CLT Capability with 6.1.x CGT">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>It is possible to apply the program cache layout capability to applications that use older versions of the compiler to generate the object code that is to be linked together to form the final application. For instance, you may be using the version 6.1.x C6x compiler to generate object code for your application, but you suspect that your application suffers from inefficient usage of the L1P cache.
+</p><p>If your application spends a significant amount of time in L1P stall cycles due to excessive L1P cache misses, then you may be able to realize some benefit by creating a preferred order linker command file using the version 7.x.x compiler and linking your 6.1.x object files together using the version 7.x.x linker.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="General_Approach">General Approach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=28" title="Edit section: General Approach">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>Build a profiling version of your application using the version 6.1.x code generation tools.</li>
+<li>Run the profiling version of your application over a representative example set of input data in order to collect path profiling statistics.</li>
+<li>Build a preferred order linker command file with the version 7.x.x code generation tools. The compiler makes use of the profiling data that was generated in the previous step and uses it to help analyze call-graph information that can be fed into and processed by the program cache layout utility to produce a preferred order linker command file (LCF).</li>
+<li>Compile the source files of your application using the version 6.1.x compiler, but this time be sure to generate code for functions into their own subsections (use the -mo option to enable this).</li>
+<li>Link your 6.1.x object files together using the version 7.x.x linker and incorporating the preferred order linker command file into the final link. The preferred order linker command file will help to guide the placement of function subsections relative to one another to reduce the number of L1P cache conflict misses that occur when the application is run.</li></ol>
+<p><br />
+</p>
+<h2><span id="Constraints_/_Assumptions"></span><span class="mw-headline" id="Constraints_.2F_Assumptions">Constraints / Assumptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=29" title="Edit section: Constraints / Assumptions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><i><b>Note: Use of the program cache layout tooling in version 7.x.x of the tools makes use of the path profiling capabilities that were developed for version 6.1.x of the tools. We do not recommend trying to apply the program cache layout tooling to objects that are built with any versions of the compiler prior to 6.1.x.</b></i>
+</p>
+<ul><li>You must have access to both the version 6.1.x code generation tools and the version 7.x.x code generation tools.</li>
+<li>You must be able to switch from one toolset to another while proceeding through the development flow described below.</li>
+<li>You must have some way of gathering profiling data into an output file. This is enabled when running the CCS debugger in simulation mode. If you do not have access to a CCS simulator, then you may need to add some low-level file-I/O functions to the profiling version of your application, namely fwrite(). Please see the RTS source files if you would like to see an example implementation.</li>
+<li>You must use the -mo option to compile the 6.1.x object files that will be linked together in the final link step to create the updated version of your application.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Development_Flow">Development Flow</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=30" title="Edit section: Development Flow">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>It is assumed that you already have a baseline version of your application that was built using the version 6.1.x code generation tools. This should have been built using your normal compiler and linker options. If possible, run this application and gather statistics about the L1P cache usage efficiency of your baseline application (number of total cycles executed, number of cycles spent in L1P stall due to L1P cache misses, number of L1P cache misses, etc.). This information may be useful in measuring what impact the use of the cache layout tooling has on your application.
+</p>
+<ol><li><b>Profile Application</b> - Compile and link your application using the version 6.1.x code generation tools with the --gen_profile_info option to create a version of your application that will generate profile information when it is run with an example set of input data. Run this version of the application using an example set of input data to generate path profiling data into a .pdd file.</li>
+<li><b>Decode Path Profiling Data</b> - Use the profiling data decoder utility to parse the path profiling data file (.pdd) and create a compiler usable profile information file (.prf).<a href="File_DevFlowPics1.html" class="image"><img alt="DevFlowPics1.jpg" src="https://processors.wiki.ti.com/images/e/eb/DevFlowPics1.jpg" width="872" height="572" /></a></li>
+<li><b>Create Weighted Call Graph Information Files</b> - Compile your application source files using the verrsion 7.x.x compiler; adding the -mo, --use_profile_info, and --analyze=callgraph options to your normal compile options. This compile step will create a series of comma-separated value files (.csv) containing call-graph information that can be fed into the program cache layout tool, clt6x, to create a preferred order linker command file.</li>
+<li><b>Create Preferred Order Linker Command File</b> - Using the cache layout tool, clt6x, available in your version 7.x.x code generation tools, process the weighted call graph information that was generated in the previous step (.csv files) to build a preferred order linker command file (LCF).<a href="File_DevFlowPicsWCG.html" class="image"><img alt="DevFlowPicsWCG.jpg" src="https://processors.wiki.ti.com/images/b/b8/DevFlowPicsWCG.jpg" width="870" height="457" /></a></li>
+<li><b>Compile Application Using -mo Option</b> - Compile your application source files using the version 6.1.x compiler adding the -mo option to your original compile options. This will enable the subsequent final link step to easily manipulate the placement of functions. The -mo option causes the compiler to generate code for a given function into its own subsection. The linker can then control the placement of the code for the function via the subsection name.</li>
+<li><b>Link Application</b> - Link the object files that you generated in the previous step (6.1.x object files) using the version 7.x.x linker. The preferred order linker command file that was generated by the cache layout tool in step 5 should be specified as input to this final link. The preferred order options in this linker command file will help to guide the placement of functions relative to each other in order to reduce the number of L1P cache conflict misses that are likely to occur.<a href="File_DevFlowPics3.html" class="image"><img alt="DevFlowPics3.jpg" src="https://processors.wiki.ti.com/images/3/35/DevFlowPics3.jpg" width="867" height="376" /></a></li></ol>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="An_Example">An Example</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit&amp;section=31" title="Edit section: An Example">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To prove this development flow, I have built and run an example tcpip benchmark application.
+</p><p>Here are the step-by-step major details:
+</p>
+<ul><li>Set up path to 6.1.x toolset</li></ul>
+<pre> &#160;%&gt; set path=&lt;your path to 6.1.x tools&gt;
+</pre>
+<ul><li>Build a profiling version of the tcpip application using the <b>--gen_profile_info</b> compiler option</li></ul>
+<pre> &#160;%&gt; set C6X_C_DIR=&lt;your include and library search path&gt;
+ &#160;%&gt; mkdir -p c64p
+ &#160;%&gt; cl6x -mv6400+ --abi=coffabi -qq -D... -I... -mh -mi -mt -k -fsc64p -frc64p -ftc64p -eoo -o3 <b>--gen_profile_info</b> socket.c
+ &#160;%&gt; etc.
+ &#160;%&gt; cl6x -mv6400+ --abi=coffabi -q -D... -I... -mh ... c64p/socket.o ... -z -l./C64X.cmd -lrts64plus.lib -x  -o tcpip_c64p.out -m tcpip_c64p.map
+</pre>
+<ul><li>Run the profiling version of the tcpip application using the benchmark input data set. Profiling data is automatically collected into a path profiling data file (.ppd) by the CCS simulator that was used to run the benchmark.
+<ul><li>Can use CCS simulator for this</li></ul></li></ul>
+<dl><dd><ol><li>Bring up CCS</li>
+<li>Configure CCS to use C6400+ simulator</li>
+<li>Load and run tcpip_c64p.out</li></ol></dd></dl>
+<ul><li>Note general performance and L1P usage efficiency statistics (to be used in later comparison to measure impact of using CLT )</li>
+<li>Decode the path profiling data into a compiler-readable profile information file (.prf)</li></ul>
+<pre> &#160;%&gt; pdd6x -e tcpip_c64p.out -o tcpip_c64p_prof.prf tcpip_c64p_prof.ppd
+</pre>
+<ul><li>Set up path to 7.x.x toolset</li></ul>
+<pre> &#160;%&gt; set path=&lt;your path to 7.x.x tools&gt;
+</pre>
+<ul><li>Compile with v7.x.x tools and <b>--use_profile_info</b> option (use path profiling information) to generate call-graph analysis information</li></ul>
+<pre> &#160;%&gt; set C6X_C_DIR=&lt;your include and library search path&gt;
+ &#160;%&gt; mkdir -p c64p
+ &#160;%&gt; cl6x -mv6400+ --abi=coffabi -qq -D... -I... -mh -mi -mt -k -fsc64p -frc64p -ftc64p -eoo -o3 <b>--use_profile_info=tcpip_c64p_prof.prf</b> <b>--analyze=callgraph</b> -mo socket.c
+ &#160;%&gt; etc.
+</pre>
+<ul><li>Process call-graph analysis information with cache layout tool to generate a preferred order linker command file, <b>tcpip.cmd</b></li></ul>
+<pre> &#160;%&gt; clt6x <b>-otcpip.cmd</b> *.csv
+</pre>
+<ul><li>Set up path to 6.1.x toolset</li></ul>
+<pre> &#160;%&gt; set path=&lt;your path to 6.1.x tools&gt;
+</pre>
+<ul><li>Compile application source files using <b>-mo</b> option to generate code for functions into their own subsection. This enables the subsequent link to manipulate the placement of functions via their subsections.</li></ul>
+<pre> &#160;%&gt; set C6X_C_DIR=&lt;your include and library search path&gt;
+ &#160;%&gt; mkdir -p c64p
+ &#160;%&gt; cl6x -mv6400+ --abi=coffabi -qq -D... -I... -mh -mi -mt -k -fsc64p -frc64p -ftc64p -eoo -o3 <b>-mo</b> socket.c
+ &#160;%&gt; etc.
+</pre>
+<ul><li>Set up path to 7.x.x toolset</li></ul>
+<pre> &#160;%&gt; set path=&lt;your path to 7.x.x tools&gt;
+</pre>
+<ul><li>Link 6.1.x object files together using 7.x.x linker and incorporate preferred order linker command file, <b>tcpip.cmd</b>, to guide the placement of functions relative to each other in order to reduce the occurrence of L1P cache conflict misses.</li></ul>
+<pre> &#160;%&gt; cl6x -mv6400+ --abi=coffabi -q -D... -I... -mh ... c64p/socket.o ... -z -l./C64X.cmd -lrts64plus.lib <b>tcpip.cmd</b> -x  -o tcpip_c64p_opt.out -m tcpip_c64p_opt.map
+</pre>
+<ul><li>Run the updated tcpip application using the same benchmark input data set as before.
+<ul><li>Again using CCS simulator for this</li></ul></li></ul>
+<dl><dd><ol><li>Bring up CCS</li>
+<li>Configure CCS to use C6400+ simulator</li>
+<li>Load and run tcpip_c64p_opt.out</li></ol></dd></dl>
+<ul><li>Note general performance and L1P usage efficiency statistics and compare numbers vs. earlier run of application. Difference represents performance impact of using the cache layout tool in the development flow.</li></ul>
+<p><br />
+For this tcpip example, a 19.5% performance improvement was observed over the entire tcpip application:
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tbody><tr style="background: #DDFFDD;">
+<th>Application
+</th>
+<th>Total Cycles (baseline)
+</th>
+<th>L1P Stall Cycles (baseline)
+</th>
+<th>Total Cycles (clt6x)
+</th>
+<th>L1P Stall Cycles (clt6x)
+</th>
+<th>(baseline/clt6x)*100 - 100
+</th></tr>
+<tr>
+<td>tcpip
+</td>
+<td>43057291
+</td>
+<td>16247019
+</td>
+<td>36029377
+</td>
+<td>9230267
+</td>
+<td>19.506%
+</td></tr></tbody></table>
+<p><br />
+</p>
+<hr />
+<p><a href="https://processors.wiki.ti.com/index.php?title=User:A0321546&amp;action=edit&amp;redlink=1" class="new" title="User:A0321546 (page does not exist)">Todd Snider</a> 18:53, 19 June 2009 (UTC)
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201023706
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.102 seconds
+Real time usage: 0.107 seconds
+Preprocessor visited node count: 123/1000000
+Preprocessor generated node count: 128/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:2580-0!canonical and timestamp 20201201023706 and revision id 49072
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Program Cache Layout</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Program Cache Layout</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Program Cache Layout</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Program Cache Layout</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Program Cache Layout</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Program Cache Layout</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Program Cache Layout</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Program Cache Layout</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Program Cache Layout</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;oldid=49072">https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;oldid=49072</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Program+Cache+Layout" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Program_Cache_Layout.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Program_Cache_Layout.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Program_Cache_Layout.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Program_Cache_Layout.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Program_Cache_Layout.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;oldid=49072" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Program_Cache_Layout&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 29 December 2010, at 13:57.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.102","walltime":"0.107","ppvisitednodes":{"value":123,"limit":1000000},"ppgeneratednodes":{"value":128,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201023706","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":342});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Program_Cache_Layout by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:32 GMT -->
+</html>

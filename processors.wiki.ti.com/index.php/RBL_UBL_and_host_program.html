@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/RBL_UBL_and_host_program by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:42:31 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>RBL UBL and host program - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"RBL_UBL_and_host_program","wgTitle":"RBL UBL and host program","wgCurRevisionId":16456,"wgRevisionId":16456,"wgArticleId":60,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","Boot"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"RBL_UBL_and_host_program","wgRelevantArticleId":60,"wgRequestId":"ff62eead82d97f5231bf8d46","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-RBL_UBL_and_host_program rootpage-RBL_UBL_and_host_program skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">RBL UBL and host program</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>DaVinci has an internal BootROM, where a small boot loader program is stored, which can be invoked by special jumper settings. With this BootRom it is possible to download SW to a DaVinci system where no code is actually stored in NOR or NAND flash the ARM processor can boot from. This can be used to download the first code ever to a DaVinci based board or to recover from broken system. This article collects information about this feature.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Naming"><span class="tocnumber">1</span> <span class="toctext">Naming</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#RBL"><span class="tocnumber">2</span> <span class="toctext">RBL</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#RBL_modes_and_info"><span class="tocnumber">2.1</span> <span class="toctext">RBL modes and info</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#RBL_booting_from_NAND_and_ECC.2FBad_blocks"><span class="tocnumber">2.2</span> <span class="toctext">RBL booting from NAND and ECC/Bad blocks</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#UBL_and_Flashing_Utilities"><span class="tocnumber">3</span> <span class="toctext">UBL and Flashing Utilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#DaVinci_Serial_Boot_and_Flashing_Utilities_UBL"><span class="tocnumber">3.1</span> <span class="toctext">DaVinci Serial Boot and Flashing Utilities UBL</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#TI_UBL_.28original.29"><span class="tocnumber">3.2</span> <span class="toctext">TI UBL (original)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#rboot_UBL"><span class="tocnumber">3.3</span> <span class="toctext">rboot UBL</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Sergeys_UBL"><span class="tocnumber">3.4</span> <span class="toctext">Sergeys UBL</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Host_program"><span class="tocnumber">4</span> <span class="toctext">Host program</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#DaVinci_Serial_Boot_and_Flashing_Utilities"><span class="tocnumber">4.1</span> <span class="toctext">DaVinci Serial Boot and Flashing Utilities</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#TI_host_program_.28original.29"><span class="tocnumber">4.2</span> <span class="toctext">TI host program (original)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#DV_RBL_UBL_Host_Tool_.28originally_load.c_and_dv_host.29"><span class="tocnumber">4.3</span> <span class="toctext">DV RBL UBL Host Tool (originally load.c and dv_host)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Sergeys_host_tool"><span class="tocnumber">4.4</span> <span class="toctext">Sergeys host tool</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Naming">Naming</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=1" title="Edit section: Naming">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>While talking about this DaVinci BootROM feature, there are three SW parts involved. The naming for these are:
+</p>
+<ul><li>RBL == ROM boot loader. This part is stored in ROM in DaVinci and therefore can't be changed by user. If needed, it can be activated by special jumper settings. It can be used to start system SW (download) via serial line, from NAND devices or HPI (Host Port Interface).</li>
+<li>UBL == user boot loader. The SW the RBL starts/downloads is called user boot loader. Download has to be done in a special format the RBL expects. UBL is limited in size. Sometimes UBL is called 2nd stage boot loader as well.</li>
+<li>Host program, known as serial host utility program as well. This SW runs on the development host (typically a PC with Windows/Linux) and communicates with RBL (and UBL) if RBL is used in UART (serial) line download mode.</li></ul>
+<h1><span class="mw-headline" id="RBL">RBL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=2" title="Edit section: RBL">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="RBL_modes_and_info">RBL modes and info</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=3" title="Edit section: RBL modes and info">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The RBL supports 3 distinct boot modes depending on device configuration pins BTSEL[1:0]:
+</p>
+<ul><li>BTSEL[1:0] = 00 - ARM NAND Boot</li>
+<li>BTSEL[1:0] = 11 - ARM UART Boot</li>
+<li>BTSEL[1:0] = 10 - ARM HPI Boot</li></ul>
+<p>If BTSEL[1:0] = 01 the ARM boots from NOR flash without RBL involved.
+</p><p>On DaVinci EVM these settings can be done by Jumper S3-1 and S3-2.
+</p><p>The DM355 supports boot from SD/MMC card rather than HPI. On the DM355 EVM the boot modes are selected by the pair of dip switches SW7.
+</p><p>Further info about RBL can be found in:
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspsupporttechdocsc.tsp?sectionId=3&amp;tabId=409&amp;familyId=1302&amp;abstractName=sprue14a">TI document SPRUE14A</a> - TMS320DM644x DMSoC ARM Subsystem Reference Guide (Rev. A), Chapter 12: Boot modes</li></ul>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspsupporttechdocsc.tsp?sectionId=3&amp;tabId=409&amp;familyId=1302&amp;abstractName=spraai0">TI document SPRAAI0</a> - Basic Application Loading over the Serial Interface for the DaVinci TMS320DM644x</li></ul>
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspsupporttechdocsc.tsp?sectionId=3&amp;tabId=409&amp;familyId=1302&amp;abstractName=spraai4">TI document SPRAAI4</a> - Booting and Flashing via the DaVinci TMS320DM644x Serial Interface</li></ul>
+<ul><li><a rel="nofollow" class="external text" href="http://linux.omap.com/pipermail/davinci-linux-open-source/2006-July/000448.html">Programming via UART</a> - mail from Rudy Reinsch at DaVinci mailing list.</li></ul>
+<h2><span id="RBL_booting_from_NAND_and_ECC/Bad_blocks"></span><span class="mw-headline" id="RBL_booting_from_NAND_and_ECC.2FBad_blocks">RBL booting from NAND and ECC/Bad blocks</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=4" title="Edit section: RBL booting from NAND and ECC/Bad blocks">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The RBL does not do any form of bad block checking/management. It will simply rely on using the HW ECCs generated during the page reads to verify that a page read was correct.  This means that the HW ECC values generated during the reads of each 512 bytes of data will be compared against the ECC values that are stored in the spare bytes of the NAND page. If the RBL sees an ECC mismatch occur during a page read, it will abort the operation from that block and try the next block. It will do this up to block 5 of the NAND device, strting from block 1 (skipping over block 0). If there is an ECC mismatch, the RBL will NOT use the ECC values to do bit error correction, even though the mismatched values could be used to find and correct a single-bit error.
+</p><p>If the RBL can't get a successful read out of the first five blocks, the boot will fail and will default to attempting a UART boot. One recommendation would be to fill the first five blocks with the same header and UBL. Then if the first one ever goes bad, you'll already have four more copies ready to do the job. But if all five of those blocks go bad (which I think is VERY unlikely over the lifetime of the device) then the device won't boot.
+</p><p>But if a block does go bad, the ECC check should detect it, unless the data and ECC are both corrupted in such a way that they still match (which I think would be extremely improbable). So a corrupted image booting up should never be an issue.
+</p><p>Since the pages/blocks holding the UBL aren't going through read and write cycles on a continuous basis, they will probably last a good while, but I understand that blocks can lose their data after some time, so some kind of periodic rewrite of these blocks might be a good idea, like maybe every 1000th system shutdown, for example.
+</p>
+<h1><span class="mw-headline" id="UBL_and_Flashing_Utilities">UBL and Flashing Utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=5" title="Edit section: UBL and Flashing Utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>For UBL there are various versions available.  One key point to understand is that the flashing utility, which writes the UBL and u-boot image, and the UBL itself are intricately related.  The UBL must understand what format the u-boot image was stored in, and where in the NAND blocks and pages to find the image.  The TI UBL and flashing utilites, as an example, use a header scheme very similar to the one used for the UBL image.  The UBL searches over a particular range of blocks to locate and parse this header, which provides the necessary info to locate and load the actual u-boot image.  This is the same way the DM644x RBL looks for the UBL image.  Any other scheme could be used, as long as the flashing program, which writes the u-boot image, and the UBL, which has to read and load the u-boot image, agree on what it is.
+</p>
+<h2><span class="mw-headline" id="DaVinci_Serial_Boot_and_Flashing_Utilities_UBL">DaVinci Serial Boot and Flashing Utilities UBL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=6" title="Edit section: DaVinci Serial Boot and Flashing Utilities UBL">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Support for DM35x, DM644x, and DM646x. Based on the original TI code, released under GPLv2.
+</p><p>The <a href="Serial_Boot_and_Flash_Loading_Utility.html" title="Serial Boot and Flash Loading Utility">Serial Boot and Flash Loading Utility</a> provides modular set of UBL programs to enable you to download and run code in RAM or to burn images to NOR and NAND flash.  The project also provides a Host Application for downloading and running these UBLs via the UART Boot Mode.
+</p>
+<h2><span id="TI_UBL_(original)"></span><span class="mw-headline" id="TI_UBL_.28original.29">TI UBL (original)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=7" title="Edit section: TI UBL (original)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The TI UBL is contained as part of the DVFLasher flash utility. See below <a href="RBL_UBL_and_host_program.html#TI_host_program" title="RBL UBL and host program">TI host program</a> for more information about obtaining and using the DVFLasher utility and its UBL.
+</p>
+<h2><span class="mw-headline" id="rboot_UBL">rboot UBL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=8" title="Edit section: rboot UBL">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a rel="nofollow" class="external text" href="http://linux.omap.com/pipermail/davinci-linux-open-source/2006-September/001066.html">rboot</a> from Rudy Reinsch from DaVinci mailing list
+</p><p>This is derived from U-Boot and has to be compiled with script rbm (in above posting as well). Together with matching open source host tool (<a href="RBL_UBL_and_host_program.html#Open_source_host_program" title="RBL UBL and host program">see below</a>) it is able to load a third stage loader.
+</p><p>This was repackaged by Dirk Behme together with windows and host tool to <a href="RBL_UBL_and_host_tool_collection.html" title="RBL UBL and host tool collection">RBL UBL and host tool collection</a>.
+</p><p>Refer to the <a href="LinuxResources.html#Email_Lists" title="LinuxResources">DaVinci mailing list</a> regarding the <a rel="nofollow" class="external text" href="http://linux.omap.com/pipermail/davinci-linux-open-source/2007-August/003924.html">effort to align on one</a> set of code and to put it into an appropriate repository.
+</p>
+<h2><span class="mw-headline" id="Sergeys_UBL">Sergeys UBL</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=9" title="Edit section: Sergeys UBL">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>See <a rel="nofollow" class="external text" href="http://article.gmane.org/gmane.comp.boot-loaders.u-boot/31457">posting</a> on U-Boot mailing list.
+</p>
+<h1><span class="mw-headline" id="Host_program">Host program</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=10" title="Edit section: Host program">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>There are several Host applications available to download the UBL using the DaVinci UART Boot Mode. 
+</p>
+<h2><span class="mw-headline" id="DaVinci_Serial_Boot_and_Flashing_Utilities">DaVinci Serial Boot and Flashing Utilities</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=11" title="Edit section: DaVinci Serial Boot and Flashing Utilities">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Support for DM35x, DM644x, and DM646x.  Based on the original TI host program (listed above).
+</p><p>The <a href="Serial_Boot_and_Flash_Loading_Utility.html" title="Serial Boot and Flash Loading Utility">Serial Boot and Flash Loading Utility</a> provides several modular UBL programs and the C# Host Download and Flash tools.  The source code is hosted on <a rel="nofollow" class="external free" href="http://sourceforge.net/projects/dvflashutils/">http://sourceforge.net/projects/dvflashutils/</a> and it has been released under GPLv2.  Parts of the development effort for this project have been sponsored by Texas Instrument, Inc. Thanks to TI for supporting an Open Source project!
+</p>
+<h2><span id="TI_host_program_(original)"></span><span class="mw-headline" id="TI_host_program_.28original.29">TI host program (original)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=12" title="Edit section: TI host program (original)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The TI host program, DVFlasher, is written in C# and can be run on Windows with .NET or on Linux with mono. Under Windows, the application can use either the .Net Framework (provided for free at <a rel="nofollow" class="external free" href="http://www.microsoft.com/">http://www.microsoft.com/</a>) or the Mono Framework (available at <a rel="nofollow" class="external free" href="http://www.mono-project.com/">http://www.mono-project.com/</a>). Under Linux, the Mono Framework is the only option.
+</p><p>The DVFlasher program can be obtained at <a rel="nofollow" class="external text" href="http://www.ti.com/dvevmupdates">http://www.ti.com/dvevmupdates</a> under "DM644x DVEVM" in the "DaVinci DM644x EVM Miscellaneous Components" section. See the readme.txt file contained in the DVFlasher package for more usage information. For a step by step example of how to use this utility to flash a new version of u-boot to NAND flash please see <a href="Flashing_NAND_Flash.html" title="Flashing NAND Flash">flashing NAND with DVFlasher</a>.
+</p><p>For more information on the DVFlasher program please refer to <a rel="nofollow" class="external text" href="http://focus.ti.com/dsp/docs/dspsupporttechdocsc.tsp?sectionId=3&amp;tabId=409&amp;familyId=1302&amp;abstractName=spraai4">TI document SPRAAI4</a>.
+</p><p>Note: Code examples for TI document SPRAAI4 <a rel="nofollow" class="external text" href="http://www.ti.com/litv/zip/spraai4">spraai4.zip</a> contain a (older) DVFlasher as well. But this outdated and shouldn't be used any more. Use latest DVFlasher available via dvevmupdates above.
+</p>
+<h2><span id="DV_RBL_UBL_Host_Tool_(originally_load.c_and_dv_host)"></span><span class="mw-headline" id="DV_RBL_UBL_Host_Tool_.28originally_load.c_and_dv_host.29">DV RBL UBL Host Tool (originally load.c and dv_host)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=13" title="Edit section: DV RBL UBL Host Tool (originally load.c and dv host)">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The original load.c and dv_host code was repackaged by Dirk Behme together with windows and host tool to <a href="RBL_UBL_and_host_tool_collection.html" title="RBL UBL and host tool collection">RBL UBL and host tool collection</a>.  Some code released under GPLv2 (but not all files include a GPL license).
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://linux.omap.com/pipermail/davinci-linux-open-source/2006-December/001978.html">load</a> from Peter Wippich from DaVinci mailing list.</li></ul>
+<p>This is for windows console and has to be compiled on your own. It works in relation with rboot (<a href="RBL_UBL_and_host_program.html#Open_source_UBL" title="RBL UBL and host program">see above</a>) and tries to load hard coded <i>u-boot_ram.bin</i> (U-Boot image to be run from RAM only). In a fourth step (RBL -&gt; UBL (rboot) -&gt; u-boot_ram.bin -&gt; Load and write "normal" U-Boot to NOR flash) this then loads and writes the final U-Boot to NOR flash. rboot isn't able to directly write NOR/NAND flash. Therefore, a special U-Boot version (RAM only) has to be used in third step which is capable to write NOR or NAND flash. U-Boot itself can't be an UBL because UBL has size restriction and U-Boot is to large for this.
+</p>
+<h2><span class="mw-headline" id="Sergeys_host_tool">Sergeys host tool</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit&amp;section=14" title="Edit section: Sergeys host tool">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>See <a rel="nofollow" class="external text" href="http://article.gmane.org/gmane.comp.boot-loaders.u-boot/31457">posting</a> on U-Boot mailing list.
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201012109
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.027 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 55/1000000
+Preprocessor generated node count: 60/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:60-0!canonical and timestamp 20201201012109 and revision id 16456
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>RBL UBL and host program</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>RBL UBL and host program</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>RBL UBL and host program</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>RBL UBL and host program</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>RBL UBL and host program</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>RBL UBL and host program</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>RBL UBL and host program</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>RBL UBL and host program</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>RBL UBL and host program</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;oldid=16456">https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;oldid=16456</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_Boot.html" title="Category:Boot">Boot</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=RBL+UBL+and+host+program" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="RBL_UBL_and_host_program.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:RBL_UBL_and_host_program&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="RBL_UBL_and_host_program.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/RBL_UBL_and_host_program.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/RBL_UBL_and_host_program.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;oldid=16456" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=RBL_UBL_and_host_program&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 7 September 2009, at 05:08.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.027","walltime":"0.028","ppvisitednodes":{"value":55,"limit":1000000},"ppgeneratednodes":{"value":60,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201012109","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":231});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/RBL_UBL_and_host_program by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 06:42:33 GMT -->
+</html>

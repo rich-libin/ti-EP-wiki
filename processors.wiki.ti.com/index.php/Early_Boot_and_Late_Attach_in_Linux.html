@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Early_Boot_and_Late_Attach_in_Linux by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:06 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Early Boot and Late Attach in Linux - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Early_Boot_and_Late_Attach_in_Linux","wgTitle":"Early Boot and Late Attach in Linux","wgCurRevisionId":236974,"wgRevisionId":236974,"wgArticleId":41368,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["IPC","Processor SDK Linux Automotive"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Early_Boot_and_Late_Attach_in_Linux","wgRelevantArticleId":41368,"wgRequestId":"ee88a076ce269d21619c3278","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Early_Boot_and_Late_Attach_in_Linux rootpage-Early_Boot_and_Late_Attach_in_Linux skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Early Boot and Late Attach in Linux</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>{{#invoke:Message box|ombox}}
+</p><p>{{#invoke:Message box|ombox}}
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Using_Early_Boot.2FLate_Attach"><span class="tocnumber">2</span> <span class="toctext">Using Early Boot/Late Attach</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Pre-flight_checks"><span class="tocnumber">2.1</span> <span class="toctext">Pre-flight checks</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Enabling_Early_Boot"><span class="tocnumber">2.2</span> <span class="toctext">Enabling Early Boot</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#U-Boot_2014.07"><span class="tocnumber">2.2.1</span> <span class="toctext">U-Boot 2014.07</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#U-Boot_2016.05"><span class="tocnumber">2.2.2</span> <span class="toctext">U-Boot 2016.05</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#U-Boot_2019.01"><span class="tocnumber">2.2.3</span> <span class="toctext">U-Boot 2019.01</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Choosing_the_cores_to_early_boot"><span class="tocnumber">2.3</span> <span class="toctext">Choosing the cores to early boot</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Binary_Placement"><span class="tocnumber">2.4</span> <span class="toctext">Binary Placement</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Customizing_Early_Boot_for_a_Usecase"><span class="tocnumber">2.5</span> <span class="toctext">Customizing Early Boot for a Usecase</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Testing_early_boot"><span class="tocnumber">2.6</span> <span class="toctext">Testing early boot</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Enabling_Late_attach"><span class="tocnumber">3</span> <span class="toctext">Enabling Late attach</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Validation"><span class="tocnumber">4</span> <span class="toctext">Validation</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Debugging_Early_Boot"><span class="tocnumber">5</span> <span class="toctext">Debugging Early Boot</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Debugging_MMU_Faults"><span class="tocnumber">5.1</span> <span class="toctext">Debugging MMU Faults</span></a>
+<ul>
+<li class="toclevel-3 tocsection-16"><a href="#Code_changes_for_debugging"><span class="tocnumber">5.1.1</span> <span class="toctext">Code changes for debugging</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-17"><a href="#Debugging_Peripheral_configuration_Faults"><span class="tocnumber">5.2</span> <span class="toctext">Debugging Peripheral configuration Faults</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Debugging_Late_Attach"><span class="tocnumber">6</span> <span class="toctext">Debugging Late Attach</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#Handling_various_peripherals.2Fusecases"><span class="tocnumber">7</span> <span class="toctext">Handling various peripherals/usecases</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#GPIO"><span class="tocnumber">7.1</span> <span class="toctext">GPIO</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Vision_SDK"><span class="tocnumber">7.2</span> <span class="toctext">Vision SDK</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>DRA7xx SOC's have multiple processor cores - Cortex A15, C66x DSP's and ARM M4 cores. The A15 typically runs a HLOS like Linux/QNX/Android and the remotecores(DSP's and M4's) run a RTOS. In the normal operation, boot loader(U-Boot/SPL) boots and loads the A15 with the HLOS. The A15 boots the DSP and the M4 cores. In this sequence, the interval between the Power on Reset and the remotecores (i.e. the DSP's and the M4's) executing is dependent on the HLOS initialization time. This delay may not be suitable for realizing some usecases with tight time constraints. e.g. Rear View Camera.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:513px;"><a href="File_Normal-boot.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/1/19/Normal-boot.png" width="511" height="263" class="thumbimage" /></a>  <div class="thumbcaption">caption Normal Boot Flow</div></div></div>
+<p>To address this usecase, one may need the boot loader to boot a remote core before booting the A15 with the linux kernel i.e. booting the remotecore early. The kernel then attaches to the already booted remote core for further communication i.e. connecting to the remotecore later in its execution. We refer to this feature as the &quot;Early Boot - Late Attach&quot; functionality. The &quot;Early Boot&quot; functionality is provided by the boot loader. The &quot;Late Attach&quot; functionality is a feature of the Linux Kernel.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:513px;"><a href="File_Early-boot.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/b/b8/Early-boot.png" width="511" height="320" class="thumbimage" /></a>  <div class="thumbcaption">caption Early Boot Flow</div></div></div>
+<p>Late attach functionality has been validated for all IPU2,IPU1,DSP1 and DSP2 on the DRA7xx platform. The next sections describe how to use this feature and how to troubleshoot any issues with early boot and late attach.
+</p>
+<h1><span id="Using_Early_Boot/Late_Attach"></span><span class="mw-headline" id="Using_Early_Boot.2FLate_Attach">Using Early Boot/Late Attach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=2" title="Edit section: Using Early Boot/Late Attach">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Early Boot/Late Attach functionality is supported on the TI GLSDK, PSDKLA and Android SDK from the same codebase. There are minor differences in the build procedure and the location where the binaries are stored based on the SDK and kernel/u-boot version.
+</p>
+<ol style="list-style-type: decimal;">
+<li><p>Kernel 3.14/u-boot 2014.07</p>
+<ol style="list-style-type: decimal;">
+<li><p>When using GLSDK, the configuration used for building u-boot is <code>dra7xx_evm.h</code> and the remotecore binaries are stored in the FAT partition of the SD/eMMC card.</p></li>
+<li><p>When using Android SDK, the configuration used for building u-boot is <code>dra7xx_evm_android.h</code> and the remotecore binaries are stored in individual partitions of the eMMC storage on the EVM.</p></li></ol>
+</li>
+<li><p>Kernel 4.4/u-boot 2016.05 and Kernel 4.19/u-boot 2019.01 </p>
+<ol style="list-style-type: decimal;">
+<li><p>When using PSDKLA, the remotecore binaries are stored in the FAT partition of the SD/eMMC card.</p></li>
+<li><p>When using Android SDK, the remotecore binaries are stored in individual partitions of the eMMC storage on the EVM.</p></li></ol>
+<p>In both Android SDK and PSDKLA, early boot support in u-boot is enabled using KConfig options.</p>
+<p><a rel="nofollow" class="external free" href="http://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Automotive_Software_Developers_Guide#Configuring_U-Boot">http://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Automotive_Software_Developers_Guide#Configuring_U-Boot</a></p></li></ol>
+<h2><span class="mw-headline" id="Pre-flight_checks">Pre-flight checks</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=3" title="Edit section: Pre-flight checks">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol style="list-style-type: decimal;">
+<li><p>Before attempting to early boot a remotecore from u-boot, please ensure that the remotecore binary can be loaded by Linux without any issues. This ensures that the memory map and MMU configuration are done correctly.</p></li>
+<li><p>MLO uses the same memory allocation strategy as the kernel for the carveouts specified in the resource table from the memory pool used by the kernel. The location of the memory pools for each of the remotecores is hardcoded in MLO to kernel defaults. In case the memory allocations in kernel are modified, U-Boot should be modified to match with the configuration specified in the kernel.</p>
+<p>The u-boot source file to modify is <code>board/ti/dra7xx/lateattach.c</code>.</p> and <code>drivers/remoteproc/ti_dra7x_rproc.h</code> in case of U-boot 2019.01
+<p>&lt;source lang="c"&gt;#define DRA7_RPROC_CMA_BASE_IPU1             0x9d000000
+</p>
+<ol><li>define DRA7_RPROC_CMA_BASE_IPU2             0x95800000</li>
+<li>define DRA7_RPROC_CMA_BASE_DSP1             0x99000000</li>
+<li>define DRA7_RPROC_CMA_BASE_DSP2             0x9f000000</li></ol>
+<ol><li>define DRA7_RPROC_CMA_SIZE_IPU1             0x02000000</li>
+<li>define DRA7_RPROC_CMA_SIZE_IPU2             0x03800000</li>
+<li>define DRA7_RPROC_CMA_SIZE_DSP1             0x04000000</li>
+<li>define DRA7_RPROC_CMA_SIZE_DSP2             0x00800000&lt;/source&gt;</li></ol>
+<p>The definitions above should match the definitions in the file <code>arch/arm/boot/dts/dra7-evm.dts</code> in the kernel source.</p>
+<pre>ipu1_cma_pool: ipu1_cma@9d000000 {
+    compatible = &quot;shared-dma-pool&quot;;
+    reg = &lt;0x9d000000 0x2000000&gt;;
+    reusable;
+    status = &quot;okay&quot;;
+};
+
+ipu2_cma_pool: ipu2_cma@95800000 {
+    compatible = &quot;shared-dma-pool&quot;;
+    reg = &lt;0x95800000 0x3800000&gt;;
+    reusable;
+    status = &quot;okay&quot;;
+};
+
+dsp1_cma_pool: dsp1_cma@99000000 {
+    compatible = &quot;shared-dma-pool&quot;;
+    reg = &lt;0x99000000 0x4000000&gt;;
+    reusable;
+    status = &quot;okay&quot;;
+};
+
+dsp2_cma_pool: dsp2_cma@9f000000 {
+    compatible = &quot;shared-dma-pool&quot;;
+    reg = &lt;0x9f000000 0x800000&gt;;
+    reusable;
+    status = &quot;okay&quot;;
+};</pre>
+<p>If the allocations do not match, MLO execution will fail when trying allocate memory for the carveouts.</p>
+<p>You can use the binary <code>print_macros_for_mlo</code> from the <a rel="nofollow" class="external text" href="https://git.ti.com/glsdk/dra7xx-earlyboot-utils/blobs/master/README.md">dra7xx-earlyboot-utils</a> repository to parse the <code>dtb</code> and print the macros that need to be included in the MLO.</p></li>
+<li><p>In case of Kernel 4.4/u-boot 2016.05, there is an additional memory area that needs to be reserved. This area is used for storing the MMU page tables of the individual cores. It is specified in the late attach device tree as shown below.</p>
+<pre>&amp;reserved_mem {
+    latea_pagetbl: late_pgtbl@bfc00000 {
+        reg = &lt;0x0 0xbfc00000 0x0 0x100000&gt;;
+        no-map;
+        status = &quot;okay&quot;;
+    };
+};</pre>
+</li><li><p>In case of Kernel 4.19/u-boot 2010.01, this additional memory area is at 0x95700000. It is specified in the late attach device tree dra7-ipu-common-early-boot.dtsi as shown below.</p>
+<pre>&amp;reserved_mem {
+    mmu-early-page-tables@bfc00000 {
+        reg = &lt;0x0 0x95700000 0x0 0x100000&gt;;
+        no-map;
+        status = &quot;okay&quot;;
+    };
+};</pre>
+<p>For each core, we reserve 16 KB for the Level 1 page table and an additional 16 KB for Level 2 page tables i.e. 32 KB for core. This information is passed to the boot loader via the below macros in <code>board/ti/dra7xx/lateattach.c</code>.</p>
+<p>&lt;source lang="c"&gt;#define DRA7_PGTBL_BASE_IPU1                 0xbfc00000
+</p>
+<ol><li>define DRA7_PGTBL_BASE_IPU2                 0xbfc08000</li>
+<li>define DRA7_PGTBL_BASE_DSP1                 0xbfc10000</li>
+<li>define DRA7_PGTBL_BASE_DSP2                 0xbfc18000&lt;/source&gt;</li></ol>
+<p>In U-boot 2019.01, <code>drivers/remoteproc/ti_dra7x_rproc.h</code>. 
+&lt;source lang="c"&gt;#define DRA7_PGTBL_BASE_IPU1                 0x95700000
+</p>
+<ol><li>define DRA7_PGTBL_BASE_IPU2                 0x95704000</li>
+<li>define DRA7_PGTBL_BASE_DSP1                 0x95708000</li>
+<li>define DRA7_PGTBL_BASE_DSP2                 0x9570c000&lt;/source&gt;</li></ol>
+<p>Based on the usage in early boot, we need only 4x32 = 128 KB of memory for the pagetables. However the carveout in memory is 1 MB in size. This can be reduced to 128 KB if the system is under a memory constraint.</p>
+<p>You can use the binary <code>print_macros_for_mlo</code> from the <a rel="nofollow" class="external text" href="https://git.ti.com/glsdk/dra7xx-earlyboot-utils/blobs/master/README.md">dra7xx-earlyboot-utils</a> repository to parse the <code>dtb</code> and print the base address of the IPU1 page table location. Page table addresses for other cores are placed at a linear offset starting with this address.</p></li>
+<li><p>MLO first loads the remotecore binaries from storage media to a temporary DDR address. Then MLO parses the binaries and copies the code/data sections to the their final locations. Please ensure that the physical addresses used by the remotecore binaries during execution do not overlap with these temporary load addresses.</p>
+<p>The location of the macros controlling these temporary load locations is listed below.</p>
+<table>
+<caption>U-boot 2014.07:Temporary load address for Early boot binaries
+</caption>
+<tbody><tr>
+<th width="11%">Core
+</th>
+<th width="25%">Load Address
+</th>
+<th width="43%">Defined in
+</th></tr>
+<tr>
+<td><p>IPU1</p>
+</td>
+<td><p><code>IPU_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/dra7xx_evm.h</code></p>
+</td></tr>
+<tr>
+<td><p>DSP1</p>
+</td>
+<td><p><code>DSP_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/dra7xx_evm.h</code></p>
+</td></tr>
+<tr>
+<td><p>IPU2</p>
+</td>
+<td><p><code>IPU_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/dra7xx_evm.h</code></p>
+</td></tr>
+<tr>
+<td><p>DSP2</p>
+</td>
+<td><p><code>DSP_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/dra7xx_evm.h</code></p>
+</td></tr></tbody></table>
+<p>In u-boot 2016.05, each core is assigned a distinct temporary load address. The header file in which the macro is defined is also modified.</p>
+<table>
+<caption>U-boot 2016.05:Temporary load address for Early boot binaries
+</caption>
+<tbody><tr>
+<th width="11%">Core
+</th>
+<th width="26%">Load Address
+</th>
+<th width="50%">Defined in
+</th></tr>
+<tr>
+<td><p>IPU1</p>
+</td>
+<td><p><code>IPU1_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/ti_omap5_common.h</code></p>
+</td></tr>
+<tr>
+<td><p>DSP1</p>
+</td>
+<td><p><code>DSP1_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/ti_omap5_common.h</code></p>
+</td></tr>
+<tr>
+<td><p>IPU2</p>
+</td>
+<td><p><code>IPU2_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/ti_omap5_common.h</code></p>
+</td></tr>
+<tr>
+<td><p>DSP2</p>
+</td>
+<td><p><code>DSP2_LOAD_ADDR</code></p>
+</td>
+<td><p><code>include/configs/ti_omap5_common.h</code></p>
+</td></tr></tbody></table>
+<p>In u-boot 2019.01, each core is assigned a distinct temporary load address. The source file in which the macro is defined is also modified.</p><p class="mw-empty-elt"></p><p class="mw-empty-elt"></p><table>
+
+<caption>U-boot 2019.01:Temporary load address for Early boot binaries
+</caption>
+
+<tbody><tr>
+<th width="11%">Core
+</th>
+<th width="26%">Load Address
+</th>
+<th width="75%">Defined in
+</th></tr>
+<tr>
+<td><p>IPU1</p>
+</td>
+<td><p><code>IPU1_LOAD_ADDR</code></p>
+</td>
+<td><p><code>arch/arm/mach-omap2/boot-common.c and drivers/remoteproc/ti_dra7x_rproc.h</code></p>
+</td></tr>
+<tr>
+<td><p>DSP1</p>
+</td>
+<td><p><code>DSP1_LOAD_ADDR</code></p>
+</td>
+<td><p><code>arch/arm/mach-omap2/boot-common.c and drivers/remoteproc/ti_dra7x_rproc.h</code></p>
+</td></tr>
+<tr>
+<td><p>IPU2</p>
+</td>
+<td><p><code>IPU2_LOAD_ADDR</code></p>
+</td>
+<td><p><code>arch/arm/mach-omap2/boot-common.c and drivers/remoteproc/ti_dra7x_rproc.h</code></p>
+</td></tr>
+<tr>
+<td><p>DSP2</p>
+</td>
+<td><p><code>DSP2_LOAD_ADDR</code></p>
+</td>
+<td><p><code>arch/arm/mach-omap2/boot-common.c and drivers/remoteproc/ti_dra7x_rproc.h</code></p>
+</td></tr></tbody></table>
+</li></ol>
+<h2><span class="mw-headline" id="Enabling_Early_Boot">Enabling Early Boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=4" title="Edit section: Enabling Early Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Early Boot functionality needs to be explictly enabled in u-boot.
+</p>
+<h3><span class="mw-headline" id="U-Boot_2014.07">U-Boot 2014.07</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=5" title="Edit section: U-Boot 2014.07">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This is done by definining the flag &quot;CONFIG_LATE_ATTACH&quot; in the configuration file. In case of GLSDK, change the below lines in <code>include/configs/dra7xx_evm.h</code> from
+</p>
+<pre>#undef CONFIG_LATE_ATTACH
+
+#ifdef CONFIG_LATE_ATTACH</pre>
+<p>to
+</p>
+<pre>#define CONFIG_LATE_ATTACH
+
+#ifdef CONFIG_LATE_ATTACH</pre>
+<p>and rebuilt u-boot using the configuration <code>dra7xx_evm_config</code>.
+</p>
+<h3><span class="mw-headline" id="U-Boot_2016.05">U-Boot 2016.05</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=6" title="Edit section: U-Boot 2016.05">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Please enable the configuration option &quot;CONFIG_LATE_ATTACH&quot; in the file <code>configs/dra7xx_evm_defconfig.h</code>. Change the lines
+</p>
+<pre>CONFIG_LATE_ATTACH=n</pre>
+<p>to
+</p>
+<pre>CONFIG_LATE_ATTACH=y</pre>
+<p>and rebuilt u-boot using the configuration <code>dra7xx_evm_config</code>.
+</p>
+<h3><span class="mw-headline" id="U-Boot_2019.01">U-Boot 2019.01</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=7" title="Edit section: U-Boot 2019.01">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Please apply this patch <a rel="nofollow" class="external free" href="File_0001-u-boot-configs-Enable-configs-for-Early-boot-support.html">http://processors.wiki.ti.com/index.php/File:0001-u-boot-configs-Enable-configs-for-Early-boot-support.zip</a> on U-boot repository in board-support to enable Early Boot of remoteproc cores.
+</p><p>and rebuild u-boot using the configuration <code>dra7xx_evm_config</code>.
+</p>
+<h2><span class="mw-headline" id="Choosing_the_cores_to_early_boot">Choosing the cores to early boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=8" title="Edit section: Choosing the cores to early boot">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The array <code>cores_to_boot</code> in the file <code>common/spl/spl.c:board_init_r()</code> controls which cores are loaded by MLO.
+</p><p>&lt;source lang="c"&gt;#ifdef CONFIG_LATE_ATTACH
+</p>
+<pre>   u32 cores_to_boot[] = { IPU2, DSP1, DSP2, IPU1 };
+</pre>
+<ol><li>endif&lt;/source&gt;</li></ol>
+<p>This array can be modified to specify the cores to loaded from MLO and the order in which the cores should be loaded. This is applicable for Uboot 2016.05.
+</p><p>In case of u-boot 2019.01, MLO will always look for all the four firmwares, if they exist in boot partition, MLO tries to load and configures.
+</p>
+<h2><span class="mw-headline" id="Binary_Placement">Binary Placement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=9" title="Edit section: Binary Placement">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>When building with the GLSDK/PSDKLA configuration, the binaries are expected to be present on the same partition as the boot loader on the SD card or on the eMMC card.
+</p>
+<table>
+<caption>Binary Locations for GLSDK
+</caption>
+<tbody><tr>
+<th width="11%">Core
+</th>
+<th width="28%">Binary name
+</th>
+<th width="31%">Location
+</th></tr>
+<tr>
+<td>DSP1
+</td>
+<td>dra7-dsp1-fw.xe66
+</td>
+<td>Boot partition(FAT)
+</td></tr>
+<tr>
+<td>DSP2
+</td>
+<td>dra7-dsp2-fw.xe66
+</td>
+<td>Boot partition(FAT)
+</td></tr>
+<tr>
+<td>IPU1
+</td>
+<td>dra7-ipu1-fw.xem4
+</td>
+<td>Boot partition(FAT)
+</td></tr>
+<tr>
+<td>IPU2
+</td>
+<td>dra7-ipu2-fw.xem4
+</td>
+<td>Boot partition(FAT)
+</td></tr></tbody></table>
+<p>The binaries can be stripped of debug symbols to save on the size.
+</p>
+<h2><span class="mw-headline" id="Customizing_Early_Boot_for_a_Usecase">Customizing Early Boot for a Usecase</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=10" title="Edit section: Customizing Early Boot for a Usecase">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The Early boot code in U-Boot does the necessary configuration to bring up a remotecore. This includes the timers and the MMUs. It does not configure any other peripherals by default. Some usecases may require additional peripheral configuration before running the remotecore. U-Boot includes placeholder functions that can be populated for this purpose. These can be found in the file <code>board/ti/dra7xx/lateattach.c</code>.
+</p><p>&lt;source lang="c"&gt;/*
+</p>
+<pre>* If the remotecore binary expects any peripherals to be setup before it has
+* booted, configure them here.
+*
+* These functions are left empty by default as their operation is usecase
+* specific.
+*/
+</pre>
+<p>u32 ipu1_config_peripherals(u32 core_id, struct rproc *cfg)
+{
+</p>
+<pre>   return 0;
+</pre>
+<p>}
+</p><p>u32 ipu2_config_peripherals(u32 core_id, struct rproc *cfg)
+{
+</p>
+<pre>   return 0;
+</pre>
+<p>}
+</p><p>u32 dsp1_config_peripherals(u32 core_id, struct rproc *cfg)
+{
+</p>
+<pre>   return 0;
+</pre>
+<p>}
+</p><p>u32 dsp2_config_peripherals(u32 core_id, struct rproc *cfg)
+{
+</p>
+<pre>   return 0;
+</pre>
+<p>}&lt;/source&gt;
+As an example, an audio playback usecase running on DSP1 needs McASP3, I2C1, I2C2 and a PLL configuration. These can be configured in the <code>board/ti/dra7xx/lateattach.c:dsp1_config_peripherals()</code> function.
+</p><p>&lt;source lang="c"&gt;u32 dsp1_config_peripherals(u32 core_id, struct rproc *cfg)
+{
+</p>
+<pre>   u32 reg=0;
+</pre>
+<pre>   /* enable I2C1 */
+   reg = __raw_readl(CM_L4PER_I2C1_CLKCTRL);
+   __raw_writel((reg &amp; ~0x00000003)|0x2, CM_L4PER_I2C1_CLKCTRL);
+</pre>
+<pre>   reg = __raw_readl(CM_L4PER_I2C2_CLKCTRL);
+   __raw_writel((reg &amp; ~0x00000003)|0x2, CM_L4PER_I2C2_CLKCTRL);
+</pre>
+<pre>   /* enable mcasp3 */
+   reg = __raw_readl(CM_L4PER2_MCASP3_CLKCTRL);
+   __raw_writel((reg &amp; ~0x00000003)|0x2, CM_L4PER2_MCASP3_CLKCTRL);
+</pre>
+<pre>   dpll_abe_opp_config(44100);
+   return 0;
+</pre>
+<p>}&lt;/source&gt;
+</p>
+<h2><span class="mw-headline" id="Testing_early_boot">Testing early boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=11" title="Edit section: Testing early boot">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>Place the MLO built with early boot enabled and the remotecore binaries in the specified locations and power on the EVM.</li>
+<li>The MLO should locate the remotecore binary and proceed to load it and then jump to U-Boot or Kernel.</li></ol>
+<p>An easy way to verify that early boot is working is by stopping the A15 execution at the U-Boot prompt and connecting to the remotecore via a JTAG. If connecting to a remotecore via JTAG does not work, please refer to the section of &quot;Debugging Early Boot&quot; later in the document. 
+<br />
+Another way to check the functionality is to execute the below command after kernel boot-up. When the core is bootstrapped from u-boot, the values of 'Time at reset()', 'Time at startup()' and 'Time at main()' should be below 60,000 ticks since it typically takes less than 2s to load the firmware. These values are above 300,000 when the firmware is bootstrapped from kernel.  
+</p>
+<pre>root@dra7xx-evm:~# cat /sys/kernel/debug/remoteproc/remoteproc0/trace0
+[0][      0.000] Watchdog enabled: TimerBase = 0x68824000 SMP-Core = 0 Freq = 19200000
+[0][      0.000] Watchdog enabled: TimerBase = 0x68826000 SMP-Core = 1 Freq = 19200000
+[0][      0.000] Watchdog_restore registered as a resume callback
+[0][      0.000] 18 Resource entries at 0x3000
+[0][      0.000] messageq_single.c:main: MultiProc id = 2
+[0][      0.000] Time at reset() is 51615 ticks
+[0][      0.000] Time at startup()  is 51726 ticks
+[0][      0.000] Time at main()  is 51804 ticks
+[0][      0.000] registering rpmsg-proto:rpmsg-proto service on 61 with HOST
+[0][      0.000] tsk1Fxn: created MessageQ: SLAVE_IPU1; QueueID: 0x20080
+[0][      0.000] Awaiting sync message from host...
+</pre>
+<p>In the next section, we describe the kernel modifications necessary to allow it to connect to a remotecore already loaded by MLO.
+</p>
+<h1><span class="mw-headline" id="Enabling_Late_attach">Enabling Late attach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=12" title="Edit section: Enabling Late attach">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Loading the remotecores in the kernel is done via the <code>remoteproc</code> module. Each remotecore requires timers for OS tick and watchdog purposes and MMU's for mapping virtual addresses to physical addresses. The remoteproc module uses device tree determine the timers and mmu's used for each remotecore.
+</p><p>The device tree nodes for each of the cores are shown below. The allocation of timers to remotecores is from the files <code>arch/arm/boot/dts/dra7-evm.dts</code> and <code>arch/arm/boot/dts/dra7.dtsi</code> in the kernel source tree.
+</p>
+<table>
+<tbody><tr>
+<th width="9%">Core
+</th>
+<th width="20%">Remotecore node
+</th>
+<th width="17%">OS timer node
+</th>
+<th width="27%">Watch dog timer node(s)
+</th>
+<th width="23%">MMU node(s)
+</th></tr>
+<tr>
+<td>IPU2
+</td>
+<td>ipu2
+</td>
+<td>timer3
+</td>
+<td>timer4,timer9
+</td>
+<td>mmu_ipu2
+</td></tr>
+<tr>
+<td>IPU1
+</td>
+<td>ipu1
+</td>
+<td>timer11
+</td>
+<td>timer7,timer8
+</td>
+<td>mmu_ipu1
+</td></tr>
+<tr>
+<td>DSP2
+</td>
+<td>dsp2
+</td>
+<td>timer6
+</td>
+<td>
+</td>
+<td>mmu0_dsp2,mmu1_dsp2
+</td></tr>
+<tr>
+<td>DSP1
+</td>
+<td>dsp1
+</td>
+<td>timer5
+</td>
+<td>timer10
+</td>
+<td>mmu0_dsp1,mmu1_dsp1
+</td></tr></tbody></table>
+<p>During the normal boot flow, Linux kernel resets, idles and configures all functional blocks to reach a known initial state. This sequence of operations will terminate execution on a remotecore started by the boot loader. To prevent this from happening, the following attributes need to be set on <b>each</b> device tree node corresponding to the remotecore.
+</p>
+<ol><li><code>ti,late-attach</code></li>
+<li><code>ti,no-idle-on-init</code></li>
+<li><code>ti,no-reset-on-init</code>.</li></ol>
+<p>These three attributes together signal to the kernel that
+</p>
+<ol><li>Late attach feature is in use for the remote core.</li>
+<li>The remotecore and other nodes have been configured and are in use before the kernel boot. These should not be reset or idled during kernel boot.</li></ol>
+<p>In Linux Kernel 4.19, following two attributes need to be enabled for late-attach
+</p>
+<ol><li><code>ti,no-idle-on-init</code></li>
+<li><code>ti,no-reset-on-init</code>.</li></ol>
+<p>Refer dra7-dsp-common-early-boot.dtsi
+</p><p>An example showing the device tree modifications necessary when late attaching to IPU2 are shown below. Please note that the attributes are set on the <code>ipu2</code> node as well as the timers and mmu nodes used by IPU2.
+</p>
+<pre>&amp;ipu2 {
+    ti,late-attach;
+    ti,no-idle-on-init;
+    ti,no-reset-on-init;
+};
+
+&amp;timer3 {
+    ti,late-attach;
+    ti,no-idle-on-init;
+    ti,no-reset-on-init;
+};
+
+&amp;timer4 {
+    ti,late-attach;
+    ti,no-idle-on-init;
+    ti,no-reset-on-init;
+};
+
+&amp;timer9 {
+    ti,late-attach;
+    ti,no-idle-on-init;
+    ti,no-reset-on-init;
+};
+
+&amp;mmu_ipu2{
+    ti,late-attach;
+    ti,no-idle-on-init;
+    ti,no-reset-on-init;
+};</pre>
+<p>You can use the binary <code>check_late_props</code> from the <a rel="nofollow" class="external text" href="https://git.ti.com/glsdk/dra7xx-earlyboot-utils/blobs/master/README.md">dra7xx-earlyboot-utils</a> repository to parse the <code>dtb</code> and check whether late attach properties are applied on each remotecore node.
+</p>
+<h1><span class="mw-headline" id="Validation">Validation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=13" title="Edit section: Validation">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Early Boot/Late attach functionality has been validated with binaries for different usecases.
+</p>
+<ol style="list-style-type: decimal;">
+<li><p>The IPC <code>messageq_single</code> sample application has been used to validate late attach for all the cores as a first level test. All the cores were loaded and functionality verified. On PSDKLA, these binaries can be found prebuilt in the target file system.</p>
+<p><a rel="nofollow" class="external free" href="http://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Automotive_Software_Developers_Guide#User_space_sample_application">http://processors.wiki.ti.com/index.php?title=Processor_SDK_Linux_Automotive_Software_Developers_Guide#User_space_sample_application</a></p>
+<p>On GLSDK, one can build these applications using the SDK top level makefile.</p></li>
+<li><p>IPU2 late attach has been verified using the IPUMM firmware(<code>dra7-ipu2-fw.xem4</code>) supplied in GLSDK.</p></li>
+<li><p>DSP1, DSP2 and IPU1 binaries from Vision SDK were used to verify late attach.</p></li></ol>
+<p>In the next sections, we will discuss how to debug any issues encountered with Early Boot and Late Attach.
+</p>
+<h1><span class="mw-headline" id="Debugging_Early_Boot">Debugging Early Boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=14" title="Edit section: Debugging Early Boot">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ol style="list-style-type: decimal;">
+<li><p>Ensure that Linux kernel is able to boot the remotecore using the same binary.</p></li>
+<li><p>Ensure that the <code>MLO</code> has been built with the <code>CONFIG_LATE_ATTACH</code> macro enabled in the right configuration file.</p></li>
+<li><p>Ensure that the desired cores are entered in the <code>cores_to_boot</code> array.</p></li>
+<li><p>If you are facing issues with early loading multiple cores, try early loading one core at a time to isolate issues.</p></li>
+<li><p>In case of PSDKLA/GLSDK, <code>MLO</code> looks for binaries in the FAT partition of the eMMC or of the SD card. The binaries are expected to have the same names as expected by the Linux Kernel. Please confirm the name and the location of the binaries.</p>
+<table>
+<caption>Binary Names
+</caption>
+<tbody><tr>
+<th width="11%">Core
+</th>
+<th width="28%">Binary name
+</th></tr>
+<tr>
+<td><p>DSP1</p>
+</td>
+<td><p>dra7-dsp1-fw.xe66</p>
+</td></tr>
+<tr>
+<td><p>DSP2</p>
+</td>
+<td><p>dra7-dsp2-fw.xe66</p>
+</td></tr>
+<tr>
+<td><p>IPU1</p>
+</td>
+<td><p>dra7-ipu1-fw.xem4</p>
+</td></tr>
+<tr>
+<td><p>IPU2</p>
+</td>
+<td><p>dra7-ipu2-fw.xem4</p>
+</td></tr></tbody></table>
+</li>
+<li><p>The remotecore binary should contain a resource table for MLO to setup the MMU mappings and copy the ELF sections to the desired locations. If the remotecore binary can be loaded in the normal manner by the kernel, this is taken care off. For more information on the resource table, refer to</p>
+<ol style="list-style-type: decimal;">
+<li><a rel="nofollow" class="external free" href="http://lwn.net/Articles/489009/">http://lwn.net/Articles/489009/</a></li>
+<li><a rel="nofollow" class="external free" href="IPC_Resource_customTable.html">http://processors.wiki.ti.com/index.php/IPC_Resource_customTable</a></li></ol>
+<p>You can use the binary <code>dump_rsc_table</code> from the <a rel="nofollow" class="external text" href="https://git.ti.com/glsdk/dra7xx-earlyboot-utils/blobs/master/README.md">dra7xx-earlyboot-utils</a> repository to parse the remotecore binary and print the resource table in human readable form.</p></li>
+<li><p>Ensure that the location of the memory pools specified in the kernel device tree is the same as the locations specified in MLO. Please see the above section on &quot;Pre-Flight Checks&quot; for details.</p></li>
+<li><p>As long as the above steps are taken care off, MLO should load the remotecore binaries and start them. To trace the load process, please enable debug prints on the following files.</p>
+<ol style="list-style-type: decimal;">
+<li><code>board/ti/dra7xx/lateattach.c</code>.</li>
+<li><code>common/elf_remoteproc.c</code></li>
+<li><code>common/spl/spl.c</code></li></ol>
+<p>Enabling debug flag can be done by either doing</p>
+<p>&lt;source lang="c"&gt;#define DEBUG&lt;/source&gt;
+</p>
+<p>at the top of the source file. This should be done before including <code>common.h</code>. Otherwise the debug flag can be set through the makefile in the appropriate directory. For <code>lateattach.c</code>, below change can be made in <code>board/ti/dra7xx/Makefile</code>.</p>
+<pre>CFLAGS_lateattach.o&#160;:= -DDEBUG</pre></li></ol>
+<p>Once the remotecore is loading and running, there are two kinds of faults that can be observed.
+</p>
+<ol><li>MMU Faults - These faults are mostly due to incorrect or incomplete resource table configuration.</li>
+<li>Peripheral configuration faults - These faults are due to a subsystem or peripheral required by the remotecore not being powered on/configured by u-boot.</li></ol>
+<h2><span class="mw-headline" id="Debugging_MMU_Faults">Debugging MMU Faults</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=15" title="Edit section: Debugging MMU Faults">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In the normal flow, Linux kernel handles the MMU error interrupts, prints the MMU fault address and reloads the core. When loading the remotecore from MLO, we need to check the MMU registers for any faults. MMU faults can be determined by checking the <code>MMU_IRQSTATUS</code> register of MMU. In case of a translation fault, the address with the fault can be found by reading the <code>MMU_FAULT_AD</code> register in the MMU.
+</p><p>As the MMU error handling is normally done on the A15, MLO configures the MMU to not generate an interrupt into the remotecore. As we are polling the MMU registers for errors, it is possible that the captured MMU fault address is not the first one that occurred.
+</p><p>As a temporary debug measure, we can configure the MMU to generate an interrupt to the remotecore itself by changing the below lines in <code>board/ti/dra7xx/lateattach.c</code> from
+</p><p>&lt;source lang="c"&gt;reg = __raw_readl(mmu_base + 0x88);
+</p><p>/* enable bus-error back */
+__raw_writel(reg | 0x1, mmu_base + 0x88);&lt;/source&gt;
+to
+</p><p>&lt;source lang="c"&gt;reg = __raw_readl(mmu_base + 0x88);
+</p><p>/* enable bus-error back */
+__raw_writel((reg &amp; (~0x1)), mmu_base + 0x88);&lt;/source&gt;
+This will cause the remotecore to jump to the exception handler and possibly prevent further MMU faults from overwriting the first address where the MMU fault occured.
+</p><p>Once the MMU fault address is determined and it is a valid address, the fault can be fixed by including a mapping for the fault address in the resource table. This is usually the case when we need to access certain L3 and L4 regions or physical memory locations.
+</p>
+<h3><span class="mw-headline" id="Code_changes_for_debugging">Code changes for debugging</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=16" title="Edit section: Code changes for debugging">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If the above approach does not help, one can try to
+</p>
+<ol style="list-style-type: decimal;">
+<li><p>Put a while() loop in the main function of the remotecore.</p>
+<p>&lt;source lang="c"&gt;volatile int ccs_dbg_flag = 0;
+void wait_for_debugger(void)
+{
+</p>
+<pre>   ccs_dbg_flag = 1;
+   System_printf("Entering Infinite loop\n");
+   while (ccs_dbg_flag == 1)
+       asm(" NOP");
+   return;
+</pre>
+<p>}
+</p><p>Int main(Int argc, Char* argv[])
+{
+</p>
+    wait_for_debugger();&lt;/source&gt;</li>
+<li><p>Load the remotecore via MLO.</p></li>
+<li><p>Stop A15 execution before it reaches kernel.</p></li>
+<li><p>Connect to the remotecore via JTAG and step through the remotecore execution until the MMU fault is encountered.</p></li></ol>
+<p>If the remotecore encounters a fault even before reaching the main() function, one can add a SYSBIOS hook that calls a user defined function on taking the core out of reset and place the while() loop in the startup function.
+</p><p>In the SYSBIOS <code>.cfg</code> file, do the following.
+</p>
+<pre class="javascript">var Startup = xdc.useModule('xdc.runtime.Startup');
+Startup.resetFxn = &quot;&amp;dbgResetFxn&quot;;
+Startup.firstFxns[Startup.firstFxns.length++] = &quot;&amp;dbgUserStartupFxn&quot;;</pre>
+<p>Add the below functions to your source.
+</p><p>&lt;source lang="c"&gt;void dbgUserStartupFxn(void)
+{
+</p>
+<pre>       wait_for_debugger();
+</pre>
+<p>}
+</p><p>void dbgResetFxn(void)
+{
+</p>
+<pre>       wait_for_debugger();
+</pre>
+<p>}&lt;/source&gt;
+With these changes, one should be able to determine the code causing the MMU fault.
+</p>
+<h2><span class="mw-headline" id="Debugging_Peripheral_configuration_Faults">Debugging Peripheral configuration Faults</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=17" title="Edit section: Debugging Peripheral configuration Faults">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Peripheral configuration faults can be easily avoided by making a list of the peripherals or subsystems accessed by the remotecore and powering them on in MLO. MLO includes placeholder functions that are invoked before starting a remotecore. These functions can be populated to power on the required peripherals.
+</p>
+<h1><span class="mw-headline" id="Debugging_Late_Attach">Debugging Late Attach</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=18" title="Edit section: Debugging Late Attach">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<ol><li>Ensure that all the 3 late attach attributes are set on the device tree nodes corresponding to the remotecore node being loaded from the boot loader. Otherwise the kernel will reset and reload the remotecore as in the normal boot flow.</li>
+<li>Ensure that the 3 late attach attributes are set <b>only</b> on the device tree nodes corresponding to the remotecore node being loaded from the boot loader. Otherwise the kernel will try to communicate with a remotecore that is not loaded and run into an error or a crash in a worst case scenario.</li>
+<li>Ensure that the peripherals accessed by the remotecore are not being handled by the kernel. This can be accomplished by removing the corresponding nodes from the device tree.</li></ol>
+<h1><span id="Handling_various_peripherals/usecases"></span><span class="mw-headline" id="Handling_various_peripherals.2Fusecases">Handling various peripherals/usecases</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=19" title="Edit section: Handling various peripherals/usecases">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="GPIO">GPIO</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=20" title="Edit section: GPIO">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If you find, kernel turning off GPIO clocks below are two ways to keep them on. The example below uses GPIO2 as an example.
+</p>
+<ol style="list-style-type: decimal;">
+<li><p>Add below attributes to the GPIO node in device tree. This is only necessary if the GPIO2 pins are also being accessed from kernel.</p>
+<pre>&amp;gpio2 {
+    ti,no-idle;
+    ti,no-idle-on-init;
+    ti,no-reset-on-init;
+};</pre></li>
+<li><p>Delete the GPIO node from the device tree.</p>
+<pre>/delete-node/ &amp;gpio2;</pre></li></ol>
+<p>In both cases, the GPIO2 instance remains on.
+</p>
+<pre>root@dra7xx-evm:~# omapconf read 0x4a009760
+00020001
+root@dra7xx-evm:~# omapconf read 0x48055134
+FFFFFFFE</pre>
+<h2><span class="mw-headline" id="Vision_SDK">Vision SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;section=21" title="Edit section: Vision SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Vision SDK uses DSS, VIP, VPE from the M4 core. Customers typically do an early boot of the M4 binary to bring up the display and camera quickly. In such scenarios, the peripherals used by Vision SDK need to be turned on before starting the M4 and DSP. Below patch can be used a starting point for the required code changes.
+</p>
+<table>
+<tbody><tr>
+<th width="7%">No.
+</th>
+<th width="35%">URL
+</th>
+<th width="57%">Headline
+</th></tr>
+<tr>
+<td>1
+</td>
+<td><a rel="nofollow" class="external free" href="http://review.omapzoom.org/38438">http://review.omapzoom.org/38438</a>
+</td>
+<td>spl: dra7xx: early boot: enable peripherals for vision sdk
+</td></tr></tbody></table>
+<p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130182854
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.083 seconds
+Real time usage: 0.086 seconds
+Preprocessor visited node count: 230/1000000
+Preprocessor generated node count: 441/1000000
+Post‐expand include size: 58/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2957/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.708      1 -total
+ 95.83%    2.595      2 Template:Ombox
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:41368-0!canonical and timestamp 20201130182854 and revision id 236974
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Early Boot and Late Attach in Linux</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Early Boot and Late Attach in Linux</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach in Linux</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach in Linux</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach in Linux</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach in Linux</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach in Linux</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Early Boot and Late Attach in Linux</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Early Boot and Late Attach in Linux</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;oldid=236974">https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;oldid=236974</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_IPC.html" title="Category:IPC">IPC</a></li><li><a href="Category_Processor_SDK_Linux_Automotive.html" title="Category:Processor SDK Linux Automotive">Processor SDK Linux Automotive</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Early+Boot+and+Late+Attach+in+Linux" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Early_Boot_and_Late_Attach_in_Linux.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Early_Boot_and_Late_Attach_in_Linux&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Early_Boot_and_Late_Attach_in_Linux.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Early_Boot_and_Late_Attach_in_Linux.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Early_Boot_and_Late_Attach_in_Linux.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;oldid=236974" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Early_Boot_and_Late_Attach_in_Linux&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 29 November 2019, at 05:30.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.083","walltime":"0.086","ppvisitednodes":{"value":230,"limit":1000000},"ppgeneratednodes":{"value":441,"limit":1000000},"postexpandincludesize":{"value":58,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2957,"limit":5000000},"timingprofile":["100.00%    2.708      1 -total"," 95.83%    2.595      2 Template:Ombox"]},"cachereport":{"timestamp":"20201130182854","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":231});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Early_Boot_and_Late_Attach_in_Linux by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:45:12 GMT -->
+</html>

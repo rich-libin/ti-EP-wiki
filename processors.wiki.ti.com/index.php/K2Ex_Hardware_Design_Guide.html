@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/K2Ex_Hardware_Design_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 14:17:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>K2Ex Hardware Design Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"K2Ex_Hardware_Design_Guide","wgTitle":"K2Ex Hardware Design Guide","wgCurRevisionId":195875,"wgRevisionId":195875,"wgArticleId":37902,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["66AK2Ex DSP+ARM"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"K2Ex_Hardware_Design_Guide","wgRelevantArticleId":37902,"wgRequestId":"a386e040fbe49d9d70d40e79","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-K2Ex_Hardware_Design_Guide rootpage-K2Ex_Hardware_Design_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">K2Ex Hardware Design Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Hardware_Design_Timeline"><span class="tocnumber">1</span> <span class="toctext"><span>Hardware Design Timeline</span></span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Introduction"><span class="tocnumber">2</span> <span class="toctext"><span>Introduction</span></span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Constructing_the_Block_Diagram"><span class="tocnumber">3</span> <span class="toctext"><span>Constructing the Block Diagram</span></span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Selecting_the_Boot_Mode"><span class="tocnumber">4</span> <span class="toctext"><span>Selecting the Boot Mode</span></span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Confirming_Electrical_and_Timing_Compatibility"><span class="tocnumber">5</span> <span class="toctext"><span>Confirming Electrical and Timing Compatibility</span></span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Designing_the_Power_Subsystem"><span class="tocnumber">6</span> <span class="toctext"><span>Designing the Power Subsystem</span></span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Designing_the_Clocking_Subsystem"><span class="tocnumber">7</span> <span class="toctext"><span>Designing the Clocking Subsystem</span></span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Floorplanning_the_PCB"><span class="tocnumber">8</span> <span class="toctext"><span>Floorplanning the PCB</span></span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Creating_the_Schematics"><span class="tocnumber">9</span> <span class="toctext"><span>Creating the Schematics</span></span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Layout_the_PCB"><span class="tocnumber">10</span> <span class="toctext"><span>Layout the PCB</span></span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Testing.2FDebugging"><span class="tocnumber">11</span> <span class="toctext"><span>Testing/Debugging</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Debugging_Tools"><span class="tocnumber">11.1</span> <span class="toctext">Debugging Tools</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Hardware_Debugging"><span class="tocnumber">11.2</span> <span class="toctext">Hardware Debugging</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#DDR3"><span class="tocnumber">11.2.1</span> <span class="toctext">DDR3</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Hardware_Design_Timeline"><span style="color: blue">Hardware Design Timeline</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=1" title="Edit section: Hardware Design Timeline">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<table cellspacing="0" cellpadding="2" border="0" align="center" class="FCK&#95;_ShowTableBorders">
+
+<tbody><tr>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Constructing_the_Block_Diagram">Constructing the Block Diagram</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Selecting_the_Boot_Mode">Selecting the Boot Mode</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Confirming_Electrical_and_Timing_Compatibility">Confirming Electrical and Timing Compatibility</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Designing_the_Power_Subsystem">Designing the Power Subsystem</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Designing_the_Clocking_Subsystem">Designing the Clocking Subsystem</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Floorplanning_the_PCB">Floorplanning the PCB</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Creating_the_Schematics">Creating the Schematics</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Layout_the_PCB">Layout the PCB</a>
+</td>
+<td>→
+</td>
+<td valign="middle" bgcolor="#ffff99" align="center"><a href="#Testing.2FDebugging">Testing / Debugging</a>
+</td></tr></tbody></table>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Introduction"><span style="color: blue">Introduction</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=2" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Welcome to the K2Ex Hardware Design Guide. The purpose of this guide is to walk hardware&#160;designers through the various stages of designing a board around K2Ex device. The guide follows the structure shown in the Hardware Design Timeline above. Each design stage in the Timeline links to a collection of useful documentation, application notes, and design recommendations pertaining to that stage. Using&#160;this Guide, hardware designers can efficiently locate the resources they need at every step in the board design flow. 
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Constructing_the_Block_Diagram"><span style="color: blue">Constructing the Block Diagram</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=3" title="Edit section: Constructing the Block Diagram">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The first step in designing the hardware platform is to create a detailed block diagram.&#160; The block diagram should contain all major system ICs and illustrate which I/O ports are used for device interconnection.&#160; Below is a collection of resources to aid in the Block Diagram creation process. 
+</p>
+<ul><li>The summary of K2Ex devices architecture are available in the below link.
+<ul><li><a rel="nofollow" class="external text" href="Keystone_II_multicore.html">Keystone2 Device Architecture</a></li></ul></li></ul>
+<ul><li>The link to the K2Ex products folder provides block diagrams, application notes, tools, software, design considerations, and other related information for various products under category "Related End Equipments".
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/keystone_arm/66ak2ex/products.page">66AK2Ex Products Folder</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/arm/keystone/arm_cortex_a15/am5k2x/products.page">AM5K2Ex Products Folder</a></li></ul></li></ul>
+<ul><li>The K2Ex EVM is a good resource for design with K2Ex devices. The EVM resource files are available under this link.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/tool/XEVMK2EX">K2Ex EVM</a></li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Selecting_the_Boot_Mode"><span style="color: blue">Selecting the Boot Mode</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=4" title="Edit section: Selecting the Boot Mode">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The block diagram should also indicate which interface will be used for booting this device. 
+</p>
+<ul><li>These devices contain an on-chip ROM Bootloader.
+<ul><li>The boot config pins are sampled at power-on-reset.</li>
+<li>Sets up system for boot depending on boot configuration selected.</li>
+<li>Depending on boot mode, copies image to internal RAM and then executes it.</li>
+<li>Maximum size of the boot image is 256KBytes.</li></ul></li>
+<li>The following boot modes are supported:
+<ul><li>ARM I2C</li>
+<li>ARM SPI</li>
+<li>ARM EMIF</li>
+<li>ARM NAND</li>
+<li>ARM Ethernet</li>
+<li>ARM PCIe</li>
+<li>ARM HyperLink</li>
+<li>ARM UART</li>
+<li>DSP No-Boot</li></ul></li>
+<li>Read K2Ex device data manual "Device Boot and Configuration" to understand details on different boot modes.</li>
+<li>See the below information for various bootloader support on K2Ex devices.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/ug/spruhj3/spruhj3.pdf">ARM Bootloader User Guide</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/ug/sprugy5c/sprugy5c.pdf">DSP Bootloader User Guide</a></li></ul></li>
+<li>Intermediate Boot Loader (IBL) provides the functionality of downloading the ROM file system image to the device's shared external memory (DDR). The configuration parameters for IBL are programmed into the I2C EEPROM of the target platform.The details about intermediate bootloader (IBL) are available in the below link.
+<ul><li><a rel="nofollow" class="external text" href="BIOS_MCSDK_2-2.html#Intermediate_Boot_Loader_.28IBL.29_and_Examples">Intermediate Bootloader</a></li></ul></li>
+<li>The MAD utility tool is used to build a combined boot image that can boot all cores. MAD infrastructure provides a set of utilities to help achieve the needs. The various utilities are explained in the below user guide.
+<ul><li><a rel="nofollow" class="external text" href="MAD_Utils_User_Guide.html">MAD Utility User Guide</a></li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Confirming_Electrical_and_Timing_Compatibility"><span style="color: blue">Confirming Electrical and Timing Compatibility</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=5" title="Edit section: Confirming Electrical and Timing Compatibility">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>A key step in the hardware design before beginning schematic capture is to confirm both DC and AC electrical compatibility between this device and the other ICs connected to it. 
+</p>
+<ul><li>The device data manual has important information with regards to timing and electrical characteristics.</li>
+<li>For High Speed Interfaces you can run IBIS simulations using IBIS models provided for K2Ex FCBGA (ABD) package to confirm signal Integrity.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm611">66AK2Ex IBIS Simulation Model</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm621">AM5K2Ex IBIS Simulation Model</a></li></ul></li>
+<li>See the below information on how to use IBIS model for timing analysis.
+<ul><li><a rel="nofollow" class="external text" href="http://focus.ti.com.cn/cn/lit/an/spra839a/spra839a.pdf">Using IBIS Models for Timing Analysis</a></li></ul></li>
+<li>Those who want to have access to SERDES IBIS-AMI models and documentation must be individually approved.
+<ul><li>SERDES IBIS-AMI Model Request: Planned</li></ul></li>
+<li>Note: TI provides PCB layout specifications for the following interfaces, eliminating the need to perform electrical analysis.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprabi1b/sprabi1b.pdf">DDR3 Design Requirements</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/pdf/spruho3">SERDES Layout Guidelines</a></li>
+<li>USB Layout Guidelines: Coming Soon</li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Designing_the_Power_Subsystem"><span style="color: blue">Designing the Power Subsystem</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=6" title="Edit section: Designing the Power Subsystem">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Once the block diagram has been validated for pin multiplexing, electrical, and timing compatibility, the power sub-system can be designed. See the below resources on estimating power consumption and designing a matching power subsystem. 
+</p>
+<ul><li>The <a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprac75/sprac75.pdf">K2E Power Consumption Summary</a> discusses the power consumption for common system application usage scenarios for the K2Ex devices. Power consumption is highly dependent on the individual user’s application; however, this document focuses on providing several K2Ex application-usage case scenarios and the environment settings that were used to perform such power measurements.</li>
+<li>The K2E power estimation tool provides users the ability to gain insight in to the power consumption of the K2Ex processor. The tool includes the ability for the user to choose multiple application scenarios and understand the power consumption as well as how advanced power saving techniques can be applied to further reduce overall power consumption.</li>
+<li>For TI power management solutions, please refer <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">TI Power Management Solutions</a>.</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Designing_the_Clocking_Subsystem"><span style="color: blue">Designing the Clocking Subsystem</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=7" title="Edit section: Designing the Clocking Subsystem">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>In addition to the power subsystem, the clocking subsystem needs to be designed to provide appropriate clocks to number of internal PLLs that are used to generate the clocks within the part. These include PLLs for generating system clocks and PLLs for the high speed SerDes interfaces. These clocks can be created by clock generators and clock distribution components to drive a common clock source to multiple clock inputs on K2Ex devices. 
+</p>
+<ul><li>The K2Ex device do not allow single-ended clock input sources. Differential clock sources provide better noise immunity and signal integrity, and are required by K2Ex device.</li>
+<li>TI recommends below clock sources which eliminates the need for external buffers, level translators, external jitter cleaners, or multiple oscillators.
+<ul><li>CDCM6208 - Single PLL, 8 Differential Output Clock Tree with 4 Fractional Dividers</li>
+<li>CDCE62005 - Single PLL, 5 Differential Output Clock Tree with Jitter Cleaner</li>
+<li>CDCE62002 - Single PLL, 2 Differential Output Clock Tree with Jitter Cleaner</li>
+<li>CDCE62005 - Five Output Low Jitter Clock Tree with Jitter Cleaner</li></ul></li>
+<li>For more details, please refer to the clocking sections of the device data manual and <a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprabv0/sprabv0.pdf">Hardware Design Guide</a>.</li>
+<li>The PLL Clocking Spreadsheet in the below link will be helpful to set the internal PLL subsystem.
+<ul><li>K2E Clocking Spreadsheet: Coming Soon</li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Floorplanning_the_PCB"><span style="color: blue">Floorplanning the PCB</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=8" title="Edit section: Floorplanning the PCB">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Before beginning schematic capture, it is recommended to floorplan the system PCB to determine the interconnect distances between the various system ICs.
+</p>
+<ul><li>The thermal analysis plays a vital role in the PCB floorplan as it determines the required airflow into the PCB. The interconnect component placement may be finalized based on this analysis. Refer below links for available resources.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm613">66AK2Ex Thermal Model</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm622">AM5K2Ex Thermal Model</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprabi3/sprabi3.pdf">Keystone Thermal Design Guide</a></li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Creating_the_Schematics"><span style="color: blue">Creating the Schematics</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=9" title="Edit section: Creating the Schematics">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>At this point in the design, it is time to start capturing the schematics. See the below collection of information to aid you in creating the schematics. 
+</p>
+<ul><li>Don’t forget to install a JTAG connection for debug purpose.</li>
+<li>It is often helpful to refer the reference schematics throughout the schematic capture process.
+<ul><li><a rel="nofollow" class="external text" href="https://www.einfochips.com/images/texas_instrument/K2EEVM/K2E_EVM_SCH_16_00175_02.pdf">K2Ex EVM Schematics</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/tool/TIDEP0026">K2E Clock Generation Reference Design</a></li></ul></li>
+<li>See the below reference designs for power management.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/tool/TIDEP0011">TIDEP0011</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/tool/PMP7256">PMP7256</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/tool/PMP7303">PMP7303</a></li></ul></li>
+<li>Refer hardware design guide for specific recommendations on sections like power, clock and all interfaces
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprabv0/sprabv0.pdf">Keystone2 Hardware Design Guide</a></li></ul></li>
+<li>Make sure to use the schematics checklist in the following link to validate your design.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/SPRACL9">Keystone Schematic Checklist</a></li></ul></li>
+<li>For detailed information on DDR3 design, see the below information.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprabi1b/sprabi1b.pdf">DDR3 Design Requirements</a></li></ul></li>
+<li>Plan to have an internal schematic review to go through the schematic checklist and inspect other key areas of the schematic to look for inaccuracies, missing net connections, etc.</li></ul>
+<p>Below are Symbol, Footprint, and Simulation Models to aid in the design of the device placement and interconnects: 
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=sprr197&amp;fileType=zip">OrCad Schematic Symbol</a></li>
+<li><a rel="nofollow" class="external text" href="https://www.einfochips.com/images/texas_instrument/K2EEVM/TI_K2E_EVM_PCB_17-00175-02.zip">Allegro PCB Footprint</a> can be extracted from EVM design file.</li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm612">66AK2Ex BSDL Simulation Model</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm623">AM5K2Ex BSDL Simulation Model</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm611">66AK2Ex IBIS Simulation Model</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm621">AM5K2Ex IBIS Simulation Model</a></li></ul>
+<p>General hardware design information:
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/SPRABV2">BGA PCB Design</a></li>
+<li>For selecting and placing decoupling capacitors in a BGA design.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/SPRABV2/BGA_decoupling">Decoupling (Bypass) Capacitor Selection and Placement for BGAs</a></li></ul></li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Layout_the_PCB"><span style="color: blue">Layout the PCB</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=10" title="Edit section: Layout the PCB">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>After completing schematic capture, see the below information on layout the PCB: 
+</p>
+<ul><li>It is often helpful to refer to an example layout when designing a custom PCB.
+<ul><li><a rel="nofollow" class="external text" href="https://www.einfochips.com/images/texas_instrument/K2EEVM/TI_K2E_EVM_PCB_17-00175-02.zip">K2Ex EVM Layout</a></li></ul></li>
+<li>Make sure to follow the Layout Specifications for the following Critical Interfaces:
+<ul><li>DDR3 - Data manual (<a rel="nofollow" class="external text" href="http://www.ti.com/lit/ds/symlink/66ak2e05.pdf">66AK2Ex</a>, <a rel="nofollow" class="external text" href="http://www.ti.com/lit/ds/symlink/am5k2e04.pdf">AM5K2Ex</a>) and <a rel="nofollow" class="external text" href="http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=sprabi1&amp;fileType=pdf">DDR3 Design Requirements</a></li>
+<li>SRIO - <a rel="nofollow" class="external text" href="http://www.ti.com/lit/pdf/spruho3">SRIO Layout Guide</a></li>
+<li>USB - USB Layout Guide (TBD)</li></ul></li></ul>
+<ul><li>Plan to have an internal PCB layout review with your design team to verify that net connection traces and the power distribution network were created correctly.</li></ul>
+<ul><li>General Information Articles:
+<ul><li><a href="http://www.ti.com/lit/pdf/spraav0" class="extiw" title="tidoc:spraav0">Understanding TI's PCB Routing Rule-Based DDR Timing Specification</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/SPRABV2">BGA PCB Design</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/SPRABV2/BGA_decoupling">Decoupling Capacitor Selection and Placement for BGAs</a></li></ul></li></ul>
+<p><br />
+</p>
+<h1><span id="Testing/Debugging"></span><span class="mw-headline" id="Testing.2FDebugging"><span style="color: blue">Testing/Debugging</span></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=11" title="Edit section: Testing/Debugging">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Debugging_Tools">Debugging Tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=12" title="Edit section: Debugging Tools">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Once your custom PCB has been produced and assembled, refer to the below information for board bring-up and debugging the system. 
+</p>
+<ul><li>See the below GEL File that aid in configuring your design during debug/development.
+<ul><li><a rel="nofollow" class="external text" href="File_66AK2E05-diag.html">K2Ex Debug GEL File</a>: This can be used with CCS to print out useful debug information such as silicon revision, bootloader error messages, current PC and PSC states, and more.</li></ul></li>
+<li>See the below information on using the debugging Tools to debug the processor.
+<ul><li><a rel="nofollow" class="external text" href="Keystone_II_Debug_Tools.html">Keystone2 Debug Tools</a></li></ul></li>
+<li>Below is a collection of information on using the TI provided Booting Tools for the processor.
+<ul><li>Usage of armhex is described in the <a rel="nofollow" class="external text" href="http://www.ti.com.cn/cn/lit/ug/spnu118m/spnu118m.pdf">ARM Assembly Language Tools</a> user guide.</li>
+<li>More options are explained in the document, <a rel="nofollow" class="external text" href="File_KeyStone_Bootloader.html">Keystone Bootloader</a>.</li></ul></li>
+<li>Below is a link to the processor BSDL Files for verifying PCB connectivity.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm612">66AK2Ex BSDL File</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprm623">AM5K2Ex BSDL File</a></li></ul></li>
+<li>IDE: <a rel="nofollow" class="external text" href="Category_Code_Composer_Studio_v5.html">Code Composer Studio V5</a>, <a rel="nofollow" class="external text" href="Category_Code_Composer_Studio_v6.html">Code Composer Studio V6</a></li></ul>
+<h2><span class="mw-headline" id="Hardware_Debugging">Hardware Debugging</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=13" title="Edit section: Hardware Debugging">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Refer the below information for hardware debugging.
+</p>
+<ul><li>We recommend hardware debugging using the GEL file.</li>
+<li>Check the latest device Errata for your silicon revision for a matching problem description.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/er/sprz417/sprz417.pdf">66AK2Ex Errata</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/er/sprz416/sprz416.pdf">AM5K2Ex Errata</a></li></ul></li>
+<li>The peripheral user guides are available in the below link.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/product/66AK2E05/technicaldocuments">K2Ex Peripherals User Guide</a>.</li></ul></li>
+<li>The hardware design guide for K2Ex devices is available in the below link.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprabv0/sprabv0.pdf">Keystone2 Hardware Design Guide</a>.</li></ul></li>
+<li>The PLL Clocking Spreadsheet in the below link to verify the clocking.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/sprac72">K2E Clocking Spreadsheet</a></li></ul></li>
+<li>The schematics checklist in the following link to validate the design.
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/SPRACL9">Keystone Schematic Checklist</a></li></ul></li>
+<li>Overview of <a rel="nofollow" class="external text" href="http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=spruhm4&amp;fileType=pdf">Debug and Trace Tools</a></li>
+<li>Trace technology is an important means for debugging and optimizing application codes, <a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/images/0/04/Trace_For_Profiling_0_0_6.pdf">Trace for Profiling</a>.</li></ul>
+<h3><span class="mw-headline" id="DDR3">DDR3</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit&amp;section=14" title="Edit section: DDR3">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>DDR debugging needs to use the GEL file and the following 2 resources - after all routing rules as defined in the DDR3 layout guide have been verified. Most issues with DDR3 come from incorrect software settings and initialization. Double check your settings with the DDR3 timing spreadsheet and initialization guide.
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/an/sprabx7/sprabx7.pdf">Keystone2 DDR3 Initialization Guide</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprabx7">Keystone2 DDR3 Timing Spreadsheet</a></li></ul>
+<p>Once the software settings are confirmed, the layout itself may be at fault.
+</p>
+<ul><li>Double check your layout against the routing rules in the DDR3 design requirement document.
+<ul><li>The most common layout problem that affects DDR3 functionality is incorrect stackup. Verify that each DDR routing layer has an adjacent solid ground plane underneath with no cuts.</li></ul></li>
+<li>Use maximum values for the timing parameters to increase timing margins.</li>
+<li>Slow down the DDR3 clock to determine if it is limited to a high speed issue.</li></ul>
+<p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201134041
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.046 seconds
+Real time usage: 0.046 seconds
+Preprocessor visited node count: 65/1000000
+Preprocessor generated node count: 82/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:37902-0!canonical and timestamp 20201201134041 and revision id 195875
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>K2Ex Hardware Design Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>K2Ex Hardware Design Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>K2Ex Hardware Design Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>K2Ex Hardware Design Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>K2Ex Hardware Design Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>K2Ex Hardware Design Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>K2Ex Hardware Design Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>K2Ex Hardware Design Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>K2Ex Hardware Design Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;oldid=195875">https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;oldid=195875</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_66AK2Ex_DSP%2bARM.html" title="Category:66AK2Ex DSP+ARM">66AK2Ex DSP+ARM</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=K2Ex+Hardware+Design+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="K2Ex_Hardware_Design_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:K2Ex_Hardware_Design_Guide&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="K2Ex_Hardware_Design_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/K2Ex_Hardware_Design_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/K2Ex_Hardware_Design_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;oldid=195875" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=K2Ex_Hardware_Design_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 23 March 2015, at 00:24.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.046","walltime":"0.046","ppvisitednodes":{"value":65,"limit":1000000},"ppgeneratednodes":{"value":82,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201134041","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":287});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/K2Ex_Hardware_Design_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 14:17:54 GMT -->
+</html>

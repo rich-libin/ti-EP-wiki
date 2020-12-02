@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AM335x_PROFINET_Driver_API_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:00:04 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>AM335x PROFINET Driver API Guide - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"AM335x_PROFINET_Driver_API_Guide","wgTitle":"AM335x PROFINET Driver API Guide","wgCurRevisionId":201251,"wgRevisionId":201251,"wgArticleId":32596,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"AM335x_PROFINET_Driver_API_Guide","wgRelevantArticleId":32596,"wgRequestId":"6ebc4fa25589f8be0bd76fb8","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-AM335x_PROFINET_Driver_API_Guide rootpage-AM335x_PROFINET_Driver_API_Guide skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">AM335x PROFINET Driver API Guide</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div style="padding-right: 5px; padding-left: 5px; background: #eeeeee; padding-bottom: 5px; color: #151b54; padding-top: 5px"><b>NOTE&#160;</b><br /></div><div style="padding-right: 5px; padding-left: 5px; background: rgb(238,238,238); padding-bottom: 5px; color: rgb(21,27,84); padding-top: 5px">This API guide is valid only for applications upto ISDK 1.1.0.6. For higher versions, please refer to sdk/protocols/profinet_slave/Docs/AM335X_Profinet_Slave_RT_API_Guide.chm<br /></div>
+<div style="width:800px; text-align:justify;"> 
+<div style="display:block; clear: both; margin: 10px 0px; padding: 0px; background-color: #ee1d23; text-align:right;"><a href="File_TIBanner.html" class="image"><img alt="TIBanner.png" src="https://processors.wiki.ti.com/images/c/cd/TIBanner.png" width="667" height="87" /></a></div>
+<div style="display:block; margin: 5px 0px; padding: 2px 5px; font-size:1.5em; font-weight:bold; text-align:left;">AM335x Profinet Driver API Guide</div>
+<div style="display:block; margin: 5px 0px; padding: 2px; color: #666666; font-size:1.0em; font-weight:bold; text-align:right;"></div> 
+<p><br />
+<b><big><big></big></big></b> 
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Profinet_Driver_APIs"><span class="tocnumber">2</span> <span class="toctext">Profinet Driver APIs</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#initPNDrv"><span class="tocnumber">2.1</span> <span class="toctext">initPNDrv</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#initRtcDrv"><span class="tocnumber">2.2</span> <span class="toctext">initRtcDrv</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#initLists"><span class="tocnumber">2.3</span> <span class="toctext">initLists</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#clearList"><span class="tocnumber">2.4</span> <span class="toctext">clearList</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#setBaseClock"><span class="tocnumber">2.5</span> <span class="toctext">setBaseClock</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#iRtcIsrSetup"><span class="tocnumber">2.6</span> <span class="toctext">iRtcIsrSetup</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#setDcpFilterStationName"><span class="tocnumber">2.7</span> <span class="toctext">setDcpFilterStationName</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#registerPpmCall"><span class="tocnumber">2.8</span> <span class="toctext">registerPpmCall</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#registerCpmCall"><span class="tocnumber">2.9</span> <span class="toctext">registerCpmCall</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#registerStatCall"><span class="tocnumber">2.10</span> <span class="toctext">registerStatCall</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#ppmBC_IsrHandler"><span class="tocnumber">2.11</span> <span class="toctext">ppmBC_IsrHandler</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#cpmBC_IsrHandler"><span class="tocnumber">2.12</span> <span class="toctext">cpmBC_IsrHandler</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#dht_IsrHandler"><span class="tocnumber">2.13</span> <span class="toctext">dht_IsrHandler</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#getPpmBuffLock"><span class="tocnumber">2.14</span> <span class="toctext">getPpmBuffLock</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#cpmBuffLock"><span class="tocnumber">2.15</span> <span class="toctext">cpmBuffLock</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#insPpmPacket"><span class="tocnumber">2.16</span> <span class="toctext">insPpmPacket</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#insCpmPacket"><span class="tocnumber">2.17</span> <span class="toctext">insCpmPacket</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#setARlink"><span class="tocnumber">2.18</span> <span class="toctext">setARlink</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#setCpmDHT"><span class="tocnumber">2.19</span> <span class="toctext">setCpmDHT</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#getStatusEvent"><span class="tocnumber">2.20</span> <span class="toctext">getStatusEvent</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#getPmStatus"><span class="tocnumber">2.21</span> <span class="toctext">getPmStatus</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#getPpmAddr"><span class="tocnumber">2.22</span> <span class="toctext">getPpmAddr</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#setIndex"><span class="tocnumber">2.23</span> <span class="toctext">setIndex</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#getIndex"><span class="tocnumber">2.24</span> <span class="toctext">getIndex</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#writeDescriptor"><span class="tocnumber">2.25</span> <span class="toctext">writeDescriptor</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#readDescriptor"><span class="tocnumber">2.26</span> <span class="toctext">readDescriptor</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#getShadowIndex"><span class="tocnumber">2.27</span> <span class="toctext">getShadowIndex</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#clearShadowList"><span class="tocnumber">2.28</span> <span class="toctext">clearShadowList</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#setActiveBit"><span class="tocnumber">2.29</span> <span class="toctext">setActiveBit</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#toggleRtcList"><span class="tocnumber">2.30</span> <span class="toctext">toggleRtcList</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#iRtcEnableIsr"><span class="tocnumber">2.31</span> <span class="toctext">iRtcEnableIsr</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#iRtcDisableIsr"><span class="tocnumber">2.32</span> <span class="toctext">iRtcDisableIsr</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-35"><a href="#Memory_Map"><span class="tocnumber">3</span> <span class="toctext">Memory Map</span></a>
+<ul>
+<li class="toclevel-2 tocsection-36"><a href="#L3_OCMC_RAM"><span class="tocnumber">3.1</span> <span class="toctext">L3 OCMC RAM</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#PRU0_DATA_RAM"><span class="tocnumber">3.2</span> <span class="toctext">PRU0 DATA RAM</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#PRU1_DATA_RAM"><span class="tocnumber">3.3</span> <span class="toctext">PRU1 DATA RAM</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#ICSS_SHARED_RAM"><span class="tocnumber">3.4</span> <span class="toctext">ICSS SHARED RAM</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Profinet Driver interfaces with 3rd Party stacks to implement Profinet I/O slave on AM335x. This driver provides interfacing with Industrial Communication SubSystem(ICSS). These APIs are used for configuring and communicating with Profinet firmware. 
+<br />
+<br />
+<br />
+</p>
+<h1><span class="mw-headline" id="Profinet_Driver_APIs">Profinet Driver APIs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=2" title="Edit section: Profinet Driver APIs">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h3><span class="mw-headline" id="initPNDrv">initPNDrv</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=3" title="Edit section: initPNDrv">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 initPNDrv(void);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none: none</li>
+<li>Return value: 0 on Success. -1 on failure</li></ul>
+<p><b>Description</b> Initializes the Profinet Driver 
+</p><p>Sets the Port MAC addresses. 
+</p><p>Initialize the RTC driver. 
+</p><p>Loads the forward and receive multicast tables. 
+</p><p>Loads the Profinet firmware 
+</p>
+<h3><span class="mw-headline" id="initRtcDrv">initRtcDrv</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=4" title="Edit section: initRtcDrv">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 initRtcDrv(void);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none: none</li>
+<li>Return value: 0 on Success. -1 on failure</li></ul>
+<p><b>Description</b> Initializes RTC driver 
+</p><p>Initializes CPM/PPM lists 
+</p><p>Configures the send clock cycle 
+</p><p>Configures and initializes RTC interrupts 
+</p>
+<h3><span class="mw-headline" id="initLists">initLists</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=5" title="Edit section: initLists">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  void initLists(void);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none: none</li>
+<li>Return value: none</li></ul>
+<p><b>Description</b> Initializes the CPM and PPM descriptor lists 
+</p>
+<h3><span class="mw-headline" id="clearList">clearList</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=6" title="Edit section: clearList">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 clearList(Uint8 list);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>list: list type, PPM or CPM, Valid values are: CPM = 0 , PPM = 1</li>
+<li>Return value: 0 on success, -1 on failure</li></ul>
+<p><b>Description</b> 
+</p><p>Clears the index of PPM or CPM list 
+</p><p>Clears active bits and resets all data 
+</p><p>This does not clear buffer and desc memory 
+</p>
+<h3><span class="mw-headline" id="setBaseClock">setBaseClock</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=7" title="Edit section: setBaseClock">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 setBaseClock(Uint16 factor);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>factor: clock factor, example values are:
+<ul><li>8 to set (8*31.25) 250us cycle time, (8 is minimum possible value)</li>
+<li>32 to set 1 ms cycle time</li>
+<li>128 to set 4 ms cycle time, (128 is maximum possible value)</li></ul></li>
+<li>Return value: 0 on success, -1 on failure</li></ul>
+<p><b>Description</b> Sets Profinet base clock in multiples of 31.25us. 
+</p>
+<h3><span class="mw-headline" id="iRtcIsrSetup">iRtcIsrSetup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=8" title="Edit section: iRtcIsrSetup">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 iRtcIsrSetup(void);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none: none</li>
+<li>Return value: 0 on success, -1 on failure</li></ul>
+<p><b>Description</b> Interrupt management function 
+</p><p>Initializes PPM/CPM/DHT interrupts 
+</p>
+<h3><span class="mw-headline" id="setDcpFilterStationName">setDcpFilterStationName</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=9" title="Edit section: setDcpFilterStationName">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 setDcpFilterStationName(const Uint8* dcp_name_of_station, Uint8 length_of_station_name);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>dcp_name_of_station: station name of the slave</li>
+<li>length_of_station_name: length of the station name</li>
+<li>Return value: 0 on success, -1 on failure</li></ul>
+<p><b>Description</b> API to set the station name of slave for filtering the DCP Ident requests which are not meant for the station 
+</p>
+<h3><span class="mw-headline" id="registerPpmCall">registerPpmCall</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=10" title="Edit section: registerPpmCall">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  void registerPpmCall(icssCallBack_t callBack);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>callBack: Callback function pointer</li>
+<li>Return value: none</li></ul>
+<p><b>Description</b> Registers callback function required for PPM processing 
+</p><p><b>Callback function</b> 
+</p>
+<pre>  static icssCallBack_t irtPpmCall;
+</pre>
+<h3><span class="mw-headline" id="registerCpmCall">registerCpmCall</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=11" title="Edit section: registerCpmCall">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  void registerCpmCall(icssCallBack_t callBack);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>callBack: Callback function pointer</li>
+<li>Return value: none</li></ul>
+<p><b>Description</b> Registers callback function required for CPM processing 
+</p><p><b>Callback function</b> 
+</p>
+<pre>  static icssCallBack_t irtCpmCall;
+</pre>
+<h3><span class="mw-headline" id="registerStatCall">registerStatCall</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=12" title="Edit section: registerStatCall">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  void registerStatCall(icssCallBack_t callBack);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>callBack: Callback function pointer</li>
+<li>Return value: none</li></ul>
+<p><b>Description</b> Registers callback function required for Stats processing 
+</p><p><b>Callback function</b> 
+</p>
+<pre>  static icssCallBack_t irtStatCall;
+</pre>
+<p><br /> 
+</p>
+<h3><span class="mw-headline" id="ppmBC_IsrHandler">ppmBC_IsrHandler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=13" title="Edit section: ppmBC IsrHandler">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  void ppmBC_IsrHandler(void);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none:</li>
+<li>Return value: none</li></ul>
+<p><b>Description</b> PPM Interrupt Service Routine 
+</p><p>Mapped to Interrupt number 21 on ARM 
+</p><p>Updates Statistics 
+</p><p>Triggers the callback registered for PPM handling(irtPpmCall) 
+</p>
+<h3><span class="mw-headline" id="cpmBC_IsrHandler">cpmBC_IsrHandler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=14" title="Edit section: cpmBC IsrHandler">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  void cpmBC_IsrHandler(Uarg);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none:</li>
+<li>Return value: none</li></ul>
+<p><b>Description</b> CPM Interrupt Service Routine 
+</p><p>Mapped to Interrupt number 22 on ARM 
+</p><p>Updates Statistics 
+</p><p>Triggers the callback registered for CPM handling(irtCpmCall) 
+</p>
+<h3><span class="mw-headline" id="dht_IsrHandler">dht_IsrHandler</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=15" title="Edit section: dht IsrHandler">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  void dht_IsrHandler(Uarg);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none:</li>
+<li>Return value: none</li></ul>
+<p><b>Description</b> DHT Interrupt Service Routine 
+</p><p>Triggers on status events 
+</p>
+<ul><li>DHT expire</li>
+<li>List changes</li></ul>
+<p>Mapped to Interrupt number 23 on ARM 
+</p><p>Triggers the callback registered for Stat handling(irtStatCall) 
+</p>
+<h3><span class="mw-headline" id="getPpmBuffLock">getPpmBuffLock</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=16" title="Edit section: getPpmBuffLock">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 getPpmBuffLock(Uint8* pos);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>pos: Return pointer to descriptor position</li>
+<li>Return value: 0 on Success, -1 on Failure</li></ul>
+<p><b>Description</b> Get PPM buffer index locked by ICSS 
+</p>
+<h3><span class="mw-headline" id="cpmBuffLock">cpmBuffLock</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=17" title="Edit section: cpmBuffLock">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 cpmBuffLock(Uint8 pos, buffLocks buff);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>pos: CPM descriptor position, Valid range is&#160;: (0 to 7)</li>
+<li>buff: enum buffLocks</li>
+<li>Return value: 0 on Success, -1 on Failure</li></ul>
+<p><b>Description</b> Locks CPM buffer 
+</p><p><b>Enum buffLocks</b> 
+</p>
+<pre>typedef enum
+{
+BUFF1 = 0,
+BUFF2,
+BUFF3,
+NOBUFF
+} buffLocks;
+</pre>
+<h3><span class="mw-headline" id="insPpmPacket">insPpmPacket</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=18" title="Edit section: insPpmPacket">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 insPpmPacket(Uint32** pktAddr, Uint16 length, Uint8 buff, Uint16 reduRatio, Uint16 phase);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>pktAddr: Return pointer to PRU buffer address</li>
+<li>length: Length of the frame in bytes</li>
+<li>buff: Number of the used PRU triple buffer</li>
+<li>reduRatio: Reduction ratio of the connection the message is part of, Valid range is: (1 to 512)</li>
+<li>phase: Phase the message has to be sent in</li>
+<li>Return value: slot number (&gt;=0) or error (&lt;0)</li></ul>
+<p><b>Description</b> Add a new PPM into shadow list using next free entry and increment buffers 
+</p>
+<h3><span class="mw-headline" id="insCpmPacket">insCpmPacket</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=19" title="Edit section: insCpmPacket">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 insCpmPacket(Uint32** pkt, Uint16 length, Uint16 frameId, Uint16 reduRatio, Uint16 phase);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>pkt: Return pointer to PRU internal start of triple buffer</li>
+<li>length: frame length</li>
+<li>frameId: frameId value (host format, little endian)</li>
+<li>reduRatio: reduction ratio for green packets, Valid range is: (1 to 512)</li>
+<li>phase: Phase send value</li>
+<li>Return value: slot number (&gt;=0) or error (&lt;0)</li></ul>
+<p><b>Description</b> Add a new CPM into list and increment buffers 
+</p>
+<h3><span class="mw-headline" id="setARlink">setARlink</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=20" title="Edit section: setARlink">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 setARlink(Uint8 ARgroup, Uint8 PpmNum, Uint8 CpmNum);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>ARgroup: AR group number, Valid range is&#160;: (0 to 7)</li>
+<li>PpmNum: PPM number, Valid range is&#160;: (0 to 7)</li>
+<li>CpmNum: CPM number, Valid range is&#160;: (0 to 7)</li>
+<li>Return value: 0 on success, -1 on failure</li></ul>
+<p><b>Description</b> Defines AR groups 
+</p><p>Sets the link between CPM and PPM in an AR group 
+</p><p>One CPM can be linked to multiple PPMs in an AR group 
+</p>
+<h3><span class="mw-headline" id="setCpmDHT">setCpmDHT</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=21" title="Edit section: setCpmDHT">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 setCpmDHT(Uint16 dht, Uint8 pos);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>dht: data hold timeout value (lost count)</li>
+<li>pos: position of CPM descriptor, Valid range is&#160;: (0 to 7)</li>
+<li>Return value: 0 on success, &lt;0 on failure</li></ul>
+<p><b>Description</b> Sets the Data hold timer timeout value for a given descriptor 
+</p>
+<h3><span class="mw-headline" id="getStatusEvent">getStatusEvent</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=22" title="Edit section: getStatusEvent">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 getStatusEvent(Uint8* eventNum, Uint8* eventType);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>eventNum: Return pointer of CPM/PPM number that triggered event</li>
+<li>eventType: Return pointer for type of event</li>
+<li>Return value: 0 on success, &lt;0 on failure</li></ul>
+<p><b>Description</b> Get the data for status IRQ from ICSS 
+</p>
+<h3><span class="mw-headline" id="getPmStatus">getPmStatus</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=23" title="Edit section: getPmStatus">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 getPmStatus(Uint8 dir, Uint8 numPm);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>dir: PPM or CPM, Valid values are: CPM = 0, PPM = 1</li>
+<li>numPm: number of PM to check</li>
+<li>Return value: PM status or error (&lt;0)</li></ul>
+<p><b>PM Status </b> 
+</p>
+<pre>#define RTC_PPM_OK			1
+#define RTC_PPM_ERROR			0
+#define RTC_CPM_RUN			1              
+#define RTC_CPM_FAILURE	        	0
+</pre>
+<p><b>Description</b> Return PM status information as set by PRU 
+</p>
+<h3><span class="mw-headline" id="getPpmAddr">getPpmAddr</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=24" title="Edit section: getPpmAddr">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 getPpmAddr(Uint32** pkt, Uint8 pos, Uint8 buff);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>pkt: Returns pointer of packet buffer</li>
+<li>pos: Slot number of the descriptor</li>
+<li>buff: Number of the used PRU triple buffer</li>
+<li>Return value: 0 on success, &lt;0 on failure</li></ul>
+<p><b>Description</b> Retreives a buffer address of active descriptor required to initialize the packet data buffer 
+</p>
+<h3><span class="mw-headline" id="setIndex">setIndex</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=25" title="Edit section: setIndex">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 setIndex(Uint8 dir, Uint8 greenStart, Uint8 redP2Start, Uint8 greenP2Start, Uint8 greenEnd);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>dir: CPM or PPM, Valid values are: CPM = 0, PPM = 1</li>
+<li>greenStart: Index of first Port 1 descriptor in green period</li>
+<li>redP2Start: Index of first Port 2 descriptor in red period</li>
+<li>greenP2Start: Index of first Port 2 descriptor in green period</li>
+<li>greenEnd: Index of last descriptor of green period</li>
+<li>Return value: 0 on success, &lt;0 on Failure</li></ul>
+<p><b>Description</b> Setup index values for shadow list 
+</p><p>CPM or PPM list is pre-sorted by period, port and time. 
+</p><p>redStart for Port1 is 0 by definition and redEnd is equal to greenStart 
+</p>
+<h3><span class="mw-headline" id="getIndex">getIndex</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=26" title="Edit section: getIndex">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 getIndex(Uint8 dir, Uint8 *greenStart, Uint8 *redP2Start, Uint8 *greenP2Start, Uint8 *greenEnd);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>dir: CPM or PPM, Valid values: CPM = 0, PPM = 1</li>
+<li>greenStart: Return pointer to first Port 1 descriptor index in green period</li>
+<li>redP2Start: Return pointer to first Port 2 descriptor index in red period</li>
+<li>greenP2Start: Return pointer to first Port 2 descriptor index in green period</li>
+<li>greenEnd: Return pointer to last descriptor index of green period</li>
+<li>Return value: 0 on success, &lt;0 if Failure</li></ul>
+<p><b>Description</b> get index values from active list 
+</p>
+<h3><span class="mw-headline" id="writeDescriptor">writeDescriptor</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=27" title="Edit section: writeDescriptor">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 writeDescriptor(t_rtcDesc* desc, t_descList* pList);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>desc: Pointer to the descriptor to be inserted in the list</li>
+<li>pList: References the list, the requested descriptor is part of (ppm_list, cpm_list)</li>
+<li>Return value: slot number (&gt;=0) or error (&lt;0)</li></ul>
+<p><b>Description</b> Insert a descriptor into shadow list at next free slot 
+</p>
+<h3><span class="mw-headline" id="readDescriptor">readDescriptor</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=28" title="Edit section: readDescriptor">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 readDescriptor(t_rtcDesc* desc, t_descList* pList, Uint8 pos, Uint8 active);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>desc: Returns the pointer to the requested descriptor</li>
+<li>pList: References the list, the requested descriptor is part of (ppm_list, cpm_list)</li>
+<li>pos: Index of the requested descriptor in the list (0,1,...,7)</li>
+<li>active: Specifies if the requested descriptor is from the active list (=1, ACTIVE_LIST) or the shadow list (=0, SHADOW_LIST)</li>
+<li>Return value: 0 on Success, &lt;0 on Failure</li></ul>
+<p><b>Description</b> Read back a (valid) descriptor from active or shadow list 
+</p>
+<h3><span class="mw-headline" id="getShadowIndex">getShadowIndex</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=29" title="Edit section: getShadowIndex">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Uint8 getShadowIndex(Uint8 lType);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>lType: list type, PPM or CPM, Valid values are: CPM = 0, PPM = 1</li>
+<li>Return value: the current shadow index according to PRU data</li></ul>
+<p><b>Description</b> Gets the shadow index 
+</p>
+<h3><span class="mw-headline" id="clearShadowList">clearShadowList</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=30" title="Edit section: clearShadowList">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 clearShadowList(Uint8 list);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>list: list type, PPM or CPM, Valid values are: CPM = 0, PPM = 1</li>
+<li>Return value: 0 on Success, &lt;0 on Failure</li></ul>
+<p><b>Description</b> Clear the index of PPM or CPM shadow list 
+</p><p>The corresponding active list stays unaffected 
+</p>
+<h3><span class="mw-headline" id="setActiveBit">setActiveBit</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=31" title="Edit section: setActiveBit">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 setActiveBit(Uint8 list, Uint8 index, Uint8 val);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>list: list type, PPM or CPM, Valid values are: CPM = 0, PPM = 1</li>
+<li>index: index of the descriptor in the list, Valid range is: (0 to 7)</li>
+<li>val: val=1 sets and val=0 clears the active bit.</li>
+<li>Return value: 0 on Success, &lt;0 on Failure</li></ul>
+<p><b>Description</b> Change the active bit of descriptor at index in active list 
+</p>
+<h3><span class="mw-headline" id="toggleRtcList">toggleRtcList</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=32" title="Edit section: toggleRtcList">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 toggleRtcList(Uint8 list);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>list: list type, PPM or CPM, Valid values are: CPM = 0, PPM = 1</li>
+<li>Return value: 0 on Success, &lt;0 on Failure</li></ul>
+<p><b>Description</b> Request to switch active and shadow list 
+</p><p>Requests a toggle of active and shadow lists, it should be answered by PRU via status IRQ. 
+</p><p>Update CPM/PPM stats structure 
+</p><p><b>Struct for CPM/PPM Statistics</b> 
+</p>
+<pre>typedef struct switchStats
+{
+Uint8 frameLength;
+Uint32* macAddr;
+} t_switchStats;
+</pre>
+<h3><span class="mw-headline" id="iRtcEnableIsr">iRtcEnableIsr</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=33" title="Edit section: iRtcEnableIsr">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 iRtcEnableIsr(void);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none</li>
+<li>Return value: 0</li></ul>
+<p><b>Description</b> Enables the PN interrupts 
+</p>
+<h3><span class="mw-headline" id="iRtcDisableIsr">iRtcDisableIsr</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=34" title="Edit section: iRtcDisableIsr">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b>Function</b> 
+</p>
+<pre>  Int32 iRtcDisableIsr(void);
+</pre>
+<p><b>Parameters</b> 
+</p>
+<ul><li>none</li>
+<li>Return value: 0</li></ul>
+<p><b>Description</b> Disables the PN interrupts
+<br />
+<br />
+<br />
+</p>
+<h1><span class="mw-headline" id="Memory_Map">Memory Map</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=35" title="Edit section: Memory Map">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="L3_OCMC_RAM">L3 OCMC RAM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=36" title="Edit section: L3 OCMC RAM">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="wikitable">
+
+<tbody><tr>
+<th>Usage</th>
+<th>Size</th>
+<th>Memory Range
+</th></tr>
+<tr>
+<td>Host Receive and Port Transmit Queues</td>
+<td>48.5 KB</td>
+<td>0x40300000 to 0x4030C1FF
+</td></tr>
+<tr>
+<td>CPM Receive Queues</td>
+<td>11 KB</td>
+<td>0x4030C200 to 0x4030EDFF
+</td></tr>
+<tr>
+<td>Queue Contention buffers</td>
+<td>4.5 KB</td>
+<td>0x4030EE00 to 0x4030FFFF
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="PRU0_DATA_RAM">PRU0 DATA RAM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=37" title="Edit section: PRU0 DATA RAM">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="wikitable">
+
+<tbody><tr>
+<th>Usage</th>
+<th>Size</th>
+<th>Memory Range
+</th></tr>
+<tr>
+<td>CPM/PPM List Descriptors</td>
+<td>384 KB</td>
+<td>0x4A300000 to 0x4A30017F
+</td></tr>
+<tr>
+<td>RTC Configuration Data</td>
+<td>292 KB</td>
+<td>0x4A300180 to 0x4A3002A3
+</td></tr>
+<tr>
+<td>Reserved</td>
+<td>92 KB</td>
+<td>0x4A3002A4 to 0x4A3002FF
+</td></tr>
+<tr>
+<td>DCP Identify Filter Data</td>
+<td>66 KB</td>
+<td>0x4A300300 to 0x4A300341
+</td></tr>
+<tr>
+<td>Free Space</td>
+<td>7 KB</td>
+<td>0x4A300342 to 0x4A301FFF
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="PRU1_DATA_RAM">PRU1 DATA RAM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=38" title="Edit section: PRU1 DATA RAM">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="wikitable">
+
+<tbody><tr>
+<th>Usage</th>
+<th>Size</th>
+<th>Memory Range
+</th></tr>
+<tr>
+<td>PPM DATA Buffers</td>
+<td>4944 KB</td>
+<td>0x4A302000 to 0x4A30334F
+</td></tr>
+<tr>
+<td>Reserved</td>
+<td>2736KB</td>
+<td>0x4A303350 to 0x4A303DFF
+</td></tr>
+<tr>
+<td>Switch Configuration Data</td>
+<td>136 KB</td>
+<td>0x4A303E00 to 0x4A303E87
+</td></tr>
+<tr>
+<td>Queue Descriptors</td>
+<td>96 KB</td>
+<td>0x4A303E88 to 0x4A303EE7
+</td></tr>
+<tr>
+<td>Reserved</td>
+<td>24 KB</td>
+<td>0x4A303EE8 to 0x4A303EFF
+</td></tr>
+<tr>
+<td>Statistics</td>
+<td>88 KB</td>
+<td>0x4A303F00 to 0x4A303F57
+</td></tr>
+<tr>
+<td>Free Space</td>
+<td>168 KB</td>
+<td>0x4A303F58 to 0x4A303FFF
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="ICSS_SHARED_RAM">ICSS SHARED RAM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;section=39" title="Edit section: ICSS SHARED RAM">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="wikitable">
+
+<tbody><tr>
+<th>Usage</th>
+<th>Size</th>
+<th>Memory Range
+</th></tr>
+<tr>
+<td>Host Receive and Port Transmit Queues Buffer Descriptors</td>
+<td>6 KB</td>
+<td>0x4A310000 to 0x4A3117FF
+</td></tr>
+<tr>
+<td>Queue Contention Queues Buffer Descriptors</td>
+<td>576 KB</td>
+<td>0x4A311800 to 0x4A311A3F
+</td></tr>
+<tr>
+<td>Static Receive Multicast MAC Table</td>
+<td>250 KB</td>
+<td>0x4A311A40 to 0x4A31B3B
+</td></tr>
+<tr>
+<td>Static Receive Multicast MAC Table</td>
+<td>250 KB</td>
+<td>0x4A31B3C to 0x4A31C35
+</td></tr>
+<tr>
+<td>Free Space</td>
+<td>5 KB</td>
+<td>0x4A31C36 to 0x4A312FFF
+</td></tr></tbody></table>
+<p><br />
+</p></div>
+<!-- 
+NewPP limit report
+Cached time: 20201130212757
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.080 seconds
+Real time usage: 0.082 seconds
+Preprocessor visited node count: 171/1000000
+Preprocessor generated node count: 216/1000000
+Post‐expand include size: 483/2097152 bytes
+Template argument size: 32/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.539      1 Template:SpArticleStart
+100.00%    1.539      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:32596-0!canonical and timestamp 20201130212757 and revision id 201251
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AM335x PROFINET Driver API Guide</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>AM335x PROFINET Driver API Guide</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>AM335x PROFINET Driver API Guide</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>AM335x PROFINET Driver API Guide</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>AM335x PROFINET Driver API Guide</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AM335x PROFINET Driver API Guide</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>AM335x PROFINET Driver API Guide</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>AM335x PROFINET Driver API Guide</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>AM335x PROFINET Driver API Guide</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;oldid=201251">https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;oldid=201251</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=AM335x+PROFINET+Driver+API+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="AM335x_PROFINET_Driver_API_Guide.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:AM335x_PROFINET_Driver_API_Guide&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="AM335x_PROFINET_Driver_API_Guide.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/AM335x_PROFINET_Driver_API_Guide.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/AM335x_PROFINET_Driver_API_Guide.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;oldid=201251" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=AM335x_PROFINET_Driver_API_Guide&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 3 June 2015, at 00:59.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.080","walltime":"0.082","ppvisitednodes":{"value":171,"limit":1000000},"ppgeneratednodes":{"value":216,"limit":1000000},"postexpandincludesize":{"value":483,"limit":2097152},"templateargumentsize":{"value":32,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.539      1 Template:SpArticleStart","100.00%    1.539      1 -total"]},"cachereport":{"timestamp":"20201130212757","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":229});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/AM335x_PROFINET_Driver_API_Guide by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 10:00:06 GMT -->
+</html>

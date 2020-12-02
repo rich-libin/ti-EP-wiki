@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Creating_filesystems_on_removable_media by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:53:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Creating filesystems on removable media - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Creating_filesystems_on_removable_media","wgTitle":"Creating filesystems on removable media","wgCurRevisionId":181596,"wgRevisionId":181596,"wgArticleId":1536,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM437x","AM335x","AM35x","AM37x","AM1x","AM18x","OMAPL1","Linux","OMAP35x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Creating_filesystems_on_removable_media","wgRelevantArticleId":1536,"wgRequestId":"4cbd3c0ddf72943f05f42683","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Creating_filesystems_on_removable_media rootpage-Creating_filesystems_on_removable_media skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Creating filesystems on removable media</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><br />
+<font size="3"> This page describes a procedure to create and use removable media (USB pendrives or MMC/SD cards) to boot the OMAP-L137 EVM board. It requires the use of Linux and its tools for partitioning disks.</font>
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Preparing_the_U-boot_and_the_Linux_kernel_to_be_loaded"><span class="tocnumber">2</span> <span class="toctext">Preparing the U-boot and the Linux kernel to be loaded</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#MMC.2FSD_preliminary_steps"><span class="tocnumber">2.1</span> <span class="toctext">MMC/SD preliminary steps</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#USB_pendrive_preliminary_steps"><span class="tocnumber">2.2</span> <span class="toctext">USB pendrive preliminary steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Creating_the_removable_media"><span class="tocnumber">3</span> <span class="toctext">Creating the removable media</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#MMC.2FSD_card_procedure"><span class="tocnumber">3.1</span> <span class="toctext">MMC/SD card procedure</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#MontaVista_Linux_based_SDK"><span class="tocnumber">3.1.1</span> <span class="toctext">MontaVista Linux based SDK</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#DaVinci_GIT_based_SDK"><span class="tocnumber">3.1.2</span> <span class="toctext">DaVinci GIT based SDK</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#USB_pendrive_procedure"><span class="tocnumber">3.2</span> <span class="toctext">USB pendrive procedure</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#MontaVista_Linux_based_SDK_2"><span class="tocnumber">3.2.1</span> <span class="toctext">MontaVista Linux based SDK</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#DaVinci_GIT_based_SDK_2"><span class="tocnumber">3.2.2</span> <span class="toctext">DaVinci GIT based SDK</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Next_steps"><span class="tocnumber">4</span> <span class="toctext">Next steps</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Booting_with_MMC.2FSD_card"><span class="tocnumber">4.1</span> <span class="toctext">Booting with MMC/SD card</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Booting_with_USB_Pendrive"><span class="tocnumber">4.2</span> <span class="toctext">Booting with USB Pendrive</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Due to the reduced available flash memory on board and unlike other development boards from TI, OMAP-L137 EVM developers that want to create a standalone Linux-based system have to go through additional steps to accomplish this.
+</p><p>In this case, the use of the common NFS remote booting procedure is not desired since it requires a wired ethernet connection and remote NFS and TFTP servers.
+</p><p>This article describes a method for creating and booting a standalone system using the two removable media storage interfaces available on the OMAP-L137 EVM.
+</p><p>This page is also a good exercise of the flexible OMAP-L137 EVM boot process.
+</p><p><b>Note:</b> the current Beta SDK does not have a fully featured USB support, therefore be advised the procedure below does not work for all brands of USB pendrives.
+</p><p>This page refers to the following wiki articles:
+</p>
+<ol><li>The boot sequence of OMAP-L137 and useful tips to configure SPI Flash:
+<dl><dd><a href="Omapl137_linux_bootup.html" class="mw-redirect" title="Omapl137 linux bootup">Omapl137_linux_bootup</a></dd></dl></li>
+<li>Example to configure NFS and TFTP servers in a Linux PC for network booting:
+<dl><dd><a href="Before_the_Getting_Started_Guide.html" title="Before the Getting Started Guide">Before_the_Getting_Started_Guide</a></dd></dl></li>
+<li>Teraterm scripts to configure U-boot for OMAP-L137 EVM:
+<dl><dd><a href="Teraterm_Scripts.html#Are_there_any_OMAPL137_examples.3F" title="Teraterm Scripts">Teraterm_Scripts#Are_there_any_OMAPL137_examples.3F</a></dd></dl></li></ol>
+<p>And makes extensive use of parted, an open source software used to create the partitions on the disks. Its manual is located at: <a rel="nofollow" class="external free" href="http://www.gnu.org/software/parted/manual/parted.html">http://www.gnu.org/software/parted/manual/parted.html</a>
+</p>
+<h2><span class="mw-headline" id="Preparing_the_U-boot_and_the_Linux_kernel_to_be_loaded">Preparing the U-boot and the Linux kernel to be loaded</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=2" title="Edit section: Preparing the U-boot and the Linux kernel to be loaded">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="MMC/SD_preliminary_steps"></span><span class="mw-headline" id="MMC.2FSD_preliminary_steps">MMC/SD preliminary steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=3" title="Edit section: MMC/SD preliminary steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>U-Boot does not support reading the Linux kernel from the SD/MMC card.  However, the Linux kernel does support SD/MMC so an SD/MMC card can be used for the target root file system as described below.
+</p>
+<h3><span class="mw-headline" id="USB_pendrive_preliminary_steps">USB pendrive preliminary steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=4" title="Edit section: USB pendrive preliminary steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li><b>Enabling USB support in U-boot (MontaVista Linux based SDK) </b></li></ul>
+<p>For the USB pendrive, however, support must be enabled in both U-boot and in the Linux kernel.
+</p><p>The U-boot sources must be installed (unzip file &lt;u-boot-1.3.3.tar.gz&gt;). In &lt;LSP_02.20_OMAP-L137_User_Guide.pdf&gt; check <b>section 2.3 item 5</b> for its location.
+</p><p><b>Section 5.4.3</b> shows the two required changes to the file <tt>/OMAPL137_dsp_1_00_00_07/REL_LSP_02_20_00_05/PSP_02_20_00_05/board_utilities/u-boot-1.3.3/include/configs/da8xx_evm.h</tt>. The provided U-boot source code already contains these two options enabled:
+&lt;syntaxhighlight lang="c"&gt;
+/*==============================*/
+/* U-Boot general configuration */
+/*==============================*/
+...
+</p>
+<ol><li>define CONFIG_USB_DA8XX</li>
+<li>define CONFIG_USB_STORAGE</li></ol>
+<p>...
+&lt;/syntaxhighlight&gt;
+</p><p>After making sure these options are enabled, go to <b>section 4.1</b> that shows how to build U-boot.
+</p>
+<ul><li><b>Enabling USB support in U-boot (DaVinci GIT based SDK) </b></li></ul>
+<p>U-boot includes support for loading files from USB mass storage devices into memory. This section explains steps for configuring U-Boot to enable USB and mass storage support in U-Boot. It also shows U-Boot commands used for initializing and loading files from mass storage devices connected to USB 2.0 port on the EVM.
+</p><p>The default U-Boot image provided in the with PSP installation has USB MSC support enabled. For instructions on how to build U-Boot, refer to this <b><a href="Configuring/Building_U-Boot_for_OMAP-L137.html" title="Configuring/Building U-Boot for OMAP-L137"> page</a></b>
+</p>
+<ul><li><b>Next Steps</b></li></ul>
+<p>Copy the generated U-boot file &lt;u-boot.bin&gt; to a Windows PC with CCS 3.3 installed and follow the procedures to write it to te SPI Flash memory. In this case it will only be necessary to write U-boot and not the DSP UBL or ARM UBL code.
+</p><p>Therefore, while flashing you must type <i>uboot</i> (instead of <i>dspais</i>) and you give the path and the name of the &lt;u-boot.bin&gt; file you just copied to the Windows PC. Everything else should be the same.
+</p>
+<ul><li><b>Enabling USB support in Linux kernel (MontaVista Linux based SDK) </b></li></ul>
+<p>The Linux kernel sources must also be installed. Check the installation procedure in <b>section 3.3</b>.
+</p><p>The note at the end of this section mentions the need to copy the kernel sources to a user defined area. It is suggested to copy it to the directory below:
+<tt>home/&lt;useracct&gt;/workdir/montavista/pro/devkit/lsp/ti-davinci_evm-arm_v5t_le/linux-2.6.18_pro500/</tt>
+</p><p>To configure the USB support, you must follow the procedure listed in <b>section 5.2</b> and <b>5.2.1</b> in its entirety, even enabling the support to SCSI devices.
+</p><p>Therefore the entire procedure to rebuild the kernel is:
+Clear any previous configurations and create a new default configuration for OMAP-L137 EVM
+</p>
+<pre>make distclean ARCH=arm CROSS_COMPILE=arm_v5t_le-
+make da830_omapl137_defconfig ARCH=arm CROSS_COMPILE=arm_v5t_le-
+</pre>
+<p>Then open the interactive configuration to enable the USB support (refer to <b>section 5.2</b>):
+</p>
+<pre>make menuconfig ARCH=arm CROSS_COMPILE=arm_v5t_le-
+</pre>
+<p>Build the Linux kernel &lt;uImage&gt; and all the modules and install them to your filesystem - make sure you modify the &lt;useracct&gt; with your Linux user account.
+See below how to install them to the prepared USB pendrive.
+</p>
+<pre>make uImage ARCH=arm CROSS_COMPILE=arm_v5t_le-
+make modules ARCH=arm CROSS_COMPILE=arm_v5t_le-
+make modules modules_install INSTALL_MOD_PATH=/home/&lt;useracct&gt;/workdir/filesys ARCH=arm CROSS_COMPILE=arm_v5t_le-
+</pre>
+<p>If you plan to use the NFS boot procedure in the future, you can copy the newly created Linux kernel to your root tftp directory:
+</p>
+<pre>sudo cp &lt;lsp_install_dir&gt;/montavista/pro/devkit/lsp/ti-davinci/linux-2.6.18_pro500/arch/arm/boot/uImage /tftpboot
+</pre>
+<ul><li><b>Enabling USB support in Linux kernel (DaVinci GIT based SDK) </b></li></ul>
+<p>For instructions on how to enable USB support in Linux Kernel, refer to this <b><a href="GSG__Building_Software_Components_for_OMAP-L1.html#Driver_configuration_in_the_Linux_kernel" class="mw-redirect" title="GSG: Building Software Components for OMAP-L1">page</a></b>
+</p>
+<h2><span class="mw-headline" id="Creating_the_removable_media">Creating the removable media</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=5" title="Edit section: Creating the removable media">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The examples below assume a 2GB media mapped in Linux as <tt>/dev/sda</tt>
+</p><p>Make sure the media being modified is the correct one! If used without care, Parted can inadvertedly erase the contents of your Hard Disk!
+</p><p>To be sure the correct disk will be modified, use the option <i>print</i> of parted to show the device information:
+</p>
+<pre>sudo /sbin/parted /dev/sda print
+</pre>
+<p>Take note of the number of partitions in the column <i>Number</i> and the maximum size of the removable media shown in <i>Disk /dev/sda:</i>.
+</p><p>Remove all the existing partitions: (the example below shows the removal of two)
+</p>
+<pre>sudo /sbin/parted /dev/sda rm 1
+sudo /sbin/parted /dev/sda rm 2
+</pre>
+<p><b>Note:</b> It might be needed to unmount the partitions that will be removed.
+</p>
+<h3><span id="MMC/SD_card_procedure"></span><span class="mw-headline" id="MMC.2FSD_card_procedure">MMC/SD card procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=6" title="Edit section: MMC/SD card procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For the MMC/SD card, only one ext2 partition is needed:
+</p>
+<pre>sudo /sbin/parted /dev/sda mkpartfs primary ext2 0 2048M
+</pre>
+<p>If the Linux distribution has an automount feature, after running this command additional icons in your desktop and (maybe) file browser screens should appear in the screen. If it does not have the automount feature, the partition(s) must be mounted manually in a previously created directory (the example below assumes disk).
+</p>
+<pre>mount -t ext2 /dev/sda1 /media/disk
+</pre>
+<p>Now copy the target filesystem to the ext2 partition. Assuming that the target filesystem is at <tt>/home/&lt;useracct&gt;/workdir/filesys</tt>:
+</p>
+<pre>sudo cp -Rf /home/&lt;useracct&gt;/workdir/filesys /media/disk
+</pre>
+<p>All modules should be properly copied onto the target filesystem.
+</p>
+<h5><span class="mw-headline" id="MontaVista_Linux_based_SDK">MontaVista Linux based SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=7" title="Edit section: MontaVista Linux based SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ul><li>If using the default Linux kernel provided with the installation:</li></ul>
+<pre>sudo cp -Rf /opt/OMAPL137_arm_1_00_00_07/REL_LSP_02_20_00_05/PSP_02_20_00_05/bin/kernel_modules/* /media/disk-1
+</pre>
+<p>Or if using a compiled Linux kernel the modules can be installed directly to the target filesystem. Check in the procedure above or in <b>section 5.3</b> of &lt;LSP_02.20_OMAP-L137_User_Guide.pdf&gt;:
+</p>
+<pre>make modules modules_install INSTALL_MOD_PATH=/media/disk-1 ARCH=arm CROSS_COMPILE=arm_v5t_le-
+</pre>
+<h5><span class="mw-headline" id="DaVinci_GIT_based_SDK">DaVinci GIT based SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=8" title="Edit section: DaVinci GIT based SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ul><li>If using the default Linux kernel provided with the installation:</li></ul>
+<pre>sudo cp -Rf &lt;sdk_install_dir&gt;/images/kernel/omapl1x(7/8)/modules/* /media/disk-1
+</pre>
+<p>Or if using a compiled Linux kernel the modules can be installed directly to the target filesystem.
+</p>
+<pre>make modules modules_install INSTALL_MOD_PATH=/media/disk-1 ARCH=arm CROSS_COMPILE=arm-none-linux-gnueabi-
+</pre>
+<h3><span class="mw-headline" id="USB_pendrive_procedure">USB pendrive procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=9" title="Edit section: USB pendrive procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For the USB pendrive you should create two partitions:
+</p>
+<ul><li>a FAT16 that contains the Linux kernel file <tt>uImage</tt></li>
+<li>a ext2 that contains the entire Linux filesystem</li></ul>
+<pre>sudo /sbin/parted /dev/sda mkpartfs primary fat16 0 30M mkpartfs primary ext2 31M 2048M
+</pre>
+<p>If the Linux distribution has an automount feature, after running this command additional icons in your desktop and (maybe) file browser screens should appear in the screen. If it does not have the automount feature, the partition(s) must be mounted manually in a previously created directory (the example below assumes disk and disk-1).
+</p>
+<pre>mount -t vfat /dev/sda1 /media/disk
+mount -t ext2 /dev/sda2 /media/disk-1
+</pre>
+<p>Copy the target filesystem to the ext2 partition.
+</p>
+<pre>sudo cp -Rf /home/&lt;useracct&gt;/workdir/filesys /media/disk-1
+</pre>
+<p>The &lt;useracct&gt; is your login.
+</p>
+<h5><span class="mw-headline" id="MontaVista_Linux_based_SDK_2">MontaVista Linux based SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=10" title="Edit section: MontaVista Linux based SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Copy the Linux kernel file <tt>uImage</tt> to the first partition
+</p>
+<ul><li>If using the default Linux kernel provided with the installation:</li></ul>
+<pre>sudo cp /opt/OMAPL137_arm_1_00_00_07/REL_LSP_02_20_00_05/PSP_02_20_00_05/bin/uImage /media/disk
+</pre>
+<ul><li>If using a compiled Linux kernel: (sections 4.2 and 5.3 of &lt;LSP_02.20_OMAP-L137_User_Guide.pdf&gt; and the errata at <a href="Known_Issues_in_OMAP-L137_Documentation.html" title="Known Issues in OMAP-L137 Documentation">this page</a>)</li></ul>
+<pre>sudo cp &lt;lsp_install_dir&gt;/montavista/pro/devkit/lsp/ti-davinci/linux-2.6.18_pro500/arch/arm/boot/uImage /media/disk
+</pre>
+<h5><span class="mw-headline" id="DaVinci_GIT_based_SDK_2">DaVinci GIT based SDK</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=11" title="Edit section: DaVinci GIT based SDK">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<p>Copy the Linux kernel file <tt>uImage</tt> to the first partition
+</p>
+<ul><li>If using the default Linux kernel provided with the installation:</li></ul>
+<pre>sudo cp &lt;sdk_install_dir&gt;/images/kernel/omapl1x(7/8)/uImage /media/disk
+</pre>
+<ul><li>If using a compiled Linux kernel:</li></ul>
+<pre>sudo cp &lt;sdk_install_dir&gt;/src/kernel/linux-#.#.#.#/arch/arm/boot/uImage /media/disk
+</pre>
+<h2><span class="mw-headline" id="Next_steps">Next steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=12" title="Edit section: Next steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="Booting_with_MMC/SD_card"></span><span class="mw-headline" id="Booting_with_MMC.2FSD_card">Booting with MMC/SD card</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=13" title="Edit section: Booting with MMC/SD card">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For the MMC/SD card, one additional step is required to write the Linux kernel to the onboard SPI Flash memory and have a true standalone system.
+You will need a working TFTP server to upload the &lt;uImage&gt; file to the board.
+At the U-boot prompt type the following commands:
+</p>
+<pre>tftp 0xc0700000 uImage
+sf erase 0x1E0000 0x220000
+sf write 0xc0700000 0x1E0000 0x220000
+</pre>
+<p><b>NOTE:</b> The value 0x220000 is a byte count denoting the size of uImage and may need to be modified if the size of the Linux kernel increases.
+</p><p>From this point you can use the MMC/SD Teraterm script at <a href="Teraterm_Scripts.html#Are_there_any_OMAPL137_examples.3F" title="Teraterm Scripts">this page</a>
+</p>
+<h3><span class="mw-headline" id="Booting_with_USB_Pendrive">Booting with USB Pendrive</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit&amp;section=14" title="Edit section: Booting with USB Pendrive">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>For the USB pendrive, the only step needed is to use the USB Pendrive Teraterm script at <a href="Teraterm_Scripts.html#Are_there_any_OMAPL137_examples.3F" title="Teraterm Scripts">this page</a>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201024054
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.039 seconds
+Real time usage: 0.040 seconds
+Preprocessor visited node count: 248/1000000
+Preprocessor generated node count: 492/1000000
+Post‐expand include size: 116/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2108/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.489      1 Template:Sitara_Devices
+100.00%    1.489      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:1536-0!canonical and timestamp 20201201024054 and revision id 181596
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Creating filesystems on removable media</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Creating filesystems on removable media</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Creating filesystems on removable media</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Creating filesystems on removable media</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Creating filesystems on removable media</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Creating filesystems on removable media</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Creating filesystems on removable media</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Creating filesystems on removable media</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Creating filesystems on removable media</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;oldid=181596">https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;oldid=181596</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM437x.html" title="Category:AM437x">AM437x</a></li><li><a href="Category_AM335x.html" title="Category:AM335x">AM335x</a></li><li><a href="Category_AM35x.html" title="Category:AM35x">AM35x</a></li><li><a href="Category_AM37x.html" title="Category:AM37x">AM37x</a></li><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_AM18x.html" title="Category:AM18x">AM18x</a></li><li><a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_OMAP35x.html" title="Category:OMAP35x">OMAP35x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Creating+filesystems+on+removable+media" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Creating_filesystems_on_removable_media.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Creating_filesystems_on_removable_media.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Creating_filesystems_on_removable_media.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Creating_filesystems_on_removable_media.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Creating_filesystems_on_removable_media.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;oldid=181596" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Creating_filesystems_on_removable_media&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 14:17.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.039","walltime":"0.040","ppvisitednodes":{"value":248,"limit":1000000},"ppgeneratednodes":{"value":492,"limit":1000000},"postexpandincludesize":{"value":116,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2108,"limit":5000000},"timingprofile":["100.00%    1.489      1 Template:Sitara_Devices","100.00%    1.489      1 -total"]},"cachereport":{"timestamp":"20201201024054","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":283});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Creating_filesystems_on_removable_media by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:53:59 GMT -->
+</html>

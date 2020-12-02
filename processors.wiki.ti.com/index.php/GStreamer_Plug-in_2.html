@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/GStreamer_Plug-in_2.x_Design by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:56:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>GStreamer Plug-in 2.x Design - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"GStreamer_Plug-in_2.x_Design","wgTitle":"GStreamer Plug-in 2.x Design","wgCurRevisionId":47196,"wgRevisionId":47196,"wgArticleId":3875,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Linux","Gstreamer","TI Gstreamer Plugin 2.x","DMAI GStreamer Plug-In"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"GStreamer_Plug-in_2.x_Design","wgRelevantArticleId":3875,"wgRequestId":"6c7514f1a6682f485cf71519","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-GStreamer_Plug-in_2_x_Design rootpage-GStreamer_Plug-in_2_x_Design skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">GStreamer Plug-in 2.x Design</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Code_Availability"><span class="tocnumber">1.1</span> <span class="toctext">Code Availability</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Support"><span class="tocnumber">1.2</span> <span class="toctext">Support</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Background"><span class="tocnumber">1.3</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Rationale"><span class="tocnumber">1.4</span> <span class="toctext">Rationale</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Design_Details"><span class="tocnumber">2</span> <span class="toctext">Design Details</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Migration_path_from_1.x_to_2.x"><span class="tocnumber">2.1</span> <span class="toctext">Migration path from 1.x to 2.x</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#General_Design"><span class="tocnumber">2.2</span> <span class="toctext">General Design</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Simplifying_Customization"><span class="tocnumber">2.2.1</span> <span class="toctext">Simplifying Customization</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Code_Orthogonality"><span class="tocnumber">2.2.2</span> <span class="toctext">Code Orthogonality</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Coding_Standard"><span class="tocnumber">2.2.3</span> <span class="toctext">Coding Standard</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Build_system"><span class="tocnumber">2.2.4</span> <span class="toctext">Build system</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#Run_time_behavior"><span class="tocnumber">2.2.5</span> <span class="toctext">Run time behavior</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Element_naming"><span class="tocnumber">2.2.6</span> <span class="toctext">Element naming</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-15"><a href="#Codec_Engine_Integration"><span class="tocnumber">2.3</span> <span class="toctext">Codec Engine Integration</span></a>
+<ul>
+<li class="toclevel-3 tocsection-16"><a href="#Codec_Servers_Management"><span class="tocnumber">2.3.1</span> <span class="toctext">Codec Servers Management</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Buffer_management"><span class="tocnumber">2.3.2</span> <span class="toctext">Buffer management</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Handling_of_CMEM_buffers_inside_gstreamer"><span class="tocnumber">2.3.3</span> <span class="toctext">Handling of CMEM buffers inside gstreamer</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-19"><a href="#Thread_prioritization_and_handling"><span class="tocnumber">2.4</span> <span class="toctext">Thread prioritization and handling</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#Integration_with_playbin.2Fdecodebin"><span class="tocnumber">2.4.1</span> <span class="toctext">Integration with playbin/decodebin</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-21"><a href="#Color_Space_Conversion"><span class="tocnumber">2.5</span> <span class="toctext">Color Space Conversion</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Video.2FImage.2FAudio_Encoding"><span class="tocnumber">2.6</span> <span class="toctext">Video/Image/Audio Encoding</span></a>
+<ul>
+<li class="toclevel-3 tocsection-23"><a href="#Encoder_elements_design_overview"><span class="tocnumber">2.6.1</span> <span class="toctext">Encoder elements design overview</span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#Resource_management"><span class="tocnumber">2.6.2</span> <span class="toctext">Resource management</span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#Input_buffer_management"><span class="tocnumber">2.6.3</span> <span class="toctext">Input buffer management</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#Output_buffer_management"><span class="tocnumber">2.6.4</span> <span class="toctext">Output buffer management</span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Output_buffer_transformations"><span class="tocnumber">2.6.5</span> <span class="toctext">Output buffer transformations</span></a></li>
+<li class="toclevel-3 tocsection-28"><a href="#Codec_Data_generation"><span class="tocnumber">2.6.6</span> <span class="toctext">Codec Data generation</span></a></li>
+<li class="toclevel-3 tocsection-29"><a href="#Extended_arguments"><span class="tocnumber">2.6.7</span> <span class="toctext">Extended arguments</span></a></li>
+<li class="toclevel-3 tocsection-30"><a href="#Timestamping"><span class="tocnumber">2.6.8</span> <span class="toctext">Timestamping</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#Pixel_aspect_ratio"><span class="tocnumber">2.6.9</span> <span class="toctext">Pixel aspect ratio</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-32"><a href="#Video.2FImage.2FAudio_Decoding"><span class="tocnumber">2.7</span> <span class="toctext">Video/Image/Audio Decoding</span></a>
+<ul>
+<li class="toclevel-3 tocsection-33"><a href="#Decoder_elements_design_overview"><span class="tocnumber">2.7.1</span> <span class="toctext">Decoder elements design overview</span></a></li>
+<li class="toclevel-3 tocsection-34"><a href="#Resource_management_2"><span class="tocnumber">2.7.2</span> <span class="toctext">Resource management</span></a></li>
+<li class="toclevel-3 tocsection-35"><a href="#Input_buffer_management_2"><span class="tocnumber">2.7.3</span> <span class="toctext">Input buffer management</span></a>
+<ul>
+<li class="toclevel-4 tocsection-36"><a href="#Parsers"><span class="tocnumber">2.7.3.1</span> <span class="toctext">Parsers</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-37"><a href="#Output_buffer_management_2"><span class="tocnumber">2.7.4</span> <span class="toctext">Output buffer management</span></a></li>
+<li class="toclevel-3 tocsection-38"><a href="#Extended_arguments_2"><span class="tocnumber">2.7.5</span> <span class="toctext">Extended arguments</span></a></li>
+<li class="toclevel-3 tocsection-39"><a href="#Flush_handling"><span class="tocnumber">2.7.6</span> <span class="toctext">Flush handling</span></a></li>
+<li class="toclevel-3 tocsection-40"><a href="#QoS_handling"><span class="tocnumber">2.7.7</span> <span class="toctext">QoS handling</span></a></li>
+<li class="toclevel-3 tocsection-41"><a href="#Clipping"><span class="tocnumber">2.7.8</span> <span class="toctext">Clipping</span></a></li>
+<li class="toclevel-3 tocsection-42"><a href="#Timestamping_2"><span class="tocnumber">2.7.9</span> <span class="toctext">Timestamping</span></a></li>
+<li class="toclevel-3 tocsection-43"><a href="#Reverse_Playback"><span class="tocnumber">2.7.10</span> <span class="toctext">Reverse Playback</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-44"><a href="#Video_Transcoding"><span class="tocnumber">2.8</span> <span class="toctext">Video Transcoding</span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#Video_Resizing"><span class="tocnumber">2.9</span> <span class="toctext">Video Resizing</span></a>
+<ul>
+<li class="toclevel-3 tocsection-46"><a href="#Pixel_Aspect_Ratio_handling"><span class="tocnumber">2.9.1</span> <span class="toctext">Pixel Aspect Ratio handling</span></a></li>
+<li class="toclevel-3 tocsection-47"><a href="#Letter_Boxing"><span class="tocnumber">2.9.2</span> <span class="toctext">Letter Boxing</span></a></li>
+<li class="toclevel-3 tocsection-48"><a href="#Color_Space_Conversion_2"><span class="tocnumber">2.9.3</span> <span class="toctext">Color Space Conversion</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-49"><a href="#Video_Rendering"><span class="tocnumber">2.10</span> <span class="toctext">Video Rendering</span></a></li>
+<li class="toclevel-2 tocsection-50"><a href="#Video_Capturing"><span class="tocnumber">2.11</span> <span class="toctext">Video Capturing</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-51"><a href="#Testing_Design"><span class="tocnumber">3</span> <span class="toctext">Testing Design</span></a>
+<ul>
+<li class="toclevel-2 tocsection-52"><a href="#Feature_Analysis"><span class="tocnumber">3.1</span> <span class="toctext">Feature Analysis</span></a></li>
+<li class="toclevel-2 tocsection-53"><a href="#Testing_Tools"><span class="tocnumber">3.2</span> <span class="toctext">Testing Tools</span></a>
+<ul>
+<li class="toclevel-3 tocsection-54"><a href="#GStreamer_Daemon_.E2.80.93_gstd"><span class="tocnumber">3.2.1</span> <span class="toctext">GStreamer Daemon – gstd</span></a></li>
+<li class="toclevel-3 tocsection-55"><a href="#Perl_Expect"><span class="tocnumber">3.2.2</span> <span class="toctext">Perl Expect</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-56"><a href="#Test_Categorization"><span class="tocnumber">3.3</span> <span class="toctext">Test Categorization</span></a>
+<ul>
+<li class="toclevel-3 tocsection-57"><a href="#Pipeline_Data_Consumption_and_Production_Tests"><span class="tocnumber">3.3.1</span> <span class="toctext">Pipeline Data Consumption and Production Tests</span></a></li>
+<li class="toclevel-3 tocsection-58"><a href="#Tests_for_Known_and_Expected_Pipelines"><span class="tocnumber">3.3.2</span> <span class="toctext">Tests for Known and Expected Pipelines</span></a></li>
+<li class="toclevel-3 tocsection-59"><a href="#Dynamic_Pipeline_Tests"><span class="tocnumber">3.3.3</span> <span class="toctext">Dynamic Pipeline Tests</span></a></li>
+<li class="toclevel-3 tocsection-60"><a href="#Dynamic_Element_Property_Tests"><span class="tocnumber">3.3.4</span> <span class="toctext">Dynamic Element Property Tests</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Code_Availability">Code Availability</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=2" title="Edit section: Code Availability">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Most of these features are available now using software on <a rel="nofollow" class="external text" href="https://gstreamer.ti.com/gf/project/gstreamer_ti/scmsvn/?action=browse&amp;path=%2Fbranches%2FBRANCH_DDOMPE%2Fgstreamer_ti%2Fti_build%2Fticodecplugin%2F">SVN BRANCH_DDOMPE</a>. The software has not been reviewed and tested as well as software on the SVN trunk.
+</p><p>A patch for OpenEmbedded was submitted <a rel="nofollow" class="external text" href="http://thread.gmane.org/gmane.comp.handhelds.openembedded/39581">here</a>. This patch will not be accepted on OE since the preferred path is to merge the branch into trunk instead of supporting the branch on OE. You can use the recipe on your local build on mean time that happens.
+</p>
+<h3><span class="mw-headline" id="Support">Support</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=3" title="Edit section: Support">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<tbody><tr>
+<td><a rel="nofollow" class="external text" href="http://www.ridgerun.com/">RidgeRun</a> provides professional support for BRANCH_DDOMPE. The features found in BRANCH_DDOMPE were funded by request from various companies.  If your company requires assistance with the TI DMAI GStreamer plug-in, please contact RidgeRun.
+</td>
+<td><a href="File_RidgeRunLogo.html" class="image" title="Right"><img alt="Right" src="https://processors.wiki.ti.com/images/c/cd/RidgeRunLogo.jpg" width="250" height="81" /></a>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Background">Background</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=4" title="Edit section: Background">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The GStreamer TI Plugin is an open source effort started by Texas Instruments (TI) with the objective of providing a solution for synchronized audio and video hardware accelerated recording and playback for Linux™ running on TI's SystemOnChips (SoCs).
+</p><p>TI has a long history of offering a set of frameworks that enables the use of hardware-accelerated video and audio codecs in their SoCs, for example <a href="Category_Codec_Engine.html" title="Category:Codec Engine">Codec Engine</a>, DMAI, and DSPLink. The GStreamer TI Plugin builds upon this foundation, particularly over DMAI, to provide the required underlying functionality for GStreamer elements.
+</p><p>RidgeRun has joined TI's effort stepping up to provide development and testing resources as well as professional services for TI's customers requiring expertise on GStreamer and companion technologies.
+</p><p>This document outlines the functional design of version 2.x of the plugin, which provides a new set of functionalities and design changes against the 1.x version, based on customer feedback and experience gathered by RidgeRun. Much of the design detailed in the following sections has been implemented on DDOMPE's branch in the project version control system repository at the time of this writing, and is being used in shipping products. The final implementation of the 2.x plugin will be done on a separated branch in the version control system based on the design detailed on this document.
+</p>
+<h3><span class="mw-headline" id="Rationale">Rationale</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=5" title="Edit section: Rationale">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The GStreamer TI plugin was originally intended as a way to provide a software platform for synchronized audio/video playback using TI's Codec Engine and DMAI (since neither of these frameworks provides lip-sync capabilities).  Another driving goal was that the same plugin source could be built to run on several TI platforms by utilizing the DMAI framework. Once this objective was accomplished, the community using the plugins started looking into supporting other GStreamer functionality that were not considered by the original design.  Desired functionality enhancements includes trick-play modes, zero-memcpy encoding and playback, dual encoding, video zooming and panning, etc. Some companies contracted with RidgeRun to enhance the plugin, adding these capabilities. RidgeRun has implemented the new features on a separate branch, which is used as the 2.x code base.
+</p><p>The new plugin changes its revision number (from 1.x to 2.x) for several reasons:
+</p>
+<ul><li>Element naming and usage is different from 1.x, causing incompatibilities.</li>
+<li>Element internal design and memory requirements changed.</li>
+<li>The code is heavily re-factored to improve orthogonality.</li>
+<li>The build system is different.</li></ul>
+<h2><span class="mw-headline" id="Design_Details">Design Details</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=6" title="Edit section: Design Details">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Migration_path_from_1.x_to_2.x">Migration path from 1.x to 2.x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=7" title="Edit section: Migration path from 1.x to 2.x">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Since the release 1.01 of the plugin, the main reference point for its use has been the <a href="Example_GStreamer_Pipelines.html" title="Example GStreamer Pipelines"> examples page</a>. For the 2.x release there will be a page in the wiki, explaining the usage for all the previously documented cases and pointing out any special details required for the new elements.
+</p>
+<h3><span class="mw-headline" id="General_Design">General Design</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=8" title="Edit section: General Design">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The 2.x plugin design follows the GStreamer design guidelines (opposed to the 1.x plugin that followed the DMAI guidelines).  Other unique requirements that have arisen as GStreamer was used in production embedded devices, like explicit thread priority control, are also addressed.
+</p>
+<h4><span class="mw-headline" id="Simplifying_Customization">Simplifying Customization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=9" title="Edit section: Simplifying Customization">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The 1.x plugin is extensively tested against the default codecs provided for each supported platform. It is however the exception and not the rule that a TI customer will use the default codec server for several reasons:
+</p>
+<ul><li>The codec servers have build time assigned memory locations, making re-compilation of the codec server necessary for supporting the customer's hardware design.</li>
+<li>The customer may require algorithms not provided in the default codec server.</li>
+<li>The customer doesn't require algorithms provided in the default codec server, and wants them removed.</li></ul>
+<p>The new plugin is still tested against the default codec servers, but will simplify and document the process of modifying the existing code to use a different codec server, trying to minimize the amount of changes required in the process. This will also greatly simplify the task of supporting new platforms.
+</p><p>The procedure to add support for a custom codec server for the 2.x plugin will be documented in the project wiki.
+</p><p><br />
+Another aspect included in the new plugins is run-time detection of codecs available in the server. When the plugin is executed, it won't show elements that aren't supported by the existing codec server.
+</p>
+<h4><span class="mw-headline" id="Code_Orthogonality">Code Orthogonality</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=10" title="Edit section: Code Orthogonality">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The 2.x plugin code layout attempts to maximize code orthogonality: creating independent pieces of code that can be re-used in many cases. This is accomplished by:
+</p>
+<ul><li>Re-factoring the code of the 1.x branch to consolidate nearly identical code.</li>
+<li>Coding new functionality with re-usability in mind. For example the new code for extended codec argument handling uses structures with function pointers to simplify adding new arguments.</li></ul>
+<p>The rule of thumb is: if you are writing the same code more than once, then your code is a good candidate for re-factoring.
+</p><p>We also avoiding conditional compiling as much as possible and instead rely on run-time detection of specific features. For example instead of using an \#ifdef condition for setting the colorSpace type for DM6467, we add code that picks the colorSpace from the plugin caps (and the caps reflect the right DM6467 colorSpace using conditional compiling only once).
+</p>
+<h4><span class="mw-headline" id="Coding_Standard">Coding Standard</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=11" title="Edit section: Coding Standard">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The 2.x plugins uses the standardized GStreamer indentation, as validated by the gst-indent script provided by the source code of the GStreamer package.
+</p>
+<h4><span class="mw-headline" id="Build_system">Build system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=12" title="Edit section: Build system">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The 2.x plugin removes building the so-called <i>open source</i> components of the project (which is currently responsible for cross-compiling the gstreamer target platform binaries). The 2.x branch will hold in the control version system only the source code of the plugin and not the build system for it (following the pattern used by most open source projects). The build system used to validate the plugin will be the <a rel="nofollow" class="external text" href="http://www.arago-project.org/">Arago project</a>.
+</p><p>The project's website will provide a tarball containing pre-built GStreamer binaries that can be overlayed on top of a the target file system.  Instructions on how that file system was built using arago will be available <a href="Building_GStreamer_Binaries_with_Arago.html" title="Building GStreamer Binaries with Arago"> here</a>.
+</p><p>The build instructions will need to clearly document the work flow for downloading the plugin, building it, making a change, rebuilding it, submitting the change.
+</p>
+<h4><span class="mw-headline" id="Run_time_behavior">Run time behavior</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=13" title="Edit section: Run time behavior">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>The 2.x plugin will avoid using environment variables for selecting run-time options as much as possible. Using environment variables is problematic for development proposes since it makes the process of reproducing issues much more difficult. We have found cases where customers couldn't get something to work, or where we couldn't reproduce an issue because there was/wasn't a environment variable set.</li>
+<li>The plugin uses <a href="#Simplifying_Customization">run time codec detection</a>.</li>
+<li>The element properties use optimized values by default, falling back to more conservative values as needed (printing visible warnings on the screen). For example, by default the element doing memory copies should attempt to do hardware accelerated memory copies but shouldn't panic in case it can't use the hardware accelerator, instead falling back to software memcpy and printing a warning.</li>
+<li>Errors or warning in the elements should be reported using the <b>GST_ELEMENT_ERROR()</b> or <b>GST_ELEMENT_WARNING()</b> instead of <b>GST_ERROR()</b> and <b>GST_WARNING(). </b>The former generate error messages that are passed down the pipeline, allowing the application to identify the error and get the string of the error message (for example, by default gst-launch will display such messages). The <b>GST_ERROR()</b> or <b>GST_WARNING()</b>&#160;calls only generate messages in the stdout when the proper gst debug level is enabled, and those errors can't be catch by the application creating the pipeline.</li>
+<li>Some existing elements in the 1.x branch may crash or exit without reporting any useful message. To improve supportability, the user should be able to control the message output for all abnormal behavior.</li></ul>
+<h4><span class="mw-headline" id="Element_naming">Element naming</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=14" title="Edit section: Element naming">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The 2.x elements are going to be named following this convention: <i>ti_<b>codec</b>enc</i> and <i>ti_<b>codec</b>dec</i> 
+</p><p>For example, if the codec is h264, and the operation is encoding: <i>ti_h264enc</i>. 
+</p><p>Other elements that are not encoders or decoders will use custom names prefixed by the atom <b>ti</b>: 
+</p>
+<ul><li><a href="#Video_Resizing">tivideoscale</a></li>
+<li><a href="#Video_Resizing">tivideoresizer</a></li>
+<li>tiperf - based on <a href="GstTIPlugin_Elements.html#dmaiperf" title="GstTIPlugin Elements">dmaiperf</a></li>
+<li><a href="#Handling_of_CMEM_buffers_inside_gstreamer">tiaccel</a></li>
+<li><a href="#Color_Space_Conversion">ticolorspace</a></li></ul>
+<p>Elements that aren't specific to TI platforms but belong to the project while accepted on mainstream won't use the <b>ti </b>prefix. For example:
+</p>
+<ul><li><a href="#Thread_prioritization_and_handling">priority</a></li></ul>
+<h3><span class="mw-headline" id="Codec_Engine_Integration">Codec Engine Integration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=15" title="Edit section: Codec Engine Integration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Codec_Servers_Management">Codec Servers Management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=16" title="Edit section: Codec Servers Management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>The codec server will be expected by default at the path <b>/usr/share/ti/codec-combo/</b>, instead of the current working directory. This default path could be changed at build time using a configure option instead of a environment variable as is currently done in the 1.x branch.</li>
+<li>The codec server name for encoding and decoding could be overwritten at build time setting a variable in the configure system. This procedure will be documented in the project wiki as part of the custom codec server setup documentation.</li></ul>
+<h4><span class="mw-headline" id="Buffer_management">Buffer management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=17" title="Edit section: Buffer management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>The 2.x branch will try to minimize as much as possible the CMEM memory footprint, since it's a vital resource on very constrained embedded systems.</li>
+<li>For audio streams the size of the input/output buffers will be allocated by querying the codec about the minimum input/output sizes.</li>
+<li>For video/image streams the elements will identify the capabilities of the stream being processed and allocate the minimum memory required. For example if the stream is at CIF resolution (320x240), then the element will allocate CMEM buffers required for that size of video encoding/decoding. This requires that all streams going into the elements provides capabilities with information regarding width and height, otherwise the video elements will default to querying the codec for the default input/output buffers sizes, wasting memory. If the capabilities lack the required information to calculate the buffer size, the element will fallback to query the codec for the minimum buffer size supported and use that.</li></ul>
+<p>In the 1.x branch the video/image decoders didn't require height and width capabilities from the input stream, since it allocated the size indicated by the codec and then re-sized the input buffers once the real size had been identified. However this approach wastes memory during the bootstrap without providing a way to work around it. Since there are already parsers implemented for all of the video types currently supported by the plugin, we rely on using parser elements when decoding elementary streams from a file, or in the worst case capabilities may be manually inserted with a caps filter. This usage model will be documented in the new 2.x plugin example pipelines page. More details about the behavior of the parsers could be found on the section regarding <a href="#Input_buffer_management_2"> input buffer management for the decoders</a>.
+</p>
+<h4><span class="mw-headline" id="Handling_of_CMEM_buffers_inside_gstreamer">Handling of CMEM buffers inside gstreamer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=18" title="Edit section: Handling of CMEM buffers inside gstreamer">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>The 2.x plugin maintains and extends the dmai transport buffer object. Dmai transport buffers are used as the exclusive way to identify when a single memory buffer is contiguous in physical memory. Therefore all of the <b>contiguousInputBuffer</b> properties has been removed.</li>
+<li>Dmai transport buffers are extend to support an optional call back release function. This functionality is required by the new design of some of the elements: the encoders and the display sink.</li>
+<li>The 2.x elements that require contiguous input buffers will identify if the incoming buffers are dmai transport buffers and use them as such, or otherwise internally move the data into CMEM memory (details on specific examples for encoder, decoders and transform elements are provided in the sections below).</li>
+<li>There is a new element <b>tiaccel</b> which is a transform element that receives buffers and performs the following actions:
+<ul><li>If an input buffer is a dmai transport buffer already, leave it untouched.</li>
+<li>If an input buffer is a standard gst buffer, take the buffer pointer and call <code>Memory_getBufferPhysicalAddress()</code> to identify if the buffer is potentially a contiguous memory buffer (like the ones provided by the v4l2src when the property <b>always-copy</b> is false). If the buffer is contiguous in memory, wrap into a dmai buffer transport object and pass it downstream, otherwise do a memcpy of the data into a CMEM buffer (from an internal buffer tab) and create a dmai transport buffer object for the new buffer.
+<ul><li>It is well <a href="CMEM_Overview.html#CMEM_FAQ" title="CMEM Overview">documented</a> in the CMEM API that <code>CMEM_getPhys()</code>, which is used by <code>Memory_getBufferPhysicalAddress()</code>, can't translate all the virtual address to physical addresses. Particularly CMEM doesn't handle non-direct-mapped kernel addresses except the ones that correspond to CMEM's managed memory block(s). This is not a problem for the logic of the <b>tiaccel</b> element, since the API doesn't generate false positives when identifying contiguous memory buffers, but may generate false negatives. The effect of a false negative in the <b>tiaccel</b> means the element will copy the data into CMEM buffer unnecessarily (since the input buffer was already contiguous on memory). This behavior will be well documented in the wiki and example pipelines, and the element will display a warning when using input buffers that aren't contiguous in memory.</li>
+<li>It's important to note that the only scenario documented so far where <b>tiaccel</b> element is used to wrap contiguous memory buffers into dmai buffer transport object is while encoding video from v4l2src, and for this case the CMEM API properly identifies the pointers from v4l2src as contiguous memory buffers.</li></ul></li>
+<li>If the property hwAccel is set to true, try the DMAI hardware accelerated frame copy API. The hwAccel property defaults to true. If hardware acceleration isn't available, fall back to software memcpy and display a warning.</li></ul></li></ul>
+<p>The design rationale of <b>tiaccel</b> is to provide a separate gstreamer element for performing memory copies outside encoder/decoder/resizer elements (which is desirable on multiple stream scenarios, because any memory copies are made only once instead of for every element using CMEM buffers). Having an element perform the memory copies independently is necessary as well in order to have full <a href="#Thread_prioritization_and_handling">control of thread prioritization</a> in the pipeline.
+</p>
+<h3><span class="mw-headline" id="Thread_prioritization_and_handling">Thread prioritization and handling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=19" title="Edit section: Thread prioritization and handling">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There are several different possible usage scenarios for elements, each one with specific requirements regarding real time behavior. The elements should be flexible enough to provide full control of the threading behavior, ultimately allowing users to achieve their real time goals. Initially, thread control appears to add unnecessary complexity, however in many practical cases this approach is far simpler than the alternatives (like using a home grown implementation tuned to a specific use case). 
+</p><p>The 1.x branch elements were designed by embedding a real time thread inside those elements responsible for receiving input buffers and sending the buffers to hardware accelerators or the DSP for processing. The rationale behind this logic is to parallelize the data processing by using specialized hardware along with the memory copies into the CMEM input buffers. 
+</p><p>The 2.x branch removes all the intra-element threading and instead provides the same functionality by allowing new elements to be included in the pipeline. The main rationale for removing the internal threading was to reduce design complexity, while simplifying the implementation of certain asynchronous functions such as flushing. Also the new design provides a more flexible control allowing developers to perform optimizations that were not possible before (like tuning the priorities of different thread segments in the pipe) or allowing the developers to remove the thread prioritizatoin solution if the extra control is not required for their use case. 
+</p><p>There is a new <b>priority</b> element introduced in the 2.x branch which is responsible for providing control properties for the priority and scheduling of the thread segment at the point in the pipeline where the <b>priority</b> element occurs. All the 2.x elements are single-threaded. 
+</p><p>The <b>priority</b>&#160;element provides the following properties:
+</p>
+<ul><li>nice: allows to add to the nice level of the thread following the same behavior of the nice application in the Linux shell.</li>
+<li>scheduler: allows to select the scheduler to use: OTHER, RT FIFO, or RT RoundRobin (see man page for <i>sched_setscheduler()</i>).</li>
+<li>rtpriority: when using an RT scheduler, sets the value of the real time priority.</li></ul>
+<p>The idea behind this design is based on the following lessons learned from the 1.x branch: 
+</p>
+<ul><li>Having real time threads embedded in the elements makes it harder to tune the system for specific scenarios. For example video encoding where no frame drops are allowed, combined with the system being under heavy load, and other real time processes are executed along with GStreamer.</li>
+<li>Having real time threads embedded in the elements doesn't work if the code can't execute as root for security reasons. In the 1.x design the only work-around was disabling the real time threads, and the code was tested and designed with the assumption that those threads were used.</li>
+<li>The same behavior and performance of the 1.x branch regarding parallelized data copy and processing can be achieved using standard GStreamer threads and the <b>priority</b> element while providing a more flexible approach. The data copy of incoming non-CMEM buffers can be performed in the <b>tiaccel</b> element in a separate thread (thanks to the <b>queue</b> element) since the data processing element can be scheduled in real time using <b>priority</b>.</li></ul>
+<p>The <b>priority</b> element works along with the standard <b>queue</b> element to control which threads will receive the right priority. For example, let's consider the scenario of NTSC video capturing and encoding without frame drops. In this case we have the following requirements: 
+</p>
+<ol><li>The video source element needs to be scheduled to run on average less than every 33ms, so we require this element to have the highest priority.</li>
+<li>The encoder element thread must have the second highest priority as any encoder CPU starvation will cause the video source to run out of buffers (since the encoder will not consume, and thus return, the buffers output by the NTSC source at a rate fast enough).</li>
+<li>The multiplexer and file sink have lower priorities since there is enough buffering capacity from the encoder element to avoid being hit by scheduler delays (see <a href="#Output_buffer_management">output buffer management</a> section).</li></ol>
+<p>The figure below provides the detail of where we locate the queues in the pipeline for creating three separate threads. Notice that we use the <b>tiaccel</b> element to transform the buffers output by <b>v4l2src</b> into dmai transport buffers, so there is no memcpy performed in the input data at all but instead the video capture buffers are processed directly by the encoder element. 
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:477px;"><a href="File_Threads.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/8/85/Threads.png" width="475" height="231" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Threads.html" class="internal" title="Enlarge"></a></div>Threads image</div></div></div></div> 
+<p>In this example, we can add a <b>priority</b> somewhere in the portion of the pipeline where separate threads are executing, allowing us to raise or lower the priority (or change the scheduler) of the thread where the <b>priority</b> element is executed. Figure bellow shows the location of the <b>priority</b> element in the example pipeline in order to achieve the appropriate control we outline before. Notice that the <b>priority</b> could be placed at different points in the pipeline as well to achieve the same result, just as long as there is a <b>priority</b> for each thread.<font class="Apple-style-span" color="#FF0000"><br /></font>
+</p><p><br />
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:525px;"><a href="File_ThreadsAndPriority.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/c/c8/ThreadsAndPriority.png" width="523" height="231" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_ThreadsAndPriority.html" class="internal" title="Enlarge"></a></div>Threads Prioritization image</div></div></div></div> 
+<h4><span id="Integration_with_playbin/decodebin"></span><span class="mw-headline" id="Integration_with_playbin.2Fdecodebin">Integration with playbin/decodebin</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=20" title="Edit section: Integration with playbin/decodebin">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A downside of using a separate thread priority element and removing the internal threading of the decoder is that when the decoder is used with playbin or decodebin, it is possible that there won't be parallelization of the decoding process. However there are two approaches to solve this problem: 
+</p>
+<ul><li>Do no solve it. Tests with the current DDOMPE's branch show that for most usage cases there is not measurable overhead (compared with the 1.x releases) for the decoding scenario by not parallelizing the decoding and the memory copy of the input buffers on most platforms.</li>
+<li>Create a new element that encapsulates a <b>tiaccel</b>, a queue, a <b>priority</b> and any given <b>ti_<i>codec</i>dec</b>}. If this element uses a rank equal or better than the standard decoders, playbin/decodebin will pick it up for decoding. Such plugin won't be included in the 2.0 release, but the solution will be documented in the wiki. If the community contributes an implementation, it could be included for future releases.<br /></li></ul>
+<h3><span class="mw-headline" id="Color_Space_Conversion">Color Space Conversion</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=21" title="Edit section: Color Space Conversion">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The 2.x branch introduces an element for color space conversion named <b>ticolorspace</b> (following the well-known element ffmpegcolorspace). The default behavior is for <b>ticolorspace</b>  to use DMAI Ccv module.
+</p><p>RidgeRun is working on creating an open source IUniversal Ccv module, and this element may be added as a future capability for run-time detection of available codecs to use this module instead of the DMAI API. However this functionality is not scheduled for the 2.0 release.
+</p>
+<h3><span id="Video/Image/Audio_Encoding"></span><span class="mw-headline" id="Video.2FImage.2FAudio_Encoding">Video/Image/Audio Encoding</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=22" title="Edit section: Video/Image/Audio Encoding">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The 2.x branch merges into a single code base the functionality of the video, image and audio encoders, given that most of the infrastructure for handling of the input/output buffers is the same for the encoding scenarios. Function calls for specific processing APIs from the Codec Engine are handled with function pointer tables. This approach presents several advantages: 
+</p>
+<ul><li>Bug fixes and improvements are shared by all the encoders, while logic specific for each codec type (video, image or audio) is minimized.</li>
+<li>Buffer handling for the encoding scenarios is shared by all the elements.</li></ul>
+<h4><span class="mw-headline" id="Encoder_elements_design_overview">Encoder elements design overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=23" title="Edit section: Encoder elements design overview">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The general design of the encoder elements is presented in figure below. The main considerations used for this design are: 
+</p>
+<ul><li>Data flow: The encoder elements receive uncompressed buffers to the sink pad and output compressed data, so the design should focus on minimizing data copies or overhead in the processing of incoming data.</li>
+<li>Memory requirements: There are two scenarios that require efficient output memory buffer allocation:</li></ul>
+<ol><li>Some muxers require queuing several buffers before they start freeing them.</li>
+<li>Some devices encode continuously but don't release the output buffers immediately, instead queuing them for some seconds and later discarding unless there is some external event (for example surveillance cameras that are trigger-activated). In this scenario, its ideal to avoid output buffer memcpy operations to minimize CPU overhead and improve battery life.</li></ol>
+<p>For these reasons, the output buffers from the encoder should be as small as possible, and use the CMEM memory as efficiently as possible. 
+</p><p>The main encoder data structures are: 
+</p>
+<ul><li><b>Input GstAdapter</b>: a structure that receives input buffers and potentially merges them to provide enough encoding data to the codecs. For detailed design see the <a href="#Input_buffer_management">input buffer management</a> section.</li>
+<li><b>Output CMEM buffer</b>: a specialized CMEM buffer for outputing encoded buffers without wasting memory and avoiding memcpy of the output data. For detailed design see the <a href="#Output_buffer_management">output buffer management</a> section.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:502px;"><a href="File_EncoderDesign.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/c/c7/EncoderDesign.png" width="500" height="289" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_EncoderDesign.html" class="internal" title="Enlarge"></a></div>Encoder elements design</div></div></div></div>
+<h4><span class="mw-headline" id="Resource_management">Resource management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=24" title="Edit section: Resource management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The encoder elements will follow this protocol for handling resources during the different element states, in accordance with gstreamer plugin guidelines: 
+</p>
+<ul><li>During the state change from NULL to READY, the engine will be open, but no stream-specific resources are allocated.</li>
+<li>During the state change from READY to PAUSED, no operation is done, since we need to have the stream capabilities information to allocate the right memory for the stream.</li>
+<li>During the first call to the setcaps function of the sink pad, the element will define memory requirements for input and output buffers and proceed to open the codec. Buffers won't be allocated yet, since it is possible that upstream element provide dmai transport buffers already.</li>
+<li>During the chain function, input and output buffers will be allocated the first time they are required.</li>
+<li>During the state change from READY to NULL, all allocated CMEM resources are released, and the codec and engine are close.</li></ul>
+<p>Since the state_change function is asynchronous to the processing thread of GStreamer, the CMEM and edma library is required to have the capability of releasing resources from a thread different to that where they were allocated from. Some versions of the CMEM and edma libraries don't have this ability (this was a problem introduced on linuxutils 2.23.01, but fixed on revision 2.25), so a version of the DVSDK for the respective platform with an updated package may be required. 
+</p>
+<h4><span class="mw-headline" id="Input_buffer_management">Input buffer management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=25" title="Edit section: Input buffer management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The handling of the incoming buffers to the encoder is done with the following rules: 
+</p>
+<ul><li>Buffers are checked upon arrival to identify if they are dmai transport buffers (for example in case those are buffers coming from a video source and passing through the <b>tiaccel</b>) or not (for example reading an elementary stream with a filesrc).</li>
+<li>If the incoming buffer is a dmai transport and the size is large enough for the encode operation, then the buffer is immediately passed to the processing function (assuming this is already a full frame).</li>
+<li>If the incoming buffer wasn't a dmai transport, then the data is pushed into the GstAdapter. If the GstAdapter is empty, the timestamp of the buffer being pushed is stored in a variable.</li>
+<li>If the GstAdapter has enough data for a full input buffer for the encoder, this data is copied into an internal CMEM buffer and passed to the processing function. Again, a hardware accelerator is used to perform the copy, if such an accelerator is available.</li>
+<li>In the case the buffer passed to the encoder is not fully consumed, just the consumed data is flushed from the adapter and the unprocessed data will be resend for encoding in the next call to the encoder. The <i>chain()<b>&#160;</b>function of the element does a while sending data to the encoder while there is enough data in the adapter.</i></li></ul>
+<p>In the case of audio streams, the minimal amount of data to be processed is defined by the codec, so buffers are accumulated by the adapter until there is enough data to be passed to the encoder. However the timestamps and duration of the buffers need to be calculated based on capabilities of the stream: depth, sample rate, and channels. If the audio input stream doesn't provide this capability, then the element panics due to the lack of timestamps.<br /> 
+</p>
+<h4><span class="mw-headline" id="Output_buffer_management">Output buffer management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=26" title="Edit section: Output buffer management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>A single CMEM output buffer is allocated for the resulting encoded buffers. By default this buffer is 3 times the size of the input buffers passed by the input <a href="#Input_buffer_management">adapter</a> to the encoder, but the size could be controlled with an element property that defines how many times the size should be. 
+</p><p>The function of this output buffer is to contain several slices of memory that are the resulting encoded data from the encoder. This slices are created dynamically from split and merge free memory slices. At the initialization of the element, the output buffer is a single free memory slice.  The element maintains a list of free and used memory slices for the output buffer.
+</p><p>The output buffer has the following behavior:
+</p>
+<ul><li>Every time a memory slice is needed for output data from the encoder, the element search for a free memory slice in the output buffer with a size equal or bigger to the input buffer passed by the adapter. If there isn't a free memory slice available of the required size, the element will sleep until there is one and generate a warning message. If the free memory slice is available, then a memory slice equal to the input buffer passed by the input adapter is marked as used and inserted into the list of used memory slices, and the corresponding amount of memory is removed from the free memory list.</li>
+<li>Once the encoded frame is produced, the element obtains the amount of memory actually used, and the memory unused. The unused memory is merged back into the free memory list.</li>
+<li>Output buffers are pushed downstream through the src pad. These are dmai transport buffers set with a special release callback function. Once the buffer is released, its release callback function merges the freed memory back into the list of free memory slices (potentially merging contiguous free memory areas into a new and bigger slice) and remove it from the list of used memory slices.</li></ul>
+<p>This design is optimized to avoid memcpys and maximize the utilization of CMEM buffers. If there is a need for preventing the encoder from going to sleep when running out of output memory, there is a boolean property named <b>copyOutput </b>that&#160;will instruct the element to allocate standard GStreamer buffers and memcpy the encoded data in them for output on the src pad (releasing the CMEM buffers immediately after created).
+</p><p>The following diagram shows an example of the lists of free and used buffers inside the CMEM output buffer. In this scenario there are three buffers in use by downstream elements, splitting the CMEM output buffer in two free areas. 
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:350px;"><a href="File_EncoderBuffer.html" class="image"><img alt="EncoderBuffer.png" src="https://processors.wiki.ti.com/images/4/41/EncoderBuffer.png" width="348" height="210" class="thumbimage" /></a>  <div class="thumbcaption"></div></div></div></div> 
+<p>Let's assume the third buffer used is released by a downstream element. In this scenario the last node of the used buffer list will be removed, and the memory area merged with the adjacent free memories. During the merge operation the two existing free memory areas will be now unified into a single free memory area, triggering the removal of the last node in the free buffer list. The following diagram shows the state after the third used buffer is released and the free memory areas merged. 
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:350px;"><a href="File_EncoderBuffer2.html" class="image"><img alt="EncoderBuffer2.png" src="https://processors.wiki.ti.com/images/5/59/EncoderBuffer2.png" width="348" height="210" class="thumbimage" /></a>  <div class="thumbcaption"></div></div></div></div> 
+<h4><span class="mw-headline" id="Output_buffer_transformations">Output buffer transformations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=27" title="Edit section: Output buffer transformations">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>In some data streams it may be required to perform data transformations on the output from the encoder before send it downstream. For example, the typical h264 encoder generates byte stream h264 format, but this needs to be transformed into "packetized" stream (removing SPS/PPS NALUs from the stream and embedding them into codec_data buffer, and exchanging the NALU headers from other NAL types by size headers) in order to send this format into a container like quicktime or mp4 file format.
+</p><p>To support this feature and the codec_data generation (see next section), there is an optional structure with callback operations that can be registered with the encoder. This structure is different for each kind of data stream. For example in the h264 encoder the stream structure registers the callback that perform data transformation for h264 bytestream into packetized stream.
+</p>
+<h4><span class="mw-headline" id="Codec_Data_generation">Codec Data generation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=28" title="Edit section: Codec Data generation">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Some data streams (like h264, mpeg4, aac), require the generation of the "codec_data" buffer to be passed off band (in the caps of the sink pad), in order to be properly muxed into container formats like mp4 or avi.
+</p><p>To generate the codec_data buffer the encoder checks if there is a codec_data generation function registered in the structure with callback operations for this data stream (see previous section), and call it passing the output of the first encoded buffer. The codec_data generation buffer is only called once, with the first buffer, since this is typically the one containing the required headers to generate the codec_data buffer.
+</p>
+<h4><span class="mw-headline" id="Extended_arguments">Extended arguments</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=29" title="Edit section: Extended arguments">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The standard XDM APIs for encoders lack most of the basic quality control features required for fine tuning the encoder algorithms. 2.x plugin encoder elements support optional codec specific extensions and control their extended arguments using GStreamer element properties. 
+</p><p>Codec specific properties are supported using a table of function pointers and other parameters required to provide the custom codec control. The members of this structure are: 
+</p>
+<ul><li>srcCaps: custom static caps definition reflecting the real capabilities of the codec. For example limiting the maximum supported height and width.</li>
+<li>sinkCaps: custom static caps definition reflecting the real capabilities of the codec. For example defining the color spaces supported for codec output buffers.</li>
+<li>setup_params(): function responsible for allocating the static and dynamic parameter arguments for codec creation. This function is expected to setup codec default parameters.</li>
+<li>set_codec_caps(): function that is called once the caps of the stream have been defined. This is used for setting values in the extended arguments that were unknown at the time of the codec creation (since the caps had not been set at that point).</li>
+<li>install_properties(): function that is called to allow the extend args to install custom GStreamer element properties controlling the extended arguments.</li>
+<li>get_property(): function to get values corresponding to the extended properties installed by the install_properties() function.</li>
+<li>set_property(): function to set values corresponding to the extended properties installed by the install_properties() function.</li>
+<li>max_samples: integer value used for certain audio encoders that has limits on the number of audio samples that can be processed, but not reported in the XDM functionality.</li></ul>
+<p>These function definitions will be documented at the wiki site, along with a how-to describing the process of adding support for extended arguments for other algorithms. Future enhancements will be documented in the wiki as well. 
+</p>
+<h4><span class="mw-headline" id="Timestamping">Timestamping</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=30" title="Edit section: Timestamping">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The encoder elements preserves the timestamps provided by the incoming buffers. This is achieved with two separate procedures depending on the stream type: 
+</p>
+<ul><li>For video and image streams, the input buffers are processed immediately (without going through the GstAdapter), so their timestamps are put directly in the output buffers.</li>
+<li>For audio streams, the input buffers may be merged together in the GstAdapter, so the encoder needs to keep track of the timestamp of the buffer on the start of the adapter, and calculate the time lapse for the amount of data pushed into the encoder. For this calculations the information regarding the number of channels, sample rate and sample depth is required in the input caps. The element would panic if any of that information is missing from the caps.</li></ul>
+<h4><span class="mw-headline" id="Pixel_aspect_ratio">Pixel aspect ratio</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=31" title="Edit section: Pixel aspect ratio">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Current XDM APIs doesn't define support for non-square pixel encoding, so any support for this is left to extended codec parameters if a particular codec supports it. However the video / image elements may support pixel aspect ratio in future custom functionality for specific codec types (like h264 and mpeg4). This involves modifications in the headers to insert proper pixel aspect ratio information, but this feature is not scheduled for 2.0 release.
+</p>
+<h3><span id="Video/Image/Audio_Decoding"></span><span class="mw-headline" id="Video.2FImage.2FAudio_Decoding">Video/Image/Audio Decoding</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=32" title="Edit section: Video/Image/Audio Decoding">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>As with the encoder elements, the 2.x branch merges into a single code base the functionality of the video, image and audio decoders, given that most of the infrastructure for handling of the input/output buffers is the same for the decoding scenarios. Function calls for specific processing APIs from the Codec Engine are handled with function pointer tables.
+</p>
+<h4><span class="mw-headline" id="Decoder_elements_design_overview">Decoder elements design overview</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=33" title="Edit section: Decoder elements design overview">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The general design of the decoder elements is presented in figure below. The main considerations used for this design are:
+</p>
+<ul><li>Data flow: The encoder elements receive compressed buffers to the sink pad and output uncompressed data, so the design should focus on minimizing data copies or overhead in the processing of output data.</li>
+<li>Data parsing:</li>
+<li>Trick modes support:</li></ul>
+<p>The main encoder data structures are:
+</p>
+<ul><li><b>Parser</b>:</li>
+<li><b>Input buffer</b>:</li>
+<li><b>Output buffer array</b>:</li></ul>
+<h4><span class="mw-headline" id="Resource_management_2">Resource management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=34" title="Edit section: Resource management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h4><span class="mw-headline" id="Input_buffer_management_2">Input buffer management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=35" title="Edit section: Input buffer management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h5><span class="mw-headline" id="Parsers">Parsers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=36" title="Edit section: Parsers">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<h4><span class="mw-headline" id="Output_buffer_management_2">Output buffer management</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=37" title="Edit section: Output buffer management">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h4><span class="mw-headline" id="Extended_arguments_2">Extended arguments</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=38" title="Edit section: Extended arguments">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Support for extended arguments in decoders is not implemented since most decoders doesn't require them to work properly. Support for decoders extended arguments could be added in the future using the same design of the extended arguments for encoders.
+</p>
+<h4><span class="mw-headline" id="Flush_handling">Flush handling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=39" title="Edit section: Flush handling">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h4><span class="mw-headline" id="QoS_handling">QoS handling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=40" title="Edit section: QoS handling">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h4><span class="mw-headline" id="Clipping">Clipping</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=41" title="Edit section: Clipping">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h4><span class="mw-headline" id="Timestamping_2">Timestamping</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=42" title="Edit section: Timestamping">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h4><span class="mw-headline" id="Reverse_Playback">Reverse Playback</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=43" title="Edit section: Reverse Playback">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<h3><span class="mw-headline" id="Video_Transcoding">Video Transcoding</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=44" title="Edit section: Video Transcoding">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Transcoding is the operation for transforming from one encoded format into another, and it usually involves the operation of a decoder and an encoder.
+</p><p>Transcoding speed is the more important factor, and to achieve the maximum possible throughput, two considerations need to be done:
+</p>
+<ul><li>Minimize memory copies, since these are slow operations for ARM cores.</li>
+<li>Enable parallelism of the encoder/decoder operations on the DSP and the ARM operations.</li></ul>
+<p>Since decoders generates CMEM transport buffers, these can be used directly by the encoders without having to perform any memory copies operations. No extra consideration is required to avoid memory copies.
+</p><p>To achieve the proper parallelism between the encoders and decoders, a queue is required between them when creating the transcoding pipeline.
+</p><p>Example pipelines for transcoding will be documented on the wiki.
+</p>
+<h3><span class="mw-headline" id="Video_Resizing">Video Resizing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=45" title="Edit section: Video Resizing">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The 2.x plugin provides two different elements for video resizing:
+</p>
+<ul><li>tivideoscale (formerly TIVidResize): this element behaves similar to the standard gstreamer videoscale element, where the output resolution is determined by the output caps, and the resizing operation is performed by the hardware acceleration.</li>
+<li>tiresizer: this is a new element introduced in the 2.x plugin, that behaves differently from the tivideoscale and provide access to a full range of functionality available thanks to the hardware accelerators:
+<ul><li>The output resolution is determined by properties of the element. The max width and height can be specified to configure the max output buffer size that is intended.</li>
+<li>Zooming and panning is posible through the use of properties.</li>
+<li>Pixel aspect ratio correction and letter boxing is supported.</li>
+<li>Color space conversion is supported.</li></ul></li></ul>
+<h4><span class="mw-headline" id="Pixel_Aspect_Ratio_handling">Pixel Aspect Ratio handling</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=46" title="Edit section: Pixel Aspect Ratio handling">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The tiresizer element provides a boolean property that enables <a rel="nofollow" class="external text" href="http://en.wikipedia.org/wiki/Pixel_aspect_ratio">pixel aspect ratio</a> normalization to 1/1 in case the input pixel aspect ratio in the caps is not 1/1.
+</p><p>For example if the source is an NTSC signal with PAR 4/3 at 720x480 pixels, when the par normalization feature is enabled the output buffer will be of 960x480.
+</p><p>The par normalization is overwritten if an specific output with and height is requested on the element properties.
+</p>
+<h4><span class="mw-headline" id="Letter_Boxing">Letter Boxing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=47" title="Edit section: Letter Boxing">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The tiresizer element provides a boolean property that enables keeping the picture aspect ratio (also known as letter boxing). Any letter boxing is done after applying pixel aspect ratio normalization if it is enabled.
+</p>
+<h4><span class="mw-headline" id="Color_Space_Conversion_2">Color Space Conversion</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=48" title="Edit section: Color Space Conversion">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Some hardware resizers provide functionality for color space conversion. This functionality will be available in the tiresizer and tivideoscale elements in the output caps to reflect the available color formats.
+</p><p>The supported color space conversions will be documented on the wiki.
+</p>
+<h3><span class="mw-headline" id="Video_Rendering">Video Rendering</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=49" title="Edit section: Video Rendering">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h3><span class="mw-headline" id="Video_Capturing">Video Capturing</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=50" title="Edit section: Video Capturing">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h2><span class="mw-headline" id="Testing_Design">Testing Design</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=51" title="Edit section: Testing Design">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The testing focus is on proper GStreamer TI Plugin operation, with the goal to make it possible to automate as much of the testing as possible given the available resources.. The surrounding components are assumed to be defect free, meaning any testing of surrounding components happens as a side effect of testing the GStreamer TI Plugin. The surrounding components include other GStreamer plugins, DMAI, Codec Engine, DSPLink and the codec server running on the DSP (if part of the system).<br />Each test is run on a host computer, connected to the unit under test via serial connection and in some cases can require a network connection as well. As with most test cases, (1) the unit under test is put in a known state, (2) the test input is provided, and (3) the results are compared against known expected results.
+</p>
+<h3><span class="mw-headline" id="Feature_Analysis">Feature Analysis <br /><br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=52" title="Edit section: Feature Analysis">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The GStreamer TI Plugin external interfaces that can be tested in a deterministic manner include:
+</p>
+<ul><li>Consumption of correct data passed to sink pad</li>
+<li>Production of correct data received from src pad</li>
+<li>Proper handling of GStreamer pipeline events</li>
+<li>Proper handling of dynamic changes to element properties</li></ul>
+<p>There are many other aspects of the GStreamer TI Plugin that could be tested as well:
+</p>
+<ul><li>Endurance testing – letting a pipeline, such as network streaming video from a camera, run for many weeks</li>
+<li>Abusive testing – bombarding element with pipeline events or property changes</li>
+<li>Interaction testing – test proper operation with all the existing GStreamer elements.</li></ul>
+<p>In addition, key aspects of the GStreamer TI Plugin could be parameterized:
+</p>
+<ul><li>ARM processor load</li>
+<li>DSP load (if applicable)</li>
+<li>Memory utilization</li></ul>
+<p>GStreamer TI Plugin testing exercises the documented external interfaces of each element.
+</p>
+<h3><span class="mw-headline" id="Testing_Tools">Testing Tools</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=53" title="Edit section: Testing Tools">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Previously the primary testing tool was the gst-launch command. Test pipelines were created using gst-launch and manual interaction verified the pipeline ran to completion without error. To move toward more automated testing, attributes of executing a test are compared to expected results. The downside is any data generated by the GStreamer TI Plugin could be bogus and the test would pass. Human interaction to monitor the generated audio and video is still required.<br />
+</p>
+<h4><span id="GStreamer_Daemon_–_gstd"></span><span class="mw-headline" id="GStreamer_Daemon_.E2.80.93_gstd">GStreamer Daemon – gstd</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=54" title="Edit section: GStreamer Daemon – gstd">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>To extend the concept of gst-launch, GStreamer daemon was created. In addition to executing pipelines described using a simple text string notation, GStreamer daemon allows control of the pipeline state and dynamically changing an element's properties while the pipeline is playing. The two key pieces of the GStreamer daemon include gstd, the actual daemon that responds to d-bus messages and gst-client, similar to gst-launch, which can send d-bus messages to gstd, and to report any d-bus messages produced by gstd.<br />
+</p>
+<h4><span class="mw-headline" id="Perl_Expect">Perl Expect</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=55" title="Edit section: Perl Expect">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Each test case is written in Perl utilizing the Perl Expect module. The expect testing paradigm is used since it allows for either local or remote control of the testing sequence. By local, we mean run the test and the test execution on the unit under test and by remote we mean run the test on the unit under test and the test execution on a desktop computer.
+</p><p>The other big advantage of Perl is the create of individual test cases can be greatly simplified by using a Perl module specific to the testing of the GStreamer TI Plugin. Additional Perl subroutines can be defined to refactor code commonly found in individual tests. Here is a simple (not real) test case comparison. In the 1.x version of the GStreamer TI Plugin test suite, one of the test cases for the DM6467 audio decode testing is: 
+</p>
+<pre>PIPELINE=filesrc location=/opt/media_files/davincieffect_HEv2.aac&#160;! ti_aacdec&#160;! tiperf  engine-name=decode print-arm-load=TRUE&#160;! alsasink
+gst-launch --gst-debug-no-color --gst-debug=TI*:3 $PIPELINE 
+</pre>
+<p>This test verifies AAC encoded audio data is decoded and plays correctly without any obvious errors.
+As an example, the test case can be expressed using Perl Expect and GStreamer TI Plugin specific subroutines as:
+</p>
+<pre>p=gtp_init($pipeline);
+ gtp_expect_avg_arm_load(p,12);
+ gtp_expect_avg_dsp_load(p,25); 
+gtp_run(p); 
+gtp_fini(p);
+</pre>
+<p>where the output generated by –gst-debug=TI*:3 and dmaiperf is checked to make sure the no error are reported and the average ARM and DSP loads don't exceed the specified values. To test the AAC decode function handles pipeline events correctly, an example test case could be:
+</p>
+<pre>p=gtp_init($pipeline); 
+gtp_run(p);
+$i=10;
+while ($i &gt; 0) { 
+  msleep(100);  
+  gst_pause(p);  
+  msleep(10);  
+  gst_resume(p); 
+} 
+ gtp_fini(p);
+</pre>
+<p>Of course it would be likely that a gtp_pause_resume() subroutine would be added instead of including the above while loop in many tests.
+</p>
+<h3><span class="mw-headline" id="Test_Categorization">Test Categorization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=56" title="Edit section: Test Categorization">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="Pipeline_Data_Consumption_and_Production_Tests">Pipeline Data Consumption and Production Tests</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=57" title="Edit section: Pipeline Data Consumption and Production Tests">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The existing gst-launch based test suite that has been used on the 1.x version of the GStreamer TI Plugin generally focused on correct pipeline operation as perceived by a human operator. Indications used identify improper operation include unexpected error messages, pipelines that never start, and pipelines that never finish.<br />With a human operator it was also possible to also detect garbled or incorrectly timed audio or video. These issues are more difficult detect with automated tests.<br />The focus of these tests is proper operation in static conditions. Tests should be generated to cover the following important cases:
+</p>
+<ul><li>Common input settings. For example, if a video encoder on a particular platform can receive video in different frame sizes depending on which CMOS sensor is installed, then each of those resolutions should be tested.</li></ul>
+<h4><span class="mw-headline" id="Tests_for_Known_and_Expected_Pipelines">Tests for Known and Expected Pipelines<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=58" title="Edit section: Tests for Known and Expected Pipelines">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Exhaustive testing of all possible inputs and settings for an element is not an objective of this test suite. Instead, the focus is on verifying pipelines work for the known and anticipated use models. The expected use models will vary based on the capabilities of the processor.<br />
+</p>
+<h4><span class="mw-headline" id="Dynamic_Pipeline_Tests">Dynamic Pipeline Tests</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=59" title="Edit section: Dynamic Pipeline Tests">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The GStreamer pipeline state will be changed and the resultant element behavior monitored for expected operation.<br />
+</p>
+<h4><span class="mw-headline" id="Dynamic_Element_Property_Tests">Dynamic Element Property Tests<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit&amp;section=60" title="Edit section: Dynamic Element Property Tests">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Element properties than can be modified while the pipeline exists are changed and the resultant element behavior monitored for expected operation.<br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130025502
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.107 seconds
+Real time usage: 0.112 seconds
+Preprocessor visited node count: 239/1000000
+Preprocessor generated node count: 246/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:3875-0!canonical and timestamp 20201130025502 and revision id 47196
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>GStreamer Plug-in 2.x Design</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>GStreamer Plug-in 2.x Design</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>GStreamer Plug-in 2.x Design</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>GStreamer Plug-in 2.x Design</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>GStreamer Plug-in 2.x Design</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>GStreamer Plug-in 2.x Design</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>GStreamer Plug-in 2.x Design</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>GStreamer Plug-in 2.x Design</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>GStreamer Plug-in 2.x Design</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;oldid=47196">https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;oldid=47196</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Linux.html" title="Category:Linux">Linux</a></li><li><a href="Category_Gstreamer.html" title="Category:Gstreamer">Gstreamer</a></li><li><a href="Category_TI_Gstreamer_Plugin_2.html" title="Category:TI Gstreamer Plugin 2.x">TI Gstreamer Plugin 2.x</a></li><li><a href="Category_DMAI_GStreamer_Plug-In.html" title="Category:DMAI GStreamer Plug-In">DMAI GStreamer Plug-In</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=GStreamer+Plug-in+2.x+Design" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="GStreamer_Plug-in_2.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_GStreamer_Plug-in_2.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="GStreamer_Plug-in_2.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/GStreamer_Plug-in_2.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/GStreamer_Plug-in_2.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;oldid=47196" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=GStreamer_Plug-in_2.x_Design&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 2 December 2010, at 11:05.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.107","walltime":"0.112","ppvisitednodes":{"value":239,"limit":1000000},"ppgeneratednodes":{"value":246,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130025502","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":237});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/GStreamer_Plug-in_2.x_Design by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:56:44 GMT -->
+</html>

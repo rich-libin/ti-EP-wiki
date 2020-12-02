@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/How_to_boot_OMAP-L138_LCDK_from_SD_card by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:14:07 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>How to boot OMAP-L138 LCDK from SD card - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"How_to_boot_OMAP-L138_LCDK_from_SD_card","wgTitle":"How to boot OMAP-L138 LCDK from SD card","wgCurRevisionId":195787,"wgRevisionId":195787,"wgArticleId":18130,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM1x","OMAPL1"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"How_to_boot_OMAP-L138_LCDK_from_SD_card","wgRelevantArticleId":18130,"wgRequestId":"9cf58f55d2efa6950e055dda","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-How_to_boot_OMAP-L138_LCDK_from_SD_card rootpage-How_to_boot_OMAP-L138_LCDK_from_SD_card skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">How to boot OMAP-L138 LCDK from SD card</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>The default dip switch settings for the OMAP-L138 LCDK is NAND boot mode. What&#160;this means is the OMAP-L138 processor will load U-Boot pre-programmed in the&#160;NAND flash which in turn loads the Linux kernel from the provided SD card.
+</p><p>For some reason&#160;if the flashed U-Boot in NAND got erased or corrupted, you can restore it using the steps outlined in the&#160;"<a rel="nofollow" class="external text" href="OMAP-L138_LCDK_Linux_Software_Developer%27s_Guide.html#Restoring_U-Boot_on_a_bricked_LCDK">Restoring U-Boot on a bricked&#160;LCDK</a>". Alternately, you can prepare a bootable SD card that includes&#160;U-Boot, Linux Kernel and Filesystem using the following steps.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary_of_Steps:"><span class="tocnumber">1</span> <span class="toctext">Summary of Steps:</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Detail_Procedure"><span class="tocnumber">2</span> <span class="toctext">Detail Procedure</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Build_U-Boot_for_SD.2FMMC_boot"><span class="tocnumber">2.1</span> <span class="toctext">Build U-Boot for SD/MMC boot</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Generate_AIS_version_of_U-Boot_using_AISGen"><span class="tocnumber">2.2</span> <span class="toctext">Generate AIS version of U-Boot using AISGen</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Create_SD_card_with_2_partitions_for_Linux_kernel_and_filesystem"><span class="tocnumber">2.3</span> <span class="toctext">Create SD card with 2 partitions for Linux kernel and filesystem</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Flashing_AIS_U-Boot_image_to_the_SD_card"><span class="tocnumber">2.4</span> <span class="toctext">Flashing AIS U-Boot image to the SD card</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Settings_DIP_switches_to_SD.2FMMC_boot_mode"><span class="tocnumber">2.5</span> <span class="toctext">Settings DIP switches to SD/MMC boot mode</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Setting_Bootargs_and_Bootcmd"><span class="tocnumber">2.6</span> <span class="toctext">Setting Bootargs and Bootcmd</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Summary_of_Steps:">Summary of Steps:</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=1" title="Edit section: Summary of Steps:">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol><li>Build U-Boot for SD/MMC boot.</li>
+<li>Generate AIS version of U-Boot using AISGen.</li>
+<li>Create SD card with 2 partitions for Linux kernel and filesystem.</li>
+<li>Flashing u-boot.ais to the SD card.</li>
+<li>Settings DIP switches to SD/MMC boot mode.</li>
+<li>Setting Bootargs and Bootcmd.</li></ol>
+<h2><span class="mw-headline" id="Detail_Procedure">Detail Procedure</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=2" title="Edit section: Detail Procedure">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="Build_U-Boot_for_SD/MMC_boot"></span><span class="mw-headline" id="Build_U-Boot_for_SD.2FMMC_boot">Build U-Boot for SD/MMC boot</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=3" title="Edit section: Build U-Boot for SD/MMC boot">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The following 2 sections include steps on how to create an AIS formatted U-Boot binary for MMC/SD boot for the LCDK.&#160; Prebuilt images (uflash and u-boot-mmc.ais) are included <a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/images/e/e7/Pre-build-images.zip">here</a> for convenience.&#160;<br />
+</p>
+<div style="margin: 5px; padding: 2px 10px; background-color: #ecffff; border-left: 5px solid #3399ff;"><b>NOTE</b><br /><br /> The released U-boot package requires a patch to be integrated. Find the patch <a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/images/2/2b/Uflash.zip">here</a>
+<p>Unzip the uflash.zip and copy the patch to the linux host where u-boot source is located.
+Follow below command to integrate it:
+</p>
+<pre>cd ti-sdk-omapl138-lcdk-01.00.00/board-support/u-boot-2010.12-psp03.21.00.04.lcdk/
+patch -p1 &lt; 0001-uflash-Add-support-to-write-ubl-to-MMC-SD-in-OMAPL13.patch </pre>
+<p>This patch adds the required support to write u-boot binary to the SD/MMC card.
+</p>
+</div>
+<p><br />
+<br />
+</p><p><br />
+</p><p>The u-boot package is under the 'board-support' directory. Untar it with the below command, 
+</p>
+<pre>host $ tar jxf $TI_SDK_PATH/board-support/u-boot-2010.12-psp03.21.00.04.lcdk.bz2</pre>
+<p>Go to the U-Boot directory when the above extraction is done. Run the below command to build U-Boot<br />It is assumed that arago tool chain is already present in the $PATH variable. If not, use this <a rel="nofollow" class="external text" href="OMAP-L138_LCDK_Linux_SDK_Getting_Started_Guide.html#Set_up_paths">link</a> to add it. 
+</p>
+<pre>host $ make distclean CROSS_COMPILE=arm-arago-linux-gnueabi-
+host $ make omapl138_lcdk_config CROSS_COMPILE=arm-arago-linux-gnueabi-
+host $ make all CROSS_COMPILE=arm-arago-linux-gnueabi-
+</pre>
+<h3><span class="mw-headline" id="Generate_AIS_version_of_U-Boot_using_AISGen">Generate AIS version of U-Boot using AISGen</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=4" title="Edit section: Generate AIS version of U-Boot using AISGen">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>RBL expects boot loader binary in the ais format. So the built u-boot.bin needs to be converted into ais format.
+</p>
+<ol><li>Download and install the AIS converter tool from <a rel="nofollow" class="external text" href="http://www.ti.com/lit/zip/sprab41">here</a>.  Note it is a MS-Windows (tm) install.</li>
+<li>Download the LCDK configuration file for the AIS converter tool from <a href="https://processors.wiki.ti.com/images/7/71/LCDK_MMC.zip" class="internal" title="LCDK MMC.zip">here</a>.</li>
+<li>Load the configuration in AISgen by going to File -&gt; Load Configuration.</li>
+<li>Copy your u-boot image to your PC.  Having it accessible by Windows through a network share is suggested to make this easier.</li>
+<li>If you're not using the LCDK then be sure to adjust the Clock source and associated speed to match your hardware.</li>
+<li>If your version of u-boot does not expect to be loaded and run from 0xC1080000 then change the Entrypoint as needed.  The u-boot from the MCSDK expects to be at that address.</li>
+<li>For "ARM Application File" you should select your u-boot.bin file.  <span style="background:yellow">Be sure to modify the @&lt;address&gt; to be at 0xC1080000.</span>  This should match the entry point you specified.  <b>It defaults to 0x80000000 so be sure to change it!</b></li>
+<li>Choose a location for the AIS Output File.  The first screen should now look something like this:
+<dl><dd><a href="File_LCDK_MMC_AISgen3.html" class="image"><img alt="LCDK MMC AISgen3.jpg" src="https://processors.wiki.ti.com/images/9/9d/LCDK_MMC_AISgen3.jpg" width="515" height="395" /></a></dd></dl></li>
+<li>The peripheral clock sets the MMC/SD clock to 25 MHz.  Not all SD cards can support high speed mode (50 MHz), but 25 MHz is always safe.</li>
+<li>For the DDR tab these values should be calculated for your hardware using the spreadsheet on <a href="Programming_mDDR/DDR2_EMIF_on_OMAP-L1x/C674x.html" title="Programming mDDR/DDR2 EMIF on OMAP-L1x/C674x">this page</a>.<br /></li>
+<li>For the PSC tab you may want to enable all the peripherals/domains.  Do NOT enable SATA as that cannot be enabled by the ROM.  Once you have everything working you could remove a few.</li>
+<li>Click "Generate AIS" to create your output binary that is now in the AIS format expected by the boot ROM.</li></ol>
+<h3><span class="mw-headline" id="Create_SD_card_with_2_partitions_for_Linux_kernel_and_filesystem">Create SD card with 2 partitions for Linux kernel and filesystem</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=5" title="Edit section: Create SD card with 2 partitions for Linux kernel and filesystem">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The RBL searches for the first stage boot loader image in 1st to 25th sector of the SD card. Sector 0 is used for storing DOS partition information. Hence the u-boot descriptor is stored from sectors 1 till 24. The descriptor is 512 bytes in size and is replicated in each of these sectors. 
+The SD card shall be re-partitioned and formatted to create some room for storing u-boot and another two partition to store uImage and filesystem. Use fdisk utility in the host pc (as super user) to delete the existing partitions and create another two partitions with vfat and ext2 filesystem.
+</p>
+<pre> 
+fdisk /dev/mmcblk0 (device name might change if USB card reader is used)
+</pre>
+<p>Device name can be found by running <i>dmesg</i> command.
+</p><p>Follow below procedure to create the partitions 
+</p>
+<ul><li>Run the fdisk command (as shown above with the sudo permission).</li>
+<li>Delete all the existing partition with 'd' command. 'p' will print the existing partitions, make sure all the partitions are deleted.</li>
+<li>Create a new partition with the 'n' command followed by 'p' (primary partition).</li>
+<li>Mark the first cylinder as 20. Typical cylinder size is 32KB. So starting the first cylinder at 20 provides us about 600KB for storing u-boot. If the fdisk utility displays a different cylinder size, make sure that you are leaving at least 500KB space before the first partition.</li>
+<li>Enter +10M for the message 'Last sector, +sectors or +size{K,M,G}'. This will allocate 10MB for the first partition. This partition is used to store uImage.</li>
+<li>Create another partition for filesystem. This can be done by entering 'n' followed by 'p'. Set the First and Last sector to its default value.</li>
+<li>Save and exit with 'w' command.</li>
+<li>Once the above procedure is done, two SD device nodes will be created. For example: /dev/mmcblk0p1 and /dev/mmcblk0p2. This might be different depending upon how its connected.</li>
+<li>Format the first partition with the vfat fs.</li></ul>
+<pre>mkfs.vfat /dev/mmcblk0p1
+</pre>
+<ul><li>Format the second partition with ext2 fs.</li></ul>
+<pre>mkfs.ext2 /dev/mmcblk0p2
+</pre>
+<ul><li>Mount the first partition and copy uImage there.</li>
+<li>Mount the second partition and copy LCDK fs. Once the copying is done, unmount both the partitions safely.</li></ul>
+<p>Also, you can refer to the following TI E2E post which has every steps for formatting the SD card in right format.
+</p><p><a rel="nofollow" class="external free" href="http://e2e.ti.com/support/dsp/omap_applications_processors/f/42/p/327704/1141451#1141451">http://e2e.ti.com/support/dsp/omap_applications_processors/f/42/p/327704/1141451#1141451</a>
+</p>
+<h3><span class="mw-headline" id="Flashing_AIS_U-Boot_image_to_the_SD_card">Flashing AIS U-Boot image to the SD card</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=6" title="Edit section: Flashing AIS U-Boot image to the SD card">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>uflash is the utility which is used to flash boot loader to the SD card. uflash is part of u-boot source and is present in the <i>tools/uflash</i> directory. It will get built with U-Boot source. Keep the uflash and u-boot.ais in the available location and run the below command from the host PC.
+</p>
+<pre>NOTE: 
+Make sure that the device node which is given to uflash is that of the MMC/SD. Also make sure that MMC/SD device node is provided
+not the MMC/SD's partition device nodes.
+</pre>
+<pre>./uflash -d &lt;SD device node&gt; -u &lt;u-boot-ais-image&gt; -p OMAPL138 -vv
+example:
+./uflash -d /dev/mmcblk0 -u u-boot_mmc.ais -p OMAPL138 -vv
+</pre>
+<h3><span id="Settings_DIP_switches_to_SD/MMC_boot_mode"></span><span class="mw-headline" id="Settings_DIP_switches_to_SD.2FMMC_boot_mode">Settings DIP switches to SD/MMC boot mode</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=7" title="Edit section: Settings DIP switches to SD/MMC boot mode">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Insert the micro-SD card to the LCDK board. Make sure micro-SD card is flashed properly with the u-boot image. Set the boot pins as below to boot from the SD card,
+</p>
+<table cellspacing="0" cellpadding="5" width="40%" border="1">
+
+<tbody><tr style="background: rgb(221,255,221) 0% 50%">
+<td align="left">Pin#
+</td>
+<td align="center">1
+</td>
+<td align="center">2
+</td>
+<td align="center">3
+</td>
+<td align="center">4
+</td></tr>
+<tr>
+<td align="left">Position
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">OFF
+</td>
+<td align="center">ON
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Setting_Bootargs_and_Bootcmd">Setting Bootargs and Bootcmd</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;section=8" title="Edit section: Setting Bootargs and Bootcmd">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Bootcmd should be set to copy and boot uImage from the first partition of the micro-SD card. The bootargs should be set to take root filesystem from the second partition of the micro-SD card.
+</p>
+<pre>setenv bootargs 'mem=32M console=ttyS2,115200n8 root=/dev/mmcblk0p2 rw rootwait ip=off'
+setenv bootcmd 'mmc rescan 0;fatload mmc 0 0xc0700000 uImage; bootm c0700000;'
+</pre>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201041728
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.051 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 112/1000000
+Preprocessor generated node count: 244/1000000
+Post‐expand include size: 508/2097152 bytes
+Template argument size: 380/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1151/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.434      1 Template:SpNote
+100.00%    2.434      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:18130-0!canonical and timestamp 20201201041728 and revision id 195787
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>How to boot OMAP-L138 LCDK from SD card</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;oldid=195787">https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;oldid=195787</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_AM1x.html" title="Category:AM1x">AM1x</a></li><li><a href="Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=How+to+boot+OMAP-L138+LCDK+from+SD+card" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="How_to_boot_OMAP-L138_LCDK_from_SD_card.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="How_to_boot_OMAP-L138_LCDK_from_SD_card.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/How_to_boot_OMAP-L138_LCDK_from_SD_card.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/How_to_boot_OMAP-L138_LCDK_from_SD_card.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;oldid=195787" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=How_to_boot_OMAP-L138_LCDK_from_SD_card&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 19 March 2015, at 05:05.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.051","walltime":"0.053","ppvisitednodes":{"value":112,"limit":1000000},"ppgeneratednodes":{"value":244,"limit":1000000},"postexpandincludesize":{"value":508,"limit":2097152},"templateargumentsize":{"value":380,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1151,"limit":5000000},"timingprofile":["100.00%    2.434      1 Template:SpNote","100.00%    2.434      1 -total"]},"cachereport":{"timestamp":"20201201041728","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":297});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/How_to_boot_OMAP-L138_LCDK_from_SD_card by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:14:14 GMT -->
+</html>

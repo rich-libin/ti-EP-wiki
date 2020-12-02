@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Power_Management_in_SA_WINCE_BSP by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:23:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Power Management in SA WINCE BSP - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Power_Management_in_SA_WINCE_BSP","wgTitle":"Power Management in SA WINCE BSP","wgCurRevisionId":88971,"wgRevisionId":88971,"wgArticleId":14280,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Power_Management_in_SA_WINCE_BSP","wgRelevantArticleId":14280,"wgRequestId":"0846ec5502030478bca5ce12","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Power_Management_in_SA_WINCE_BSP rootpage-Power_Management_in_SA_WINCE_BSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Power Management in SA WINCE BSP</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#PM_Status_Summary"><span class="tocnumber">1</span> <span class="toctext">PM Status Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#PRCM"><span class="tocnumber">2</span> <span class="toctext">PRCM</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#CPU_Idle"><span class="tocnumber">3</span> <span class="toctext">CPU Idle</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#CM3"><span class="tocnumber">4</span> <span class="toctext">CM3</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Suspend_Resume"><span class="tocnumber">5</span> <span class="toctext">Suspend Resume</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Code"><span class="tocnumber">5.1</span> <span class="toctext">Code</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Current_Status"><span class="tocnumber">5.2</span> <span class="toctext">Current Status</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#DS2"><span class="tocnumber">5.2.1</span> <span class="toctext">DS2</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#DS1"><span class="tocnumber">5.2.2</span> <span class="toctext">DS1</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#DS0"><span class="tocnumber">5.2.3</span> <span class="toctext">DS0</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#RTC-only"><span class="tocnumber">5.2.4</span> <span class="toctext">RTC-only</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-12"><a href="#Flags"><span class="tocnumber">5.3</span> <span class="toctext">Flags</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Wake-Up_Sources"><span class="tocnumber">5.4</span> <span class="toctext">Wake-Up Sources</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Drivers_-_Known_Issue"><span class="tocnumber">5.5</span> <span class="toctext">Drivers - Known Issue</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Pending_Work"><span class="tocnumber">6</span> <span class="toctext">Pending Work</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#LINKS"><span class="tocnumber">7</span> <span class="toctext">LINKS</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="PM_Status_Summary">PM Status Summary</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=1" title="Edit section: PM Status Summary">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This wiki provides a quick summary of the current status of Power Management module in Sub-Arctic WinCE BSP&#160;(SA BSP). Most of the code and infrastructure are in place and many of the pieces have been unit tested. We believe that 80% of the code is present and 20% needs to be tweaked/added. In addition final integration and testing is left to be done. To rule out hardware/silicon/system issues, this should be undertaken after CM3 firmware is fully functional in Linux’s PM framework. Following sections in this note provide more details about different PM pieces and their respective states.<br />
+</p>
+<h1><span class="mw-headline" id="PRCM">PRCM<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=2" title="Edit section: PRCM">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>Most of the PRCM APIs are implemented in SA BSP and on par with OMAP3530 BSP. The main chunk of code is in prcm_device.c, prcm_clock.c, prcm_domain.c, prcm_reset.c (\COMMON\SRC\SOC\COMMON_TI_V1\AM33X\OAL\PRCM). The device table is defined in prcm_device.h. The clock and clock domain tables are defined in prcm_clock.c. OPP&#160;modes are implemented in \AM33X_BSP\SRC\OAL\OALLIB\opp_map.c and \AM33X_BSP\SRC\INC\bsp_opp_map.h - but it is not hooked up with&#160;DVFS. The only way to change OPP&#160;mode is through Eboot menu.<br /> 
+</p><p><br /> 
+</p>
+<h1><span class="mw-headline" id="CPU_Idle">CPU Idle<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=3" title="Edit section: CPU Idle">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>CPU&#160;Idle is implemented and working in SA BSP. The code is in \COMMON\SRC\SOC\COMMON_TI_V1\AM33X\OAL\CPUIDLE\cpu.s (OALCPUIdle) and \COMMON\SRC\SOC\COMMON_TI_V1\COMMON_TI_AMXX\OAL\TIMER\GPTIMER\timer.c (OEMIdle). CM3 is not involved during CPU&#160;idle.<br /> 
+</p><p>One can use the shell command "cpuidle" or "do cpuidle" to get the CPU&#160;load.<br /> 
+</p><p><br /> 
+</p>
+<h1><span class="mw-headline" id="CM3">CM3<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=4" title="Edit section: CM3">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>In the existing BSP, CM3 code is split into two parts - (1) PRCM&#160;related code in OAL PRCM&#160;module and (2) CM3 firmware loading driver. The PRCM&#160;code is the main code that takes care of communicating with the CM3, setting up mailboxes, configuring IPC regs, handling CM3 interrupt, etc. On init, the CM3 firmware driver&#160;just does the job of reading firmware.bin from windows folder and loading it in CM3 code space. It then calls a PRCM function to release CM3 from reset. Details about CM3 firmware and the communication between CM3 and ARM-A8 can be found <a href="AM335x_StarterWare_Power_management.html" title="AM335x StarterWare Power management">here</a>. The firmware.bin is the CM3 firmware downloaded from CM3 arago project and is placed at AM33X_BSP\Files folder. Platform.bib makes sure that this file is located in the windows folder on bootup. 
+</p><p>The interaction between ARM and CM3 in the existing BSP&#160;is described below:<br /> 
+</p><p>1. On device bootup, during OAL&#160;PostInit(), PrcmCM3Init() is called which sets up the CM3 interrupt handler and initializes the mailbox.<br /> 
+</p><p>2. Then, when the CM3 firmware driver is loaded by device manager, it reads and loads the CM3 firmware (firmware.bin) into CM3 code space. It then calls PrcmCM3ResetAndHandshake() to release CM3 from reset. <br /> 
+</p><p>3. CM3 starts executing and signals back to A8 if setup is successful. In the meantime, CM3 firmware driver busy waits for this signal from CM3. 
+</p><p>4. After this CM3 executes WFI and is waiting for a mailbox interrupt from ARM. 
+</p><p>5. When system goes into suspend, PRCM sets up the IPC regs as per desired suspend state (DSx) and then sends a mailbox interrupt to CM3. 
+</p><p>6. CM3 checks the IPC regs and then waits for ARM to execute WFI. 
+</p><p>7. After performing the required steps for suspend, ARM&#160;executes WFI. 
+</p><p>8. CM3 now receives a PRCM&#160;interrupt and does the needful to put the system in desired DSx state. 
+</p><p>9. On wakeup interrupt, CM3 wakes up the ARM and ARM&#160;continues to resume to functional state. 
+</p><p><br /> 
+</p>
+<h1><span class="mw-headline" id="Suspend_Resume">Suspend Resume<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=5" title="Edit section: Suspend Resume">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="Code">Code<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=6" title="Edit section: Code">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The main crux of the suspend resume code is in following files:<br /> 
+</p><p>1. \AM33X_BSP\SRC\OAL\OALLIB\oem_pm.c<br /> 
+</p><p>2. \AM33X_BSP\SRC\OAL\OALLIB\power.c<br /> 
+</p><p>3. \COMMON\SRC\SOC\COMMON_TI_V1\AM33X\OAL\PRCM\prcm.c<br /> 
+</p><p>When the system goes to suspend, the WinCE PM&#160;driver puts all the drivers in D4 state. After that, it calls the OEMPowerOff function with global interrupts disabled (via CPSR bit). OEMPowerOff function is implemented in oem_pm.c. <br /> 
+</p><p>This function disables Watchdog, KITL, High Performance Timer, Interrupts in INTC (except for CM3 interrupt). <br /> 
+</p><p>It calls BSPPowerOff to do BSP/board specific stuff. Under ideal case, when suspend resume is working, BSPPowerOff() disables the Timer and debugUart. For debugging purposes, a function BSPDebugTurnOFFClocks() have been provided. This function checks which modules are still enabled and then turns them off. Ideally, one should not be needing this function if the drivers are doing their job of disabling modules and their clocks while going to D4. This function uses a list skipCheckDeviceList to skip WAkEUP&#160;domain devices, DEBUGSS (needed for CCS/JTAG debugging), EMIF, OCMC RAM, Interconnect modules. So use this function only when debugging suspend resume and not in production builds. Since debug UART&#160;(UART0) belongs to wakeup domain, you can keep this module enabled and use it for debugging suspend resume issues. <br /> 
+</p><p>After disabling all necessary clocks, OEMPowerOff() reduces the MPU domain to OPP50 and CORE domain voltage to OPP50 (not the frequency). <br /> 
+</p><p>It then calls PrcmSuspend() function implemented in prcm.c. This function clears any pending timer interrupt (so that ARM&#160;doesnt wakeup immediately after entering WFI). It then fills up the IPC registers with&#160;CM3 message for the desired Deepsleep mode. The desired deepsleep mode is set using the variable _suspendState in the same file. PrcmCM3ConfigDeepSleep() takes care of setting up the IPC regs, sending the message across to CM3 and doing the proper handshake. PrcmSuspend() then calls PrcmPreSuspendDisableClock() to disable any clocks for which there are no drivers in the SA BSP. There are bunch of wakeup sources available on SA - the current code uses DMTIMER1MS to test suspend resume. It then calls OALCPUIdle using function pointer - since we want the CPUIdle code to run from OCMC RAM&#160;(so that EMIF&#160;can be disabled). The OALSRAMFnInit() in prcm.c moves all the suspend resume related code (see cpu.s) to OCMC RAM&#160;on bootup. OALCPUIdle() checks the suspendState in CPU_INFO&#160;structure and decides if the system is going into deepsleep or not. Under normal running conditions, suspendState is set to PM_CMD_NO_PM (no suspend) and OALCPUIdle just executes WFI to enter idle state (this is how OEMIdle works). Under suspend scenario, suspendState is same as _suspendState and OALCPUIdle saves the ARM context and executes WFI. On executing WFI, CM3 takes over and does the needful to enter the desired Deepsleep mode. <br /> 
+</p><p>On wakeup interrupt from one of the wakeup sources (DMTIMER1MS in this case), CM3 wakes up ARM. If the desired state was DS2, then ARM&#160;starts executing from the next line after WFI. For DS0 and DS1, Rom code executes first and jumps to OALCPURestoreContext (since this is the pointer set in IPC REGS 0). OALCPURestoreContext() restores the ARM&#160;context saved by OALCPUIdle and then jumps to next line in PrcmSuspend() after OALCPURestoreContext. PrcmSuspend and OEMPowerOff then do the reverse of what happened while going into suspend.<br /> 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Current_Status">Current Status<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=7" title="Edit section: Current Status">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="DS2">DS2<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=8" title="Edit section: DS2">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There was a bug in CM3 firmware dated 11/02/2011. So this state was not fully tested. <br /> 
+</p>
+<h3><span class="mw-headline" id="DS1">DS1<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=9" title="Edit section: DS1">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>ARM could enter DS1 state. The Master OSC was also turned off. But it could never resume. The reason being that the wakeup sources (TSC, RTC, DMTIMER1MS) generated regular interrupts but not wakeup interrupts. CM3 wakes up ARM&#160;only when wakeup interrupts are received. Why wakeup sources do not generate wakeup interrupt needs to be debugged further.<br /> 
+</p>
+<h3><span class="mw-headline" id="DS0">DS0<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=10" title="Edit section: DS0">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This cannot be tested until Peripheral Save/Restore Context is implemented.<br /> 
+</p>
+<h3><span class="mw-headline" id="RTC-only">RTC-only<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=11" title="Edit section: RTC-only">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>PG1.0 silicon has a bug for RTC only mode. So this mode can be tested only when new PG&#160;comes out.<br /> 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Flags">Flags<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=12" title="Edit section: Flags">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The suspend resume code (described above) is commented out in existing SA&#160;BSP&#160;and can be enabled by setting the flag TEST_SUSPEND_RESUME in oem_pm.c. To enable debug code for suspend resume, enable the flag DEBUG_PRCM_SUSPEND_RESUME in AM33X_BSP\sources.cmn. 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Wake-Up_Sources">Wake-Up Sources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=13" title="Edit section: Wake-Up Sources">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>In the existing code, DMTIMER1MS is used as the wakeup source. To disable this, disable the flag USE_TIMER1_AS_WAKEUP_SOURCE in prcm.c. To use RTC as wakeup source, USE_RTC_AS_WAKEUP_SOURCE flag should be enabled in prcm.c. For RTC, one will need to do some extra configuration which is not present in the existing BSP:<br /> 
+</p><p>Changes needed are:<br />&#160; 1. Set SYSCONFIG register to Smart Idle w/ wakeup<br />&#160; 2. Use 32768 Crystal as the source and not the PER PLLL 32K output; set the OSC register accordingly<br />&#160; 3. Enable alarm wakeup interrupt. 
+</p><p>Touchscreen can also be used as a wakeup source. You will have to modify the driver to flush all FIFOs and make sure the module gets disabled (including the functional clock) on entering D4. 
+</p><p><br /> 
+</p>
+<h2><span class="mw-headline" id="Drivers_-_Known_Issue">Drivers - Known Issue</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=14" title="Edit section: Drivers - Known Issue">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>1. EDMA&#160;driver doesnt follow any power management. This needs to be implemented before testing DS0 state. 
+</p><p>2. When DMA&#160;is enabled in display driver, the system gets stucks when going into suspend. OEMPowerOff() is not even called. This needs to be debugged. For the existing BSP, DMA&#160;was turned off in display driver registry when testing/debugging suspend resume. 
+</p><p>3. For USB, the sysconfig register should be set to force idle on entering D4, otherwise the USBSS will not transition to disabled state. 
+</p><p><br /> <br /> 
+</p>
+<h1><span class="mw-headline" id="Pending_Work">Pending Work<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=15" title="Edit section: Pending Work">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>1. There are lot of APIs/IOCTLs defined in EVM_OMAP3530\SRC\OAL\OALLIB\oem_pm.c that are not implemented in SA BSP because: <br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160; (a) They do not apply for SA chip OR <br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160; (b) they are needed for PM policies management or advanced suspend resume functionality (like DS0) which is still not available in this BSP<br /> 
+</p><p>2. SmartReflex is disabled in&#160;BSP&#160;since the h/w doesnt support it yet<br /> 
+</p><p>3. None of the PM policies have been implemented (DVFS, CPU Load Policy, Interrupt Latency, DEVMON). From requirements perspective, it is not clear if any of these are even needed. <br /> 
+</p><p>4. Drivers - All drivers need to be tested if they disable the clocks correctly when going to D4 and are able to recover to functional state on resume (D0)<br /> 
+</p><p>5. Peripheral Context Save/restore - Logic needs to be added to do context save of peripheral domain registers when going into DS0 state on suspend. Similar logic needs to be added to restore their context on resume from DS0 state. If one wants to follow the OMAP way of doing this, then the OMAP Bus driver will have to be ported for SA BSP. Currently SA BSP&#160;doesnt use/include the OMAP Bus driver. 
+</p><p>6. Testing/Debugging Suspend resume - all DSx and RTC-only states should be tested <br /> 
+</p><p>7. Sometimes system gets stuck when entering suspend (this is with DMA&#160;disabled in display driver). OEMPowerOff() is not even called. So suspicion is that the system is stuck at some driver level trying to put a module in D4 state. This needs to be debugged. For now, the workaround is to reboot the board and try again. 
+</p><p><br /> 
+</p>
+<h1><span class="mw-headline" id="LINKS">LINKS<br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;section=16" title="Edit section: LINKS">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>1. <a rel="nofollow" class="external free" href="AM335x_StarterWare_Power_management.html">http://processors.wiki.ti.com/index.php/AM335x_StarterWare_Power_management</a><br /> 
+</p><p>2. <a rel="nofollow" class="external free" href="StarterWare.html">http://processors.wiki.ti.com/index.php/StarterWare</a><br /> 
+</p><p>3. <a rel="nofollow" class="external free" href="http://ap-fpdsp-swapps.dal.design.ti.com/index.php/AM335x_Power_Consumption_Data">http://ap-fpdsp-swapps.dal.design.ti.com/index.php/AM335x_Power_Consumption_Data</a><br /> 
+</p><p><br /> 
+</p><p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130081822
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.031 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 62/1000000
+Preprocessor generated node count: 68/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:14280-0!canonical and timestamp 20201130081822 and revision id 88971
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Power Management in SA WINCE BSP</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Power Management in SA WINCE BSP</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Power Management in SA WINCE BSP</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Power Management in SA WINCE BSP</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Power Management in SA WINCE BSP</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Power Management in SA WINCE BSP</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Power Management in SA WINCE BSP</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Power Management in SA WINCE BSP</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Power Management in SA WINCE BSP</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;oldid=88971">https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;oldid=88971</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Power+Management+in+SA+WINCE+BSP" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Power_Management_in_SA_WINCE_BSP.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Power_Management_in_SA_WINCE_BSP&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Power_Management_in_SA_WINCE_BSP.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Power_Management_in_SA_WINCE_BSP.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Power_Management_in_SA_WINCE_BSP.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;oldid=88971" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Power_Management_in_SA_WINCE_BSP&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 9 December 2011, at 11:37.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.031","walltime":"0.032","ppvisitednodes":{"value":62,"limit":1000000},"ppgeneratednodes":{"value":68,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130081822","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":248});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Power_Management_in_SA_WINCE_BSP by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:23:25 GMT -->
+</html>

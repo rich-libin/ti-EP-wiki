@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_the_uPP_DSP/BIOS_Driver by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:31:27 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Using the uPP DSP/BIOS Driver - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Using_the_uPP_DSP/BIOS_Driver","wgTitle":"Using the uPP DSP/BIOS Driver","wgCurRevisionId":181668,"wgRevisionId":181668,"wgArticleId":2950,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["OMAPL1","C674x","AM1x"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Using_the_uPP_DSP/BIOS_Driver","wgRelevantArticleId":2950,"wgRequestId":"7da7f79494caebcd5fe79ab7","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Using_the_uPP_DSP_BIOS_Driver rootpage-Using_the_uPP_DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Using the uPP DSP/BIOS Driver</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Important_Note_-_Read_This_First.21"><span class="tocnumber">1</span> <span class="toctext">Important Note - Read This First!</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Introduction"><span class="tocnumber">2</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Installation"><span class="tocnumber">2.1</span> <span class="toctext">Installation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Static_Configuration"><span class="tocnumber">3</span> <span class="toctext">Static Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#System_Considerations"><span class="tocnumber">3.1</span> <span class="toctext">System Considerations</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Run-Time_Initialization"><span class="tocnumber">4</span> <span class="toctext">Run-Time Initialization</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Sending_and_Receiving_Data"><span class="tocnumber">5</span> <span class="toctext">Sending and Receiving Data</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Synchronous_versus_Asynchronous"><span class="tocnumber">5.1</span> <span class="toctext">Synchronous versus Asynchronous</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Error_Recovery"><span class="tocnumber">5.2</span> <span class="toctext">Error Recovery</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Driver_APIs_and_Data_Types"><span class="tocnumber">6</span> <span class="toctext">Driver APIs and Data Types</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#Exposed_APIs"><span class="tocnumber">6.1</span> <span class="toctext">Exposed APIs</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Useful_Data_Types"><span class="tocnumber">6.2</span> <span class="toctext">Useful Data Types</span></a>
+<ul>
+<li class="toclevel-3 tocsection-13"><a href="#upp_StaticConfig"><span class="tocnumber">6.2.1</span> <span class="toctext">upp_StaticConfig</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#upp_Transfer_Struct"><span class="tocnumber">6.2.2</span> <span class="toctext">upp_Transfer Struct</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#upp_UserParams_Struct"><span class="tocnumber">6.2.3</span> <span class="toctext">upp_UserParams Struct</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#upp_Params_Struct"><span class="tocnumber">6.2.4</span> <span class="toctext">upp_Params Struct</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#upp_ChanParams"><span class="tocnumber">6.2.5</span> <span class="toctext">upp_ChanParams</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#upp_CbFxn"><span class="tocnumber">6.2.6</span> <span class="toctext">upp_CbFxn</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#upp_ioctl"><span class="tocnumber">6.2.7</span> <span class="toctext">upp_ioctl</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-20"><a href="#See_Also"><span class="tocnumber">7</span> <span class="toctext">See Also</span></a></li>
+</ul>
+</div>
+
+<h2><span id="Important_Note_-_Read_This_First!"></span><span class="mw-headline" id="Important_Note_-_Read_This_First.21">Important Note - Read This First!</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=1" title="Edit section: Important Note - Read This First!">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>When this page was originally written, there was no uPP driver in the BIOS PSP for OMAP-L1 or C674x.  That omission has since been addressed, and developers are encouraged to use the uPP driver from the current PSP release.  The PSP can be downloaded from the following website:
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_public_sw/psp/BIOSPSP/index.html">BIOS PSP Download Page</a></li></ul>
+<p>This page describes the original driver that was created before the PSP added uPP support.  It does not apply to the newer PSP driver.
+</p>
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=2" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The universal parallel port (uPP) peripheral provides a high-speed parallel data interface with a relatively simple protocol to chips such as OMAP-L138 and C6748.  It provides a clean, fast alternative to other peripherals such as HPI or data-transfer-through-video-port kludges.  It is also well-suited to connect directly to high-speed analog-to-digital converters (ADCs) or digital-to-analog converters (DACs).  For more information on the uPP peripheral, please refer to the <a href="http://www.ti.com/lit/pdf/sprugj5" class="extiw" title="tidoc:sprugj5"> uPP user guide</a>, available on the <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/prod/folders/print/omap-l138.html">OMAP-L138</a> and <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/prod/folders/print/tms320c6748.html">C6748</a> product websites.
+</p><p>This topic describes an IOM-compliant driver that enables a DSP application (using DSP/BIOS) to quickly and easily make use of the uPP peripheral.  This driver is DSP-specific and cannot be used directly by an ARM application.  The driver exposes uPP functionality to DSP applications via the GIO standard API.  It supports most features of the uPP peripheral:
+</p>
+<ul><li>Independent channel operation through a single GIO handle
+<ul><li>uPP channels A and B</li>
+<li>Transmit and receive with one or both channels</li>
+<li>2D DMA programming for each channel
+<ul><li>Uses uPP internal DMA, not system EDMA</li></ul></li>
+<li>Transfer queueing for each channel</li></ul></li>
+<li>Synchronous or asynchronous driver model</li>
+<li>Clock source selection for uPP peripheral</li>
+<li>Allows user callback functions for uPP interrupts</li>
+<li>Digital loopback (DLB) mode for debug purposes</li></ul>
+<p>Many of these features are demonstrated by a demo application, which is included with the driver installation package in the "test" folder.
+</p>
+<h3><span class="mw-headline" id="Installation">Installation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=3" title="Edit section: Installation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The uPP driver for DSP/BIOS will ultimately be included with the PSP installation for all relevant devices.  As a temporary mesaure, the driver is available for download separately from this website.  Simply download and execute the stand-alone installer.
+</p><p><a href="https://processors.wiki.ti.com/images/b/bd/UPP_BIOS_Driver_Install_v10.zip" class="internal" title="UPP BIOS Driver Install v10.zip">Media:UPP_BIOS_Driver_Install_v10.zip</a>
+</p><p>You will also need the following software packages:
+</p>
+<ul><li>DSP/BIOS v5.33.05 or higher</li>
+<li>C6000 Code Generation Tools v6.1.8 or higher</li></ul>
+<h2><span class="mw-headline" id="Static_Configuration">Static Configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=4" title="Edit section: Static Configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Like any other IOM-compliant driver, the first step to using the uPP driver is to add the necessary items to your DSP/BIOS text configuration file (TCF).  The following lines tell DSP/BIOS to create the uPP device handle and run an initialization function (provided by the driver) when the application begins:
+</p>
+<pre>bios.UDEV.create("UPP");
+bios.UDEV.instance("UPP").fxnTableType = "IOM_Fxns";
+bios.UDEV.instance("UPP").comment = "uPP IOM mini driver";
+bios.UDEV.instance("UPP").initFxn = prog.extern("UPP_INIT");
+bios.UDEV.instance("UPP").fxnTable = prog.extern("UPP_FXN_TABLE");
+bios.UDEV.instance("UPP").params = prog.extern("UPP_DEV_CONFIG");</pre>
+<p>There are several noteworthy items in this configuration block:
+</p>
+<ul><li>The <tt>fxnTableType</tt> item tells DSP/BIOS that this is an IOM driver.</li>
+<li>The IOM function table, <tt>UPP_FXN_TABLE</tt>, and intialization function, <tt>UPP_INIT</tt>, are both provided by the driver.</li>
+<li>Two structs <b>must</b> be provided by your application code:
+<ol><li><tt>UPP_DEV_CONFIG</tt> is a struct containing static configuration for the driver.  It should be declared using the <tt>const</tt> modifier.</li></ol></li></ul>
+<p>The application-specified struct is defined in the demo application's main.c source file using a default value macro, <tt>UPP_STATICCONFIG</tt>, from the upp_md.h header file.  To use non-default parameters, this struct should instead be defined using a standard struct declaration:
+</p><p>&lt;syntaxhighlight lang="c"&gt;// static init struct for uPP driver
+const upp_StaticConfig UPP_DEV_CONFIG =
+{
+</p>
+<pre>   upp_sync,        // synchronous operation (non-default)
+   upp_pll1sysclk2  // PLL1 SYSCLK2 (non-default)
+</pre>
+<p>};&lt;/syntaxhighlight&gt;
+</p>
+<h3><span class="mw-headline" id="System_Considerations">System Considerations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=5" title="Edit section: System Considerations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>In addition to initializing the uPP device, three requirements must be satisfied in the application's global configuration:
+</p>
+<ol><li>There must be at least one system heap for dynamic memory allocation</li>
+<li>The Event Combiner Module (ECM) must be enabled</li>
+<li>One hardware interrupt (HWI) must be assigned to handle ECM block 2, which includes the uPP interrupt event</li></ol>
+<p>The demo application's TCF includes the following lines to satisfy the above conditions:
+</p>
+<pre>bios.MEM.NOMEMORYHEAPS = 0;
+bios.MEM.instance("IRAM").createHeap = 1;
+bios.MEM.BIOSOBJSEG = prog.get("IRAM");
+bios.MEM.MALLOCSEG = prog.get("IRAM");
+
+bios.ECM.ENABLE = 1;
+bios.HWI.instance("HWI_INT7").interruptSelectNumber = 2;</pre>
+<p>Note that the heap does not need to be placed in internal memory.  Similarly, the interrupt assigned does not need to be HWI 7.  Any available memory segment or HWI can be assigned these tasks.
+</p>
+<h2><span class="mw-headline" id="Run-Time_Initialization">Run-Time Initialization</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=6" title="Edit section: Run-Time Initialization">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>When the static configuration requirements are met, the uPP driver can be opened and used at run-time using the GIO standard API.  This begins with a call to <tt>GIO_open</tt> to create a driver handle.
+</p><p>&lt;syntaxhighlight lang="c"&gt;GIO_Handle upph = GIO_create("/UPP", IOM_INOUT, &amp;status, &amp;upp_setup, NULL);&lt;/syntaxhighlight&gt;
+</p><p>The arguments passed to <tt>GIO_create</tt> are summarized as follows:
+</p>
+<ol><li>The uPP device name declared in the DSP/BIOS TCF.  For the demo application, this is simply "UPP."  A slash is pre-pended to that name to obtain the string required by the GIO API.</li>
+<li><tt>IOM_INOUT</tt> must be used for the driver mode, since uPP consists of two data channels that operate independently.</li>
+<li>Integer pointer used to report errors during driver initialization</li>
+<li>Pointer to a struct of type <tt>upp_UserParams</tt>.  This struct is used to configure the uPP peripheral.</li>
+<li>Reserved; set to <tt>NULL</tt>.</li></ol>
+<p>The fourth argument contains the bulk of uPP configuration and must be initialized by the application code prior to calling <tt>GIO_create</tt>.  Typically, it should be initialized by copying the UPP_USERPARAMS struct, provided by the driver as a default configuration:
+</p><p>&lt;syntaxhighlight lang="c"&gt;upp_UserParams upp_setup = UPP_USERPARAMS;&lt;/syntaxhighlight&gt;
+</p><p>With no additional configuration, this will place the uPP driver in a single-channel transmit mode with an 8-bit data width.  By modifying individual elements of <tt>upp_setup</tt>, this behavior can be modified significantly.  See the description of the <a href="#upp_UserParams_Struct">#upp_UserParams Struct</a> for details.  The struct and its enumerated elements are defined in the driver include file, <tt>upp_md.h</tt>.
+</p><p>The driver offers many configuration options, but using the default UPP_USERPARAMS struct sets most of them to "safe" values (see the driver source file <tt>upp_md_defaults.c</tt> for details).  The following code illustrates how the demo application places uPP in internal loopback mode (A-to-B).
+</p><p>&lt;syntaxhighlight lang="c"&gt;upp_setup = UPP_USERPARAMS;
+</p><p>upp_setup.params.channels = 2;
+upp_setup.params.special_mode = upp_digital_loopback;
+</p><p>upp_setup.params.A.direction = upp_dir_xmit;
+upp_setup.params.A.clock_div = upp_clock_div;
+upp_setup.params.A.fxn_eow = (upp_CbFxn)LOCAL_upp_complete_cb;
+upp_setup.params.A.fxn_dpe = (upp_CbFxn)LOCAL_upp_error_cb;
+upp_setup.params.A.fxn_err = (upp_CbFxn)LOCAL_upp_error_cb;
+upp_setup.params.A.fxn_uor = (upp_CbFxn)LOCAL_upp_error_cb;
+</p><p>upp_setup.params.B.direction = upp_dir_rcv;
+upp_setup.params.B.clock_div = upp_clock_div;
+upp_setup.params.B.fxn_eow = (upp_CbFxn)LOCAL_upp_complete_cb;
+upp_setup.params.B.fxn_dpe = (upp_CbFxn)LOCAL_upp_error_cb;
+upp_setup.params.B.fxn_err = (upp_CbFxn)LOCAL_upp_error_cb;
+upp_setup.params.B.fxn_uor = (upp_CbFxn)LOCAL_upp_error_cb;&lt;/syntaxhighlight&gt;
+</p><p>Note that <tt>upp_clock_div</tt> is a local macro in the application code, and that <tt>LOCAL_upp_complete_cb</tt> and <tt>LOCAL_upp_error_cb</tt> are local functions in the application code.
+</p>
+<h2><span class="mw-headline" id="Sending_and_Receiving_Data">Sending and Receiving Data</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=7" title="Edit section: Sending and Receiving Data">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>After the driver handle has been created, transmitting or receiving data via uPP is as simple as calling <tt>GIO_write</tt> or <tt>GIO_read</tt>, respectively.
+</p><p>&lt;syntaxhighlight lang="c"&gt;status = GIO_read(upph, &amp;upp_xfer_b, NULL);
+status |= GIO_write(upph, &amp;upp_xfer_a, NULL);&lt;/syntaxhighlight&gt;
+</p><p>The arguments passed to <tt>GIO_read</tt> and/or <tt>GIO_write</tt> are summarized as follows:
+</p>
+<ol><li>The uPP driver handle obtained from <tt>GIO_create</tt></li>
+<li>Pointer to a struct of type <tt>upp_Transfer</tt>.  The driver uses this struct to program the channel's DMA descriptors.</li>
+<li>Reserved; set to <tt>NULL</tt>.</li></ol>
+<p>&lt;syntaxhighlight lang="c"&gt;// start with default settings
+upp_Transfer upp_xfer_a = UPP_TRANSFER, upp_xfer_b = UPP_TRANSFER;
+</p><p>// apply common settings
+upp_xfer_a.windowAddr = upp_buffer_a;
+upp_xfer_a.lineCount = upp_line_count;
+upp_xfer_a.lineSize = upp_line_size;
+upp_xfer_a.lineOffset = upp_line_offset;
+upp_xfer_a.channel = upp_A;
+</p><p>upp_xfer_b.windowAddr = upp_buffer_b;
+upp_xfer_b.lineCount = upp_line_count;
+upp_xfer_b.lineSize = upp_line_size;
+upp_xfer_b.lineOffset = upp_line_offset;
+upp_xfer_b.channel = upp_B;&lt;/syntaxhighlight&gt;
+</p><p>Note that most of the fields in the <tt>upp_Transfer</tt> struct correspond with the standard concepts of 2D DMA programming: the window address, line count, line size, and line offset.  For more information on these concepts, refer to the uPP user guide.
+</p><p>The final member of the <tt>upp_Transfer</tt> struct simply tells the uPP driver to which channel to apply this transfer.
+</p>
+<h3><span class="mw-headline" id="Synchronous_versus_Asynchronous">Synchronous versus Asynchronous</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=8" title="Edit section: Synchronous versus Asynchronous">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Part of the uPP driver's static configuration places the driver in synchronous or asynchronous mode.  There is only one difference between these modes.
+</p>
+<ul><li>In synchronous mode, a call to <tt>GIO_write</tt> or <tt>GIO_read</tt> will not return until that transfer is complete.</li>
+<li>In asynchronous mode, a call to <tt>GIO_write</tt> or <tt>GIO_read</tt> will return immediately after the DMA descriptors are programmed.</li></ul>
+<p>This different behavior has many implications.  First, since synchronous mode blocks the application during a uPP transfer, it is impossible to queue multiple transfers on the same channel or to execute simultaneous transfers on channels A and B using a single application thread.  This means that the demo application will not work in loopback mode if the driver is operated in synchronous mode; the first call to <tt>GIO_read</tt> will never return.
+</p><p>Since a read or write call returns immediately in asynchronous mode, it is possible to make another read or write call before the previous operation ends.  When this happens, the uPP driver enqueues the second transfer.  When the active transfer completes, the driver automatically starts the next transfer in the queue if one is available.
+</p><p>By default, the application is not notified when a transfer completes in asynchronous mode.  The use of user callback functions (particularly for the EOW event) becomes an important tool for tracking the status and completion of uPP transfers.  The demo application demonstrates this with separate callback functions for EOW and various error events.
+</p>
+<h3><span class="mw-headline" id="Error_Recovery">Error Recovery</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=9" title="Edit section: Error Recovery">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>To recover from a uPP error condition at run time, use the <tt>GIO_control</tt> API with the <tt>upp_ioctl_sw_reset</tt> IOCTL.
+</p><p>&lt;syntaxhighlight lang="c"&gt;GIO_control(upph, upp_ioctl_sw_reset, NULL);&lt;/syntaxhighlight&gt;
+</p><p>This will abort the active uPP transfer and clear the first pending transfer, which is already programmed in the uPP DMA descriptors.  If additional transfers have already been queued up (in the driver's internal QUEs), the driver will automatically begin the first transfer from the QUE.
+</p><p>In synchronous mode, the driver will return from a <tt>GIO_read</tt> or <tt>GIO_write</tt> call immediately with an error code when an error condition occurs.  The <tt>upp_ioctl_sw_reset</tt> IOCTL should then be applied before attempting additional uPP transfers.
+</p>
+<h2><span class="mw-headline" id="Driver_APIs_and_Data_Types">Driver APIs and Data Types</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=10" title="Edit section: Driver APIs and Data Types">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Exposed_APIs">Exposed APIs</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=11" title="Edit section: Exposed APIs">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The uPP driver provides no functions that are intended to be called directly by application code.  Instead, it is accessed via its IOM function table.  These functions are called in response to application calls to <tt>GIO_create</tt>, <tt>GIO_submit</tt> (including its wrappers, <tt>GIO_read</tt> and <tt>GIO_write</tt>), <tt>GIO_control</tt>, and <tt>GIO_delete</tt>.  The function table provided in the driver source <tt>upp_md.c</tt> maps IOM functions to various internal functions:
+</p><p>&lt;syntaxhighlight lang="c"&gt;IOM_Fxns UPP_FXN_TABLE = {
+</p>
+<pre>   (IOM_TmdBindDev)upp_mdBindDev,
+   IOM_UNBINDDEVNOTIMPL,  // upp_mdUnBindDev not implemented
+   (IOM_TmdControlChan)upp_mdControlChan,
+   (IOM_TmdCreateChan)upp_mdCreateChan,
+   (IOM_TmdDeleteChan)upp_mdDeleteChan,
+   (IOM_TmdSubmitChan)upp_mdSubmitChan,
+</pre>
+<p>};&lt;/syntaxhighlight&gt;
+</p><p>Neither these functions nor any of the various static functions in <tt>upp_md.c</tt> are intended to be called directly by application code.  The driver should be controlled via calls to GIO functions at all times.
+</p>
+<h3><span class="mw-headline" id="Useful_Data_Types">Useful Data Types</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=12" title="Edit section: Useful Data Types">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span class="mw-headline" id="upp_StaticConfig">upp_StaticConfig</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=13" title="Edit section: upp StaticConfig">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>DSP/BIOS requires this struct to configure the uPP driver during system initialization.  A struct of this type must be included in your application code and referenced in the DSP/BIOS static configuration (i.e. in the TCF).
+</p>
+<dl><dd><table cellspacing="0" cellpadding="5" border="1" width="80%">
+
+<tbody><tr>
+<td><b>Element</b>
+</td>
+<td><b>Type</b>
+</td>
+<td><b>Allowed Values</b>
+</td>
+<td><b>Description</b>
+</td></tr>
+<tr>
+<td>mode
+</td>
+<td>upp_DrvModel
+</td>
+<td>upp_sync
+<p>upp_async
+</p>
+</td>
+<td>Configures the driver in synchronous or asynchronous operation.  In synchronous mode, calls to <tt>GIO_submit</tt> will not return until the uPP transfer completes.  In asynchronous mode, calls to <tt>GIO_submit</tt> return immediately.
+</td></tr>
+<tr>
+<td>tx_clk_src
+</td>
+<td>upp_ClockSrc
+</td>
+<td>upp_pll0sysclk2
+<p>upp_pll1sysclk2
+</p><p>upp_2xTxClk
+</p><p>upp_defaultClk
+</p>
+</td>
+<td>Selects the source for the uPP transmit clock.  The three options correspond to PLL0 SYSCLK2, PLL1 SYSCLK2, and the UPP_2XTXCLK pin.  Refer to your device's system reference guide for more information.
+</td></tr></tbody></table></dd></dl>
+<h4><span class="mw-headline" id="upp_Transfer_Struct">upp_Transfer Struct</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=14" title="Edit section: upp Transfer Struct">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>This struct is passed (by reference) to <tt>GIO_read</tt> and <tt>GIO_write</tt> and defines the 2D DMA transaction that will control the uPP transfer.  Refer to the uPP User Guide for more information about 2D DMA concepts.
+</p>
+<dl><dd><table cellspacing="0" cellpadding="5" border="1" width="80%">
+
+<tbody><tr>
+<td><b>Element</b>
+</td>
+<td><b>Type</b>
+</td>
+<td><b>Allowed Values</b>
+</td>
+<td><b>Description</b>
+</td></tr>
+<tr>
+<td>link
+</td>
+<td>QUE_Elem
+</td>
+<td>{NULL, NULL}
+</td>
+<td>Allows upp_Transfer struct to be placed on the driver's internal QUE objects.  Should be initialized to {NULL, NULL} by the application before upp_Transfer is passed to the uPP driver.
+</td></tr>
+<tr>
+<td>channel
+</td>
+<td>upp_Channel
+</td>
+<td>upp_A
+<p>upp_B
+</p>
+</td>
+<td>Specifies which channel will execute the uPP transfer.
+</td></tr>
+<tr>
+<td>windowAddr
+</td>
+<td>Ptr
+</td>
+<td>
+</td>
+<td>Starting address of the uPP data buffer.  Must be aligned to multiple of 64 bits (8 bytes).
+</td></tr>
+<tr>
+<td>lineSize
+</td>
+<td>Uint16
+</td>
+<td>
+</td>
+<td>Number of bytes per DMA line.  Must be an even number and greater than zero.
+</td></tr>
+<tr>
+<td>lineCount
+</td>
+<td>Uint16
+</td>
+<td>
+</td>
+<td>Number of lines in the DMA transfer.  Must be greater than zero.
+</td></tr>
+<tr>
+<td>lineOffset
+</td>
+<td>Uint16
+</td>
+<td>
+</td>
+<td>Offset (in bytes) between the start of each DMA line.  Must be aligned to a multiple of 64 bits (8 bytes)
+</td></tr></tbody></table></dd></dl>
+<h4><span class="mw-headline" id="upp_UserParams_Struct">upp_UserParams Struct</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=15" title="Edit section: upp UserParams Struct">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>This struct is passed (by reference) to <tt>GIO_create</tt> to configure the uPP device.  Most parameters are included as part of the <tt>params</tt> element of this struct.
+</p>
+<dl><dd><table cellspacing="0" cellpadding="5" border="1" width="80%">
+
+<tbody><tr>
+<td><b>Element</b>
+</td>
+<td><b>Type</b>
+</td>
+<td><b>Allowed Values</b>
+</td>
+<td><b>Description</b>
+</td></tr>
+<tr>
+<td>uppObj
+</td>
+<td>upp_Obj*
+</td>
+<td>NULL
+<p>&amp;(upp_Obj)
+</p>
+</td>
+<td>Optional pointer to existing <tt>upp_Obj</tt> struct allocated by application code.  If passed as NULL, the driver will allocate its own struct dynamically.
+</td></tr>
+<tr>
+<td>params
+</td>
+<td>upp_Params
+</td>
+<td>
+</td>
+<td>Parameter struct to configure uPP device.  This struct and its elements are described in detail below.
+</td></tr>
+<tr>
+<td>segID
+</td>
+<td>Int32
+</td>
+<td>
+</td>
+<td>Memory segment from which the driver will allocate objects.  Must be a valid segment ID usable by DSP/BIOS MEM module.
+</td></tr></tbody></table></dd></dl>
+<h4><span class="mw-headline" id="upp_Params_Struct">upp_Params Struct</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=16" title="Edit section: upp Params Struct">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>This struct and its children (type <tt>upp_ChanParams</tt>) specify most of the configuration for the uPP device.
+</p>
+<dl><dd><table cellspacing="0" cellpadding="5" border="1" width="80%">
+
+<tbody><tr>
+<td><b>Element</b>
+</td>
+<td><b>Type</b>
+</td>
+<td><b>Allowed Values</b>
+</td>
+<td><b>Description</b>
+</td></tr>
+<tr>
+<td>channels
+</td>
+<td>Uint8
+</td>
+<td>1
+<p>2
+</p>
+</td>
+<td>Number of active uPP channels
+</td></tr>
+<tr>
+<td>A
+</td>
+<td>upp_ChanParams
+</td>
+<td>
+</td>
+<td>Parameter struct to configure uPP channel A.  This struct and its elements are described in detail below.
+</td></tr>
+<tr>
+<td>B
+</td>
+<td>upp_ChanParams
+</td>
+<td>
+</td>
+<td>Parameter struct to configure uPP channel B.  This struct and its elements are described in detail below.
+</td></tr>
+<tr>
+<td>dma_i_thresh
+</td>
+<td>upp_Threshold
+</td>
+<td>upp_thresh_64
+<p>upp_thresh_128
+</p><p>upp_thresh_256
+</p>
+</td>
+<td>Read burst size for internal DMA channel I
+</td></tr>
+<tr>
+<td>dma_q_thresh
+</td>
+<td>upp_Threshold
+</td>
+<td>upp_thresh_64
+<p>upp_thresh_128
+</p><p>upp_thresh_256
+</p>
+</td>
+<td>Read burst size for internal DMA channel Q
+</td></tr>
+<tr>
+<td>special_mode
+</td>
+<td>upp_SpecialMode
+</td>
+<td>upp_none
+<p>upp_digital_loopback
+</p>
+</td>
+<td>Special mode selection.  Allows the use of internal loopback (or DLB) mode for debug purposes
+</td></tr></tbody></table></dd></dl>
+<h4><span class="mw-headline" id="upp_ChanParams">upp_ChanParams</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=17" title="Edit section: upp ChanParams">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>This struct configures an individual uPP channel (A or B).  The uPP channels are independent and do not need to be configured using similar parameters except in DLB mode.
+</p>
+<dl><dd><table cellspacing="0" cellpadding="5" border="1" width="80%">
+
+<tbody><tr>
+<td><b>Element</b>
+</td>
+<td><b>Type</b>
+</td>
+<td><b>Allowed Values</b>
+</td>
+<td><b>Description</b>
+</td></tr>
+<tr>
+<td>direction
+</td>
+<td>upp_Direction
+</td>
+<td>upp_dir_xmit
+<p>upp_dir_rcv
+</p>
+</td>
+<td>Operating direction
+</td></tr>
+<tr>
+<td>clock_div
+</td>
+<td>Uint8
+</td>
+<td>0 - 15
+</td>
+<td>Clock division value.  Used in transmit mode only
+</td></tr>
+<tr>
+<td>data_rate
+</td>
+<td>Uint8
+</td>
+<td>1
+<p>2
+</p>
+</td>
+<td>Selects single or double data rate.  Refer to uPP User Guide for more information
+</td></tr>
+<tr>
+<td>width
+</td>
+<td>Uint8
+</td>
+<td>8 - 16
+</td>
+<td>Data width in bits
+</td></tr>
+<tr>
+<td>format
+</td>
+<td>upp_DataFormat
+</td>
+<td>upp_format_ljzf
+<p>upp_format_rjse
+</p><p>upp_format_rjze
+</p>
+</td>
+<td>Data format.  Used only when width is between 9 and 15.  Refer to uPP User Guide for more information
+</td></tr>
+<tr>
+<td>xmit_thresh
+</td>
+<td>upp_Threshold
+</td>
+<td>upp_thresh_64
+<p>upp_thresh_128
+</p><p>upp_thresh_256
+</p>
+</td>
+<td>Transmit write threshold.  Used in transmit mode only
+</td></tr>
+<tr>
+<td>drive_idle
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: drive value from IVR when channel is idle.  Used in transmit mode only
+</td></tr>
+<tr>
+<td>idle_value
+</td>
+<td>Uint16
+</td>
+<td>
+</td>
+<td>Value to program to IVR
+</td></tr>
+<tr>
+<td>en_start
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: use START signal
+</td></tr>
+<tr>
+<td>en_enable
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: use ENABLE signal
+</td></tr>
+<tr>
+<td>en_wait
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: use WAIT signal
+</td></tr>
+<tr>
+<td>inv_start
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: invert polarity of START signal
+</td></tr>
+<tr>
+<td>inv_enable
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: invert polarity of ENABLE signal
+</td></tr>
+<tr>
+<td>inv_wait
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: invert polarity of WAIT signal
+</td></tr>
+<tr>
+<td>inv_clock
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: invert polarity of CLOCK signal
+</td></tr>
+<tr>
+<td>gen_eow
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: Generate interrupt for end of window (EOW) events
+</td></tr>
+<tr>
+<td>gen_eol
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: Generate interrupt for end of line (EOL) events
+</td></tr>
+<tr>
+<td>gen_uor
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: Generate interrupt for underrun/overflow (UOR) events
+</td></tr>
+<tr>
+<td>gen_err
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: Generate interrupt for internal error (ERR) events
+</td></tr>
+<tr>
+<td>gen_dpe
+</td>
+<td>Uint8
+</td>
+<td>0
+<p>1
+</p>
+</td>
+<td>Boolean: Generate interrupt for DMA programming error (DPE) events
+</td></tr>
+<tr>
+<td>fxn_eow
+</td>
+<td>upp_CbFxn
+</td>
+<td>NULL
+<p>(Fxn)
+</p>
+</td>
+<td>Function pointer to user callback function for end of window (EOW) events.  Not called if NULL
+</td></tr>
+<tr>
+<td>fxn_eol
+</td>
+<td>upp_CbFxn
+</td>
+<td>NULL
+<p>(Fxn)
+</p>
+</td>
+<td>Function pointer to user callback function for end of line (EOL) events.  Not called if NULL
+</td></tr>
+<tr>
+<td>fxn_uor
+</td>
+<td>upp_CbFxn
+</td>
+<td>NULL
+<p>(Fxn)
+</p>
+</td>
+<td>Function pointer to user callback function for underrun/overflow (UOR) events.  Not called if NULL
+</td></tr>
+<tr>
+<td>fxn_err
+</td>
+<td>upp_CbFxn
+</td>
+<td>NULL
+<p>(Fxn)
+</p>
+</td>
+<td>Function pointer to user callback function for internal error (ERR) events.  Not called if NULL
+</td></tr>
+<tr>
+<td>fxn_dpe
+</td>
+<td>upp_CbFxn
+</td>
+<td>NULL
+<p>(Fxn)
+</p>
+</td>
+<td>Function pointer to user callback function for DMA programming error (DPE) events.  Not called if NULL
+</td></tr></tbody></table></dd></dl>
+<h4><span class="mw-headline" id="upp_CbFxn">upp_CbFxn</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=18" title="Edit section: upp CbFxn">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Callback functions registered with the uPP driver should adhere to the <tt>upp_CbFxn</tt> typedef:
+</p>
+<dl><dd>&lt;syntaxhighlight lang="c"&gt;typedef void (* upp_CbFxn)(Ptr xferp, Uint32 val);&lt;/syntaxhighlight&gt;</dd></dl>
+<p>When called by the driver, the first argument will be a <tt>upp_Transfer</tt> handle pointing to the transfer that caused the interrupt event.  The second argument will be a single bit corresponding to the interrupt event that called the function.  This can be useful for using a single callback function to handle multiple interrupt events.
+</p>
+<h4><span class="mw-headline" id="upp_ioctl">upp_ioctl</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=19" title="Edit section: upp ioctl">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>The <tt>upp_ioctl</tt> enum specifies valid IOCTLs that the application can call using <tt>GIO_control</tt>.  Standard IOM IOCTLs may also be used.
+</p>
+<dl><dd><table cellspacing="0" cellpadding="5" border="1" width="80%">
+
+<tbody><tr>
+<td><b>IOCTL</b>
+</td>
+<td><b>Description</b>
+</td></tr>
+<tr>
+<td>upp_ioctl_enable
+</td>
+<td>Enables the uPP peripheral.  Has no effect if peripheral is already enabled (i.e. after <tt>GIO_create</tt> is called)
+</td></tr>
+<tr>
+<td>upp_ioctl_disable
+</td>
+<td>Disables the uPP peripheral.  Has no effect if peripheral is already enabled (i.e. before <tt>GIO_create</tt> is called)
+</td></tr>
+<tr>
+<td>upp_ioctl_sw_reset
+</td>
+<td>Toggles uPP peripheral software reset.  Clears error conditions and the active and first pending transfer on both channels.  If additional transfers are pending in a uPP channel's QUE, they will automatically move up to the active and (first) pending position.
+</td></tr>
+<tr>
+<td>upp_ioctl_apply_params
+</td>
+<td>Applies new parameters to driver.  A pointer to a new <tt>upp_Params</tt> struct must be passed as an argument to <tt>GIO_control</tt>.  To be safe, the uPP peripheral should be disabled before calling this function.
+</td></tr>
+<tr>
+<td>upp_ioctl_get_status
+</td>
+<td>Gets status of uPP driver.  A pointer to a dummy struct of type <tt>upp_Obj</tt> must be passed as an argument to <tt>GIO_control</tt>.  The status bits of this dummy struct will be copied from the driver's internal <tt>upp_Obj</tt> struct.
+</td></tr>
+<tr>
+<td>upp_ioctl_dequeue
+</td>
+<td>Clears QUEs for both uPP channels.  Each channel's active transfer and first pending transfer will not be affected.  A pointer to an external QUE_Obj must be passed as an argument to <tt>GIO_control</tt>.  The transfers removed from the uPP driver's internal QUEs will be added to the external QUE.  <tt>GIO_delete</tt> cannot be called unless the driver internal QUEs are empty.
+</td></tr>
+<tr>
+<td>upp_ioctl_clear_errors
+</td>
+<td>Clears error conditions from the driver internal status struct.  Generally, <tt>upp_ioctl_sw_reset</tt> should be used instead to recover from error conditions.
+</td></tr></tbody></table></dd></dl>
+<h2><span class="mw-headline" id="See_Also">See Also</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;section=20" title="Edit section: See Also">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><a href="../Introduction_to_uPP.html" title="Introduction to uPP">Introduction to uPP</a>
+</p><p><a rel="nofollow" class="external text" href="http://www.ti.com/litv/pdf/sprugj5b">uPP Peripheral User Guide</a>
+</p><p><a rel="nofollow" class="external text" href="http://focus.ti.com/lit/ug/spru616/spru616.pdf">DSP/BIOS Driver Developer's Guide</a> (includes description of IOM driver model)
+</p><p><a rel="nofollow" class="external text" href="http://focus.ti.com/docs/training/catalog/events/event.jhtml?sku=OLT109057">uPP Driver Introduction Video</a> (requires registration on my.ti.com)
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201201023332
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.076 seconds
+Real time usage: 0.078 seconds
+Preprocessor visited node count: 97/1000000
+Preprocessor generated node count: 124/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 579/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:2950-0!canonical and timestamp 20201201023332 and revision id 181668
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="../File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using the uPP DSP/BIOS Driver</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Using the uPP DSP/BIOS Driver</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Using the uPP DSP/BIOS Driver</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Using the uPP DSP/BIOS Driver</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Using the uPP DSP/BIOS Driver</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using the uPP DSP/BIOS Driver</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Using the uPP DSP/BIOS Driver</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Using the uPP DSP/BIOS Driver</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Using the uPP DSP/BIOS Driver</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="../File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;oldid=181668">https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;oldid=181668</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="../Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="../Category_OMAPL1.html" title="Category:OMAPL1">OMAPL1</a></li><li><a href="../Category_C674x.html" title="Category:C674x">C674x</a></li><li><a href="../Category_AM1x.html" title="Category:AM1x">AM1x</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Using+the+uPP+DSP%2FBIOS+Driver" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="../Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="BIOS_Driver.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Using_the_uPP_DSP/BIOS_Driver&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="BIOS_Driver.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="../Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="../Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="../Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="../Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="../Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="../Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="../Special_WhatLinksHere/Using_the_uPP_DSP/BIOS_Driver.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="../Special_RecentChangesLinked/Using_the_uPP_DSP/BIOS_Driver.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="../Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;oldid=181668" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Using_the_uPP_DSP/BIOS_Driver&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 15 July 2014, at 19:04.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="../Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="../Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="../Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="../Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.076","walltime":"0.078","ppvisitednodes":{"value":97,"limit":1000000},"ppgeneratednodes":{"value":124,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":579,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201023332","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":231});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Using_the_uPP_DSP/BIOS_Driver by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 07:31:29 GMT -->
+</html>

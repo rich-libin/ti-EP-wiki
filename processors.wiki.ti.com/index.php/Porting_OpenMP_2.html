@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_OpenMP_2.x_to_KeyStone_1 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:08:53 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Porting OpenMP 2.x to KeyStone 1 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Porting_OpenMP_2.x_to_KeyStone_1","wgTitle":"Porting OpenMP 2.x to KeyStone 1","wgCurRevisionId":195694,"wgRevisionId":195694,"wgArticleId":37839,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["C665x DSP","C667x DSP","KeyStone Multicore DSP","OpenMP"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Porting_OpenMP_2.x_to_KeyStone_1","wgRelevantArticleId":37839,"wgRequestId":"a444ceaf66530b571b2a480d","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Porting_OpenMP_2_x_to_KeyStone_1 rootpage-Porting_OpenMP_2_x_to_KeyStone_1 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Porting OpenMP 2.x to KeyStone 1</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1"><a href="#General_Information"><span class="tocnumber">1</span> <span class="toctext">General Information</span></a></li>
+<li class="toclevel-1"><a href="#Software_Downloads_Required"><span class="tocnumber">2</span> <span class="toctext">Software Downloads Required</span></a></li>
+<li class="toclevel-1"><a href="#Procedure"><span class="tocnumber">3</span> <span class="toctext">Procedure</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Windows"><span class="tocnumber">3.1</span> <span class="toctext">Windows</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Install_Code_Generation_Tools_8.0.1"><span class="tocnumber">3.1.1</span> <span class="toctext">Install Code Generation Tools 8.0.1</span></a></li>
+<li class="toclevel-3"><a href="#Install_the_MCSDK_and_rebuild_the_PDKs"><span class="tocnumber">3.1.2</span> <span class="toctext">Install the MCSDK and rebuild the PDKs</span></a></li>
+<li class="toclevel-3"><a href="#Rebuild_OpenMP_2.x_for_KeyStone_1"><span class="tocnumber">3.1.3</span> <span class="toctext">Rebuild OpenMP 2.x for KeyStone 1</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="#Ubuntu"><span class="tocnumber">3.2</span> <span class="toctext">Ubuntu</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Install_Code_Generation_Tools_8.0.1_2"><span class="tocnumber">3.2.1</span> <span class="toctext">Install Code Generation Tools 8.0.1</span></a></li>
+<li class="toclevel-3"><a href="#Install_the_MCSDK"><span class="tocnumber">3.2.2</span> <span class="toctext">Install the MCSDK</span></a></li>
+<li class="toclevel-3"><a href="#Rebuild_the_PDKs"><span class="tocnumber">3.2.3</span> <span class="toctext">Rebuild the PDKs</span></a></li>
+<li class="toclevel-3"><a href="#Rebuild_OpenMP_2.x_for_KeyStone_1_2"><span class="tocnumber">3.2.4</span> <span class="toctext">Rebuild OpenMP 2.x for KeyStone 1</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2 class="TML"><span class="mw-headline" id="General_Information">General Information</span></h2>
+<p>This guide aims to use publicly available software downloads to rebuild OpenMP 2.x for KeyStone 1 devices. There are two sets of instructions: one for Windows based operating systems and one for Ubuntu based operating systems. This procedure has been tested on Windows 7 and Ubuntu 12.04.</p>
+<h2 class="TML"><span class="mw-headline" id="Software_Downloads_Required">Software Downloads Required</span></h2>
+<p>The required list of software is as follows. Ubuntu host users will select the Linux version of each download when presented with the option. Windows host users will select the Windows version of each download EXCEPT the MCSDK-HPC package. The MCSDK-HPC download only exists for Linux host computers so <strong>Windows users will need to download the Linux version of the MCSDK-HPC package</strong>.</p>
+<ol>
+<li> <a rel="nofollow" class="external text" href="http://software-dl.ti.com/codegen/non-esd/downloads/download.htm">Code Generation Tools 8.0.1 for C6000</a> </li>
+<li> <a rel="nofollow" class="external text" href="http://software-dl.ti.com/sdoemb/sdoemb_public_sw/bios_mcsdk/latest/index_FDS.html">MCSDK 2.1.2.6</a> </li>
+<li> <a rel="nofollow" class="external text" href="http://software-dl.ti.com/sdoemb/sdoemb_public_sw/bios_mcsdk/latest/index_FDS.html">Patch 01 for MCSDK 2.1.2.6</a> </li>
+<li> <a rel="nofollow" class="external text" href="http://software-dl.ti.com/sdoemb/sdoemb_public_sw/mcsdk_hpc/latest/index_FDS.html">MCSDK-HPC package</a> </li>
+<li> <a rel="nofollow" class="external text" href="http://software-dl.ti.com/sdoemb/sdoemb_public_sw/bios_mcsdk/latest/index_FDS.html">MinGW</a> <strong>(optional, only for Windows host users)</strong> </li>
+</ol>
+<h2 class="TML"><span class="mw-headline" id="Procedure">Procedure</span></h2>
+<p>The required list of install and rebuild steps is as follows:</p>
+<h3 class="TML"><span class="mw-headline" id="Windows">Windows</span></h3>
+<h4 class="TML"><span class="mw-headline" id="Install_Code_Generation_Tools_8.0.1">Install Code Generation Tools 8.0.1</span></h4>
+<ol>
+<li> Run the installer downloaded above and follow the steps to install the Code Generation Tools on your Windows machine. <strong>Note the installation directory as the installation path will be used below.</strong> 
+<ul>
+<li> My installation directory is 'C:/TI/ti-cgt-c6000_8.0.1'. The instructions below will use this path. </li>
+</ul>
+</li>
+</ol>
+<h4 class="TML"><span class="mw-headline" id="Install_the_MCSDK_and_rebuild_the_PDKs">Install the MCSDK and rebuild the PDKs</span></h4>
+<ol>
+<li> Run the MCSDK 2.1.2.6 installer downloaded above and follow the steps to install the MCSDK on your Windows machine. <strong>Note the installation directory as the installation path will be used below.</strong> 
+<ul>
+<li> My installation directory is 'C:/TI/mcsdk_02_01_02_06'. The instructions below will use this path. </li>
+</ul>
+</li>
+<li> Run the MCSDK 2.1.2.6 Patch 01 installer downloaded above and follow the steps to install the patch on top of the MCSDK 2.1.2.6 installation from the previous step. </li>
+<li> Modify mcsdk_02_01_02_06/pdk_C6657_1_1_2_6/packages/ti/csl/cslr_device.h line #1320 and replace the forward slash (/) with an underscore. </li>
+<li> Modify lines 38 and 43 of pdk_C66xx_1_1_2_6/packages/ti/drv/qmss/config.bld in all three of the PDKs (C6678, C6670, and C6657) to add the mem_model, like below:  
+<ul>
+<li> Line 38: C66LE.ccOpts.prefix = "-mo -o3 -q -k -eo.o --mem_model:data=far"; </li>
+<li> Line 43: C66BE.ccOpts.prefix = "-mo -o3 -q -k -eo.o --mem_model:data=far -DBIGENDIAN"; </li>
+<li> <a href="File_Mem_model.html" class="image"><img alt="Mem model.png" src="https://processors.wiki.ti.com/images/0/00/Mem_model.png" width="670" height="168" /></a></li>
+</ul>
+</li>
+<li> Modify the pdk_C66xx_1_1_2_6/packages/ti/drv/qmss/src/qmss_drv.c file in all three of the PDKs (C6678, C6670, and C6657) to add DATA_SECTION pragmas for the qmssLObj and qmssLObjIsValid variables, like below. Place each DATA_SECTION pragma on the line above each variable declaration.  
+<ul>
+<li> #pragma DATA_SECTION (qmssLObj, ".far:local"); </li>
+<li> #pragma DATA_SECTION (qmssLObjIsValid, ".far:local"); </li>
+<li> <a href="File_Data_section.html" class="image"><img alt="Data section.png" src="https://processors.wiki.ti.com/images/9/9d/Data_section.png" width="485" height="132" /></a></li>
+</ul>
+</li>
+<li> Rebuild the PDKs with the new changes  <ol>
+<li> For C6678 open a command prompt and navigate to mcsdk_02_01_02_06/pdk_C6678_1_1_2_6/packages </li>
+<li> set C6X_GEN_INSTALL_PATH=C:/TI/ti-cgt-c6000_8.0.1 </li>
+<li> set XDC_INSTALL_PATH=C:/TI/mcsdk_02_01_02_06/xdctools_3_23_04_60 </li>
+<li> set CG_XML_BIN_INSTALL_PATH=C:/TI/mcsdk_02_01_02_06/cg_xml/bin </li>
+<li> set EDMA3_LLD_INSTALL_PATH=C:/TI/mcsdk_02_01_02_06/edma3_lld_02_11_05_02 </li>
+<li> Type '.\ti\drv\pdksetupenv.bat'  
+<ul>
+<li> The output should be 'PDK BUILD ENVIRONMENT CONFIGURED' </li>
+</ul>
+</li>
+<li> Type '.\ti\drv\pdkbuilder.bat' </li>
+<li> Once this has finished follow the same steps above from step 1 - 7 for both the C6670 PDK as well as the C6657 PDK </li>
+</ol> </li>
+</ol>
+<h4 class="TML"><span class="mw-headline" id="Rebuild_OpenMP_2.x_for_KeyStone_1">Rebuild OpenMP 2.x for KeyStone 1</span></h4>
+<ol>
+<li> Install the MCSDK-HPC package downloaded above onto a Linux machine </li>
+<li> Locate the openmp_dsp_2_01_16_02 folder inside the directory where the MCSDK-HPC package was installed and copy this folder to your Windows machine  
+<ul>
+<li> <strong>These are the only two steps that will require a Linux machine for the Windows version of these steps</strong> </li>
+</ul>
+</li>
+<li> On the Windows machine find the openmp_dsp_2_01_16_02/utils/Makefile file in the folder you just copied </li>
+<li> Open the Makefile and change 'C6636' on line 26 to 'C6657' </li>
+<li> In the same Makefile delete all references to C6636 or hawking </li>
+<li> Save the Makefile </li>
+<li> Open a command prompt with make capabilities at the openmp_dsp_2_01_16_02 folder  
+<ul>
+<li> <strong>You may need to install MinGW (mentioned as optional in the downloads section above) in order to have make capabilities on your Windows machine</strong> </li>
+</ul>
+</li>
+<li> Type the following commands replacing paths to products with the correct path on your machine, notice that the only path not found in the MCSDK 2.1.2.6 (which we installed in an earlier step) is the code generation tools (that we also just installed)  <ol>
+<li> set BUILD_KS1_LIBS=1 </li>
+<li> set XDCCGROOT=C:/TI/ti-cgt-c6000_8.0.1 </li>
+<li> set C6678_PDK_DIR=C:/TI/mcsdk_02_01_02_06/pdk_C6678_1_1_2_6/packages </li>
+<li> set C6670_PDK_DIR=C:/TI/mcsdk_02_01_02_06/pdk_C6670_1_1_2_6/packages </li>
+<li> set C6657_PDK_DIR=C:/TI/mcsdk_02_01_02_06/pdk_C6657_1_1_2_6/packages </li>
+<li> set XDC_DIR=C:/TI/mcsdk_02_01_02_06/xdctools_3_23_04_60 </li>
+<li> set BIOS_DIR=C:/TI/mcsdk_02_01_02_06/bios_6_33_06_50/packages </li>
+<li> set IPC_DIR=C:/TI/mcsdk_02_01_02_06/ipc_1_24_03_32/packages </li>
+<li> make -f utils/Makefile </li>
+</ol> </li>
+<li> Once this build has finished follow the steps in the OpenMP_Runtime_User_Guide.pdf found in the openmp_2_01_16_02/docs folder to build your first OpenMP example
+<ul>
+<li> <strong>Use the RTSC component versions that are provided with the MCSDK 2.1.2.6 release when building your OpenMP examples for KeyStone 1 (PDK 1.1.2.6, IPC 1.24.3.32, SYS/BIOS 6.33.6.50, XDC 3.23.4.60)</strong> </li>
+</ul> </li>
+</ol>
+<p class="mw-empty-elt"> </p>
+<h3 class="TML"><span class="mw-headline" id="Ubuntu">Ubuntu</span></h3>
+<h4 class="TML"><span class="mw-headline" id="Install_Code_Generation_Tools_8.0.1_2">Install Code Generation Tools 8.0.1</span></h4>
+<ol>
+<li> Open a terminal window and navigate to the folder containing the ti_cgt_c6000_8.0.1_linux_installer_x86.bin file that was downloaded from the required software section above. </li>
+<li> Add execute permissions by typing 'chmod +x ti_cgt_c6000_8.0.1_linux_installer_x86.bin' </li>
+<li> Now type './ti_cgt_c6000_8.x.x_linux_installer_x86.bin' to start the installation </li>
+<li> Select your installation directory and click next </li>
+<li> C6000 Code Generation Tools are now installed on your Linux host, remember the installation directory as we will be using it again shortly  
+<ul>
+<li> My installation directory is '~/ti/ti-cgt-c6000_8.0.1'. The instructions below will use this path. </li>
+</ul>
+</li>
+</ol>
+<h4 class="TML"><span class="mw-headline" id="Install_the_MCSDK">Install the MCSDK</span></h4>
+<ol>
+<li> Open a terminal window and navigate to the folder containing the bios_mcsdk_02_01_02_06_setuplinux.bin file that was downloaded from the required software section above </li>
+<li> Add execute permissions by typing 'chmod +x bios_mcsdk_02_01_02_06_setuplinux.bin' </li>
+<li> Now type './bios_mcsdk_02_01_02_06_setuplinux.bin' to start the installation </li>
+<li> Select your installation directory and click next </li>
+<li> Select all of the available packages and continue with the installation </li>
+<li> MCSDK 2.1.2.6 is now installed on your Linux host, remember the installation directory as we will be using it again shortly  
+<ul>
+<li> My installation directory is '~/ti/mcsdk_2_01_02_06'. The instructions below will use this path. </li>
+</ul>
+</li>
+<li> Open a terminal window and navigate to the folder containing the bios_mcsdk_02_01_02_06_patch01_setuplinux.bin file that was downloaded from the required software section above </li>
+<li> Add execute permissions by typing 'chmod +x bios_mcsdk_02_01_02_06_patch01_setuplinux.bin' </li>
+<li> Now type './bios_mcsdk_02_01_02_06_patch01_setuplinux.bin' to start the installation </li>
+<li> Follow the installation instructions and install this patch to the same folder that the MCSDK 2.1.2.6 was installed in the previous steps </li>
+</ol>
+<h4 class="TML"><span class="mw-headline" id="Rebuild_the_PDKs">Rebuild the PDKs</span></h4>
+<ol>
+<li> Modify mcsdk_02_01_02_06/pdk_C6657_1_1_2_6/packages/ti/csl/cslr_device.h line #1320 and replace the forward slash (/) with an underscore </li>
+<li> Modify lines 38 and 43 of pdk_C66xx_1_1_2_6/packages/ti/drv/qmss/config.bld in all three of the PDKs (C6678, C6670, and C6657) to add the mem_model, like below:  
+<ul>
+<li> Line 38: C66LE.ccOpts.prefix = "-mo -o3 -q -k -eo.o --mem_model:data=far"; </li>
+<li> Line 43: C66BE.ccOpts.prefix = "-mo -o3 -q -k -eo.o --mem_model:data=far -DBIGENDIAN"; </li>
+<li> <a href="File_Mem_model.html" class="image"><img alt="Mem model.png" src="https://processors.wiki.ti.com/images/0/00/Mem_model.png" width="670" height="168" /></a></li>
+</ul>
+</li>
+<li> Modify the pdk_C66xx_1_1_2_6/packages/ti/drv/qmss/src/qmss_drv.c file in all three of the PDKs (C6678, C6670, and C6657) to add DATA_SECTION pragmas for the qmssLObj and qmssLObjIsValid variables, like below. Place each DATA_SECTION pragma on the line above each variable declaration.  
+<ul>
+<li> #pragma DATA_SECTION (qmssLObj, ".far:local"); </li>
+<li> #pragma DATA_SECTION (qmssLObjIsValid, ".far:local"); </li>
+<li> <a href="File_Data_section.html" class="image"><img alt="Data section.png" src="https://processors.wiki.ti.com/images/9/9d/Data_section.png" width="485" height="132" /></a></li>
+</ul>
+</li>
+<li> Rebuild the PDKs with the new changes  <ol>
+<li> For C6678 open a terminal window and navigate to mcsdk_2_01_02_06/pdk_C6678_1_1_2_6/packages </li>
+<li> Type 'export C6X_GEN_INSTALL_PATH=~/ti/ti-cgt-c6000_8.0.1' replacing my path with your path to the Code Generation Tools </li>
+<li> Type 'export EDMA3_LLD_INSTALL_PATH=~/ti/mcsdk_2_01_02_06/edma3_lld_02_11_05_02' replacing my path with your path to the EDMA3 LLD </li>
+<li> Type 'chmod +x ./ti/drv/pdksetupenv.sh' </li>
+<li> Type './ti/drv/pdksetupenv.sh'  
+<ul>
+<li> The output should be 'PDK environment is set successfully' </li>
+</ul>
+</li>
+<li> Type 'chmod +x ./ti/drv/pdkbuilder.sh' </li>
+<li> Type './ti/drv/pdkbuilder.sh' </li>
+<li> Once this has finished follow the same steps above from step 1 - 7 for both the C6670 PDK as well as the C6657 PDK </li>
+</ol> </li>
+</ol>
+<h4 class="TML"><span class="mw-headline" id="Rebuild_OpenMP_2.x_for_KeyStone_1_2">Rebuild OpenMP 2.x for KeyStone 1</span></h4>
+<ol>
+   <li> Open a terminal window and navigate to the folder containing the mcsdk-hpc_03_xx_xx_xx_setuplinux.bin file that was downloaded from the required software section above (where 03_xx_xx_xx is the version number you    downloaded) </li>
+   <li> Add execute permissions by typing 'chmod +x mcsdk-hpc_03_xx_xx_xx_setuplinux.bin' </li>
+   <li> Now type './chmod +x mcsdk-hpc_03_xx_xx_xx_setuplinux.bin' to start the installation </li>
+   <li> Select your installation directory and click next </li>
+   <li> Locate the openmp_dsp_2_01_16_02 folder inside the directory where the MCSDK-HPC package was just installed </li>
+   <li> Copy this openmp_dsp_2_01_16_02 folder to another location on your Linux machine since we will be rebuilding it for KeyStone 1 and MCSDK 2.1.2.6 </li>
+   <li> Find the openmp_dsp_2_01_16_02/utils/Makefile file in the folder you just copied </li>
+   <li> Open the makefile and change 'C6636' on line 26 to 'C6657' </li>
+   <li> In the same makefile delete all references to C6636 or hawking </li>
+   <li> Save the makefile </li>
+   <li> Open a terminal window and navigate to the new openmp_dsp_2_01_16_02 folder </li>
+   <li> Type the following commands replacing paths to products with the correct path on your machine, notice that the only path not found in the MCSDK 2.1.2.6 (which we installed in an earlier step) is the code generation tools (that we also just installed)
+   <ol>
+      <li> export BUILD_KS1_LIBS=1 </li>
+      <li> export XDCCGROOT=~/ti/ti-cgt-c6000_8.0.1 </li>
+      <li> export C6678_PDK_DIR=~/ti/mcsdk_2_01_02_06/pdk_C6678_1_1_2_6/packages </li>
+      <li> export C6670_PDK_DIR=~/ti/mcsdk_2_01_02_06/pdk_C6670_1_1_2_6/packages </li>
+      <li> export C6657_PDK_DIR=~/ti/mcsdk_2_01_02_06/pdk_C6657_1_1_2_6/packages </li>
+      <li> export XDC_DIR=~/ti/mcsdk_2_01_02_06/xdctools_3_23_04_60 </li>
+      <li> export BIOS_DIR=~/ti/mcsdk_2_01_02_06/bios_6_33_06_50/packages </li>
+      <li> export IPC_DIR=~/ti/mcsdk_2_01_02_06/ipc_1_24_03_32/packages </li>
+      <li> make -f utils/Makefile </li>
+   </ol> 
+   </li>
+   <li> Once this build has finished follow the steps in the OpenMP_Runtime_User_Guide.pdf found in the openmp_2_01_16_02/docs folder to build your first OpenMP example 
+<ul>
+<li> <strong>Use the RTSC component versions that are provided with the MCSDK 2.1.2.6 release when building your OpenMP examples for KeyStone 1 (PDK 1.1.2.6, IPC 1.24.3.32, SYS/BIOS 6.33.6.50, XDC 3.23.4.60)</strong> </li>
+</ul></li>
+</ol>
+<!-- 
+NewPP limit report
+Cached time: 20201130112225
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.051 seconds
+Real time usage: 0.052 seconds
+Preprocessor visited node count: 13/1000000
+Preprocessor generated node count: 32/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:37839-0!canonical and timestamp 20201130112225 and revision id 195694
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Porting OpenMP 2.x to KeyStone 1</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Porting_OpenMP_2.x_to_KeyStone_1&amp;oldid=195694">https://processors.wiki.ti.com/index.php?title=Porting_OpenMP_2.x_to_KeyStone_1&amp;oldid=195694</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_C665x_DSP.html" title="Category:C665x DSP">C665x DSP</a></li><li><a href="Category_C667x_DSP.html" title="Category:C667x DSP">C667x DSP</a></li><li><a href="Category_KeyStone_Multicore_DSP.html" title="Category:KeyStone Multicore DSP">KeyStone Multicore DSP</a></li><li><a href="Category_OpenMP.html" title="Category:OpenMP">OpenMP</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Porting+OpenMP+2.x+to+KeyStone+1" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Porting_OpenMP_2.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Porting_OpenMP_2.x_to_KeyStone_1&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Porting_OpenMP_2.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_OpenMP_2.x_to_KeyStone_1&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_OpenMP_2.x_to_KeyStone_1&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Porting_OpenMP_2.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Porting_OpenMP_2.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Porting_OpenMP_2.x_to_KeyStone_1&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Porting_OpenMP_2.x_to_KeyStone_1&amp;oldid=195694" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Porting_OpenMP_2.x_to_KeyStone_1&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 17 March 2015, at 12:07.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.051","walltime":"0.052","ppvisitednodes":{"value":13,"limit":1000000},"ppgeneratednodes":{"value":32,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":1,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130112225","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":222});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_OpenMP_2.x_to_KeyStone_1 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:08:57 GMT -->
+</html>

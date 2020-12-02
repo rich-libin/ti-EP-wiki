@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Optimized_Merge_Sort_For_DSP by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:30:58 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Optimized Merge Sort For DSP - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Optimized_Merge_Sort_For_DSP","wgTitle":"Optimized Merge Sort For DSP","wgCurRevisionId":49476,"wgRevisionId":49476,"wgArticleId":4780,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Compiler"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Optimized_Merge_Sort_For_DSP","wgRelevantArticleId":4780,"wgRequestId":"e76990b1e57eb36a778c09ae","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Optimized_Merge_Sort_For_DSP rootpage-Optimized_Merge_Sort_For_DSP skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Optimized Merge Sort For DSP</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>This implementation of the Merge Sort algorithm has been created as part of a short study on the optimization of sorting algorithms for Texas Instruments DSPs. If you have any suggestions for further optimizations please do not hesitate to give us feedback.
+</p><p>Refer to our study about <a href="Optimized_Sort_Algorithms_For_DSP.html" title="Optimized Sort Algorithms For DSP">Optimized Sort Algorithms For DSP</a> for some benchmark results and comparison with other sort algorithms.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Sort_Function"><span class="tocnumber">1</span> <span class="toctext">Sort Function</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Merge_Functions"><span class="tocnumber">2</span> <span class="toctext">Merge Functions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Two-Ways_Merge"><span class="tocnumber">2.1</span> <span class="toctext">Two-Ways Merge</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Three-Ways_Merge"><span class="tocnumber">2.2</span> <span class="toctext">Three-Ways Merge</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Four-Ways_Merge"><span class="tocnumber">2.3</span> <span class="toctext">Four-Ways Merge</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Sort_Function">Sort Function</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=edit&amp;section=1" title="Edit section: Sort Function">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<pre>static int do_merge(unsigned int **inputs, int *sizes, int count, unsigned int *output) {
+	int i;
+	int remainder = count &amp; 3;
+	int iterations = (count - remainder)/4;
+	unsigned int **current_inputs = inputs;
+	int *current_sizes = sizes;
+	int merge_count = 0, merge_size;
+	unsigned int *current_output = output;
+	
+	if (iterations &gt; 0 &amp;&amp; remainder &gt; 0 &amp;&amp; remainder &lt; 3) {
+		remainder += 10;
+		iterations--;
+	}
+	for (i=0;i&lt;iterations;i++) {
+		/* Do a fourWays merge.  */
+		merge_size = current_sizes[0] + current_sizes[1] + current_sizes[2] + current_sizes[3];
+		Merge_fourWays32(current_inputs, current_sizes, current_output, (unsigned int *)0/*unused*/);
+		inputs[i] = current_output;
+		sizes[i] = merge_size;
+		merge_count++;
+		current_inputs +=4;
+		current_sizes +=4;
+		current_output += merge_size;
+	}
+	/* Tail of the merges.  */
+	switch (remainder) {
+	case 11:
+		/* Do one threeWays and one twoWays merge.  */
+		merge_size = current_sizes[0] + current_sizes[1] + current_sizes[2];
+		Merge_threeWays32(current_inputs, current_sizes, current_output, (unsigned int *)0/*unused*/);
+		inputs[merge_count] = current_output;
+		sizes[merge_count] = merge_size;
+		merge_count++;
+		current_inputs +=3;
+		current_sizes +=3;
+		current_output += merge_size;
+		/* Intentional fall-through.  */
+	case 2:
+		/* Here is the twoWays merge.  */ 
+		merge_size = current_sizes[0] + current_sizes[1];
+		Merge_twoWays32(current_inputs, current_sizes, current_output, (unsigned int *)0/*unused*/);
+		inputs[merge_count] = current_output;
+		sizes[merge_count] = merge_size;
+		merge_count++;
+		current_inputs +=2;
+		current_sizes +=2;
+		current_output += merge_size;
+		break;
+	case 12:
+		/* Do two threeWays merges.  */
+		/* First threeWays merge.  */
+		merge_size = current_sizes[0] + current_sizes[1] + current_sizes[2];
+		Merge_threeWays32(current_inputs, current_sizes, current_output, (unsigned int *)0/*unused*/);
+		inputs[merge_count] = current_output;
+		sizes[merge_count] = merge_size;
+		merge_count++;
+		current_inputs +=3;
+		current_sizes +=3;
+		current_output += merge_size;
+		/* Second threeWays merge.  Fall through, no "break" statement. */
+	case 3:
+	case 13:
+		/* Do one threeWays merge.  */
+		merge_size = current_sizes[0] + current_sizes[1] + current_sizes[2];
+		Merge_threeWays32(current_inputs, current_sizes, current_output, (unsigned int *)0/*unused*/);
+		inputs[merge_count] = current_output;
+		sizes[merge_count] = merge_size;
+		merge_count++;
+		current_inputs +=3;
+		current_sizes +=3;
+		current_output += merge_size;
+		break;
+	case 1:
+		/* There is nothing to do in this case. Why has this function been called?  */
+	default:
+		break;
+	}
+	return merge_count;
+}
+
+void Sort_merge32(unsigned int * restrict array, int size, unsigned int * restrict output, unsigned int * restrict scratch) {
+	unsigned int *inputs[128];
+	int sizes[128];
+	unsigned int i1, i2, i3, i4;
+	int insert_1st = 0, insert_2nd = 0, insert_3rd = 0, insert_4th = 0;
+	unsigned int i_temp;
+	int i, remainder, iterations, list_count = 0, shift;
+	unsigned int offset = 0;
+	unsigned int *scratch_output;
+
+	remainder = size &amp; 3;
+	iterations = (size - remainder)/4;
+	if (size&gt;16) { offset += 16;}
+	if (size&gt;64) { offset += 64;}
+	if (size&gt;256) { offset += 256;}
+	if (size&gt;1024) { offset += 1024;} /* FIXME: For now we don't support sorting more than 4K elements.  */
+	if (size &lt;= 4) {
+		scratch_output = output;
+	} else {
+		scratch_output = scratch+offset;
+	}
+	
+	_nassert((int)array&#160;% 8 == 0);
+	_nassert((int)scratch_output&#160;% 8 == 0);
+	_nassert((int)output&#160;% 8 == 0);
+	for (i=0;i&lt;iterations;i++) {
+		/* Prepare the array for the merges.  */
+		inputs[i] = scratch_output+4*i;
+		sizes[i] = 4;
+		list_count++;
+		/* Sort_sortFour32(array+i, scratch+i); */
+		i1 = array[4*i]; i2 = array[4*i+1];
+		i3 = array[4*i+2]; i4 = array[4*i+3];
+		insert_2nd = 0; insert_3rd = 0; insert_4th = 0;
+		i_temp = i3;
+		/* First element to be inserted. */
+		if (i4 &lt; i3) {
+			/* We just have to swap the two inputs if required.  */
+			i3 = i4; 
+			i4 = i_temp; 
+		}
+		/* Second element to be inserted.  */
+		i_temp = i2;
+		if (i4 &lt; i2) insert_3rd = 1;
+		if (i3 &lt; i2) insert_2nd = 1  &amp; ~insert_3rd;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			i2 = i3;
+			i3 = i_temp;
+		}
+		if (insert_3rd) {
+			i2 = i3;
+			i3 = i4;
+			i4 = i_temp;
+		}
+		/* Last element to be inserted  */
+		insert_2nd = 0; insert_3rd = 0;
+		i_temp = i1;
+		if (i4 &lt; i1) insert_4th = 1;
+		if (i3 &lt; i1) insert_3rd = 1  &amp; ~insert_4th;
+		if (i2 &lt; i1) insert_2nd = 1  &amp; ~insert_3rd &amp; ~insert_4th;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			i1 = i2;
+			i2 = i_temp;
+		}
+		if (insert_3rd) {
+			i1 = i2;
+			i2 = i3;
+			i3 = i_temp;
+		}
+		if (insert_4th) {
+			i1 = i2;
+			i2 = i3;
+			i3 = i4;
+			i4 = i_temp;
+		}
+#ifdef _TMS320C6X
+		_amem8((void *)&amp;(scratch_output[4*i])) = _itoll(i2, i1);
+		_amem8((void *)&amp;(scratch_output[4*i+2])) = _itoll(i4, i3);
+#else
+		scratch_output[4*i] = i1; scratch_output[4*i+1] = i2;
+		scratch_output[4*i+2] = i3; scratch_output[4*i+3] = i4;
+#endif
+	}
+	/* Merge the remaining elements if any.  */
+	if (remainder &gt; 0) {
+		inputs[i] = scratch_output+4*i;
+		sizes[i] = remainder;
+		list_count++;
+	}
+	switch(remainder) {
+	case 0:
+		break;
+	case 1:
+		scratch_output[4*i] = array[4*i];
+		break;
+	case 2:
+		i1 = array[4*i]; i2 = array[4*i+1];
+		if (i1 &lt;= i2) {
+			scratch_output[4*i] = i1; scratch_output[4*i+1] = i2;
+		} else {
+			scratch_output[4*i] = i2; scratch_output[4*i+1] = i1;
+		}
+		break;
+	case 3:
+		i1 = array[4*i]; i2 = array[4*i+1]; i3 = array[4*i+2];
+		/* Sort the three entries.  */
+		if (i2 &lt; i1) {
+			i_temp = i1;
+			i1 = i2;
+			i2 = i_temp;
+		}
+		if (i3 &lt; i2) {
+			i_temp = i2;
+			i2 = i3;
+			i3 = i_temp;
+		}
+		if (i2 &lt; i1) {
+			i_temp = i1;
+			i1 = i2;
+			i2 = i_temp;
+		}
+		/* Write the output.  */
+		scratch_output[4*i] = i1; scratch_output[4*i+1] = i2; scratch_output[4*i+2] = i3;
+		break;
+	}
+	if (list_count &lt; 2) return;
+	/* All array elements are now sorted by groups of 4.  We are about to start
+	   merging all the array elements.  */
+	shift = 16;
+	while (list_count &gt; 4) {
+		/* We merge into a temporary space.  */
+		scratch_output -= shift;
+		shift *= 4;
+		list_count = do_merge(inputs, sizes, list_count, scratch_output);
+	}
+	/* This is the final merge that will produce the final output.  */
+	do_merge(inputs, sizes, list_count, output);
+}
+</pre>
+<h1><span class="mw-headline" id="Merge_Functions">Merge Functions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=edit&amp;section=2" title="Edit section: Merge Functions">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The large majority of the CPU time used by our Merge Sort implementation is spent merging sorted arrays.
+</p><p>Our implementation provides three functions that have been carefully written to perform the merge of 2, 3 and 4 sorted arrays.
+</p>
+<h2><span class="mw-headline" id="Two-Ways_Merge">Two-Ways Merge</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=edit&amp;section=3" title="Edit section: Two-Ways Merge">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This function merges in one pass the content of two arrays that were previously sorted in ascending order.  It does not require any scratch memory.
+</p>
+<pre>void Merge_twoWays32 (unsigned int **inputs, int *sizes,
+		      unsigned int * restrict out, unsigned int * restrict scratch) {
+	/* In this optimized version we are using restricts and replacing the original loop
+	   which had a complex condition in it with two loops.  */
+	int i;
+	int count1 = 0, count2 = 0;
+	unsigned int * restrict in1 = inputs[0], * restrict in2 = inputs[1];
+	int size1 = sizes[0], size2 = sizes[1];
+	unsigned int val1 , val2;
+	
+	_nassert((int)in1&#160;% 8 == 0);
+	_nassert((int)in2&#160;% 8 == 0);
+	_nassert((int)out&#160;% 8 == 0);
+	_nassert((int)scratch&#160;% 8 == 0);
+	if (in1[size1-1] &lt; in2[size2-1]) {
+		/* Just swap the two lists. */
+		unsigned int *in_temp = in1;
+		int size_temp = size1;
+		in1 = in2; in2 = in_temp;
+		size1 = size2; size2 = size_temp;
+	}
+	val1 = *in1; val2 = *in2;
+	for (i=0; count2 &lt; size2; i++) {
+		/* Merge until 'in2' is exhausted first.  */
+		if (val1 &lt; val2) {
+			*out++ = val1;
+			val1 = *++in1;
+			count1++;
+		} else {
+			*out++ = val2;
+			val2 = *++in2;
+			count2++;
+		}
+	}
+	for (; count1 &lt; size1; i++) {
+		/* Just copy the remaining elements in 'in1' to 'out'.  */
+		*out++ = *in1++;
+		count1++;
+	}
+}
+</pre>
+<h2><span class="mw-headline" id="Three-Ways_Merge">Three-Ways Merge</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=edit&amp;section=4" title="Edit section: Three-Ways Merge">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This function merges in one pass the content of three arrays that were previously sorted in ascending order.  It does not require any scratch memory.
+</p>
+<pre>void Merge_threeWays32(unsigned int **inputs, int *sizes, unsigned int * restrict out, unsigned int * restrict scratch) {
+	unsigned int * restrict in1 = inputs[0], * restrict in2 = inputs[1], * restrict in3 = inputs[2];
+	int size1 = sizes[0], size2 = sizes[1], size3 = sizes[2];
+	int count1 = 0, count2 = 0, count3 = 0;
+	unsigned int value1 = *in1, value2 = *in2, value3 = *in3;
+	int insert_2nd = 0, insert_3rd = 0;
+	unsigned int *in_temp;
+	unsigned int value_temp;
+	int size_temp, count_temp;
+
+	/* As the merge is progressing the various inputs are exhausted and the code deals differently
+	   with each stage. For the 'Four inputs' and 'Three inputs' stages we basically keep a 'list'
+	   of the inputs sorted (ascending) by the value of their current first value.  */
+
+	/* PHASE #0: Sort the inputs one first time, sort is ascending.  */
+	{
+		insert_2nd = 0; insert_3rd = 0;
+		in_temp = in2;
+		value_temp = value2;
+		size_temp = size2;
+		/* First element to be inserted. */
+		if (value3 &lt; value2) {
+			size2 = size3; in2 = in3; value2 = value3;
+			size3 = size_temp; in3 = in_temp; value3 = value_temp;
+		}
+		/* Second element to be inserted.  */
+		in_temp = in1;
+		value_temp = value1;
+		size_temp = size1;
+		if (value3 &lt; value1) insert_3rd = 1;
+		if (value2 &lt; value1) insert_2nd = 1  &amp; ~insert_3rd;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			size1 = size2; in1 = in2; value1 = value2;
+			size2 = size_temp; in2 = in_temp; value2 = value_temp;
+		}
+		if (insert_3rd) {
+			/* We just have to swap the two inputs if required.  */
+			size1 = size2; in1 = in2; value1 = value2;
+			size2 = size3; in2 = in3; value2 = value3;
+			size3 = size_temp; in3 = in_temp; value3 = value_temp;
+		}
+	}
+	
+	/* PHASE #1: Three inputs processing.  */
+	/* The list of inputs is already sorted the first time.  */
+	*out++ = value1;
+	value1 = *++in1;
+	count1++;
+	for (;count1&lt;size1;) {
+		insert_2nd = 0; insert_3rd = 0;
+		/* Sort the inputs.  The nice thing is that we just have insert 'value1' in
+		   the right position because the rest of the list (2 other elements) is
+		   already sorted.  */
+		if (value3 &lt; value1) insert_3rd = 1;
+		if (value2 &lt; value1) insert_2nd = 1  &amp; ~insert_3rd;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count_temp; size2 = size_temp; in2 = in_temp; value2 = value_temp;
+		}
+		if (insert_3rd) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count3; size2 = size3; in2 = in3; value2 = value3;
+			count3 = count_temp; size3 = size_temp; in3 = in_temp; value3 = value_temp;
+		}
+		/* Add the first element of 'in1' to the 'out'.  */
+		*out++ = value1;
+		value1 = *++in1;
+		count1++;
+	}
+	/* Get rid of the first input, and shift the other two into position.  */
+	count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+	count2 = count3; size2 = size3; in2 = in3; value2 = value3;
+	
+	/* PHASE #2: Two inputs processing.  */
+	/* The list of inputs is already sorted the first time.  */
+	*out++ = value1;
+	value1 = *++in1;
+	count1++;
+	for (;count1&lt;size1;) {
+		/* Sort the inputs.  The nice thing is that we just have insert 'value1' in
+		   the right position because the rest of the list (1 other element) is already sorted.  */
+		if (value2 &lt; value1) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count_temp; size2 = size_temp; in2 = in_temp; value2 = value_temp;
+		}
+		/* Add the first element of 'in1' to the 'out'.  */
+		*out++ = value1;
+		value1 = *++in1;
+		count1++;
+	}
+	/* Get rid of the first input, and shift the other two into position.  */
+	count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+
+	/* PHASE #3: One input left. */
+	for (; count1 &lt; size1; ) {
+		/* Just copy the remaining elements in 'in1' to 'out'.  */
+		*out++ = value1;
+		value1 = *++in1;
+		count1++;
+	}
+}
+</pre>
+<h2><span class="mw-headline" id="Four-Ways_Merge">Four-Ways Merge</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=edit&amp;section=5" title="Edit section: Four-Ways Merge">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This function merges in one pass the content of four arrays that were previously sorted in ascending order. It does not require any scratch memory.
+</p>
+<pre>void Merge_fourWays32(unsigned int **inputs, int *sizes, unsigned int * restrict out, unsigned int * restrict scratch) {
+	unsigned int * restrict in1 = inputs[0], * restrict in2 = inputs[1], * restrict in3 = inputs[2], * restrict in4 = inputs[3];
+	int size1 = sizes[0], size2 = sizes[1], size3 = sizes[2], size4 = sizes[3];
+	int count1 = 0, count2 = 0, count3 = 0, count4 = 0;
+	unsigned int value1 = *in1, value2 = *in2, value3 = *in3, value4 = *in4;
+	int insert_2nd = 0, insert_3rd = 0, insert_4th = 0;
+	unsigned int *in_temp;
+	unsigned int value_temp;
+	int size_temp, count_temp;
+
+	/* As the merge is progressing the various inputs are exhausted and the code deals differently
+	   with each stage. For the 'Four inputs' and 'Three inputs' stages we basically keep a 'list'
+	   of the inputs sorted (ascending) by the value of their current first value.  */
+
+	/* PHASE #0: Sort the inputs one first time, sort is ascending.  */
+	{
+		insert_2nd = 0; insert_3rd = 0; insert_4th = 0;
+		in_temp = in3;
+		value_temp = value3;
+		size_temp = size3;
+		/* First element to be inserted. */
+		if (value4 &lt; value3) {
+			size3 = size4; in3 = in4; value3 = value4;
+			size4 = size_temp; in4 = in_temp; value4 = value_temp;
+		}
+		/* Second element to be inserted.  */
+		in_temp = in2;
+		value_temp = value2;
+		size_temp = size2;
+		if (value4 &lt; value2) insert_3rd = 1;
+		if (value3 &lt; value2) insert_2nd = 1  &amp; ~insert_3rd;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			size2 = size3; in2 = in3; value2 = value3;
+			size3 = size_temp; in3 = in_temp; value3 = value_temp;
+		}
+		if (insert_3rd) {
+			/* We just have to swap the two inputs if required.  */
+			size2 = size3; in2 = in3; value2 = value3;
+			size3 = size4; in3 = in4; value3 = value4;
+			size4 = size_temp; in4 = in_temp; value4 = value_temp;
+		}
+		/* Last element to be inserted  */
+		insert_2nd = 0; insert_3rd = 0; insert_4th = 0;
+		in_temp = in1;
+		value_temp = value1;
+		size_temp = size1;
+		if (value4 &lt; value1) insert_4th = 1;
+		if (value3 &lt; value1) insert_3rd = 1  &amp; ~insert_4th;
+		if (value2 &lt; value1) insert_2nd = 1  &amp; ~insert_3rd &amp; ~insert_4th;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			size1 = size2; in1 = in2; value1 = value2;
+			size2 = size_temp; in2 = in_temp; value2 = value_temp;
+		}
+		if (insert_3rd) {
+			/* We just have to swap the two inputs if required.  */
+			size1 = size2; in1 = in2; value1 = value2;
+			size2 = size3; in2 = in3; value2 = value3;
+			size3 = size_temp; in3 = in_temp; value3 = value_temp;
+		}
+		if (insert_4th) {
+			/* We just have to swap the two inputs if required.  */
+			size1 = size2; in1 = in2; value1 = value2;
+			size2 = size3; in2 = in3; value2 = value3;
+			size3 = size4; in3 = in4; value3 = value4;
+			size4 = size_temp; in4 = in_temp; value4 = value_temp;
+		}
+	}
+	
+        /* PHASE #1: Four inputs processing.  */
+	/* The list of inputs is already sorted the first time.  */
+	*out++ = value1;
+	value1 = *++in1;
+	count1++;
+	for (;count1&lt;size1;) {
+		insert_2nd = 0; insert_3rd = 0; insert_4th = 0;
+		/* Sort the inputs.  The good thing is that we just have insert 'value1' in
+		   the right position because the rest of the list (3 other elements) is
+		   already sorted.  */
+		if (value4 &lt; value1) insert_4th = 1;
+		if (value3 &lt; value1) insert_3rd = 1  &amp; ~insert_4th;
+		if (value2 &lt; value1) insert_2nd = 1  &amp; ~insert_3rd &amp; ~insert_4th;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count_temp; size2 = size_temp; in2 = in_temp; value2 = value_temp;
+		}
+		if (insert_3rd) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count3; size2 = size3; in2 = in3; value2 = value3;
+			count3 = count_temp; size3 = size_temp; in3 = in_temp; value3 = value_temp;
+		}
+		if (insert_4th) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count3; size2 = size3; in2 = in3; value2 = value3;
+			count3 = count4; size3 = size4; in3 = in4; value3 = value4;
+			count4 = count_temp; size4 = size_temp; in4 = in_temp; value4 = value_temp;
+		}
+		/* Add the first element of 'in1' to the 'out'.  */
+		*out++ = value1;
+		value1 = *++in1;
+		count1++;
+	}
+	/* Get rid of the first input, and shift the other three into position.  */
+	count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+	count2 = count3; size2 = size3; in2 = in3; value2 = value3;
+	count3 = count4; size3 = size4; in3 = in4; value3 = value4;
+	
+	/* PHASE #2: Three inputs processing.  */
+	/* The list of inputs is already sorted the first time.  */
+	*out++ = value1;
+	value1 = *++in1;
+	count1++;
+	for (;count1&lt;size1;) {
+		insert_2nd = 0; insert_3rd = 0;
+		/* Sort the inputs.  The nice thing is that we just have insert 'value1' in
+		   the right position because the rest of the list (2 other elements) is
+		   already sorted.  */
+		if (value3 &lt; value1) insert_3rd = 1;
+		if (value2 &lt; value1) insert_2nd = 1  &amp; ~insert_3rd;
+		if (insert_2nd) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count_temp; size2 = size_temp; in2 = in_temp; value2 = value_temp;
+		}
+		if (insert_3rd) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count3; size2 = size3; in2 = in3; value2 = value3;
+			count3 = count_temp; size3 = size_temp; in3 = in_temp; value3 = value_temp;
+		}
+		/* Add the first element of 'in1' to the 'out'.  */
+		*out++ = value1;
+		value1 = *++in1;
+		count1++;
+	}
+	/* Get rid of the first input, and shift the other two into position.  */
+	count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+	count2 = count3; size2 = size3; in2 = in3; value2 = value3;
+	
+	/* PHASE #3: Two inputs processing.  */
+	/* The list of inputs is already sorted the first time.  */
+	*out++ = value1;
+	value1 = *++in1;
+	count1++;
+	for (;count1&lt;size1;) {
+		/* Sort the inputs.  The nice thing is that we just have insert 'value1' in
+		   the right position because the rest of the list (1 other element) is already sorted.  */
+		if (value2 &lt; value1) {
+			/* We just have to swap the two inputs if required.  */
+			in_temp = in1;
+			value_temp = value1;
+			count_temp = count1; size_temp = size1;
+			count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+			count2 = count_temp; size2 = size_temp; in2 = in_temp; value2 = value_temp;
+		}
+		/* Add the first element of 'in1' to the 'out'.  */
+		*out++ = value1;
+		value1 = *++in1;
+		count1++;
+	}
+	/* Get rid of the first input, and shift the other two into position.  */
+	count1 = count2; size1 = size2; in1 = in2; value1 = value2;
+
+	/* PHASE #4: One input left. */
+	for (; count1 &lt; size1; ) {
+		/* Just copy the remaining elements in 'in1' to 'out'.  */
+		*out++ = value1;
+		value1 = *++in1;
+		count1++;
+	}
+}
+</pre>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201023652
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.024 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 49/1000000
+Preprocessor generated node count: 104/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 19436/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:4780-0!canonical and timestamp 20201201023652 and revision id 49476
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Optimized Merge Sort For DSP</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Optimized Merge Sort For DSP</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Optimized Merge Sort For DSP</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Optimized Merge Sort For DSP</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Optimized Merge Sort For DSP</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Optimized Merge Sort For DSP</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Optimized Merge Sort For DSP</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Optimized Merge Sort For DSP</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Optimized Merge Sort For DSP</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;oldid=49476">https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;oldid=49476</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Compiler.html" title="Category:Compiler">Compiler</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Optimized+Merge+Sort+For+DSP" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Optimized_Merge_Sort_For_DSP.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Optimized_Merge_Sort_For_DSP&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Optimized_Merge_Sort_For_DSP.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Optimized_Merge_Sort_For_DSP.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Optimized_Merge_Sort_For_DSP.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;oldid=49476" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Optimized_Merge_Sort_For_DSP&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 5 January 2011, at 08:36.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.024","walltime":"0.025","ppvisitednodes":{"value":49,"limit":1000000},"ppgeneratednodes":{"value":104,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":19436,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201023652","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":275});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Optimized_Merge_Sort_For_DSP by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 03:31:00 GMT -->
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/CC2640_Porting_Projects by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 05:17:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>CC2640 Porting Projects - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"CC2640_Porting_Projects","wgTitle":"CC2640 Porting Projects","wgCurRevisionId":234371,"wgRevisionId":234371,"wgArticleId":39322,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Applications"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"CC2640_Porting_Projects","wgRelevantArticleId":39322,"wgRequestId":"8d4bea5467e6bff24ef38ee0","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-CC2640_Porting_Projects rootpage-CC2640_Porting_Projects skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">CC2640 Porting Projects</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p><a rel="nofollow" class="external text" href="Category_BluetoothLE.html">Bluetooth Low Energy Main Page</a>
+</p><p><br />
+This wiki page explains necessary steps to port projects from an older version of the TI <i>Bluetooth<sup>(R)</sup></i> low energy software stack (BLE-Stack) v2.x SDK installer to a newer version. As always, it is recommended to make a backup copy of all changes prior to porting your project. In addition to making a backup of your project, TI recommends making a backup (zip) of the BLE-Stack SDK, typically installed to C:\ti\simplelink\ble_cc26xx_2_0x_0y_nnnnn, prior to developing your Bluetooth Smart application.
+<br />
+The procedures listed below assume the developer is familiar with the IDE and build environment concepts described in the CC2640 BLE SW Developer's Guide (<a rel="nofollow" class="external text" href="http://www.ti.com/lit/pdf/swru393">SWRU393</a>). A copy of the Developer's Guide can be found in the Documents folder of the BLE-Stack SDK installer.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Porting_from_BLEv2.2.1_to_BLEv3.x"><span class="tocnumber">1</span> <span class="toctext">Porting from BLEv2.2.1 to BLEv3.x</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#LE_Secure_Connections_Recommended_Parameters"><span class="tocnumber">2</span> <span class="toctext">LE Secure Connections Recommended Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Porting_BLEv2.2.1_Projects_to_BLEv2.2.2"><span class="tocnumber">3</span> <span class="toctext">Porting BLEv2.2.1 Projects to BLEv2.2.2</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Porting_Steps"><span class="tocnumber">3.1</span> <span class="toctext">Porting Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Porting_BLEv2.2.0_Projects_to_BLEv2.2.1"><span class="tocnumber">4</span> <span class="toctext">Porting BLEv2.2.0 Projects to BLEv2.2.1</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Porting_Steps_2"><span class="tocnumber">4.1</span> <span class="toctext">Porting Steps</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Optimizing_Flash_Memory"><span class="tocnumber">4.2</span> <span class="toctext">Optimizing Flash Memory</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Known_Issues_.2F_Workarounds_for_BLEv2.2.1"><span class="tocnumber">4.3</span> <span class="toctext">Known Issues / Workarounds for BLEv2.2.1</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Porting_BLEv2.1.1_Projects_to_BLEv2.2"><span class="tocnumber">5</span> <span class="toctext">Porting BLEv2.1.1 Projects to BLEv2.2</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#BLE_Stack_changes"><span class="tocnumber">5.1</span> <span class="toctext">BLE Stack changes</span></a>
+<ul>
+<li class="toclevel-3 tocsection-11"><a href="#icall_api.c"><span class="tocnumber">5.1.1</span> <span class="toctext">icall_api.c</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#peripheral.c"><span class="tocnumber">5.1.2</span> <span class="toctext">peripheral.c</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#central.c"><span class="tocnumber">5.1.3</span> <span class="toctext">central.c</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#main.c"><span class="tocnumber">5.1.4</span> <span class="toctext">main.c</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-15"><a href="#TI-RTOS_changes"><span class="tocnumber">5.2</span> <span class="toctext">TI-RTOS changes</span></a>
+<ul>
+<li class="toclevel-3 tocsection-16"><a href="#Display_Driver"><span class="tocnumber">5.2.1</span> <span class="toctext">Display Driver</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Porting_BLE_Bridge_Project_to_LaunchPad"><span class="tocnumber">5.2.2</span> <span class="toctext">Porting BLE Bridge Project to LaunchPad</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-18"><a href="#Known_Issues_.2F_Workarounds_for_BLEv2.2.0"><span class="tocnumber">5.3</span> <span class="toctext">Known Issues / Workarounds for BLEv2.2.0</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#Porting_BLEv2.1.0_Projects_to_BLEv2.1.1"><span class="tocnumber">6</span> <span class="toctext">Porting BLEv2.1.0 Projects to BLEv2.1.1</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#IAR_.26_CCS_Project_Porting_Directions"><span class="tocnumber">6.1</span> <span class="toctext">IAR &amp; CCS Project Porting Directions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Porting_BLEv2.0.0_Projects_to_BLEv2.1.0"><span class="tocnumber">7</span> <span class="toctext">Porting BLEv2.0.0 Projects to BLEv2.1.0</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#IAR_Project_Porting_Directions"><span class="tocnumber">7.1</span> <span class="toctext">IAR Project Porting Directions</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#CCSProject_Porting_Directions"><span class="tocnumber">7.2</span> <span class="toctext">CCSProject Porting Directions</span></a>
+<ul>
+<li class="toclevel-3 tocsection-24"><a href="#Import_the_Old_Project"><span class="tocnumber">7.2.1</span> <span class="toctext">Import the Old Project</span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#Application_Project_Modifications"><span class="tocnumber">7.2.2</span> <span class="toctext">Application Project Modifications</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#Stack_Project_Modifications"><span class="tocnumber">7.2.3</span> <span class="toctext">Stack Project Modifications</span></a></li>
+<li class="toclevel-3 tocsection-27"><a href="#Compiling_Steps"><span class="tocnumber">7.2.4</span> <span class="toctext">Compiling Steps</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-28"><a href="#API_Changes"><span class="tocnumber">7.3</span> <span class="toctext">API Changes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-29"><a href="#Porting_Drivers_From_TI-RTOS_2.20_or_higher_To_TI-RTOS_2.18"><span class="tocnumber">8</span> <span class="toctext">Porting Drivers From TI-RTOS 2.20 or higher To TI-RTOS 2.18</span></a>
+<ul>
+<li class="toclevel-2 tocsection-30"><a href="#Steps_For_Importing_Drivers"><span class="tocnumber">8.1</span> <span class="toctext">Steps For Importing Drivers</span></a>
+<ul>
+<li class="toclevel-3 tocsection-31"><a href="#Continue_For_CCS_User"><span class="tocnumber">8.1.1</span> <span class="toctext">Continue For CCS User</span></a></li>
+<li class="toclevel-3 tocsection-32"><a href="#Continue_For_IAR_User"><span class="tocnumber">8.1.2</span> <span class="toctext">Continue For IAR User</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Porting_from_BLEv2.2.1_to_BLEv3.x">Porting from BLEv2.2.1 to BLEv3.x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=1" title="Edit section: Porting from BLEv2.2.1 to BLEv3.x">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>See the Porting chapter of the software developer's guide.
+</p>
+<h1><span class="mw-headline" id="LE_Secure_Connections_Recommended_Parameters">LE Secure Connections Recommended Parameters</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=2" title="Edit section: LE Secure Connections Recommended Parameters">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>The underlying ECC software used to generate the Public/Private Key pair and the DH Key check will lock the BLE-Stack task for approximately 160ms. This lock will occur twice during secure connections pairing.
+When using a LE Secure Connections pairing method, it is recommend to configure a supervision timeout of at least <b>165ms</b> to prevent the link from dropping during ECDH key operations. 
+Additionally the application should be prepared to be preempted/blocked during this time.
+</p><p>Note: This only affects stacks using the LE Secure Connections feature
+</p>
+<h1><span class="mw-headline" id="Porting_BLEv2.2.1_Projects_to_BLEv2.2.2">Porting BLEv2.2.1 Projects to BLEv2.2.2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=3" title="Edit section: Porting BLEv2.2.1 Projects to BLEv2.2.2">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This section will describe how to update from BLEv2.2.1 to BLE v2.2.2. Application source code previously developed or updated to BLE 2.2.1 can be ported to BLE 2.2.2 with minimal effort due to the fact that no BLE APIs were modified between these releases. Notable differences include:
+</p>
+<ul><li>Updated to use TI-RTOS SDK 2.21.01.08 (included with BLE-Stack SDK installer). It's recommended to use the updated board files for this TI-RTOS version</li>
+<li>Updated BLE libraries and supporting stack source code. This includes GAPBondMgr, OAD, the ECCROMCC26XX driver and ble_user_config.c which as updated RF overrides and ROM patch parameters. Refer to BLE-Stack release notes for a full list of changes</li>
+<li>Example application source files (e.g., simple_peripheral.c) updated to handle and assert upon HCI_BLE_HARDWARE_ERROR_EVENT_CODE in *_processStackMsg handler. This is optional.</li></ul>
+<h2><span class="mw-headline" id="Porting_Steps">Porting Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=4" title="Edit section: Porting Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>1. Copy your project files, source files, and any modified BLE Stack source files from the 2.2.1 installer to the 2.2.2 installer, ensuring to merge any changes with common (non-application) SDK files.<br />
+2. Verify your application's .customargvars (IAR) / .cproject or .projectspec (CCS) point to resources in the TI-RTOS 2.21.01.08 &amp; XDCTools default installation path. These can be inspected by importing an unmodified sample application from the BLE 2.2.2 SDK. These are the same parameters, but different values, as listed below for BLE 2.2.1.<br />
+3. Open/import your project in IAR 7.80.4 or CCS v7.4. Note that CCS projects now use the TI ARM Compiler 16.9.4.LTS and the RTSC option needs to specify the new TI-RTOS version.<br />
+</p>
+<h1><span class="mw-headline" id="Porting_BLEv2.2.0_Projects_to_BLEv2.2.1">Porting BLEv2.2.0 Projects to BLEv2.2.1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=5" title="Edit section: Porting BLEv2.2.0 Projects to BLEv2.2.1">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This section will describe one way port a project from BLEv2.2.0 to BLE v2.2.1.  It assumes that your project is constructed similar to the default stack projects. That is, the project files exist under $INSTALL$/examples/cc2650em/ and source files exist under the respective folder in $INSTALL$/src/.  It also assumes that you are using the default .customargvars (IAR) / .cproject or .projectspec (CCS) which use the relative location of the IAR / CCS project files to point to BLE Stack components.  If your project exists outside of the standard directory structure of the source installer and uses absolute paths for these variables, you’ll need to manually modify these to point to the respective directories in the 2.2.1 installer. In this case, the .cfg file in the application project will also need to be manually modified to point to the 2.2.1 .cfg ($INSTALL$/src/common/cc26xx/kernel/cc2640/config/cc2640.cfg)
+</p>
+<h2><span class="mw-headline" id="Porting_Steps_2">Porting Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=6" title="Edit section: Porting Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>1. Copy your project files, source files, and any modified BLE Stack source files from the 2.2.0 installer to the 2.2.1 installer, ensuring to merge any changes with common files.
+<br /> 2. Since many of the environment variables defined in the .customargvars / .project  or .projectspec use the relative location of the project file, these should successfully be updated from step 1.  However, the paths relating to the new RTOS need to be manually updated.  The following should be used based on the type of project:
+</p>
+<ul><li>IAR .custom_argvars:</li></ul>
+<div class="floatnone"><a href="File_2.2.1_argvars.html" class="image" title="Argvars to be used for 2.2.1 installer"><img alt="Argvars to be used for 2.2.1 installer" src="https://processors.wiki.ti.com/images/6/65/2.2.1_argvars.png" width="1000" height="90" /></a></div>
+<ul><li>CCS .project_spec:</li></ul>
+<div class="floatnone"><a href="File_Ccs_env_vars.html" class="image" title="2.2.1 Environment Variables for CCS"><img alt="2.2.1 Environment Variables for CCS" src="https://processors.wiki.ti.com/images/9/90/Ccs_env_vars.png" width="1000" height="165" /></a></div>
+<ul><li>CCS: .project:</li></ul>
+<div class="floatnone"><a href="File_Ccs_project_env_vars.html" class="image" title="CCS Environment variables for .project"><img alt="CCS Environment variables for .project" src="https://processors.wiki.ti.com/images/3/3f/Ccs_project_env_vars.png" width="800" height="570" /></a></div>
+<p><br /> 3. Open in the new IAR (7.70.2) / CCS (6.2.0 Build 50 or later)
+<br /> 4.In the application project, under Drivers --&gt; RF…remove RF.c and add $TI_RTOS_DRIVERS_BASE$\ti\drivers\rf\RFCC26XX_singleMode.c
+<br /><a href="File_2.2.1_porting_step_4.html" class="image"><img alt="2.2.1 porting step 4.png" src="https://processors.wiki.ti.com/images/5/54/2.2.1_porting_step_4.png" width="261" height="145" /></a>
+<br /> 5.	In the application project, under Drivers, add a TRNG folder and add the following files:
+</p>
+<ul><li>$SRC_COMMON$\hal\src\target\_common\TRNGCC26XX.c</li>
+<li>$SRC_COMMON$\hal\src\target\_common\TRNGCC26XX.h</li></ul>
+<p><br /><a href="File_2.2.1_porting_step_5.html" class="image"><img alt="2.2.1 porting step 5.png" src="https://processors.wiki.ti.com/images/1/1a/2.2.1_porting_step_5.png" width="205" height="165" /></a>
+<br /> 6.	In the stack project, add $SRC_BLE_CORE$/rom to preprocessor search path
+<br /> 7.	Remove common_rom_init.c and rom_init.c from the Startup folder and add $ROM$\rom_jt.c
+<br /><a href="File_2.2.1_porting_step_7.html" class="image"><img alt="2.2.1 porting step 7.png" src="https://processors.wiki.ti.com/images/4/41/2.2.1_porting_step_7.png" width="198" height="193" /></a>
+<br /> 8.	If building with the Secure Connections feature defined (-DBLE_V42_FEATURES=SECURE_CONNS_CFG or similar), add $SRC_EX$\host\sm_ecc.c to the Profiles folder:
+<br /><a href="File_2.2.1_porting_step_8.html" class="image"><img alt="2.2.1 porting step 8.png" src="https://processors.wiki.ti.com/images/3/3a/2.2.1_porting_step_8.png" width="210" height="190" /></a>
+</p>
+<h2><span class="mw-headline" id="Optimizing_Flash_Memory">Optimizing Flash Memory</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=7" title="Edit section: Optimizing Flash Memory">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The following tips for maximizing the amount of flash memory to the application is a supplement to Section 10.4 <i>Optimizing Bluetooth low energy Stack Memory Usage</i> from the BLE SW Developer's Guide (docID SWRU393 rev D). 
+</p>
+<ul><li>When not enabling Pairing/Bonding support with the GAP Bond Manager (GAP_BOND_MGR) in the stack build_config.opt, set the following Predefined Symbols in the Stack project:
+<ul><li>NO_BLE_SECURITY</li>
+<li>If OSAL_SNV=x is defined, set OSAL_SNV=0, otherwise, define NO_OSAL_SNV. This will remove allocation of flash page(s) for SNV storage</li></ul></li>
+<li>The use of the BT4.1 L2CAP_COC_CFG is not required for GATT and has limited or no smartphone compatibility. Enabling a BLE_V41_FEATURES=V41_CTRL_CFG is the minimum configuration needed for Peripheral + Central configurations or when multiple slave connections are required.</li>
+<li>If the GAP_BOND_MGR is not required or if the application does not need to send a Service Changed Indication, support for this feature can be disabled to save flash memory space. Service Changed requires use of L2CAP stack build_config.opt feature. Set the following in the Stack Predefined Symbols to disable support for Service Changed: GATT_NO_SERVICE_CHANGED</li></ul>
+<p><br />
+</p>
+<h2><span id="Known_Issues_/_Workarounds_for_BLEv2.2.1"></span><span class="mw-headline" id="Known_Issues_.2F_Workarounds_for_BLEv2.2.1">Known Issues / Workarounds for BLEv2.2.1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=8" title="Edit section: Known Issues / Workarounds for BLEv2.2.1">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>CCS cannot find target config file for  simple_peripheral_cc2650em_app project. Open your project properties and select "General". Check the box marked "Manage the project's target-configuration automatically" and change "Connection" to Texas Instruments XDS100V3 USB Debug.</li></ul>
+<ul><li>Host Test does not automatically respond to Connection Parameter Update Requests and instead allows the application to specify the response parameters. Responses must manually sent within 40 seconds of reception of the GAP_LinkParamUpdateRequest event 0x0612 using HCI_LERemoteConnectionParameterRequestReply or HCI_LERemoteConnectionParameterRequestNegativeReply. See log below for an example of handling this request using BTool:</li></ul>
+<div class="center"><div class="floatnone"><a href="File_Btoollog.html" class="image" title="BTool Procedure to Handle Connection Parameter Update Request"><img alt="BTool Procedure to Handle Connection Parameter Update Request" src="https://processors.wiki.ti.com/images/d/d7/Btoollog.png" width="638" height="546" /></a></div></div>
+<ul><li>Advertising (ADV) may stop when performing extended periods (i.e., more than 1 hour) of continuous Advertising due to an anomaly in the TI-RTOS RF Driver used by BLE-Stack v2.2.0 and v2.2.1. The workaround is to stop and restart ADV on a periodic basis using a TI-RTOS Clock instance. See attached <a href="File_Simple_peripheral_ble_221_advRestart.html" title="File:Simple peripheral ble 221 advRestart.zip">File:simple_peripheral_ble_221_advRestart.zip</a> with modifications denoted by "ADV-Restart" code comments. Please use Rev 1.1 of the patch. The suggested restart period is 30 minutes but can be adjusted by changing the ADV_RESTART_EVT_PERIOD #define. This file is compatible with BLE-Stack v2.2.1 and the same procedure can be applied to other sample applications in the SDK. <b>Note: TI strongly recommends using BLE 2.2.2 which includes a fix for this issue</b>.</li></ul>
+<ul><li>The CC2650 Remote Control (CC2650RC) "hid_adv_remote_cc2650rc_app" application project in CCS will fail to link due to incorrect TI-RTOS project configuration. Open your project properties, General -&gt; RTSC tab, select 2.20.1.08 under "TI-RTOS for CC13XX and CC26XX". Rebuild the project.</li></ul>
+<ul><li>Error in stack project build: symbol "ECC_initialize" redeclared with incompatible type. This error will occur when projects using Secure Connections are built in CCS with a TI ARM Compiler other than TI ARM Compiler v5.2.6. To install TI ARM Compiler v5.2.6 if it is not already installed please refer to section 2.6.3.2 of the TI BLE Software Developer's Guide.</li></ul>
+<ul><li>The Sleep Clock Accuracy (SCA) setting for CC2650 LaunchPad sample applications does not match the actual 32 kHz crystal accuracy for this development kit. This may result is an unexpected connection drop, especially with longer connection intervals. To set the correct SCA, call the following API after ICall_registerApp in the Application's initialization function: HCI_EXT_SetSCACmd(100);</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Porting_BLEv2.1.1_Projects_to_BLEv2.2">Porting BLEv2.1.1 Projects to BLEv2.2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=9" title="Edit section: Porting BLEv2.1.1 Projects to BLEv2.2">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="BLE_Stack_changes">BLE Stack changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=10" title="Edit section: BLE Stack changes">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>BLE Stack 2.2 is a major release that incorporates several bug fixes as well as new features from the BLE 2.2 specifications. See Software Developer's Guide(SDG)v2.2 for more details.
+The new features include:
+</p>
+<ul><li>LE Secure Connections</li>
+<li>LE Data Length Extension</li>
+<li>LE Privacy 1.2</li></ul>
+<p>New APIs associated with their respective APIs is described in the SDG. 
+The following APIs have changed from 2.1 to 2.2:
+</p>
+<h4><span class="mw-headline" id="icall_api.c">icall_api.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=11" title="Edit section: icall api.c">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>void GAPBondMgr_SlaveReqSecurity(uint16 connHandle, uint8 authReq)
+</pre>
+<pre>bStatus_t GAP_Bond(uint16 connectionHandle, uint8 authenticated,
+                   uint8 secureConnections, smSecurityInfo_t *pParams, 
+                   uint8 startEncryption)
+</pre>
+<h4><span class="mw-headline" id="peripheral.c">peripheral.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=12" title="Edit section: peripheral.c">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>// Connection parameter update parameters.
+static gapRole_updateConnParams_t gapRole_updateConnParams =
+{
+  .paramUpdateEnable = FALSE,
+  .minConnInterval = DEFAULT_MIN_CONN_INTERVAL,
+  .maxConnInterval = DEFAULT_MAX_CONN_INTERVAL,
+  .slaveLatency = MIN_SLAVE_LATENCY,
+  .timeoutMultiplier = DEFAULT_TIMEOUT_MULTIPLIER
+};
+
+static bStatus_t gapRole_startConnUpdate(uint8_t handleFailure, 
+                                       gapRole_updateConnParams_t *pConnParams);
+</pre>
+<h4><span class="mw-headline" id="central.c">central.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=13" title="Edit section: central.c">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>uint8_t authReq = ((gapSlaveSecurityReqEvent_t *)pMsg)-&gt;authReq;
+        
+GAPBondMgr_SlaveReqSecurity(connHandle, authReq);
+</pre>
+<p>Most of these APIs changes are due to additional parameters that have been added to support new features. 
+</p><p>Other than the new features, the major change in BLE SDK 2.2 is the new directory structure. In addition, a new naming convention is used to a common naming standard for file and folder names. See Section 2.4 Directory Structure in the Software Developer's Guide v2.2 for more information. 
+</p><p><br />Note: To port from a release prior to BLE v2.1.1, we recommend following the porting guides incrementally up to this version. 
+</p><p>To port from a project based on 2.1 to 2.2, we recommend manually adding the changes into the 2.2 directory files due to the extensive amount of changes incorporated in the 2.2 release.
+</p><p><br />
+</p>
+<h4><span class="mw-headline" id="main.c">main.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=14" title="Edit section: main.c">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Copying the reset vectors was removed from main.c since it is now configured in the RTOS configuration file. The options are set in the Pre-build command option: 
+"--cfgArgs NO_ROM=1,OAD_IMG_E=1"
+to make RTOS automatically copy the reset vectors into RAM before main.c for OAD projects.
+</p>
+<h2><span class="mw-headline" id="TI-RTOS_changes">TI-RTOS changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=15" title="Edit section: TI-RTOS changes">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There is significant amount of change from the TI-RTOS used in BLE SDK v2.1 to v2.2. Some of the RTOS changes are detailed in this guide: <a rel="nofollow" class="external free" href="TI-RTOS_Migration_2_15.html">http://processors.wiki.ti.com/index.php/TI-RTOS_Migration_2_15</a>
+</p><p>See the following watchdog consideration: <a rel="nofollow" class="external free" href="https://e2e.ti.com/support/wireless_connectivity/bluetooth_low_energy/f/538/p/543091/1984008#1984008">https://e2e.ti.com/support/wireless_connectivity/bluetooth_low_energy/f/538/p/543091/1984008#1984008</a>
+</p>
+<h3><span class="mw-headline" id="Display_Driver">Display Driver</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=16" title="Edit section: Display Driver">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A new display driver has been added. For example, to add the UART display to the Launchpad, define/modify these in preprocessor settings:
+</p><p>xDisplay_DISABLE_ALL<br />
+xBOARD_DISPLAY_EXCLUDE_UART<br />
+BOARD_DISPLAY_EXCLUDE_LCD
+</p><p>and open the display to use UART in simple_peripheral.c:
+</p><p>dispHandle = Display_open(Display_Type_UART, NULL);
+</p><p>To not use the display at all, define 
+</p><p>Display_DISABLE_ALL<br />
+</p><p>The Display_print() macros can be redefined in the project to output to another debug module. For example, in the SPP BLE project, it is routed to the UART via the DEBUG macro:
+</p>
+<pre>#  define Display_print0(handle, line, col, fmt) DEBUG(fmt); \
+    DEBUG_NEWLINE()
+#  define Display_print1(handle, line, col, fmt, a0) DEBUG(fmt); \
+    DEBUG_NEWLINE()
+</pre>
+<h3><span class="mw-headline" id="Porting_BLE_Bridge_Project_to_LaunchPad">Porting BLE Bridge Project to LaunchPad</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=17" title="Edit section: Porting BLE Bridge Project to LaunchPad">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This section shows some examples of changes needed to port an existing project from v2.1 to v2.2.
+</p><p>The following files need to be added:
+</p>
+<ul><li>Add SDI folder in the project</li>
+<li>Exclude Simple GATT Profile and add Serial Port Profile in the project</li></ul>
+<p><br />
+Note: Make sure to disable all displays since Launchpad does not include a display and the SDI uses the UART for sending data.
+</p><p>The following modifications has to be made:
+</p>
+<ul><li>Change definition of MRDY_PIN and SRDY_PIN to match the board file in sdi_config.h:</li></ul>
+<pre>#  elif defined(SDI_USE_UART)
+#    define MRDY_PIN Board_BUTTON0
+#    define SRDY_PIN Board_BUTTON1
+#  endif
+
+</pre>
+<ul><li>Add in new power drivers:</li></ul>
+<pre>#include &lt;ti/drivers/Power.h&gt;
+#include &lt;ti/drivers/power/PowerCC26XX.h&gt;
+</pre>
+<ul><li>Change definition names of power contraints:</li></ul>
+<pre>// set constraints for Standby and idle mode
+Power_setConstraint(PowerCC26XX_SB_DISALLOW);
+Power_setConstraint(PowerCC26XX_IDLE_PD_DISALLOW);
+</pre>
+<ul><li>Change definition of UART struct name:</li></ul>
+<pre>if (!UARTCharsAvail(((UARTCC26XX_HWAttrsV1 const *)(uartHandle-&gt;hwAttrs))-&gt;baseAddr))
+</pre>
+<p><br />
+</p>
+<h2><span id="Known_Issues_/_Workarounds_for_BLEv2.2.0"></span><span class="mw-headline" id="Known_Issues_.2F_Workarounds_for_BLEv2.2.0">Known Issues / Workarounds for BLEv2.2.0</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=18" title="Edit section: Known Issues / Workarounds for BLEv2.2.0">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Building protocol stack projects in CCS with TI Compiler v15.12.2.LTS results in linker error / build failure. This is fixed in the v15.12.3.LTS compiler update or by updating the project to use the TI Compiler v5.2.7. Details on how to update to TI Compiler v5.2.7 are provided in the SW Developer's Guide (SWRU393).</li>
+<li>SensorTag Application project fails to build on CCS when the project is copied to the Workspace. Workaround: Do not copy the project to the Workspace when importing the project -or- update the project with the procedure from this E2E <a rel="nofollow" class="external text" href="https://e2e.ti.com/support/wireless_connectivity/bluetooth_low_energy/f/538/t/525660">post</a>.</li>
+<li>Link order in CCS v6.1.x projects may be incorrect which may result in an incorrectly linked Application project. This may cause undefined behaviour at run time. To workaround this condition,the following procedure can be applied to the Application project:</li></ul>
+<ol><li>In the Application project, expand the TOOLS folder, right-click on 'ccs_linker_define.cmd' and select Exclude from Build</li>
+<li>Add linker search path <b>${ORG_PROJ_DIR}/../../ccs/config</b> to the Project Properties -&gt; ARM Linker -&gt; File Search Path as shown below <div class="center"><div class="floatnone"><a href="File_Ccs_linker_search_path.html" class="image" title="Image:ccs_linker_search_path.PNG"><img alt="Image:ccs_linker_search_path.PNG" src="https://processors.wiki.ti.com/images/a/ab/Ccs_linker_search_path.PNG" width="300" height="206" /></a></div></div></li>
+<li>Open the linker file, typically 'cc26xx_app.cmd', and add the line "-l ccs_linker_defines.cmd" (no quotes, lower case dash L) near the top of the file but before the MEMORY define. See below for reference. <div class="center"><div class="floatnone"><a href="File_Ccs_linker_include.html" class="image" title="Image:ccs_linker_include.PNG"><img alt="Image:ccs_linker_include.PNG" src="https://processors.wiki.ti.com/images/4/40/Ccs_linker_include.PNG" width="200" height="58" /></a></div></div></li></ol>
+<ul><li>SNV data may be lost following reset after <b>first time power up</b> when using OSAL_SNV=1 (default setting for stack projects). To apply the fix, edit nvocop.c in ble_sdk_2_02_00_31\src\components\services\src\nv\cc26xx and add {FF}; to the as shown in this <a rel="nofollow" class="external text" href="https://e2e.ti.com/support/wireless_connectivity/bluetooth_low_energy/f/538/p/530696/1942788#1942788">post</a> such that the NV_FLASH array is defined as follows:</li></ul>
+<p>const uint8 NV_FLASH[FLASH_PAGE_SIZE] = {0xFF};
+</p>
+<ul><li>Potential memory leak caused by using non-atomic Queue APIs that are not thread-safe in util.c. To apply the fix, edit util.c found in ble_sdk_2_02_00_31\src\common\cc26xx as shown in this <a rel="nofollow" class="external text" href="https://e2e.ti.com/support/wireless_connectivity/bluetooth_low_energy/f/538/p/544221/1994563#1994563">post</a>.</li>
+<li>Using "#pragma FUNCTION_OPTIONS(&lt;func name&gt;, "opt_level=X" ) in CCS to selectively deoptimize functions for debugging purposes can result in non functional application code. The work around for this is to set the whole project's optimization level to the desired level. Note, if additional problems appear, upgrade to newer TI compilers for debugging purposes. TI does not recommend releasing production code without optimizations.</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Porting_BLEv2.1.0_Projects_to_BLEv2.1.1">Porting BLEv2.1.0 Projects to BLEv2.1.1</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=19" title="Edit section: Porting BLEv2.1.0 Projects to BLEv2.1.1">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><br />The BLE-Stack v2.1.1 release is a maintenance release to the existing v2.1.0 release. Most v2.1.1 changes are incorporated in library form, therefore porting from v2.1.0 uses a simplified procedure. For porting earlier v2.0 projects, it is recommended to first port to v2.1.0, then follow the below instructions to incorporate the v2.1.1 changes. For a detailed list of the changes in v2.1.1, please refer to the release notes included in the BLE-Stack v2.1.1 SDK installer.
+<br />
+</p>
+<h2><span id="IAR_&amp;_CCS_Project_Porting_Directions"></span><span class="mw-headline" id="IAR_.26_CCS_Project_Porting_Directions">IAR &amp; CCS Project Porting Directions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=20" title="Edit section: IAR &amp; CCS Project Porting Directions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br /> 1. Move (or Copy) the project files from $2.1.0_INSTALL$\Projects\ble\$PROJECT$ to $INSTALL\Projects\ble\$PROJECT$ where $2.1.0_INSTALL$ is the top level installation directory of the v2.1.0 stack, $INSTALL$ is the top level installation directory of the 2.1.1 stack, and $PROJECT$ is your project folder. 
+<br /> 2. When porting from v2.1.0, the only source file required to be merged to a v2.1.1 based project is <b>$INSTALL$\Projects\ble\ICall\Application\bleUserConfig.c</b>. It can be accessed from the IDE in the Application project under the ICallBLE virtual folder. Under normal conditions, this file is not modified during project development. However, if you have made changes to bleUserConfig.c, merge your changes to the v2.1.1 bleUserConfig.c version.
+<br /> 3a. For IAR: Open the updated v2.1.1 project workspace from $PROJECT$\CC26xx\IAR. 
+<br /> 3b. For CCS: Import the Application and Stack projects from $PROJECT$\CC26xx\CCS into your workspace using Project--&gt;Import CCS Projects.
+<br /> 4. Rebuild &amp; save your project.
+<br />
+</p><p><br />
+</p>
+<h1><span class="mw-headline" id="Porting_BLEv2.0.0_Projects_to_BLEv2.1.0">Porting BLEv2.0.0 Projects to BLEv2.1.0</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=21" title="Edit section: Porting BLEv2.0.0 Projects to BLEv2.1.0">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<h2><span class="mw-headline" id="IAR_Project_Porting_Directions">IAR Project Porting Directions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=22" title="Edit section: IAR Project Porting Directions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br />1. Move (or Copy) the project files from $2.0.0_INSTALL$\Projects\ble\$PROJECT$ to $INSTALL\Projects\ble\$PROJECT$ where $2.0.0_INSTALL$ is the top level installation directory of the 2.0.0 stack, $INSTALL$ is the top level installation directory of the 2.1.0 stack, and  $PROJECT$ is your project folder.
+<br />2. If you modified any files from anywhere outside of the application folder, such as in the profiles at $2.1.0_INSTALL$\Projects\Profiles, you will need to merge your changes with the new 2.1.0 version.
+<br />3. Open your project (now in the 2.1.0 folder) with IAR &gt;= 7.40.2
+<br />4. When prompted, choose yes to convert for use with new IAR version.
+<br />5. The device information profile path has changed. If this is part of your project, remove the old file (devinfoservice.c) from the project (it will be in the PROFILES group). Then add the file from the correct path ($INSTALL\Projects\ble\Profiles\DevInfo\CC26xx\devinfoservice.c)
+<br />6. There are several files in the  $PROJECT$\Config folder which need to be updated for 2.1.0. The easiest way to do this is to delete this folder and copy the Config folder from the SimpleBLEPeripheral sample project ($INSTALL$\Projects\ble\SimpleBLEPeripheral\CC26xx\IAR\Config) for use.  Then, if there were any modifications to any of these files in the original 2.0.0 project, replicate the modifications here.
+<br />7. Similarly, the stack configuration file needs to be updated. The easiest way to do this is to replace the $PROJECT$\Stack\CC2640\buildConfig.opt file with $INSTALL\Projects\ble\SimpleBLEPeripheral\CC26xx\IAR\Stack\CC2640\buildConfig.opt. Then make any desired modifications.
+<br />8. The custom argument variables must be updated to use the new RTOS.  The easiest way to do this is to replace the 2.0.0 .custom_argvars file in $PROJECT$ with the .custom_argvars from the simpleBLEPeripheral project: $INSTALL\Projects\ble\SimpleBLEPeripheral\CC26xx\IAR\SimpleBLEPeripheral.custom_argvars). Close and re-open the IAR workspace after changing these variables.
+<br />9. Delete the $PROJECT$\Application\CC2640\configPkg and $PROJECT$\CC26xx\IAR\Config\src folders to remove any remnants of the old RTOS.
+<br />10. Compile and save your project.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="CCSProject_Porting_Directions">CCSProject Porting Directions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=23" title="Edit section: CCSProject Porting Directions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Import_the_Old_Project">Import the Old Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=24" title="Edit section: Import the Old Project">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>1. Move (or Copy) the project files from $2.0.0_INSTALL$\Projects\ble\$PROJECT$ to $INSTALL\Projects\ble\$PROJECT$ where $2.0.0_INSTALL$ is the top level installation directory of the 2.0.0 stack, $INSTALL$ is the top level installation directory of the 2.1.0 stack, and $PROJECT$ is your project folder.
+<br />2. If you modified any files from anywhere outside of the application folder, such as in the profiles at $2.1.0_INSTALL$\Projects\Profiles, you will need to merge your changes with the new 2.1.0 version. 
+<br />3. Using CCS 6.1.0, import the application and stack projects from $PROJECT$\CC26xx\CCS into your workspace using Project--&gt;Import CCS Projects.  The relevant project folder in your folder will be referred to as $WORKSPACE$.
+</p>
+<h3><span class="mw-headline" id="Application_Project_Modifications">Application Project Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=25" title="Edit section: Application Project Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>1. The device information profile path has changed. If this is part of your project, remove the old file (devinfoservice.c) from the project (it will be in the PROFILES group). Then add the file from the correct path ($INSTALL\Projects\ble\Profiles\DevInfo\CC26xx\devinfoservice.c)
+<br />2. There are several files in the $PROJECT$\CC6xx\CCS\Config folder which need to be updated for 2.1.0. The easiest way to do this is to delete this folder and copy the Config folder from the SimpleBLEPeripheral sample project ($INSTALL$\Projects\ble\SimpleBLEPeripheral\CC26xx\CCS\Config) for use. Then, if there were any modifications to any of these files in the original 2.0.0 project, replicate the modifications here. 
+<br />3. In the project properties, under Resource-&gt;Linked Resources in the Path Variables tab, update the following names:
+</p>
+<pre>CC26XXWARE = C:\ti\tirtos_simplelink_2_13_00_06\products\cc26xxware_2_21_01_15600
+TI_RTOS_DRIVERS_BASE = C:\ti\tirtos_simplelink_2_13_00_06\packages
+</pre>
+<p>4. Under General in the Main tab, select the TI v5.2.4 compiler
+<br />5. Under General in the RTSC tab, select the 2.13.0.06 TI-RTOS and choose version 3.31.1.33 of XDCTools from the drop down menu.  Then reselect ti.platforms.simplelink:CC2640F128 from the Platforms dropdown menu.
+<br />6. Under Build-&gt;ARM Compiler-&gt;Advanced Options-&gt;Predefined Symbols, remove the __TI_COMPILER_VERSION=1 define
+<br />7. Clean out the old RTOS by deleting the $PROJECT$\CC25xx\CCS\Config\src and $WORKSPACE$\FlashROM\configPkg folders if they exist.
+<br />8. Remove all uncommented lines from the ccsLinkerDefines.cmd and ccsCompilerDefines.bcfg files. These are located under the TOOLS folder.
+<br />9. Do not compile yet.
+</p>
+<h3><span class="mw-headline" id="Stack_Project_Modifications">Stack Project Modifications</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=26" title="Edit section: Stack Project Modifications">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>1. The stack configuration file needs to be updated. The easiest way to do this is to replace the $PROJECT$\CC26xx\IAR\Stack\CC2640\buildConfig.opt file with $INSTALL\Projects\ble\SimpleBLEPeripheral\CC26xx\IAR\Stack\CC2640\buildConfig.opt. Then make any desired modifications.
+<br />2. In the project properties, under Resource-&gt;Linked Resources in the Path Variables tab, update the following name:
+</p>
+<pre>CC26XXWARE = C:\ti\tirtos_simplelink_2_13_00_06\products\cc26xxware_2_21_01_15600
+</pre>
+<p>3. Delete the pwrmon.c and pwrmon.h files from the project. They can be found in HAL\Target\CC2650\Drivers
+<br />4. Under General in the Main tab, select the TI v5.2.4 compiler
+<br />5. Under Build-&gt;ARM Compiler-&gt;Advanced Options-&gt;Predefined Symbols, remove the __TI_COMPILER_VERSION=1 define
+<br />8. Remove all uncommented lines from the ccsLinkerDefines.cmd and ccsCompilerDefines.bcfg files. These are located under the TOOLS folder.
+</p>
+<h3><span class="mw-headline" id="Compiling_Steps">Compiling Steps</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=27" title="Edit section: Compiling Steps">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>1. Compile the Stack Project. If there is a Boundary error after the first compilation, compile again. See the Boundary Tool in the software developer's guide for more information.
+<br />2. Compile the Application Project.
+<br />3. Load the Application Project.
+<br />4. Load the Stack Project.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="API_Changes">API Changes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=28" title="Edit section: API Changes">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><br />1. The following array elements of structures defined in att.h have changed from uint8 to uint16:
+</p>
+<ul><li>numInfo</li>
+<li>len</li>
+<li>numPairs</li>
+<li>numHandles</li>
+<li>numGrps</li></ul>
+<p>2. The GAP_RegisterForHCIMsgs() command has changed to GAP_RegisterForMsgs().
+</p><p><br />3. The gattService_t structure has an additional encKeySize field:
+&lt;syntaxhighlight lang='c'&gt;
+typedef struct
+{
+</p>
+<pre> uint16 numAttrs; //!&lt; Number of attributes in attrs
+ uint8 encKeySize;//!&lt; Minimum encryption key size required by service (7-16 bytes)
+ 
+ /** Array of attribute records. 
+  *  NOTE: The list must start with a Service attribute followed by
+  *        all attributes associated with this Service attribute. 
+  */
+ gattAttribute_t *attrs;
+</pre>
+<p>} gattService_t;
+&lt;/syntaxhighlight&gt;
+Because of this, the GATTServApp_RegisterService() command has an additional encryption key size parameter:
+&lt;syntaxhighlight lang='c'&gt;
+bStatus_t GATTServApp_RegisterService( gattAttribute_t *pAttrs,
+</p>
+<pre>                                      uint16 numAttrs, uint8 encKeySize,
+                                      CONST gattServiceCBs_t *pServiceCBs )
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+4. The connection event callback command can now work with multiple connections. Therefore a connHandle parameter has been added:
+&lt;syntaxhighlight lang='c'&gt;
+hciStatus_t HCI_EXT_ConnEventNoticeCmd( uint16 connHandle, uint8 taskID, uint16 taskEvent );
+&lt;/syntaxhighlight&gt;
+5. The HCI_EXT_GetNumConnsCmd() command has been replaced with the HCI_EXT_GetConnInfoCmd() command. See the software developer's guide for more information.
+<br />6. A connection handle parameter has been added to the ggsAttrValueChange_t function type:
+&lt;syntaxhighlight lang='c'&gt;
+typedef void (*ggsAttrValueChange_t)( uint16 connHandle, uint8 attrId );
+&lt;/syntaxhighlight&gt;
+7. The read and write profile callback function types have been modified: the pLen and maxlen parameters have been changed from uint8 to uint16:
+&lt;syntaxhighlight lang='c'&gt;
+typedef bStatus_t (*pfnGATTReadAttrCB_t)( uint16 connHandle, gattAttribute_t *pAttr,
+</p>
+<pre>                                         uint8 *pValue, uint16 *pLen, uint16 offset,
+                                         uint16 maxLen, uint8 method );
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+&lt;syntaxhighlight lang='c'&gt;
+typedef bStatus_t (*pfnGATTWriteAttrCB_t)( uint16 connHandle, gattAttribute_t *pAttr,
+</p>
+<pre>                                          uint8 *pValue, uint16 len, uint16 offset,
+                                          uint8 method );
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+8. RSSI functionality has been moved from the GAPRole to the application. See the simpleBLEcentral project (and central GAPRole) for an example.
+</p>
+<h1><span class="mw-headline" id="Porting_Drivers_From_TI-RTOS_2.20_or_higher_To_TI-RTOS_2.18">Porting Drivers From TI-RTOS 2.20 or higher To TI-RTOS 2.18</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=29" title="Edit section: Porting Drivers From TI-RTOS 2.20 or higher To TI-RTOS 2.18">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p><br />The BLE-Stack v2.2 comes with tirtos_cc13xx_cc26xx_2_18_00_03 and all the software testing was done with this combination. Therefore, it's not recommended to change TI-RTOS version if you want to use BLE-Stack. Here we are providing a workaround for users who would like to use the addition drivers which release in tirtos_cc13xx_cc26xx_2_20_00_06 or later. <br />
+Please noted, here we are using simple_peripheral launchpad as example. You can use the same guide to port the drivers to work with different board files.
+<br />
+</p>
+<h2><span class="mw-headline" id="Steps_For_Importing_Drivers">Steps For Importing Drivers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=30" title="Edit section: Steps For Importing Drivers">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>1. Rename the PWM folder, driver files and board file folder in TI-RTOS 2.18(C:\ti\tirtos_cc13xx_cc26xx_2_18_00_03\products\tidrivers_cc13xx_cc26xx_2_16_01_13\packages\ti\drivers) to something different (optional, but recommended)<br /> 
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep1_1.html" class="image" title="Image:DriverPortingGuideStep1_1.PNG"><img alt="Image:DriverPortingGuideStep1_1.PNG" src="https://processors.wiki.ti.com/images/d/d0/DriverPortingGuideStep1_1.PNG" width="650" height="97" /></a></div> 
+<p><br /><br /><br /><br /><br />
+C:\ti\tirtos_cc13xx_cc26xx_2_18_00_03\products\tidrivers_cc13xx_cc26xx_2_16_01_13\packages\ti\boards<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep1_2.html" class="image" title="Image:DriverPortingGuideStep1_2.PNG"><img alt="Image:DriverPortingGuideStep1_2.PNG" src="https://processors.wiki.ti.com/images/b/b5/DriverPortingGuideStep1_2.PNG" width="650" height="40" /></a></div> 
+<p><br /><br /><br />
+2. Rename the board files in BLE stack(C:\ti\simplelink\ble_sdk_2_02_00_31\src\boards)<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep2_1.html" class="image" title="Image:DriverPortingGuideStep2_1.PNG"><img alt="Image:DriverPortingGuideStep2_1.PNG" src="https://processors.wiki.ti.com/images/6/60/DriverPortingGuideStep2_1.PNG" width="650" height="32" /></a></div> 
+<p><br /><br />
+3. Copy the needed driver and board files from TI-RTOS 2.20 over to TI-RTOS 2.18(we copied all the new drivers for convenience, so we don't need to do any more modification on the board files other than copy&amp;paste)<br />
+From C:\ti\tirtos_cc13xx_cc26xx_2_20_00_06\products\tidrivers_cc13xx_cc26xx_2_20_00_08\packages\ti\drivers to C:\ti\tirtos_cc13xx_cc26xx_2_18_00_03\products\tidrivers_cc13xx_cc26xx_2_16_01_13\packages\ti\drivers<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep3_1.html" class="image" title="Image:DriverPortingGuideStep3_1.PNG"><img alt="Image:DriverPortingGuideStep3_1.PNG" src="https://processors.wiki.ti.com/images/4/4f/DriverPortingGuideStep3_1.PNG" width="650" height="245" /></a></div>
+<p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+From C:\ti\tirtos_cc13xx_cc26xx_2_20_00_06\products\tidrivers_cc13xx_cc26xx_2_20_00_08\packages\ti\boards to C:\ti\tirtos_cc13xx_cc26xx_2_18_00_03\products\tidrivers_cc13xx_cc26xx_2_16_01_13\packages\ti\boards<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep4_1.html" class="image" title="Image:DriverPortingGuideStep4_1.PNG"><img alt="Image:DriverPortingGuideStep4_1.PNG" src="https://processors.wiki.ti.com/images/2/27/DriverPortingGuideStep4_1.PNG" width="650" height="27" /></a></div>
+<p><br /><br />
+4. Copy the needed board files from TI-RTOS 2.20 to BLE stack<br />
+From C:\ti\tirtos_cc13xx_cc26xx_2_20_00_06\products\tidrivers_cc13xx_cc26xx_2_20_00_08\packages\ti\boards to C:\ti\simplelink\ble_sdk_2_02_00_31\src\boards <br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep4_1.html" class="image" title="Image:DriverPortingGuideStep4_1.PNG"><img alt="Image:DriverPortingGuideStep4_1.PNG" src="https://processors.wiki.ti.com/images/2/27/DriverPortingGuideStep4_1.PNG" width="650" height="27" /></a></div> 
+<p><br /><br />
+Comment out the following line in the CC2650_LAUNCHXL.h(Only needed for the board files in BLE stack) <br /> &lt;syntaxhighlight lang='c'&gt; #define CC2650_LAUNCHXL &lt;/syntaxhighlight&gt; <br /> 
+</p>
+<h3><span class="mw-headline" id="Continue_For_CCS_User">Continue For CCS User</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=31" title="Edit section: Continue For CCS User">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>5. Import simple_peripheral to CCS, make sure the compiler version for both stack and app &gt;= 5.2.6 <br />
+6. Add virtual folders under the Drivers folder and drag the files into the new folders you made<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep6_1.html" class="image" title="Image:DriverPortingGuideStep6_1.PNG"><img alt="Image:DriverPortingGuideStep6_1.PNG" src="https://processors.wiki.ti.com/images/1/15/DriverPortingGuideStep6_1.PNG" width="300" height="221" /></a></div>
+<p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /> 
+7. Make sure the location of the files are relative to TI_RTOS_DRIVERS_BASE<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep7_1.html" class="image" title="Image:DriverPortingGuideStep7_1.PNG"><img alt="Image:DriverPortingGuideStep7_1.PNG" src="https://processors.wiki.ti.com/images/d/d7/DriverPortingGuideStep7_1.PNG" width="650" height="363" /></a></div>
+<p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+8. In file main.c, add the following code &lt;syntaxhighlight lang='c'&gt; #include &lt;ti/drivers/PWM.h&gt;; &lt;/syntaxhighlight&gt; <br />
+9. In int main(), add &lt;syntaxhighlight lang='c'&gt; PWM_init(); &lt;/syntaxhighlight&gt; <br />
+10. Delete the FlashROM folder in app, then build stack and application.<br />
+</p>
+<h3><span class="mw-headline" id="Continue_For_IAR_User">Continue For IAR User</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit&amp;section=32" title="Edit section: Continue For IAR User">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>5. Add virtual folders under the Drivers folder and drag the files into the new folders you made<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep5_1_IAR.html" class="image" title="Image:DriverPortingGuideStep5_1_IAR.PNG"><img alt="Image:DriverPortingGuideStep5_1_IAR.PNG" src="https://processors.wiki.ti.com/images/7/7e/DriverPortingGuideStep5_1_IAR.PNG" width="300" height="297" /></a></div>
+<p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />  
+6. Make sure the location of the files are relative to TI_RTOS_DRIVERS_BASE<br />
+</p>
+<div class="floatleft"><a href="File_DriverPortingGuideStep6_1_IAR.html" class="image" title="Image:DriverPortingGuideStep6_1_IAR.PNG"><img alt="Image:DriverPortingGuideStep6_1_IAR.PNG" src="https://processors.wiki.ti.com/images/d/de/DriverPortingGuideStep6_1_IAR.PNG" width="300" height="430" /></a></div>
+<p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />    
+7. In file main.c, add the following code &lt;syntaxhighlight lang='c'&gt; #include &lt;ti/drivers/PWM.h&gt;; &lt;/syntaxhighlight&gt; <br />
+8. In int main(), add &lt;syntaxhighlight lang='c'&gt; PWM_init(); &lt;/syntaxhighlight&gt; <br />
+9. Rebuild the cc2650lp_app<br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130202126
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.114 seconds
+Real time usage: 0.127 seconds
+Preprocessor visited node count: 208/1000000
+Preprocessor generated node count: 312/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1547/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:39322-0!canonical and timestamp 20201130202126 and revision id 234371
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>CC2640 Porting Projects</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>CC2640 Porting Projects</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>CC2640 Porting Projects</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>CC2640 Porting Projects</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>CC2640 Porting Projects</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>CC2640 Porting Projects</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>CC2640 Porting Projects</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>CC2640 Porting Projects</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>CC2640 Porting Projects</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;oldid=234371">https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;oldid=234371</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_Applications.html" title="Category:Applications">Applications</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=CC2640+Porting+Projects" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="CC2640_Porting_Projects.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:CC2640_Porting_Projects&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="CC2640_Porting_Projects.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/CC2640_Porting_Projects.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/CC2640_Porting_Projects.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;oldid=234371" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=CC2640_Porting_Projects&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 23 April 2018, at 18:43.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.114","walltime":"0.127","ppvisitednodes":{"value":208,"limit":1000000},"ppgeneratednodes":{"value":312,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":1547,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130202126","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":238});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/CC2640_Porting_Projects by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 05:18:14 GMT -->
+</html>

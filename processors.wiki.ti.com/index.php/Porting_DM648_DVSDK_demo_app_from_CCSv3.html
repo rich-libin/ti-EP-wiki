@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:39:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4 - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4","wgTitle":"Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4","wgCurRevisionId":37581,"wgRevisionId":37581,"wgArticleId":6181,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Code Composer Studio v4","DVEVM","Code Composer Studio v3","DVSDK","DM648"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4","wgRelevantArticleId":6181,"wgRequestId":"cd5d4203705b0d105cdcb8b4","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Porting_DM648_DVSDK_demo_app_from_CCSv3_3_to_CCSv4 rootpage-Porting_DM648_DVSDK_demo_app_from_CCSv3_3_to_CCSv4 skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Assumptions"><span class="tocnumber">2</span> <span class="toctext">Assumptions</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Component_Versions_Used"><span class="tocnumber">3</span> <span class="toctext">Component Versions Used</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Quick_Notice_about_RTSC_Projects_in_CCSv4"><span class="tocnumber">4</span> <span class="toctext">Quick Notice about RTSC Projects in CCSv4</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Creating_a_new_RTSC-based_Project"><span class="tocnumber">4.1</span> <span class="toctext">Creating a new RTSC-based Project</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Finishing_touches"><span class="tocnumber">5</span> <span class="toctext">Finishing touches</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Modifying_dm648_demo_ccsv4_configuration"><span class="tocnumber">5.1</span> <span class="toctext">Modifying dm648_demo_ccsv4_configuration</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Modifying_dm648_demo_ccsv4"><span class="tocnumber">5.2</span> <span class="toctext">Modifying dm648_demo_ccsv4</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Cleaning_up_the_Build_Warnings"><span class="tocnumber">5.2.1</span> <span class="toctext">Cleaning up the Build Warnings</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Troubleshooting"><span class="tocnumber">6</span> <span class="toctext">Troubleshooting</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#Additional_Information"><span class="tocnumber">6.1</span> <span class="toctext">Additional Information</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This article is intended to help port the dm648_demo from DVSDK 1.11.00.00, which was based on CCSv3.3, to CCSv4 (specifically v4.1.2). This article does not cover upgrading ALL RTSC components such as Codec Engine, etc., but only the necessary components XDC and XDAIS. 
+</p>
+<h2><span class="mw-headline" id="Assumptions">Assumptions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=2" title="Edit section: Assumptions">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This article assumes that a user has already installed the DVSDK v1.11.00.00, CCSv4 and the DM648 DVDP Board Support Package. To obtain the DVSDK please visit <a rel="nofollow" class="external text" href="http://software-dl.ti.com/dsps/dsps_registered_sw/sdo_sb/targetcontent/dvsdk/bios_dvsdk/1_11_00_00/exports/DM648_DVSDK_setupwin32_1_11_00_00.exe">here</a>. If you do not already own CCSv4 you can download an evaluation version <a href="Category_Code_Composer_Studio_v4.html" class="mw-redirect" title="Code Composer Studio v4">here</a>. The DM648 BSP is included in the CD provided with the DM648 DVDP. 
+</p><p>The dm648_demo project was built for use on the <a rel="nofollow" class="external text" href="http://focus.ti.com/docs/toolsw/folders/print/tmdsdvp648.html">DM648DVDP</a> evaluation board developed by <a rel="nofollow" class="external text" href="http://www.lyrtech.com/Products/DM648 evaluation module.php">Lyrtech</a>. As such, this project will require significant rework to be used on a custom platform. 
+</p><p>Further below the actual paths in the Windows file system will be replaced with something like &lt;dvsdk_install_dir&gt;. These should be substituted with the actual path in which that particular component is installed. The defaults for the three replacement paths used in this example are: 
+</p>
+<ul><li>&lt;dvsdk_install_dir&gt; = C:\dvsdk_1_11_00_00_DM648\</li>
+<li>&lt;ccsv4_install_dir&gt; = C:\Program Files\Texas Instruments</li>
+<li>&lt;dm648_demo_ccsv4_dir&gt; = C:\dvsdk_1_11_00_00_DM648\dm648_demo_ccsv4</li></ul>
+<h2><span class="mw-headline" id="Component_Versions_Used">Component Versions Used</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=3" title="Edit section: Component Versions Used">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>To build this project the below component versions are required. There is no guarantee that using a different platform version will create a functioning project. 
+</p>
+<ul><li>DSP/BIOS 5.41.02.14 (installed w/ CCS v4.1.2)</li>
+<li>Code Generation Tools v6.1.16 (installed w/ CCS v4.1.2)</li>
+<li>XDC Tools v3.16.02.32 (installed w/ CCS v4.1.2)</li>
+<li>XDAIS v6.25.01.08 (installed w/ CCS v4.1.2)</li>
+<li>BIOS Utils v1.00.02 (installed w/ DM648 DVSDK v1.11.00.00)</li>
+<li>Codec Engine v1.20.02 (installed w/ DM648 DVSDK v1.11.00.00)</li>
+<li>DM648 Codecs v1.10 (installed w/ DM648 DVSDK v1.11.00.00)</li>
+<li>EDMA3 Low-Level Driver v1.05.00 (installed w/ DM648 DVSDK v1.11.00.00)</li>
+<li>Framework Components v1.20.03 (installed w/ DM648 DVSDK v1.11.00.00)</li>
+<li>Network Developer's Kit v1.92.00.22 eval (installed w/ DM648 DVSDK v1.11.00.00)</li>
+<li>Platform Support Package v1.10.00 (installed w/ DM648 DVSDK v1.11.00.00)</li></ul>
+<h2><span class="mw-headline" id="Quick_Notice_about_RTSC_Projects_in_CCSv4">Quick Notice about RTSC Projects in CCSv4</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=4" title="Edit section: Quick Notice about RTSC Projects in CCSv4">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>CCSv4 treats RTSC projects differently than CCSv3.3. CCSv3.3 included all RTSC information inside of the application project whereas CCSv4 creates a separate dependency project for RTSC configuration. This is to allow for a common RTSC configuration to be easily transported to multiple projects without having to reconfigure repository directories, etc. As a result creating a new project is necessary. 
+</p>
+<h3><span class="mw-headline" id="Creating_a_new_RTSC-based_Project">Creating a new RTSC-based Project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=5" title="Edit section: Creating a new RTSC-based Project">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Unless otherwise specified in the steps below the default choices can be left as-is. 
+</p>
+<ol><li>To create a new project inside CCSv4 select File-&gt;New CCS Project</li>
+<li>Specify a project name and a location for the project directory. This example will assume the name dm648_demo_ccs4 (<b>click Next</b>) <div class="thumb tright"><div class="thumbinner" style="width:302px;"><a href="File_Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard1.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/c/ce/Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard1.jpg" width="300" height="322" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard1.html" class="internal" title="Enlarge"></a></div>CCS Application Project Settings</div></div></div></li>
+<li>Select Project Type: C6000 (<b>click Next</b>)</li>
+<li>Because the Referenced project does not yet exist <b>click Next</b> again</li>
+<li>The defaults inside the 'CCS Project Settings' page can change per machine so make sure they are as follows
+<dl><dd>Output type: Executable</dd>
+<dd>Device Variant: TMS320DM648</dd>
+<dd>Device Endianness: little</dd>
+<dd>Code Generation tools: TI v6.1.16</dd>
+<dd>Linker Command File: <i>leave blank</i></dd>
+<dd>Runtime Support Library: &lt;automatic&gt;</dd>
+<dd>Make certain to check the button next to Enable RTSC support (<b>click Next</b>)</dd>
+<dd></dd></dl></li>
+<li>Select 'Create a new RTSC Configuration project' in the 'Referenced RTSC Configuration' page</li>
+<li>Specify a different name and location of the RTSC Configuration Project if desired. This example assumes the default name dm648_demo_ccsv4_configuration (<b>click Next</b>)
+<dl><dd></dd></dl></li>
+<li>The RTSC Configuration Settings screen requires a number of changes <div class="thumb tright"><div class="thumbinner" style="width:302px;"><a href="File_Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard2.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/c/cd/Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard2.jpg" width="300" height="357" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard2.html" class="internal" title="Enlarge"></a></div>RTSC Configuration Project Settings</div></div></div></li>
+<li>Uncheck the boxes next to DSP/BIOS, Inter-processor Communication, and XDAIS</li>
+<li>Click Add..., then the add following repositories (this must be done one-by-one)
+<dl><dd>&lt;ccsv4_install_dir&gt;\bios_5_41_02_14\packages</dd>
+<dd>&lt;ccsv4_install_dir&gt;\xdais_6_25_01_08\packages</dd>
+<dd>&lt;dvsdk_install_dir&gt;\codec_engine_1_20_02\packages</dd>
+<dd>&lt;dvsdk_install_dir&gt;\ndk_1_92_00_22_eval\packages</dd>
+<dd>&lt;dvsdk_install_dir&gt;\biosutils_1_00_02\packages</dd>
+<dd>&lt;dvsdk_install_dir&gt;\examples\common\evmDM648</dd>
+<dd>&lt;dvsdk_install_dir&gt;\codec_engine_1_20_02\examples</dd>
+<dd>&lt;dvsdk_install_dir&gt;\codecs_1_10_evmDM648\packages-evaluation</dd>
+<dd>&lt;dvsdk_install_dir&gt;\edma3_lld_1_05_00\packages</dd>
+<dd>&lt;dvsdk_install_dir&gt;\framework_components_1_20_03\packages</dd>
+<dd>&lt;dvsdk_install_dir&gt;\pspdrivers_1_10_00\packages</dd></dl></li></ol>
+<ol><li>Specify the RTSC Platform as ti.platforms.evmDM648 and the RTSC Build-Profile as whole_program_debug (<b>click Next</b>)</li>
+<li><b>Click Finish</b></li></ol>
+<h2><span class="mw-headline" id="Finishing_touches">Finishing touches</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=6" title="Edit section: Finishing touches">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>At this point the Project Wizard will create two new projects called dm648_demo_ccsv4 and dm648_demo_ccsv4_configuration. The first is the application project which will contain all source, header and library files for the actual application code while the second contains RTSC component and BIOS configuration information. At this point a few more changes to each project are necessary in order to build properly. 
+</p>
+<h3><span class="mw-headline" id="Modifying_dm648_demo_ccsv4_configuration">Modifying dm648_demo_ccsv4_configuration</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=7" title="Edit section: Modifying dm648 demo ccsv4 configuration">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Right click on the project dm648_demo_ccsv4_configuration and select <i>Add files to project...</i>. Search for the original dm648_demo project folder in the &lt;dvsdk_install_dir&gt; and add the files dm648_demo.cfg and dm648_demo.tcf. 
+</p><p>Next, right click on the dm648_demo_ccsv4_configuration project in the file listing and select Build Properties. Under XDCtools-&gt;Advanced Options check the box next to <i>Read infile.tcf in addition to infile.cfg (--tcf)</i>. This tells the RTSC builder to include the dm648_demo.tcf file in the build process. 
+</p><p>Because the DVSDK uses older versions of some of the RTSC products add the line <i>ti.rtdx</i> in the field <i>Exclude packages from compatibility checking (-x)</i>. This is because the BIOSUtils included with the DVSDK was built with an older version of DSP/BIOS. <b>Click OK</b>.
+</p>
+<h3><span class="mw-headline" id="Modifying_dm648_demo_ccsv4">Modifying dm648_demo_ccsv4</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=8" title="Edit section: Modifying dm648 demo ccsv4">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Copy the \source and \include folders from the original dm648_demo_0_92_04 folder over to the dm648_demo_ccsv4 project folder. The files app_block_compositor.c, app_block_template.c and app_template.c should be either excluded from the build or deleted from the source folder as they are not used. 
+</p><p>Next, right click on the dm648_demo_ccsv4 project and select Build Properties. Under C6000 Compiler-&gt;Include Options add the following paths:
+</p>
+<ul><li>&lt;dvsdk_install_dir&gt;\ndk_1_92_00_22_eval\packages\ti\ndk\inc</li>
+<li>&lt;dm648_demo_ccsv4_dir&gt;\include</li></ul>
+<p>Under C6000 Compiler-&gt;Predefined Symbols add <i>CHIP_DM648</i> under Pre-Define NAME.(<b>click OK</b>)
+</p><p>Right click the project and select <i>Add Files to Project...</i> and add the following files: 
+</p>
+<ol><li>From the &lt;dvsdk_install_dir&gt;\ndk_1_92_00_22_eval\packages\ti\ndk\lib\hal\evmdm648 folder add
+<dl><dd>hal_eth_dm648.lib</dd>
+<dd></dd></dl></li>
+<li>From the &lt;dvsdk_install_dir&gt;\ndk_1_92_00_22_eval\packages\ti\ndk\lib\c64plus folder add
+<dl><dd>netctrl.lib</dd>
+<dd>nettool.lib</dd>
+<dd>os.lib</dd>
+<dd>stack.lib</dd>
+<dd>miniPrintf.lib</dd>
+<dd></dd></dl></li>
+<li>From the &lt;dvsdk_install_dir&gt;\ndk_1_92_00_22_eval\packages\ti\ndk\lib\c64plus\hal folder add
+<dl><dd>hal_ser_stub.lib</dd>
+<dd>hal_timer_bios.lib</dd>
+<dd>hal_userled_stub.lib</dd></dl></li></ol>
+<p>At this point the project should build successfully with a number of build warnings. This is because the project was built in CCSv3.3 where the <i>--diag_warning=225</i> compiler switch was not used by default. This switch tells the compiler to turn the remarks for this specific number (function declared implicitly) into warnings. 
+</p>
+<h4><span class="mw-headline" id="Cleaning_up_the_Build_Warnings">Cleaning up the Build Warnings</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=9" title="Edit section: Cleaning up the Build Warnings">edit</a><span class="mw-editsection-bracket">]</span></span></h4><p>
+These implicitly declared function warnings should be cleared up as they could cause issues with run-time functionality. A number of them should be related to the function <code>CLK_getltime()</code>. </p><div class="thumb tright"><div class="thumbinner" style="width:302px;"><a href="File_Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard3.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/2/22/Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard3.jpg" width="300" height="211" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="File_Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4_wizard3.html" class="internal" title="Enlarge"></a></div>Finished project!</div></div></div>
+<ul><li>app_block_speech_decode.c, app_block_speech_encode.c, app_block_video_compositor.c and app_block_video_decode.c must be modified with <i>#include &lt;clk.h&gt;</i> to eliminate the warnings pertaining to <code>CLK_getltime()</code>.</li>
+<li>app_main.c must be modified with <i>#include &lt;ti/sdo/ce/CERuntime.h&gt;</i> to eliminate the warning for the function call <code>CERuntime_init()</code>.</li>
+<li>app_ndk.c and app_rpcs.c must be modified with <i>#include "app_i2c.h"</i> to eliminate the warning for the calls to <code>APP_I2C_writeLeds()</code>.</li>
+<li>app_rpcs.c must be modified with <i>extern int c_int00();</i> to eliminate the warning pertaining to that call.</li></ul>
+<h2><span class="mw-headline" id="Troubleshooting">Troubleshooting</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=10" title="Edit section: Troubleshooting">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>If the project fails to run due to an issue with I2C make sure the .ccxml file is including the DM648 DVDP GEL file (found in C:\Lyrtech\EVMDM648\gel by default). Otherwise the <code>LOCAL_mainTskFxn()</code> inside app_main.c will fail in the <code>APP_I2C_readSwitches()</code> call on line 307. Inside that function is a call into the BIOS GIO layer which will return a -12 (<code>IOM_EINUSE</code>).  Allowing the GEL script to initialize the board will prevent this issue from occurring.
+</p>
+<h3><span class="mw-headline" id="Additional_Information">Additional Information</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit&amp;section=11" title="Edit section: Additional Information">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Some older versions of the DVSDK required a predefined symbol <i>CPSW3G_OSC_FREQUENCY_62_5MHZ</i> or <i>CPSW3G_OSC_FREQUENCY_125MHZ</i> to specify which crystal was used for the 3PSW peripheral. The earliest DM648 boards used a 125MHz crystal where as current and several older board revisions used a 62.5MHz crystal. If using an older DVSDK and/or board double check the crystal value and add the proper define to the Project Build Properties-&gt;C6000 Compiler-&gt;Predefined Symbols under Pre-Define NAME.</li></ul>
+<ul><li>Some older versions of the DVSDK may have additional build warnings pertaining to implicitly defined functions.
+<ul><li>The app_block_audio_decode.c and app_block_audio_encode.c files may also require the statement <i>#include &lt;clk.h&gt;</i></li>
+<li>The app_block_control.c and app_main.c files may also require the statement <i>#include "app_i2c.h"</i></li>
+<li>The file app_block_video_input.h may have a couple of typos related to functions where INPUT is spelled INPUPT</li></ul></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130084053
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.055 seconds
+Real time usage: 0.058 seconds
+Preprocessor visited node count: 42/1000000
+Preprocessor generated node count: 48/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:6181-0!canonical and timestamp 20201130084053 and revision id 37581
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Porting DM648 DVSDK demo app from CCSv3.3 to CCSv4</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;oldid=37581">https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;oldid=37581</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Code_Composer_Studio_v4.html" title="Category:Code Composer Studio v4">Code Composer Studio v4</a></li><li><a href="Category_DVEVM.html" title="Category:DVEVM">DVEVM</a></li><li><a href="Category_Code_Composer_Studio_v3.html" title="Category:Code Composer Studio v3">Code Composer Studio v3</a></li><li><a href="Category_DVSDK.html" title="Category:DVSDK">DVSDK</a></li><li><a href="Category_DM648.html" title="Category:DM648">DM648</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Porting+DM648+DVSDK+demo+app+from+CCSv3.3+to+CCSv4" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Porting_DM648_DVSDK_demo_app_from_CCSv3.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk"><span><a href="Talk_Porting_DM648_DVSDK_demo_app_from_CCSv3.html" rel="discussion" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Porting_DM648_DVSDK_demo_app_from_CCSv3.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Porting_DM648_DVSDK_demo_app_from_CCSv3.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Porting_DM648_DVSDK_demo_app_from_CCSv3.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;oldid=37581" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 27 July 2010, at 12:51.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.055","walltime":"0.058","ppvisitednodes":{"value":42,"limit":1000000},"ppgeneratednodes":{"value":48,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130084053","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":225});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_DM648_DVSDK_demo_app_from_CCSv3.3_to_CCSv4 by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 04:39:16 GMT -->
+</html>

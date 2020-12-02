@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Debugging_AM335x_Suspend-Resume_Issues by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 11:05:00 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Debugging AM335x Suspend-Resume Issues - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Debugging_AM335x_Suspend-Resume_Issues","wgTitle":"Debugging AM335x Suspend-Resume Issues","wgCurRevisionId":232717,"wgRevisionId":232717,"wgArticleId":40376,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["AM335x Processors"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Debugging_AM335x_Suspend-Resume_Issues","wgRelevantArticleId":40376,"wgRequestId":"b0a44e8497623e8533a7e082","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Debugging_AM335x_Suspend-Resume_Issues rootpage-Debugging_AM335x_Suspend-Resume_Issues skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Debugging AM335x Suspend-Resume Issues</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Hardware_Setup"><span class="tocnumber">2</span> <span class="toctext">Hardware Setup</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Software"><span class="tocnumber">3</span> <span class="toctext">Software</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Configuring_the_I.2FO_values_for_DeepSleep0"><span class="tocnumber">3.1</span> <span class="toctext">Configuring the I/O values for DeepSleep0</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#VTT_considerations"><span class="tocnumber">3.2</span> <span class="toctext">VTT considerations</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Controlling_the_Power_Management_IC_during_DeepSleep0"><span class="tocnumber">3.3</span> <span class="toctext">Controlling the Power Management IC during DeepSleep0</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Patches_for_Sitara_SDK_6.00"><span class="tocnumber">3.4</span> <span class="toctext">Patches for Sitara SDK 6.00</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#Beagle_Bone_Black_Suspend.2FResume_Fix"><span class="tocnumber">3.4.1</span> <span class="toctext">Beagle Bone Black Suspend/Resume Fix</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#Patch_for_Processor_SDK_1.00"><span class="tocnumber">3.5</span> <span class="toctext">Patch for Processor SDK 1.00</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Patch_for_Processor_SDK_2.00"><span class="tocnumber">3.6</span> <span class="toctext">Patch for Processor SDK 2.00</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Patch_for_Processor_SDK_3.00"><span class="tocnumber">3.7</span> <span class="toctext">Patch for Processor SDK 3.00</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Validating_Suspend.2FResume"><span class="tocnumber">4</span> <span class="toctext">Validating Suspend/Resume</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Verifying_all_domains_transitioned"><span class="tocnumber">4.1</span> <span class="toctext">Verifying all domains transitioned</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Verifying_the_I.2FO_State"><span class="tocnumber">4.2</span> <span class="toctext">Verifying the I/O State</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Finding_Underlying_Issues"><span class="tocnumber">5</span> <span class="toctext">Finding Underlying Issues</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="#Investigating_a_mystery_hang_using_no_console_suspend"><span class="tocnumber">5.1</span> <span class="toctext">Investigating a mystery hang using no console_suspend</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Inspecting_the_SoC_state_immediately_prior_to_entering_DeepSleep0"><span class="tocnumber">5.2</span> <span class="toctext">Inspecting the SoC state immediately prior to entering DeepSleep0</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#Downloading_the_Power_Management_Firmware"><span class="tocnumber">5.2.1</span> <span class="toctext">Downloading the Power Management Firmware</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Building.2FEditing_the_Code"><span class="tocnumber">5.2.2</span> <span class="toctext">Building/Editing the Code</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#M3_Firmware_Binaries_.28with_jtag_spin_loop.29"><span class="tocnumber">5.2.3</span> <span class="toctext">M3 Firmware Binaries (with jtag spin loop)</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Connecting_to_the_M3_during_suspend"><span class="tocnumber">5.2.4</span> <span class="toctext">Connecting to the M3 during suspend</span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#Validating_the_State_of_the_DDR_Bus"><span class="tocnumber">5.2.5</span> <span class="toctext">Validating the State of the DDR Bus</span></a></li>
+<li class="toclevel-3 tocsection-23"><a href="#Checking_the_state_of_the_power_domains_and_clocks"><span class="tocnumber">5.2.6</span> <span class="toctext">Checking the state of the power domains and clocks</span></a></li>
+<li class="toclevel-3 tocsection-24"><a href="#Finish_Suspend.2FResume_with_JTAG"><span class="tocnumber">5.2.7</span> <span class="toctext">Finish Suspend/Resume with JTAG</span></a></li>
+<li class="toclevel-3 tocsection-25"><a href="#Stepping_through_C_Code_-_Load_Symbols"><span class="tocnumber">5.2.8</span> <span class="toctext">Stepping through C Code - Load Symbols</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-26"><a href="#Investigating_a_failed_resume"><span class="tocnumber">5.3</span> <span class="toctext">Investigating a failed resume</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-27"><a href="#Video_Tutorials"><span class="tocnumber">6</span> <span class="toctext">Video Tutorials</span></a>
+<ul>
+<li class="toclevel-2 tocsection-28"><a href="#Successful_suspend.2Fresume"><span class="tocnumber">6.1</span> <span class="toctext">Successful suspend/resume</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Failed_suspend.2Fresume"><span class="tocnumber">6.2</span> <span class="toctext">Failed suspend/resume</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Finding_the_root_cause_of_a_failed_suspend"><span class="tocnumber">6.3</span> <span class="toctext">Finding the root cause of a failed suspend</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-31"><a href="#Other_Resources"><span class="tocnumber">7</span> <span class="toctext">Other Resources</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This page is geared toward Linux developers using the AM335x family of embedded processors.  Many of the topics contained in the page, however, will still apply to users of other operating systems.
+</p><p>The goal of this page is to give users some insight into common issues they might bump into, as well as tools to help identify issues.
+</p>
+<h2><span class="mw-headline" id="Hardware_Setup">Hardware Setup</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=2" title="Edit section: Hardware Setup">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>First and foremost you must be certain that your hardware is configured appropriately.  In general:
+</p>
+<ul><li>Consult the data manual for a general diagram of how the memory should be connected to the AM335x.</li>
+<li>When using a single 16-bit external memory device, there is no need for VTT termination for the address/control lines.  VTT termination adds additional cost and complexity to the board, so if you are only using a single 16-bit memory then you should <b>not</b> use VTT termination.</li>
+<li>If you're using dual 8-bit memories with VTT termination, pay very careful attention to the terminations, i.e. some signals get pulled to VTT while others are pulled to VDDS_DDR.</li>
+<li>If using VTT termination and want to control the LDO (TPS51200 or equivalent) then you must select a pin from GPIO bank 0.</li>
+<li>A pull-up on DDR_RESETn is <b>not</b> recommended since we want reset to be asserted (low) during power-up.</li>
+<li>Since most peripherals are turned off during DeepSleep0, it is necessary to specify the state of each and every pin associated with the PER domain.  There is a very helpful spreadsheet focusing on this topic on this wiki page: <a href="Optimizing_AM335x_IO_Power_in_DeepSleep0.html" title="Optimizing AM335x IO Power in DeepSleep0">Optimizing AM335x IO Power in DeepSleep0</a></li>
+<li>Any GPIO wakeup sources must utilize bank 0 of the GPIO</li>
+<li>For your main clock (e.g. 24 MHz, etc.) you can use either a crystal or a LVCMOS square wave clock. There is a power benefit to using a crystal because there is hardware inside the chip that can shutoff the crystal entirely during DeepSleep0. When using a square wave clock there is unfortunately no mechanism for automatically turning the clock off and on, which results in additional current consumption.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Software">Software</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=3" title="Edit section: Software">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="Configuring_the_I/O_values_for_DeepSleep0"></span><span class="mw-headline" id="Configuring_the_I.2FO_values_for_DeepSleep0">Configuring the I/O values for DeepSleep0</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=4" title="Edit section: Configuring the I/O values for DeepSleep0">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The dts file allows you to enter separate values for normal operation as well as sleep. The actual run-time change is driver dependent.  There is a call to pinctrl_pm_select_sleep_state that is usually in a suspend handler within the driver.  It is generally the last thing done before sleep.  Therefore the IP should be ready to be shut off and not doing anything in preparation of having its clocks disabled.
+</p><p>As a general note, the mux mode does NOT need to be changed for DS0.  A different mux mode needs to be chosen only in the case where the spreadsheet from <a href="Optimizing_AM335x_IO_Power_in_DeepSleep0.html" title="Optimizing AM335x IO Power in DeepSleep0">Optimizing AM335x IO Power in DeepSleep0</a> dictates that a mux change is needed.  In these cases you should use the spreadsheet to find a mux mode that it "likes" in order to achieve the necessary state on the pin.  Changing the mux mode does not reduce power consumption, so there's not a general need to do it.  The only reason to do it is in cases where there is a conflict, e.g. the pin drives low during DS0 but you need to have it high.  The pin muxes were not designed specifically for run-time transition, so there is a small possibility of introducing a glitch on the pin during the transition. So in general changing the muxes can/should be avoided.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="VTT_considerations">VTT considerations</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=5" title="Edit section: VTT considerations">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<dl><dd>SDK 6.00
+<ul><li>VTT_toggle gpio is hardcoded to GPIO0_7 in sleep33xx.S line: 262. Though it uses the evm_id to enable this feature.</li></ul></dd>
+<dd>Processor SDK 1.00 and later
+<ul><li>See arch/arm/boot/dts/am335x-evmsk.dts for reference.  Look for the "wkup_m3" entry.</li></ul></dd></dl>
+<h3><span class="mw-headline" id="Controlling_the_Power_Management_IC_during_DeepSleep0">Controlling the Power Management IC during DeepSleep0</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=6" title="Edit section: Controlling the Power Management IC during DeepSleep0">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Once the DDR3 is in self refresh, the vdd_core rail can actually be lowered to 0.95V to save even more power.  This can be achieved through the "scale-data.bin" files that are part of the firmware.
+</p><p>More in depth documentation can be found at <a href="Linux_Core_Power_Management_User%27s_Guide.html#Deep_Sleep_Voltage_Scaling" class="mw-redirect" title="Linux Core Power Management User&#39;s Guide">Linux Core Power Management User's Guide#Deep_Sleep_Voltage_Scaling</a>
+</p>
+<h3><span class="mw-headline" id="Patches_for_Sitara_SDK_6.00">Patches for Sitara SDK 6.00</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=7" title="Edit section: Patches for Sitara SDK 6.00">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<h4><span id="Beagle_Bone_Black_Suspend/Resume_Fix"></span><span class="mw-headline" id="Beagle_Bone_Black_Suspend.2FResume_Fix">Beagle Bone Black Suspend/Resume Fix</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=8" title="Edit section: Beagle Bone Black Suspend/Resume Fix">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<pre>Patch to fix suspend/resume for BeagleBone Black
+
+diff --git a/arch/arm/mach-omap2/sleep33xx.S b/arch/arm/mach-omap2/sleep33xx.S
+index 1ee0b1a..8e4aa19 100644
+--- a/arch/arm/mach-omap2/sleep33xx.S
++++ b/arch/arm/mach-omap2/sleep33xx.S
+
+@@ -789,6 +789,10 @@ sdram_ref_ctrl:
+
+        str     r4, [r3, #EMIF4_0_SDRAM_REF_CTRL_SHADOW]
+
+pmcr:
+        ldr     r4, emif_pmcr_val
++       bic     r4, r4, #0x0700
++       orr     r4, r4, #0x0200
++       str     r4, [r3, #EMIF4_0_SDRAM_MGMT_CTRL]
++       bic     r4, r4, #0x0700
+        str     r4, [r3, #EMIF4_0_SDRAM_MGMT_CTRL]
+
+pmcr_shdw:
+        ldr     r4, emif_pmcr_shdw_val
+</pre>
+<h3><span class="mw-headline" id="Patch_for_Processor_SDK_1.00">Patch for Processor SDK 1.00</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=9" title="Edit section: Patch for Processor SDK 1.00">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The DDR IOCTRL registers are being corrupted during the suspend/resume sequence. The following patch introduces code to save/restore those registers during a suspend/resume sequence.  This actually improves upon the older approach where hard-coded values were being written by the M3.  With this new patch, customers with customized IOCTRL values (i.e. based on IBIS analysis, etc.) will have their values preserved.
+</p><p><a rel="nofollow" class="external text" href="https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/791/0001_2D00_CM3_2D00_ddr_2D00_Split_2D00_335x_2D00_and_2D00_437x_2D00_ddr_2D00_io_2D00_ctrl_2D00_handling.patch">0001-CM3-ddr-Split-335x-and-437x-ddr-io-ctrl-handling.patch</a>
+</p>
+<h3><span class="mw-headline" id="Patch_for_Processor_SDK_2.00">Patch for Processor SDK 2.00</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=10" title="Edit section: Patch for Processor SDK 2.00">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Processor SDK 2.00.00 through 2.00.02 all use the same patch as Processor SDK 1.00:
+</p><p><a rel="nofollow" class="external text" href="https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/791/0001_2D00_CM3_2D00_ddr_2D00_Split_2D00_335x_2D00_and_2D00_437x_2D00_ddr_2D00_io_2D00_ctrl_2D00_handling.patch">0001-CM3-ddr-Split-335x-and-437x-ddr-io-ctrl-handling.patch</a>
+</p>
+<h3><span class="mw-headline" id="Patch_for_Processor_SDK_3.00">Patch for Processor SDK 3.00</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=11" title="Edit section: Patch for Processor SDK 3.00">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>This resolution to this issue ("Split 335x and 437x ddr io ctrl handling") is part of Proc SDK 3.01.  Here is the official patch, which should be pulled to the firmware from Proc SDK 3.00:
+</p><p><a rel="nofollow" class="external free" href="http://git.ti.com/cgit/cgit.cgi/processor-firmware/ti-amx3-cm3-pm-firmware.git/patch/?id=97c2c32d0bc8ca0254710dcb5df055aa9a569ae6">http://git.ti.com/cgit/cgit.cgi/processor-firmware/ti-amx3-cm3-pm-firmware.git/patch/?id=97c2c32d0bc8ca0254710dcb5df055aa9a569ae6</a>
+</p><p>Alternatively, just grab the binary from Proc SDK 3.01.
+</p>
+<h2><span id="Validating_Suspend/Resume"></span><span class="mw-headline" id="Validating_Suspend.2FResume">Validating Suspend/Resume</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=12" title="Edit section: Validating Suspend/Resume">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>There are two main things to validate:
+</p>
+<ol><li>That all of the domains powered down as expected.</li>
+<li>That the IO values correlate with your spreadsheet.</li></ol>
+<h3><span class="mw-headline" id="Verifying_all_domains_transitioned">Verifying all domains transitioned</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=13" title="Edit section: Verifying all domains transitioned">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>When you begin the suspend sequence you see something like this:
+</p>
+<pre>root@am335x-evm:~# echo mem &gt; /sys/power/state
+[ 3394.834101] PM: Syncing filesystems ... done.
+[ 3395.466312] Freezing user space processes ... (elapsed 0.002 seconds) done.
+[ 3395.476099] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+[ 3395.485132] Suspending console(s) (use no_console_suspend to debug)
+</pre>
+<p>It's actually during resume that you can see whether or not all the power domains transitioned as expected.  After hitting a key on the console to resume you will see something like this in the case of a <b>successful</b> suspend/resume sequence:
+</p>
+<pre>[ 3395.628781] PM: suspend of devices complete after 136.014 msecs
+[ 3395.631267] PM: late suspend of devices complete after 2.446 msecs
+[ 3395.634411] PM: noirq suspend of devices complete after 3.097 msecs
+<span style="color:#00B000">[ 3395.634427] PM: Successfully put all powerdomains to target state</span>
+[ 3395.634427] PM: Wakeup source UART
+[ 3395.668907] PM: noirq resume of devices complete after 34.296 msecs
+[ 3395.671091] PM: early resume of devices complete after 1.911 msecs
+[ 3395.672008] net eth0: initializing cpsw version 1.12 (0)
+[ 3395.753887] net eth0: phy found&#160;: id is&#160;: 0x4dd074
+[ 3395.754026] libphy: PHY 4a101000.mdio:01 not found
+[ 3395.754044] net eth0: phy 4a101000.mdio:01 not found on slave 1
+[ 3396.103275] PM: resume of devices complete after 432.127 msecs
+[ 3396.172099] Restarting tasks ... done.
+</pre>
+<p>If you get the message in green above, then things appear to be in good shape.   In the case of a <b>failed</b> suspend/resume sequence, it will look like this:
+</p>
+<pre>root@am335x-evm:~# echo mem &gt; /sys/power/state
+[  615.163344] PM: Syncing filesystems ... done.
+[  615.176086] Freezing user space processes ... (elapsed 0.001 seconds) done.
+[  615.185179] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+[  615.194341] Suspending console(s) (use no_console_suspend to debug)
+[  615.319638] PM: suspend of devices complete after 117.927 msecs
+[  615.321581] PM: late suspend of devices complete after 1.905 msecs
+[  615.324047] PM: noirq suspend of devices complete after 2.423 msecs
+<span style="color:#ff0000">[  615.324064] PM: Could not transition all powerdomains to target state</span>
+[  615.324064] PM: Wakeup source UART
+[  615.342318] PM: noirq resume of devices complete after 18.079 msecs
+[  615.343951] PM: early resume of devices complete after 1.390 msecs
+[  615.344757] net eth0: initializing cpsw version 1.12 (0)
+[  615.347859] net eth0: phy found&#160;: id is&#160;: 0x7c0f1
+[  615.347975] libphy: PHY 4a101000.mdio:01 not found
+[  615.347992] net eth0: phy 4a101000.mdio:01 not found on slave 1
+[  615.692217] PM: resume of devices complete after 348.214 msecs
+[  615.763381] Restarting tasks ... done.
+</pre>
+<p>In the case all power domains did not transition you will need to use JTAG to determine which power domain and clocks are still alive.  Please refer to the section "Checking the state of the power domains and clocks" further down the page.  A script has been developed to make this job much easier.
+</p>
+<h3><span id="Verifying_the_I/O_State"></span><span class="mw-headline" id="Verifying_the_I.2FO_State">Verifying the I/O State</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=14" title="Edit section: Verifying the I/O State">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The other major place for power consumption to occur is with the I/Os.  If for example, an external device is driving an I/O pin high, but the internal pull-down is configured, then you are going to have constant leakage on that pin.  Hopefully you have gotten this all correct when filling out the spreadsheet from <a href="Optimizing_AM335x_IO_Power_in_DeepSleep0.html" title="Optimizing AM335x IO Power in DeepSleep0">Optimizing AM335x IO Power in DeepSleep0</a>.  And furthermore, hopefully everything has been entered correctly into the device tree so that the pins are in the proper state.
+</p><p>More often than not, given so many pins, there are a few mistakes lurking...  To find the mistakes the best approach is to <i>measure</i> each pin with a multimeter and record the corresponding voltage in Column U of the spreadsheet.  Do they all match the expected state?  If they don't match, or you have an in-between level then you need to revisit that particular pin.  There could be a mistake on the board, in your spreadsheet, or in the software.  These mistakes all have a cumulative impact.
+</p><p><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> Floating pins consume significant current.  For any pins where you are <b>disabling</b> the internal pull during DeepSleep0 you need to be <i>absolutely sure</i> that the pin is being driven to a known state by an external device.  When probing a floating pin with a multi-meter, the ~1Mohm impedance to ground is often sufficient to pull a floating pin low and hide the fact that you have a floating pin.
+</p>
+<h2><span class="mw-headline" id="Finding_Underlying_Issues">Finding Underlying Issues</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=15" title="Edit section: Finding Underlying Issues">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Investigating_a_mystery_hang_using_no_console_suspend">Investigating a mystery hang using no console_suspend</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=16" title="Edit section: Investigating a mystery hang using no console suspend">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>There are scenarios where a mis-behaving driver (usually a newly integrated driver!) can introduce issues.  If the crash happens while the UART is disabled, you won't see any of the output.  One method of checking for this type of issue by setting console_suspend to "no":
+</p>
+<pre>echo no &gt; /sys/module/printk/parameters/console_suspend
+</pre>
+<p><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> With this configuration, the console cannot be used as a wakeup source!<br />
+<br />
+So for example, on PG2.1 silicon you can use the RTC as a wakeup source (broken on PG1.0).  The following command will use RTC to wake back up in 10 seconds:
+</p>
+<pre>rtcwake -d /dev/rtc0 -m mem -s 10
+</pre>
+<p>Alternatively you could use a GPIO bank 0 wakeup, etc.  In this way, if a driver crashes during the suspend/resume sequence, you should be able to see the kernel panic, which will help you track down the issue.
+</p>
+<h3><span class="mw-headline" id="Inspecting_the_SoC_state_immediately_prior_to_entering_DeepSleep0">Inspecting the SoC state immediately prior to entering DeepSleep0</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=17" title="Edit section: Inspecting the SoC state immediately prior to entering DeepSleep0">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>One of the main difficulties of debugging issues pertaining to DeepSleep0 is that you have limited visibility once everything (or nearly everything) is turned off! When entering DeepSleep0, the Cortex A8 will turn off many clocks but the final steps of turning off the various power domains is handled by the wakeup controller (i.e. Cortex M3).  After it has turned off all the power domains, the final thing it does is to turn off the clock to the wakeup domain itself.  Once that clock is turned off you no longer have JTAG connectivity.
+</p><p><b>The main goal of this particular section is to enable you to connect to the M3 at the point <i>right after</i> the M3 has attempted to turn off all the power domains, but <i>right before</i> the wakeup clock is turned off such that you can still use JTAG.</b>  So in order to do this, we will need to modify the power management firmware to put a spin loop at the place where we want to connect with JTAG.
+</p>
+<h4><span class="mw-headline" id="Downloading_the_Power_Management_Firmware">Downloading the Power Management Firmware</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=18" title="Edit section: Downloading the Power Management Firmware">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>If you look in the software manifest for a Linux SDK, there is a line that tells the corresponding firmware version.  For example, in Processor SDK 2.00, it mentions amx3-cm3 version 1.9.1 from <a rel="nofollow" class="external free" href="git://git.ti.com/ti-cm3-pm-firmware/amx3-cm3.git;protocol=git;branch=ti-v4.1.y">git://git.ti.com/ti-cm3-pm-firmware/amx3-cm3.git;protocol=git;branch=ti-v4.1.y</a>.  So you can do:
+</p>
+<pre>mkdir ~/git-clones
+cd ~/git-clones
+git clone <a rel="nofollow" class="external free" href="git://git.ti.com/ti-cm3-pm-firmware/amx3-cm3.git">git://git.ti.com/ti-cm3-pm-firmware/amx3-cm3.git</a>
+cd amx3-cm3/
+git checkout -b PSDK_2.00 origin/ti-v4.1.y
+</pre>
+<p>So now you have a local version of the Cortex M3 firmware.  
+</p>
+<h4><span id="Building/Editing_the_Code"></span><span class="mw-headline" id="Building.2FEditing_the_Code">Building/Editing the Code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=19" title="Edit section: Building/Editing the Code">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Make the following edit:
+</p>
+<pre>diff --git a/src/pm_services/pm_handlers.c b/src/pm_services/pm_handlers.c
+index d4bd911..f9a04f2 100644
+--- a/src/pm_services/pm_handlers.c
++++ b/src/pm_services/pm_handlers.c
+@@ -83,6 +83,7 @@ void a8_lp_ds0_handler(struct cmd_data *data)
+        unsigned int per_st;
+        unsigned int mpu_st;
+        int temp;
++       volatile int stop=1;
+
+        if (cmd_handlers[cmd_global_data.cmd_id].do_ddr)
+                ds_save();
+@@ -138,6 +139,8 @@ void a8_lp_ds0_handler(struct cmd_data *data)
+                }
+        }
+
++       while(stop) {}; // connect with JTAG and set stop=0 to continue
++
+        /* TODO: wait for power domain state change interrupt from PRCM */
+        clkdm_sleep(CLKDM_WKUP);
+ }
+</pre>
+<p>Next, go to the root directory of Processor SDK 2.00:
+</p>
+<pre>cd ~/ti-processor-sdk-linux-am335x-evm-02.00.00.00
+</pre>
+<p>Edit the Makefile there in the base directory.  Right after the linux_clean rule you can insert these rules:
+</p>
+<pre>cm3:
+        @echo =================================
+        @echo     Building the M3 Firmware
+        @echo =================================
+        $(MAKE) -C ~/git-clones/amx3-cm3 ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) all
+
+cm3_clean:
+        @echo =================================
+        @echo     Cleaning the M3 Firmware
+        @echo =================================
+        $(MAKE) -C ~/git-clones/amx3-cm3 ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) clean
+</pre>
+<p><img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b>  Make sure that the indented lines are with TABS and not SPACES or these rules won't work!
+</p><p>Now from your SDK base directory you can clean and build with these commands:
+</p>
+<pre>make cm3_clean
+make cm3
+</pre>
+<p>That will generate the executable <tt>amx3-cm3/bin/am335x-pm-firmware.elf</tt> which should be copied into the <tt>/lib/firmware</tt> directory of the AM335x root file system.
+</p>
+<h4><span id="M3_Firmware_Binaries_(with_jtag_spin_loop)"></span><span class="mw-headline" id="M3_Firmware_Binaries_.28with_jtag_spin_loop.29">M3 Firmware Binaries (with jtag spin loop)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=20" title="Edit section: M3 Firmware Binaries (with jtag spin loop)">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>For quick usage you can use a pre-built firmware with the spin loop integrated.  It needs to be copied into the AM335x file system in the <tt>/lib/firmware</tt> directory.
+</p>
+<ul><li><a href="https://processors.wiki.ti.com/images/3/36/Am335x-pm-firmware-psdk200.zip" class="internal" title="Am335x-pm-firmware-psdk200.zip">Processor SDK 2.00</a></li></ul>
+<h4><span class="mw-headline" id="Connecting_to_the_M3_during_suspend">Connecting to the M3 during suspend</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=21" title="Edit section: Connecting to the M3 during suspend">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Once your modified M3 firmware is in the file system you can initiate a suspend to DeepSleep0 (DS0):
+</p>
+<pre>echo mem &gt; /sys/power/state
+</pre>
+<p>In CCS perform the following steps:
+</p>
+<ol><li>If you have not already created a Target Configuration File, go to File -&gt; New -&gt; Target Configuration File.  Select your JTAG probe and your device.</li>
+<li>In the Target Configurations window (View -&gt; Target Configurations), right-click on your Target Configuration and select Launch Selected Configuration.
+<dl><dd><a href="File_Am335x-suspend-target-config.html" class="image"><img alt="Am335x-suspend-target-config.png" src="https://processors.wiki.ti.com/images/8/82/Am335x-suspend-target-config.png" width="600" height="388" /></a></dd></dl></li>
+<li>In the Debug window that launches, right-click on your target configuration and select "Show all cores".
+<dl><dd><a href="File_Am335x-suspend-show-all-cores.html" class="image"><img alt="Am335x-suspend-show-all-cores.png" src="https://processors.wiki.ti.com/images/1/1e/Am335x-suspend-show-all-cores.png" width="500" height="326" /></a></dd></dl></li>
+<li>Right-click on M3_wakeupSS_0 and select "Connect Target".
+<dl><dd><a href="File_Am335x-suspend-M3-connect.html" class="image"><img alt="Am335x-suspend-M3-connect.png" src="https://processors.wiki.ti.com/images/0/0a/Am335x-suspend-M3-connect.png" width="600" height="336" /></a></dd></dl></li></ol>
+<p><br />
+<img alt="Note" src="https://processors.wiki.ti.com/images/b/b0/Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> If you're having trouble with connecting to a core it might be due the debug clock being turned off.  If that's the case, reboot your board and from the console you can poke the CM_WKUP_DEBUGSS_CLKCTRL register by executing "devmem2 0x44e00414 w 0x12500002".
+<br /><br />
+At this point you will now be connected to the M3 and ideally almost the entire chip should be powered down.  Here's a diagram:
+</p><p><a href="File_Am335x-suspend-interconnect-view.html" class="image"><img alt="Am335x-suspend-interconnect-view.png" src="https://processors.wiki.ti.com/images/d/d1/Am335x-suspend-interconnect-view.png" width="600" height="412" /></a>
+</p><p>We are connected to the highlighted Cortex M3, and the goal at this point is to interrogate the Control Module and the PRCM in order to verify that everything is truly powered down, and to find sources of power consumption.
+</p><p><br />
+</p>
+<h4><span class="mw-headline" id="Validating_the_State_of_the_DDR_Bus">Validating the State of the DDR Bus</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=22" title="Edit section: Validating the State of the DDR Bus">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>One of the more complex areas managed by software is the DDR interface.  There are many registers related to this configuration and so a script was written to help scrape these values from memory and decode them to provide insight.
+</p><p>Once you have managed to halt the M3 and connect with CCS during the suspend path, you can follow these steps:
+</p>
+<ol><li>Download <a rel="nofollow" class="external text" href="https://git.ti.com/sitara-dss-files/am335x-dss-files/blobs/raw/master/am335x-ddr-analysis.dss">am335x-ddr-analysis.dss</a>.</li>
+<li>Launch CCS.</li>
+<li>Create an appropriate target configuration file for connecting to your board.
+<ul><li>File -&gt; New -&gt; Target Configuration File</li>
+<li>Supply a name/location for the file.</li>
+<li>View -&gt; Target Configurations to see the available target configurations (yours should now be among them!).</li>
+<li>Double-click your file in the Target Configurations panel to open it for editing.</li>
+<li>Select your emulator and processor.  Save.</li></ul></li>
+<li>Launch the debugger, but <b>do not connect to any CPUs</b>.
+<ul><li>In the Target Configurations window, right-click on your ccxml file and select "Launch Selected Configuration".</li></ul></li>
+<li>Launch the scripting console by going to View -&gt; Scripting Console.</li>
+<li>Load am335x-ddr-analysis.dss in the scripting console by executing "loadJSFile &lt;path-to-dss-file&gt;/am335x-ddr-analysis.dss".</li>
+<li>It will use the <a href="Debug_Access_Port_(DAP).html" class="mw-redirect" title="Debug Access Port (DAP)">Debug Access Port (DAP)</a> unobtrusively behind the scenes such that the Cortex A8 is never halted.  It will generate a am335x-ddr-analysis_yyyy-mm-dd_hhmmss.txt file on your desktop.</li></ol>
+<p>Things to check in the output file:
+</p>
+<ul><li>DDR_PHY_CTRL_1[20] reg_phy_enable_dynamic_pwrdn should be enabled all the time (active and sleep).</li>
+<li>The ddr_cmd0/1/2_ioctrl and ddr_data0/1_ioctrl registers should have the same value before suspend and after resume.</li>
+<li>The ddr_cmd0/1/2_ioctrl and ddr_data0/1_ioctrl registers during active operation should have all pulls disabled.</li>
+<li>The ddr_cmd0/1/2_ioctrl and ddr_data0/1_ioctrl registers during sleep should have a pullup on ddr_resetn and pulldown on ddr_cke.</li></ul>
+<h4><span class="mw-headline" id="Checking_the_state_of_the_power_domains_and_clocks">Checking the state of the power domains and clocks</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=23" title="Edit section: Checking the state of the power domains and clocks">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ol><li>Download <a rel="nofollow" class="external text" href="https://git.ti.com/sitara-dss-files/am335x-dss-files/blobs/raw/master/am335x-ds0-analysis.dss">am335x-ds0-analysis.dss</a> and <a rel="nofollow" class="external text" href="https://git.ti.com/sitara-dss-files/am335x-dss-files/blobs/raw/master/am335x-ctt.dss">am335x-ctt.dss</a>.</li>
+<li>Launch CCS.</li>
+<li>Create an appropriate target configuration file for connecting to your board.
+<ul><li>File -&gt; New -&gt; Target Configuration File</li>
+<li>Supply a name/location for the file.</li>
+<li>View -&gt; Target Configurations to see the available target configurations (yours should now be among them!).</li>
+<li>Double-click your file in the Target Configurations panel to open it for editing.</li>
+<li>Select your emulator and processor.  Save.</li></ul></li>
+<li>Launch the debugger, but <b>do not connect to any CPUs</b>.
+<ul><li>In the Target Configurations window, right-click on your ccxml file and select "Launch Selected Configuration".</li></ul></li>
+<li>Launch the scripting console by going to View -&gt; Scripting Console.</li>
+<li>Load am335x-ds0-analysis.dss in the scripting console by executing "loadJSFile &lt;path-to-dss-file&gt;/am335x-ds0-analysis.dss".</li>
+<li>Two files will be created on your desktop:
+<ul><li>am335x-ds0-analysis_yyyy-mm-dd_hhmmss.txt</li>
+<li>am335x-ds0-padconf_yyyy-mm-dd_hhmmss.csv</li></ul></li>
+<li>Analysis of am335x-ds0-analysis_yyyy-mm-dd_hhmmss.txt:
+<ul><li>Cortex A8, Graphics, and PER are <i>supposed</i> to all be off.  Generally if there's a problem, it's something in "PER".</li>
+<li>In some cases, this file might tell you precisely what failed (e.g. "TIMER7 active").  In other cases (e.g. "L3 active") you will need to continue onto the following steps to identify the precise peripheral.</li></ul></li>
+<li>The file am335x-ds0-padconf_yyyy-mm-dd_hhmmss.csv is intended to facilitate entering data into the spreadsheet on <a href="Optimizing_AM335x_IO_Power_in_DeepSleep0.html" title="Optimizing AM335x IO Power in DeepSleep0">this wiki page</a>.</li>
+<li>Load am335x-ctt.dss in the scripting console by executing "loadJSFile &lt;path-to-dss-file&gt;/am335x-ctt.dss".</li>
+<li>A file named am335x-ctt_yyyy-mm-dd_hhmmss.rd1 will be created on your desktop.  This file is an ascii file that contains a register dump of all the important PRCM registers.  It is useful in identifying what peripherals are enabled that shouldn't be.</li>
+<li>Take the output file (am335x-ctt_yyyy-mm-dd_hhmmss.rd1) and perform a diff against a file taken from a "good" suspend sequence.  (You might need to make one on the TI EVM if you cannot ever get your hardware to suspend.)  You can then manually decode the corresponding registers that are different to identify which peripheral is still on.</li></ol>
+<h4><span id="Finish_Suspend/Resume_with_JTAG"></span><span class="mw-headline" id="Finish_Suspend.2FResume_with_JTAG">Finish Suspend/Resume with JTAG</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=24" title="Edit section: Finish Suspend/Resume with JTAG">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Once you've finished collecting all the data you want to allow the M3 core to finish the suspend sequence.
+</p><p>CCS 6.1.0 with Processor SDK 2.00 was having an issue with the ELF file (NOTE: fixed in CCS 6.1.1) and so the variables window was not showing the proper value.  It was necessary to use a memory window set to address "SP" to modify the "stop" variable.  Here's a picture:
+</p><p><a href="File_Am335x-suspend-resume.html" class="image"><img alt="Am335x-suspend-resume.png" src="https://processors.wiki.ti.com/images/4/41/Am335x-suspend-resume.png" width="400" height="421" /></a>
+</p><p>To allow the AM335x to suspend all the way, you simply change the memory location shown above to zero, and then disconnect from the M3.  When you disconnect that will start the M3 running again.  It will immediately complete the transition to DeepSleep0.  We choose "disconnect" instead of "Run" to prevent a "loss of connection" message in CCS which should lead to a more stable debug experience.  At this point you should be able to resume as usual at this point, e.g. press a key on the console, etc.
+</p>
+<h4><span class="mw-headline" id="Stepping_through_C_Code_-_Load_Symbols">Stepping through C Code - Load Symbols</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=25" title="Edit section: Stepping through C Code - Load Symbols">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>It is possible to step through the C code executing on any of the processors of the AM335x by loading symbols.  To step through the M3 firmware after halting execution with a while loop mentioned above, ensure the M3 core is selected in the Debug panel, then from the File menu, select Tools-&gt;Load Symbols-&gt;Load Symbols.
+</p><p><a href="File_LoadSymbols.html" class="image"><img alt="LoadSymbols.png" src="https://processors.wiki.ti.com/images/6/69/LoadSymbols.png" width="400" height="102" /></a>
+</p><p>In the Load Symbols dialog box, select the am335x-pm-firmware.elf.
+</p><p><a href="File_LoadSymbols-pm-firmware.html" class="image"><img alt="LoadSymbols-pm-firmware.png" src="https://processors.wiki.ti.com/images/4/47/LoadSymbols-pm-firmware.png" width="400" height="152" /></a>
+</p><p>On the first attempt, the code editor panel will need pointing to M3 firmware source tree- select the folder containing the source file.
+</p>
+<h3><span class="mw-headline" id="Investigating_a_failed_resume">Investigating a failed resume</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=26" title="Edit section: Investigating a failed resume">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Initial investigation should check the hardware:
+</p>
+<ol><li>Check vdd_mpu and vdd_core at 3 points: before suspend, during suspend, after failed resume.
+<ul><li>Normally these rails will drop to 0.95V during suspend, and they should return back to their original voltages upon resume.</li></ul></li>
+<li>Has the main clock turned back on after the failed resume?</li>
+<li>Check DDR_RESETn and DDR_CKE on a scope to make sure there's not any issues with the levels of these signals.  There can be issues here if there are improperly configured internal pullups/pulldowns or improper external pullups/pulldowns.
+<ul><li>DDR_RESETn should remain high (i.e. VDDS_DDR voltage) the entire time.</li>
+<li>DDR_CKE should be low during suspend.  It should be high after resume.</li></ul></li></ol>
+<p>Next you can move on to JTAG debug:
+</p>
+<ol><li>Can you connect to the Cortex A8?  If so, where is it?  Be careful if the MMU is turned on.  You can see this in the status bar at the bottom of CCS.</li>
+<li>Connect to the DAP and open a memory window to the base of DDR (0x80000000):
+<ul><li>Launch the debugger.</li>
+<li>In the "Debug" window, right-click on the ccxml file and select “Show all cores” (i.e. this is the same way as shown earlier for M3).</li>
+<li>Expand the “Non Debuggable Devices” entry that comes up.</li>
+<li>Right click on the one that says CS_DAP_DebugSS and choose “Connect”.</li>
+<li>Go to View -&gt; Memory and enter address 0x80000000.</li></ul></li>
+<li>Disconnect from all cores (e.g. DAP and Cortex A8).  Follow the directions from the earlier section "Checking the state of the power domains and clocks" to get a better view into what's on or off.</li></ol>
+<h2><span class="mw-headline" id="Video_Tutorials">Video Tutorials</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=27" title="Edit section: Video Tutorials">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span id="Successful_suspend/resume"></span><span class="mw-headline" id="Successful_suspend.2Fresume">Successful suspend/resume</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=28" title="Edit section: Successful suspend/resume">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><iframe width="720" height="355" src="https://www.youtube.com/embed/0lnr2NNwHtU" frameborder="0" allowfullscreen></iframe>
+</p>
+<h3><span id="Failed_suspend/resume"></span><span class="mw-headline" id="Failed_suspend.2Fresume">Failed suspend/resume</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=29" title="Edit section: Failed suspend/resume">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><iframe width="720" height="355" src="https://www.youtube.com/embed/vCuZWdTD8N4" frameborder="0" allowfullscreen></iframe>
+</p>
+<h3><span class="mw-headline" id="Finding_the_root_cause_of_a_failed_suspend">Finding the root cause of a failed suspend</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=30" title="Edit section: Finding the root cause of a failed suspend">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><iframe width="720" height="355" src="https://www.youtube.com/embed/lzyTKxFC3F0" frameborder="0" allowfullscreen></iframe>
+</p>
+<h2><span class="mw-headline" id="Other_Resources">Other Resources</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;section=31" title="Edit section: Other Resources">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li><a href="Linux_Core_Power_Management_User%27s_Guide.html" class="mw-redirect" title="Linux Core Power Management User&#39;s Guide">Linux Core Power Management User's Guide</a><br /></li>
+<li><a rel="nofollow" class="external text" href="https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/791/3554.sitara_5F00_boot_5F00_camp_5F00_am335x_5F00_pm_5F00_sw_5F00_training.pdf">Power Management Slides</a><br /></li>
+<li><a href="Sitara_Linux_Training__Power_Management.html" title="Sitara Linux Training: Power Management">Power Management Lab</a><br /></li></ul>
+
+<!-- 
+NewPP limit report
+Cached time: 20201130200903
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.096 seconds
+Real time usage: 0.104 seconds
+Preprocessor visited node count: 184/1000000
+Preprocessor generated node count: 370/1000000
+Post‐expand include size: 302/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2456/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    2.192      1 -total
+ 76.05%    1.667      4 Template:Note
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:40376-0!canonical and timestamp 20201130200903 and revision id 232717
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Debugging AM335x Suspend-Resume Issues</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Debugging AM335x Suspend-Resume Issues</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Debugging AM335x Suspend-Resume Issues</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Debugging AM335x Suspend-Resume Issues</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Debugging AM335x Suspend-Resume Issues</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Debugging AM335x Suspend-Resume Issues</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Debugging AM335x Suspend-Resume Issues</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Debugging AM335x Suspend-Resume Issues</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Debugging AM335x Suspend-Resume Issues</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;oldid=232717">https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;oldid=232717</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_AM335x_Processors.html" title="Category:AM335x Processors">AM335x Processors</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Debugging+AM335x+Suspend-Resume+Issues" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Debugging_AM335x_Suspend-Resume_Issues.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Debugging_AM335x_Suspend-Resume_Issues.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Debugging_AM335x_Suspend-Resume_Issues.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Debugging_AM335x_Suspend-Resume_Issues.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;oldid=232717" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Debugging_AM335x_Suspend-Resume_Issues&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 8 January 2018, at 13:53.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.096","walltime":"0.104","ppvisitednodes":{"value":184,"limit":1000000},"ppgeneratednodes":{"value":370,"limit":1000000},"postexpandincludesize":{"value":302,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":2456,"limit":5000000},"timingprofile":["100.00%    2.192      1 -total"," 76.05%    1.667      4 Template:Note"]},"cachereport":{"timestamp":"20201130200903","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":270});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Debugging_AM335x_Suspend-Resume_Issues by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 11:05:10 GMT -->
+</html>

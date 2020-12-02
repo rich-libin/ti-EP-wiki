@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_C5000_Teaching_ROM_to_C5535_eZdsp by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 13:15:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>Porting C5000 Teaching ROM to C5535 eZdsp - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Porting_C5000_Teaching_ROM_to_C5535_eZdsp","wgTitle":"Porting C5000 Teaching ROM to C5535 eZdsp","wgCurRevisionId":227485,"wgRevisionId":227485,"wgArticleId":15178,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["C5000"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Porting_C5000_Teaching_ROM_to_C5535_eZdsp","wgRelevantArticleId":15178,"wgRequestId":"e5a767174ec496faa05fed54","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-Porting_C5000_Teaching_ROM_to_C5535_eZdsp rootpage-Porting_C5000_Teaching_ROM_to_C5535_eZdsp skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">Porting C5000 Teaching ROM to C5535 eZdsp</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#About_the_C5000_Teaching_ROM"><span class="tocnumber">1</span> <span class="toctext">About the C5000 Teaching ROM</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Download"><span class="tocnumber">2</span> <span class="toctext">Download</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Teaching_ROM_Compatibility"><span class="tocnumber">3</span> <span class="toctext">Teaching ROM Compatibility</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#How_to_change_I2S0_to_I2S2"><span class="tocnumber">3.1</span> <span class="toctext">How to change I2S0 to I2S2</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#Download_the_modified_source_code_and_replace_original_files"><span class="tocnumber">3.1.1</span> <span class="toctext">Download the modified source code and replace original files</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Or_copy_the_modified_code_sections_into_your_source_code"><span class="tocnumber">3.1.2</span> <span class="toctext">Or copy the modified code sections into your source code</span></a>
+<ul>
+<li class="toclevel-4 tocsection-7"><a href="#Edit_csl_general.h"><span class="tocnumber">3.1.2.1</span> <span class="toctext">Edit csl_general.h</span></a></li>
+<li class="toclevel-4 tocsection-8"><a href="#Edit_usbstk5505.h"><span class="tocnumber">3.1.2.2</span> <span class="toctext">Edit usbstk5505.h</span></a></li>
+<li class="toclevel-4 tocsection-9"><a href="#Edit_aic3204_init.c"><span class="tocnumber">3.1.2.3</span> <span class="toctext">Edit aic3204_init.c</span></a></li>
+<li class="toclevel-4 tocsection-10"><a href="#Edit_aic3204.c"><span class="tocnumber">3.1.2.4</span> <span class="toctext">Edit aic3204.c</span></a></li>
+<li class="toclevel-4 tocsection-11"><a href="#Rebuild_the_project"><span class="tocnumber">3.1.2.5</span> <span class="toctext">Rebuild the project</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Configuring_a_Microphone_as_Input_to_the_C5535_eZdsp"><span class="tocnumber">4</span> <span class="toctext">Configuring a Microphone as Input to the C5535 eZdsp</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Adjusting_the_Microphone_gain"><span class="tocnumber">5</span> <span class="toctext">Adjusting the Microphone gain</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="About_the_C5000_Teaching_ROM">About the C5000 Teaching ROM</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=1" title="Edit section: About the C5000 Teaching ROM">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>Twenty chapters provide an introduction to Digital Signal Processing (DSP) techniques including FIR filters, IIR filters, LMS adaptive filters, Goertzel Algorithm, speech compression and wavelets. The material is aimed at the beginner to DSP or the enthusiast. Suitable for classroom use or self study. The emphasis is hands-on practical experiments rather than pure theory. Complete working examples of C code are provided for each chapter which run on the TSM320C5505 and TMS320C5515 USB Sticks. There is also a fun element to the experiments - you will be able to sound like an alien or play an electric guitar with echo and phasing effects. Each chapter contains a PowerPoint presentation to introduce the topic, block diagrams, some Matlab models and working C code. Self-test questions are provided to check on your progress. All the additional equipment you need is a dynamic microphone and headphones. Also useful are an electric guitar or other musical instrument and a digital frequency meter or oscilloscope. The material does assume some basic knowledge of C programming to allow the code to be used modified by the student.
+</p>
+<h3><span class="mw-headline" id="Download">Download</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=2" title="Edit section: Download">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li>Download the C5000 Teaching ROM from the <a rel="nofollow" class="external text" href="http://ti.com/lit/zip/SSQC020">TI University Program Website (zip file)</a></li>
+<li>Download the 4 modified files that allow the C5000 Teaching ROM to run on the C5535 eZdsp: <a href="https://processors.wiki.ti.com/images/8/8e/C5000_Teaching_ROM_Port_to_C5535_eZdsp.zip" class="internal" title="C5000 Teaching ROM Port to C5535 eZdsp.zip">Media:C5000_Teaching_ROM_Port_to_C5535_eZdsp.zip</a></li></ul>
+<h2><span class="mw-headline" id="Teaching_ROM_Compatibility">Teaching ROM Compatibility</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=3" title="Edit section: Teaching ROM Compatibility">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The C5000 Teaching ROM was created for use with the {{#tiwikiurl:C5505#eZdsp|C5505 eZdsp}} and {{#tiwikiurl:C5515#eZdsp|C5515 eZdsp}} development boards. On the C5505 eZdsp and C5515 eZdsp the AIC3204 stereo audio codec is connected to the I2S0 interface of the DSP.
+</p><p>On the {{#tiwikiurl:C5535#eZdsp|C5535 eZdsp}} the AIC3204 codec is connected to the I2S2 interface. To send or receive audio streams to/from the AIC3204 codec on the C5535 eZdsp, the Teaching ROM source code needs to use I2S2 instead of I2S0 and needs to configure the EBSR Parallel Port pin mux to bring out the I2S2 signals.
+</p>
+<h3><span class="mw-headline" id="How_to_change_I2S0_to_I2S2">How to change I2S0 to I2S2</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=4" title="Edit section: How to change I2S0 to I2S2">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li><a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/tms320c5000_power-efficient_dsps/f/109/p/140749/514321.aspx">This forum post</a> and <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/tms320c5000_power-efficient_dsps/f/109/t/161606.aspx">this forum post</a> explain the changes required.</li></ul>
+<ul><li>Follow the project configuration instructions in "Chapter 1 Getting Started.ppt"
+<ul><li>Important to use rts55h.lib, set the memory model to huge, set the --ptrdiff_size to 32, --silicon_version = 5515</li></ul></li>
+<li>Build the project to make sure there are no build problems before the code port...</li></ul>
+<h4><span class="mw-headline" id="Download_the_modified_source_code_and_replace_original_files">Download the modified source code and replace original files</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=5" title="Edit section: Download the modified source code and replace original files">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>This download includes the 4 files already ported to function with the C5535 eZdsp</li>
+<li>Copy and paste these modified files into each project directory of the Teaching ROM</li>
+<li>Download: <a href="https://processors.wiki.ti.com/images/8/8e/C5000_Teaching_ROM_Port_to_C5535_eZdsp.zip" class="internal" title="C5000 Teaching ROM Port to C5535 eZdsp.zip">Media:C5000_Teaching_ROM_Port_to_C5535_eZdsp.zip</a></li></ul>
+<h4><span class="mw-headline" id="Or_copy_the_modified_code_sections_into_your_source_code">Or copy the modified code sections into your source code</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=6" title="Edit section: Or copy the modified code sections into your source code">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<ul><li>Copy and paste the below code segments into the respective files in your project...</li></ul>
+<h5><span class="mw-headline" id="Edit_csl_general.h">Edit csl_general.h</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=7" title="Edit section: Edit csl general.h">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ul><li>Configure CSL for C5515 eZdsp (C5535 and C5515 are very similar at a device level)</li>
+<li>Comment C5515_EVM on line 159:</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+//#define C5515_EVM
+&lt;/syntaxhighlight&gt;
+</p>
+<h5><span class="mw-headline" id="Edit_usbstk5505.h">Edit usbstk5505.h</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=8" title="Edit section: Edit usbstk5505.h">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ul><li>Copy and paste these register definitions into the usbstk5505.h file:</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+//Add I2S2 register definitions for C5535 port
+</p>
+<ol><li>define I2S2_CR            *(volatile ioport Uint16*)(0x2A00)</li>
+<li>define I2S2_SRGR          *(volatile ioport Uint16*)(0x2A04)</li>
+<li>define I2S2_W0_LSW_W      *(volatile ioport Uint16*)(0x2A08)</li>
+<li>define I2S2_W0_MSW_W      *(volatile ioport Uint16*)(0x2A09)</li>
+<li>define I2S2_W1_LSW_W      *(volatile ioport Uint16*)(0x2A0C)</li>
+<li>define I2S2_W1_MSW_W      *(volatile ioport Uint16*)(0x2A0D)</li>
+<li>define I2S2_IR            *(volatile ioport Uint16*)(0x2A10)</li>
+<li>define I2S2_ICMR          *(volatile ioport Uint16*)(0x2A14)</li>
+<li>define I2S2_W0_LSW_R      *(volatile ioport Uint16*)(0x2A28)</li>
+<li>define I2S2_W0_MSW_R      *(volatile ioport Uint16*)(0x2A29)</li>
+<li>define I2S2_W1_LSW_R      *(volatile ioport Uint16*)(0x2A2C)</li>
+<li>define I2S2_W1_MSW_R      *(volatile ioport Uint16*)(0x2A2D)</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h5><span class="mw-headline" id="Edit_aic3204_init.c">Edit aic3204_init.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=9" title="Edit section: Edit aic3204 init.c">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ul><li>Change the initialization of Serial Port 0 (I2S0) to Parallel Port Mode 1 (I2S2) (2 instances at lines 80 &amp; 222)...</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   /* Configure Serial Bus */
+   SYS_EXBUSSEL |= 0x0100;  // Configure Serial bus 0 for I2S0
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+to...
+&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   /* Configure Parallel Port */
+   SYS_EXBUSSEL = 0x1000;  // Configure Parallel Port mode = 1 for I2S2
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Change all instances I2S0 to I2S2 (2 instances at lines 139 &amp; 281)...</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   /* I2S settings */
+   I2S0_SRGR = 0x0;
+   I2S0_CR = 0x8010;    // 16-bit word, slave, enable I2C
+   I2S0_ICMR = 0x3f;    // Enable interrupts
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+to...
+&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   /* I2S settings */
+   I2S2_SRGR = 0x0;
+   I2S2_CR = 0x8010;    // 16-bit word, slave, enable I2C
+   I2S2_ICMR = 0x3f;    // Enable interrupts
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h5><span class="mw-headline" id="Edit_aic3204.c">Edit aic3204.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=10" title="Edit section: Edit aic3204.c">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ul><li>Change all instances I2S0 to I2S2 (11 instances throughout file)...</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   /* Read Digital audio inputs */
+   while(!(I2S0_IR &amp; RcvR) )
+   {
+   	counter1++; // Wait for receive interrupt
+   }
+</pre>
+<pre>   *left_input = I2S0_W0_MSW_R;         // Read Most Significant Word of first channel
+    dummy = I2S0_W0_LSW_R;              // Read Least Significant Word (ignore)
+   *right_input = I2S0_W1_MSW_R;        // Read Most Significant Word of second channel
+    dummy = I2S0_W1_LSW_R;              // Read Least Significant Word of second channel (ignore)
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+to...
+&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   /* Read Digital audio inputs */
+   while(!(I2S2_IR &amp; RcvR) )
+   {
+   	counter1++; // Wait for receive interrupt
+   }
+</pre>
+<pre>   *left_input = I2S2_W0_MSW_R;         // Read Most Significant Word of first channel
+    dummy = I2S2_W0_LSW_R;              // Read Least Significant Word (ignore)
+   *right_input = I2S2_W1_MSW_R;        // Read Most Significant Word of second channel
+    dummy = I2S2_W1_LSW_R;              // Read Least Significant Word of second channel (ignore)
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>Comment SYS_EXBUSSEL &amp; GPIO configuration in aic3204_hardware_init(void) and aic3204_disable(void)...
+<ul><li>On the C5505 eZdsp, GPIO 26 is used as reset signal to the AIC3204 codec</li>
+<li>On the C5535 and C5515 eZdsps, TARGET_PWR_GOOD brings the AIC3204 out of reset</li></ul></li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+void aic3204_hardware_init(void)
+{
+</p>
+<pre>	SYS_EXBUSSEL |= 0x0020;  // Select A20/GPIO26 as GPIO26
+</pre>
+<p>	USBSTK5505_GPIO_init();
+	USBSTK5505_GPIO_setDirection(GPIO26, GPIO_OUT);
+	USBSTK5505_GPIO_setOutput( GPIO26, 1 );    // Take AIC3204 chip out of reset
+	USBSTK5505_I2C_init( );                    // Initialize I2C
+	USBSTK5505_wait( 100 );  // Wait
+}
+</p><p>void aic3204_disable(void)
+{
+</p>
+<pre>   AIC3204_rset( 1, 1 );                   // Reset codec
+   USBSTK5505_GPIO_setOutput( GPIO26, 0 ); // Put AIC3204 into reset
+   I2S0_CR = 0x00;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+to...
+&lt;syntaxhighlight lang="c"&gt;
+void aic3204_hardware_init(void)
+{
+// 	SYS_EXBUSSEL |= 0x0020;  // Select A20/GPIO26 as GPIO26
+//	USBSTK5505_GPIO_init();
+//	USBSTK5505_GPIO_setDirection(GPIO26, GPIO_OUT);
+//	USBSTK5505_GPIO_setOutput( GPIO26, 1 );    // Take AIC3204 chip out of reset
+	USBSTK5505_I2C_init( );                    // Initialize I2C
+	USBSTK5505_wait( 100 );  // Wait
+}
+</p><p>void aic3204_disable(void)
+{
+</p>
+<pre>   AIC3204_rset( 1, 1 );                   // Reset codec
+</pre>
+<p>//  	USBSTK5505_GPIO_setOutput( GPIO26, 0 ); // Put AIC3204 into reset
+</p>
+<pre>   I2S2_CR = 0x00;
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h5><span class="mw-headline" id="Rebuild_the_project">Rebuild the project</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=11" title="Edit section: Rebuild the project">edit</a><span class="mw-editsection-bracket">]</span></span></h5>
+<ul><li>With these changes made, rebuild and reload the program. The audio examples should now work with the C5535 eZdsp.</li></ul>
+<h2><span class="mw-headline" id="Configuring_a_Microphone_as_Input_to_the_C5535_eZdsp">Configuring a Microphone as Input to the C5535 eZdsp</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=12" title="Edit section: Configuring a Microphone as Input to the C5535 eZdsp">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The teaching ROM software is configured to use either an audio line-input or microphone input from a dynamic microphone. Dynamic microphones differ from PC microphones (electret-based) in that no microphone bias current is required to generate a signal. To use a PC microphone, the AIC3204 CODEC must be configured to output a microphone bias into the microphone.
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/tms320c5000_power-efficient_dsps/f/109/t/140749.aspx#611327">This forum post</a> explains the changes required.</li>
+<li>The microphone bias is configured in AIC3204 register: Page 1 / Register 51: MICBIAS Configuration Register</li>
+<li>Copy and paste the following line into the two functions of aic3204_init.c
+<ul><li>aic3204_init()</li>
+<li>set_sampling_frequency_and_gain()</li></ul></li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   AIC3204_rset( 51, 0x48);  // power up MICBIAS with AVDD (0x40)or LDOIN (0x48)
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<ul><li>The MICBIAS register is on Page 1, so make sure to paste the line after Page 1 has been selected</li>
+<li>The code with MICBIAS enabled should look like the following:</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<pre>   /* ADC ROUTING and Power Up */
+   AIC3204_rset( 0, 1 );      // Select page 1
+   AIC3204_rset( 51, 0x48);  // power up MICBIAS with AVDD (0x40)or LDOIN (0x48)
+   AIC3204_rset( 0x34, 0x30 );// STEREO 1 Jack
+   ...
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Adjusting_the_Microphone_gain">Adjusting the Microphone gain</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;section=13" title="Edit section: Adjusting the Microphone gain">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<ul><li>Adjust the ADC gain by modifying the #define near the top of main.c:</li></ul>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<ol><li>define GAIN_IN_dB 30</li></ol>
+<p>&lt;/syntaxhighlight&gt;
+</p><p><span style="position: relative; top: -2px;"><img alt="Warning" src="https://processors.wiki.ti.com/images/c/cb/Warning.png" title="Warning" width="18" height="15" /></span> <b>Warning</b>:  Loud audio may damage your ears when MICBIAS is enabled and GAIN_IN_dB is set to 30.
+&#160;
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130181932
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.051 seconds
+Real time usage: 0.054 seconds
+Preprocessor visited node count: 67/1000000
+Preprocessor generated node count: 171/1000000
+Post‐expand include size: 107/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    1.827      1 Template:Warning
+100.00%    1.827      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:15178-0!canonical and timestamp 20201130181932 and revision id 227485
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>Porting C5000 Teaching ROM to C5535 eZdsp</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;oldid=227485">https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;oldid=227485</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Category</a>: <ul><li><a href="Category_C5000.html" title="Category:C5000">C5000</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=Porting+C5000+Teaching+ROM+to+C5535+eZdsp" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="Porting_C5000_Teaching_ROM_to_C5535_eZdsp.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="Porting_C5000_Teaching_ROM_to_C5535_eZdsp.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/Porting_C5000_Teaching_ROM_to_C5535_eZdsp.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/Porting_C5000_Teaching_ROM_to_C5535_eZdsp.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;oldid=227485" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=Porting_C5000_Teaching_ROM_to_C5535_eZdsp&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 11 May 2017, at 15:35.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.051","walltime":"0.054","ppvisitednodes":{"value":67,"limit":1000000},"ppgeneratednodes":{"value":171,"limit":1000000},"postexpandincludesize":{"value":107,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    1.827      1 Template:Warning","100.00%    1.827      1 -total"]},"cachereport":{"timestamp":"20201130181932","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":222});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/Porting_C5000_Teaching_ROM_to_C5535_eZdsp by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 13:15:05 GMT -->
+</html>

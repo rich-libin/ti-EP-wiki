@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/CC26xx_Ouput_TI-RTOS_Log_statements_over_UART by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:08:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>CC26xx Ouput TI-RTOS Log statements over UART - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"CC26xx_Ouput_TI-RTOS_Log_statements_over_UART","wgTitle":"CC26xx Ouput TI-RTOS Log statements over UART","wgCurRevisionId":210294,"wgRevisionId":210294,"wgArticleId":40572,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Code example for advanced feature","Pages with broken file links"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"CC26xx_Ouput_TI-RTOS_Log_statements_over_UART","wgRelevantArticleId":40572,"wgRequestId":"04e086d538ec80538911f60f","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-CC26xx_Ouput_TI-RTOS_Log_statements_over_UART rootpage-CC26xx_Ouput_TI-RTOS_Log_statements_over_UART skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">CC26xx Ouput TI-RTOS Log statements over UART</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>The logging system in TI-RTOS is quite useful and configurable. In the below we will set the logging system up to give us log events which are stored in a circular buffer and then printed out later in the idle thread.
+</p>
+<div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Log_system"><span class="tocnumber">1</span> <span class="toctext">Log system</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Implementation"><span class="tocnumber">1.1</span> <span class="toctext">Implementation</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#References"><span class="tocnumber">1.2</span> <span class="toctext">References</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Compiler_options"><span class="tocnumber">2</span> <span class="toctext">Compiler options</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Remove_global_Log_disable"><span class="tocnumber">2.1</span> <span class="toctext">Remove global Log disable</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Configure_what_FILE_does"><span class="tocnumber">2.2</span> <span class="toctext">Configure what __FILE__ does</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#IAR"><span class="tocnumber">2.2.1</span> <span class="toctext">IAR</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#CCS"><span class="tocnumber">2.2.2</span> <span class="toctext">CCS</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#TI-RTOS_config_file"><span class="tocnumber">3</span> <span class="toctext">TI-RTOS config file</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#main.c_or_other_init"><span class="tocnumber">4</span> <span class="toctext">main.c or other init</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Add_log_statements"><span class="tocnumber">5</span> <span class="toctext">Add log statements</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Include_uart_logs.c"><span class="tocnumber">6</span> <span class="toctext">Include uart_logs.c</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#How_it_looks"><span class="tocnumber">7</span> <span class="toctext">How it looks</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Log_system">Log system</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=1" title="Edit section: Log system">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The short version is, xdc.runtime.Log provides an interface (a lot of macros) that you can use. The RTOS config file can then be set up to make the RTOS precompiler route the logs to whichever logger implementation you want.
+</p><p>We are going to use xdc.runtime.LoggerCallback, which is a lightweight implementation, to hand us the arguments to the Log call for storage and output.
+</p>
+<h3><span class="mw-headline" id="Implementation">Implementation</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=2" title="Edit section: Implementation">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>LoggerCallback allows us to specify an <a rel="nofollow" class="external text" href="http://rtsc.eclipse.org/cdoc-tip/xdc/runtime/LoggerCallback.html#.Output.Fxn">outputFxn</a> which will be called each time <code>Log_xx</code> is called. It receives a user-specified argument (ignored in this example), a <a rel="nofollow" class="external text" href="http://rtsc.eclipse.org/cdoc-tip/xdc/runtime/Log.html#.Event.Rec">Log_EventRec</a> struct which contains the pointers to the strings to be printed, and finally the number of arguments.
+</p><p>To interfere as little as possible with the operation of the device, the <code>uartLog_outputFxn</code> does not print anything, just stores the string pointers, and adds a serial number and a timestamp. Each stored record is <code>40 bytes</code>, and if more than <code>UARTLOG_NUM_EVT_BUF</code> events are received before the device has entered the <code>Idle</code> thread, the oldest record is lost.
+</p><p>In the <code>Idle</code> thread, we add <code>uartLog_flush</code> which loops through the records in the buffer, formats using <code>System_snprintf</code> into a local buffer of length <code>UARTLOG_OUTBUF_LEN</code>, and sends the formatted string array to the UART driver for transport.
+</p><p><b>Note:</b> The UART driver must be opened in <b>blocking</b> mode, as the <code>uartLog_flush</code> loop depends on this.
+</p><p>Both the above defines for string length and buffer length can be overridden via precompiler defines, or source code changes.
+</p>
+<h3><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=3" title="Edit section: References">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<ul><li><a rel="nofollow" class="external text" href="http://rtsc.eclipse.org/cdoc-tip/xdc/runtime/Log.html">xdc.runtime.Log cdocs</a></li>
+<li><a rel="nofollow" class="external text" href="http://rtsc.eclipse.org/cdoc-tip/xdc/runtime/LoggerCallback.html">xdc.runtime.LoggerCallback cdocs</a></li>
+<li><a rel="nofollow" class="external text" href="LoggerIdle_Uart.html">uia.ti.sysbios.LoggerIdle wiki example for Stellaris</a></li>
+<li><a rel="nofollow" class="external text" href="http://rtsc.eclipse.org/docs-tip/Using_xdc.runtime_Logging">RTSC Logging tips</a></li></ul>
+<h2><span class="mw-headline" id="Compiler_options">Compiler options</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=4" title="Edit section: Compiler options">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<h3><span class="mw-headline" id="Remove_global_Log_disable">Remove global Log disable</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=5" title="Edit section: Remove global Log disable">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>If it's present, change predefined symbol below (or remove entirely) to avoid removing all Log statements from the code, which we don't want now.<br />
+&lt;syntaxhighlight inline enclose="none" lang="text"&gt;  xdc_runtime_Log_DISABLE_ALL --&gt; X_xdc_runtime_Log_DISABLE_ALL&lt;/syntaxhighlight&gt;
+</p>
+<h3><span class="mw-headline" id="Configure_what_FILE_does">Configure what __FILE__ does</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=6" title="Edit section: Configure what FILE does">edit</a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><code>Log_info/warning/error</code> will by default include the file and line they were called from.  To avoid excessively long paths, you can change how the <code>__FILE__</code> macro is made.
+</p>
+<h4><span class="mw-headline" id="IAR">IAR</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=7" title="Edit section: IAR">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Add extra compiler option <i>--no_path_in_file_macros</i>
+</p>
+<h4><span class="mw-headline" id="CCS">CCS</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=8" title="Edit section: CCS">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>Add an extra precompiler define: <code>xdc_FILE="\"${InputFileName}\""</code>
+</p><p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="TI-RTOS_config_file">TI-RTOS config file</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=9" title="Edit section: TI-RTOS config file">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>This is where the magic happens. We will include the Log module/interface from the XDC Runtime package, and the LoggerCallback plugin for the Log module, and we will tell LoggerCallback to route Log calls to our own output handler function.
+</p><p>&lt;syntaxhighlight lang="javascript"&gt;
+// Need Text loaded for formatting of Log_info/warning/error, but not for Log_print.
+Text.isLoaded = true;
+</p><p>// Logging
+var Log = xdc.useModule('xdc.runtime.Log');
+</p><p>// Override error output color with ANSI codes, and use shorter (file.c:line) format.
+Log.L_error =  {
+</p>
+<pre>   mask: Diags.STATUS,
+   level: Diags.ERROR,
+   msg: "\x1b[31;1mERROR:\x1b[0m (%s:%d)&#160;%$S"
+</pre>
+<p>};
+</p><p>Log.L_info = {
+</p>
+<pre>   mask: Diags.INFO,
+   msg: "\x1b[32;1mINFO:\x1b[0m (%s:%d)&#160;%$S"
+</pre>
+<p>};
+</p><p>Log.L_warning = {
+</p>
+<pre>   mask: Diags.STATUS,
+   level: Diags.WARNING,
+   msg: "\x1b[33;1mWARNING:\x1b[0m (%s:%d)&#160;%$S"
+   };
+
+</pre>
+<p>// Pull in LoggerCallback
+var LoggerCallback = xdc.useModule('xdc.runtime.LoggerCallback');
+</p><p>// Tell LoggerCallback to call our output function
+LoggerCallback.outputFxn = "&amp;uartLog_outputFxn";
+</p><p>// Tell the Idle module to add our flush() function to the idle loop (before Power)
+var Idle = xdc.useModule('ti.sysbios.knl.Idle'); // Add if Idle isn't already imported.
+Idle.addFunc('&amp;uartLog_flush');
+</p><p>// Create a static instance of LoggerCallback and set as default Main logger
+var loggerParams = new LoggerCallback.Params();
+loggerParams.arg = 1;
+Main.common$.logger = LoggerCallback.create(loggerParams); // Only for Main (code that's not in an rtsc module)
+//Defaults.common$.logger = LoggerCallback.create(loggerParams); // Use for all log events
+</p><p>// Turn on USER1 logs and INFO in Main module (user code). Turn off USER2 for fun.
+Main.common$.diags_USER1 = Diags.ALWAYS_ON;
+Main.common$.diags_USER2 = Diags.ALWAYS_OFF;
+Main.common$.diags_INFO = Diags.ALWAYS_ON;
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="main.c_or_other_init">main.c or other init</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=10" title="Edit section: main.c or other init">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Even though our function is now being called each time Log_xx is called, we need to set up the UART and tell the output function about it.
+</p><p>&lt;syntaxhighlight lang="c"&gt;
+// To open the UART
+</p>
+<ol><li>include &lt;ti/drivers/UART.h&gt;</li></ol>
+<p>// To initialize the uart log output (only needed here)
+</p>
+<ol><li>include "uart_logs.h"</li></ol>
+<p>// ...
+int main()
+{
+</p>
+<pre> PIN_init(BoardGpioInitTable);
+ // ...
+ UART_Params uartParams;
+ UART_Params_init(&amp;uartParams);
+ uartParams.baudRate = 115200;
+ UART_Handle hUart = UART_open(Board_UART, &amp;uartParams);
+ // Initialize the logger output
+ UartLog_init(hUart);
+ // ...
+</pre>
+<p>&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Add_log_statements">Add log statements</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=11" title="Edit section: Add log statements">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>&lt;syntaxhighlight lang="c"&gt;
+</p>
+<ol><li>include &lt;xdc/runtime/Log.h&gt;   // For Log_warning1("Warning number #%d", 4); things</li>
+<li>include &lt;xdc/runtime/Diags.h&gt; // For Log_print0(Diags_USER1, "hello"); things.</li></ol>
+<p>// ...
+int myfunc()
+{
+</p>
+<pre> // ...
+ Log_info0("Hello world via Log_info0");
+ Log_error0("Out of cheese error!");
+</pre>
+<p>}
+&lt;/syntaxhighlight&gt;
+</p>
+<h2><span class="mw-headline" id="Include_uart_logs.c">Include uart_logs.c</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=12" title="Edit section: Include uart logs.c">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Both the function <code>uartLog_outputFxn(...)</code> and <code>uartLog_flush()</code>, along with a sample modified TI-RTOS .cfg file can be downloaded here: <a href="File_Cc26xx_uart_log_loggercallback_example.html" title="File:Cc26xx uart log loggercallback example.zip">File:Cc26xx uart log loggercallback example.zip</a>
+</p>
+<h2><span class="mw-headline" id="How_it_looks">How it looks</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;section=13" title="Edit section: How it looks">edit</a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>The above example, and Simple BLE Peripheral plus a custom service instrumented with Log_info and Log_error statements looks like this:
+</p>
+<div class="thumb tleft"><div class="thumbinner" style="width:1069px;"><a href="File_Uart_log.html" class="image"><img alt="" src="https://processors.wiki.ti.com/images/9/9c/Uart_log.png" width="1067" height="408" class="thumbimage" /></a>  <div class="thumbcaption">Putty session</div></div></div>
+
+<!-- 
+NewPP limit report
+Cached time: 20201201091553
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.048 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 51/1000000
+Preprocessor generated node count: 56/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:40572-0!canonical and timestamp 20201201091553 and revision id 210294
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>CC26xx Ouput TI-RTOS Log statements over UART</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;oldid=210294">https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;oldid=210294</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="Special_Categories.html" title="Special:Categories">Categories</a>: <ul><li><a href="Category_Code_example_for_advanced_feature.html" title="Category:Code example for advanced feature">Code example for advanced feature</a></li><li><a href="https://processors.wiki.ti.com/index.php?title=Category:Pages_with_broken_file_links&amp;action=edit&amp;redlink=1" class="new" title="Category:Pages with broken file links (page does not exist)">Pages with broken file links</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=CC26xx+Ouput+TI-RTOS+Log+statements+over+UART" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="CC26xx_Ouput_TI-RTOS_Log_statements_over_UART.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="CC26xx_Ouput_TI-RTOS_Log_statements_over_UART.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/CC26xx_Ouput_TI-RTOS_Log_statements_over_UART.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/CC26xx_Ouput_TI-RTOS_Log_statements_over_UART.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;oldid=210294" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=CC26xx_Ouput_TI-RTOS_Log_statements_over_UART&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 1 December 2015, at 02:37.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.048","walltime":"0.050","ppvisitednodes":{"value":51,"limit":1000000},"ppgeneratednodes":{"value":56,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201201091553","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":270});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/CC26xx_Ouput_TI-RTOS_Log_statements_over_UART by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 12:08:15 GMT -->
+</html>

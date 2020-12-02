@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/PROFIBUS_DP_slave_demo_setup_on_AM335x by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:59:16 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8"/>
+<title>PROFIBUS DP slave demo setup on AM335x - Texas Instruments Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"PROFIBUS_DP_slave_demo_setup_on_AM335x","wgTitle":"PROFIBUS DP slave demo setup on AM335x","wgCurRevisionId":168634,"wgRevisionId":168634,"wgArticleId":17157,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"PROFIBUS_DP_slave_demo_setup_on_AM335x","wgRelevantArticleId":17157,"wgRequestId":"a731fcaeb0184ce79c8336e9","wgIsProbablyEditable":false,"wgRelevantPageIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"ready","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.tokens@19o3a1s",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+});mw.loader.load(["site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.toc","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="https://processors.wiki.ti.com/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.31.6"/>
+<link rel="shortcut icon" href="https://processors.wiki.ti.com/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="https://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://processors.wiki.ti.com/api.php?action=rsd"/>
+<link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="https://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+<!--[if lt IE 9]><script src="/load.php?debug=false&amp;lang=en&amp;modules=html5shiv&amp;only=scripts&amp;skin=Vector&amp;sync=1"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-PROFIBUS_DP_slave_demo_setup_on_AM335x rootpage-PROFIBUS_DP_slave_demo_setup_on_AM335x skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="siteNotice" class="mw-body-content"><div id="localNotice" lang="en" dir="ltr"><div class="mw-parser-output"><p><br />
+<span style="color:#ff0000"><b>NOTICE: The Processors Wiki will End-of-Life on January 15, 2021. It is recommended to download any files or other content you may need that are hosted on processors.wiki.ti.com. The site is now set to read only.</b></span>
+</p></div></div></div><div class="mw-indicators mw-body-content">
+</div>
+<h1 id="firstHeading" class="firstHeading" lang="en">PROFIBUS DP slave demo setup on AM335x</h1>			<div id="bodyContent" class="mw-body-content">
+				<div id="siteSub" class="noprint">From Texas Instruments Wiki</div>				<div id="contentSub"></div>
+								<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div id="toc" class="toc"><div class="toctitle" lang="en" dir="ltr"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#1._Master_Configuration:"><span class="tocnumber">1.1</span> <span class="toctext"><b>1. Master Configuration:</b></span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#2._Slave_Configuration:"><span class="tocnumber">1.2</span> <span class="toctext"><b>2. Slave Configuration:</b></span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#3._Running.2F_Configuring_the_Profibus_Slave_application:"><span class="tocnumber">1.3</span> <span class="toctext"><b>3. Running/ Configuring the Profibus Slave application:</b></span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#4._Communication_between_ProfiTrace_and_the_Profibus_Slave_using_the_UART_console_Menu:"><span class="tocnumber">1.4</span> <span class="toctext"><b>4. Communication between ProfiTrace and the Profibus Slave using the UART&#160;console Menu:</b></span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=edit&amp;section=1" title="Edit section: Introduction">edit</a><span class="mw-editsection-bracket">]</span></span></h1>
+<p>This article describes how to set up the AM335x PROFIBUS DP slave with PROFIBUS master software running on a PC. <br /> 
+</p>
+<h4><span class="mw-headline" id="1._Master_Configuration:"><u><b>1. Master Configuration:</b></u><br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=edit&amp;section=2" title="Edit section: 1. Master Configuration:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>We use <a rel="nofollow" class="external text" href="http://www.procentec.com/profitrace2/index.php">ProfiTrace&#160; </a>(Version 2.6.1 or Later) from Procentec as Profibus master. This software can be run on Windows machine and the 'ProfiCore Ultra' hardware should be connected between the PC and the EVM running Profibus slave application. The ProfiTrace configuration should be done as follows-<br /> 
+</p><p>1.1 Copy PRU_OCDA.gsd file provided in the SDK package [(ISDK_HOME)\examples\profibus_slave\GSD] into master GSD library (<b>ProfiCaptain- Settings-&gt;Add/Copy GSD to catalog</b>)<br /><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_Copy_GSD_to_catalog.html" class="image"><img alt="Copy GSD to catalog.jpg" src="https://processors.wiki.ti.com/images/4/41/Copy_GSD_to_catalog.jpg" width="524" height="128" /></a><br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 1 - Adding GSD&#160;file to ProfiTrace and generating the catalog<br /><br /> 
+</p><p>1.2&#160; Use '<b>Generate Catalog'</b> option to regenerate the catalog when the GSD&#160;file is modified (<b>ProfiCaptain- Settings-&gt; Generate catalog</b>).<br /> 
+</p><p>1.3 <b>ProfiCore Initialization</b>: Once the Proficore Ultra is connected to EVM, initialize the proficore using 'Init ProfiCore Ultra' (<b>ProfiTrace-&gt; Init ProfiCore Ultra</b>). If profiTrace shows 'Unable to detect Baud Rate', proceed by clicking 'OK'.<br /> 
+</p><p>1.4 <b>Load/Save Project: </b>Configure the ProfiCaptian Project by drag-dropping the "AM335x Evaluation Module (EVM)" slave into the ProfiCore slave Network.Verify that the module parameters are correctly configured using 'Setup Modules and Parameters'. Save this project in ProfiCaptain Project File (*.ppf) format (File-&gt;Save Project). This project files can be used in future for the easy reloading (File-&gt;Load Project)<br /> 
+</p><p>1.5 <b>Operate Master</b>: By default, the master will not be active on the bus. When the master goes to 'Operate' state, it will become active by transmitting tokens in the bus. <br /> 
+</p><p><br /> 
+</p>
+<h4><span class="mw-headline" id="2._Slave_Configuration:"><u><b>2. Slave Configuration:</b></u><br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=edit&amp;section=3" title="Edit section: 2. Slave Configuration:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p><u>2.1<b>EVM Configuration:</b></u><br /> 
+</p><p>Set up the board in which Profibus Slave application is running as shown below: <br /> 
+</p><p><u><b>2.1.1 ICE V2 Setup</b></u> 
+</p><p>NOTE 1 - &#160;Set Jumpers between pins 2 &amp; 3 on J18 and J19 to select ICSS mode 
+</p><p>NOTE 2 - Set jumper on J7, J8 ( pin 1 and 2) and J10. Remove Jumper on J6 as shown in Fig 2<br /> 
+</p><p><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_ICEv2_with_Rotary_switch.html" class="image"><img alt="ICEv2 with Rotary switch.jpg" src="https://processors.wiki.ti.com/images/b/bd/ICEv2_with_Rotary_switch.jpg" width="913" height="753" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; &#160;&#160; Fig 2 - ICEv2 Setup for running Profibus Slave<br /> 
+</p><p><br /><u><b>2.1.2 ICE Setup:</b></u> 
+</p><p>NOTE 1 - Set Jumper on J6 (pin 1 and 2), J7,J5 and remove Jumper J4 as shown in Fig 3. 
+</p>
+<div style="text-align: center;">
+<p><a href="File_Profibus_Slave_Jumper_Settings_ICEv1.html" class="image"><img alt="Profibus Slave Jumper Settings ICEv1.jpg" src="https://processors.wiki.ti.com/images/4/40/Profibus_Slave_Jumper_Settings_ICEv1.jpg" width="912" height="768" /></a><br /> 
+</p><p>Fig 3 - ICE Setup for running Profibus Slave<br /> 
+</p>
+</div> 
+<p><br /> 
+</p><p><u><b>2.1.3 IDK Setup:</b></u> <br /> 
+</p><p>NOTE 1 - Connect the Proficore Ultra Serial interface to J13 of IDK as shown in Fig 4<br /> 
+</p>
+<div style="text-align: center;">
+<p><a href="File_IDK_profibus.html" class="image"><img alt="IDK profibus.jpg" src="https://processors.wiki.ti.com/images/1/13/IDK_profibus.jpg" width="768" height="904" /></a> 
+</p><p>Fig 4 - IDK Setup for running Profibus Slave<br /> 
+</p>
+<br /></div> 
+<h4><span id="3._Running/_Configuring_the_Profibus_Slave_application:"></span><span class="mw-headline" id="3._Running.2F_Configuring_the_Profibus_Slave_application:"><u><b>3. Running/ Configuring the Profibus Slave application:</b></u><br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=edit&amp;section=4" title="Edit section: 3. Running/ Configuring the Profibus Slave application:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>3.1 After powering on the board, the bootloader will load the APP from SDMMC/SPI flash/NOR flash into DDR/Internal RAM/Cache 
+</p><p>3.2 The boot logs can be seen on serial console (Connect the JTAG in case of ICE boards and use DB9 serial cable to 'J10' in case of IDK)<br /> 
+</p><p>3.3 <u><b>Configuring the Station Address:</b> </u><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; The procedure for configuring the station address depends on the EVM type in which the application is running.<br /> 
+</p><p>3.3.1 <u><b>ICE/ IDK:</b> </u><br /> 
+</p><p>The application waits for 5 sec to so that the station address can be configured from serial console. Hit 'Enter' key to change station address, then enter the valid station address (0 to 126) and hit 'Enter' again so that the application will start running with the configured station address. If there is no user defined station address specified, then the application will be running with default station address 5. 
+</p>
+<div style="text-align: center;"><a href="File_Console_ICE.html" class="image"><img alt="Console ICE.JPG" src="https://processors.wiki.ti.com/images/1/16/Console_ICE.JPG" width="560" height="467" /></a></div><div style="text-align: center;">Fig 5 - UART console view for application running on ICE<br /></div> 
+<p>3.3.2 <u><b>ICE2:</b></u><br /> 
+</p><p>The application will detect the board type. In case of ICEv2, the station address are read based on the 'Rotary Switch Position' (Refer Fig 2). The rotary switch can be positioned to 0 to 9 and the application will be running with a station address which is read based on the rotary switch position as shown in Fig 6<br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_ICE2_UART_console.html" class="image"><img alt="ICE2 UART console.jpg" src="https://processors.wiki.ti.com/images/7/76/ICE2_UART_console.jpg" width="681" height="365" /></a><br /> 
+</p><p>&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; Fig 6 - UART console view for application running on ICE2<br /><br /> 
+</p>
+<h4><span class="mw-headline" id="4._Communication_between_ProfiTrace_and_the_Profibus_Slave_using_the_UART_console_Menu:"><b><u>4. Communication between ProfiTrace and the Profibus Slave using the UART&#160;console Menu:</u></b><br /></span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=edit&amp;section=5" title="Edit section: 4. Communication between ProfiTrace and the Profibus Slave using the UART console Menu:">edit</a><span class="mw-editsection-bracket">]</span></span></h4>
+<p>4.1 Once the application started running with a configured station address, the master can detect the slaves in the network. Operate the master and the active slaves which are online will be detected and displayed with a green icon in the ProfiTrace Console as shown in Fig 7 and 8<br /> 
+</p><p><br /> 
+</p><p><a href="File_Profibus_master_go_online.html" class="image"><img alt="Profibus master go online.jpg" src="https://processors.wiki.ti.com/images/4/44/Profibus_master_go_online.jpg" width="1093" height="733" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 7 - Profibus Master in Operate state and detects the slave device.<br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_Profibus_master.html" class="image"><img alt="Profibus master.JPG" src="https://processors.wiki.ti.com/images/6/63/Profibus_master.JPG" width="629" height="588" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; Fig 8 - Active slave devices displayed in ProfiTrace console &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <br /> 
+</p><p>4.2 <u><b>UART&#160;Console Menu:</b></u> <br /> 
+</p><p>UART&#160;console menu supports different options for the communication between master and slave. They are as follows-<br /> 
+</p><p>4.2.1 <u><b>Change Inputs</b>:</u><br /> 
+</p><p>Inputs can be changed from the slave side by pressing 'I' on UART console. The input changes will be communicated to the master. In the 'Inputs and Outputs window', input changes are reflected.<br /> 
+</p><p><a href="File_Screenshot_1_-_240_byte_inputs.html" class="image"><img alt="Screenshot 1 - 240 byte inputs.jpg" src="https://processors.wiki.ti.com/images/6/67/Screenshot_1_-_240_byte_inputs.jpg" width="1066" height="784" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 9 - Input changes are communicated to master<br /> 
+</p><p>The input change from the slave side can be monitored via profibus DP&#160;data exachange through ProfiTrace message window (ProfiTrace-&gt; Start Message Recording-&gt;Messages with view filter applied). Check the option '<b>Stick to bottom'</b> to see the latest messages as shown in Fig 10<br /><br /> 
+</p><p><a href="File_Profibus_DP_data_exchange.html" class="image"><img alt="Profibus DP data exchange.jpg" src="https://processors.wiki.ti.com/images/f/fb/Profibus_DP_data_exchange.jpg" width="1241" height="713" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 10 - Profibus DP&#160;data exchange<br /> 
+</p><p><br /> 
+</p><p>4.2.2 <u><b>Send Static Diagnosis:</b></u><br /> 
+</p><p>Profibus slave application will send the static diagnostic data to the master via using the UART&#160;console option 'S'. We can see the diagnostic data in the message window as shown in Fig 11. <br /> 
+</p><p><br /> 
+</p><p><a href="File_Send_static_diagnostics.html" class="image"><img alt="Send static diagnostics.jpg" src="https://processors.wiki.ti.com/images/a/a8/Send_static_diagnostics.jpg" width="1020" height="790" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 11 - Send Static Diagnostics - Data exchange view<br /> 
+</p><p>Also we can see the 'Static Diagnostics' bit set in the 'Diagnostic and Status Information' (Launch Slave setup dialog by double clicking the slave station -&gt; Info and setup Tab) as shown in Fig 12<br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_Send_static_diagnostics_Diag_info.html" class="image"><img alt="Send static diagnostics Diag info.jpg" src="https://processors.wiki.ti.com/images/2/29/Send_static_diagnostics_Diag_info.jpg" width="802" height="454" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; &#160;&#160; Fig 12 - Send Static diagnostics - Diagnostics information<br /> 
+</p><p>4.2.3 <u><b>Send Extended Diagnosis:</b></u><br /> 
+</p><p>The slave application will send the Extended static diagnostic data to the master via using the UART console option 'E'. The extended diagnostic message can be found in the message window (Stop message recording to see the data)<br /> 
+</p><p><a href="File_Send_extended_diagnostics.html" class="image"><img alt="Send extended diagnostics.jpg" src="https://processors.wiki.ti.com/images/d/d7/Send_extended_diagnostics.jpg" width="1247" height="408" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 13 - Send Extended diagnostic data - Data exchange view 
+</p><p><br /> 
+</p><p>It contains more data than the normal diagnostics data. The extended diagnostics data can be decoded in the Diagnostics window. (Launch Slave setup dialog by double clicking the slave station -&gt; Diagnostics Tab) as shown in Fig 14<br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_Extended_diagnostic_data.html" class="image"><img alt="Extended diagnostic data.jpg" src="https://processors.wiki.ti.com/images/6/61/Extended_diagnostic_data.jpg" width="814" height="237" /></a> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 14 - Extended Diagnostic data - Diagnostics window 
+</p><p>4.2.4 <u><b>Clear Diagnosis:</b></u><br /> 
+</p><p>The slave application will stop sending the Diagnostic data (Static as well as Extended) using the console option 'C'. In the data exchange message window, we can see normal input data changes. 
+</p><p>4.2.5<u><b>DP&#160;Status:</b></u><br /> 
+</p><p>DP&#160;Status indicates the operational state/ Communication data excahnge status between master and slave. 'D' gives the DP status - 0x80 or 0x81 indicates the data exchanges, 0x0 indicates that data exchange is stopped. The DP status value can be decoded as shown in Fig 15<br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_DP_status.html" class="image"><img alt="DP status.jpg" src="https://processors.wiki.ti.com/images/3/33/DP_status.jpg" width="690" height="256" /></a><br /> 
+</p><p>&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 15 - DP&#160;Status Bits<br /> 
+</p><p>4.3 <u><b>Controlling the Outputs from the Master:</b></u><br />Profibus Master can control the output bytes in the slave by writing values to it. This is done using '<b>Watch/Modify I/O'</b> (ProfiCaptain-&gt; Watch/Modify/IO). Master output updates are seen on serial console and output Address 3 toggles the LEDs on top of J17 (in IDK) or below J9 (in ICE) in a pattern sent by the master on Address 3.<br /> 
+</p><p>&#160;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_Screenshot_2_-_Controlling_240_byte_outputs.html" class="image"><img alt="Screenshot 2 - Controlling 240 byte outputs.jpg" src="https://processors.wiki.ti.com/images/a/a7/Screenshot_2_-_Controlling_240_byte_outputs.jpg" width="799" height="659" /></a> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 16 - Controlling the output from Profibus master<br /> 
+</p><p><br /> 4.4<u><b>Configuring User Defined Input/ Ouput length</b></u><br />&#160; To configure User defined length for input/output bytes, follow the procedure-<br /> 
+</p><p>4.4.1 Change the INPUT_LEN and OUTPUT_LEN in main.c accordingly<br />4.4.2 Configure the 'myCfg1' array with character string corresponding to the number of inut/output length. As a general configuration, refer Fig 17-<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <a href="File_Input_output_length_configuration.html" class="image"><img alt="Input output length configuration.jpg" src="https://processors.wiki.ti.com/images/9/91/Input_output_length_configuration.jpg" width="331" height="217" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 17 - Configuration bytes representation<br /> 
+</p><p>4.4.3 In Fig 17, the table can be intepreted as follows-<br /><br />0x5F&#160;: represents input and 32 bytes<br />0x6F&#160;: represents output and 32 bytes<br />Input 150 bytes =&gt; 4*32+22 =&gt; 0x5F, 0x5F, 0x5F, 0x5F, 0x5A (11 words)<br />Output 146 bytes =&gt; 4*32+18 =&gt; 0x6F, 0x6F, 0x6F, 0x6F, 0x68 (9 words)<br /><br />4.4.5 Configure the GSD&#160;file matching the application<br />4.4.6 Add the updated GSD&#160;file to the master GSD&#160;library<br /><br /> 
+</p><p>4.5 <u><b>Sample changes for configuring 150 Bytes input and 146 bytes output</b></u><br /> 
+</p><p><br />4.5.1 In main.c make the following changes,<br />&#160;&#160; #define INPUT_LEN 150<br />&#160;&#160; #define OUTPUT_LEN 146<br />&#160;&#160; const unsigned char myCfg1[] = { 0x5F,0x5F,0x5F,0x5F,0x5A,0x6F,0x6F,0x6F,0x6F,0x68 }; 
+</p><p><br />4.5.2 In the GSD file, use Module = "150 Byte Out, 146 Byte In " 0x5F,0x5F,0x5F,0x5F,0x5A,0x6F,0x6F,0x6F,0x6F,0x68&#160; and add to ProfiTrace GSD library.<br />4.5.3 Go offline in master side, Drag a AM335X EVM to the ProfiCore slave network.Verify that the module parameters are correctly configured using '<b>Setup Modules and Parameters'</b>.<br /> 
+</p><p><br /><a href="File_Setup_modules_and_parameters.html" class="image"><img alt="Setup modules and parameters.jpg" src="https://processors.wiki.ti.com/images/3/3e/Setup_modules_and_parameters.jpg" width="1263" height="789" /></a><br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 18 - Configuring the module parameters when there is a change in Input/Output data length<br /><br />4.5.4 If the added slave is preconfigured with some wrong station address, edit the station address by double clicking the station. <br /> 
+</p><p><br /><a href="File_Configuring_the_station_address.html" class="image"><img alt="Configuring the station address.jpg" src="https://processors.wiki.ti.com/images/7/78/Configuring_the_station_address.jpg" width="1104" height="706" /></a><br /> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 19 - Configuring the correct Station address in Master. 
+</p><p><br />4.5.5 Verify that the input chages are communicated to the master. Also the master should be able to control the outputs. For the 150 bytes inputs,146 bytes outputs the input/output configuration looks as follows-<br /><br /><a href="File_150_byte_inputs_146_byte_outputs.html" class="image"><img alt="150 byte inputs 146 byte outputs.jpg" src="https://processors.wiki.ti.com/images/9/9d/150_byte_inputs_146_byte_outputs.jpg" width="817" height="529" /></a> 
+</p><p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Fig 20 - Input/Output changes shown simultaneously<br /><br /><br /><br /><br /> 
+</p>
+<div style="text-align: center;"><br /></div> 
+<p><br />
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20201130211717
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.094 seconds
+Real time usage: 0.109 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 34/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+</div>
+<!-- Saved in parser cache with key procwiki:pcache:idhash:17157-0!canonical and timestamp 20201130211717 and revision id 168634
+ -->
+<div class='hf-nsfooter' id='hf-nsfooter-'><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="File_E2e.html" class="image"><img alt="E2e.jpg" src="https://processors.wiki.ti.com/images/8/82/E2e.jpg" width="305" height="63" /></a>
+</td>
+<td>{{
+<ol><li>switchcategory:MultiCore=</li></ol>
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.<i></i>
+</p>
+</td>
+<td>Keystone=
+<ul><li>For technical support on MultiCore devices, please post your questions in the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/c6000_multi-core_dsps/default.aspx">C6000 MultiCore Forum</a></li>
+<li>For questions related to the BIOS MultiCore SDK (MCSDK), please use the <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS Forum</a></li></ul>
+<p>Please post only comments related to the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.<i></i>
+</p>
+</td>
+<td>C2000=<i>For technical support on the C2000 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/tms320c2000_32-bit_real-time_mcus/f/171.aspx">The C2000 Forum</a>. Please post only comments about the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.</i>
+</td>
+<td>DaVinci=<i>For technical support on DaVincoplease post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/davinci_digital_media_processors/default.aspx">The DaVinci Forum</a>. Please post only comments about the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.</i>
+</td>
+<td>MSP430=<i>For technical support on MSP430 please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/microcontrollers/msp43016-bit_ultra-low_power_mcus/default.aspx">The MSP430 Forum</a>. Please post only comments about the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.</i>
+</td>
+<td>OMAP35x=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.</i>
+</td>
+<td>OMAPL1=<i>For technical support on OMAP please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/dsp/omap_applications_processors/default.aspx">The OMAP Forum</a>. Please post only comments about the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.</i>
+</td>
+<td>MAVRK=<i>For technical support on MAVRK please post your questions on <a rel="nofollow" class="external text" href="http://e2e.ti.com/support/development_tools/mavrk/default.aspx">The MAVRK Toolbox Forum</a>. Please post only comments about the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.</i>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external text" href="http://e2e.ti.com/">http://e2e.ti.com</a>. Please post only comments about the article <b>PROFIBUS DP slave demo setup on AM335x</b> here.</i>
+<p>}}
+</p>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"><a href="File_Hyperlink_blue.html" class="image"><img alt="Hyperlink blue.png" src="https://processors.wiki.ti.com/images/9/9f/Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br/>
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br/>
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<div id="tiPrivacy"></div>
+</div></div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;oldid=168634">https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;oldid=168634</a>"					</div>
+				<div id="catlinks" class="catlinks catlinks-allhidden" data-mw="interface"></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="https://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=PROFIBUS+DP+slave+demo+setup+on+AM335x" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="Special_RequestAccount.html" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+							<li id="ca-nstab-main" class="selected"><span><a href="PROFIBUS_DP_slave_demo_setup_on_AM335x.html" title="View the content page [c]" accesskey="c">Page</a></span></li><li id="ca-talk" class="new"><span><a href="https://processors.wiki.ti.com/index.php?title=Talk:PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=edit&amp;redlink=1" rel="discussion" title="Discussion about the content page (page does not exist) [t]" accesskey="t">Discussion</a></span></li>						</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-variants-label" />
+						<h3 id="p-variants-label">
+							<span>Variants</span>
+						</h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+							<li id="ca-view" class="collapsible selected"><span><a href="PROFIBUS_DP_slave_demo_setup_on_AM335x.html">Read</a></span></li><li id="ca-viewsource" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li><li id="ca-history" class="collapsible"><span><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>						</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="p-cactions-label" />
+						<h3 id="p-cactions-label"><span>More</span></h3>
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+						<form action="https://processors.wiki.ti.com/index.php" id="searchform">
+							<div id="simpleSearch">
+								<input type="search" name="search" placeholder="Search Texas Instruments Wiki" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="Main_Page.html"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id="p-navigation" aria-labelledby="p-navigation-label">
+			<h3 id="p-navigation-label">Navigation</h3>
+			<div class="body">
+								<ul>
+					<li id="n-mainpage"><a href="Main_Page.html" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-All-pages"><a href="Special_AllPages.html">All pages</a></li><li id="n-All-categories"><a href="Special_Categories.html">All categories</a></li><li id="n-recentchanges"><a href="Special_RecentChanges.html" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-randompage"><a href="Package_Reflow_Profiles.html" title="Load a random page [x]" accesskey="x">Random page</a></li><li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>				</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id="p-tb" aria-labelledby="p-tb-label">
+			<h3 id="p-tb-label">Toolbox</h3>
+			<div class="body">
+								<ul>
+					<li id="t-whatlinkshere"><a href="Special_WhatLinksHere/PROFIBUS_DP_slave_demo_setup_on_AM335x.html" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="Special_RecentChangesLinked/PROFIBUS_DP_slave_demo_setup_on_AM335x.html" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="Special_SpecialPages.html" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;oldid=168634" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://processors.wiki.ti.com/index.php?title=PROFIBUS_DP_slave_demo_setup_on_AM335x&amp;action=info" title="More information about this page">Page information</a></li>				</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+				<div id="footer" role="contentinfo">
+						<ul id="footer-info">
+								<li id="footer-info-lastmod"> This page was last edited on 3 February 2014, at 05:44.</li>
+								<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+							</ul>
+						<ul id="footer-places">
+								<li id="footer-places-privacy"><a href="Project_Privacy_policy.html" title="Project:Privacy policy">Privacy policy</a></li>
+								<li id="footer-places-about"><a href="Project_About.html" title="Project:About">About Texas Instruments Wiki</a></li>
+								<li id="footer-places-disclaimer"><a href="Project_General_disclaimer.html" title="Project:General disclaimer">Disclaimers</a></li>
+								<li id="footer-places-termsofservice"><a href="Project_Terms_of_Service.html" title="Project:Terms of Service">Terms of Use</a></li>
+							</ul>
+										<ul id="footer-icons" class="noprint">
+										<li id="footer-copyrightico">
+						<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="https://processors.wiki.ti.com/resources/assets/licenses/cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31"/></a>					</li>
+										<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="https://processors.wiki.ti.com/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>					</li>
+									</ul>
+						<div style="clear: both;"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.094","walltime":"0.109","ppvisitednodes":{"value":23,"limit":1000000},"ppgeneratednodes":{"value":34,"limit":1000000},"postexpandincludesize":{"value":0,"limit":2097152},"templateargumentsize":{"value":0,"limit":2097152},"expansiondepth":{"value":2,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":0,"limit":5000000},"timingprofile":["100.00%    0.000      1 -total"]},"cachereport":{"timestamp":"20201130211717","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":257});});</script>
+	</body>
+
+<!-- Mirrored from processors.wiki.ti.com/index.php/PROFIBUS_DP_slave_demo_setup_on_AM335x by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Dec 2020 09:59:37 GMT -->
+</html>
